@@ -1,3 +1,5 @@
+import RewriteBlocks from "./Blocks.js";
+
 /**
  * @module ToolResults
  *
@@ -6,6 +8,7 @@
  * machinery.
  *
  * @remarks
+ *
  * A factory over the shared machinery: four injected pieces registered in the
  * flavor's Function/Apply next to the llm/stream listener. A tool result here
  * is pre-commit (the waterfall settles before the result is appended to the
@@ -52,8 +55,6 @@
  * Pure per call: no module-level state - two concurrent dispatches share
  * nothing, and an HMR reload rebinds the closure cleanly.
  */
-import RewriteBlocks from "./Blocks.js";
-
 /**
  * The schema-default scope gates (the fallback for a hand-built config).
  */

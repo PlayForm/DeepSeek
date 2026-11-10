@@ -4,6 +4,7 @@
  * The guard's verdict: the result of classifying one command.
  *
  * @remarks
+ *
  * `allow` passes through (the listener calls next()); `deny` refuses the dispatch (the listener
  * returns the refusal line WITHOUT next() - the command must never execute).
  */

@@ -1,3 +1,10 @@
+import type Capability from "@Interface/Capability.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type Lease from "@Interface/Lease.js";
+import type PolicyRule from "@Interface/Policy.js";
+import type Residency from "@Interface/Residency.js";
+import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module State
  *
@@ -5,6 +12,7 @@
  * own fields.
  *
  * @remarks
+ *
  * The SHARED factory shape (Context, Module, Enabled/Ledger/List, the
  * machinery maps, the P10 volatile refresh the factory's State builder
  * registers) plus the service's own fields.
@@ -15,13 +23,6 @@
  * `name` export (plugin-dsh-workspace-authority); the ledger prefix is the
  * module's OWN contract string.
  */
-import type Capability from "@Interface/Capability.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type Lease from "@Interface/Lease.js";
-import type PolicyRule from "@Interface/Policy.js";
-import type Residency from "@Interface/Residency.js";
-import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
-
 interface Extra {
 	/**
 	 * Master switch (config `enabled`, volatile) - false = full no-op.

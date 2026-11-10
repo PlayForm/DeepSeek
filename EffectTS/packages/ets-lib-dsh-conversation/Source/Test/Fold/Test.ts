@@ -1,15 +1,23 @@
-// Source/Test/Fold/Test.ts - the fold's smokes over hand-written event arrays
-// (the conversation spine's section 3.1): a two-step session folds turn, step
-// and both calls with their usage; a tool call with a relative path resolves
-// against the session header's cwd; a grep whose path is a directory produces
-// no file touch; an unknown event shape is skipped without throwing. No ctx,
-// no factory, no fs - the fold is pure.
 import assert from "node:assert/strict";
 import { resolve } from "node:path";
 
 import { Fold } from "../../../Target/Library.js";
 import { Check, Finish, MakeCounter } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The fold's smokes over hand-written event arrays (the conversation spine's
+ * section 3.1).
+ *
+ * @remarks
+ *
+ * A two-step session folds turn, step and both calls with their usage; a
+ * tool call with a relative path resolves against the session header's cwd;
+ * a grep whose path is a directory produces no file touch; an unknown event
+ * shape is skipped without throwing. No ctx, no factory, no fs - the fold is
+ * pure.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

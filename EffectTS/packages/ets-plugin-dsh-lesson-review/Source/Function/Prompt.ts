@@ -1,3 +1,5 @@
+import { Fence, Header, Never, Order, Reply, Routing, Shape, Signals } from "@Variable/Blocks.js";
+
 /**
  * @module Prompt
  *
@@ -5,6 +7,7 @@
  * assumes, plus the optional explicit focus.
  *
  * @remarks
+ *
  * THE ORDER IS THE CONTRACT, not a style choice:
  *
  * - Header - the task and the "be active" instruction;
@@ -22,8 +25,6 @@
  * appended AFTER the reply contract as a prioritisation note, never woven into
  * the blocks: the blocks stay byte-stable so the smokes can assert them.
  */
-import { Fence, Header, Never, Order, Reply, Routing, Shape, Signals } from "@Variable/Blocks.js";
-
 export default (Focus?: string): string => {
 	const Body = [Header, Shape, Signals, Order, Fence, Routing, Never, Reply].join("\n\n");
 	const Trimmed = (Focus ?? "").trim();

@@ -1,3 +1,4 @@
+import type { Section } from "../Interface/Section.js";
 /**
  * @module Collapse
  *
@@ -6,12 +7,12 @@
  * ONE-LINE SUMMARIES.
  *
  * @remarks
+ *
  * The collapse is never a silent drop - the live-containers failsafe-8 rule:
  * the collapsed section stays visible as its summary line. Pure: sections in,
  * `{ text, collapsed }` list out; the caller joins the texts with the
  * separator it owns.
  */
-import type { Section } from "../Interface/Section.js";
 /**
  * One collapsed entry: the rendered text (full frame or one-line summary)
  * and whether it was collapsed by the budget.

@@ -1,8 +1,3 @@
-// Source/Test/Wiring-And-Endpoints/Test.ts - the wiring: the loader contract
-// (the default object carries name/apply/Config/inject, apply returns
-// nothing), the service provided through ctx.provide, the byte-exact
-// activation lines for both postures, the disabled gate on both endpoints,
-// and the fail-loud schema validation.
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -16,6 +11,18 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The wiring: the loader contract and the endpoints' gates.
+ *
+ * @remarks
+ *
+ * The test covers the loader contract (the default object carries
+ * name/apply/Config/inject, apply returns nothing), the service provided
+ * through ctx.provide, the byte-exact activation lines for both postures,
+ * the disabled gate on both endpoints, and the fail-loud schema validation.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

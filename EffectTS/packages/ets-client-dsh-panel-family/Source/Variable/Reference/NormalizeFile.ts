@@ -1,3 +1,6 @@
+import type { PanelSection } from "@Interface/Panel.js";
+import Trace from "@Variable/Trace.js";
+
 /**
  * @module NormalizeFile
  *
@@ -6,15 +9,13 @@
  * coach).
  *
  * @remarks
+ *
  * Same reference pattern: the child slot, the settings namespace, the static
  * activation posture, and the D5 trace names. Its schema keeps the family's
  * volatile cells (logFile, replacement, the scopes object,
  * toolResultsExempt) and adds no plain semantic gate: every field the form
  * derives is volatile.
  */
-import type { PanelSection } from "@Interface/Panel.js";
-import Trace from "@Variable/Trace.js";
-
 export default {
 	id: "adapter-plugin-dsh-normalize-file",
 	bundle: "@playform/ets-plugin-dsh-normalize-file",

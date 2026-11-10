@@ -6,6 +6,7 @@
  * OPERATE.md's typed proposals).
  *
  * @remarks
+ *
  * A proposal is created ONLY when the resolution rules pass; it always
  * carries the version fence it was made against and its monotonic sequence
  * (never a wall clock). The status lifecycle is the proposal-side slice of

@@ -1,19 +1,28 @@
-// Source/Test/Update-Envelope/Test.ts - one singular test: the typed-effect
-// Update envelope (the base's own additive surface) - the builders' export
-// names, Settle's breaker/U2 flow, the three dispatch gates, the dispatched
-// order (journal first, then the line), the never-rejecting done outcome, the
-// contained bug-level rejection, the settling detached fallback and the
-// forkIn interruption at dispose.
-// Runs standalone (`node Target/Test/Update-Envelope/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// This folder is the ETS-only additive coverage re-homed from the ETS core
-// smoke's sections 9 + 11; there is no Classic twin.
 import assert from "node:assert/strict";
 import { Check, CheckAsync, Finish, MakeCounter } from "../Harness.js";
 import { Activate, Update } from "../../../Target/Library.js";
 import type { Dependencies } from "../../../Target/Function/Update.js";
 import { Effect, type Scope } from "effect";
 
+/**
+ * @module Test
+ *
+ * One singular test: the typed-effect Update envelope.
+ *
+ * @remarks
+ *
+ * The envelope is the base's own additive surface: the builders' export
+ * names, Settle's breaker/U2 flow, the three dispatch gates, the dispatched
+ * order (journal first, then the line), the never-rejecting done outcome, the
+ * contained bug-level rejection, the settling detached fallback and the
+ * forkIn interruption at dispose.
+ *
+ * Runs standalone (`node Target/Test/Update-Envelope/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * This folder is the ETS-only additive coverage re-homed from the ETS core
+ * smoke's sections 9 + 11; there is no Classic twin.
+ */
 // The module-side fake: injected State maps, factory delegates, the job hooks
 // and the module's OWN ledger strings (the shape the governor/pinner/cargo
 // modules supply; the strings here are the smoke's, not the core's). Typed

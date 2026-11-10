@@ -1,20 +1,28 @@
-// Source/Test/Harness.ts - the shared test harness for the CONVERSATION's
-// smokes. The conversation is a pure library: NO ctx, NO factory, NO fs -
-// every test imports the REAL built Target/Library.js of this package only
-// and feeds it hand-written event arrays, so the harness here is just the
-// counter: the Check (one check per source-suite assert group; a throw counts
-// that group failed), the async variant, and the Finish guard.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass and one deliberate failure and exits 0
-// only when both are counted exactly, then proves the built library actually
-// loads with its four named exports (the vacuously-green backstop);
-// prepublishOnly.sh gates the build on it. Imported as a library, this module
-// only exports.
 import assert from "node:assert/strict";
 
 import { Emits, Fold, Names, Version } from "../../Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the CONVERSATION's smokes: just the counter,
+ * because the conversation is a pure library.
+ *
+ * @remarks
+ *
+ * The conversation is a pure library: NO ctx, NO factory, NO fs - every test
+ * imports the REAL built Target/Library.js of this package only and feeds it
+ * hand-written event arrays, so the harness here is just the counter: the
+ * Check (one check per source-suite assert group; a throw counts that group
+ * failed), the async variant, and the Finish guard.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass and one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the built library actually
+ * loads with its four named exports (the vacuously-green backstop);
+ * prepublishOnly.sh gates the build on it. Imported as a library, this
+ * module only exports.
+ */
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks. Passed
  * by reference so Check can bump it from inside its callback.

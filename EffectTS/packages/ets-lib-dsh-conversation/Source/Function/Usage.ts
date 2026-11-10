@@ -4,6 +4,7 @@
  * The shared read of one assistant/message's usage fields.
  *
  * @remarks
+ *
  * The read covers the TokenUsage buckets (a missing bucket is an unreported
  * one, null, charged at zero downstream) and the call's own source block
  * (the provider and the model). Both Function/Fold (the State's Calls) and

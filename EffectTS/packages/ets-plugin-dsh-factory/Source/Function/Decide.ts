@@ -1,3 +1,6 @@
+import type Allowlist from "@Interface/Allowlist.js";
+import Default from "@Variable/Policy.js";
+
 /**
  * @module Decide
  *
@@ -5,6 +8,7 @@
  * class.
  *
  * @remarks
+ *
  * The action names ARE the block's keys (read, index, record, suggest, write, commit, spawn,
  * message), so a consumer's gate reads `Decide(State.Allow, "spawn") === "auto"` before it acts.
  * The block a consumer holds is the schema-defaulted object (or a pack-overridden one), so every
@@ -16,9 +20,6 @@
  * missing and takes the default, so a bad config can only be MORE conservative than the D6 posture
  * for writes, commits and spawns and never silently widens an automatic action.
  */
-import type Allowlist from "@Interface/Allowlist.js";
-import Default from "@Variable/Policy.js";
-
 export default (Policy: Allowlist, Action: keyof Allowlist): "auto" | "approve" => {
 	const Verdict = Policy?.[Action];
 	switch (Verdict) {

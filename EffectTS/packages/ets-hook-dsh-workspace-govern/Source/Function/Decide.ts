@@ -1,3 +1,10 @@
+import type Decision from "@Interface/Decision.js";
+import type Proposal from "@Interface/Proposal.js";
+import type State from "@Interface/State.js";
+
+import Check from "./Check.js";
+import Policy from "./Policy.js";
+
 /**
  * @module Decide
  *
@@ -5,6 +12,7 @@
  * independent checks, then the record and the ledger line.
  *
  * @remarks
+ *
  * The decision semantics:
  *
  *   * a policy rule forces its outcome (deny -> deny, escalate -> escalate,
@@ -20,13 +28,6 @@
  *       govern: escalated <operation> (approval required)
  *       govern: recovery <obligation> (fail-open)
  */
-import type Decision from "@Interface/Decision.js";
-import type Proposal from "@Interface/Proposal.js";
-import type State from "@Interface/State.js";
-
-import Check from "./Check.js";
-import Policy from "./Policy.js";
-
 export default (State: State, Proposal_: Proposal, Append: (Message: string) => void): Decision => {
 	const Obligations = Check(State, Proposal_);
 	const Rule = Policy(State.PolicyRules, Proposal_);

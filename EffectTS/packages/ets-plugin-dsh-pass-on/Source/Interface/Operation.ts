@@ -5,6 +5,7 @@
  * the pass-on.
  *
  * @remarks
+ *
  * Plan section 3. The ingester applies it only after the decision.
  */
 export default interface Operation {

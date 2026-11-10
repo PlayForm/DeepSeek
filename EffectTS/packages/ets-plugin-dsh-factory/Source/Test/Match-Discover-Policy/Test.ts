@@ -1,12 +1,3 @@
-// Source/Test/Match-Discover-Policy/Test.ts - one singular test: the pure
-// helpers - the exclusion-first Match, the Discover walk-up with the
-// node_modules boundary and the nearest-wins rule, the contained Parse, and
-// the ResolvePolicy union keep-list with the P3 chain keys and the
-// unreadable/absent handling.
-// Runs standalone (`node Target/Test/Match-Discover-Policy/Test.js`) AND
-// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-plugin-dsh-factory: the fake ctx + the REAL factory
-// class, from the Harness.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -19,6 +10,23 @@ import {
 	FactoryClass,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The pure helpers of the factory: Match, Discover, Parse and ResolvePolicy.
+ *
+ * @remarks
+ *
+ * The singular test proves the exclusion-first Match, the Discover walk-up
+ * with the node_modules boundary and the nearest-wins rule, the contained
+ * Parse, and the ResolvePolicy union keep-list with the P3 chain keys and
+ * the unreadable/absent handling.
+ *
+ * Runs standalone (`node Target/Test/Match-Discover-Policy/Test.js`) AND
+ * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit
+ * smoke of @playform/ets-plugin-dsh-factory: the fake ctx + the REAL
+ * factory class, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

@@ -1,9 +1,12 @@
+import type Decision from "./Decision.js";
+
 /**
  * @module Learning
  *
  * Declares the learned layer's view the score, the follow-through and the recorder use.
  *
  * @remarks
+ *
  * Function/Store builds it: the accept-rate reads the score consumes, the outcome writes
  * the follow-through performs, and the decision-record memory.
  *
@@ -14,8 +17,6 @@
  * the NEUTRAL path: every rate answers the Laplace prior 1/3, so the default score is
  * byte-identical to the PoC.
  */
-import type Decision from "./Decision.js";
-
 export default interface Learning {
 	/**
 	 * Which backend answers: the shared pattern service or the memory fallback.

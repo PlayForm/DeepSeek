@@ -1,3 +1,5 @@
+import { Fullwidth, ReplaceMap } from "@playform/ets-lib-dsh-core";
+
 /**
  * @module Replace
  *
@@ -5,6 +7,7 @@
  * char->char map replacer, pinned to its table.
  *
  * @remarks
+ *
  * The mechanism (the per-call regex built from the mapping's keys as
  * code-point escapes, the function replacer, the `{ text, count }`
  * contract) lives in @playform/ets-lib-dsh-core's Normalize/ReplaceMap; this
@@ -17,6 +20,4 @@
  * installed as a directory link there); the flavor is a table plus a
  * closure, not a fork of the dispatch.
  */
-import { Fullwidth, ReplaceMap } from "@playform/ets-lib-dsh-core";
-
 export default (Text: string): { text: string; count: number } => ReplaceMap(Text, Fullwidth);

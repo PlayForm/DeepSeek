@@ -11,6 +11,7 @@ import type { ValuationBasis } from "@Interface/ValuationSelection.js";
  * difference between the two, and the calls that revision could not price.
  *
  * @remarks
+ *
  * It is a comparison block, not the stored Valuation row of
  * Interface/Valuation.ts: nothing is persisted, and the per-call money
  * fields stay as recorded.

@@ -1,9 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { Options, State } from "@playform/ets-base-dsh";
+export default _default;
 /**
  * @module State
  *
  * The State builder: `State(ctx, config, { module, fields, policyFileName? })`.
  *
  * @remarks
+ *
  * Defensive cell unwrap (Function/Unwrap - volatile Schemastery cells), the FIXED shared field
  * mappings (Tool from mutationTools, Policy from policyFile, Ledger from logFile, Enabled from
  * log, List from exclude), the module's own fields copied by the `fields` map (StateKey to
@@ -33,15 +37,14 @@
  * activation line, zero consumer changes. A failed refresh keeps the previous value (the same
  * defensive rule as the initial unwrap); unknown or non-volatile key paths are ignored.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { Options, State } from "@playform/ets-base-dsh";
-export default _default;
 declare function _default<Extra extends object = Record<string, unknown>>(Context: Context, Config: unknown, Setup: Options & {
     journalDomain?: string | undefined;
 }): State & Extra;
 declare module "@deepseek-ai/cordis" {
     interface Events {
-        /** Volatile config values committed into the running fiber without a remount. */
+        /**
+         * Volatile config values committed into the running fiber without a remount.
+         */
         "loader/volatile-update"(Paths: unknown): void;
     }
 }

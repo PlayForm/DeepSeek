@@ -1,12 +1,3 @@
-// Source/Test/Loop-And-Vocabulary/Test.ts - one singular test: the trace
-// vocabulary and the detached loop - the exact names, the envelope completion
-// (bus-assigned trace/at, the emitter's supplied values preserved), the two
-// guards, the coalescing key, the loop's coalescing (ONE run per key, no
-// timer), its fail-open containment, its disposer, per-key independence, and
-// the fixed ring bound.
-// Runs standalone (`node Target/Test/Loop-And-Vocabulary/Test.js`) AND under
-// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-lib-dsh-trace: the REAL built entry only.
 import assert from "node:assert/strict";
 import {
 	Bound,
@@ -19,6 +10,23 @@ import {
 } from "../../../Target/Library.js";
 import { Check, CheckAsync, Finish, MakeCounter } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The trace vocabulary and the detached loop.
+ *
+ * @remarks
+ *
+ * The singular test proves the exact names, the envelope completion
+ * (bus-assigned trace/at, the emitter's supplied values preserved), the two
+ * guards, the coalescing key, the loop's coalescing (ONE run per key, no
+ * timer), its fail-open containment, its disposer, per-key independence, and
+ * the fixed ring bound.
+ *
+ * Runs standalone (`node Target/Test/Loop-And-Vocabulary/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-lib-dsh-trace: the REAL built entry only.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

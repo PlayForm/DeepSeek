@@ -1,10 +1,3 @@
-// Source/Test/Wiring-And-Guards/Test.ts - the loader contract, the wiring and
-// the guard chain: the default object carries name/apply/Config/inject, the
-// root-identity of the fs/observed registration, the cold-mount
-// idle-forever posture with its byte-exact line, the activation proof line,
-// the fail-loud validation, the exclusion / own-actor / include guards with
-// their byte-exact lines, the malformed-event containment, and the purity
-// invariants (zero writeText/readText calls, apply returns nothing).
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -22,7 +15,23 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount with overrides. */
+/**
+ * @module Test
+ *
+ * The loader contract, the wiring and the guard chain of the monitor hook.
+ *
+ * @remarks
+ *
+ * The folder proves the default object carries name/apply/Config/inject, the
+ * root-identity of the fs/observed registration, the cold-mount
+ * idle-forever posture with its byte-exact line, the activation proof line,
+ * the fail-loud validation, the exclusion / own-actor / include guards with
+ * their byte-exact lines, the malformed-event containment, and the purity
+ * invariants (zero writeText/readText calls, apply returns nothing).
+ */
+/**
+ * A standard enabled mount with overrides.
+ */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));

@@ -4,6 +4,7 @@
  * The live view's trace contract.
  *
  * @remarks
+ *
  * The D5 envelope is mirrored structurally from @playform/ets-lib-dsh-trace
  * (the package never imports the library): the view reads only the correlation
  * id, the event name, and the payload. A `LiveTrace` is the bounded,

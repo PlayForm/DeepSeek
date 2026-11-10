@@ -1,3 +1,5 @@
+import type Factory from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Factory
  *
@@ -6,6 +8,7 @@
  * 0-2).
  *
  * @remarks
+ *
  * The comment filter is a NON-MANIFEST module: it consumes the State builder
  * (cell unwrap + shared fields, section 2.10) and the ledger (Append +
  * Journal, section 2.1) - but NOT the fs/observed Wire (section 2.11,
@@ -27,8 +30,6 @@
  * it with `agent/pre-step` (payload, next) => Promise<PreStepDecision> -
  * re-declaring either would be a conflicting duplicate.
  */
-import type Factory from "@playform/ets-plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

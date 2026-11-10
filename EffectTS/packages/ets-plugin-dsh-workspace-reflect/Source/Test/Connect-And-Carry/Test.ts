@@ -1,9 +1,3 @@
-// Source/Test/Connect-And-Carry/Test.ts - the connect op and the reflective
-// carry: the import insertion with a symbol, the comment form without one,
-// the idempotence (already connected), the identity rejection, the relative
-// specifier computation, and the carry (absent graph silent skip, present
-// graph reindexes with the byte-exact carried line, a graph failure is
-// contained and never undoes the applied write).
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -17,6 +11,16 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The connect op and the reflective carry: the import insertion with a
+ * symbol, the comment form without one, the idempotence (already connected),
+ * the identity rejection, the relative specifier computation, and the carry
+ * (absent graph silent skip, present graph reindexes with the byte-exact
+ * carried line, a graph failure is contained and never undoes the applied
+ * write).
+ */
 const CONTENT = "export const alpha = 1;\n";
 
 /** An enabled mount with an optional workspaceGraph attached (an array

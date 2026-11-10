@@ -1,19 +1,3 @@
-// Source/Test/Harness.ts - the shared test harness for the WORKSPACE-EVIDENCE
-// tests: the fake ctx (registration capture with a DISTINCT root object, the
-// ctx listener capture, reflect.provide capture, the effect runner, the
-// logger capture, the fs purity capture, the storageDomain probe) + the REAL
-// @playform/ets-plugin-dsh-factory instance from its built Target + the REAL
-// workspace-evidence apply from its built Target - the family fake-ctx +
-// real-factory harness pattern, written ONCE per package and imported by
-// every test folder.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --self` runs the counter
-// through one deliberate pass + one deliberate failure and exits 0 only when
-// both are counted exactly, then proves the fake ctx actually wires the
-// plugin (the vacuously-green backstop).
-//
-// NO FAKE CLOCK: the sequence is the service's own monotonic counter (the
-// no-wall-clock rule); every timing assertion is on the counter.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -21,6 +5,28 @@ import * as Path from "node:path";
 import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the WORKSPACE-EVIDENCE tests: the fake ctx
+ * (registration capture with a DISTINCT root object, the ctx listener
+ * capture, reflect.provide capture, the effect runner, the logger capture,
+ * the fs purity capture, the storageDomain probe) + the REAL
+ * @playform/ets-plugin-dsh-factory instance from its built Target + the REAL
+ * workspace-evidence apply from its built Target - the family fake-ctx +
+ * real-factory harness pattern, written ONCE per package and imported by
+ * every test folder.
+ *
+ * @remarks
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --self` runs the counter
+ * through one deliberate pass + one deliberate failure and exits 0 only when
+ * both are counted exactly, then proves the fake ctx actually wires the
+ * plugin (the vacuously-green backstop).
+ *
+ * NO FAKE CLOCK: the sequence is the service's own monotonic counter (the
+ * no-wall-clock rule); every timing assertion is on the counter.
+ */
 export { Plugin };
 
 /**
@@ -158,7 +164,9 @@ export const FakeStorage = (Options: { failOpen?: boolean } = {}): any => {
 		},
 	};
 
-	/** Seed one record (the restart scenario: the store outlives the process). */
+	/**
+	 * Seed one record (the restart scenario: the store outlives the process).
+	 */
 	Store.seed = (Name: string, Key: string, Value: unknown): void => {
 		if (!Store.tables.has(Name)) {
 			Store.tables.set(Name, new Map());

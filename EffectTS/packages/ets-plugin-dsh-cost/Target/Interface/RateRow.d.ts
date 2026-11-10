@@ -10,6 +10,7 @@
  * a family of rows.
  *
  * @remarks
+ *
  * The effective interval is half-open (ValidFrom <= at < ValidTo, a NULL
  * ValidTo is the open end) and it lives inside an immutable revision, so a
  * rate is corrected by publishing a new revision, never by editing this

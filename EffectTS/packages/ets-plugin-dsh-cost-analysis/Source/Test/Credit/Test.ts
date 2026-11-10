@@ -1,9 +1,3 @@
-// Source/Test/Credit/Test.ts - THE READ CREDIT (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 11, Ring C): reading a file warms the prompt
-// cache, so every later call whose surface carries it pays the cache-read
-// rate instead of the full input rate - the drain stores that saving on the
-// Call row (Call.CacheSaving) and the analysis credits it to the file in
-// proportion to the share of the surface the file occupied.
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -17,6 +11,20 @@ import Analysis from "../../../Target/Function/Analysis.js";
 import Reader from "../../../Target/Function/Open.js";
 import { Check, Finish, Make, MakeCounter, Validate } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE READ CREDIT (Documentation/Plans/COST-TRACK-PLUGIN.md section 11,
+ * Ring C) of the cost-analysis plugin.
+ *
+ * @remarks
+ *
+ * Reading a file warms the prompt cache, so every later call whose surface
+ * carries it pays the cache-read rate instead of the full input rate - the
+ * drain stores that saving on the Call row (Call.CacheSaving) and the
+ * analysis credits it to the file in proportion to the share of the surface
+ * the file occupied.
+ */
 // The ledger half's validated config (the ledger package's own schema): the
 // fixture price row - input 1, output 2, cache read 0.1 per million - under
 // one client, at the temporary database.

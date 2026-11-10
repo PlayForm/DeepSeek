@@ -1,3 +1,5 @@
+import Match from "./Match.js";
+
 /**
  * @module Ring
  *
@@ -8,6 +10,7 @@
  * section 2: "watch the next judged calls within a window").
  *
  * @remarks
+ *
  * THE OPEN NOTE (the outcome signal): an emitted note opens a window with
  * the family and the companion paths it named; every judged in-workspace
  * call either FOLLOWS it (the call path names a companion - an ACCEPT) or
@@ -17,8 +20,6 @@
  * forgets an open note without a verdict (the turn boundary is not a judged
  * call), so a reset never invents an outcome.
  */
-import Match from "./Match.js";
-
 /**
  * One open note awaiting its follow-through verdict.
  */

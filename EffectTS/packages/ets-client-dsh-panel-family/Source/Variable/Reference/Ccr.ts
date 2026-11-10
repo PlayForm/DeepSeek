@@ -1,3 +1,6 @@
+import type { PanelSection } from "@Interface/Panel.js";
+import Trace from "@Variable/Trace.js";
+
 /**
  * @module Ccr
  *
@@ -5,6 +8,7 @@
  * the last section of the family tab).
  *
  * @remarks
+ *
  * Same reference pattern: the child slot, the settings namespace, the static
  * activation posture, and the D5 trace names. Its schema's volatile cells
  * (logFile, thresholdBytes, the multipliers object, previewMaxChars) ride the
@@ -12,9 +16,6 @@
  * the journal, autoExpand, the phase-4 context-engine flags) ride the plain
  * bridge.
  */
-import type { PanelSection } from "@Interface/Panel.js";
-import Trace from "@Variable/Trace.js";
-
 export default {
 	id: "adapter-hook-dsh-ccr",
 	bundle: "@playform/ets-hook-dsh-ccr",

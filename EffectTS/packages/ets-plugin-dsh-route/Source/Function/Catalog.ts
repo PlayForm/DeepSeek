@@ -1,9 +1,12 @@
+import type CatalogService from "@Interface/Catalog.js";
+
 /**
  * @module Catalog
  *
  * The LIVE model catalog probe for the escalation ladder's rung check.
  *
  * @remarks
+ *
  * The ladder verifies its rung against the models the provider actually
  * advertises, exactly the data `list_subagent_models` reads (the `llm`
  * service's `listProviders` / `listModels` / `resolveModelInfo`). The route
@@ -16,8 +19,6 @@
  * `undefined`, which Function/Ladder reads as "no catalog proof - keep the
  * policy's rung". Silence is the contract; a catalog failure never surfaces.
  */
-import type CatalogService from "@Interface/Catalog.js";
-
 export default async (Context: unknown, Provider: string): Promise<string[] | undefined> => {
 	const Llm = (Context as { get?: (Name: string) => unknown } | undefined)?.get?.("llm") as
 		CatalogService | undefined;

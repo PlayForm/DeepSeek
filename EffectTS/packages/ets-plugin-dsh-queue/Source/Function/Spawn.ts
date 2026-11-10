@@ -1,9 +1,15 @@
+import type { AgentsService } from "@Interface/Agent.js";
+import type State from "@Interface/State.js";
+import type SubagentsService from "@Interface/Subagent.js";
+import type Task from "@Interface/Task.js";
+
 /**
  * @module Spawn
  *
  * The queue's LAUNCH: start a subagent through the HARNESS subagent service.
  *
  * @remarks
+ *
  * The completion spec's re-spec: "use the harness subagent service, never a
  * private spawn"; SUBAGENT-QUEUE-PLUGIN.md section 4.4. The dispatcher calls
  * this after the seat is taken and the state flipped; the spec goes to the
@@ -29,11 +35,6 @@
  * dispatcher supplies, which also pulls the next queued task into the freed
  * seat (the idle-slot automation).
  */
-import type { AgentsService } from "@Interface/Agent.js";
-import type State from "@Interface/State.js";
-import type SubagentsService from "@Interface/Subagent.js";
-import type Task from "@Interface/Task.js";
-
 /**
  * The settle callback: `true` = completed, `false` = failed.
  */

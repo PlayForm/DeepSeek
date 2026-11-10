@@ -1,9 +1,17 @@
+import type Packet from "@Interface/Packet.js";
+import type Query from "@Interface/Query.js";
+import type State from "@Interface/State.js";
+
+import CacheKey from "./CacheKey.js";
+import PacketBuild from "./Packet.js";
+
 /**
  * @module Cached
  *
  * The packet memo: a bounded cache over the packet build.
  *
  * @remarks
+ *
  * A bounded map keyed by Function/CacheKey. A hit returns the SAME packet
  * object (the build - the graph snapshot/find/expand reads, the ranking,
  * the budget clamp - is skipped); a miss builds through the existing
@@ -17,13 +25,6 @@
  * The memo is a performance cache only - a cleared map changes nothing but
  * the next build.
  */
-import type Packet from "@Interface/Packet.js";
-import type Query from "@Interface/Query.js";
-import type State from "@Interface/State.js";
-
-import CacheKey from "./CacheKey.js";
-import PacketBuild from "./Packet.js";
-
 const LIMIT = 256;
 
 export default (State: State, Options: Query): Packet => {

@@ -1,9 +1,18 @@
+import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import { LedgerService, WriteService, type State, type Transform } from "@playform/ets-base-dsh";
+import { Cause, Effect, Exit } from "effect";
+
+import Parse from "./Parse.js";
+import RefreshFn from "./Refresh.js";
+import Resolve from "./Resolve.js";
+
 /**
  * @module Continue
  *
  * The DETACHED CONTAINED continuation of the fs/observed pass.
  *
  * @remarks
+ *
  * Everything the API owns is async, so this stage lives off the listener: the listener (the
  * module's Observe, wired through Function/Wire) stays await-free, and every throw is contained -
  * this function's rejections can never surface as a tool error (the silence invariant). Identical
@@ -49,14 +58,6 @@
  * 8. every throw is contained: the logger-only suppression line (`<module>: continuation error
  *    (suppressed): ...`) - never the ledger, never a rethrow.
  */
-import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
-import { LedgerService, WriteService, type State, type Transform } from "@playform/ets-base-dsh";
-import { Cause, Effect, Exit } from "effect";
-
-import Parse from "./Parse.js";
-import RefreshFn from "./Refresh.js";
-import Resolve from "./Resolve.js";
-
 export default (
 	State: State,
 	Target: FsTarget,

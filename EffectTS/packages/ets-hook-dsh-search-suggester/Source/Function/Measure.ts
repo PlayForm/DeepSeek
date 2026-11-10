@@ -1,3 +1,8 @@
+import type { Intent, Target } from "../Interface/Execution.js";
+import type Measurement from "../Interface/Measurement.js";
+import type Projection from "../Interface/Projection.js";
+import Kinds from "../Variable/Kinds.js";
+
 /**
  * @module Measure
  *
@@ -5,6 +10,7 @@
  * the neutral 0.5 literal of Function/Score).
  *
  * @remarks
+ *
  *   literal(c) =
  *     0.5                                  the graph is absent or empty (the
  *                                          documented neutral fallback - the
@@ -38,11 +44,6 @@
  *   - any other glob is translated to a segment-anchored regex (a double star
  *     then a slash means any depth, a single star means one segment).
  */
-import type { Intent, Target } from "../Interface/Execution.js";
-import type Measurement from "../Interface/Measurement.js";
-import type Projection from "../Interface/Projection.js";
-import Kinds from "../Variable/Kinds.js";
-
 /**
  * The literal score of a candidate the graph has nodes for but cannot prove.
  */

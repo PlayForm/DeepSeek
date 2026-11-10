@@ -1,9 +1,14 @@
+import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import { LedgerService, WriteService, type State, type Transform } from "@playform/ets-base-dsh";
+import { Effect } from "effect";
+export default _default;
 /**
  * @module Continue
  *
  * The DETACHED CONTAINED continuation of the fs/observed pass.
  *
  * @remarks
+ *
  * Everything the API owns is async, so this stage lives off the listener: the listener (the
  * module's Observe, wired through Function/Wire) stays await-free, and every throw is contained -
  * this function's rejections can never surface as a tool error (the silence invariant). Identical
@@ -49,8 +54,4 @@
  * 8. every throw is contained: the logger-only suppression line (`<module>: continuation error
  *    (suppressed): ...`) - never the ledger, never a rethrow.
  */
-import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
-import { LedgerService, WriteService, type State, type Transform } from "@playform/ets-base-dsh";
-import { Effect } from "effect";
-export default _default;
 declare function _default(State: State, Target: FsTarget, Actor: object | undefined, Dir: string, Found: string | null, Version: FsVersion, Transform: Transform): Effect.Effect<void, never, LedgerService | WriteService>;

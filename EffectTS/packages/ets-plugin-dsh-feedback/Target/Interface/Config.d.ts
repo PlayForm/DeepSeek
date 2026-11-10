@@ -1,9 +1,9 @@
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 /**
  * @module Config
  *
  * The schema's runtime shape (Variable/Config.ts produces it).
  */
-import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 export default interface Options {
     enabled: boolean;
     logFile: string;

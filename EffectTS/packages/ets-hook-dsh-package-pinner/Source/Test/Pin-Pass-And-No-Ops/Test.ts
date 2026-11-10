@@ -1,14 +1,3 @@
-// Source/Test/Pin-Pass-And-No-Ops/Test.ts - one singular test: the pin pass
-// end to end - the range law across all four sections (strip ^/~/= one leading
-// prefix, everything else untouched, the documented ^1.* edge, non-string
-// values, the refusal domain preserved, the serialization), the guarded write
-// with Stash pre-registration and the P₃ same-actor re-emit, the silent
-// re-entrant no-op, the author's next guarded write at the fresh version, and
-// the three no-op paths (already pinned, non-JSON, vanished) all
-// silent-writes-none.
-// Runs standalone (`node Target/Test/Pin-Pass-And-No-Ops/Test.js`) AND under
-// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-package-pinner.
 import assert from "node:assert/strict";
 import * as Path from "node:path";
 import {
@@ -27,6 +16,27 @@ import {
 	token,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The singular test of the pin pass end to end and the no-op paths.
+ *
+ * @remarks
+ *
+ * The pin pass covers the range law across all four sections (strip ^/~/=
+ * one leading prefix, everything else untouched, the documented ^1.* edge,
+ * non-string values, the refusal domain preserved, the serialization), the
+ * guarded write with Stash pre-registration and the P₃ same-actor re-emit,
+ * the silent re-entrant no-op, the author's next guarded write at the fresh
+ * version, and the three no-op paths (already pinned, non-JSON, vanished)
+ * all silent-writes-none.
+ *
+ * The file runs standalone
+ * (`node Target/Test/Pin-Pass-And-No-Ops/Test.js`) and under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * It is a unit smoke of @playform/ets-hook-dsh-package-pinner.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	const World = Boot();

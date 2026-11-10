@@ -1,3 +1,9 @@
+import Emit from "@Function/Emit.js";
+import Persist from "@Function/Persist.js";
+import type Entry from "@Interface/Entry.js";
+import type Proposal from "@Interface/Proposal.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Propose
  *
@@ -5,6 +11,7 @@
  * board.
  *
  * @remarks
+ *
  * THE SPLICE the plan's exploration item 1 asked for: the proposal arrives
  * as an inbox message (the harness agent-team channel), the board parses it
  * (Function/Envelope) and projects it into its state, so the board, the
@@ -23,12 +30,6 @@
  * `batch/state-change` kind `proposal` AFTER the state moved - the same
  * contract the write API follows.
  */
-import Emit from "@Function/Emit.js";
-import Persist from "@Function/Persist.js";
-import type Entry from "@Interface/Entry.js";
-import type Proposal from "@Interface/Proposal.js";
-import type State from "@Interface/State.js";
-
 /**
  * Read one string field off the untrusted payload.
  */

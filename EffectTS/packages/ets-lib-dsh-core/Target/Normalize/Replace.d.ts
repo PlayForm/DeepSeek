@@ -7,6 +7,7 @@ export default _default;
  * text segment and count the replaced characters.
  *
  * @remarks
+ *
  * The replacement is a FUNCTION replacer, not a string: a string
  * replacement would interpret `$` patterns in a custom config value (e.g.
  * `$&`), while the function form returns `To` literally - a config value is

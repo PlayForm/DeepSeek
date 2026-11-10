@@ -1,3 +1,7 @@
+import type { LaunchTarget, PanelRegistry, PanelSection, PanelSlot } from "@Interface/Panel.js";
+import Lines from "@Variable/Lines.js";
+import Slots from "@Variable/Slots.js";
+
 /**
  * @module Registry
  *
@@ -5,6 +9,7 @@
  * body).
  *
  * @remarks
+ *
  * Sections are stored by id; re-registering the same id replaces it in place
  * (an HMR reload rebinds the closure without duplicating it). The registry is
  * slot-aware (the v4.1 model): every section belongs to one declared child
@@ -18,10 +23,6 @@
  * ordered by (order, id), optionally filtered to one slot. Every accepted
  * mutation bumps the version and notifies the subscribers.
  */
-import type { LaunchTarget, PanelRegistry, PanelSection, PanelSlot } from "@Interface/Panel.js";
-import Lines from "@Variable/Lines.js";
-import Slots from "@Variable/Slots.js";
-
 const Ordering = (Left: PanelSection, Right: PanelSection): number => {
 	switch (true) {
 		case Left.order !== Right.order:

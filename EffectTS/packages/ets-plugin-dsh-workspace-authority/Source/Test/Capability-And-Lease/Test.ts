@@ -1,11 +1,17 @@
-// Source/Test/Capability-And-Lease/Test.ts - the capability and the lease
-// records: the grant/revoke/authorize paths with their byte-exact lines, the
-// per-holder ceilings, the lease TTL (explicit, policy override, default),
-// the lazy expiry sweep, the release path, and the statistics.
 import assert from "node:assert/strict";
 import { Check, Finish, LinesWith, Make, MakeCounter, Validate, rm } from "../Harness.js";
 
-/** An enabled service with a fresh state. */
+/**
+ * @module Test
+ *
+ * The capability and the lease records: the grant/revoke/authorize paths with
+ * their byte-exact lines, the per-holder ceilings, the lease TTL (explicit,
+ * policy override, default), the lazy expiry sweep, the release path, and the
+ * statistics.
+ */
+/**
+ * An enabled service with a fresh state.
+ */
 const Setup = (Raw: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: "/nonexistent/authority.log", enabled: true, ...Raw }));

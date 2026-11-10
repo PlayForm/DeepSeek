@@ -1,44 +1,51 @@
-// Provide - the engine services: `cost.session(SessionId, Rows, Selection?)`
-// answers one session's CostResponse from the ledger, `cost.contributions(Path)`
-// answers the conversations that contributed to one file's cost,
-// `cost.fileCalls(Path, SessionId)` answers the calls of one conversation that
-// allocated money to that same file (the deeper level of the same
-// file-scoped read), `cost.history(Path)` answers the content versions the
-// ledger recorded for that same file with the touches bound to each (the
-// lineage level), and `costPricing` (Interface/PricingService.ts,
-// Function/Pricing.ts) answers the versioned catalog surface over the v5
-// tables - catalogs, revisions and rate rows as reads, `publish` as the one
-// write, and `preview` as the re-pricing that persists nothing. The ledger
-// path is this package's own config default (Variable/Config's
-// `Home(["cost", "ledger.db"])`), never a caller's: all three file-scoped
-// reads take a FILE path (and a session id), not a ledger path, so they are
-// handed to the read and never opened.
-//
-// THE READ SERVICE opens the ledger read-only once per call and closes it in a
-// finally, so a failed read never leaks a handle. The package's own
-// Function/Open is the WRITE path (mkdir, the WAL pragmas, the schema ladder),
-// so it is not reused here: the local open expands a leading "~/" once and
-// throws one actionable line.
-//
-// THE VALUATION SELECTION (lane B4d) is the third argument of the session
-// read: the basis and the catalog revision the caller wants the recorded usage
-// interpreted under. The read service hands it to the reader together with the
-// pricing service, so a selection that names a non-recorded basis and a
-// revision gets its `valuation` block from the same preview the settings
-// surface uses - one pricing engine, never a second copy. Absent, the
-// argument changes nothing: the reader answers the recorded envelope.
-//
-// THE PRICING SERVICE is the one service that writes, so it rides the ledger
-// effect's own handle (passed in by Function/Apply): the WAL pragmas and the
-// foreign keys already in force there are the ones `publish`'s transaction
-// uses, and no second write handle is opened for a rare insert. A handle that
-// is absent (the ledger effect never ran) leaves the pricing service
-// unprovided rather than opening a path of its own; the session read still
-// answers the recorded envelope, and a selected basis then throws one
-// actionable line instead of pretending the comparison happened.
-//
-// Both services are returned as one disposer, so they are removed with the
-// fiber: the pricing service first, then the read service.
+/**
+ * @module Provide
+ *
+ * The engine services: `cost.session(SessionId, Rows, Selection?)` answers one
+ * session's CostResponse from the ledger, `cost.contributions(Path)` answers
+ * the conversations that contributed to one file's cost,
+ * `cost.fileCalls(Path, SessionId)` answers the calls of one conversation that
+ * allocated money to that same file, `cost.history(Path)` answers the content
+ * versions the ledger recorded for that same file, and `costPricing` answers
+ * the versioned catalog surface over the v5 tables.
+ *
+ * @remarks
+ * `cost.fileCalls` is the deeper level of the same file-scoped read and
+ * `cost.history` is the lineage level - the file's own content versions with
+ * the touches bound to each. `costPricing` follows
+ * `Interface/PricingService.ts` and `Function/Pricing.ts` - catalogs, revisions
+ * and rate rows as reads, `publish` as the one write, and `preview` as the
+ * re-pricing that persists nothing. The ledger path is this package's own
+ * config default (Variable/Config's `Home(["cost", "ledger.db"])`), never a
+ * caller's: all three file-scoped reads take a FILE path (and a session id),
+ * not a ledger path, so they are handed to the read and never opened.
+ *
+ * The read service opens the ledger read-only once per call and closes it in a
+ * finally, so a failed read never leaks a handle. The package's own
+ * `Function/Open` is the WRITE path (mkdir, the WAL pragmas, the schema
+ * ladder), so it is not reused here: the local open expands a leading "~/" once
+ * and throws one actionable line.
+ *
+ * The valuation selection (lane B4d) is the third argument of the session read:
+ * the basis and the catalog revision the caller wants the recorded usage
+ * interpreted under. The read service hands it to the reader together with the
+ * pricing service, so a selection that names a non-recorded basis and a
+ * revision gets its `valuation` block from the same preview the settings
+ * surface uses - one pricing engine, never a second copy. Absent, the argument
+ * changes nothing: the reader answers the recorded envelope.
+ *
+ * The pricing service is the one service that writes, so it rides the ledger
+ * effect's own handle (passed in by `Function/Apply`): the WAL pragmas and the
+ * foreign keys already in force there are the ones `publish`'s transaction
+ * uses, and no second write handle is opened for a rare insert. A handle that
+ * is absent (the ledger effect never ran) leaves the pricing service
+ * unprovided rather than opening a path of its own; the session read still
+ * answers the recorded envelope, and a selected basis then throws one
+ * actionable line instead of pretending the comparison happened.
+ *
+ * Both services are returned as one disposer, so they are removed with the
+ * fiber: the pricing service first, then the read service.
+ */
 import { homedir } from "node:os";
 import { DatabaseSync } from "node:sqlite";
 

@@ -5,6 +5,7 @@
  * transition.
  *
  * @remarks
+ *
  * The kind is the write API that caused it (or "clear" for the reset;
  * "proposal" / "decision" / "gate" for the inbox splice and the Gates
  * block). Emitted after the state is updated and persisted; the consumers

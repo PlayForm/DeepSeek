@@ -1,9 +1,12 @@
+import type { BlockSpecification } from "@Interface/Execution.js";
+
 /**
  * @module Catalog
  *
  * Projects the 14-entry template catalog for the suggester and the accept path.
  *
  * @remarks
+ *
  * The suggester-facing projection of the 14-entry template catalog (Requirements/03
  * section 3; the design's section 2.6 + I6 section 2). ONE source, THREE consumers: the
  * default block table (Variable/DefaultBlocks), this catalog (the suggester's compressed
@@ -18,8 +21,6 @@
  * suggestable-configured - they fall back to the "section" tier's plain note even in
  * "plant" mode.
  */
-import type { BlockSpecification } from "@Interface/Execution.js";
-
 /**
  * One catalog entry: the block spec plus the suggester's projection fields.
  */

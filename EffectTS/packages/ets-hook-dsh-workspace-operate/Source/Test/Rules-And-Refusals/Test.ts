@@ -1,11 +1,3 @@
-// Source/Test/Rules-And-Refusals/Test.ts - the loader contract, the service
-// registration, the cold-mount idle-forever posture, the activation proof,
-// the fail-loud validation, and the resolution rules through the real
-// service: the happy-path proposals with their byte-exact lines, and the
-// full refusal-to-guess vocabulary (bad-request, missing-version,
-// graph-unavailable, unknown-symbol, name-collision, duplicate-edge,
-// incompatible-edge, stale-version, span-beyond-file), plus the purity rule
-// (zero writeText calls - the hook never writes a file).
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -24,13 +16,32 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount with overrides and an optional fake graph. */
+/**
+ * @module Test
+ *
+ * The loader contract, the service registration, and the resolution rules of
+ * the operate hook through the real service.
+ *
+ * @remarks
+ *
+ * The folder proves the cold-mount idle-forever posture, the activation
+ * proof, the fail-loud validation, the happy-path proposals with their
+ * byte-exact lines, and the full refusal-to-guess vocabulary (bad-request,
+ * missing-version, graph-unavailable, unknown-symbol, name-collision,
+ * duplicate-edge, incompatible-edge, stale-version, span-beyond-file), plus
+ * the purity rule (zero writeText calls - the hook never writes a file).
+ */
+/**
+ * A standard enabled mount with overrides and an optional fake graph.
+ */
 const Setup = (Config: Record<string, unknown> = {}, Graph?: any): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }), Graph);
 };
 
-/** The default fake graph: symbol Alpha in a.ts, file nodes for a.ts and b.ts. */
+/**
+ * The default fake graph: symbol Alpha in a.ts, file nodes for a.ts and b.ts.
+ */
 const DefaultGraph = (
 	Edges: { kind: string; from: string; to: string }[] = [],
 	ExtraNodes: any[] = [],
@@ -45,7 +56,9 @@ const DefaultGraph = (
 		Edges,
 	);
 
-/** Drive one folder's checks. */
+/**
+ * Drive one folder's checks.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

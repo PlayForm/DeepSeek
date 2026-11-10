@@ -1,9 +1,12 @@
+import type State from "@Interface/State.js";
+
 /**
  * @module Focus
  *
  * The caller's focus tracker for the staleness contract.
  *
  * @remarks
+ *
  * Remember the last focus per caller so the staleness contract ("the
  * version the caller held, if it differs") can compare a later packet
  * against the version the caller last saw. The map is per-apply state,
@@ -11,8 +14,6 @@
  * dropped when the map exceeds 256 callers (a fixed implementation bound,
  * recorded here, not a config knob).
  */
-import type State from "@Interface/State.js";
-
 const CALLER_LIMIT = 256;
 
 export default (State: State, Caller: string, Id: string, Version: string): void => {

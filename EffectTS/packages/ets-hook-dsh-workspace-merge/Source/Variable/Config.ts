@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The hook's Schemastery Config schema: one constant built once at load.
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills
  * every default, so invalid configuration fails LOUD at load. The shape
  * this schema produces is Interface/Config.ts; the contract is MERGE.md.
@@ -18,9 +22,6 @@
  *
  * `enabled` defaults to FALSE - the IDLE-forever posture.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
-
 export default Compose(false, {
 	logFile: Schema.string().default("~/.dsh/playform/ets-hook-dsh-workspace-merge.log").volatile(),
 	enabled: Schema.boolean().default(false).volatile(),

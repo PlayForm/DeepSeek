@@ -7,6 +7,7 @@
  * serialized Schemastery schema.
  *
  * @remarks
+ *
  * The panel declares this shape locally (the client bundle must not import
  * the settings package at runtime) and uses it structurally: a host that
  * composes the settings client supplies the same methods.

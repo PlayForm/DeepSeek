@@ -4,6 +4,7 @@
  * The canonical batch contract the pass-on PRODUCES.
  *
  * @remarks
+ *
  * PASS-ON-AND-INGESTER.md section 2. Declared structurally: the family's
  * self-contained rule forbids importing the decision hook, so this file is
  * the pass-on's own copy of the contract, and the inbox envelope is the only

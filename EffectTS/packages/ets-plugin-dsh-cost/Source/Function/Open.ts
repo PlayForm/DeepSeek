@@ -1,3 +1,18 @@
+import { mkdirSync } from "node:fs";
+import { dirname } from "node:path";
+import { DatabaseSync } from "node:sqlite";
+
+import { Expand } from "@playform/ets-base-dsh";
+
+import type Config from "../Interface/Config.js";
+import Ddl, {
+	Migration,
+	MigrationFactor,
+	MigrationPricing,
+	MigrationTelemetry,
+	MigrationVersioning,
+} from "./Schema.js";
+
 /**
  * @module Open
  *
@@ -5,6 +20,7 @@
  * returned as `{ Database, Close }`.
  *
  * @remarks
+ *
  * The durability postures are the design document's (section 3):
  * journal_mode=WAL, foreign_keys=ON, synchronous=NORMAL, every table
  * STRICT. The schema runs exactly once per file - a fresh file (user_version
@@ -26,21 +42,6 @@
  * (section 1.7). The import is the static `node:sqlite` core module
  * (DatabaseSync), which needs no native build.
  */
-import { mkdirSync } from "node:fs";
-import { dirname } from "node:path";
-import { DatabaseSync } from "node:sqlite";
-
-import { Expand } from "@playform/ets-base-dsh";
-
-import type Config from "../Interface/Config.js";
-import Ddl, {
-	Migration,
-	MigrationFactor,
-	MigrationPricing,
-	MigrationTelemetry,
-	MigrationVersioning,
-} from "./Schema.js";
-
 /**
  * The schema version this build writes and understands: the ladder's top
  * rung.

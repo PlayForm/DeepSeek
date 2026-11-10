@@ -1,3 +1,10 @@
+import FileSystem from "node:fs/promises";
+import OS from "node:os";
+import Path from "node:path";
+
+import type Configuration from "@Interface/Config.js";
+import type { Op } from "@Interface/Proposal.js";
+
 /**
  * @module Apply
  *
@@ -5,6 +12,7 @@
  * judge's acceptance becomes a file.
  *
  * @remarks
+ *
  * THE FENCE IS THE EXISTENCE CHECK, not a version number. Every operation
  * declares which side of the existence line it lives on, and the write refuses
  * the other side:
@@ -21,13 +29,6 @@
  * AGREEMENT OPERATIONS NEVER REACH THIS MODULE. `~/.dsh/AGENTS.md` is the
  * user's file; the service queues those proposals and says so in the ledger.
  */
-import FileSystem from "node:fs/promises";
-import OS from "node:os";
-import Path from "node:path";
-
-import type Configuration from "@Interface/Config.js";
-import type { Op } from "@Interface/Proposal.js";
-
 /**
  * Expand a leading `~` (the family's path convention for every knob).
  */

@@ -1,3 +1,5 @@
+import { Effect, Exit, Scope } from "effect";
+
 /**
  * @module Update
  *
@@ -6,6 +8,7 @@
  * engine is wrapped in.
  *
  * @remarks
+ *
  * The package governor (ncu) and the cargo governor (cargo upgrade) run the
  * same control flow - only the child execution stage and the module's own
  * ledger strings differ - so the flow lives here as a builder: the module
@@ -74,8 +77,6 @@
  * and contains every outcome with `Effect.exit`, so the typed effect never
  * fails where the Classic promise chain never rejected.
  */
-import { Effect, Exit, Scope } from "effect";
-
 /**
  * Job - the output-ring handle the jobs runtime passes to a started job's
  * `run` callback (structural: the only member the envelope consumes).

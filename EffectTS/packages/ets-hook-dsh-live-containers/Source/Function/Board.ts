@@ -1,9 +1,17 @@
+import Clock from "@Function/Clock.js";
+import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
+import * as Policy from "@Function/Policy.js";
+import type { Log } from "@Function/Render.js";
+import type { BoardMember, BoardState, JobEvent, LeaseEntry } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Board
  *
  * Opens, folds and renders the planted-block boards of the live-container surface.
  *
  * @remarks
+ *
  * The planted-block surface (CAN-2, I5 PLANTED-LEASE; IMPLEMENTATION-DESIGN.md sections
  * 3.4, 4.4 as amended). A planted block is a LEASE: the board declares its reporters and
  * a window of N consecutive parent turns without a foldable report from a running
@@ -18,13 +26,6 @@
  * declarations are section changes at the next parent request. There is no
  * completion-style dynamic context for boards - a board is RUNNING state.
  */
-import Clock from "@Function/Clock.js";
-import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
-import * as Policy from "@Function/Policy.js";
-import type { Log } from "@Function/Render.js";
-import type { BoardMember, BoardState, JobEvent, LeaseEntry } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
-
 /**
  * The byte length of one string.
  */

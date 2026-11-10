@@ -5,6 +5,7 @@
  * governed.
  *
  * @remarks
+ *
  * Anywhere mode, exclusion-first. Identical in the package.json governor, the package.json pinner
  * and the Cargo.toml governor: internals (.pnpm/.store), the harness home (.dsh), VCS metadata
  * (.git), dependency trees (node_modules) and the app bundle. A module may override it by passing

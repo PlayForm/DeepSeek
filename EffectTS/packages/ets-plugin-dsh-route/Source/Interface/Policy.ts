@@ -4,6 +4,7 @@
  * The user's routing-policy shapes for the enforcer.
  *
  * @remarks
+ *
  * ROUTING-ENFORCER-PLUGIN.md sections 1-3: the user owns the configuration,
  * the plugin only enforces it. The policy covers the agent-loop roles
  * (coder / explorer / planner, each with its explicit provider / model /

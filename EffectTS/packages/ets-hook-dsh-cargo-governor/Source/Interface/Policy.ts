@@ -5,6 +5,7 @@
  * code).
  *
  * @remarks
+ *
  * Resolved by Function/Resolve and materialized by Function/Update/Policy:
  * the configured file when given and readable, else the BUILT-IN DEFAULT
  * (no rejects, all dep tables, target latest, NO verifyCommand - never

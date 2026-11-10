@@ -1,9 +1,15 @@
+import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
+import Decide from "@Function/Decide.js";
+import type Decision from "@Interface/Decision.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Guard
  *
  * The tools/pre-execute listener: the intercept.
  *
  * @remarks
+ *
  * ORCHESTRATION-PLUGINS.md section 3. Registered as a WATERFALL on the plugin's own context (the
  * guard judges only the dispatches the terminal surface delivers; root registration is NOT used -
  * a pre-execute transform is scoped, unlike the observation listeners).
@@ -25,11 +31,6 @@
  * factory's segment match) skips the guard entirely - the paths the user declared out of the
  * guard's jurisdiction.
  */
-import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
-import Decide from "@Function/Decide.js";
-import type Decision from "@Interface/Decision.js";
-import type State from "@Interface/State.js";
-
 /**
  * The refusal line (module-owned, byte-stable): surfaces ONCE, never
  * punishes - it states the rule and the allowed path, nothing more.

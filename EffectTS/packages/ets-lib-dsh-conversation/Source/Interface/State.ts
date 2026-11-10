@@ -5,6 +5,7 @@
  * and what a conversation-aware consumer keeps in its cell.
  *
  * @remarks
+ *
  * The derivation "which files did this step touch" lives in
  * Function/Resolve and appears here as the Touches list and the distinct
  * Files, written once instead of once per plugin.

@@ -1,9 +1,14 @@
+import type { Log } from "@Function/Render.js";
+import type { MonitorEntry, MonitorRecord } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Storage
  *
  * Opens the monitor storage domain, records into it, and rebuilds the monitor set.
  *
  * @remarks
+ *
  * The P5-style monitor-domain open, the record sink and the recovery load (the
  * FILE-MONITOR design section 1, the factory's ets-plugin-dsh-factory
  * Function/{Open,Attach}.ts pattern).
@@ -31,10 +36,6 @@
  * recovered <path> (<n> checks)`. When the read surface is absent or fails: no recovery -
  * the bands render `not run yet` (honesty, never fabrication).
  */
-import type { Log } from "@Function/Render.js";
-import type { MonitorEntry, MonitorRecord } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
-
 /**
  * The queue cap for the pre-bind buffer (the factory Queue pattern).
  */

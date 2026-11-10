@@ -1,3 +1,7 @@
+import CapacityFn from "@Function/Capacity.js";
+import type State from "@Interface/State.js";
+import type Task from "@Interface/Task.js";
+
 /**
  * @module Schedule
  *
@@ -5,6 +9,7 @@
  * one to dispatch.
  *
  * @remarks
+ *
  * SUBAGENT-QUEUE-PLUGIN.md section 2.2, the pair-schedule replacement. Pure
  * and deterministic - the same store always produces the same order:
  * 1. Only tasks whose dependencies are all COMPLETED are eligible (a
@@ -17,10 +22,6 @@
  * Returns undefined when nothing is eligible (an empty queue, a saturated
  * dependency, or no capacity).
  */
-import CapacityFn from "@Function/Capacity.js";
-import type State from "@Interface/State.js";
-import type Task from "@Interface/Task.js";
-
 export default (State: State, Agent: string): Task | undefined => {
 	// The capacity gate first: no free slot, no dispatch.
 	if (CapacityFn(State, Agent) <= 0) {

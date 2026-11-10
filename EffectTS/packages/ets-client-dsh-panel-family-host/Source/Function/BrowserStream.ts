@@ -1,3 +1,5 @@
+import type { PanelEnvelope } from "@Interface/Trace.js";
+
 /**
  * @module BrowserStream
  *
@@ -5,6 +7,7 @@
  * `GET /api/playform-family/trace` route.
  *
  * @remarks
+ *
  * Each frame is `data: <json>` and the JSON is one trace envelope, so the
  * stream is the browser equivalent of the host's D5 bus subscription: the
  * frames are unshifted into a bounded newest-first ring and every arrival
@@ -16,8 +19,6 @@
  * no-op subscriptions - never an error. A malformed frame is ignored
  * silently: the stream is a status surface, not a log store.
  */
-import type { PanelEnvelope } from "@Interface/Trace.js";
-
 const BOUND = 200;
 
 export default function BrowserStream(): {

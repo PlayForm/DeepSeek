@@ -1,9 +1,3 @@
-// Source/Test/Service-And-Storage/Test.ts - the service surface and the
-// storage domain: the manual line recording, the IntentAssessment loop
-// closer, the chain and ring views, the ring cap with its byte-exact drop
-// line, the domain spec, the persistence, the restart recovery with the
-// continued sequence, the absent facility (silent skip), the loud open
-// failure, and the effect's disposer closing the handle.
 import assert from "node:assert/strict";
 import {
 	Boot,
@@ -20,7 +14,23 @@ import {
 	FakeStorage,
 } from "../Harness.js";
 
-/** A standard enabled mount with the fake storage attached. */
+/**
+ * @module Test
+ *
+ * The singular test of the service surface and the storage domain.
+ *
+ * @remarks
+ *
+ * The service surface covers the manual line recording, the
+ * IntentAssessment loop closer, the chain and ring views, the ring cap with
+ * its byte-exact drop line. The storage domain covers the domain spec, the
+ * persistence, the restart recovery with the continued sequence, the absent
+ * facility (silent skip), the loud open failure, and the effect's disposer
+ * closing the handle.
+ */
+/**
+ * A standard enabled mount with the fake storage attached.
+ */
 const Setup = async (Config: Record<string, unknown> = {}, Facility: unknown = undefined): Promise<any> => {
 	rm();
 	const Run = Make(
@@ -35,7 +45,9 @@ const Setup = async (Config: Record<string, unknown> = {}, Facility: unknown = u
 	return Run;
 };
 
-/** Let the effect's void storage open settle. */
+/**
+ * Let the effect's void storage open settle.
+ */
 const Settle = async (): Promise<void> => {
 	await new Promise((Resolve) => setImmediate(Resolve));
 };

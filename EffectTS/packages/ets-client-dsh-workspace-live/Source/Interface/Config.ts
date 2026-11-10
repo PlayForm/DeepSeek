@@ -4,6 +4,7 @@
  * The validated shape of the live client's tunables.
  *
  * @remarks
+ *
  * The Schemastery schema in Variable/Config.ts produces this object.
  */
 export default interface Config {

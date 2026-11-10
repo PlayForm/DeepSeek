@@ -1,10 +1,3 @@
-// Source/Test/Real-Graph-Packet/Test.ts - the orientation packet over a REAL
-// populated graph: the real workspace-graph service (from its built Target) is
-// indexed through its own indexing trigger over a deterministic file map, and
-// the context service builds the packet from it. The WORKSPACE/MAP/FOCUS/
-// NEIGHBORS/EVIDENCE bands carry real ids, real spans, real fingerprints and
-// the real indexRevision, and OPEN is "(none)" - the graph answered, so this is
-// not the empty form the absent-graph folder proves.
 import assert from "node:assert/strict";
 import Render from "../../../Target/Function/Render.js";
 import {
@@ -21,6 +14,17 @@ import {
 	rm,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The orientation packet over a REAL populated graph: the real workspace-graph
+ * service (from its built Target) is indexed through its own indexing trigger
+ * over a deterministic file map, and the context service builds the packet
+ * from it. The WORKSPACE/MAP/FOCUS/NEIGHBORS/EVIDENCE bands carry real ids,
+ * real spans, real fingerprints and the real indexRevision, and OPEN is
+ * "(none)" - the graph answered, so this is not the empty form the
+ * absent-graph folder proves.
+ */
 const CORE = 'import { util } from "./util.ts";\n\nexport function core(): number {\n\treturn util;\n}\n';
 const UTIL = "export const util = 1;\n";
 const TEST_FILE = 'import { core } from "./core.ts";\n\nexport const suite = core;\n';

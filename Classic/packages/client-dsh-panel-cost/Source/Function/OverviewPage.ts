@@ -1,30 +1,31 @@
-// OverviewPage - the Cost tab's Overview page (Temporary/Cost-Research/
-// Plan.md lane B5c; the research's section 2 navigation and section 8's
-// dynamic list): the session at a glance, before any table.
-//
-// THE GRID is the folded envelope's own summary: the turns and steps the
-// snapshot holds, the calls, the tokens, the money, the cache hit, the
-// signed net cache benefit and the unpriced count, with the coverage the
-// summary states (priced of calls) in the unpriced tile's tooltip. Nothing
-// here is fetched: the page reads what the session fetch already returned,
-// so opening it adds no request, and its figures agree with the totals row
-// and the footer strip.
-//
-// THE VALUATION LINE is the envelope's optional block: when the selected
-// cost basis pins a revision, the recorded, revised and difference figures
-// render under their own head, titled with the revision and the attribution
-// policy version - the same comparison the footer band carries, on the page
-// the reader lands on first.
-//
-// THE TOP FILES are the summary's ranked list as buttons, wired to the
-// view's existing top-file action, so a click opens the Files page already
-// filtered to that path.
-//
-// THE STATES: this page renders the ready session and the empty one. An
-// empty session shows the panel's own empty line instead of a grid of
-// zeros. The loading, unavailable and error states never reach the page,
-// because the view answers them with its full-panel lines before a page is
-// chosen.
+/**
+ * @module OverviewPage
+ *
+ * The Cost tab's Overview page: the session at a glance, before any table.
+ *
+ * @remarks
+ * The research source is `Temporary/Cost-Research/Plan.md` lane B5c, with the research's section 2
+ * navigation and section 8's dynamic list.
+ *
+ * THE GRID is the folded envelope's own summary: the turns and steps the snapshot holds, the
+ * calls, the tokens, the money, the cache hit, the signed net cache benefit and the unpriced
+ * count, with the coverage the summary states (priced of calls) in the unpriced tile's tooltip.
+ * Nothing here is fetched: the page reads what the session fetch already returned, so opening it
+ * adds no request, and its figures agree with the totals row and the footer strip.
+ *
+ * THE VALUATION LINE is the envelope's optional block: when the selected cost basis pins a
+ * revision, the recorded, revised and difference figures render under their own head, titled with
+ * the revision and the attribution policy version - the same comparison the footer band carries,
+ * on the page the reader lands on first.
+ *
+ * THE TOP FILES are the summary's ranked list as buttons, wired to the view's existing top-file
+ * action, so a click opens the Files page already filtered to that path.
+ *
+ * THE STATES: this page renders the ready session and the empty one. An empty session shows the
+ * panel's own empty line instead of a grid of zeros. The loading, unavailable and error states
+ * never reach the page, because the view answers them with its full-panel lines before a page is
+ * chosen.
+ */
 import Count from "@Function/Count";
 import CountShort from "@Function/CountShort";
 import Price from "@Function/Price";
@@ -60,17 +61,21 @@ const BaseName = (Path: string): string => {
 	return Cut === -1 ? Path : Path.slice(Cut + 1);
 };
 
-// Tone - the stable dot tone of one path: the same hash the footer band
-// uses, so a file keeps one color wherever the panel names it.
+/**
+ * Tone - the stable dot tone of one path: the same hash the footer band uses, so a file keeps one
+ * color wherever the panel names it.
+ */
 const Tone = (Path: string): number => {
 	let Hash = 0;
 	for (const Character of Path) Hash = (Hash * 31 + Character.charCodeAt(0)) % 9973;
 	return Hash % 8;
 };
 
-// Stat - one tile of the grid: the label and the value, with the tooltip
-// that names where the figure comes from. The tile is the sheet's bucket
-// face, so the grid needs no new rule of its own.
+/**
+ * Stat - one tile of the grid: the label and the value, with the tooltip that names where the
+ * figure comes from. The tile is the sheet's bucket face, so the grid needs no new rule of its
+ * own.
+ */
 const Stat = (
 	Label: string,
 	Value: ReturnType<typeof createElement> | string,
@@ -83,10 +88,11 @@ const Stat = (
 		createElement("span", { className: "playform-cost-bucket-value" }, Value),
 	);
 
-// Comparison - the valuation line of one envelope: the basis the read was
-// valued under, the recorded and revised totals over the same calls, and
-// their signed difference, titled with the catalog revision and the
-// attribution policy version. Without a block the page renders no line.
+/**
+ * Comparison - the valuation line of one envelope: the basis the read was valued under, the
+ * recorded and revised totals over the same calls, and their signed difference, titled with the
+ * catalog revision and the attribution policy version. Without a block the page renders no line.
+ */
 const Comparison = (
 	Valuation: CostValuation,
 	Currency: string,

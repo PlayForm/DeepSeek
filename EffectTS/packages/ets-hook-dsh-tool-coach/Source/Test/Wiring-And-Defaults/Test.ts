@@ -1,14 +1,3 @@
-// Source/Test/Wiring-And-Defaults/Test.ts - one singular test: the loader
-// contract and the config defaults are the two surfaces every other folder
-// (and every consumer) silently depends on - the volatile cells, the defaults,
-// the activation posture (six registrations, the REAL factory on the state,
-// the byte-exact activation ledger line, the durable [ISO] proof), and the
-// fail-loud validation refusals. A drift here breaks every later folder, so
-// it is its own folder. Runs standalone (`node Target/Test/Wiring-And-Defaults/Test.js`)
-// AND under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions are moved
-// verbatim from Classic/smokes/tool-coach-smoke.mjs (Run 1 + the fail-loud
-// validation checks).
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {
@@ -29,6 +18,28 @@ import {
 	CAT_ROW,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The singular test of the loader contract and the config defaults, the two
+ * surfaces every other folder (and every consumer) silently depends on.
+ *
+ * @remarks
+ *
+ * The test covers the volatile cells, the defaults, the activation posture
+ * (six registrations, the REAL factory on the state, the byte-exact
+ * activation ledger line, the durable `[ISO]` proof), and the fail-loud
+ * validation refusals. A drift here breaks every later folder, so it is its
+ * own folder.
+ *
+ * The file runs standalone
+ * (`node Target/Test/Wiring-And-Defaults/Test.js`) and under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * It is a unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions
+ * are moved verbatim from `Classic/smokes/tool-coach-smoke.mjs` (Run 1 +
+ * the fail-loud validation checks).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

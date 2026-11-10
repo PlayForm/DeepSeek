@@ -1,9 +1,16 @@
+import { Layer, type Context } from "effect";
+import * as GovernService from "./Govern.js";
+import * as JournalService from "./Journal.js";
+import type { Host } from "./Journal.js";
+import * as LedgerService from "./Ledger.js";
+import * as WriteService from "./Write.js";
 /**
  * @module Runtime
  *
  * The factory's effect runtime: the layer graph and the run helpers.
  *
  * @remarks
+ *
  * This is the one new file per the plan ("new files only where the runtime
  * lives"): the factory owns the runtime, the shell's constructor materializes
  * it once, and every plain-async seam calls back into it through the four
@@ -53,12 +60,6 @@
  * bundle load - and an unloadable bundle degrades to the no-op Tracer
  * (tracing is best-effort by design; it must never break the plugin).
  */
-import { Layer, type Context } from "effect";
-import * as GovernService from "./Govern.js";
-import * as JournalService from "./Journal.js";
-import type { Host } from "./Journal.js";
-import * as LedgerService from "./Ledger.js";
-import * as WriteService from "./Write.js";
 /**
  * Tags - the union of the four service tags the graph provides.
  */

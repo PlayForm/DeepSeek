@@ -5,6 +5,7 @@
  * result, never a thrown string and never a guessed proposal.
  *
  * @remarks
+ *
  * The resolution rules (Function/Rules.ts) return either a Proposal or a
  * Refusal; the reason vocabulary is frozen below and the tool renders the
  * detail verbatim.

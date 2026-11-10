@@ -1,3 +1,11 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
+import { type Gate as Decision, type Registry as GovernRegistry, type Selection as GovernSelection, type Options as Setup, type State as Shape, type Transform, type Over as WriteOver } from "@playform/ets-base-dsh";
+import PolicyFn from "./Function/Policy.js";
+import SchemaFn from "./Function/Schema.js";
+import type Allowlist from "./Interface/Allowlist.js";
+import type Trace from "./Interface/Trace.js";
+import Version from "./Variable/Version.js";
 /**
  * @module Library
  *
@@ -5,6 +13,7 @@
  * plugin in the governance family (docs/user/develop/framework/service.md).
  *
  * @remarks
+ *
  * Loader contract: the class form - `export default class PluginFactory extends Service` with
  * `super(Context, "pluginFactory")`, registered immediately on construction and removed with its
  * owning fiber; `static inject = ["fs"]` because the factory's primitives call ctx.fs (the
@@ -78,14 +87,6 @@
  * parameterized machinery (the unreadable-policy line, the suppressed-error lines prefixed with
  * State.Module) and stay byte-identical when the module keeps its historical name.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
-import { type Gate as Decision, type Registry as GovernRegistry, type Selection as GovernSelection, type Options as Setup, type State as Shape, type Transform, type Over as WriteOver } from "@playform/ets-base-dsh";
-import PolicyFn from "./Function/Policy.js";
-import SchemaFn from "./Function/Schema.js";
-import type Allowlist from "./Interface/Allowlist.js";
-import type Trace from "./Interface/Trace.js";
-import Version from "./Variable/Version.js";
 /**
  * The NAMED TYPE exports (P0-1): the four structural contracts + the output
  * shape, re-exported from the entry so consumers can

@@ -1,9 +1,14 @@
+import { readFileSync } from "node:fs";
+
+import type { BuildOptions, Plugin } from "esbuild";
+
 /**
  * @module ESBuild
  *
  * The build configuration twin.
  *
  * @remarks
+ *
  * The plain-ESM twin convention (the
  * live-containers / factory / normalize family template). The base
  * configuration from @playform/build already applies: format esm, platform
@@ -24,10 +29,6 @@
  * The Target plugin wipes outdir "Target" recursively on start so stale
  * files can never linger after a rename or removal.
  */
-import { readFileSync } from "node:fs";
-
-import type { BuildOptions, Plugin } from "esbuild";
-
 /**
  * The package manifest, read at config-load time: its name and version become
  * the build-time constants the define block below compiles into the Target.

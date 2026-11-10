@@ -1,10 +1,3 @@
-// Source/Test/Wiring-And-Ledger/Test.ts - the wiring and the ledger: the
-// loader contract (the default object carries name/apply/Config/inject,
-// apply returns nothing), the context-only listener registration with the
-// distinct root identity, the byte-exact activation and disabled lines
-// (logger form and durable `[ISO]` form), the config fail-loud, the schema
-// defaults on the built State, and the fs purity (the doc suggester is a
-// NON-MANIFEST module: zero ctx.fs calls).
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -27,6 +20,20 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The wiring and the ledger.
+ *
+ * @remarks
+ *
+ * The test covers the loader contract (the default object carries
+ * name/apply/Config/inject, apply returns nothing), the context-only
+ * listener registration with the distinct root identity, the byte-exact
+ * activation and disabled lines (logger form and durable `[ISO]` form), the
+ * config fail-loud, the schema defaults on the built State, and the fs
+ * purity (the doc suggester is a NON-MANIFEST module: zero ctx.fs calls).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

@@ -1,9 +1,15 @@
+import Decide from "@Function/Decide.js";
+import Envelope from "@Function/Envelope.js";
+import Propose from "@Function/Propose.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Inbox
  *
  * The harness inbox listener (Function/Inbox): THE SPLICE.
  *
  * @remarks
+ *
  * The batch packages talk to each other through the harness agent-team
  * inbox - the same channel the harness itself delivers agent messages on -
  * so the board registers on the inbox events and projects every batch block
@@ -24,11 +30,6 @@
  * not depend on (the self-contained PoC rule). An ordinary message without a
  * batch block is ignored - silence is the default.
  */
-import Decide from "@Function/Decide.js";
-import Envelope from "@Function/Envelope.js";
-import Propose from "@Function/Propose.js";
-import type State from "@Interface/State.js";
-
 /**
  * The message shape both inbox channels carry (structurally narrowed).
  */

@@ -1,3 +1,4 @@
+import type { FsVersion } from "@deepseek-ai/dsh-fs";
 /**
  * @module Output
  *
@@ -5,6 +6,7 @@
  * null).
  *
  * @remarks
+ *
  * `next` is the NEXT content of the governed file: an object for a JSON
  * module (serialized by Function/Continue as JSON.stringify(next, null, 2) +
  * "\n" - the trio's exact serialization) or a raw string for a text-surgery
@@ -19,7 +21,6 @@
  * Returning `null` (or logging inside the transform and returning null) is
  * the no-change path: the factory stays silent.
  */
-import type { FsVersion } from "@deepseek-ai/dsh-fs";
 export default interface Output {
     /**
      * The next content - an object (JSON module) or a string (text surgery).

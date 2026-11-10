@@ -1,8 +1,3 @@
-// Source/Test/Resolve-And-Inject/Test.ts - the policy resolution, the
-// correction and the escalation: the deterministic Resolve (kept / corrected
-// / resolved / escalated), the keyword classification order, the attempts
-// ladder, the silent injection on the launch path with its byte-exact ledger
-// line, the volatile policy flip, and the purity of the resolver.
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -16,7 +11,18 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * The policy resolution, the correction and the escalation: the deterministic
+ * Resolve (kept / corrected / resolved / escalated), the keyword
+ * classification order, the attempts ladder, the silent injection on the
+ * launch path with its byte-exact ledger line, the volatile policy flip, and
+ * the purity of the resolver.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = async (): Promise<any> => {
 	const Run = Make(Validate({ enabled: true }));
 	return Run;

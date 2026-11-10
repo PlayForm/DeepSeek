@@ -6,6 +6,7 @@
  * decision record print them.
  *
  * @remarks
+ *
  * - `scope` - the call matched the family's path rules.
  * - `graph` - the graph-distance term (the neutral placeholder here).
  * - `prior` - the pack's prior for the companion.

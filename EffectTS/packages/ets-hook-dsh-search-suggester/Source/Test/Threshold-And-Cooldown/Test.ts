@@ -1,13 +1,3 @@
-// Source/Test/Threshold-And-Cooldown/Test.ts - the plan's suite 2: the gate
-// arithmetic (the config floor and the synthetic family's own 0.75 gate, the
-// R13 loop bonus on the ring), the cooldown window, the dedupe, and the
-// per-turn cap. Every refusal is a byte-exact ledger line; the counters are
-// judged calls, never a clock.
-//
-// THE CANDIDATES COME FROM THE SESSION HISTORY (k = sigmoid(2.5 - 0.6) =
-// 0.87), so the gate arithmetic is asserted on the history path instead of a
-// pack row's per-intent threshold. Every scenario mounts a temp workspace and
-// judges the workspace's absolute anchor.
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -26,23 +16,50 @@ import {
 	Workspace,
 } from "../Harness.js";
 
-/** The judged call's anchor path (relative to the temp workspace). */
+/**
+ * @module Test
+ *
+ * The plan's suite 2: the gate arithmetic, the cooldown and the cap test.
+ *
+ * @remarks
+ *
+ * The suite covers the gate arithmetic (the config floor and the synthetic
+ * family's own 0.75 gate, the R13 loop bonus on the ring), the cooldown
+ * window, the dedupe, and the per-turn cap. Every refusal is a byte-exact
+ * ledger line; the counters are judged calls, never a clock.
+ *
+ * THE CANDIDATES COME FROM THE SESSION HISTORY (k = sigmoid(2.5 - 0.6) =
+ * 0.87), so the gate arithmetic is asserted on the history path instead of a
+ * pack row's per-intent threshold. Every scenario mounts a temp workspace
+ * and judges the workspace's absolute anchor.
+ */
+/**
+ * The judged call's anchor path (relative to the temp workspace).
+ */
 const Anchor = "README.md";
 
-/** The two companions touched right after the anchor. */
+/**
+ * The two companions touched right after the anchor.
+ */
 const Companions = ["CHANGELOG.md", "SCHEME.md"];
 
-/** The temp workspace the scenarios judge. */
+/**
+ * The temp workspace the scenarios judge.
+ */
 const Space = Workspace([Anchor, ...Companions]);
 
-/** One judged read of the anchor. */
+/**
+ * One judged read of the anchor.
+ */
 const Read = (Id: string): any => ({
 	name: "read",
 	arguments: { file_path: Space.At(Anchor) },
 	agent: AgentOf(Id),
 });
 
-/** One judged call whose anchor has no history (it only ages the cooldown). */
+/**
+ * One judged call whose anchor has no history (it only ages the cooldown).
+ */
 const Elsewhere = (Id: string, N: string): any => ({
 	name: "grep",
 	arguments: { pattern: `unrelated query ${N}`, path: Space.At("package.json") },

@@ -1,12 +1,3 @@
-// Source/Test/Workspace-Gate/Test.ts - the workspace gate and the existence
-// filter against the fake ctx and REAL temp trees: (a) a call path with NO
-// `.git`/`package.json` root and no session cwd abstains `foreign-workspace`
-// before any candidate work, whether the cwd service is absent or its getter
-// throws; (b) a rooted tree with no history abstains `no-history`; (c) a
-// rooted tree with a history committed through the projection drive emits the
-// HISTORY note naming ONLY the companions that exist; (d) a history whose
-// whole companion set is absent abstains `no-companions`; (e) a foreign call
-// never poisons the next in-workspace call.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -23,10 +14,31 @@ import {
 	Setup,
 } from "../Harness.js";
 
-/** A temp tree under the OS temp dir (fresh per folder process). */
+/**
+ * @module Test
+ *
+ * The singular test of the workspace gate and the existence filter against
+ * the fake ctx and REAL temp trees.
+ *
+ * @remarks
+ *
+ * (a) A call path with NO `.git`/`package.json` root and no session cwd
+ * abstains `foreign-workspace` before any candidate work, whether the cwd
+ * service is absent or its getter throws. (b) A rooted tree with no history
+ * abstains `no-history`. (c) A rooted tree with a history committed through
+ * the projection drive emits the HISTORY note naming ONLY the companions
+ * that exist. (d) A history whose whole companion set is absent abstains
+ * `no-companions`. (e) A foreign call never poisons the next in-workspace
+ * call.
+ */
+/**
+ * A temp tree under the OS temp dir (fresh per folder process).
+ */
 const Tree = (Prefix: string): string => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
 
-/** Write one file under the tree (parents created). */
+/**
+ * Write one file under the tree (parents created).
+ */
 const Put = (Root: string, Relative: string, Body = "x"): string => {
 	const Full = Path.join(Root, Relative);
 	FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
@@ -34,7 +46,9 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
-/** A dedicated parent for the fixture trees. */
+/**
+ * A dedicated parent for the fixture trees.
+ */
 const Parent = Tree("search-suggester-workspaces-");
 const Branch = (Name: string): string => {
 	const Full = Path.join(Parent, Name);
@@ -42,28 +56,38 @@ const Branch = (Name: string): string => {
 	return Full;
 };
 
-/** The FOREIGN tree: no `.git`, no `package.json`, and no session cwd. */
+/**
+ * The FOREIGN tree: no `.git`, no `package.json`, and no session cwd.
+ */
 const Foreign = Branch("foreign");
 const ForeignIndex = Put(Foreign, "Documentation/INDEX.md");
 
-/** The ROOTED tree: the `package.json` marker and the anchor's companions. */
+/**
+ * The ROOTED tree: the `package.json` marker and the anchor's companions.
+ */
 const Rooted = Branch("rooted");
 Put(Rooted, "package.json", "{}");
 const RootedAnchor = Put(Rooted, "README.md");
 Put(Rooted, "CHANGELOG.md");
 Put(Rooted, "SCHEME.md");
 
-/** The optional harness service the probe reads (the real shape: get(session)). */
+/**
+ * The optional harness service the probe reads (the real shape: get(session)).
+ */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** A judged read call. */
+/**
+ * A judged read call.
+ */
 const Read = (Path_: string, Id: string): any => ({
 	name: "read",
 	arguments: { file_path: Path_ },
 	agent: AgentOf(Id),
 });
 
-/** The history note's byte-exact text (k = sigmoid(2.5 - 0.6) = 0.87). */
+/**
+ * The history note's byte-exact text (k = sigmoid(2.5 - 0.6) = 0.87).
+ */
 const HistoryText = [
 	"[search-suggester] intent=History confidence=0.87",
 	"targets (1):",

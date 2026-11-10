@@ -1,25 +1,33 @@
-// Source/Test/Harness.ts - the shared test harness for the CCR tests: the
-// fake ctx of the source suite (on capture with listener options, get
-// returning the REAL @playform/ets-plugin-dsh-factory instance from its built
-// Target, logger info/warn capture, the tool registry seam, the ROOT seam) +
-// the REAL CCR apply (from the built Target) - the seams from the source
-// suite, written ONCE per package and imported by every test folder. The
-// content helpers (the sha256-24 hash, the serialized size, the terminal
-// text, the exec stub, the waterfall default) are also here, since nearly
-// every folder drives the post-execute listener with them.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually wires
-// apply (the vacuously-green backstop for every folder's fixture);
-// prepublishOnly.sh gates the build on it. Imported as a library, this module
-// only exports.
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { rmSync } from "node:fs";
 import CCR from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the CCR tests: the source suite's fake ctx
+ * plus the REAL CCR apply, both seams from the source suite.
+ *
+ * @remarks
+ *
+ * The fake ctx carries on capture with listener options, get returning the
+ * REAL @playform/ets-plugin-dsh-factory instance from its built Target,
+ * logger info/warn capture, the tool registry seam, and the ROOT seam. The
+ * REAL CCR apply comes from the built Target. The seams are written ONCE
+ * per package and imported by every test folder. The content helpers (the
+ * sha256-24 hash, the serialized size, the terminal text, the exec stub,
+ * the waterfall default) are also here, since nearly every folder drives
+ * the post-execute listener with them.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * wires apply (the vacuously-green backstop for every folder's fixture);
+ * prepublishOnly.sh gates the build on it. Imported as a library, this
+ * module only exports.
+ */
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks. Passed
  * by reference so Check can bump it from inside its callback.

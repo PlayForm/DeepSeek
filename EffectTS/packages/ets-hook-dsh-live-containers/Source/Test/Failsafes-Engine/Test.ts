@@ -1,6 +1,3 @@
-// Source/Test/Failsafes-Engine/Test.ts - the F-series tests: the hang
-// detector and its kill gate, the meta-budget, the retry loop, the drift
-// guard, the wave-2 section collapse, and the failsafes-off posture.
 import assert from "node:assert/strict";
 import {
 	AgentA,
@@ -23,6 +20,13 @@ import {
 	FakeShell,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The F-series tests: the hang detector and its kill gate, the
+ * meta-budget, the retry loop, the drift guard, the wave-2 section
+ * collapse, and the failsafes-off posture.
+ */
 const DetachConfig = {
 	mode: "long-running",
 	allRequiresConfirm: false,

@@ -1,8 +1,3 @@
-// Source/Test/Lines/Test.ts - THE CHURN (Documentation/Plans/
-// COST-TRACK-PLUGIN.md sections 16.2 and 17.3): every edit tool call
-// produces hunks, the ledger stores each one in the Edit table, and the
-// analysis sums the lines a file's hunks added and removed, counts the
-// hunks, and divides the file's allocated cost by its added lines.
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -16,6 +11,19 @@ import Analysis from "../../../Target/Function/Analysis.js";
 import Reader from "../../../Target/Function/Open.js";
 import { Check, Finish, Make, MakeCounter, Validate } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE CHURN (Documentation/Plans/COST-TRACK-PLUGIN.md sections 16.2 and
+ * 17.3) of the cost-analysis plugin.
+ *
+ * @remarks
+ *
+ * Every edit tool call produces hunks, the ledger stores each one in the
+ * Edit table, and the analysis sums the lines a file's hunks added and
+ * removed, counts the hunks, and divides the file's allocated cost by its
+ * added lines.
+ */
 // The ledger half's validated config (the ledger package's own schema): the
 // fixture price row - input 1, output 2 per million - under one client, at
 // the temporary database.

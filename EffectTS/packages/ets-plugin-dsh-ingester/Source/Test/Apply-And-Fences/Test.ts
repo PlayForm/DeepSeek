@@ -1,7 +1,3 @@
-// Source/Test/Apply-And-Fences/Test.ts - the apply path through the fake
-// governed fs: the version fence, the conflict reasons, the stop-on-conflict
-// discipline, the multi-op version chain, the recovery path, the maxTargets
-// bound, and the journal record for every outcome.
 import assert from "node:assert/strict";
 import {
 	Build,
@@ -15,6 +11,13 @@ import {
 	Sha,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The apply path through the fake governed fs: the version fence, the conflict
+ * reasons, the stop-on-conflict discipline, the multi-op version chain, the
+ * recovery path, the maxTargets bound, and the journal record for every outcome.
+ */
 const A = "/repo/a.txt";
 const B = "/repo/b.txt";
 

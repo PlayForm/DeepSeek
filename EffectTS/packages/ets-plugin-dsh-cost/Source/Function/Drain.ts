@@ -1,3 +1,20 @@
+import { createHash } from "node:crypto";
+import { basename } from "node:path";
+import type { DatabaseSync } from "node:sqlite";
+
+import type { Context } from "@deepseek-ai/cordis";
+
+import type Config from "../Interface/Config.js";
+import type Touched from "../Interface/Touch.js";
+import type Usage from "../Interface/Usage.js";
+import Allocate from "./Allocate.js";
+import Edit from "./Edit.js";
+import Mass from "./Mass.js";
+import Price from "./Price.js";
+import StageOf from "./Stage.js";
+import Telemetry from "./Telemetry.js";
+import Touch, { Content, Rendered, Search } from "./Touch.js";
+
 /**
  * @module Drain
  *
@@ -6,6 +23,7 @@
  * folds one session's queued events into the ledger inside ONE transaction.
  *
  * @remarks
+ *
  * The fold writes the session and project dimensions adopted from the
  * session header, the Call row per assistant/message that carries usage
  * (priced at the price row in force at the call's own time, with the cache
@@ -59,23 +77,6 @@
  * processed session can rebuild the state a continuous run would hold before
  * it books the events past its cursor.
  */
-import { createHash } from "node:crypto";
-import { basename } from "node:path";
-import type { DatabaseSync } from "node:sqlite";
-
-import type { Context } from "@deepseek-ai/cordis";
-
-import type Config from "../Interface/Config.js";
-import type Touched from "../Interface/Touch.js";
-import type Usage from "../Interface/Usage.js";
-import Allocate from "./Allocate.js";
-import Edit from "./Edit.js";
-import Mass from "./Mass.js";
-import Price from "./Price.js";
-import StageOf from "./Stage.js";
-import Telemetry from "./Telemetry.js";
-import Touch, { Content, Rendered, Search } from "./Touch.js";
-
 /**
  * One raw session-log event: the fields the fold reads.
  */

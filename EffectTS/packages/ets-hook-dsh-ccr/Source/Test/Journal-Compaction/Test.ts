@@ -1,14 +1,3 @@
-// Source/Test/Journal-Compaction/Test.ts - one singular test: the opt-in
-// JSONL journal - the wired store path, the one-record-per-store format
-// ({hash, type, size, ttlAt} + the base64 payload), the boot compaction (the
-// corrupt and expired records dropped on a fake restart, the entry still
-// retrievable), and the boot-compaction edges (an empty file, an all-expired
-// file rewritten empty, and a MISSING file that is not created on boot -
-// memory-only).
-// Runs standalone (`node Target/Test/Journal-Compaction/Test.js`) AND under
-// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-ccr: the fake ctx + the REAL factory +
-// the REAL CCR apply, from the Harness.
 import assert from "node:assert/strict";
 import {
 	appendFileSync,
@@ -35,6 +24,26 @@ import {
 	SizeOf,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the opt-in JSONL journal.
+ *
+ * @remarks
+ *
+ * The test covers the wired store path, the one-record-per-store format
+ * ({hash, type, size, ttlAt} + the base64 payload), the boot compaction
+ * (the corrupt and expired records dropped on a fake restart, the entry
+ * still retrievable), and the boot-compaction edges (an empty file, an
+ * all-expired file rewritten empty, and a MISSING file that is not created
+ * on boot - memory-only).
+ *
+ * Runs standalone (`node Target/Test/Journal-Compaction/Test.js`) AND
+ * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-ccr: the fake ctx + the REAL
+ * factory + the REAL CCR apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

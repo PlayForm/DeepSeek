@@ -1,6 +1,3 @@
-// Source/Test/Loader-And-Journal/Test.ts - the class-form loader contract,
-// the config defaults, and the pre-apply validation: every rejection is
-// journaled before any write, every target is reported honestly.
 import assert from "node:assert/strict";
 import {
 	Build,
@@ -16,6 +13,13 @@ import {
 	rm,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The class-form loader contract, the config defaults, and the pre-apply
+ * validation: every rejection is journaled before any write, every target is
+ * reported honestly.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

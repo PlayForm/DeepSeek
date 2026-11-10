@@ -1,3 +1,8 @@
+import type Family from "../Interface/Family.js";
+import type Pack from "../Interface/Pack.js";
+import type Signal from "../Interface/Signal.js";
+import type Target from "../Interface/Target.js";
+
 /**
  * @module Normalize
  *
@@ -5,6 +10,7 @@
  * families projection can rely on a total structure.
  *
  * @remarks
+ *
  * The defaults are the pack schema's documented ones:
  *
  * - `family.id` - the key's last segment (`doc/Plan` -> `Plan`);
@@ -23,11 +29,6 @@
  * suggester's fail-open listener catches it, warns, and passes the call through
  * unnoted.
  */
-import type Family from "../Interface/Family.js";
-import type Pack from "../Interface/Pack.js";
-import type Signal from "../Interface/Signal.js";
-import type Target from "../Interface/Target.js";
-
 /**
  * A string field with a fallback.
  */

@@ -1,5 +1,25 @@
 import { dirname, isAbsolute, resolve, sep } from "node:path";
 
+import type { Context } from "@deepseek-ai/cordis";
+import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
+import type Config from "@Interface/Config.js";
+import type { ReplayRecord } from "@Interface/History.js";
+import type { Candidate, Intent } from "@Interface/Pack.js";
+import type { AgentMemory } from "@Interface/State.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
+import { Families, Home, Resolve, Root as RootOf } from "@playform/ets-lib-dsh-pack";
+import Version from "@Variable/Version.js";
+
+import Detect, { Compile } from "./Detect.js";
+import { IsFile } from "./Exists.js";
+import History, { Recall } from "./History.js";
+import BuildNote, { Prepend } from "./Note.js";
+import RecallHistory from "./RecallHistory.js";
+import Record from "./Record.js";
+import Recover from "./Recover.js";
+import Storage from "./Storage.js";
+
 /**
  * @module Apply
  *
@@ -10,6 +30,7 @@ import { dirname, isAbsolute, resolve, sep } from "node:path";
  * hook's OWN listeners.
  *
  * @remarks
+ *
  * The replay-suggester's special steps:
  * - THE PRODUCER (the wave 2c re-spec): every judged call that names a path is
  *   appended to the recall history (Function/Record) - the per-agent ring, the
@@ -63,26 +84,6 @@ import { dirname, isAbsolute, resolve, sep } from "node:path";
  * service (the State builder + the ledger); the loader's PENDING state handles
  * the ordering. The function returns NOTHING.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
-import type Config from "@Interface/Config.js";
-import type { ReplayRecord } from "@Interface/History.js";
-import type { Candidate, Intent } from "@Interface/Pack.js";
-import type { AgentMemory } from "@Interface/State.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
-import { Families, Home, Resolve, Root as RootOf } from "@playform/ets-lib-dsh-pack";
-import Version from "@Variable/Version.js";
-
-import Detect, { Compile } from "./Detect.js";
-import { IsFile } from "./Exists.js";
-import History, { Recall } from "./History.js";
-import BuildNote, { Prepend } from "./Note.js";
-import RecallHistory from "./RecallHistory.js";
-import Record from "./Record.js";
-import Recover from "./Recover.js";
-import Storage from "./Storage.js";
-
 /**
  * Fresh per-agent memory.
  */

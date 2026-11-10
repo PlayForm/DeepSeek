@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The hook's Schemastery Config schema: one constant built once at load.
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills
  * every default, so invalid configuration fails LOUD at load, and `apply`
  * receives a validated plain config object. The shape this schema produces
@@ -25,9 +29,6 @@
  * disabled, never appears in the profile's bundles, and enables only by an
  * explicit ACTIVATE.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
-
 export default Compose(false, {
 	logFile: Schema.string()
 		.default("~/.dsh/playform/ets-hook-dsh-workspace-govern.log")

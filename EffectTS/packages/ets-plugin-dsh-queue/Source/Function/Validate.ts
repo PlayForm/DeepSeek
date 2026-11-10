@@ -5,6 +5,7 @@
  * silently defaults.
  *
  * @remarks
+ *
  * The tool-coach precedent. The schema already guarantees the types; this
  * pass enforces the COMPOSITION contracts the schema cannot express:
  * - capacity.main >= 1 and capacity.child >= 1 (the two-active regime needs a

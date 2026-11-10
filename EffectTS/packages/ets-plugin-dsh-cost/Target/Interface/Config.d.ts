@@ -6,6 +6,7 @@
  * interfaces.
  *
  * @remarks
+ *
  * The optional price rates stay optional (an absent rate is an unpriced
  * bucket, charged at zero); every defaulted column is always present. The
  * factor layer's arrays (section 17) carry the modifier rows and the

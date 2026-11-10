@@ -1,20 +1,3 @@
-// Source/Test/Volatile-Refresh/Test.ts - one singular test: the State
-// builder's P10 loader/volatile-update refresh listener as the CCR State
-// carries it - the listener is registered alongside tools/post-execute (and,
-// with the engine flag ON, agent/pre-step), so a committed config change can
-// reach the running State without a remount.
-//
-// NOTE ON SCOPE: the source suite asserts the listener's PRESENCE here; the
-// dispatch BEHAVIOR (the in-place field updates on the key-array, dotted and
-// nested-object paths, the identity preservation, the unknown/failed path
-// safety) is the factory's shared machinery and is exercised byte-verbatim by
-// the factory package's Entry-And-State folder (the P10 volatile-refresh
-// section). This folder holds the CCR-side registration assertions from the
-// source suite's Run 1 - moved verbatim, nothing invented.
-// Runs standalone (`node Target/Test/Volatile-Refresh/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-ccr: the fake ctx + the REAL factory +
-// the REAL CCR apply, from the Harness.
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -26,6 +9,33 @@ import {
 	Ledger,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the State builder's P10 loader/volatile-update refresh
+ * listener as the CCR State carries it.
+ *
+ * @remarks
+ *
+ * The listener is registered alongside tools/post-execute (and, with the
+ * engine flag ON, agent/pre-step), so a committed config change can reach
+ * the running State without a remount.
+ *
+ * NOTE ON SCOPE: the source suite asserts the listener's PRESENCE here; the
+ * dispatch BEHAVIOR (the in-place field updates on the key-array, dotted
+ * and nested-object paths, the identity preservation, the unknown/failed
+ * path safety) is the factory's shared machinery and is exercised
+ * byte-verbatim by the factory package's Entry-And-State folder (the P10
+ * volatile-refresh section). This folder holds the CCR-side registration
+ * assertions from the source suite's Run 1 - moved verbatim, nothing
+ * invented.
+ *
+ * Runs standalone (`node Target/Test/Volatile-Refresh/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-ccr: the fake ctx + the REAL
+ * factory + the REAL CCR apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

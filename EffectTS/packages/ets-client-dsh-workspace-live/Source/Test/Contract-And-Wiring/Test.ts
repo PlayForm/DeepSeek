@@ -1,9 +1,3 @@
-// Source/Test/Contract-And-Wiring/Test.ts - the apply/inject contract of
-// the workspace-live client entry and its apply-time wiring: the loader
-// row contract, the Config schema defaults and the fail-loud validation,
-// the client inject list, the provided workspaceLive service, the effect
-// labels, the byte-exact locale registration, the tab renderer
-// registration, and the purity probe on the real built code.
 import assert from "node:assert/strict";
 import {
 	BuiltSource,
@@ -16,6 +10,20 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The apply/inject contract of the workspace-live client entry and its
+ * apply-time wiring.
+ *
+ * @remarks
+ *
+ * The test covers the loader row contract, the Config schema defaults and
+ * the fail-loud validation, the client inject list, the provided
+ * workspaceLive service, the effect labels, the byte-exact locale
+ * registration, the tab renderer registration, and the purity probe on the
+ * real built code.
+ */
 export const runTest = (): number => {
 	const Count = MakeCounter();
 

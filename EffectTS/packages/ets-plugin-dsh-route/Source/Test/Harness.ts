@@ -1,28 +1,40 @@
-// Source/Test/Harness.ts - the shared test harness for the ROUTING ENFORCER
-// tests: the fake ctx (ctx listener capture with a DISTINCT root object,
-// reflect.provide capture, the effect runner, the logger capture) + the REAL
-// @playform/ets-plugin-dsh-factory instance from its built Target + the REAL
-// plugin-dsh-route apply from its built Target - the family fake-ctx +
-// real-factory harness pattern, adapted from the workspace-observe reference
-// harness. Each folder process gets a fresh set, so every folder is
-// standalone-green.
-//
-// NO FAKE CLOCK, NO FAKE FS: the route plugin touches no files (it injects
-// into the launch and writes only its own ledger through the factory) and
-// has no timer dependency - the harness needs neither seam.
 import assert from "node:assert/strict";
 import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the ROUTING ENFORCER tests: the fake ctx (ctx
+ * listener capture with a DISTINCT root object, reflect.provide capture, the
+ * effect runner, the logger capture) + the REAL
+ * @playform/ets-plugin-dsh-factory instance from its built Target + the REAL
+ * plugin-dsh-route apply from its built Target - the family fake-ctx +
+ * real-factory harness pattern, adapted from the workspace-observe reference
+ * harness. Each folder process gets a fresh set, so every folder is
+ * standalone-green.
+ *
+ * @remarks
+ *
+ * NO FAKE CLOCK, NO FAKE FS: the route plugin touches no files (it injects
+ * into the launch and writes only its own ledger through the factory) and
+ * has no timer dependency - the harness needs neither seam.
+ */
 export { Plugin };
 
-/** The per-folder counter: `N` = passing checks, `F` = failing checks. */
+/**
+ * The per-folder counter: `N` = passing checks, `F` = failing checks.
+ */
 export type Counter = { N: number; F: number };
 
-/** A fresh counter for one test folder. */
+/**
+ * A fresh counter for one test folder.
+ */
 export const MakeCounter = (): Counter => ({ N: 0, F: 0 });
 
-/** One check = one assert group; a throw counts the group failed. */
+/**
+ * One check = one assert group; a throw counts the group failed.
+ */
 export const Check = (Count: Counter, Label: string, Assertions: () => void): void => {
 	Count.N++;
 	try {
@@ -35,7 +47,9 @@ export const Check = (Count: Counter, Label: string, Assertions: () => void): vo
 	}
 };
 
-/** The async variant of Check. */
+/**
+ * The async variant of Check.
+ */
 export const CheckAsync = async (
 	Count: Counter,
 	Label: string,
@@ -52,7 +66,9 @@ export const CheckAsync = async (
 	}
 };
 
-/** End-of-folder guard: any failed assertion is a folder failure. */
+/**
+ * End-of-folder guard: any failed assertion is a folder failure.
+ */
 export const Finish = (Count: Counter, Name: string): number => {
 	if (Count.F !== 0) {
 		throw new Error(`${Name}: ${Count.F} failed check(s)`);
@@ -60,7 +76,9 @@ export const Finish = (Count: Counter, Name: string): number => {
 	return Count.N;
 };
 
-/** The REAL factory instance (constructed the way the factory's smoke does). */
+/**
+ * The REAL factory instance (constructed the way the factory's smoke does).
+ */
 export const Furnace: any = new FactoryClass({
 	reflect: { provide: () => undefined },
 } as any);
@@ -131,7 +149,9 @@ export const Make = (Raw: any, Attach?: (Context: any, Run: any) => void): any =
 	return Run;
 };
 
-/** The validated config shape the loader hands to apply (the schema call). */
+/**
+ * The validated config shape the loader hands to apply (the schema call).
+ */
 export const Validate = (Raw: Record<string, unknown>): any =>
 	(Plugin.Config as unknown as (Raw: Record<string, unknown>) => any)({ ...Raw });
 
@@ -149,7 +169,9 @@ export const Fire = async (Run: any, Exec: any): Promise<any> => {
 	return { Out, Decision, Called };
 };
 
-/** A subagent launch fixture (fresh per call, so mutations don't leak). */
+/**
+ * A subagent launch fixture (fresh per call, so mutations don't leak).
+ */
 export const Launch = (
 	Args: Record<string, unknown> = { description: "fix the bug" },
 ): any => ({ name: "subagent", args: JSON.parse(JSON.stringify(Args)) });
@@ -177,7 +199,9 @@ export const Child = (Options: Record<string, unknown> = {}, Depth = 1): any => 
 	session: { header: { delegationDepth: Depth } },
 });
 
-/** One offered step message (the harness's UserMessage, read structurally). */
+/**
+ * One offered step message (the harness's UserMessage, read structurally).
+ */
 export const Prompt = (Text: string): any => ({
 	id: `message-${Text.length}`,
 	role: "user",
@@ -185,21 +209,27 @@ export const Prompt = (Text: string): any => ({
 	source: { kind: "user" },
 });
 
-/** The route triples of the shipped default policy. */
+/**
+ * The route triples of the shipped default policy.
+ */
 export const Coder = {
 	provider: "cloudflare-workers-ai",
 	model: "@cf/zai-org/glm-5.3-flash",
 	reasoningEffort: "high",
 };
 
-/** The planner triple (the escalation rung's shipped route). */
+/**
+ * The planner triple (the escalation rung's shipped route).
+ */
 export const Planner = {
 	provider: "cloudflare-workers-ai",
 	model: "@cf/deepseek-ai/deepseek-v4.1-flash-1017",
 	reasoningEffort: "max",
 };
 
-/** A captured info line that carries the needle. */
+/**
+ * A captured info line that carries the needle.
+ */
 export const LinesWith = (Run: any, Needle: string): string[] =>
 	Run.Lines.filter((L: string) => L.includes(Needle));
 

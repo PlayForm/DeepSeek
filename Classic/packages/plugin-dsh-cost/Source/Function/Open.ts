@@ -1,19 +1,24 @@
-// Open - the database effect: the ledger's SQLite file opened, migrated and
-// returned as `{ Database, Close }`. The durability postures are the design
-// document's (section 3): journal_mode=WAL, foreign_keys=ON,
-// synchronous=NORMAL, every table STRICT. The schema runs exactly once per
-// file - a fresh file (user_version 0) takes every DDL statement AND its
-// version stamp inside ONE transaction, so a crash can never leave a complete
-// schema stamped version zero; a v1 ledger runs the v2,
-// v3, v4, v5 and v6 rungs of the ladder (sections 14, 17.6, 17.3, 17.4, the
-// valuation model and the old-ledger compatibility step), a v2 ledger runs
-// the v3, v4, v5 and v6 rungs, a v3 ledger runs the v4, v5 and v6 rungs, a
-// v4 ledger runs the v5 and v6 rungs, a v5 ledger runs the v6 rung alone,
-// and version 6 opens as-is. A file stamped ABOVE this build's version is
-// rejected with one actionable line instead of being opened as though it
-// were compatible (section 1.7). The
-// import is the static `node:sqlite` core module (DatabaseSync), which needs
-// no native build.
+/**
+ * @module Open
+ *
+ * The database effect: the ledger's SQLite file opened, migrated and returned
+ * as `{ Database, Close }`.
+ *
+ * @remarks
+ * The durability postures are the design document's (section 3):
+ * journal_mode=WAL, foreign_keys=ON, synchronous=NORMAL, every table STRICT.
+ * The schema runs exactly once per file - a fresh file (user_version 0) takes
+ * every DDL statement AND its version stamp inside ONE transaction, so a crash
+ * can never leave a complete schema stamped version zero; a v1 ledger runs the
+ * v2, v3, v4, v5 and v6 rungs of the ladder (sections 14, 17.6, 17.3, 17.4, the
+ * valuation model and the old-ledger compatibility step), a v2 ledger runs the
+ * v3, v4, v5 and v6 rungs, a v3 ledger runs the v4, v5 and v6 rungs, a v4
+ * ledger runs the v5 and v6 rungs, a v5 ledger runs the v6 rung alone, and
+ * version 6 opens as-is. A file stamped ABOVE this build's version is rejected
+ * with one actionable line instead of being opened as though it were compatible
+ * (section 1.7). The import is the static `node:sqlite` core module
+ * (DatabaseSync), which needs no native build.
+ */
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { DatabaseSync } from "node:sqlite";

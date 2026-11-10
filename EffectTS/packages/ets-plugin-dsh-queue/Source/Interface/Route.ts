@@ -1,9 +1,12 @@
+import type { Role } from "./Task.js";
+
 /**
  * @module Route
  *
  * The SELF-CONTAINED declaration of the routing-enforcer's service shape.
  *
  * @remarks
+ *
  * The PoC rule: declare the sibling services' shapes in your own Interface/
  * - never import from a sibling that may not be wired. This is the structural
  * contract of the `dshRoute` service (@playform/plugin-dsh-route,
@@ -11,9 +14,6 @@
  * service at dispatch time and skips routing when it is absent (the plugin
  * ships disabled) - a contained skip, never a load block.
  */
-
-import type { Role } from "./Task.js";
-
 // Re-export the role vocabulary in the queue's own terms (the three routing
 // roles of the task-routing skill).
 export type { Role } from "./Task.js";

@@ -1,10 +1,17 @@
-// Source/Test/Packet/Test.ts - the orientation-packet renderer: the full
-// eight-line grammar byte-exact, the `(none)` placeholders for absent
-// bands, the omitted FOCUS and STALE lines, and the STALE-only-on-difference
-// rule.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Packet } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The orientation-packet renderer of the workspace-live library.
+ *
+ * @remarks
+ *
+ * The folder proves the full eight-line grammar byte-exact, the `(none)`
+ * placeholders for absent bands, the omitted FOCUS and STALE lines, and the
+ * STALE-only-on-difference rule.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

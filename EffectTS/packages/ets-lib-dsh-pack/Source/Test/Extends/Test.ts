@@ -1,12 +1,21 @@
-// Source/Test/Extends/Test.ts - the cycle-guarded extends chain against
-// REAL temporary user layers: a base, a middle pack, a cycle, a self-cycle,
-// a missing link and an array of bases. The repo layer always overrides its
-// bases; a base already visited is merged once.
 import assert from "node:assert/strict";
 
 import { Check, Finish, Library, MakeCounter, Put, Tree } from "../Harness.js";
 
-/** The repo layer: the slug, the signature and the extends link. */
+/**
+ * @module Test
+ *
+ * The cycle-guarded extends chain against REAL temporary user layers.
+ *
+ * @remarks
+ *
+ * The folder proves the base, the middle pack, the cycle, the self-cycle,
+ * the missing link and an array of bases. The repo layer always overrides
+ * its bases; a base already visited is merged once.
+ */
+/**
+ * The repo layer: the slug, the signature and the extends link.
+ */
 const Repo = (Extends: string, Family = ""): string =>
 	`slug: repo
 signature:
@@ -14,7 +23,9 @@ signature:
 extends: ${Extends}
 ${Family}`;
 
-/** One base pack with one doc/Plan target. */
+/**
+ * One base pack with one doc/Plan target.
+ */
 const Pack = (Extends: string, Path: string, Priority: number): string =>
 	`${Extends === "" ? "" : `extends: ${Extends}\n`}families:
   "doc/Plan":

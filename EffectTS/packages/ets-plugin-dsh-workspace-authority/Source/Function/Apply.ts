@@ -1,3 +1,10 @@
+import type { Context } from "@deepseek-ai/cordis";
+import ServiceClass from "@Function/Service.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
+
 /**
  * @module Apply
  *
@@ -5,6 +12,7 @@
  * service registration and the activation proof.
  *
  * @remarks
+ *
  * The State build is the factory's cell unwrap plus the P10 volatile
  * refresh; the service registration is Function/Service
  * (`workspaceAuthority`).
@@ -18,13 +26,6 @@
  * The function returns NOTHING (the loader contract). The test probe is the
  * `ctx.__PluginDshWorkspaceAuthorityState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import ServiceClass from "@Function/Service.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
  */

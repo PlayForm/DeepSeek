@@ -1,3 +1,37 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { AssembleContext, PromptAssembly } from "@deepseek-ai/dsh-system-prompt";
+// The type-only imports below publish the EVENT signatures on the cordis
+// Events interface (the packages' own augmentations): dsh-tools declares the
+// tools/* waterfalls + tools/change (and transitively dsh-agent's
+// agent/pre-step), dsh-system-prompt declares system-prompt/assemble.
+import type {
+	PostToolDecision,
+	PreToolDecision,
+	ToolDispatchExecution,
+	ToolExecution,
+	ToolExecutionResult,
+} from "@deepseek-ai/dsh-tools";
+// The wave-2 modules (the C2 extension - each behavior in its own module;
+// Apply only REGISTERS and wires).
+import * as Board from "@Function/Board.js";
+import Clock from "@Function/Clock.js";
+import * as Completion from "@Function/Completion.js";
+import Counters, { DefaultKey, RecordTool, RecordTurn, ScopeLabel } from "@Function/Counters.js";
+import * as Detach from "@Function/Detach.js";
+import * as Failsafe from "@Function/Failsafe.js";
+import * as Monitors from "@Function/Monitors.js";
+import * as MonitorTools from "@Function/MonitorTools.js";
+import * as Plant from "@Function/Plant.js";
+import Build, { Cached } from "@Function/Render.js";
+import * as SetTool from "@Function/Set.js";
+import * as Storage from "@Function/Storage.js";
+import * as Suggester from "@Function/Suggester.js";
+import type Config from "@Interface/Config.js";
+import { KINDS, type AgentState, type BlockSpecification } from "@Interface/Execution.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
+import Version from "@Variable/Version.js";
+
 /**
  * @module Apply
  *
@@ -5,6 +39,7 @@
  * the phase-1 listeners, and the wave-2 and wave-3 registrations.
  *
  * @remarks
+ *
  * The State build is the factory's cell unwrap + the P10 volatile refresh; the proof is
  * the durable activation record. IMPLEMENTATION-DESIGN.md sections 2-6; the C2 and C3
  * additions are REGISTERED here - every wave-2 behavior lives in its own Function module:
@@ -61,40 +96,6 @@
  * builder + the ledger; `tools` is declared per the design's phase-1 inject list (the
  * wave-2 listeners consume it; phase 1 never touches it).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { AssembleContext, PromptAssembly } from "@deepseek-ai/dsh-system-prompt";
-// The type-only imports below publish the EVENT signatures on the cordis
-// Events interface (the packages' own augmentations): dsh-tools declares the
-// tools/* waterfalls + tools/change (and transitively dsh-agent's
-// agent/pre-step), dsh-system-prompt declares system-prompt/assemble.
-import type {
-	PostToolDecision,
-	PreToolDecision,
-	ToolDispatchExecution,
-	ToolExecution,
-	ToolExecutionResult,
-} from "@deepseek-ai/dsh-tools";
-// The wave-2 modules (the C2 extension - each behavior in its own module;
-// Apply only REGISTERS and wires).
-import * as Board from "@Function/Board.js";
-import Clock from "@Function/Clock.js";
-import * as Completion from "@Function/Completion.js";
-import Counters, { DefaultKey, RecordTool, RecordTurn, ScopeLabel } from "@Function/Counters.js";
-import * as Detach from "@Function/Detach.js";
-import * as Failsafe from "@Function/Failsafe.js";
-import * as Monitors from "@Function/Monitors.js";
-import * as MonitorTools from "@Function/MonitorTools.js";
-import * as Plant from "@Function/Plant.js";
-import Build, { Cached } from "@Function/Render.js";
-import * as SetTool from "@Function/Set.js";
-import * as Storage from "@Function/Storage.js";
-import * as Suggester from "@Function/Suggester.js";
-import type Config from "@Interface/Config.js";
-import { KINDS, type AgentState, type BlockSpecification } from "@Interface/Execution.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
-import Version from "@Variable/Version.js";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
  */

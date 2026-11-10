@@ -1,9 +1,15 @@
+import type { IncomingMessage, ServerResponse } from "node:http";
+
+import type { Context } from "@deepseek-ai/cordis";
+import type { PanelEnvelope } from "@Interface/Trace.js";
+
 /**
  * @module Stream
  *
  * The HTTP SSE route that bridges the host's D5 trace bus to the browser.
  *
  * @remarks
+ *
  * The Workspace tab resolves `ctx.get("trace")` (the client half's
  * re-published face), which in turn needs the host's bus envelopes; this
  * route streams them as `text/event-stream` frames so an EventSource in the
@@ -13,11 +19,6 @@
  * comment frame, so a browser connected before the factory provides the bus
  * picks the flow up the moment a later mount starts writing.
  */
-import type { IncomingMessage, ServerResponse } from "node:http";
-
-import type { Context } from "@deepseek-ai/cordis";
-import type { PanelEnvelope } from "@Interface/Trace.js";
-
 type Bus = {
 	on(kind: string, listener: (envelope: PanelEnvelope) => void): () => void;
 	ring?(limit?: number): PanelEnvelope[];

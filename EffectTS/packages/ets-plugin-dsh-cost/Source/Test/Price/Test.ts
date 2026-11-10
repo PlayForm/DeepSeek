@@ -1,8 +1,3 @@
-// Source/Test/Price/Test.ts - THE PRICE RESOLUTION (the design's verification
-// case 2, Documentation/Plans/COST-TRACK-PLUGIN.md section 2): an
-// effective-dated price table prices a call at the row in force at the call's
-// own time - never at the newest row - and the cost arithmetic converts the
-// provider's own token buckets at the resolved rates, per million tokens.
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -12,6 +7,19 @@ import Open from "../../../Target/Function/Open.js";
 import Price from "../../../Target/Function/Price.js";
 import { Check, Finish, MakeCounter, Validate } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE PRICE RESOLUTION (the design's verification case 2,
+ * Documentation/Plans/COST-TRACK-PLUGIN.md section 2) of the cost plugin.
+ *
+ * @remarks
+ *
+ * An effective-dated price table prices a call at the row in force at the
+ * call's own time - never at the newest row - and the cost arithmetic
+ * converts the provider's own token buckets at the resolved rates, per
+ * million tokens.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	const Home = await mkdtemp(join(tmpdir(), "dsh-cost-price-"));

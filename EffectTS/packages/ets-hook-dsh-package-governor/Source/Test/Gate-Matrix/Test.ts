@@ -1,12 +1,3 @@
-// Source/Test/Gate-Matrix/Test.ts - one singular test: the g1 gate matrix
-// through the wired fs/observed listener - the silent gates (missing target,
-// non-mutation actor, absent observation, non-package.json basename, Stash
-// idempotence), the exclusion-first `skipped (excluded)` line with its P5
-// record and zero writes, and the listener throw containment (the silence
-// invariant).
-// Runs standalone (`node Target/Test/Gate-Matrix/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-package-governor.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -30,6 +21,24 @@ import {
 	settle,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The singular test of the g1 gate matrix through the wired fs/observed
+ * listener.
+ *
+ * @remarks
+ *
+ * The matrix covers the silent gates (missing target, non-mutation actor,
+ * absent observation, non-package.json basename, Stash idempotence), the
+ * exclusion-first `skipped (excluded)` line with its P5 record and zero
+ * writes, and the listener throw containment (the silence invariant).
+ *
+ * The file runs standalone (`node Target/Test/Gate-Matrix/Test.js`) and under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * It is a unit smoke of @playform/ets-hook-dsh-package-governor.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Boot();

@@ -1,3 +1,10 @@
+import { mkdirSync, writeFileSync } from "node:fs";
+import { dirname, extname, join, resolve } from "node:path";
+import type { DatabaseSync } from "node:sqlite";
+
+import type Config from "../Interface/Config.js";
+import Version from "../Variable/Version.js";
+
 /**
  * @module Export
  *
@@ -5,6 +12,7 @@
  * section 8): csv, json and markdown.
  *
  * @remarks
+ *
  * csv is RFC 4180 quoting with CRLF records, one header row, one row per
  * Day, Project, File and Model; json is the re-derivable bundle - the meta
  * block, the projects, the files, the calls, the allocations and the
@@ -15,13 +23,6 @@
  * configured export directory or the project root. The money columns round
  * to six decimals, the same precision the reports use.
  */
-import { mkdirSync, writeFileSync } from "node:fs";
-import { dirname, extname, join, resolve } from "node:path";
-import type { DatabaseSync } from "node:sqlite";
-
-import type Config from "../Interface/Config.js";
-import Version from "../Variable/Version.js";
-
 /**
  * One statement row of untyped cells.
  */

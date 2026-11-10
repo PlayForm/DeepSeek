@@ -1,3 +1,8 @@
+import Record from "@Function/Record.js";
+import type Binding from "@Interface/Binding.js";
+import type Candidate from "@Interface/Candidate.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Bind
  *
@@ -5,6 +10,7 @@
  * pending binding.
  *
  * @remarks
+ *
  * The exact-approval semantics:
  *
  *   - the candidate must carry a non-empty path, a non-empty fingerprint and
@@ -18,11 +24,6 @@
  *   - the binding id is `ap-<sequence>`; the sequence is the plugin's own
  *     monotonic counter, never a wall clock.
  */
-import Record from "@Function/Record.js";
-import type Binding from "@Interface/Binding.js";
-import type Candidate from "@Interface/Candidate.js";
-import type State from "@Interface/State.js";
-
 export default (State: State, Candidate: Candidate): Binding => {
 	const Path = String(Candidate.path ?? "");
 	const Fingerprint = String(Candidate.fingerprint ?? "");

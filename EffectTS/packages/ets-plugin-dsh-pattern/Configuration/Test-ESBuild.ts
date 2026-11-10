@@ -1,3 +1,5 @@
+import type { BuildOptions, Plugin } from "esbuild";
+
 /**
  * @module Test-ESBuild
  *
@@ -5,6 +7,7 @@
  * Target/Test, one output file per source file.
  *
  * @remarks
+ *
  * The compile uses bundle: false, so each test folder runs standalone AND
  * under the aggregate runner. The mirrored outbase keeps the relative import
  * depth valid from both trees. NOT minified; sourcemaps on.
@@ -12,8 +15,6 @@
  * The Target-Test plugin wipes ONLY Target/Test on start - the plugin build
  * owns Target and runs BEFORE this step (prepublishOnly.sh order).
  */
-import type { BuildOptions, Plugin } from "esbuild";
-
 export default {
 	color: true,
 	format: "esm",

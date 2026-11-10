@@ -4,6 +4,7 @@
  * The generic text-block rewrite shared by the overpass arms.
  *
  * @remarks
+ *
  * Walk a content array, rewrite only the text blocks through the caller's
  * transform, and return the ORIGINAL array by identity when nothing changed.
  * The identity rule is the caller's no-op contract: an unchanged content

@@ -1,3 +1,6 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Config
  *
@@ -5,6 +8,7 @@
  * one constant built once at load).
  *
  * @remarks
+ *
  * The schema is produced by the FACTORY's schema factory
  * (`factory.Schema(shared?, module?)` - SCHEME.md §2.14): the SHARED block
  * (log / logFile / updateCooldownMs / mutationTools volatile - the P8
@@ -30,9 +34,6 @@
  * consumes (the schema must be a real schemastery instance - the Standard
  * Schema `~standard` interface).
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
-
 export default Compose(
 	{
 		// Ledger file — the CARGO MODULE's OWN ledger (separate from

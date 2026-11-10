@@ -1,3 +1,7 @@
+import type { BatchDecision, BatchProposal } from "@Interface/Batch.js";
+import type { PendingProposal } from "@Interface/State.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Proposals
  *
@@ -5,15 +9,12 @@
  * list.
  *
  * @remarks
+ *
  * Pure in-memory state on the State object - the durable record is the ledger
  * file. Expiry is evaluated lazily at every read/decision (no timers in the
  * plugin): a proposal past expiresAt becomes an "expired" decision by
  * "policy" the first time it is touched.
  */
-import type { BatchDecision, BatchProposal } from "@Interface/Batch.js";
-import type { PendingProposal } from "@Interface/State.js";
-import type State from "@Interface/State.js";
-
 export const Now = (State_: State): number => (State_.Now ? State_.Now() : Date.now());
 
 /**

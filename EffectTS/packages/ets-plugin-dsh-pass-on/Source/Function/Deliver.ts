@@ -1,3 +1,10 @@
+import { randomUUID as Identifier } from "node:crypto";
+
+import type Batch from "../Interface/Batch.js";
+import type State from "../Interface/State.js";
+import Envelope from "./Envelope.js";
+import Journal from "./Journal.js";
+
 /**
  * @module Deliver
  *
@@ -5,6 +12,7 @@
  * inbox so the board splices it and the decision hook answers back.
  *
  * @remarks
+ *
  * THE CHANNEL: `agent.inject(message)` - the harness's model-facing context
  * splice for the next pre-step, which does NOT wake the driver
  * (packages/core/agent/src/runtime-types.ts:241) and commits the durable
@@ -18,13 +26,6 @@
  * cold harness, a smoke) is an honest `inbox none` journal line - the bus
  * emission still carries the proposal, so nothing is lost.
  */
-import { randomUUID as Identifier } from "node:crypto";
-
-import type Batch from "../Interface/Batch.js";
-import type State from "../Interface/State.js";
-import Envelope from "./Envelope.js";
-import Journal from "./Journal.js";
-
 /**
  * The slice of the harness Agent the delivery uses (structural).
  */

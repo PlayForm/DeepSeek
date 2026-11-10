@@ -1,3 +1,14 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import BoardFn from "@Function/Board.js";
+import CapacityFn, { MAIN } from "@Function/Capacity.js";
+import DispatchFn from "@Function/Dispatch.js";
+import EnqueueFn, { type Input } from "@Function/Enqueue.js";
+import PullFn from "@Function/Pull.js";
+import ReconcileFn, { type Report } from "@Function/Reconcile.js";
+import SettleFn from "@Function/Settle.js";
+import type State from "@Interface/State.js";
+import type Task from "@Interface/Task.js";
+
 /**
  * @module Dispatcher
  *
@@ -5,6 +16,7 @@
  * the surface the orchestration layer consumes.
  *
  * @remarks
+ *
  * The factory's class/service pattern. Registered immediately on construction
  * and removed with its owning fiber; it holds the State (the queue store, the
  * seats) and exposes the surface:
@@ -30,17 +42,6 @@
  * after every settle. The child's own result settles its task (completed /
  * failed), so the queue runs itself without a caller loop.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import BoardFn from "@Function/Board.js";
-import CapacityFn, { MAIN } from "@Function/Capacity.js";
-import DispatchFn from "@Function/Dispatch.js";
-import EnqueueFn, { type Input } from "@Function/Enqueue.js";
-import PullFn from "@Function/Pull.js";
-import ReconcileFn, { type Report } from "@Function/Reconcile.js";
-import SettleFn from "@Function/Settle.js";
-import type State from "@Interface/State.js";
-import type Task from "@Interface/Task.js";
-
 export default class Dispatcher extends Service {
 	private Context: Context;
 	private State: State;

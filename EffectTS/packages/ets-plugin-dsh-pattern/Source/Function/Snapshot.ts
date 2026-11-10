@@ -1,9 +1,16 @@
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import os from "node:os";
+import { dirname, join, resolve } from "node:path";
+
+import type Snapshot from "@Interface/Snapshot.js";
+
 /**
  * @module Snapshot
  *
  * The best-effort JSON persistence: the DEGRADED FALLBACK store.
  *
  * @remarks
+ *
  * Function/Snapshot. The PRIMARY store is the storage-domain KV domain
  * (Function/Open, the config `domain`); this file is written and read ONLY
  * when the harness provides no storage facility (or its open fails) - the
@@ -13,12 +20,6 @@
  * (the registry keeps the cold-start catalog) - persistence failure must
  * never reach any caller path.
  */
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import os from "node:os";
-import { dirname, join, resolve } from "node:path";
-
-import type Snapshot from "@Interface/Snapshot.js";
-
 /**
  * Expand a leading ~ to the user's home directory.
  *

@@ -8,6 +8,7 @@
  *    u2E5D u301C u3030 u30A0 uFE31-uFE32 uFE58 uFE63 uFF0D]
  *
  * @remarks
+ *
  * This is the normalize-dash hook's IDENTITY (the exact class its
  * Function/Replace.ts carried before the pattern moved here): Armenian
  * hyphen, right-to-left mark hyphen, Canadian syllabics hyphen,

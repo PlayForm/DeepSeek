@@ -1,3 +1,8 @@
+import Clock from "@Function/Clock.js";
+import type { Log } from "@Function/Render.js";
+import type { DetachRecord, JobEvent, SessionEvent } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Completion
  *
@@ -5,6 +10,7 @@
  * context.
  *
  * @remarks
+ *
  * The completion-append carrier (I3 APPEND-SEAM + I4 COMPLETION-ERGONOMICS;
  * IMPLEMENTATION-DESIGN.md section 3.3 as amended).
  *
@@ -36,11 +42,6 @@
  * instruction, so the pending text is wrapped with one line above the frames:
  * `[live] completion report (harness-appended; not a user request):`
  */
-import Clock from "@Function/Clock.js";
-import type { Log } from "@Function/Render.js";
-import type { DetachRecord, JobEvent, SessionEvent } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
-
 /**
  * The context registration name (the SCHEME's seam evidence).
  */

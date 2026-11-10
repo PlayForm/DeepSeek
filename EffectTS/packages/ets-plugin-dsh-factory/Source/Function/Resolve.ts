@@ -1,9 +1,17 @@
+import * as FileSystem from "node:fs";
+import { join as Join, dirname as Parent } from "node:path";
+
+import { Append, type State } from "@playform/ets-base-dsh";
+
+import Parse from "./Parse.js";
+
 /**
  * @module Resolve
  *
  * The UNION KEEP-LIST policy discovery.
  *
  * @remarks
+ *
  * Order (the pinner's priority, parameterized by the policy sidecar file name): the configured
  * global policy file (State.Policy via `policyFileField`), then the governed file's own directory,
  * then co-located with the discovered registry.json (if any), and ALWAYS the P3 chain-keys union:
@@ -26,13 +34,6 @@
  * (policy sidecars) - part of the policy-discovery calculation, same exemption as
  * Function/Discover. The governed manifest is never touched here.
  */
-import * as FileSystem from "node:fs";
-import { join as Join, dirname as Parent } from "node:path";
-
-import { Append, type State } from "@playform/ets-base-dsh";
-
-import Parse from "./Parse.js";
-
 export default (
 	State: State,
 	Dir: string,

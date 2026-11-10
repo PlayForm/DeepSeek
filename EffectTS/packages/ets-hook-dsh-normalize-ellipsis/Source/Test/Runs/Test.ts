@@ -1,12 +1,3 @@
-// Source/Test/Runs/Test.ts - one singular test: the Run-2 through Run-7
-// matrix - reasoning off, the custom replacement's $-literal safety, the
-// upstream throw, the identity stream, the fresh-state probe and the
-// tool-args normalization, including their cumulative pre-bind journal
-// counts.
-// Runs standalone (`node Target/Test/Runs/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Smoke of @playform/ets-hook-dsh-normalize-ellipsis: the fake ctx + the REAL
-// factory + the REAL ellipsis apply (the seams live in ../Harness.js).
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import {
@@ -20,6 +11,25 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The singular Run-2 through Run-7 matrix test.
+ *
+ * @remarks
+ *
+ * The matrix covers reasoning off, the custom replacement's $-literal
+ * safety, the upstream throw, the identity stream, the fresh-state probe and
+ * the tool-args normalization, including their cumulative pre-bind journal
+ * counts.
+ *
+ * The file runs standalone (`node Target/Test/Runs/Test.js`) and under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * It smokes @playform/ets-hook-dsh-normalize-ellipsis: the fake ctx plus the
+ * REAL factory plus the REAL ellipsis apply (the seams live in
+ * `../Harness.js`).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

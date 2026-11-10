@@ -5,6 +5,7 @@
  * authored by hand.
  *
  * @remarks
+ *
  * Sources: a suggestion from the suggester, a user/agent intent ("bump the
  * version"), or a batch authored by hand
  * (Documentation/Plans/PASS-ON-AND-INGER.md section 3). The intent names the

@@ -1,3 +1,5 @@
+import type { HeuristicValues } from "../Interface/Decision.js";
+
 /**
  * @module Table
  *
@@ -6,14 +8,13 @@
  * pairs in the canonical order, so the two can be diffed.
  *
  * @remarks
+ *
  * The rendered line is
  * `scope=1.00,graph=0.50,prior=1.00,literal=0.50,history=0.33,accept=0.33`.
  *
  * Two decimals: the values are scores, and a two-decimal ledger keeps the
  * lines short and stable (the kappa's own precision in the note).
  */
-import type { HeuristicValues } from "../Interface/Decision.js";
-
 export default (Values: HeuristicValues): string =>
 	[
 		`scope=${Values.scope.toFixed(2)}`,

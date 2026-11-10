@@ -1,3 +1,7 @@
+import { MAIN, Seat } from "@Function/Capacity.js";
+import type State from "@Interface/State.js";
+import type Task from "@Interface/Task.js";
+
 /**
  * @module Restore
  *
@@ -5,6 +9,7 @@
  * half.
  *
  * @remarks
+ *
  * The caller hands back the previous process's `Snapshot().tasks`, and this
  * module reinstates the tasks, the id sequence and the seat bookkeeping.
  *
@@ -16,10 +21,6 @@
  * reconcile proves its child gone), under the seat key the task was assigned
  * to.
  */
-import { MAIN, Seat } from "@Function/Capacity.js";
-import type State from "@Interface/State.js";
-import type Task from "@Interface/Task.js";
-
 export default (State: State, Persisted: readonly Task[]): void => {
 	State.Tasks.clear();
 	State.Seats.clear();

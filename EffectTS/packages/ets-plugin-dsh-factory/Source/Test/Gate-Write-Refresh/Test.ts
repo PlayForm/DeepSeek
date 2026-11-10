@@ -1,13 +1,3 @@
-// Source/Test/Gate-Write-Refresh/Test.ts - one singular test: the write path
-// - the full g1 Gate matrix (target/govern/actor/kind/idempotent/basename/
-// excluded/pass + the empty-tool-list and govern-marker cases), the
-// GuardedWrite executor (the replaceIfVersion intent, both P4 sandbox
-// postures, the Stash pre-registration, the abort-signal forwarding) and the
-// Refresh same-actor re-emit with its best-effort containment.
-// Runs standalone (`node Target/Test/Gate-Write-Refresh/Test.js`) AND under
-// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-plugin-dsh-factory: the fake ctx + the REAL factory
-// class, from the Harness.
 import assert from "node:assert/strict";
 import { mkdirSync } from "node:fs";
 import * as Path from "node:path";
@@ -21,6 +11,26 @@ import {
 	FactoryClass,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The write path of the factory: the Gate matrix, the GuardedWrite executor
+ * and the Refresh same-actor re-emit.
+ *
+ * @remarks
+ *
+ * The singular test proves the full g1 Gate matrix (target/govern/actor/
+ * kind/idempotent/basename/excluded/pass + the empty-tool-list and
+ * govern-marker cases), the GuardedWrite executor (the replaceIfVersion
+ * intent, both P4 sandbox postures, the Stash pre-registration, the
+ * abort-signal forwarding) and the Refresh same-actor re-emit with its
+ * best-effort containment.
+ *
+ * Runs standalone (`node Target/Test/Gate-Write-Refresh/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-plugin-dsh-factory: the fake ctx + the REAL factory class,
+ * from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

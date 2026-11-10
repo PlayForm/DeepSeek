@@ -1,16 +1,3 @@
-/**
- * @module Persist
- *
- * The learned knowledge file (plan section 5): load, update, save.
- *
- * @remarks
- * The file lives under ~/.dsh/search-suggester/ (never the repo), is written
- * atomically (temp + rename) with mode 0600, and keeps the journal bounded
- * (the last 2000 entries, a ring). A load failure or a corrupt file degrades
- * to empty knowledge - the static pack alone is enough to emit (the cold
- * start of plan section 6.4) - and every failure logs through the caller,
- * never throws into the hot path.
- */
 import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
@@ -19,6 +6,20 @@ import { Expand } from "@playform/ets-base-dsh";
 
 import type { Dismissal, Knowledge, KnowledgeRow } from "../Interface/Execution.js";
 
+/**
+ * @module Persist
+ *
+ * The learned knowledge file (plan section 5): load, update, save.
+ *
+ * @remarks
+ *
+ * The file lives under ~/.dsh/search-suggester/ (never the repo), is written
+ * atomically (temp + rename) with mode 0600, and keeps the journal bounded
+ * (the last 2000 entries, a ring). A load failure or a corrupt file degrades
+ * to empty knowledge - the static pack alone is enough to emit (the cold
+ * start of plan section 6.4) - and every failure logs through the caller,
+ * never throws into the hot path.
+ */
 /**
  * The journal ring's capacity (plan section 5.3).
  */

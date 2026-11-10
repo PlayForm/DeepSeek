@@ -1,14 +1,22 @@
-// Source/Test/Data-Lists/Test.ts - one singular test: the two exported data
-// lists carry their exact contents - Section (the canonical npm dependency
-// sections) and Default (the built-in exclusion segments, anywhere mode,
-// exclusion-first).
-// Runs standalone (`node Target/Test/Data-Lists/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-lib-dsh-core: the REAL built entry only.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter } from "../Harness.js";
 import { Default, Section } from "../../../Target/Library.js";
 
+/**
+ * @module Test
+ *
+ * The two exported data lists carry their exact contents.
+ *
+ * @remarks
+ *
+ * The singular test proves Section (the canonical npm dependency sections)
+ * and Default (the built-in exclusion segments, anywhere mode,
+ * exclusion-first).
+ *
+ * Runs standalone (`node Target/Test/Data-Lists/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-lib-dsh-core: the REAL built entry only.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

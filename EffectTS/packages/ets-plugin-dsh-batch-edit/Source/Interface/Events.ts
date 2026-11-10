@@ -7,6 +7,7 @@
  * site).
  *
  * @remarks
+ *
  * The PoC rule binds: no imports from the packages that declare the canonical
  * types (dsh-tools / dsh-system-prompt / dsh-agent) - the end-phase wires
  * them.

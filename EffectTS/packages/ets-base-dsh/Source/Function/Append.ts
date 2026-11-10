@@ -1,3 +1,10 @@
+import * as FileSystem from "node:fs";
+import { dirname as Parent } from "node:path";
+
+import type State from "@Interface/State.js";
+
+import Expand from "./Expand.js";
+
 /**
  * @module Append
  *
@@ -5,6 +12,7 @@
  * ledger file when enabled.
  *
  * @remarks
+ *
  * Both sinks are best-effort and never rethrow.
  *
  * The write is byte-identical with the trio's `Function/Append`: the logger
@@ -20,13 +28,6 @@
  * `ctx.fs.writeText` would be both racy and wrong. Every write of a governed
  * file goes through `ctx.fs` (`Function/Write`).
  */
-import * as FileSystem from "node:fs";
-import { dirname as Parent } from "node:path";
-
-import type State from "@Interface/State.js";
-
-import Expand from "./Expand.js";
-
 export default (State: State, Message: string): void => {
 	try {
 		State.Context.logger.info(`${State.Module}: ${Message}`);

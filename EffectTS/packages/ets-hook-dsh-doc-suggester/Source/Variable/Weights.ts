@@ -6,6 +6,7 @@
  * heuristics table with weights").
  *
  * @remarks
+ *
  * `score(c) = 0.35*scope + 0.00*graph + 0.25*prior + 0.25*literal
  * + 0.15*history + 0.00*accept`
  *

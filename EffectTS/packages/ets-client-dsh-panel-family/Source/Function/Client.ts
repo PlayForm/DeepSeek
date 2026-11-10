@@ -1,3 +1,18 @@
+import Bridge from "@Function/Bridge.js";
+import Forms from "@Function/Forms.js";
+import Live from "@Function/Live.js";
+import Reference from "@Function/Reference.js";
+import Registry from "@Function/Registry.js";
+import Trace from "@Function/Trace.js";
+import type { ClientContext } from "@Interface/Client.js";
+import type { PanelRegistry } from "@Interface/Panel.js";
+import type { PanelPorts } from "@Interface/Ports.js";
+import EN_DICTIONARY from "@Variable/Locale-en.json";
+import ZH_DICTIONARY from "@Variable/Locale-zh.json";
+import Slots from "@Variable/Slots.js";
+import Names from "@Variable/Trace.js";
+import { createElement, useEffect, useState, type ReactNode } from "react";
+
 /**
  * @module Client
  *
@@ -5,6 +20,7 @@
  * here).
  *
  * @remarks
+ *
  * The v4.1 wiring, zero adapter logic of its own:
  *
  * 1. Provide the slot-aware registry service:
@@ -31,21 +47,6 @@
  * React arrives via createElement calls (no JSX in this package) and stays
  * an external - the module system's platform seed table resolves it.
  */
-import Bridge from "@Function/Bridge.js";
-import Forms from "@Function/Forms.js";
-import Live from "@Function/Live.js";
-import Reference from "@Function/Reference.js";
-import Registry from "@Function/Registry.js";
-import Trace from "@Function/Trace.js";
-import type { ClientContext } from "@Interface/Client.js";
-import type { PanelRegistry } from "@Interface/Panel.js";
-import type { PanelPorts } from "@Interface/Ports.js";
-import EN_DICTIONARY from "@Variable/Locale-en.json";
-import ZH_DICTIONARY from "@Variable/Locale-zh.json";
-import Slots from "@Variable/Slots.js";
-import Names from "@Variable/Trace.js";
-import { createElement, useEffect, useState, type ReactNode } from "react";
-
 const NAMESPACE = "client-dsh-panel-family";
 
 /**

@@ -1,9 +1,13 @@
+import type Proposal from "../Interface/Proposal.js";
+import type State from "../Interface/State.js";
+
 /**
  * @module Record
  *
  * The `batch/proposed` recorder: the ingester keeps the proposal the decision will name.
  *
  * @remarks
+ *
  * Bounded by `maxProposals`
  * (newest last) so a long session's proposal traffic cannot grow the
  * service's memory without limit.
@@ -12,9 +16,6 @@
  * producer-side packages (the board, the decision hook) already report a
  * malformed proposal on their own ledgers.
  */
-import type Proposal from "../Interface/Proposal.js";
-import type State from "../Interface/State.js";
-
 /**
  * The structural validation of a proposal payload (the shape the recorder
  * keeps; the same checks the guard chain applied).

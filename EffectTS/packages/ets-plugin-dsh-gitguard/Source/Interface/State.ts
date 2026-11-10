@@ -1,9 +1,13 @@
+import type FactoryHandle from "@Interface/Factory.js";
+import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module State
  *
  * The plugin's per-apply state: the SHARED factory shape plus the git guard's own fields.
  *
  * @remarks
+ *
  * The base carries Context, Module, Enabled/Ledger, the machinery maps, the P10 volatile refresh
  * the factory's State builder registers.
  *
@@ -13,9 +17,6 @@
  * (plugin-dsh-gitguard); the ledger prefix is the module's OWN contract
  * string.
  */
-import type FactoryHandle from "@Interface/Factory.js";
-import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
-
 interface Extra {
 	/**
 	 * Master switch (config `enabled`, volatile) - false = full passthrough.

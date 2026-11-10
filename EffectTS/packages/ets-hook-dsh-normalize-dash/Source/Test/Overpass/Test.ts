@@ -1,17 +1,27 @@
-// Source/Test/Overpass/Test.ts - one singular test: the overpass arms and the
-// command - the registration facts (the two arms with their ordering
-// contract, the normalize-overpass command), the tool-results arm (default
-// off, the O2 volatile flip with the exact ledger line, the read exemption,
-// the block rules, the N=0 no-op, the value-carrying and CCR-marker
-// pass-throughs, the downstream basis), the step-batch arm (default off, the
-// O10 flip, the one-shot command arm), and the history-safety invariant.
-// Runs standalone (`node Target/Test/Overpass/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the REAL
-// factory + the REAL dash apply, from the Harness.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Furnace, Ledger } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the overpass arms and the command.
+ *
+ * @remarks
+ *
+ * The test covers the registration facts (the two arms with their ordering
+ * contract, the normalize-overpass command), the tool-results arm (default
+ * off, the O2 volatile flip with the exact ledger line, the read
+ * exemption, the block rules, the N=0 no-op, the value-carrying and
+ * CCR-marker pass-throughs, the downstream basis), the step-batch arm
+ * (default off, the O10 flip, the one-shot command arm), and the
+ * history-safety invariant.
+ *
+ * Runs standalone (`node Target/Test/Overpass/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the
+ * REAL factory + the REAL dash apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

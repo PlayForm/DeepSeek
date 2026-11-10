@@ -1,18 +1,3 @@
-// Source/Test/Child-Slot-And-Trace/Test.ts - the live view's two new
-// contracts, against the real built client apply and the real built trace
-// source / view:
-//
-//   * THE CHILD-SLOT MODEL: with the panel family composed
-//     (`playformFamilyPanel` present) the tab declares `workspace.live.section`
-//     in its `children` table and renders it through the renderer's
-//     `renderSlot` prop; the section registers into that declared child slot
-//     and its registration's INJECT face (`{ section, ports }`) is the data
-//     path.
-//   * THE D5 INGEST: the trace source forwards a bus envelope into the
-//     newest-first bounded tail, a new envelope notifies the subscribers
-//     (stable-until-event, no timer), and a missing bus is the documented
-//     static state (`live: false`, empty tail) - never an error. The View
-//     renders the stored tail.
 import assert from "node:assert/strict";
 import {
 	BundleSource,
@@ -24,6 +9,27 @@ import {
 	MakeTrace,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The live view's two new contracts, against the real built client apply
+ * and the real built trace source / view.
+ *
+ * @remarks
+ *
+ * THE CHILD-SLOT MODEL: with the panel family composed
+ * (`playformFamilyPanel` present) the tab declares `workspace.live.section`
+ * in its `children` table and renders it through the renderer's
+ * `renderSlot` prop; the section registers into that declared child slot
+ * and its registration's INJECT face (`{ section, ports }`) is the data
+ * path.
+ *
+ * THE D5 INGEST: the trace source forwards a bus envelope into the
+ * newest-first bounded tail, a new envelope notifies the subscribers
+ * (stable-until-event, no timer), and a missing bus is the documented
+ * static state (`live: false`, empty tail) - never an error. The View
+ * renders the stored tail.
+ */
 // The built modules load AFTER the Harness registered the alias hooks (a
 // static import would link before the hooks exist, the same reason the
 // Harness imports the Target dynamically).
@@ -35,7 +41,9 @@ const SECTION = "workspace.live.section";
 
 const EmptyView = () => ({ sequence: 0, representations: [], events: [] });
 
-/** The child `<ul>` of the rendered view (the trace tail). */
+/**
+ * The child `<ul>` of the rendered view (the trace tail).
+ */
 const TailList = (Element: any): any =>
 	(Element.props.children as any[]).find(
 		(Child: any) => Child?.props?.className === "playform-workspace-trace",

@@ -1,3 +1,6 @@
+import type { Detection, Intent } from "../Interface/Execution.js";
+import Exists from "./Exists.js";
+
 /**
  * @module Filter
  *
@@ -8,12 +11,10 @@
  * into the same note).
  *
  * @remarks
+ *
  * An intent whose whole candidate set is absent survives as a detection with
  * zero targets, and Score turns that into the `no-companions` abstention.
  */
-import type { Detection, Intent } from "../Interface/Execution.js";
-import Exists from "./Exists.js";
-
 /**
  * One intent with only the candidates that exist under a base.
  */

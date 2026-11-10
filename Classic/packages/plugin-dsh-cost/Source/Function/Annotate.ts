@@ -1,15 +1,22 @@
-// Annotate - the comment writer (Documentation/Plans/COST-TRACK-PLUGIN.md
-// section 7): the accumulated cost of one file, read from the ledger, is
-// rendered as at most Config.annotate.maxLines content lines between the
-// marker delimiters in the file's own comment language, then written through
-// the factory's write executor so the fresh-stat version guard applies - an
-// existing block is replaced in place (its line count may change), an absent
-// block is appended after one blank line at end of file, and a second run
-// with the same numbers is a no-op. A file with no recorded cost is skipped
-// with a reason, never invented; an unknown extension is skipped, never
-// guessed; the gate Config.annotate.enabled (off by default) refuses the
-// write before anything is read. Every successful write leaves one Annotation
-// row: what was written, into which file, at what price, when.
+/**
+ * @module Annotate
+ *
+ * The comment writer: the accumulated cost of one file, read from the ledger,
+ * is rendered between the marker delimiters in the file's own comment language
+ * and written through the factory's write executor.
+ *
+ * @remarks
+ * The writer follows `Documentation/Plans/COST-TRACK-PLUGIN.md` section 7. The
+ * rendered block carries at most Config.annotate.maxLines content lines and is
+ * written through the factory's write executor so the fresh-stat version guard
+ * applies - an existing block is replaced in place (its line count may change),
+ * an absent block is appended after one blank line at end of file, and a second
+ * run with the same numbers is a no-op. A file with no recorded cost is skipped
+ * with a reason, never invented; an unknown extension is skipped, never
+ * guessed; the gate Config.annotate.enabled (off by default) refuses the write
+ * before anything is read. Every successful write leaves one Annotation row:
+ * what was written, into which file, at what price, when.
+ */
 import { resolve } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 

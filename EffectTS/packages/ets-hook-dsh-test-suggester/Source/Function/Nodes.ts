@@ -1,3 +1,7 @@
+import { relative, sep } from "node:path";
+
+import type { Context } from "@deepseek-ai/cordis";
+
 /**
  * @module Nodes
  *
@@ -5,6 +9,7 @@
  * the suite files the package carries.
  *
  * @remarks
+ *
  * The graph is OPTIONAL here (the hook does not inject it - a repo without
  * the graph must still reconcile), so the service is PROBED through `ctx.get`,
  * never accessed through an inject-bound accessor, and every failure is an
@@ -16,10 +21,6 @@
  * uses these nodes for ONE purpose: a node whose file is gone is a claim the
  * tree no longer supports (the index outlived the suite).
  */
-import { relative, sep } from "node:path";
-
-import type { Context } from "@deepseek-ai/cordis";
-
 /**
  * The graph's find query shape (the subset this hook uses).
  */

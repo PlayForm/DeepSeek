@@ -1,8 +1,13 @@
-// Cells - the six cell renderers the table rows compose, exported as one
-// default object in the Slots.ts pattern: Scope, Model, Files, Money, Bar
-// and Alloc. Every renderer emits exactly the classes and locale keys of
-// the design's sections 2 to 6, reads every field defensively, and never
-// throws on a malformed envelope.
+/**
+ * @module Cells
+ *
+ * The six cell renderers the table rows compose, exported as one default object in the
+ * `Slots.ts` pattern: Scope, Model, Files, Money, Bar and Alloc.
+ *
+ * @remarks
+ * Every renderer emits exactly the classes and locale keys of the design's sections 2 to 6, reads
+ * every field defensively, and never throws on a malformed envelope.
+ */
 import { Tooltip } from "@deepseek-ai/dsh-client-ui-primitives";
 import Clock from "@Function/Clock";
 import CountShort from "@Function/CountShort";

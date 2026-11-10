@@ -1,26 +1,31 @@
-// Fetch - the browser half of the data path: the session GET (the route
-// path with the encoded session id and the row budget, answered as a
-// CostResponse), the file-scoped GET that answers the conversations that
-// contributed to one file's cost, the deeper file-scoped GET that answers one
-// conversation's calls that allocated money to that same file, the lineage GET
-// that answers one file's content versions with the touches bound to each, the
-// two pricing GETs a settings surface lists (lane B4d): the catalogs with their
-// revisions and one revision's rate rows, and the one pricing POST (lane B4f)
-// that publishes a revision. None of the functions throws: a runtime without
-// fetch, a failed request, a non-JSON answer or a malformed body resolve to
-// the unavailable envelope, to an empty contribution list, to an empty call
-// list, to an empty version list, to the empty catalog answer, to an empty
-// rate list or to a refused publish answer, so the panel can always render a
-// state. The envelope's `path` names the route, because the browser knows no
-// ledger path; the route's own message names the file.
-//
-// THE VALUATION SELECTION (lane B4d; the research's section 8): the session
-// fetch accepts the basis and the revision the panel selected and sends them
-// as query parameters. Without a selection the URL is the recorded one -
-// `?session=<id>&rows=<n>` - and the engine answers the recorded envelope; a
-// selection adds `basis`, and a pinned revision adds `revision` too. The
-// browser validates nothing here: the route owns the four-basis union and
-// answers one actionable line for anything else.
+/**
+ * @module Fetch
+ *
+ * The browser half of the data path: the session GET, the file-scoped contribution GET, the
+ * deeper per-conversation call GET, the lineage GET, the two pricing GETs and the one pricing POST.
+ *
+ * @remarks
+ * The session GET is the route path with the encoded session id and the row budget, answered as a
+ * `CostResponse`. The file-scoped GET answers the conversations that contributed to one file's
+ * cost; the deeper file-scoped GET answers one conversation's calls that allocated money to that
+ * same file; the lineage GET answers one file's content versions with the touches bound to each;
+ * the two pricing GETs a settings surface lists (lane B4d) answer the catalogs with their
+ * revisions and one revision's rate rows; and the one pricing POST (lane B4f) publishes a
+ * revision.
+ *
+ * None of the functions throws: a runtime without fetch, a failed request, a non-JSON answer or a
+ * malformed body resolve to the unavailable envelope, to an empty contribution list, to an empty
+ * call list, to an empty version list, to the empty catalog answer, to an empty rate list or to a
+ * refused publish answer, so the panel can always render a state. The envelope's `path` names the
+ * route, because the browser knows no ledger path; the route's own message names the file.
+ *
+ * THE VALUATION SELECTION (lane B4d; the research's section 8): the session fetch accepts the
+ * basis and the revision the panel selected and sends them as query parameters. Without a
+ * selection the URL is the recorded one - `?session=<id>&rows=<n>` - and the engine answers the
+ * recorded envelope; a selection adds `basis`, and a pinned revision adds `revision` too. The
+ * browser validates nothing here: the route owns the four-basis union and answers one actionable
+ * line for anything else.
+ */
 import type CostContributionRow from "@Interface/ContributionRow.js";
 import type CostResponse from "@Interface/Response.js";
 import type {
@@ -33,11 +38,12 @@ import type {
 } from "@playform/plugin-dsh-cost/service";
 import Route, { CatalogPath, PublishPath, RatePath } from "@Variable/Path.js";
 
-// The minimal browser fetch surface this module needs (the build targets
-// ESNext with node types only, so the browser globals are declared here
-// instead of pulling in the full DOM library - the Interface/Document.ts
-// pattern). `body` is the one member the publish POST adds: the session, the
-// contribution and the two pricing reads all send a bare GET.
+/**
+ * The minimal browser fetch surface this module needs (the build targets ESNext with node types
+ * only, so the browser globals are declared here instead of pulling in the full DOM library - the
+ * `Interface/Document.ts` pattern). `body` is the one member the publish POST adds: the session,
+ * the contribution and the two pricing reads all send a bare GET.
+ */
 declare const fetch:
 	| ((
 			input: string,
@@ -63,10 +69,11 @@ const IsEnvelope = (Candidate: unknown): Candidate is CostResponse => {
 	);
 };
 
-// Selected - the session request the route reads: the recorded query when no
-// selection is given (byte-identical to the request before lane B4d), the
-// basis alone when no revision is pinned, and both parameters otherwise. The
-// values are encoded exactly as the route decodes them.
+/**
+ * Selected - the session request the route reads: the recorded query when no selection is given
+ * (byte-identical to the request before lane B4d), the basis alone when no revision is pinned, and
+ * both parameters otherwise. The values are encoded exactly as the route decodes them.
+ */
 const Selected = (SessionId: string, Rows: number, Selection?: ValuationSelection): string => {
 	const Query = `${Route}?session=${encodeURIComponent(SessionId)}&rows=${Rows}`;
 
@@ -169,17 +176,21 @@ export default function Fetch(
 	}
 }
 
-// The file-scoped answer: the engine's contribution rows under the same
-// 200-with-envelope convention as the session read, with the rows unwrapped
-// because the contribution read carries no envelope of its own.
+/**
+ * The file-scoped answer: the engine's contribution rows under the same 200-with-envelope
+ * convention as the session read, with the rows unwrapped because the contribution read carries no
+ * envelope of its own.
+ */
 type ContributionAnswer = {
 	readonly ok: true;
 	readonly contributions: readonly CostContributionRow[];
 };
 
-// IsContributionAnswer - the file-scoped answer's guard: the ok flag and a
-// contributions array. The rows themselves are read defensively where they
-// render, so the guard stops at the shape the table indexes.
+/**
+ * IsContributionAnswer - the file-scoped answer's guard: the ok flag and a contributions array.
+ * The rows themselves are read defensively where they render, so the guard stops at the shape the
+ * table indexes.
+ */
 const IsContributionAnswer = (Candidate: unknown): Candidate is ContributionAnswer => {
 	if (typeof Candidate !== "object" || Candidate === null) {
 		return false;
@@ -188,11 +199,12 @@ const IsContributionAnswer = (Candidate: unknown): Candidate is ContributionAnsw
 	return Answer.ok === true && Array.isArray(Answer.contributions);
 };
 
-// Contributions - the file-scoped read: one GET to the same route with the
-// encoded path, answered as the rows of the conversations that contributed
-// to that file's cost. It never throws: a runtime without fetch, a failed
-// request, a non-JSON answer or a malformed body all resolve to an empty
-// list, so a file row that opens always has a state to render.
+/**
+ * Contributions - the file-scoped read: one GET to the same route with the encoded path, answered
+ * as the rows of the conversations that contributed to that file's cost. It never throws: a
+ * runtime without fetch, a failed request, a non-JSON answer or a malformed body all resolve to an
+ * empty list, so a file row that opens always has a state to render.
+ */
 export function Contributions(Path: string): Promise<readonly CostContributionRow[]> {
 	if (typeof fetch !== "function") {
 		return Promise.resolve([]);
@@ -211,17 +223,21 @@ export function Contributions(Path: string): Promise<readonly CostContributionRo
 	}
 }
 
-// The per-call answer: the engine's call rows for one file and one
-// conversation, unwrapped the same way the contribution answer is - the ok
-// flag and the calls array are the shape the table indexes.
+/**
+ * The per-call answer: the engine's call rows for one file and one conversation, unwrapped the
+ * same way the contribution answer is - the ok flag and the calls array are the shape the table
+ * indexes.
+ */
 type FileCallAnswer = {
 	readonly ok: true;
 	readonly calls: readonly CostFileCallRow[];
 };
 
-// IsFileCallAnswer - the per-call answer's guard: the ok flag and a calls
-// array. The rows themselves are read defensively where they render, so the
-// guard stops at the shape the table indexes.
+/**
+ * IsFileCallAnswer - the per-call answer's guard: the ok flag and a calls array. The rows
+ * themselves are read defensively where they render, so the guard stops at the shape the table
+ * indexes.
+ */
 const IsFileCallAnswer = (Candidate: unknown): Candidate is FileCallAnswer => {
 	if (typeof Candidate !== "object" || Candidate === null) {
 		return false;
@@ -230,12 +246,13 @@ const IsFileCallAnswer = (Candidate: unknown): Candidate is FileCallAnswer => {
 	return Answer.ok === true && Array.isArray(Answer.calls);
 };
 
-// FileCalls - the deeper file-scoped read: one GET to the same route with the
-// encoded path and the encoded conversation id, answered as the calls of that
-// conversation that allocated money to that file. It never throws: a runtime
-// without fetch, a failed request, a non-JSON answer or a malformed body all
-// resolve to an empty list, so a conversation row that opens always has a
-// state to render.
+/**
+ * FileCalls - the deeper file-scoped read: one GET to the same route with the encoded path and the
+ * encoded conversation id, answered as the calls of that conversation that allocated money to that
+ * file. It never throws: a runtime without fetch, a failed request, a non-JSON answer or a
+ * malformed body all resolve to an empty list, so a conversation row that opens always has a state
+ * to render.
+ */
 export function FileCalls(Path: string, SessionId: string): Promise<readonly CostFileCallRow[]> {
 	if (typeof fetch !== "function") {
 		return Promise.resolve([]);
@@ -259,17 +276,21 @@ export function FileCalls(Path: string, SessionId: string): Promise<readonly Cos
 	}
 }
 
-// The version answer: the file's content versions with the touches bound to
-// each, unwrapped the same way the contribution and call answers are - the ok
-// flag and the versions array are the shape the block indexes.
+/**
+ * The version answer: the file's content versions with the touches bound to each, unwrapped the
+ * same way the contribution and call answers are - the ok flag and the versions array are the
+ * shape the block indexes.
+ */
 type VersionAnswer = {
 	readonly ok: true;
 	readonly versions: readonly CostVersionRow[];
 };
 
-// IsVersionAnswer - the version answer's guard: the ok flag and a versions
-// array. The rows themselves are read defensively where they render, so the
-// guard stops at the shape the table indexes.
+/**
+ * IsVersionAnswer - the version answer's guard: the ok flag and a versions array. The rows
+ * themselves are read defensively where they render, so the guard stops at the shape the table
+ * indexes.
+ */
 const IsVersionAnswer = (Candidate: unknown): Candidate is VersionAnswer => {
 	if (typeof Candidate !== "object" || Candidate === null) {
 		return false;
@@ -278,11 +299,12 @@ const IsVersionAnswer = (Candidate: unknown): Candidate is VersionAnswer => {
 	return Answer.ok === true && Array.isArray(Answer.versions);
 };
 
-// History - the lineage read: one GET to the same route with the encoded path
-// under `history`, answered as the file's content versions, newest first, each
-// with the touches bound to it. It never throws: a runtime without fetch, a
-// failed request, a non-JSON answer or a malformed body all resolve to an
-// empty list, so the block always has a state to render.
+/**
+ * History - the lineage read: one GET to the same route with the encoded path under `history`,
+ * answered as the file's content versions, newest first, each with the touches bound to it. It
+ * never throws: a runtime without fetch, a failed request, a non-JSON answer or a malformed body
+ * all resolve to an empty list, so the block always has a state to render.
+ */
 export function History(Path: string): Promise<readonly CostVersionRow[]> {
 	if (typeof fetch !== "function") {
 		return Promise.resolve([]);
@@ -301,17 +323,20 @@ export function History(Path: string): Promise<readonly CostVersionRow[]> {
 	}
 }
 
-// CatalogAnswer - the pricing list the catalogs route answers: every catalog
-// the ledger carries and every revision of each, flattened in catalog order
-// (the Revision row names its CatalogId). The settings view groups the two
-// lists; nothing here is nested, and the answer is empty when the route could
-// not be read.
+/**
+ * CatalogAnswer - the pricing list the catalogs route answers: every catalog the ledger carries
+ * and every revision of each, flattened in catalog order (the Revision row names its CatalogId).
+ * The settings view groups the two lists; nothing here is nested, and the answer is empty when the
+ * route could not be read.
+ */
 export type CatalogAnswer = {
 	readonly catalogs: readonly Catalog[];
 	readonly revisions: readonly Revision[];
 };
 
-// IsCatalogAnswer - the catalogs answer's guard: the ok flag and both arrays.
+/**
+ * IsCatalogAnswer - the catalogs answer's guard: the ok flag and both arrays.
+ */
 const IsCatalogAnswer = (Candidate: unknown): Candidate is CatalogAnswer => {
 	if (typeof Candidate !== "object" || Candidate === null) {
 		return false;
@@ -320,7 +345,9 @@ const IsCatalogAnswer = (Candidate: unknown): Candidate is CatalogAnswer => {
 	return Answer.ok === true && Array.isArray(Answer.catalogs) && Array.isArray(Answer.revisions);
 };
 
-// IsRateAnswer - the rates answer's guard: the ok flag and the rate array.
+/**
+ * IsRateAnswer - the rates answer's guard: the ok flag and the rate array.
+ */
 const IsRateAnswer = (
 	Candidate: unknown,
 ): Candidate is { readonly ok: true; readonly rates: readonly RateRow[] } => {
@@ -331,13 +358,17 @@ const IsRateAnswer = (
 	return Answer.ok === true && Array.isArray(Answer.rates);
 };
 
-// Blank - the empty catalog answer a failed read resolves to.
+/**
+ * Blank - the empty catalog answer a failed read resolves to.
+ */
 const Blank = (): CatalogAnswer => ({ catalogs: [], revisions: [] });
 
-// Catalogs - the pricing list: one GET to the catalogs route, answered as the
-// catalogs and their revisions. It never throws: a runtime without fetch, a
-// failed request, a non-JSON answer or a malformed body all resolve to the
-// empty answer, so a settings surface always has a state to render.
+/**
+ * Catalogs - the pricing list: one GET to the catalogs route, answered as the catalogs and their
+ * revisions. It never throws: a runtime without fetch, a failed request, a non-JSON answer or a
+ * malformed body all resolve to the empty answer, so a settings surface always has a state to
+ * render.
+ */
 export function Catalogs(): Promise<CatalogAnswer> {
 	if (typeof fetch !== "function") {
 		return Promise.resolve(Blank());
@@ -356,11 +387,12 @@ export function Catalogs(): Promise<CatalogAnswer> {
 	}
 }
 
-// Rates - one revision's rate rows: one GET to the rates route with the
-// revision id. It never throws: a runtime without fetch, a failed request, a
-// non-JSON answer or a malformed body all resolve to an empty list. A
-// revision id that is not a positive integer never reaches the route, because
-// the query would only answer the error envelope.
+/**
+ * Rates - one revision's rate rows: one GET to the rates route with the revision id. It never
+ * throws: a runtime without fetch, a failed request, a non-JSON answer or a malformed body all
+ * resolve to an empty list. A revision id that is not a positive integer never reaches the route,
+ * because the query would only answer the error envelope.
+ */
 export function Rates(RevisionId: number): Promise<readonly RateRow[]> {
 	switch (true) {
 		case !Number.isInteger(RevisionId) || RevisionId <= 0:
@@ -383,18 +415,20 @@ export function Rates(RevisionId: number): Promise<readonly RateRow[]> {
 	}
 }
 
-// PublishRow - one rate row as the publish body carries it: every field the
-// engine inserts, and neither ledger-assigned id, because the publish assigns
-// the revision id and the row id itself. The host half validates exactly this
-// shape and hands the engine the full RateRow, so the browser never invents
-// an id and the engine never stores one.
+/**
+ * PublishRow - one rate row as the publish body carries it: every field the engine inserts, and
+ * neither ledger-assigned id, because the publish assigns the revision id and the row id itself.
+ * The host half validates exactly this shape and hands the engine the full RateRow, so the browser
+ * never invents an id and the engine never stores one.
+ */
 export type PublishRow = Omit<RateRow, "RateRowId" | "RevisionId">;
 
-// PublishRequest - the one write's body: the catalog the revision belongs to,
-// the revision the draft corrects (null for a catalog's first revision), the
-// reason the audit reads and the whole edited row set. A concurrent publish
-// is answered by the engine's own base-revision check, so the caller always
-// names the book it was editing.
+/**
+ * PublishRequest - the one write's body: the catalog the revision belongs to, the revision the
+ * draft corrects (null for a catalog's first revision), the reason the audit reads and the whole
+ * edited row set. A concurrent publish is answered by the engine's own base-revision check, so the
+ * caller always names the book it was editing.
+ */
 export type PublishRequest = {
 	readonly catalogId: number;
 	readonly baseRevisionId: number | null;
@@ -402,11 +436,12 @@ export type PublishRequest = {
 	readonly rows: readonly PublishRow[];
 };
 
-// PublishAnswer - the publish route's answer, flat so the caller reads one
-// field instead of narrowing a union: the ok flag, the new revision when the
-// write landed, and the route's own code, line and path when it did not. An
-// error envelope comes back as this value, never as a rejection, so the
-// settings surface can render the refusal inline.
+/**
+ * PublishAnswer - the publish route's answer, flat so the caller reads one field instead of
+ * narrowing a union: the ok flag, the new revision when the write landed, and the route's own
+ * code, line and path when it did not. An error envelope comes back as this value, never as a
+ * rejection, so the settings surface can render the refusal inline.
+ */
 export type PublishAnswer = {
 	readonly ok: boolean;
 	readonly revision: Revision | null;
@@ -415,8 +450,10 @@ export type PublishAnswer = {
 	readonly path: string;
 };
 
-// Refused - the answer a failed request resolves to: the route's own line
-// when one came back, and the browser's line when the request never landed.
+/**
+ * Refused - the answer a failed request resolves to: the route's own line when one came back, and
+ * the browser's line when the request never landed.
+ */
 const Refused = (Message: string): PublishAnswer => ({
 	ok: false,
 	revision: null,
@@ -425,9 +462,10 @@ const Refused = (Message: string): PublishAnswer => ({
 	path: PublishPath,
 });
 
-// IsRevision - the one field the caller reads off a published revision: an
-// answer that names a revision without an id is a malformed answer, not a
-// successful publish.
+/**
+ * IsRevision - the one field the caller reads off a published revision: an answer that names a
+ * revision without an id is a malformed answer, not a successful publish.
+ */
 const IsRevision = (Candidate: unknown): Candidate is Revision => {
 	if (typeof Candidate !== "object" || Candidate === null) {
 		return false;
@@ -436,10 +474,11 @@ const IsRevision = (Candidate: unknown): Candidate is Revision => {
 	return typeof Shape.RevisionId === "number" && Number.isFinite(Shape.RevisionId);
 };
 
-// Normalize - the raw answer as the flat PublishAnswer: the success shape
-// (`{ ok, revision }`) and the existing error envelope (`{ ok: false, code,
-// message, path }`) both land in one record, and anything else is refused
-// rather than rendered as a half-read outcome.
+/**
+ * Normalize - the raw answer as the flat PublishAnswer: the success shape (`{ ok, revision }`) and
+ * the existing error envelope (`{ ok: false, code, message, path }`) both land in one record, and
+ * anything else is refused rather than rendered as a half-read outcome.
+ */
 const Normalize = (Body: unknown): PublishAnswer => {
 	if (typeof Body !== "object" || Body === null) {
 		return Refused("the publish route answered a malformed answer");
@@ -477,10 +516,11 @@ const Normalize = (Body: unknown): PublishAnswer => {
 	return Refused("the publish route answered a malformed answer");
 };
 
-// Publish - the one write: one POST to the publish route with the whole body
-// as JSON. It never throws: a runtime without fetch, a failed request, a
-// non-JSON answer or a malformed body all resolve to a refused answer whose
-// message is the one line the settings surface shows.
+/**
+ * Publish - the one write: one POST to the publish route with the whole body as JSON. It never
+ * throws: a runtime without fetch, a failed request, a non-JSON answer or a malformed body all
+ * resolve to a refused answer whose message is the one line the settings surface shows.
+ */
 export function Publish(Request: PublishRequest): Promise<PublishAnswer> {
 	if (typeof fetch !== "function") {
 		return Promise.resolve(Refused("the fetch API is not available in this runtime"));

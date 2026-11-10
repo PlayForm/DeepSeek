@@ -6,6 +6,7 @@ import Schema from "@deepseek-ai/schemastery";
  * at load).
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every
  * default (docs/user/develop/basic/config.md:45), so invalid configuration
  * fails LOUD at load instead of silently falling back per-field, and `apply`

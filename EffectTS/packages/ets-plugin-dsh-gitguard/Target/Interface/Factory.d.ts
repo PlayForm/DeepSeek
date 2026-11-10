@@ -1,9 +1,11 @@
+import type Factory from "@playform/ets-plugin-dsh-factory";
 /**
  * @module Factory
  *
  * The slice of the factory service the git guard consumes.
  *
  * @remarks
+ *
  * Structural, so a test context can serve the REAL built factory and any future factory refactor
  * keeps the consumer honest (the observe package's precedent).
  *
@@ -12,7 +14,6 @@
  * factory package (erased at build - no runtime import), so
  * `ctx.pluginFactory` is typed at every consumption site.
  */
-import type Factory from "@playform/ets-plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {
         /**

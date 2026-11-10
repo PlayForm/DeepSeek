@@ -1,20 +1,3 @@
-// Source/Test/Harness.ts - the shared test harness for the PANEL-FAMILY
-// HOST tests: the fake ctx (the ctx.provide capture for the
-// panelFamilyHost service, logger capture) + the REAL
-// @playform/ets-client-dsh-panel-family-host apply from its built Target - the
-// family fake-ctx harness pattern, written ONCE per package and imported by
-// every test folder. The host injects NO services and reads the REAL
-// filesystem (its own logs, read-only), so the harness works against a
-// disposable temp directory that stands in for the log root.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// NO FAKE CLOCK: the host has no clock dependency at all - every assertion
-// is on the endpoint results, the file bytes, and the activation lines.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -22,9 +5,36 @@ import * as Path from "node:path";
 import Plugin from "../../Target/Library.js";
 import ClientPluginModule from "../../Target/Client.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the PANEL-FAMILY HOST tests: the fake ctx and
+ * the real apply from the package's built Target.
+ *
+ * @remarks
+ *
+ * The harness carries the fake ctx (the ctx.provide capture for the
+ * panelFamilyHost service, logger capture) plus the REAL
+ * @playform/ets-client-dsh-panel-family-host apply from its built Target - the
+ * family fake-ctx harness pattern, written ONCE per package and imported by
+ * every test folder. The host injects NO services and reads the REAL
+ * filesystem (its own logs, read-only), so the harness works against a
+ * disposable temp directory that stands in for the log root.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * wires the plugin (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * NO FAKE CLOCK: the host has no clock dependency at all - every assertion
+ * is on the endpoint results, the file bytes, and the activation lines.
+ */
 export { Plugin };
 
-/** The browser half (`./client`: { inject, apply, default }). */
+/**
+ * The browser half (`./client`: { inject, apply, default }).
+ */
 export const ClientPlugin = ClientPluginModule;
 
 /**
@@ -200,13 +210,17 @@ export const MakeEditor = (Entries: any[]): any => {
 	return { Editor, Writes };
 };
 
-/** One fake profile entry carrying a serialized Schemastery schema. */
+/**
+ * One fake profile entry carrying a serialized Schemastery schema.
+ */
 export const MakeEntry = (Id: string, Schema: any): any => ({
 	options: { id: Id, name: `@playform/${Id}` },
 	fiber: { runtime: { Config: Schema } },
 });
 
-/** A serialized-schema stand-in: the `{ toJSON }` shape the editor carries. */
+/**
+ * A serialized-schema stand-in: the `{ toJSON }` shape the editor carries.
+ */
 export const MakeSchema = (Serialized: unknown): any => ({
 	toJSON: () => Serialized,
 });
@@ -288,7 +302,9 @@ export const MakeClient = (Options: { remote?: unknown } = {}): any => {
 	return Run;
 };
 
-/** The built client bundle's source (the closure-factory envelope). */
+/**
+ * The built client bundle's source (the closure-factory envelope).
+ */
 export const BundleSource = (): string =>
 	FileSystem.readFileSync(new URL("../Client.bundle.js", import.meta.url), "utf8");
 

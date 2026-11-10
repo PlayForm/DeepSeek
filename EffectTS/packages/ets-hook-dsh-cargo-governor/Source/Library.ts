@@ -1,9 +1,14 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
  * The entry module (mirrors Source/Library.rs).
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` +
  * `export const Config` + `export const inject` + `export default { name,
  * apply, Config, inject }` - the ONLY named exports in the tree (cordis
@@ -117,10 +122,6 @@
  * (registry.json, update-policy.json, pin-policy.json), and the ledger
  * append (ctx.fs has no append operation).
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "hook-dsh-governor-cargo";
 
 /**

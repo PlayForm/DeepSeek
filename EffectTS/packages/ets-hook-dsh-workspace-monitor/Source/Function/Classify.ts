@@ -5,6 +5,7 @@
  * globs and return the matching set identifiers in insertion order.
  *
  * @remarks
+ *
  * The matching order is the table's insertion order, the deterministic order
  * the ledger and the smoke rely on. The glob translator handles the catalog's
  * patterns: a leading double star then a slash (any directory depth,

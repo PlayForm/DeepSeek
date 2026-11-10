@@ -1,3 +1,5 @@
+import type { ContentBlock } from "@deepseek-ai/dsh-llm";
+
 /**
  * @module Classify
  *
@@ -5,6 +7,7 @@
  * is proxy-shaped; DSH needs 7) plus the error override.
  *
  * @remarks
+ *
  * The verdict order is:
  * 1. `error` - a FAILURE result is always type `error` (the ×8 tier: errors
  *    are high-signal, compress late) when compressFailures is on; a
@@ -23,8 +26,6 @@
  * terminal, error, grep, paths, file, json, web, default) and the preview
  * builder (Function/Preview). Pure - no I/O, no clock.
  */
-import type { ContentBlock } from "@deepseek-ai/dsh-llm";
-
 /**
  * The joined TEXT of the content blocks (the text blocks' text, newline-
  * joined; non-text blocks fall through to their JSON projection). Shared by

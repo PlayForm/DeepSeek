@@ -1,14 +1,20 @@
-// Source/Test/Nudge-Cadence/Test.ts - THE NUDGE: when a review becomes due.
-//
-// The cadence is the whole reason a review can be unattended: it must fire
-// often enough to learn from a session and rarely enough to be invisible. The
-// four states below are the contract - disabled, on-interval, interval-off, and
-// reset - and each is asserted on the counter the service returns, never on a
-// timer.
 import assert from "node:assert/strict";
 
 import { Check, Finish, Make, MakeCounter } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE NUDGE: when a review becomes due.
+ *
+ * @remarks
+ *
+ * The cadence is the whole reason a review can be unattended: it must fire
+ * often enough to learn from a session and rarely enough to be invisible. The
+ * four states below are the contract - disabled, on-interval, interval-off,
+ * and reset - and each is asserted on the counter the service returns, never
+ * on a timer.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

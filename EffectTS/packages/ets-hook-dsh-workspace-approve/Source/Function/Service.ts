@@ -1,22 +1,3 @@
-/**
- * @module Service
- *
- * The `workspaceApprove` service (Function/Service): extends the cordis
- * Service base and is REGISTERED FROM APPLY (the loader contract for the
- * object-form plugin: apply constructs the service; the Service base
- * constructor calls ctx.reflect.provide("workspaceApprove", this), so
- * `ctx.workspaceApprove` resolves). Declaration merging below gives the
- * typed accessor.
- *
- * @remarks
- * The methods are thin delegates (one Function module each):
- *
- *   bind(candidate)              - register an exact candidate as pending;
- *   approve(id, who, constraints?) / deny(id, who) / revoke(id, who)
- *                                - the human decision paths;
- *   check(request)               - the merge/execute side's exactness check;
- *   binding(id) / bindings(limit?) / statistics() - the read surface.
- */
 import { Service, type Context } from "@deepseek-ai/cordis";
 import BindFn from "@Function/Bind.js";
 import Check from "@Function/Check.js";
@@ -28,6 +9,26 @@ import type CheckResult from "@Interface/Check.js";
 import type Request from "@Interface/Request.js";
 import type State from "@Interface/State.js";
 
+/**
+ * @module Service
+ *
+ * The `workspaceApprove` service (Function/Service): extends the cordis
+ * Service base and is REGISTERED FROM APPLY (the loader contract for the
+ * object-form plugin: apply constructs the service; the Service base
+ * constructor calls ctx.reflect.provide("workspaceApprove", this), so
+ * `ctx.workspaceApprove` resolves). Declaration merging below gives the
+ * typed accessor.
+ *
+ * @remarks
+ *
+ * The methods are thin delegates (one Function module each):
+ *
+ *   bind(candidate)              - register an exact candidate as pending;
+ *   approve(id, who, constraints?) / deny(id, who) / revoke(id, who)
+ *                                - the human decision paths;
+ *   check(request)               - the merge/execute side's exactness check;
+ *   binding(id) / bindings(limit?) / statistics() - the read surface.
+ */
 export default class WorkspaceApprove extends Service {
 	/**
 	 * The apply-built state the methods read and write.

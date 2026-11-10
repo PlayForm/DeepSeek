@@ -1,3 +1,7 @@
+import Record from "@Function/Record.js";
+import type Line from "@Interface/Line.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Write
  *
@@ -5,6 +9,7 @@
  * ledger it, and persist it.
  *
  * @remarks
+ *
  * Builds the AuditLine from the caller's input, assigns the monotonic
  * id/sequence, ledgers it, and persists it (Function/Record). This is the
  * ONE path every line takes - the listener's and the service's - so the id
@@ -15,10 +20,6 @@
  *   with an assessment suffix for intent-assessment lines:
  *   audit intent-assessment <operation> (satisfied|unsatisfied) <assessment>
  */
-import Record from "@Function/Record.js";
-import type Line from "@Interface/Line.js";
-import type State from "@Interface/State.js";
-
 export default (
 	State: State,
 	Input: {

@@ -1,9 +1,13 @@
+import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import type { State } from "@playform/ets-base-dsh";
+export default _default;
 /**
  * @module Refresh
  *
  * The P3/U2 observation-policy refresh: register the version token and re-emit `fs/observed`.
  *
  * @remarks
+ *
  * The re-emit carries the SAME actor so the observation-policy's per-owner CAS record stays in
  * sync - the author's next guarded write/edit does not fail FS_STALE_VERSION (a notification
  * leak). Same actor means the same owner bucket. Best-effort: any failure is swallowed here.
@@ -13,7 +17,4 @@
  * file) - the caller stats first (`ctx.fs.stat(Target)`) and passes the stat's version. The token
  * is never computed or parsed locally.
  */
-import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
-import type { State } from "@playform/ets-base-dsh";
-export default _default;
 declare function _default(State: State, Target: FsTarget, Actor: object | undefined, Version: FsVersion): void;

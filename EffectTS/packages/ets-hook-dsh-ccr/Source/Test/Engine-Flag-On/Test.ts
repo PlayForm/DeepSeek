@@ -1,14 +1,3 @@
-// Source/Test/Engine-Flag-On/Test.ts - one singular test: the context engine
-// with the flag ON - the pure decision math (ThresholdBytes, Eligible's
-// protect windows, Decide's middle-only archive plan) and the end-to-end
-// engine lifecycle (the agent/pre-step + tools/post-execute posture, the
-// built runtime, the threshold crossings, the byte-exact engine ledger lines
-// in both the logger and the durable [ISO] form, and the archive pushing
-// records through the REAL compress path).
-// Runs standalone (`node Target/Test/Engine-Flag-On/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-ccr: the fake ctx + the REAL factory +
-// the REAL CCR apply, from the Harness.
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import {
@@ -28,6 +17,27 @@ import {
 } from "../Harness.js";
 import { ThresholdBytes, Eligible, Decide } from "../../../Target/Function/Engine.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the context engine with the flag ON - the pure
+ * decision math and the end-to-end engine lifecycle.
+ *
+ * @remarks
+ *
+ * The pure decision math covers ThresholdBytes, Eligible's protect windows,
+ * and Decide's middle-only archive plan. The end-to-end engine lifecycle
+ * covers the agent/pre-step + tools/post-execute posture, the built
+ * runtime, the threshold crossings, the byte-exact engine ledger lines in
+ * both the logger and the durable [ISO] form, and the archive pushing
+ * records through the REAL compress path.
+ *
+ * Runs standalone (`node Target/Test/Engine-Flag-On/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-ccr: the fake ctx + the REAL
+ * factory + the REAL CCR apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

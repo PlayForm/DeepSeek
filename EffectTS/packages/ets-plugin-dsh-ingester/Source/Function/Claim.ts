@@ -1,9 +1,18 @@
+import type Decision from "../Interface/Decision.js";
+import type Proposal from "../Interface/Proposal.js";
+import type Result from "../Interface/Result.js";
+import type State from "../Interface/State.js";
+import ApplyFn from "./Apply.js";
+import JournalFn from "./Journal.js";
+import OutcomeFn from "./Outcome.js";
+
 /**
  * @module Claim
  *
  * The one-apply-per-DECISION gate.
  *
  * @remarks
+ *
  * The claim is taken SYNCHRONOUSLY, before any await, so the same decision arriving twice
  * (the tool's direct handoff and the `batch/decision` event, or the same
  * event delivered by two channels) applies EXACTLY once and every caller
@@ -18,14 +27,6 @@
  * later callers await the same promise. `WhenIdle` drains it for the smokes
  * (no sleeps, no timers).
  */
-import type Decision from "../Interface/Decision.js";
-import type Proposal from "../Interface/Proposal.js";
-import type Result from "../Interface/Result.js";
-import type State from "../Interface/State.js";
-import ApplyFn from "./Apply.js";
-import JournalFn from "./Journal.js";
-import OutcomeFn from "./Outcome.js";
-
 /**
  * The decision's identity: one apply per (proposal, outcome, at).
  */

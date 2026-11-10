@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "@Interface/Config.js";
+export default _default;
 /**
  * @module Apply
  *
@@ -6,6 +9,7 @@
  * the two tools and the own P5-style storage effect.
  *
  * @remarks
+ *
  * The service (Function/Service - `workspaceOperate`) is constructed here so
  * `ctx.workspaceOperate` resolves. The fence tracker rides the factory's
  * Wire on the ROOT context - the staleness rule's data source, silent by
@@ -23,7 +27,4 @@
  * silently kills event delivery). The test probe is the
  * `ctx.__hookDshWorkspaceOperateState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
-export default _default;
 declare function _default(Context: Context, Options: Config): void;

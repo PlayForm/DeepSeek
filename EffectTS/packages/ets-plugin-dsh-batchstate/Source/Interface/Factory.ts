@@ -1,4 +1,6 @@
 import type Factory from "@playform/ets-plugin-dsh-factory";
+import type Factory from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Factory
  *
@@ -6,14 +8,13 @@ import type Factory from "@playform/ets-plugin-dsh-factory";
  * (Interface/Factory).
  *
  * @remarks
+ *
  * Structural, so a test context can serve the REAL built factory and any
  * future factory refactor keeps the consumer honest (the observe package's
  * precedent). The augmentation below publishes the typed vocabulary on the
  * cordis Context, so `ctx.pluginFactory` is fully typed at every
  * consumption site (the observe/pinner precedent).
  */
-import type Factory from "@playform/ets-plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

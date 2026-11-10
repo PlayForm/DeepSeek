@@ -10,6 +10,7 @@ import { Load } from "./Snapshot.js";
  * ONCE on mount and repopulate the mirror (Function/Restore).
  *
  * @remarks
+ *
  * THE SPLIT (the completion spec's storage migration, the pattern/batchstate
  * precedent): the PRIMARY tier is the storage-domain KV domain
  * (Function/Storage); this file is the DEGRADED tier, engaged ONLY when the

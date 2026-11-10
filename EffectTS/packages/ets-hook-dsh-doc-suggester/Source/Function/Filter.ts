@@ -1,3 +1,6 @@
+import type { Detection } from "../Interface/Execution.js";
+import Exists from "./Exists.js";
+
 /**
  * @module Filter
  *
@@ -7,25 +10,31 @@
  * the score/gate step.
  *
  * @remarks
+ *
  * A family whose whole companion set is absent survives as a detection with
  * zero targets, and Score turns that into the `no-companions` abstention
  * (the family is still named in the ledger, so the silence stays
  * diagnosable).
  */
-import type { Detection } from "../Interface/Execution.js";
-import Exists from "./Exists.js";
-
 export default (
-	/** The ranked detections (Detect's output). */
+	/**
+	 * The ranked detections (Detect's output).
+	 */
 	Detections: Detection[],
 
-	/** The call path the pack is judged against. */
+	/**
+	 * The call path the pack is judged against.
+	 */
 	CallPath: string,
 
-	/** The resolved workspace root (the gate's root). */
+	/**
+	 * The resolved workspace root (the gate's root).
+	 */
 	Root: string,
 
-	/** The session cwd, when the harness service exposes one. */
+	/**
+	 * The session cwd, when the harness service exposes one.
+	 */
 	Cwd: string | undefined,
 ): Detection[] =>
 	Detections.map((Detection) => ({

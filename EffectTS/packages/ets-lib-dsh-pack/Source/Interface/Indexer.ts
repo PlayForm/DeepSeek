@@ -5,6 +5,7 @@
  * indexed languages and the file bound.
  *
  * @remarks
+ *
  * Every field is optional; a later wave's indexer consumes the section, the
  * suggester family only carries it.
  */

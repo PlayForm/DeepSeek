@@ -4,6 +4,7 @@
  * One check-set specification in the hook's classification catalog.
  *
  * @remarks
+ *
  * The SHAPE is the live-containers monitor precedent
  * (Variable/DefaultCheckSets.ts there); the SEMANTICS differ by role: the
  * workspace-monitor hook CLASSIFIES and RECORDES - it never executes the
@@ -24,9 +25,13 @@ export default interface CheckSet {
 	 */
 	command?: string;
 
-	/** True for fast checks (per-edit cadence); false for slow checks. */
+	/**
+	 * True for fast checks (per-edit cadence); false for slow checks.
+	 */
 	fast: boolean;
 
-	/** The optional slow cadence hint in milliseconds (informational). */
+	/**
+	 * The optional slow cadence hint in milliseconds (informational).
+	 */
 	intervalMs?: number;
 }

@@ -1,3 +1,5 @@
+import RewriteBlocks from "./Blocks.js";
+
 /**
  * @module StepBatch
  *
@@ -5,6 +7,7 @@
  * waterfall listener per flavor, built over the shared machinery.
  *
  * @remarks
+ *
  * A factory over the shared machinery: three injected pieces registered in
  * the flavor's Function/Apply. The arm sees only the incoming batch of
  * user-role messages for the step - never the assistant/tool history - and it
@@ -45,8 +48,6 @@
  * Pure per call: no module-level state - the one-shot flag lives on the
  * per-apply State object, so an HMR reload resets it cleanly.
  */
-import RewriteBlocks from "./Blocks.js";
-
 /**
  * The schema-default scope gates (the fallback for a hand-built config).
  */

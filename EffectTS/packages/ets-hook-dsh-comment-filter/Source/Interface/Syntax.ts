@@ -4,6 +4,7 @@
  * The per-language comment/string descriptor the strip transform consumes.
  *
  * @remarks
+ *
  * A Variable-style table (Function/Detect) maps a file extension onto one of
  * these, and the string-aware scanner (Function/Scan) uses it to tell a
  * comment from what only looks like one.

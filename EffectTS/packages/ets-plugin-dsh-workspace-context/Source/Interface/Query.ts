@@ -1,19 +1,37 @@
-// Query - one packet request (Interface/Query): the focus selector, the
-// lens, the caller identity and the caller-held version (the staleness
-// contract). All fields optional; the SCOPE section renders what was given.
+/**
+ * @module Query
+ *
+ * One packet request: the focus selector, the lens and the caller identity.
+ *
+ * @remarks
+ *
+ * The focus selector, the lens, the caller identity and the caller-held
+ * version (the staleness contract). All fields optional; the SCOPE section
+ * renders what was given.
+ */
 export default interface Query {
-	/** The node id to focus on (e.g. "Symbol:<path>:<name>"). */
+	/**
+	 * The node id to focus on (e.g. "Symbol:<path>:<name>").
+	 */
 	id?: string;
 
-	/** A name query to resolve the focus from (when no id is given). */
+	/**
+	 * A name query to resolve the focus from (when no id is given).
+	 */
 	query?: string;
 
-	/** The lens name (code | docs | tests); undefined = the default lens. */
+	/**
+	 * The lens name (code | docs | tests); undefined = the default lens.
+	 */
 	lens?: string;
 
-	/** The caller identity (the focus tracker key). */
+	/**
+	 * The caller identity (the focus tracker key).
+	 */
 	caller?: string;
 
-	/** The version the caller currently holds (the staleness comparison). */
+	/**
+	 * The version the caller currently holds (the staleness comparison).
+	 */
 	callerVersion?: string;
 }

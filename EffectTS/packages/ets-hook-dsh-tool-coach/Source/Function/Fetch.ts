@@ -1,3 +1,6 @@
+import type { ToolCatalog, ToolEntry } from "@Interface/Execution.js";
+import { STATIC_TOOL_LINES } from "@Variable/Notes.js";
+
 /**
  * @module Fetch
  *
@@ -22,9 +25,6 @@
  * `fetchLive: false` (the escape hatch) uses the static table unconditionally
  * and never logs a fetch-failure line.
  */
-import type { ToolCatalog, ToolEntry } from "@Interface/Execution.js";
-import { STATIC_TOOL_LINES } from "@Variable/Notes.js";
-
 /**
  * The tools-service surface Fetch needs (structural; the injected `tools`).
  */

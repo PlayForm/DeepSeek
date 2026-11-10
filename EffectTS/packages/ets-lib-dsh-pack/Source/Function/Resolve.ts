@@ -1,9 +1,24 @@
+import type Options from "../Interface/Options.js";
+import type Pack from "../Interface/Pack.js";
+import Builtin from "../Variable/Builtin.js";
+import Chain from "./Chain.js";
+import Extends from "./Extends.js";
+import Home from "./Home.js";
+import Merge from "./Merge.js";
+import Normalize from "./Normalize.js";
+import Pick from "./Pick.js";
+import Read from "./Read.js";
+import Repository from "./Repository.js";
+import Slug from "./Slug.js";
+import User from "./User.js";
+
 /**
  * @module Resolve
  *
  * Runs the layered resolution (D2), the heart of the library.
  *
  * @remarks
+ *
  * The steps:
  *
  * 1. read the repo layer (`<root>/.dsh/pack.yml`) to discover a declared
@@ -20,20 +35,6 @@
  * The merge rules live in `Function/Merge`; the parser decision in
  * `Function/Parse`. The result is a normalized Pack (`Function/Normalize`).
  */
-import type Options from "../Interface/Options.js";
-import type Pack from "../Interface/Pack.js";
-import Builtin from "../Variable/Builtin.js";
-import Chain from "./Chain.js";
-import Extends from "./Extends.js";
-import Home from "./Home.js";
-import Merge from "./Merge.js";
-import Normalize from "./Normalize.js";
-import Pick from "./Pick.js";
-import Read from "./Read.js";
-import Repository from "./Repository.js";
-import Slug from "./Slug.js";
-import User from "./User.js";
-
 export default (Root: string, Options?: Options): Pack | undefined => {
 	const Home_ = Home(Options);
 	const RepoPath = Pick(Repository(Root));

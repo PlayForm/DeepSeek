@@ -1,11 +1,16 @@
-// Columns - the Turns table's one column definition: the eleven shipped
-// columns in their shipped order and widths. Every render delegates to the
-// cell renderers in Cells.ts, so the header, the colgroup, the body cells
-// and the totals row all read the same definition and a hidden or reordered
-// column cannot desynchronise them. The token, cache and other-title
-// renderers live here because Cells.ts ships no renderer for them and this
-// lane does not own that file; their markup is the markup the three rows
-// carried before.
+/**
+ * @module Columns
+ *
+ * The Turns table's one column definition: the eleven shipped columns in their shipped order and
+ * widths.
+ *
+ * @remarks
+ * Every render delegates to the cell renderers in `Cells.ts`, so the header, the colgroup, the body
+ * cells and the totals row all read the same definition and a hidden or reordered column cannot
+ * desynchronise them. The token, cache and other-title renderers live here because `Cells.ts`
+ * ships no renderer for them and this lane does not own that file; their markup is the markup the
+ * three rows carried before.
+ */
 import Cells from "@Function/Cells";
 import CountShort from "@Function/CountShort";
 import Price from "@Function/Price";
@@ -17,11 +22,12 @@ import type { Translate } from "@Interface/Translate";
 import Dash from "@Variable/Dash";
 import { createElement } from "react";
 
-// TurnsCells - the cell source one Turns row hands its definition: the props
-// of every column's renderer, already carrying the row's own cell class and
-// its values. The three rows that render this table - the turn, the step and
-// the totals row - build it from their own aggregates, so the definition
-// owns the order and the markup while each row owns its data.
+/**
+ * TurnsCells - the cell source one Turns row hands its definition: the props of every column's
+ * renderer, already carrying the row's own cell class and its values. The three rows that render
+ * this table - the turn, the step and the totals row - build it from their own aggregates, so the
+ * definition owns the order and the markup while each row owns its data.
+ */
 export type TurnsCells = {
 	Key: string;
 	scope: Parameters<typeof Cells.Scope>[0];
@@ -46,10 +52,20 @@ const Token = (Cell: string, Value: number): ReturnType<typeof createElement> =>
 		createElement("span", { className: "playform-cost-num" }, CountShort(Value)),
 	);
 
-// Cache - the cache-hit cell: the token-weighted rate, the read/input/write
-// detail as its tooltip when the call touched the cache, the column title
-// otherwise, and the dash when the call served no prompt tokens at all.
-// Moved verbatim from the three rows, which carried one copy each.
+// Token - the count cell: the compact token figure under the row's own cell
+// class. Moved verbatim from the three rows, which carried one copy each.
+const Token = (Cell: string, Value: number): ReturnType<typeof createElement> =>
+	createElement(
+		"td",
+		{ className: Cell },
+		createElement("span", { className: "playform-cost-num" }, CountShort(Value)),
+	);
+
+/**
+ * Cache - the cache-hit cell: the token-weighted rate, the read/input/write detail as its tooltip
+ * when the call touched the cache, the column title otherwise, and the dash when the call served
+ * no prompt tokens at all. Moved verbatim from the three rows, which carried one copy each.
+ */
 const Cache = (
 	Cell: string,
 	Tokens: CostTokens,
@@ -85,9 +101,11 @@ const Cache = (
 	}
 };
 
-// OtherTitle - the residual bucket's tooltip: the cache-write and reasoning
-// shares beside the remainder, or the column title when neither was booked.
-// Moved verbatim from the three rows, which carried one copy each.
+/**
+ * OtherTitle - the residual bucket's tooltip: the cache-write and reasoning shares beside the
+ * remainder, or the column title when neither was booked. Moved verbatim from the three rows,
+ * which carried one copy each.
+ */
 const OtherTitle = (Cost: CostBuckets, Currency: string, t: Translate): string => {
 	const Write = typeof Cost.cacheWrite === "number" ? Cost.cacheWrite : 0;
 	const Reasoning = typeof Cost.reasoning === "number" ? Cost.reasoning : 0;
@@ -103,10 +121,11 @@ const OtherTitle = (Cost: CostBuckets, Currency: string, t: Translate): string =
 	}
 };
 
-// Turns - the definition: the shipped order, the shipped widths, and the
-// renderer each column hands its cell. `sortable` names the columns a sort
-// control may order; the table ships no sort control and the definition's
-// default order is empty, so the ledger order stands.
+/**
+ * Turns - the definition: the shipped order, the shipped widths, and the renderer each column
+ * hands its cell. `sortable` names the columns a sort control may order; the table ships no sort
+ * control and the definition's default order is empty, so the ledger order stands.
+ */
 export default {
 	id: "turns",
 	version: 1,

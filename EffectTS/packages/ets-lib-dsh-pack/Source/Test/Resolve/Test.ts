@@ -1,8 +1,3 @@
-// Source/Test/Resolve/Test.ts - the layered resolution against REAL
-// temporary trees: the built-in fallback, the repo layer, the user layer and
-// the repo override, the declared slug, the signature gate, and the
-// user-only layer. Every scenario uses a fresh root (the Load memo is
-// per-root) and a temporary home (never the real ~/.dsh).
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -13,7 +8,21 @@ import {
 	Tree,
 } from "../Harness.js";
 
-/** The repo layer's text: a custom signature, a slug, one doc family. */
+/**
+ * @module Test
+ *
+ * The layered resolution against REAL temporary trees.
+ *
+ * @remarks
+ *
+ * The folder proves the built-in fallback, the repo layer, the user layer
+ * and the repo override, the declared slug, the signature gate, and the
+ * user-only layer. Every scenario uses a fresh root (the Load memo is
+ * per-root) and a temporary home (never the real ~/.dsh).
+ */
+/**
+ * The repo layer's text: a custom signature, a slug, one doc family.
+ */
 const Repo = `signature:
   - docs/STYLE.md
 slug: custom

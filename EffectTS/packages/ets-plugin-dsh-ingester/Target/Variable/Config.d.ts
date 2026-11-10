@@ -1,9 +1,11 @@
+import Schema from "@deepseek-ai/schemastery";
 /**
  * @module Config
  *
  * The plugin's Schemastery Config schema.
  *
  * @remarks
+ *
  * A Variable: one constant built at load. Every tunable is a field; the shape this schema
  * produces is Interface/Config.ts.
  *
@@ -12,7 +14,6 @@
  * ingester is THE ONLY WRITER of the batch flow (plan section 4) - its knobs
  * bound the write path.
  */
-import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     enabled: Schema<boolean, boolean, "defined">;
     logFile: Schema<string, string, "defined">;

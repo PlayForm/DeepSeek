@@ -1,18 +1,3 @@
-// Source/Test/Harness.ts - the shared test harness for the PINNER tests: the
-// fake ctx (on/emit/effect/get/reflect capture + the root seam) with the
-// REAL-TOKEN fs backend (real temp-dir I/O whose version tokens
-// dev:size:mtimeNs:ctimeNs enforce the replaceIfVersion guard) + the REAL
-// @playform/ets-plugin-dsh-factory instance from its built Target + the pinner's
-// REAL built Target - the seams from the source suite
-// (Classic/smokes/pinner-smoke.mjs), written ONCE per package and imported by
-// every test folder.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the real-token fs actually
-// wires the pinner (the vacuously-green backstop for every folder's fixture);
-// prepublishOnly.sh gates the build on it. Imported as a library, this module
-// only exports.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -20,6 +5,28 @@ import * as Path from "node:path";
 import * as Pinner from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the PINNER tests.
+ *
+ * @remarks
+ *
+ * The harness wires the fake ctx (on/emit/effect/get/reflect capture plus
+ * the root seam) with the REAL-TOKEN fs backend (real temp-dir I/O whose
+ * version tokens `dev:size:mtimeNs:ctimeNs` enforce the replaceIfVersion
+ * guard) plus the REAL @playform/ets-plugin-dsh-factory instance from its
+ * built Target plus the pinner's REAL built Target - the seams from the
+ * source suite (`Classic/smokes/pinner-smoke.mjs`), written ONCE per package
+ * and imported by every test folder.
+ *
+ * The standalone selfcheck `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass plus one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the real-token fs actually
+ * wires the pinner (the vacuously-green backstop for every folder's fixture);
+ * `prepublishOnly.sh` gates the build on it. Imported as a library, this
+ * module only exports.
+ */
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks.
  * Passed by reference so Check can bump it from inside its callback.

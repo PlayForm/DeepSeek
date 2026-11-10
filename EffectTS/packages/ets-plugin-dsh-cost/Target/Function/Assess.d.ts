@@ -1,3 +1,4 @@
+import type { DatabaseSync } from "node:sqlite";
 /**
  * @module Assess
  *
@@ -6,6 +7,7 @@
  * spend the way a client argues about it.
  *
  * @remarks
+ *
  * The buckets are delivered (the files whose verdict is "changed"),
  * explored (read or searched, never changed), reverted (changed and then
  * undone), overhead (the unattributed rows - retries, compaction, title
@@ -17,7 +19,6 @@
  * (section 12). The money is rounded to six decimals, the reading precision
  * of every other report row.
  */
-import type { DatabaseSync } from "node:sqlite";
 /**
  * One session's spend, bucketed and rounded.
  */

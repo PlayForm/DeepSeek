@@ -1,4 +1,25 @@
 /**
+ * @module Ring
+ *
+ * Holds the per-agent state the suggester needs between judged calls.
+ *
+ * @remarks
+ *
+ * The per-agent state (the tool-coach precedent): a WeakMap keyed on the Agent object
+ * holding the paths touched since the last user message, the cooldown counters, the
+ * dedupe set, the per-turn note count, and the OPEN NOTE the follow-through watches
+ * (completion spec 03-SUGGESTERS section 2: "watch the next judged calls within a
+ * window").
+ *
+ * THE OPEN NOTE (the outcome signal): an emitted note opens a window with the family and
+ * the companion paths it named; every judged in-workspace call either FOLLOWS it (the
+ * call path names a companion - an ACCEPT) or AGES it by one call. The window is counted
+ * in calls, never in time: no timers, no clock, deterministic. A window that reaches the
+ * config's `learnWindow` untouched closes as a soft REJECT. The per-turn reset forgets an
+ * open note without a verdict (the turn boundary is not a judged call), so a reset never
+ * invents an outcome.
+ */
+/**
  * One open note awaiting its follow-through verdict.
  */
 export interface Pending {

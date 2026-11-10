@@ -1,3 +1,16 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { ContentBlock } from "@deepseek-ai/dsh-llm";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
+
+import Version from "../Variable/Version.js";
+import Compress, { type Verdict } from "./Compress.js";
+import { Decide, type EngineRecord, type EngineRuntime } from "./Engine.js";
+import Marker from "./Marker.js";
+import Retrieve from "./Retrieve.js";
+import Store, { type Eviction } from "./Store.js";
+
 /**
  * @module Apply
  *
@@ -7,6 +20,7 @@
  * registers the `ccr_retrieve` tool.
  *
  * @remarks
+ *
  * The State is built through `Factory.State` (the cell unwrap, the shared
  * mappings Ledger←logFile / Enabled←log and the module's own fields via the
  * setup `fields` map - factory SCHEME.md §2.10); the durable activation proof
@@ -74,19 +88,6 @@
  * the ledger append is the factory's own plain-fs exemption, and the store's
  * optional journal is the store's own plain-fs exemption (Function/Store).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { ContentBlock } from "@deepseek-ai/dsh-llm";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
-
-import Version from "../Variable/Version.js";
-import Compress, { type Verdict } from "./Compress.js";
-import { Decide, type EngineRecord, type EngineRuntime } from "./Engine.js";
-import Marker from "./Marker.js";
-import Retrieve from "./Retrieve.js";
-import Store, { type Eviction } from "./Store.js";
-
 export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
 	// augmentation; guaranteed present by the inject declaration).

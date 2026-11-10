@@ -1,3 +1,8 @@
+import type { StreamChunk } from "@deepseek-ai/dsh-llm";
+import { Chunk as CoreChunk } from "@playform/ets-base-dsh";
+
+import Replace from "./Replace.js";
+
 /**
  * @module Chunk
  *
@@ -5,6 +10,7 @@
  * generic per-chunk dispatch with the transform INJECTED.
  *
  * @remarks
+ *
  * The dispatch structure (which chunk types, which fields, the identity
  * passthroughs, the reasoning gate, the tool-args gate - three-way since the
  * edit exemption and the per-call raw marker: a delta whose `name` is "edit"
@@ -20,11 +26,6 @@
  * The behavior is byte-identical to the previous in-file implementation
  * (which hardcoded its own Replace) - the hook-dsh-normalize-dash smoke is the arbiter.
  */
-import type { StreamChunk } from "@deepseek-ai/dsh-llm";
-import { Chunk as CoreChunk } from "@playform/ets-base-dsh";
-
-import Replace from "./Replace.js";
-
 export default (
 	Input: StreamChunk,
 	Replacement: string,

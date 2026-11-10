@@ -1,3 +1,8 @@
+import type { Context } from "@deepseek-ai/cordis";
+
+import type { InjectingContext } from "../Interface/Session.js";
+import Unit from "./Unit.js";
+
 /**
  * @module Register
  *
@@ -6,6 +11,7 @@
  * event once for every agent.
  *
  * @remarks
+ *
  * WHY `ctx.inject` AND NOT THE `inject` ARRAY: the registry is a service a
  * shipped composition provides, but the hook must LOAD without it (a bare
  * mount, a test ctx, an older profile). Declaring `sessionProjections` in the
@@ -28,11 +34,6 @@
  * the same posture as the `workingDirectory` and `workspaceGraph` probes in
  * Function/Apply.
  */
-import type { Context } from "@deepseek-ai/cordis";
-
-import type { InjectingContext } from "../Interface/Session.js";
-import Unit from "./Unit.js";
-
 export default (Context: Context): void => {
 	try {
 		const Inject = (Context as unknown as InjectingContext).inject;

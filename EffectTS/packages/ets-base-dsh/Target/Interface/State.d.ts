@@ -1,3 +1,7 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { FsTargetKey, FsVersion } from "@deepseek-ai/dsh-fs";
+import type SubprocessService from "@deepseek-ai/dsh-subprocess";
+import type Record from "./Journal.js";
 /**
  * @module State
  *
@@ -5,6 +9,7 @@
  * every factory primitive consumes.
  *
  * @remarks
+ *
  * A module's own state is this shape plus its module-specific fields (copied
  * from config by the State builder's `fields` map) - a module declares its
  * own extended interface and its instances are assignable to this one, which
@@ -28,10 +33,6 @@
  * compares them but never parses or computes them
  * (subsystems/filesystem.md).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { FsTargetKey, FsVersion } from "@deepseek-ai/dsh-fs";
-import type SubprocessService from "@deepseek-ai/dsh-subprocess";
-import type Record from "./Journal.js";
 export default interface State {
     /**
      * The loading context - carries fs, logger, emit and the event bus.

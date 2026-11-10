@@ -1,9 +1,12 @@
+import { type State } from "@playform/ets-base-dsh";
+export default _default;
 /**
  * @module Open
  *
  * The optional storageDomain seam setup (P5).
  *
  * @remarks
+ *
  * Registered once per load by Function/Attach inside a `ctx.effect`: the facility is probed via
  * `ctx.get?.("storageDomain")`; when present, the domain is declared ONCE (`defineDomain` -
  * name/version/UNIT_NAME_RE fail loud here, at setup, not on any caller path), opened, and
@@ -63,8 +66,6 @@
  * contention. The Journal routing is unchanged: post-open records still flow through the first
  * bound shared sink.
  */
-import { type State } from "@playform/ets-base-dsh";
-export default _default;
 declare function _default(State: State & {
     JournalDomain?: string | undefined;
 }, Facility: {

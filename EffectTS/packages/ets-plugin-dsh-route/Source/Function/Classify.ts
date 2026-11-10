@@ -1,3 +1,5 @@
+import type { KeywordTable, Role } from "@Interface/Policy.js";
+
 /**
  * @module Classify
  *
@@ -5,6 +7,7 @@
  * table.
  *
  * @remarks
+ *
  * ROUTING-ENFORCER-PLUGIN.md section 2.1: when the orchestrator does NOT
  * declare a role, the plugin derives it from the task's shape using the
  * keyword table. Pure and deterministic: the same spec text and the same
@@ -18,8 +21,6 @@
  * match their stems. No match and no declared type: the caller falls back
  * to the policy's default role.
  */
-import type { KeywordTable, Role } from "@Interface/Policy.js";
-
 export default (Spec: string, Keywords: KeywordTable): Role | undefined => {
 	const Text = Spec.toLowerCase();
 

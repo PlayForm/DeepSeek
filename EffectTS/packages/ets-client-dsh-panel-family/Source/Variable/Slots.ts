@@ -1,3 +1,5 @@
+import type { PanelSlot } from "@Interface/Panel.js";
+
 /**
  * @module Slots
  *
@@ -5,12 +7,11 @@
  * renders (the v4.1 model), plus the two host slots the panel mounts into.
  *
  * @remarks
+ *
  * The type side lives in Interface/Panel.ts (PanelSlot); the `satisfies`
  * annotations make a typo a compile error while keeping the literal types for
  * the byte-exact smoke assertions.
  */
-import type { PanelSlot } from "@Interface/Panel.js";
-
 export default {
 	/**
 	 * The family tab's section list (conversation.view > playform-family).

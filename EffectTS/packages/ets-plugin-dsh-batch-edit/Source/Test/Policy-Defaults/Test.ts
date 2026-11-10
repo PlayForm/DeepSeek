@@ -1,8 +1,3 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the batch
-// edit tool: the shared block's defaults in the schema and on the built
-// State, the `approve` verdict REFUSING the apply with the documented line
-// (nothing planned, nothing written, the machine still open), and the `auto`
-// verdict proceeding to the commit.
 import assert from "node:assert/strict";
 
 import {
@@ -15,7 +10,21 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * @module Test
+ *
+ * THE POLICY BLOCK (D6) on the batch edit tool.
+ *
+ * @remarks
+ *
+ * The folder proves the shared block's defaults in the schema and on the
+ * built State, the `approve` verdict REFUSING the apply with the documented
+ * line (nothing planned, nothing written, the machine still open), and the
+ * `auto` verdict proceeding to the commit.
+ */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",
@@ -32,7 +41,9 @@ const Defaults = {
 const Setup = (Raw: Record<string, unknown> = {}): any =>
 	Make(Validate({ logFile: Ledger, enabled: true, ...Raw }), { "a.txt": "hello\nworld\n" });
 
-/** Open one machine holding a.txt with one replace op. */
+/**
+ * Open one machine holding a.txt with one replace op.
+ */
 const Open = async (Run: any): Promise<any> =>
 	Run.Tool.execute(
 		{

@@ -1,9 +1,15 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
+import { DEFAULT_BLOCKS } from "@Variable/DefaultBlocks.js";
+import { DEFAULT_CHECK_SETS } from "@Variable/DefaultCheckSets.js";
+
 /**
  * @module Config
  *
  * Declares the plugin's Schemastery Config schema as one constant built once at load.
  *
  * @remarks
+ *
  * A Variable: one constant built once at load. Cordis validates the exported schema while
  * the plugin loads and fills every default, so invalid configuration fails LOUD at load
  * instead of silently falling back per-field, and `apply` receives a validated plain
@@ -38,11 +44,6 @@
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance - the loader
  * consumes it through the Standard Schema `~standard` interface).
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
-import { DEFAULT_BLOCKS } from "@Variable/DefaultBlocks.js";
-import { DEFAULT_CHECK_SETS } from "@Variable/DefaultCheckSets.js";
-
 export default Compose(false, {
 	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-live-containers.log").volatile(),
 	enabled: Schema.boolean().default(false).volatile(),

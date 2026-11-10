@@ -1,21 +1,3 @@
-// Source/Test/Harness.ts - the shared test harness for the BATCH-DECISION
-// hook tests: the fake ctx (ctx listener capture, emit capture, the
-// reflect.provide capture, logger capture, the throwing fs purity seam, the
-// DISTINCT root object with its own on/emit capture) + the REAL
-// @play_written_as @playform/ets-plugin-dsh-factory instance from its built
-// Target + the REAL batch-decision apply from its built Target - the family
-// fake-ctx + real-factory harness pattern, written ONCE per package and
-// imported by every test folder. Each folder process gets a fresh set, so
-// every folder is standalone-green.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// THE FAKE CLOCK: the State carries the `Now` clock seam - every time read
-// goes through it, so the expiry and TTL tests never touch the wall clock.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -23,6 +5,33 @@ import * as Path from "node:path";
 import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the BATCH-DECISION hook tests: the fake ctx
+ * plus the REAL factory instance and the REAL apply, both from their built
+ * Target.
+ *
+ * @remarks
+ *
+ * The harness carries the fake ctx (ctx listener capture, emit capture, the
+ * reflect.provide capture, logger capture, the throwing fs purity seam, the
+ * DISTINCT root object with its own on/emit capture) + the REAL
+ * @play_written_as @playform/ets-plugin-dsh-factory instance from its built
+ * Target + the REAL batch-decision apply from its built Target - the family
+ * fake-ctx + real-factory harness pattern, written ONCE per package and
+ * imported by every test folder. Each folder process gets a fresh set, so
+ * every folder is standalone-green.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * wires the plugin (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * THE FAKE CLOCK: the State carries the `Now` clock seam - every time read
+ * goes through it, so the expiry and TTL tests never touch the wall clock.
+ */
 export { Plugin };
 
 /**

@@ -1,3 +1,5 @@
+import type { DatabaseSync } from "node:sqlite";
+
 /**
  * @module Report
  *
@@ -6,6 +8,7 @@
  * views.
  *
  * @remarks
+ *
  * FileCost answers the file rows, ClientCost the client rows, SessionCost
  * joined through the Session and Project dimensions the project rows, and
  * the model rows are grouped from Allocation and Call per provider, model,
@@ -23,8 +26,6 @@
  * numbers at the same precision. The FileCost view carries no token column,
  * so file rows report Tokens zero.
  */
-import type { DatabaseSync } from "node:sqlite";
-
 /**
  * One report row of one scope.
  */

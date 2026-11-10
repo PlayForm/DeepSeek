@@ -1,9 +1,20 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { BatchDecision, BatchProposal, BatchResult } from "@Interface/Batch.js";
+import {
+	LIVE_KEYS,
+	SEAM_KEYS,
+	type ApprovalService,
+	type IngesterService,
+	type PassOnService,
+} from "@Interface/Siblings.js";
+
 /**
  * @module Handoff
  *
  * The sibling-service resolution and the ingester call (Function/Handoff).
  *
  * @remarks
+ *
  * The services are resolved via Context.get at use time (the tool-jobs
  * precedent) - never injected, never imported from sibling workspace packages
  * (the self-contained posture). An absent sibling is a silent skip plus one
@@ -16,16 +27,6 @@
  * the real packages without importing them (Interface/Siblings documents the
  * pair).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { BatchDecision, BatchProposal, BatchResult } from "@Interface/Batch.js";
-import {
-	LIVE_KEYS,
-	SEAM_KEYS,
-	type ApprovalService,
-	type IngesterService,
-	type PassOnService,
-} from "@Interface/Siblings.js";
-
 export const Resolve = (Context_: Context, Key: string): unknown => {
 	try {
 		return Context_.get?.(Key);

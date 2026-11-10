@@ -1,13 +1,3 @@
-// Source/Test/Index-Refresh/Test.ts - the plan's suite 7 (Index-Refresh),
-// re-specified onto the P2 graph projection: the projection is built once per
-// apply, reused across calls, rebuilt on `tools/change` while `refreshOnBoot`
-// holds, frozen when it does not, and re-probed while the graph is empty. The
-// suite asserts the SNAPSHOT CALL COUNTS (the refresh evidence) and the
-// note's order before and after a re-index.
-//
-// THE CANDIDATES COME FROM THE SESSION HISTORY: the anchor and its two
-// companions are committed per agent's session through the projection drive,
-// and the graph proves (or fails to prove) the companions.
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -25,23 +15,51 @@ import {
 	Workspace,
 } from "../Harness.js";
 
-/** The judged call's anchor path (relative to the temp workspace). */
+/**
+ * @module Test
+ *
+ * The plan's suite 7 (Index-Refresh), re-specified onto the P2 graph
+ * projection.
+ *
+ * @remarks
+ *
+ * The projection is built once per apply, reused across calls, rebuilt on
+ * `tools/change` while `refreshOnBoot` holds, frozen when it does not, and
+ * re-probed while the graph is empty. The suite asserts the SNAPSHOT CALL
+ * COUNTS (the refresh evidence) and the note's order before and after a
+ * re-index.
+ *
+ * THE CANDIDATES COME FROM THE SESSION HISTORY: the anchor and its two
+ * companions are committed per agent's session through the projection drive,
+ * and the graph proves (or fails to prove) the companions.
+ */
+/**
+ * The judged call's anchor path (relative to the temp workspace).
+ */
 const Anchor = "README.md";
 
-/** The two companions touched right after the anchor. */
+/**
+ * The two companions touched right after the anchor.
+ */
 const Companions = ["CHANGELOG.md", "package.json"];
 
-/** The temp workspace the scenarios judge. */
+/**
+ * The temp workspace the scenarios judge.
+ */
 const Space = Workspace([Anchor, ...Companions]);
 
-/** One judged read of the anchor. */
+/**
+ * One judged read of the anchor.
+ */
 const Read = (Id: string): any => ({
 	name: "read",
 	arguments: { file_path: Space.At(Anchor) },
 	agent: AgentOf(Id),
 });
 
-/** The byte-exact note the neutral (no graph) path emits. */
+/**
+ * The byte-exact note the neutral (no graph) path emits.
+ */
 const Neutral =
 	"[search-suggester] intent=History confidence=0.87\ntargets (2):\n- CHANGELOG.md - touched 1 time(s) after a similar call\n- package.json - touched 1 time(s) after a similar call\nnote: open these before more searches; Target/ is generated, never edit it.";
 

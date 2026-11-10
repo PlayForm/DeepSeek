@@ -1,13 +1,23 @@
-// Source/Test/Loader-And-Config/Test.ts - one singular test: the pinner's
-// loader contract (name/apply/Config/inject + the full default object) and the
-// factory-built Config schema validated with the historical defaults.
-// Runs standalone (`node Target/Test/Loader-And-Config/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-package-pinner.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter } from "../Harness.js";
 import * as Pinner from "../../../Target/Library.js";
 
+/**
+ * @module Test
+ *
+ * The singular test of the pinner's loader contract and Config schema.
+ *
+ * @remarks
+ *
+ * The loader contract covers name/apply/Config/inject plus the full default
+ * object. The Config schema is the factory-built one, validated with the
+ * historical defaults.
+ *
+ * The file runs standalone (`node Target/Test/Loader-And-Config/Test.js`)
+ * and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * It is a unit smoke of @playform/ets-hook-dsh-package-pinner.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

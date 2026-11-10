@@ -6,6 +6,7 @@
  * every default, so `apply` receives a plain object of exactly this shape.
  *
  * @remarks
+ *
  * The schema that produces it lives in Variable/Config.ts (the plan's
  * section 4.8 schema, verbatim); every field here is a config field (the
  * cordis.yml test - no hardcoded tunables).

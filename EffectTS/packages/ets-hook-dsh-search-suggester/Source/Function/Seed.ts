@@ -1,3 +1,7 @@
+import type { Intent, Knowledge } from "../Interface/Execution.js";
+import type Projection from "../Interface/Projection.js";
+import Measure from "./Measure.js";
+
 /**
  * @module Seed
  *
@@ -5,6 +9,7 @@
  * applied at load with NO LLM and NO session history.
  *
  * @remarks
+ *
  * The seed source (the only source):
  *
  *   - an EXPLICIT repo/user pack's canonical candidates - every target of the
@@ -31,10 +36,6 @@
  * emit, a follow, a dismissal), so the cold-start file stays absent until
  * there is something to record.
  */
-import type { Intent, Knowledge } from "../Interface/Execution.js";
-import type Projection from "../Interface/Projection.js";
-import Measure from "./Measure.js";
-
 export default (
 	/**
 	 * The loaded (or cold) knowledge, mutated in place.

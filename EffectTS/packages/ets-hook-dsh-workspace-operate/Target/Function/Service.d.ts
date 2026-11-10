@@ -1,3 +1,9 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type Filter from "@Interface/Filter.js";
+import type Outcome from "@Interface/Outcome.js";
+import type Proposal from "@Interface/Proposal.js";
+import type State from "@Interface/State.js";
+import type Statistics from "@Interface/Statistics.js";
 /**
  * @module Service
  *
@@ -5,6 +11,7 @@
  * REGISTERED FROM APPLY.
  *
  * @remarks
+ *
  * This is the loader contract for the object-form plugin: apply constructs
  * the service; the Service base constructor calls
  * ctx.reflect.provide("workspaceOperate", this), so `ctx.workspaceOperate`
@@ -19,12 +26,6 @@
  *   withdraw(id)           - mark one proposal withdrawn;
  *   statistics()           - the honest counts.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type Filter from "../Interface/Filter.js";
-import type Outcome from "../Interface/Outcome.js";
-import type Proposal from "../Interface/Proposal.js";
-import type State from "../Interface/State.js";
-import type Statistics from "../Interface/Statistics.js";
 export default class WorkspaceOperate extends Service {
     /**
      * The apply-built state the methods read and write.

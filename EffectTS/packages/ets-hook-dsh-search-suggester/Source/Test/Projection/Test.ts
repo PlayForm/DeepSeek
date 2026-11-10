@@ -1,13 +1,3 @@
-// Source/Test/Projection/Test.ts - the P2 GRAPH PROJECTION against the fake
-// ctx and a fake workspaceGraph: the projected candidate scoring (the note's
-// order changes when the graph proves the candidates), the byte-exact
-// neutral fallback when the graph is absent, the projected sticky section,
-// the kind test, the depth test, and the no-new-ledger-string rule.
-//
-// THE CANDIDATES COME FROM THE SESSION HISTORY: every scenario commits the
-// agent's history through the projection drive (the anchor and its companions
-// as `tool/call` events), and the graph then proves (or fails to prove) those
-// companion paths.
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -29,13 +19,37 @@ import {
 	Workspace,
 } from "../Harness.js";
 
-/** The judged call's anchor path (relative to the temp workspace). */
+/**
+ * @module Test
+ *
+ * The P2 GRAPH PROJECTION test against the fake ctx and a fake
+ * workspaceGraph.
+ *
+ * @remarks
+ *
+ * The test covers the projected candidate scoring (the note's order changes
+ * when the graph proves the candidates), the byte-exact neutral fallback
+ * when the graph is absent, the projected sticky section, the kind test,
+ * the depth test, and the no-new-ledger-string rule.
+ *
+ * THE CANDIDATES COME FROM THE SESSION HISTORY: every scenario commits the
+ * agent's history through the projection drive (the anchor and its
+ * companions as `tool/call` events), and the graph then proves (or fails to
+ * prove) those companion paths.
+ */
+/**
+ * The judged call's anchor path (relative to the temp workspace).
+ */
 const Anchor = "README.md";
 
-/** The companions the scenarios prove against the graph. */
+/**
+ * The companions the scenarios prove against the graph.
+ */
 const Companions = ["CHANGELOG.md", "SCHEME.md"];
 
-/** The temp workspace the scenarios judge (every companion exists). */
+/**
+ * The temp workspace the scenarios judge (every companion exists).
+ */
 const Space = Workspace([
 	Anchor,
 	...Companions,
@@ -43,18 +57,24 @@ const Space = Workspace([
 	"Source/Function/Apply.ts",
 ]);
 
-/** One judged read of the anchor. */
+/**
+ * One judged read of the anchor.
+ */
 const Read = (Id: string): any => ({
 	name: "read",
 	arguments: { file_path: Space.At(Anchor) },
 	agent: AgentOf(Id),
 });
 
-/** The byte-exact note the neutral (no graph) path emits. */
+/**
+ * The byte-exact note the neutral (no graph) path emits.
+ */
 const Neutral =
 	"[search-suggester] intent=History confidence=0.87\ntargets (2):\n- CHANGELOG.md - touched 1 time(s) after a similar call\n- SCHEME.md - touched 1 time(s) after a similar call\nnote: open these before more searches; Target/ is generated, never edit it.";
 
-/** The byte-exact note a graph that proves the recency order emits. */
+/**
+ * The byte-exact note a graph that proves the recency order emits.
+ */
 const Projected =
 	"[search-suggester] intent=History confidence=0.87\ntargets (2):\n- SCHEME.md - touched 1 time(s) after a similar call\n- CHANGELOG.md - touched 1 time(s) after a similar call\nnote: open these before more searches; Target/ is generated, never edit it.";
 

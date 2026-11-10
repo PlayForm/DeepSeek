@@ -4,6 +4,7 @@
  * What the live view presents.
  *
  * @remarks
+ *
  * Documentation/Plans/Workspace-Family/LIVE.md: the presentations of the
  * Entity/Presentation/Interaction model. The live view NEVER conflates a
  * running OS process with a managed entity: a representation describes a

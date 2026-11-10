@@ -1,3 +1,5 @@
+import type { PacketView } from "@Interface/Section.js";
+
 /**
  * @module Packet
  *
@@ -15,14 +17,13 @@
  * - `STALE <the version the caller held, if it differs>`
  *
  * @remarks
+ *
  * Multi-value bands (MAP/NEIGHBORS/EVIDENCE/OPEN) render one entry per line
  * under the tag; absent bands render `MAP (none)` style placeholders - the
  * grammar is always COMPLETE, never partially omitted. STALE renders only when
  * the caller's version differs. Pure: PacketView in, text out; the token
  * budget is the CALLER's concern (it owns the counter seam).
  */
-import type { PacketView } from "@Interface/Section.js";
-
 /**
  * One band of the grammar: tag + entries + the empty placeholder.
  */

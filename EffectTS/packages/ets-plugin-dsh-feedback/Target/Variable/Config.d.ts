@@ -1,9 +1,11 @@
+import Schema from "@deepseek-ai/schemastery";
 /**
  * @module Config
  *
  * The plugin's Schemastery Config schema.
  *
  * @remarks
+ *
  * A Variable: one constant built once at load. Every tunable is a field; the shape this schema
  * produces is Interface/Config.ts.
  *
@@ -18,7 +20,6 @@
  * is the ledger size, capped by maxSessions. The bundle patch still ships `enabled: true`
  * explicit so the activation is visible in the patch.
  */
-import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     enabled: Schema<boolean, boolean, "defined">;
     logFile: Schema<string, string, "defined">;

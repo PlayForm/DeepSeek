@@ -1,9 +1,12 @@
+import type State from "@Interface/State.js";
+
 /**
  * @module Duplicate
  *
  * The repeat-event guard: the COALESCER.
  *
  * @remarks
+ *
  * A repeat event for the same path that carries the SAME version within the
  * window on the module's clock announces a file state that was already
  * processed (the version token identifies the file state), so it is dropped
@@ -18,9 +21,6 @@
  * eviction of the oldest entry: a MISSING entry always processes, so the cap
  * can never skip a first sighting.
  */
-
-import type State from "@Interface/State.js";
-
 /**
  * The coalescing window in milliseconds: a repeat inside the window that
  * carries the same version is dropped.

@@ -1,9 +1,12 @@
+import type { Role, RouteHint } from "./Policy.js";
+
 /**
  * @module Request
  *
  * The launch request shape the resolver sees.
  *
  * @remarks
+ *
  * ROUTING-ENFORCER-PLUGIN.md section 2.1: the task type (or the omission),
  * the task spec text for the keyword inference, the explicitly passed route
  * (or the omission), and the escalation flag (the attempts ladder's
@@ -12,9 +15,6 @@
  * Every field is optional on purpose: the OMSSION is the normal case the
  * plugin resolves silently - it is never an error to surface.
  */
-
-import type { Role, RouteHint } from "./Policy.js";
-
 export default interface Request {
 	/**
 	 * The declared task type, when the launcher declares one.

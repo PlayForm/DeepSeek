@@ -10,6 +10,7 @@ import type { ReplayRecord } from "@Interface/History.js";
  * similar prior call.
  *
  * @remarks
+ *
  * This is the reader the completion spec's wave 2c re-spec finally feeds -
  * before the producer (Function/Record) the recall always missed.
  *
@@ -33,7 +34,6 @@ import type { ReplayRecord } from "@Interface/History.js";
  * `verify`, so the note path, the caveat fallback and the delivery surface
  * are the same for both sources.
  */
-
 /**
  * Whether a prior entry is similar to this call.
  */
@@ -53,19 +53,29 @@ const Similar = (Entry_: Entry, Probe: string, Path: string): boolean => {
 };
 
 export default (
-	/** The entries, newest first (an agent's ring or the durable mirror). */
+	/**
+	 * The entries, newest first (an agent's ring or the durable mirror).
+	 */
 	Entries: Entry[],
 
-	/** The current call's probe. */
+	/**
+	 * The current call's probe.
+	 */
 	Probe: string,
 
-	/** The current call's path ("" when the call names none). */
+	/**
+	 * The current call's path ("" when the call names none).
+	 */
 	Path: string,
 
-	/** The episode radius (config `learnWindow`, volatile). */
+	/**
+	 * The episode radius (config `learnWindow`, volatile).
+	 */
 	Window: number,
 
-	/** The sequence fence: only entries STRICTLY older than this are prior. */
+	/**
+	 * The sequence fence: only entries STRICTLY older than this are prior.
+	 */
 	Before: number,
 ): ReplayRecord | undefined => {
 	const Prior = Entries.filter((Entry_) => Entry_.seq < Before);

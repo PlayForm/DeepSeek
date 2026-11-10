@@ -5,6 +5,7 @@
  * read back.
  *
  * @remarks
+ *
  * A FIXED implementation bound, not a config knob - the trace adds no config
  * schema anywhere (the completion spec's "no new config schema beyond what a
  * task strictly needs").

@@ -1,3 +1,5 @@
+import type Batch from "../Interface/Batch.js";
+
 /**
  * @module Envelope
  *
@@ -5,6 +7,7 @@
  * through the harness inbox.
  *
  * @remarks
+ *
  * The format is:
  *
  * [BATCH PROPOSAL - <id>]
@@ -17,6 +20,4 @@
  * line. The JSON is the contract verbatim - the board and the decision hook
  * read the same object the pass-on computed.
  */
-import type Batch from "../Interface/Batch.js";
-
 export default (Batch: Batch): string => `[BATCH PROPOSAL - ${Batch.id}]\n${JSON.stringify(Batch)}`;

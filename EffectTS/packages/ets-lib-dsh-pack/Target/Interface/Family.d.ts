@@ -1,3 +1,5 @@
+import type Signal from "./Signal.js";
+import type Target from "./Target.js";
 /**
  * @module Family
  *
@@ -7,13 +9,12 @@
  * long-tail family globs ([] when the domain has none).
  *
  * @remarks
+ *
  * A family lives in a pack's `families` map under a DOMAIN-QUALIFIED key,
  * `<domain>/<id>` (e.g. `doc/Plan`), so the six suggester domains share one
  * pack without colliding on the ids they reuse (Version, Config, Test, ...).
  * The `id` field stays unqualified: the suggester's ledger strings name it.
  */
-import type Signal from "./Signal.js";
-import type Target from "./Target.js";
 export default interface Family {
     /**
      * The family id (unqualified: the ledger's name).

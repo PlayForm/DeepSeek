@@ -1,9 +1,3 @@
-// Source/Test/Record-And-Decay-And-Save/Test.ts - the learner, the decay and
-// the snapshot persistence: the Record ledger lines byte-exactly, the
-// unknown-id silence, the half-life decay arithmetic with the 0.5 floor, the
-// clamping, the Save (real file in the redirected $HOME) with its
-// byte-exact line, and the restore path (a seeded snapshot replaces the
-// cold-start catalog).
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -17,12 +11,25 @@ import {
 	Settle,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The learner, the decay and the snapshot persistence: the Record ledger
+ * lines byte-exactly, the unknown-id silence, the half-life decay arithmetic
+ * with the 0.5 floor, the clamping, the Save (real file in the redirected
+ * $HOME) with its byte-exact line, and the restore path (a seeded snapshot
+ * replaces the cold-start catalog).
+ */
 const Day = 86_400_000;
 
-/** The default snapshot path inside the redirected home. */
+/**
+ * The default snapshot path inside the redirected home.
+ */
 const SnapshotPath = (): string => Path.join(Home, ".dsh", "pattern", "registry.json");
 
-/** A custom pattern for the arithmetic tests. */
+/**
+ * A custom pattern for the arithmetic tests.
+ */
 const Pattern = (Id: string, Confidence: number, UpdatedAt: number): any => ({
 	id: Id,
 	intent: Id,

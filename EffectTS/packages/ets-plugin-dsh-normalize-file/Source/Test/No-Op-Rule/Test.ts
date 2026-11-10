@@ -1,18 +1,22 @@
-// Source/Test/No-Op-Rule/Test.ts - one singular test: the N=0 no-op rule -
-// normalizing an already-normalized file (count 0, changed=false, NO write,
-// NO waterfall, NO emit, NO count line, NO journal record, the file left
-// byte-identical, no before/after in the outcome) and a clean file that is a
-// no-op from the start. The suite's journal arithmetic is cumulative on the
-// factory-level PendingJournal, so this folder replays Run 1b's write as a
-// silent fixture first - every check below is byte-verbatim and the counts
-// reproduce the source suite's values when run standalone OR under the
-// aggregate. Runs standalone (`node Target/Test/No-Op-Rule/Test.js`) AND
-// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-plugin-dsh-normalize-file: the fake ctx + the REAL
-// factory + the REAL normalize-file apply, from the Harness.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the N=0 no-op rule - normalizing an already-normalized
+ * file (count 0, changed=false, NO write, NO waterfall, NO emit, NO count
+ * line, NO journal record, the file left byte-identical, no before/after in
+ * the outcome) and a clean file that is a no-op from the start. The suite's
+ * journal arithmetic is cumulative on the factory-level PendingJournal, so
+ * this folder replays Run 1b's write as a silent fixture first - every check
+ * below is byte-verbatim and the counts reproduce the source suite's values
+ * when run standalone OR under the aggregate. Runs standalone (`node
+ * Target/Test/No-Op-Rule/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-plugin-dsh-normalize-file: the fake ctx + the REAL factory +
+ * the REAL normalize-file apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

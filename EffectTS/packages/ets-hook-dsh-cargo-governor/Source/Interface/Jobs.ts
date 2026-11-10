@@ -1,9 +1,12 @@
+import type Job from "@Interface/Job.js";
+
 /**
  * @module Jobs
  *
  * The probed view of the DSH jobs service (the root-level runtime).
  *
  * @remarks
+ *
  * The service is NEVER injected: it is optional, and on contexts without a
  * job controller the direct `ctx.jobs` accessor can throw - the documented
  * optional-dep probe is `ctx.get(name)` (live-verified 2026-10-03, the same
@@ -12,8 +15,6 @@
  * published @deepseek-ai/cordis typings, so the shapes the plugin consumes
  * are mirrored here structurally.
  */
-import type Job from "@Interface/Job.js";
-
 export default interface Jobs {
 	/**
 	 * Register this plugin as a root-level job controller (Function/Apply).

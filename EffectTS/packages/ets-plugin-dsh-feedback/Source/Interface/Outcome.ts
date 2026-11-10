@@ -4,6 +4,7 @@
  * One batch outcome the orchestration layer reports to the council.
  *
  * @remarks
+ *
  * The plan's deferred caller-side integration, HONEST-FEEDBACK-PLUGIN section 2.3. The outcome
  * belongs to the BATCH, not to an agent's opinion, so it is its own record beside the blocks -
  * the honest apply truth the feedback journal and summary carry:

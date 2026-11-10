@@ -1,9 +1,13 @@
+import { existsSync, readdirSync, statSync } from "node:fs";
+import { dirname, isAbsolute, join, resolve } from "node:path";
+
 /**
  * @module Exists
  *
  * Filters pack companions by existence under any of the call's three path bases.
  *
  * @remarks
+ *
  * The BASE-AWARE companion existence filter: does a pack target exist under any of the
  * call's three path bases? The embedded packs are this repo's conventions as DATA, and
  * they mix three bases:
@@ -34,9 +38,6 @@
  * - a target carrying a `<...>` placeholder (`Source/Test/<Suite>/Test.ts`) is
  *   illustrative and always kept.
  */
-import { existsSync, readdirSync, statSync } from "node:fs";
-import { dirname, isAbsolute, join, resolve } from "node:path";
-
 /**
  * An illustrative target placeholder (`Source/Test/<Suite>/Test.ts`).
  */

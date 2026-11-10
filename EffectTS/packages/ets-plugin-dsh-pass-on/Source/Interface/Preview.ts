@@ -5,6 +5,7 @@
  * files.
  *
  * @remarks
+ *
  * Plan section 3.
  */
 export default interface Preview {

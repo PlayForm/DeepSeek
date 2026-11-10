@@ -1,9 +1,14 @@
+import Clock from "@Function/Clock.js";
+import type State from "@Interface/State.js";
+import type { DetachConfig } from "@Interface/State.js";
+
 /**
  * @module Policy
  *
  * Decides per call whether the command-runner transform may detach it.
  *
  * @remarks
+ *
  * The per-call detach decision engine (IMPLEMENTATION-DESIGN.md sections 3.2, 5.1-5.2;
  * Requirements/01 sections 5 + 12). Pure functions over the plugin's own state - no I/O,
  * no eval.
@@ -32,10 +37,6 @@
  *
  * All time reads go through the State's clock seam (the smoke's fake clock).
  */
-import Clock from "@Function/Clock.js";
-import type State from "@Interface/State.js";
-import type { DetachConfig } from "@Interface/State.js";
-
 /**
  * The permanently non-detachable content-mutating family (I1 12.1, HARD - hardcoded,
  * never config; rejected even under "all" and "selected").

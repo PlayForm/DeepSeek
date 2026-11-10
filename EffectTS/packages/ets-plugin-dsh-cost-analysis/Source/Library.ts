@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +9,7 @@
  * (@playform/ets-plugin-dsh-cost-analysis).
  *
  * @remarks
+ *
  * THE EXPORT SURFACE AND THE LOADER CONTRACT: `export const name` +
  * `export const apply` + `export const Config` + `export const inject` +
  * `export default { name, apply, Config, inject }` - the ONLY named exports
@@ -25,10 +30,6 @@
  * writes a row, never creates a table, and never registers a tool or a
  * prompt section: its only surface is the one /cost analysis command.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 /**
  * The plugin's loader name.
  */

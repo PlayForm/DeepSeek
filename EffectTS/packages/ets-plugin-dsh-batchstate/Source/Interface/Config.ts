@@ -1,3 +1,5 @@
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Config
  *
@@ -5,11 +7,11 @@
  * validates and defaults it.
  *
  * @remarks
+ *
  * Every field is a volatile cell (the values may arrive as `{ get }`
  * references; the factory's State builder unwraps and hot-refreshes them in
  * place).
- */ import type { Allowlist, Allowlist } from "@playform/ets-plugin-dsh-factory";
-
+ */
 /**
  * The plugin's resolved configuration.
  */

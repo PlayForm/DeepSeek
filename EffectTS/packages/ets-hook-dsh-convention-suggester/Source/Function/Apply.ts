@@ -1,3 +1,27 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { UserMessage } from "@deepseek-ai/dsh-llm";
+import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
+import { Activate } from "@playform/ets-base-dsh";
+import {
+	Adjacent,
+	Families,
+	Home,
+	Locate,
+	Resolve,
+	Root as RootOf,
+} from "@playform/ets-lib-dsh-pack";
+
+import type Config from "../Interface/Config.js";
+import type { Candidate } from "../Interface/Pack.js";
+import type { AgentMemory } from "../Interface/State.js";
+import type State from "../Interface/State.js";
+import Version from "../Variable/Version.js";
+import Detect, { Compile } from "./Detect.js";
+import Exists from "./Exists.js";
+import History from "./History.js";
+import BuildNote, { Prepend } from "./Note.js";
+import Register from "./Register.js";
+
 /**
  * @module Apply
  *
@@ -6,6 +30,7 @@
  * registers the hook's own listeners.
  *
  * @remarks
+ *
  * The State is built through `Factory.State` (the cell unwrap, the shared
  * mappings Ledger←logFile / Enabled←log and the module's own fields via the
  * setup `fields` map); the durable activation proof is the module's own
@@ -77,30 +102,6 @@
  * hook registers on through `ctx.inject` and reads through `ctx.get`, so a
  * mount without it still loads (Function/Register, Function/History).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { UserMessage } from "@deepseek-ai/dsh-llm";
-import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
-import { Activate } from "@playform/ets-base-dsh";
-import {
-	Adjacent,
-	Families,
-	Home,
-	Locate,
-	Resolve,
-	Root as RootOf,
-} from "@playform/ets-lib-dsh-pack";
-
-import type Config from "../Interface/Config.js";
-import type { Candidate } from "../Interface/Pack.js";
-import type { AgentMemory } from "../Interface/State.js";
-import type State from "../Interface/State.js";
-import Version from "../Variable/Version.js";
-import Detect, { Compile } from "./Detect.js";
-import Exists from "./Exists.js";
-import History from "./History.js";
-import BuildNote, { Prepend } from "./Note.js";
-import Register from "./Register.js";
-
 /**
  * Fresh per-agent memory.
  */

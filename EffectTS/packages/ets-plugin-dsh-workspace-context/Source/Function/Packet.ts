@@ -1,16 +1,3 @@
-// Packet - the orientation packet builder (Function/Packet): the orient
-// step of V4-1 section 3.5's "orient -> drill -> act" loop. Consumes the
-// sibling workspace-graph's snapshot through the structural handle
-// (Interface/Graph), filters through the resolved lens (Function/LensFn),
-// ranks the neighbors by edge strength (Function/Rank), composes the eight
-// fixed sections, records the caller's focus (Function/Focus), and hands the
-// result to the budget clamp (Function/Budget).
-//
-// SELF-CONTAINED: the graph handle is probed at call time (State.Graph,
-// injected as "workspaceGraph" when the sibling provides it). An absent
-// sibling is NOT a crash: the packet still renders with an honest OPEN line
-// ("workspace graph unavailable") - the attention projection degrades, it
-// never lies.
 import Budget from "@Function/Budget.js";
 import Focus from "@Function/Focus.js";
 import LensFn from "@Function/LensFn.js";
@@ -22,7 +9,30 @@ import type State from "@Interface/State.js";
 import DefaultLens from "@Variable/DefaultLens.js";
 import EdgeWeight from "@Variable/EdgeWeight.js";
 
-/** One MAP line: "<dir> (<count> files)". */
+/**
+ * @module Packet
+ *
+ * The orientation packet builder for the orient step of the loop.
+ *
+ * @remarks
+ *
+ * The orient step of V4-1 section 3.5's "orient -> drill -> act" loop.
+ * Consumes the sibling workspace-graph's snapshot through the structural
+ * handle (Interface/Graph), filters through the resolved lens
+ * (Function/LensFn), ranks the neighbors by edge strength (Function/Rank),
+ * composes the eight fixed sections, records the caller's focus
+ * (Function/Focus), and hands the result to the budget clamp
+ * (Function/Budget).
+ *
+ * SELF-CONTAINED: the graph handle is probed at call time (State.Graph,
+ * injected as "workspaceGraph" when the sibling provides it). An absent
+ * sibling is NOT a crash: the packet still renders with an honest OPEN line
+ * ("workspace graph unavailable") - the attention projection degrades, it
+ * never lies.
+ */
+/**
+ * One MAP line: "<dir> (<count> files)".
+ */
 const MapLine = (Dir: string, Count: number): string => `${Dir} (${Count} files)`;
 
 export default (State: State, Options: Query): Packet => {

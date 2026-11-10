@@ -1,9 +1,17 @@
+import { basename as Base } from "node:path";
+
+import type { FsObservation, FsTarget, FsTargetKey, FsVersion } from "@deepseek-ai/dsh-fs";
+import type { Actor as ActorView, Gate as Decision, State } from "@playform/ets-base-dsh";
+
+import Match from "./Match.js";
+
 /**
  * @module Gate
  *
  * The g1 gate set of the fs/observed pass, as ONE decision function.
  *
  * @remarks
+ *
  * Order, exactly as in the trio's Function/Observe:
  *
  * 1. the target exists and carries a string displayPath;
@@ -25,13 +33,6 @@
  * `mutationToolsField` names the STATE field that holds the tool list (default "Tool" - the State
  * builder's fixed shared mapping) so a module that renamed the field can point at it.
  */
-import { basename as Base } from "node:path";
-
-import type { FsObservation, FsTarget, FsTargetKey, FsVersion } from "@deepseek-ai/dsh-fs";
-import type { Actor as ActorView, Gate as Decision, State } from "@playform/ets-base-dsh";
-
-import Match from "./Match.js";
-
 export default (
 	State: State,
 	Target: FsTarget,

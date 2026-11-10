@@ -6,6 +6,7 @@
  * service.
  *
  * @remarks
+ *
  * The panel does not import either package: the client bundle must not reach
  * a host package, and the names are the contract, so they are restated here
  * as data. A host that exposes the bus in the browser answers these names

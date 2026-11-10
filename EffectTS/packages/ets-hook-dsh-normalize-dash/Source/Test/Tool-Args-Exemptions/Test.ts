@@ -1,18 +1,27 @@
-// Source/Test/Tool-Args-Exemptions/Test.ts - one singular test: the tool-args
-// gate and its exemption family - the deprecated normalizeToolArguments flag
-// on (plain fields + activation line + the delta and block rewrites), the
-// edit exemption (byte-contracted old_string passes by identity), the
-// per-call raw marker (strip variants, the reset at the next call id), and
-// the N=0 negative controls. The journal-count siblings live in
-// Journal-And-Custom.
-// Runs standalone (`node Target/Test/Tool-Args-Exemptions/Test.js`) AND under
-// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the REAL
-// factory + the REAL dash apply, from the Harness.
 import { existsSync, readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Validate, Ledger } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the tool-args gate and its exemption family.
+ *
+ * @remarks
+ *
+ * The test covers the deprecated normalizeToolArguments flag on (plain
+ * fields + activation line + the delta and block rewrites), the edit
+ * exemption (byte-contracted old_string passes by identity), the per-call
+ * raw marker (strip variants, the reset at the next call id), and the N=0
+ * negative controls. The journal-count siblings live in
+ * Journal-And-Custom.
+ *
+ * Runs standalone (`node Target/Test/Tool-Args-Exemptions/Test.js`) AND
+ * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the
+ * REAL factory + the REAL dash apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

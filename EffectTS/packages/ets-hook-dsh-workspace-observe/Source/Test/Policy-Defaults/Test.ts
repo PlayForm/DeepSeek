@@ -1,16 +1,25 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the
-// workspace-observe hook: the shared block's defaults in the schema and on
-// the built State (`Allow` - the factory's shared `Policy` is the global
-// policy file path), the override, the package's no-gated-action posture, and
-// the RECORD action still proceeding under the shipped defaults with zero
-// file writes.
 import assert from "node:assert/strict";
 
 import { Decide } from "../../../../ets-plugin-dsh-factory/Target/Library.js";
 
 import { Check, Finish, Fire, Ledger, LinesWith, Make, MakeCounter, rm, Validate } from "../Harness.js";
 
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * @module Test
+ *
+ * THE POLICY BLOCK (D6) on the workspace-observe hook.
+ *
+ * @remarks
+ *
+ * The folder proves the shared block's defaults in the schema and on the
+ * built State (`Allow` - the factory's shared `Policy` is the global policy
+ * file path), the override, the package's no-gated-action posture, and the
+ * RECORD action still proceeding under the shipped defaults with zero file
+ * writes.
+ */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",

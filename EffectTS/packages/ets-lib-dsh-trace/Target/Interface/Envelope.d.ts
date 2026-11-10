@@ -5,6 +5,7 @@
  * `{ trace, kind, at, actor, payload }`.
  *
  * @remarks
+ *
  * `trace` is the emission's correlation id: the bus assigns
  * `trace-<sequence>` when the emitter supplies none, so a correlated chain can
  * pass its own id through; `kind` is the event name (`Names`, or a future

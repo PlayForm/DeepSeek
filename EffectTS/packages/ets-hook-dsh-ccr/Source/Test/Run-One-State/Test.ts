@@ -1,13 +1,3 @@
-// Source/Test/Run-One-State/Test.ts - one singular test: one State instance's
-// posture - the registered listener set (tools/post-execute, prepending), the
-// single ccr_retrieve tool registration, the State fields (the REAL factory,
-// the volatile unwraps, the module identity, the memory-only store, the 8
-// copied targets), and the under-threshold pass-through the listener starts
-// from.
-// Runs standalone (`node Target/Test/Run-One-State/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-ccr: the fake ctx + the REAL factory +
-// the REAL CCR apply, from the Harness.
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -23,6 +13,25 @@ import {
 	Exec,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: one State instance's posture.
+ *
+ * @remarks
+ *
+ * The test covers the registered listener set (tools/post-execute,
+ * prepending), the single ccr_retrieve tool registration, the State fields
+ * (the REAL factory, the volatile unwraps, the module identity, the
+ * memory-only store, the 8 copied targets), and the under-threshold
+ * pass-through the listener starts from.
+ *
+ * Runs standalone (`node Target/Test/Run-One-State/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-ccr: the fake ctx + the REAL
+ * factory + the REAL CCR apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

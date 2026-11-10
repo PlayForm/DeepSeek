@@ -1,13 +1,21 @@
-// Export - the client-facing bundle (Documentation/Plans/COST-TRACK-PLUGIN.md
-// section 8): csv (RFC 4180 quoting with CRLF records, one header row, one
-// row per Day, Project, File and Model), json (the re-derivable bundle - the
-// meta block, the projects, the files, the calls, the allocations and the
-// rollups, with ISO-8601 UTC timestamps) and markdown (a one-page invoice per
-// client: the totals, the per-project table, the top-10 files and the model
-// mix). The destination is the given path - a directory, or an exact file
-// path when its extension matches the format - and defaults to the configured
-// export directory or the project root. The money columns round to six
-// decimals, the same precision the reports use.
+/**
+ * @module Export
+ *
+ * The client-facing bundle: csv, json and markdown, written to a given path or
+ * the configured export directory.
+ *
+ * @remarks
+ * The formats follow `Documentation/Plans/COST-TRACK-PLUGIN.md` section 8. The
+ * csv format is RFC 4180 quoting with CRLF records, one header row, one row per
+ * Day, Project, File and Model. The json format is the re-derivable bundle -
+ * the meta block, the projects, the files, the calls, the allocations and the
+ * rollups, with ISO-8601 UTC timestamps. The markdown format is a one-page
+ * invoice per client: the totals, the per-project table, the top-10 files and
+ * the model mix. The destination is the given path - a directory, or an exact
+ * file path when its extension matches the format - and defaults to the
+ * configured export directory or the project root. The money columns round to
+ * six decimals, the same precision the reports use.
+ */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, extname, join, resolve } from "node:path";
 import type { DatabaseSync } from "node:sqlite";

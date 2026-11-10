@@ -1,18 +1,21 @@
-// Source/Test/Overpass/Test.ts - one singular test: the overpass arms and the
-// command - the registration facts (the two arms with their ordering
-// contract, the normalize-overpass command as the files sweep owner), the
-// tool-results arm (default off, the volatile flip with the SIX-FOLD rewrite
-// and the exact ledger line, the read exemption, the block rules, the N=0
-// no-op, the value-carrying and CCR-marker pass-throughs), the files sweep
-// through the command, the step-batch arm, the command's other grammars, and
-// the history-safety invariant. Runs standalone (`node
-// Target/Test/Overpass/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-plugin-dsh-normalize-file: the fake ctx + the REAL
-// factory + the REAL normalize-file apply, from the Harness.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Ledger } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the overpass arms and the command - the registration
+ * facts (the two arms with their ordering contract, the normalize-overpass
+ * command as the files sweep owner), the tool-results arm (default off, the
+ * volatile flip with the SIX-FOLD rewrite and the exact ledger line, the read
+ * exemption, the block rules, the N=0 no-op, the value-carrying and
+ * CCR-marker pass-throughs), the files sweep through the command, the
+ * step-batch arm, the command's other grammars, and the history-safety
+ * invariant. Runs standalone (`node Target/Test/Overpass/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-plugin-dsh-normalize-file: the fake ctx + the REAL factory +
+ * the REAL normalize-file apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

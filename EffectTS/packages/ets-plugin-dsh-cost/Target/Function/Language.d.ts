@@ -6,6 +6,7 @@
  * block speaks the file's own comment language.
  *
  * @remarks
+ *
  * The line-comment families are the C family (a double slash), the script
  * and data languages (a hash), and the dash family (a double dash); the
  * markup family opens with a comment-open token and closes with a

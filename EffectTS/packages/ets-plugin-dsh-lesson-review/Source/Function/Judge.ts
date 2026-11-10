@@ -1,9 +1,13 @@
+import type { Corpus } from "@Interface/Corpus.js";
+import type { Op, Proposal, Verdict } from "@Interface/Proposal.js";
+
 /**
  * @module Judge
  *
  * The deterministic acceptance rules between the model's reply and the corpus.
  *
  * @remarks
+ *
  * This module is the reason the review can run unattended: the model
  * proposes, the judge disposes, and every refusal names the rule that refused
  * it so the ledger and the report can say WHY.
@@ -19,9 +23,6 @@
  * A refused operation is reported, not repaired - a repaired write is a write
  * nobody proposed.
  */
-import type { Corpus } from "@Interface/Corpus.js";
-import type { Op, Proposal, Verdict } from "@Interface/Proposal.js";
-
 /**
  * The class-level name: kebab-case, starting with a letter.
  */

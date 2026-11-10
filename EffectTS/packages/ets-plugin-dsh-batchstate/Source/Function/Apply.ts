@@ -1,3 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import Inbox from "@Function/Inbox.js";
+import Recover from "@Function/Recover.js";
+import ServiceClass from "@Function/Service.js";
+import Storage from "@Function/Storage.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
+
 /**
  * @module Apply
  *
@@ -6,6 +16,7 @@
  * recovery.
  *
  * @remarks
+ *
  * THE STORE SPLIT (the completion spec's wave 3 storage migration): the KV
  * domain (Function/Storage, config `domain`, default `batch_state`) is the
  * PRIMARY store - the plugin probes the harness's storage facility once and
@@ -27,16 +38,6 @@
  * silently kills event delivery). The test probe is the
  * `ctx.__pluginDshBatchstateState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import Inbox from "@Function/Inbox.js";
-import Recover from "@Function/Recover.js";
-import ServiceClass from "@Function/Service.js";
-import Storage from "@Function/Storage.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
-
 /**
  * The storage-domain name rule (the library's UNIT_NAME_RE).
  */

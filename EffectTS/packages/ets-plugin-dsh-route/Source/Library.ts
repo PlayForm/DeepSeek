@@ -1,9 +1,14 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
  * The entry module of the routing enforcer plugin (@playform/plugin-dsh-route).
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` +
  * `export const Config` + `export const inject` +
  * `export default { name, apply, Config, inject }` - the ONLY named exports
@@ -55,10 +60,6 @@
  * `tools/pre-execute` vocabulary through @deepseek-ai/dsh-tools' own
  * augmentations (never re-declared here).
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "plugin-dsh-route";
 
 // Loader contract (cordis): the exported schema is validated and defaulted

@@ -1,9 +1,14 @@
+import { readFile } from "node:fs/promises";
+import { homedir } from "node:os";
+import { join } from "node:path";
+
 /**
  * @module Tail
  *
  * The tail(namespace, lines) method.
  *
  * @remarks
+ *
  * The namespace must match the family module-name pattern (lowercase letters,
  * digits, hyphens) - anything else, including any path separator or dot, is
  * rejected (`rejected`), not sanitized: the endpoint never opens a path its
@@ -11,10 +16,6 @@
  * `<logRoot>/<namespace>.log` with the leading `~` resolved to os.homedir().
  * Read-only: one openFileSync-equivalent read, no write surface.
  */
-import { readFile } from "node:fs/promises";
-import { homedir } from "node:os";
-import { join } from "node:path";
-
 const PATTERN = /^[a-z0-9-]+$/;
 
 /**

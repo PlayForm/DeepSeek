@@ -1,19 +1,27 @@
-// Source/Test/Chunk/Test.ts - one singular test: the generic per-chunk
-// dispatch with the injected transform - the text-delta rewrites and identity
-// passthroughs, the tool-call-delta gate ON + OFF, the three exemptions (edit,
-// raw-write, normalize-file), the per-call raw-marker strip, the reasoning
-// gate, the block-start/usage/finish passthroughs, the block-end
-// text/reasoning/thinking fields, and the second-flavor injection.
-// Runs standalone (`node Target/Test/Chunk/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-lib-dsh-core: the REAL built Target only.
-// NOTE: the harness's Finish guard is aliased to `Guard` here so the source
-// suite's `Finish` chunk fixture keeps its name.
 import assert from "node:assert/strict";
 import { Check, Finish as Guard, MakeCounter } from "../Harness.js";
 import { Dashes, Quotes, Replace, ReplaceMap } from "../../../Target/Library.js";
 import { Chunk } from "../../../../ets-base-dsh/Target/Library.js";
 
+/**
+ * @module Test
+ *
+ * The generic per-chunk dispatch with the injected transform.
+ *
+ * @remarks
+ *
+ * The singular test proves the text-delta rewrites and identity
+ * passthroughs, the tool-call-delta gate ON + OFF, the three exemptions
+ * (edit, raw-write, normalize-file), the per-call raw-marker strip, the
+ * reasoning gate, the block-start/usage/finish passthroughs, the block-end
+ * text/reasoning/thinking fields, and the second-flavor injection.
+ *
+ * Runs standalone (`node Target/Test/Chunk/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-lib-dsh-core: the REAL built Target only. NOTE: the
+ * harness's Finish guard is aliased to `Guard` here so the source suite's
+ * `Finish` chunk fixture keeps its name.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

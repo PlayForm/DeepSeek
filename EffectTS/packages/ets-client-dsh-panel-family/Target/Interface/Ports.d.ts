@@ -1,3 +1,7 @@
+import type { PanelBridge } from "./Bridge.js";
+import type { PanelConfigForms } from "./Form.js";
+import type { LaunchTarget, PanelRegistry } from "./Panel.js";
+import type { PanelLive } from "./Trace.js";
 /**
  * @module Ports
  *
@@ -7,13 +11,10 @@
  * the plain-field bridge).
  *
  * @remarks
+ *
  * The section reads host data through this face; it never reads a file or
  * writes a config itself.
  */
-import type { PanelBridge } from "./Bridge.js";
-import type { PanelConfigForms } from "./Form.js";
-import type { LaunchTarget, PanelRegistry } from "./Panel.js";
-import type { PanelLive } from "./Trace.js";
 /**
  * The logger seam: the panel's own documented lines (the duplicate-adapter
  * refusal, the plain-field audit, the missing-bridge note) route through it.

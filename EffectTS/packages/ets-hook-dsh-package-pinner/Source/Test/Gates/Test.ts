@@ -1,11 +1,3 @@
-// Source/Test/Gates/Test.ts - one singular test: the pinner's g1 gate set
-// through the real wired listener - actor/kind/basename gates silent (no read,
-// no write, no line), the exclusion-first `skipped (excluded)` line in
-// byte-format with the file untouched, and the Stash idempotence gate silent
-// and taking precedence over the excluded line.
-// Runs standalone (`node Target/Test/Gates/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-package-pinner.
 import assert from "node:assert/strict";
 import * as Path from "node:path";
 import {
@@ -19,6 +11,24 @@ import {
 	Settle,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The singular test of the pinner's g1 gate set through the real wired
+ * listener.
+ *
+ * @remarks
+ *
+ * The gate set covers the actor/kind/basename gates silent (no read, no
+ * write, no line), the exclusion-first `skipped (excluded)` line in
+ * byte-format with the file untouched, and the Stash idempotence gate silent
+ * and taking precedence over the excluded line.
+ *
+ * The file runs standalone (`node Target/Test/Gates/Test.js`) and under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * It is a unit smoke of @playform/ets-hook-dsh-package-pinner.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	const World = Boot();

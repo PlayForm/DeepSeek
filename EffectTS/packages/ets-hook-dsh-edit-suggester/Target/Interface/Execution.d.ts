@@ -1,3 +1,4 @@
+import type { CompanionDecision } from "./Decision.js";
 /**
  * @module Execution
  *
@@ -5,6 +6,7 @@
  * companions, and the gate's verdict.
  *
  * @remarks
+ *
  * Same algebra, same shapes as the doc suggester (the family's shared pattern), different
  * pack - and the synthetic History family is a pack row like any other.
  *
@@ -29,7 +31,6 @@
  * pickable heuristic values (Interface/Decision), so the note, the decision record and
  * the ledger line all read ONE computation.
  */
-import type { CompanionDecision } from "./Decision.js";
 export interface Signal {
     /**
      * The rule id this row implements.

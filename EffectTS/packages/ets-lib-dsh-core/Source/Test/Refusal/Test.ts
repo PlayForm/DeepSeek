@@ -1,13 +1,22 @@
-// Source/Test/Refusal/Test.ts - one singular test: the shared refusal guard -
-// only the declared dependency sections may differ; a non-dependency section
-// change is refused with the byte-identical refusal line.
-// Runs standalone (`node Target/Test/Refusal/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-lib-dsh-core: the REAL built entry only.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter } from "../Harness.js";
 import { Refusal, Section } from "../../../Target/Library.js";
 
+/**
+ * @module Test
+ *
+ * The shared refusal guard over the package sections.
+ *
+ * @remarks
+ *
+ * The singular test proves that only the declared dependency sections may
+ * differ; a non-dependency section change is refused with the byte-identical
+ * refusal line.
+ *
+ * Runs standalone (`node Target/Test/Refusal/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-lib-dsh-core: the REAL built entry only.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

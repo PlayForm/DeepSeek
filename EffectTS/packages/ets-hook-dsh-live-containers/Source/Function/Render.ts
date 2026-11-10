@@ -1,9 +1,21 @@
+import Clock from "@Function/Clock.js";
+import { Table } from "@Function/Counters.js";
+import {
+	RENDERED_KINDS,
+	type AgentState,
+	type BlockSpecification,
+	type Frame as FrameRow,
+	type Variables,
+} from "@Interface/Execution.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Render
  *
  * Substitutes tokens into block templates and builds the live section body.
  *
  * @remarks
+ *
  * The substitution engine and the section builder (research section 3 +
  * IMPLEMENTATION-DESIGN.md section 3.1, phase 1). {{token}} replace ONLY - no eval, no
  * expressions, no `new Function` (research section 5: the programmable stage routes
@@ -30,17 +42,6 @@
  * Fail-open: a render failure skips the block and logs `render failed <id> -> skipped`;
  * the assembly still resolves.
  */
-import Clock from "@Function/Clock.js";
-import { Table } from "@Function/Counters.js";
-import {
-	RENDERED_KINDS,
-	type AgentState,
-	type BlockSpecification,
-	type Frame as FrameRow,
-	type Variables,
-} from "@Interface/Execution.js";
-import type State from "@Interface/State.js";
-
 /**
  * The ledger sink Apply passes down (Factory.Append with the State bound).
  */

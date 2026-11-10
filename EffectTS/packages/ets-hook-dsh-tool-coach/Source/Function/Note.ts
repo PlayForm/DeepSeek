@@ -1,3 +1,7 @@
+import { randomUUID } from "node:crypto";
+
+import type { MessageSource, UserMessage } from "@deepseek-ai/dsh-llm";
+
 /**
  * @module Note
  *
@@ -6,6 +10,7 @@
  * downstream decision's additionalContexts.
  *
  * @remarks
+ *
  * THE SOURCE LABEL IS LOAD-BEARING (the repeat-tool-reminder precedent,
  * README:89): an unlabeled context would render as a user prompt in derived
  * history. The label is `{ kind: 'tool-coach', form: 'notice', summary }` -
@@ -19,10 +24,6 @@
  * tool-reminder bundles the same helper instead of importing it, so the
  * built Target carries no runtime import of the harness's own packages.
  */
-import { randomUUID } from "node:crypto";
-
-import type { MessageSource, UserMessage } from "@deepseek-ai/dsh-llm";
-
 /**
  * The coach's own source kind, declared in the coach's own module (the
  * MessageSourceMap vocabulary is merge-extensible by design).

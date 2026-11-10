@@ -5,6 +5,7 @@
  * `ctx.agents` service).
  *
  * @remarks
+ *
  * The declaration covers @deepseek-ai/dsh-agent's AgentRegistry. The PoC
  * rule: declare the sibling service's shape in your own Interface/, never
  * import the package that may not be wired. The queue consumes exactly two

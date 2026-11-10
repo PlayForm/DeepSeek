@@ -5,6 +5,7 @@
  * packages share through the harness inbox.
  *
  * @remarks
+ *
  * The producer (the pass-on for a proposal, the decision hook for a
  * decision) renders a block
  *

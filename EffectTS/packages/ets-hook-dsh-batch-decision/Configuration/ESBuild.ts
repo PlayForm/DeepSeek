@@ -1,9 +1,14 @@
+import { readFileSync } from "node:fs";
+
+import type { BuildOptions, Plugin } from "esbuild";
+
 /**
  * @module ESBuild
  *
  * The plain-ESM twin configuration for the package's build.
  *
  * @remarks
+ *
  * Configuration/ESBuild.ts follows the plain-ESM twin convention (the
  * live-containers / factory / normalize family template). The base
  * configuration from @playform/build already applies: format esm, platform
@@ -23,10 +28,6 @@
  * `process.env.NAME_PACKAGE` and `process.env.VERSION_PACKAGE` rather than
  * relying on the build tool's default define.
  */
-import { readFileSync } from "node:fs";
-
-import type { BuildOptions, Plugin } from "esbuild";
-
 /**
  * The package manifest, read at config-load time.
  */

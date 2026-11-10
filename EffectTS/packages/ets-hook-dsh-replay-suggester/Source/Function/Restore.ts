@@ -9,6 +9,7 @@ import type State from "@Interface/State.js";
  * mirror and the sequence counter.
  *
  * @remarks
+ *
  * Both tiers (the KV domain and the JSON fallback) land here, so their
  * behaviour is identical.
  *
@@ -21,7 +22,6 @@ import type State from "@Interface/State.js";
  * nothing. Byte-exact (SCHEME.md) and distinct from the seeded history
  * reader's lines: this is the PRODUCER's own store, not the fixtures' seed.
  */
-
 /**
  * Whether a parsed value is a plausible entry.
  */
@@ -41,13 +41,19 @@ const Valid = (Value: unknown): Value is Entry => {
 };
 
 export default (
-	/** The plugin state (the mirror, the sequence and the ledger). */
+	/**
+	 * The plugin state (the mirror, the sequence and the ledger).
+	 */
 	State: State,
 
-	/** The tier's rows, in store order (untrusted). */
+	/**
+	 * The tier's rows, in store order (untrusted).
+	 */
 	Rows: unknown[],
 
-	/** The tier's name for the ledger line (`replay_history` or `file`). */
+	/**
+	 * The tier's name for the ledger line (`replay_history` or `file`).
+	 */
 	Source: string,
 ): void => {
 	const Entries = Rows.filter(Valid)

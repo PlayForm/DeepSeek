@@ -1,9 +1,14 @@
+import Clock from "@Function/Clock.js";
+import type { Log } from "@Function/Render.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Failsafe
  *
  * Owns the drift guard and the wave-2 section-collapse pass of the CAN-4 engine.
  *
  * @remarks
+ *
  * The CAN-4 engine's remaining scenarios (IMPLEMENTATION-DESIGN.md section 6). The other
  * scenarios live where their truth is: the hang + the live-timeout in Board.ScanDeadlines,
  * the delegation stall in Board (the I5 lease: the declaration IS the trigger), the
@@ -22,10 +27,6 @@
  * through the registry's kill, gated behind hangAction/config; `failsafes: "off"` is the
  * default even when enabled.
  */
-import Clock from "@Function/Clock.js";
-import type { Log } from "@Function/Render.js";
-import type State from "@Interface/State.js";
-
 /**
  * The drift thresholds the failsafe layer owns (the validator template's automatic twin;
  * 04 scenario 4 - thresholds are constants of the layer, the session-stats block's own

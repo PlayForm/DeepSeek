@@ -1,9 +1,14 @@
+import type { HeuristicValues } from "../Interface/Decision.js";
+import Names from "../Variable/Heuristics.js";
+import Defaults from "../Variable/Weights.js";
+
 /**
  * @module Weights
  *
  * Resolves the config's enabled list and weight table into the EFFECTIVE table.
  *
  * @remarks
+ *
  * The pickable-weight resolver: the config's enabled list plus its weight table, resolved
  * to the EFFECTIVE table the score and the decision record use (completion spec D8:
  * "every heuristic and every decision pickable").
@@ -16,10 +21,6 @@
  * The resolver runs per judged call (the config cells are volatile), so a hot edit to
  * `heuristics` or `weights` lands on the next call without a remount.
  */
-import type { HeuristicValues } from "../Interface/Decision.js";
-import Names from "../Variable/Heuristics.js";
-import Defaults from "../Variable/Weights.js";
-
 export default (
 	/**
 	 * The enabled heuristic names (config `heuristics`, volatile).

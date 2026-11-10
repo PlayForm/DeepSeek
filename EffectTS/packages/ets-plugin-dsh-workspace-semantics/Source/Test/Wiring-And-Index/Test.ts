@@ -1,10 +1,3 @@
-// Source/Test/Wiring-And-Index/Test.ts - the wiring and the index
-// maintainer: the loader contract (apply returns nothing), the IDLE-forever
-// cold mount, the root-context registration with the distinct root identity,
-// the service registered from apply, the adapter registry, the activation
-// proof, the invalidation on fs/observed (the monotonic revision, no wall
-// clock), the guard chain, the malformed-event containment, and the
-// fail-loud validation.
 import assert from "node:assert/strict";
 import {
 	Boot,
@@ -21,7 +14,19 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * The wiring and the index maintainer: the loader contract (apply returns
+ * nothing), the IDLE-forever cold mount, the root-context registration with
+ * the distinct root identity, the service registered from apply, the adapter
+ * registry, the activation proof, the invalidation on fs/observed (the
+ * monotonic revision, no wall clock), the guard chain, the malformed-event
+ * containment, and the fail-loud validation.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = async (Config: Record<string, unknown> = {}): Promise<any> => {
 	rm();
 	const Run = Make(Validate({ logFile: Ledger, enabled: true, ...Config }));

@@ -1,36 +1,57 @@
-// Source/Test/Overpass/Test.ts - one singular test: the OVERPASS ARM of the
-// comment filter - the registration facts (the two listeners, the prepend
-// ordering, the deliberate `read`/`ccr_retrieve` targeting), the envelope
-// strip (prefixes and footer preserved, the byte-exact ledger line, the
-// omission notice), the string guard, the unknown-extension identity, the
-// ccr_retrieve target, the exemption list, the N=0 no-op, the CCR marker
-// guard, the fail-open on a thrown transform, and the notice-off variant.
-// Runs standalone (`node Target/Test/Overpass/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-comment-filter: the fake ctx + the REAL
-// factory + the REAL comment-filter apply, from the Harness.
 import assert from "node:assert/strict";
 
 import { Check, Finish, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
 
-/** The read tool's model-facing envelope (the harness contract, byte-exact). */
+/**
+ * @module Test
+ *
+ * One singular test: the OVERPASS ARM of the comment filter.
+ *
+ * @remarks
+ *
+ * The test covers the registration facts (the two listeners, the prepend
+ * ordering, the deliberate `read`/`ccr_retrieve` targeting), the envelope
+ * strip (prefixes and footer preserved, the byte-exact ledger line, the
+ * omission notice), the string guard, the unknown-extension identity, the
+ * ccr_retrieve target, the exemption list, the N=0 no-op, the CCR marker
+ * guard, the fail-open on a thrown transform, and the notice-off variant.
+ *
+ * Runs standalone (`node Target/Test/Overpass/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-comment-filter: the fake ctx + the
+ * REAL factory + the REAL comment-filter apply, from the Harness.
+ */
+/**
+ * The read tool's model-facing envelope (the harness contract, byte-exact).
+ */
 const Envelope = (Path: string, Body: string): string =>
 	`<path>${Path}</path>\n<type>file</type>\n<content>\n${Body}\n</content>`;
 
-/** A numbered body: the numbered lines, the blank separator, the footer. */
+/**
+ * A numbered body: the numbered lines, the blank separator, the footer.
+ */
 const Body = (Lines: string[], Footer: string): string => [...Lines, "", Footer].join("\n");
 
-/** The omission notice line (module-owned, byte-exact). */
+/**
+ * The omission notice line (module-owned, byte-exact).
+ */
 const Omission =
 	"(Comments omitted. Use grep to inspect them, or ask the user to include comments.)";
 
-/** A text content block. */
+/**
+ * A text content block.
+ */
 const Block = (Value: string) => ({ type: "text", text: Value });
 
-/** A settled tool result whose only content is one text block. */
+/**
+ * A settled tool result whose only content is one text block.
+ */
 const Outcome = (Value: string) => ({ isError: false, value: {}, content: [Block(Value)] });
 
-/** One tool execution identity. */
+/**
+ * One tool execution identity.
+ */
 const Exec = (Name: string) => ({
 	callId: "call_smoke",
 	name: Name,

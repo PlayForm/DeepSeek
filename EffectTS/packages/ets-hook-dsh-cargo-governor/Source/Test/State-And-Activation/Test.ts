@@ -1,12 +1,3 @@
-// Source/Test/State-And-Activation/Test.ts - one singular test: the activation
-// posture (the ledger byte-shape regex + the State.Module logger prefix), the
-// factory-built shared state shape with the cargo module fields, the wire
-// posture (exactly one fiber-owned fs/observed registration + the State
-// builder's P10 volatile-update refresh), and the attach posture (the
-// P1/P2/P5 effect labels + the P1 root jobs controller).
-// Runs standalone (`node Target/Test/State-And-Activation/Test.js`) AND
-// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-cargo-governor.
 import assert from "node:assert/strict";
 import {
 	Boot,
@@ -23,6 +14,26 @@ import {
 	SeamStub,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the activation posture, the shared state shape, the
+ * wire posture, and the attach posture.
+ *
+ * @remarks
+ *
+ * The activation posture is the ledger byte-shape regex + the State.Module
+ * logger prefix. The factory-built shared state shape carries the cargo
+ * module fields. The wire posture is exactly one fiber-owned fs/observed
+ * registration + the State builder's P10 volatile-update refresh. The
+ * attach posture is the P1/P2/P5 effect labels + the P1 root jobs
+ * controller.
+ *
+ * Runs standalone (`node Target/Test/State-And-Activation/Test.js`) AND
+ * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-cargo-governor.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

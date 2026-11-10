@@ -1,3 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import ServiceClass from "@Function/Service.js";
+import Storage from "@Function/Storage.js";
+import Watch from "@Function/Watch.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
+
 /**
  * @module Apply
  *
@@ -6,6 +16,7 @@
  * the own storage effect.
  *
  * @remarks
+ *
  * The State build runs through the factory (the cell unwrap plus the P10
  * volatile refresh); the service registration is `Function/Service` -
  * `workspaceEvidence`, constructed here so `ctx.workspaceEvidence` resolves.
@@ -23,24 +34,18 @@
  * silently kills event delivery). The test probe is the
  * `ctx.__pluginDshWorkspaceEvidenceState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
-import ServiceClass from "@Function/Service.js";
-import Storage from "@Function/Storage.js";
-import Watch from "@Function/Watch.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
-
-/** Unwrap one possibly-volatile config cell (`{ get }` reference or value). */
+/**
+ * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
+ */
 const Cell = (Value: unknown): unknown =>
 	typeof (Value as { get?: unknown } | null)?.get === "function"
 		? (Value as { get: () => unknown }).get()
 		: Value;
 
-/** The fail-loud validation; runs BEFORE the State build so an invalid config
- *  throws at load, never silently defaults. */
+/**
+ * The fail-loud validation; runs BEFORE the State build so an invalid config
+ * throws at load, never silently defaults.
+ */
 const Validate = (Options: unknown): void => {
 	const Raw = (Options ?? {}) as Record<string, unknown>;
 	const Fail = (Message: string): never => {

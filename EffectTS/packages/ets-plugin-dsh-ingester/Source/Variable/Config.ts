@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Policy } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The plugin's Schemastery Config schema.
  *
  * @remarks
+ *
  * A Variable: one constant built at load. Every tunable is a field; the shape this schema
  * produces is Interface/Config.ts.
  *
@@ -12,9 +16,6 @@
  * ingester is THE ONLY WRITER of the batch flow (plan section 4) - its knobs
  * bound the write path.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Policy } from "@playform/ets-plugin-dsh-factory";
-
 export default Schema.object({
 	enabled: Schema.boolean().default(true),
 	logFile: Schema.string().default("~/.dsh/playform/ets-plugin-dsh-ingester.log"),

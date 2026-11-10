@@ -4,6 +4,7 @@
  * Shields the clock around the factory's awaited Effect seams.
  *
  * @remarks
+ *
  * The ETS factory's service seams (Write, Govern) each run a spanned Effect
  * whose tracer samples the global `Date.now` internally (span start + span
  * end). Those INTERNAL samples must not consume the caller's deadline budget:

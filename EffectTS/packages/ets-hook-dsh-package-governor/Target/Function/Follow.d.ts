@@ -1,3 +1,8 @@
+import type { FsTarget } from "@deepseek-ai/dsh-fs";
+import type Passage from "@Interface/Passage.js";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+export default _default;
 /**
  * @module Follow
  *
@@ -5,6 +10,7 @@
  * (Function/Continue).
  *
  * @remarks
+ *
  * The factory owns the chain pass's scaffolding (read, union keep-list, guarded
  * write, message, P3 refresh), so the update stage - which the pre-refactor
  * Function/Continue ran inline after the rewrite - now runs OFF the settled
@@ -26,9 +32,4 @@
  * the ledger, never a rethrow, never an unhandled rejection - the silence
  * invariant.
  */
-import type { FsTarget } from "@deepseek-ai/dsh-fs";
-import type Passage from "../Interface/Passage.js";
-import type Registry from "../Interface/Registry.js";
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(State: State, Target: FsTarget, Actor: object | undefined, Dir: string, Found: string | null, Registry: Registry | null, Passage: Passage): Promise<void>;

@@ -1,11 +1,3 @@
-// Connect - the reflective connect op (Function/Connect): ONE call bundling
-// the connection of two blocks/files. The v0 transformation: insert the
-// reference into the from-file - with a `symbol`, an import statement of that
-// symbol from the relative specifier of the to-file; without one, a reference
-// comment naming the to-file. Idempotent by construction: a from-file that
-// already references the specifier is a `rejected` reply ("already
-// connected"), never a duplicated import. The publish goes through
-// Function/Publish (the version fence).
 import * as Path from "node:path";
 
 import Carry from "@Function/Carry.js";
@@ -15,6 +7,21 @@ import type { Operation } from "@Interface/Operation.js";
 import type Reply from "@Interface/Reply.js";
 import type State from "@Interface/State.js";
 
+/**
+ * @module Connect
+ *
+ * The reflective connect op: ONE call bundling the connection of two
+ * blocks/files.
+ *
+ * @remarks
+ *
+ * The v0 transformation: insert the reference into the from-file - with a
+ * `symbol`, an import statement of that symbol from the relative specifier
+ * of the to-file; without one, a reference comment naming the to-file.
+ * Idempotent by construction: a from-file that already references the
+ * specifier is a `rejected` reply ("already connected"), never a duplicated
+ * import. The publish goes through Function/Publish (the version fence).
+ */
 const Refuse = (State: State, From: string, Reason: string): Reply => {
 	State.Factory.Append(State, `rejected ${From} (${Reason})`);
 	return { status: "rejected", detail: Reason, version: undefined };

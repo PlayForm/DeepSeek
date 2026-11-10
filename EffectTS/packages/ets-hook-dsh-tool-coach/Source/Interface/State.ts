@@ -1,3 +1,7 @@
+import type { AgentState, CoachNotes, CoachRow } from "@Interface/Execution.js";
+import type Factory from "@playform/ets-plugin-dsh-factory";
+import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module State
  *
@@ -6,6 +10,7 @@
  * with the coach's own fields.
  *
  * @remarks
+ *
  * The shared half comes from the factory's NAMED type export (`State`). The
  * shared machinery that stays inert here: Tool/Policy/PolicyName/List (no
  * fs/observed machinery - the coach is a NON-MANIFEST module), Stash/
@@ -24,10 +29,6 @@
  * returns specially, a live-verified lesson recorded in the plugin-
  * development skill).
  */
-import type { AgentState, CoachNotes, CoachRow } from "@Interface/Execution.js";
-import type Factory from "@playform/ets-plugin-dsh-factory";
-import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
-
 export default interface State extends Shared {
 	/**
 	 * Master switch (config `enabled`, volatile) - false = full passthrough.

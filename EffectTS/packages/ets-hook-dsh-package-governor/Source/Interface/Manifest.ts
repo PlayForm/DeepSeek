@@ -4,6 +4,7 @@
  * One parsed package.json as the governor sees it.
  *
  * @remarks
+ *
  * An arbitrary JSON object decoded by Function/Decode from the
  * `ctx.fs.readText` content. Dependency sections are named by Variable/Section;
  * every other key is the author's own (the circuit breaker refuses to let the

@@ -1,14 +1,21 @@
-// Tool - the model-facing surface (Function/Tool): the `workspace_context`
-// tool (V4-1 section 3.4), read-only, one canonical JSON value, a pure
-// presenter. Registered from apply through the context's `tools` facility
-// (the live-containers registration posture). The tool delegates to the
-// packet builder (Function/Packet) and renders the packet's text form
-// (Function/Render); it never writes.
 import { defineTool } from "@deepseek-ai/dsh-tools";
 import PacketBuild from "@Function/Packet.js";
 import Render from "@Function/Render.js";
 import type State from "@Interface/State.js";
 
+/**
+ * @module Tool
+ *
+ * The model-facing `workspace_context` tool definition.
+ *
+ * @remarks
+ *
+ * V4-1 section 3.4: read-only, one canonical JSON value, a pure presenter.
+ * Registered from apply through the context's `tools` facility (the
+ * live-containers registration posture). The tool delegates to the packet
+ * builder (Function/Packet) and renders the packet's text form
+ * (Function/Render); it never writes.
+ */
 export default (Agent: State) =>
 	defineTool({
 		name: "workspace_context",

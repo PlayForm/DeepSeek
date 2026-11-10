@@ -1,3 +1,13 @@
+import { existsSync, statSync } from "node:fs";
+import { dirname, isAbsolute, resolve } from "node:path";
+
+import type Located from "../Interface/Located.js";
+import type Options from "../Interface/Options.js";
+import Home from "./Home.js";
+import Load from "./Load.js";
+import Present from "./Present.js";
+import Signature from "./Signature.js";
+
 /**
  * @module Locate
  *
@@ -5,6 +15,7 @@
  * and which pack governs it.
  *
  * @remarks
+ *
  * The answer is the first ancestor directory (starting at the call path's
  * directory, or its nearest existing ancestor) that is a workspace CANDIDATE
  * (a repo layer, a user layer for its slug, or the default signature) AND
@@ -16,16 +27,6 @@
  * is the pre-pack resolver's walk, with the signature now read from the pack
  * (default: `Documentation/ARCHIVE-STYLE.md`).
  */
-import { existsSync, statSync } from "node:fs";
-import { dirname, isAbsolute, resolve } from "node:path";
-
-import type Located from "../Interface/Located.js";
-import type Options from "../Interface/Options.js";
-import Home from "./Home.js";
-import Load from "./Load.js";
-import Present from "./Present.js";
-import Signature from "./Signature.js";
-
 /**
  * The nearest existing ancestor of a path (the path itself when it exists).
  */

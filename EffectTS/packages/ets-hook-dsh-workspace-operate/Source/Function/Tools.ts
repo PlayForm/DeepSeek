@@ -1,3 +1,10 @@
+import { defineTool } from "@deepseek-ai/dsh-tools";
+import type { JsonValue } from "@deepseek-ai/dsh-util-values";
+import Propose from "@Function/Propose.js";
+import * as Query from "@Function/Query.js";
+import Withdraw from "@Function/Withdraw.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Tools
  *
@@ -5,6 +12,7 @@
  * idiom).
  *
  * @remarks
+ *
  * The tools live inside their owning hook (OPERATE.md; the ccr registers
  * ccr_retrieve). The propose tool returns the Outcome verbatim - a proposed
  * proposal or the typed refusal, rendered as one canonical JSON value; it
@@ -16,13 +24,6 @@
  *   workspace_proposals  - the read/manage surface: list, get, withdraw,
  *                          stats.
  */
-import { defineTool } from "@deepseek-ai/dsh-tools";
-import type { JsonValue } from "@deepseek-ai/dsh-util-values";
-import Propose from "@Function/Propose.js";
-import * as Query from "@Function/Query.js";
-import Withdraw from "@Function/Withdraw.js";
-import type State from "@Interface/State.js";
-
 const Read = (Args: unknown, Key: string): unknown =>
 	Args !== null && typeof Args === "object" ? (Args as Record<string, unknown>)[Key] : undefined;
 

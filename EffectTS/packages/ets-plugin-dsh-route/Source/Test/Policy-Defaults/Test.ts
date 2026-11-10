@@ -1,12 +1,18 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the routing
-// enforcer: the shared block's defaults in the schema and on the built State
-// (`Allow`, fed by the `automation` config key - `policy` is the ROUTING
-// policy), the override, and the router's read/suggest posture.
 import assert from "node:assert/strict";
 
 import { Check, Finish, Make, MakeCounter, Validate } from "../Harness.js";
 
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * @module Test
+ *
+ * THE POLICY BLOCK (D6) on the routing enforcer: the shared block's defaults
+ * in the schema and on the built State (`Allow`, fed by the `automation`
+ * config key - `policy` is the ROUTING policy), the override, and the
+ * router's read/suggest posture.
+ */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",

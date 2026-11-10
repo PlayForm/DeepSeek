@@ -1,21 +1,31 @@
-// Source/Test/Journal-And-Custom/Test.ts - one singular test: the journaling
-// mechanics and the custom-replacement run - the P5 record shape and routing,
-// the N=0/throw/identity negative controls, the custom $-literal replacement
-// (config unwrap, literal insertion, its count line and its journal record),
-// and the transport-boom error path. The suite's journal arithmetic is
-// CUMULATIVE on the factory-level PendingJournal, so this folder replays the
-// generating streams (Run 1's 10-replacement stream, Run 2, Run 3, Run 4,
-// Run 5, Run 7, 7b, 7c, 7d) as silent fixtures in suite order - every check
-// below is byte-verbatim and the arithmetic reproduces the source suite's
-// values exactly when run standalone OR under the aggregate.
-// Runs standalone (`node Target/Test/Journal-And-Custom/Test.js`) AND under
-// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the REAL
-// factory + the REAL dash apply, from the Harness.
 import { existsSync, readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the journaling mechanics and the custom-replacement
+ * run.
+ *
+ * @remarks
+ *
+ * The test covers the P5 record shape and routing, the N=0/throw/identity
+ * negative controls, the custom $-literal replacement (config unwrap,
+ * literal insertion, its count line and its journal record), and the
+ * transport-boom error path. The suite's journal arithmetic is CUMULATIVE
+ * on the factory-level PendingJournal, so this folder replays the
+ * generating streams (Run 1's 10-replacement stream, Run 2, Run 3, Run 4,
+ * Run 5, Run 7, 7b, 7c, 7d) as silent fixtures in suite order - every
+ * check below is byte-verbatim and the arithmetic reproduces the source
+ * suite's values exactly when run standalone OR under the aggregate.
+ *
+ * Runs standalone (`node Target/Test/Journal-And-Custom/Test.js`) AND
+ * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the
+ * REAL factory + the REAL dash apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

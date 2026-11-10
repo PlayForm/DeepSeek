@@ -1,8 +1,3 @@
-// Source/Test/Monitors-Band/Test.ts - the R-series byte-identity tests for
-// the monitor stanza: every outcome line of the design section 6 byte-exact,
-// the STALE flips without a re-run, the recovered forms, the summary
-// arithmetic, the token budget and the KV stability. The glyphs are asserted
-// as the rendered characters (the source writes the escapes).
 import assert from "node:assert/strict";
 import * as Monitors from "../../../Target/Function/Monitors.js";
 import {
@@ -23,7 +18,21 @@ import {
 } from "../Harness.js";
 import type { CheckResult, MonitorEntry } from "../../../Target/Interface/Events.js";
 
-/** A standard band mount: watchlist tsc only, nothing dispatched. */
+/**
+ * @module Test
+ *
+ * The R-series byte-identity tests for the monitor stanza.
+ *
+ * @remarks
+ *
+ * The test covers every outcome line of the design section 6 byte-exact,
+ * the STALE flips without a re-run, the recovered forms, the summary
+ * arithmetic, the token budget and the KV stability. The glyphs are
+ * asserted as the rendered characters (the source writes the escapes).
+ */
+/**
+ * A standard band mount: watchlist tsc only, nothing dispatched.
+ */
 const Setup = (Config: any = {}): { Run: any; Log: string[]; Entry: () => MonitorEntry } => {
 	const Jobs = FakeJobsHub();
 	const Shell = FakeShell();
@@ -72,7 +81,9 @@ const Settle = (Entry: MonitorEntry, Result: Partial<CheckResult>): void => {
 	} as CheckResult);
 };
 
-/** The stanza text for one agent. */
+/**
+ * The stanza text for one agent.
+ */
 const Parts = (Run: any): string =>
 	Monitors.SectionParts(Run.State, "agent-a", "---", (Message: string) => Run.State.Factory.Append(Run.State, Message)).join("\n");
 

@@ -1,3 +1,14 @@
+import type { DatabaseSync } from "node:sqlite";
+
+import { Service, type Context } from "@deepseek-ai/cordis";
+import Pricing from "@Function/Pricing.js";
+import type Catalog from "@Interface/Catalog.js";
+import type Config from "@Interface/Config.js";
+import type PricingPreview from "@Interface/PricingPreview.js";
+import type PricingService from "@Interface/PricingService.js";
+import type RateRow from "@Interface/RateRow.js";
+import type Revision from "@Interface/Revision.js";
+
 /**
  * @module Service
  *
@@ -6,6 +17,7 @@
  * as Function/Service does for the other ets-* plugins).
  *
  * @remarks
+ *
  * Apply constructs it over the ledger effect's own write handle, so the WAL
  * pragmas and the foreign keys already in force there are the ones
  * `publish`'s transaction uses, and no second write handle is opened for a
@@ -26,17 +38,6 @@
  * service, and it is provided from the ledger effect where the write handle
  * lives.
  */
-import type { DatabaseSync } from "node:sqlite";
-
-import { Service, type Context } from "@deepseek-ai/cordis";
-import Pricing from "@Function/Pricing.js";
-import type Catalog from "@Interface/Catalog.js";
-import type Config from "@Interface/Config.js";
-import type PricingPreview from "@Interface/PricingPreview.js";
-import type PricingService from "@Interface/PricingService.js";
-import type RateRow from "@Interface/RateRow.js";
-import type Revision from "@Interface/Revision.js";
-
 export default class CostPricing extends Service {
 	/**
 	 * The engine the methods delegate to (Function/Pricing over this

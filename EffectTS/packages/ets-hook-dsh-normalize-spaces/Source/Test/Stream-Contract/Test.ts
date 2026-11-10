@@ -1,12 +1,3 @@
-// Source/Test/Stream-Contract/Test.ts - one singular test: the full
-// llm/stream waterfall contract of the Run-1 stream - the next() mechanics,
-// the untouched options, the passthrough-by-identity groups, the rewrite
-// groups, the count ledger line and the P5 journal routing of the count
-// event (factory pre-bind buffer, not the per-State queue).
-// Runs standalone (`node Target/Test/Stream-Contract/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Smoke of @playform/ets-hook-dsh-normalize-spaces: the fake ctx + the REAL
-// factory + the REAL spaces apply (the seams live in ../Harness.js).
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import {
@@ -20,6 +11,26 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The singular test of the full llm/stream waterfall contract of the Run-1
+ * stream.
+ *
+ * @remarks
+ *
+ * The contract covers the next() mechanics, the untouched options, the
+ * passthrough-by-identity groups, the rewrite groups, the count ledger line
+ * and the P5 journal routing of the count event (factory pre-bind buffer,
+ * not the per-State queue).
+ *
+ * The file runs standalone (`node Target/Test/Stream-Contract/Test.js`) and
+ * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * It smokes @playform/ets-hook-dsh-normalize-spaces: the fake ctx plus the
+ * REAL factory plus the REAL spaces apply (the seams live in
+ * `../Harness.js`).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

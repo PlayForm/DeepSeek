@@ -1,3 +1,4 @@
+import type Pack from "./Pack.js";
 /**
  * @module Located
  *
@@ -6,10 +7,10 @@
  * families from it).
  *
  * @remarks
+ *
  * `undefined` from the locator is the honest silence: no pack, no signature,
  * no note.
  */
-import type Pack from "./Pack.js";
 export default interface Located {
     /**
      * The workspace root (the first ancestor whose pack signature matched).

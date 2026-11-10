@@ -1,20 +1,32 @@
-// FileFilters - the Files view's client-side filter state and predicate: the
-// case-insensitive path substring, the touch-kind choice derived from the
-// row's counts, the stage choice over the distinct stage set, and the sort
-// order whose default is this conversation's cost. It is pure and total: no
-// React, no mutation of the envelope's rows, and no input can make it throw.
+/**
+ * @module FileFilters
+ *
+ * The Files view's client-side filter state and predicate.
+ *
+ * @remarks
+ * The case-insensitive path substring, the touch-kind choice derived from the row's counts, the
+ * stage choice over the distinct stage set, and the sort order whose default is this
+ * conversation's cost. It is pure and total: no React, no mutation of the envelope's rows, and no
+ * input can make it throw.
+ */
 import type CostFileRow from "@Interface/FileRow";
 
-// Kind - the four touch-kind choices: every file, the files the
-// conversation edited, the files it wrote, and the files it only read.
+/**
+ * Kind - the four touch-kind choices: every file, the files the conversation edited, the files it
+ * wrote, and the files it only read.
+ */
 export type Kind = "all" | "edited" | "written" | "readOnly";
 
-// Sort - the four orders: this conversation's cost (the default), the
-// lifetime cost, the changed lines, and the touch count.
+/**
+ * Sort - the four orders: this conversation's cost (the default), the lifetime cost, the changed
+ * lines, and the touch count.
+ */
 export type Sort = "conversation" | "lifetime" | "lines" | "touches";
 
-// Filter - the one state the view holds: the path needle, the kind, the
-// stage (null for every stage) and the order.
+/**
+ * Filter - the one state the view holds: the path needle, the kind, the stage (null for every
+ * stage) and the order.
+ */
 export type Filter = {
 	Path: string;
 	Kind: Kind;
@@ -33,14 +45,17 @@ const N = (Value: unknown): number =>
 
 const S = (Value: unknown): string => (typeof Value === "string" ? Value : "");
 
-// Stages - one row's stage set, read defensively: the envelope may carry no
-// stage list at all, and a stage that is not a string is not a stage.
+/**
+ * Stages - one row's stage set, read defensively: the envelope may carry no stage list at all, and
+ * a stage that is not a string is not a stage.
+ */
 const Stages = (Value: unknown): readonly string[] =>
 	Array.isArray(Value) ? Value.filter((Item: unknown) => typeof Item === "string") : [];
 
-// Match - the predicate: the needle is a case-insensitive substring of the
-// full path, the kind reads the edit and write counts, and the stage is one
-// of the row's own stages.
+/**
+ * Match - the predicate: the needle is a case-insensitive substring of the full path, the kind
+ * reads the edit and write counts, and the stage is one of the row's own stages.
+ */
 const Match = (Row: CostFileRow, Current: Filter): boolean => {
 	const Path = S(Row.path).toLowerCase();
 	const Needle = Current.Path.trim().toLowerCase();
@@ -62,7 +77,9 @@ const Match = (Row: CostFileRow, Current: Filter): boolean => {
 	}
 };
 
-// Weight - the sort key of one order, every order descending.
+/**
+ * Weight - the sort key of one order, every order descending.
+ */
 const Weight = (Row: CostFileRow, Choice: Sort): number => {
 	switch (true) {
 		case Choice === "lifetime":
@@ -76,7 +93,9 @@ const Weight = (Row: CostFileRow, Choice: Sort): number => {
 	}
 };
 
-// Compare - the tie break every order shares: the full path ascending.
+/**
+ * Compare - the tie break every order shares: the full path ascending.
+ */
 const Compare = (Left: CostFileRow, Right: CostFileRow): number => {
 	const A = S(Left.path);
 	const B = S(Right.path);
@@ -93,17 +112,21 @@ const Compare = (Left: CostFileRow, Right: CostFileRow): number => {
 const Sorted = (Rows: readonly CostFileRow[], Choice: Sort): readonly CostFileRow[] =>
 	[...Rows].sort((A, B) => Weight(B, Choice) - Weight(A, Choice) || Compare(A, B));
 
-// StagesOf - the distinct stage set the filter chips offer, in first-seen
-// order, over every file of the conversation rather than the filtered ones,
-// so a chosen stage never makes its own chip disappear.
+/**
+ * StagesOf - the distinct stage set the filter chips offer, in first-seen order, over every file
+ * of the conversation rather than the filtered ones, so a chosen stage never makes its own chip
+ * disappear.
+ */
 const StagesOf = (Rows: readonly CostFileRow[]): readonly string[] => {
 	const Seen = new Set<string>();
 	for (const Row of Rows) for (const Stage of Stages(Row.stages)) Seen.add(Stage);
 	return [...Seen];
 };
 
-// Apply - the one entry the view calls: match, then order, without touching
-// the envelope's own array.
+/**
+ * Apply - the one entry the view calls: match, then order, without touching the envelope's own
+ * array.
+ */
 const Apply = (Rows: readonly CostFileRow[], Current: Filter): readonly CostFileRow[] =>
 	Sorted(
 		Rows.filter((Row) => Match(Row, Current)),

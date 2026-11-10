@@ -1,18 +1,21 @@
-// Source/Test/Error-Paths/Test.ts - one singular test: the error paths - a
-// missing file, a binary/undecodable target, and a pre-aborted signal all
-// reject with the tool's context prefix (keeping the backend's error code)
-// and produce NO write and NO journal record. The suite's journal arithmetic
-// is cumulative on the factory-level PendingJournal, so this folder replays
-// Run 1b's write as a silent fixture first - every check below is
-// byte-verbatim and the counts reproduce the source suite's values when run
-// standalone OR under the aggregate.
-// Runs standalone (`node Target/Test/Error-Paths/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-plugin-dsh-normalize-file: the fake ctx + the REAL
-// factory + the REAL normalize-file apply, from the Harness.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the error paths - a missing file, a binary/undecodable
+ * target, and a pre-aborted signal all reject with the tool's context prefix
+ * (keeping the backend's error code) and produce NO write and NO journal
+ * record. The suite's journal arithmetic is cumulative on the factory-level
+ * PendingJournal, so this folder replays Run 1b's write as a silent fixture
+ * first - every check below is byte-verbatim and the counts reproduce the
+ * source suite's values when run standalone OR under the aggregate. Runs
+ * standalone (`node Target/Test/Error-Paths/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-plugin-dsh-normalize-file: the fake ctx + the REAL factory +
+ * the REAL normalize-file apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

@@ -1,3 +1,6 @@
+import Block from "./Block.js";
+import Strip from "./Strip.js";
+
 /**
  * @module Chunk
  *
@@ -5,6 +8,7 @@
  * chunk and the replaced-character count out.
  *
  * @remarks
+ *
  * The waterfall contract (docs/subsystems/llm-streaming.md:1108-1125,
  * :296-304):
  *
@@ -88,9 +92,6 @@
  * while keeping `count: 0` - marker removal is not normalization, so the
  * ledger must not count it.
  */
-import Block from "./Block.js";
-import Strip from "./Strip.js";
-
 type BlockShape =
 	| { type: "text"; text: string }
 	| { type: "reasoning"; text?: string | undefined }

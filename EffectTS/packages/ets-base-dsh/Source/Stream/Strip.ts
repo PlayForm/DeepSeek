@@ -5,6 +5,7 @@
  * convention.
  *
  * @remarks
+ *
  * A tool call whose arguments JSON opens with the marker `{"__normalize":false`
  * (the FIRST key) is raw: its arguments pass through the family's tool-args
  * gate unnormalized - and the marker entry itself must be removed before the

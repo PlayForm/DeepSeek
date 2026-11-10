@@ -4,6 +4,7 @@
  * One agent's honest signal, in the plan's block format.
  *
  * @remarks
+ *
  * Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md section 1:
  *
  * ```

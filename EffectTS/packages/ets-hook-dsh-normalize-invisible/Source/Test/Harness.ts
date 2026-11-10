@@ -1,15 +1,3 @@
-// Source/Test/Harness.ts — the shared test harness for the invisible flavor's
-// per-test folders: the fake ctx + the REAL factory instance + the REAL
-// invisible apply, written ONCE per package and imported by every test folder
-// (the seams are the source suite's, EffectTS/smokes/invisible-smoke.mjs, moved
-// verbatim — the .mjs suite duplicates its harness per file; here it is one
-// file).
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly (the negative control for the harness
-// itself); prepublishOnly.sh gates the build on it. Imported as a library,
-// this module only exports.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import type { Context as CordisContext } from "@deepseek-ai/cordis";
@@ -21,6 +9,25 @@ import type State from "../../Target/Interface/State.js";
 import Invisible from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the invisible flavor's per-test folders.
+ *
+ * @remarks
+ *
+ * The harness wires the fake ctx plus the REAL factory instance plus the
+ * REAL invisible apply, written ONCE per package and imported by every test
+ * folder (the seams are the source suite's,
+ * `EffectTS/smokes/invisible-smoke.mjs`, moved verbatim - the .mjs suite
+ * duplicates its harness per file; here it is one file).
+ *
+ * The standalone selfcheck `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass plus one deliberate failure and exits 0
+ * only when both are counted exactly (the negative control for the harness
+ * itself); `prepublishOnly.sh` gates the build on it. Imported as a library,
+ * this module only exports.
+ */
 // (apply + Config live on both named and default — same as the source suite.)
 const { apply, Config: Schema } = Invisible;
 

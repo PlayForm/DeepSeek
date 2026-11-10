@@ -1,3 +1,13 @@
+import { existsSync, readFileSync, statSync } from "node:fs";
+import { basename, isAbsolute, join, relative, sep } from "node:path";
+
+import type Drift from "@Interface/Drift.js";
+import type { Reconciliation } from "@Interface/Drift.js";
+
+import Counts from "./Counts.js";
+import Folders from "./Folders.js";
+import Roster from "./Roster.js";
+
 /**
  * @module Reconcile
  *
@@ -6,6 +16,7 @@
  * package, compare the package's SMOKE CLAIMS with the tree it actually has.
  *
  * @remarks
+ *
  * THE THREE EVIDENCE SETS:
  *
  *   - the CLAIMS   - each `Source/Test/<Folder>/README.md`'s
@@ -31,16 +42,6 @@
  * never fixes, and never throws (a package without a smoke tree answers
  * `undefined` - the documented silence).
  */
-import { existsSync, readFileSync, statSync } from "node:fs";
-import { basename, isAbsolute, join, relative, sep } from "node:path";
-
-import type Drift from "@Interface/Drift.js";
-import type { Reconciliation } from "@Interface/Drift.js";
-
-import Counts from "./Counts.js";
-import Folders from "./Folders.js";
-import Roster from "./Roster.js";
-
 /**
  * The repo-relative display of a path (a relative one is already displayable;
  * the workspace root itself displays as its own name).

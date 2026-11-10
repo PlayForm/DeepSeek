@@ -1,20 +1,18 @@
 import type Entry from "@Interface/Entry.js";
+import type Gate from "@Interface/Gate.js";
+import type Member from "@Interface/Member.js";
+
 /**
  * @module Snapshot
  *
  * The full batch snapshot (Interface/Snapshot): what getState() returns.
  *
  * @remarks
+ *
  * The running lanes, the idle queue (in order), the recent completions, the
  * spliced proposals and the arbiter gates - the LIVE truth, never the
  * histories.
  */
-import type Entry from "@Interface/Entry.js";
-import type Gate from "@Interface/Gate.js";
-import type Gate from "@Interface/Gate.js";
-import type Member from "@Interface/Member.js";
-import type Member from "@Interface/Member.js";
-
 /**
  * The full batch snapshot.
  */

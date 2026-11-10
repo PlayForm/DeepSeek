@@ -5,6 +5,7 @@
  * counterpart for code without an await point).
  *
  * @remarks
+ *
  * The factory's Append runs a spanned Effect whose tracer samples the global
  * `Date.now` internally; those INTERNAL samples must not consume the caller's
  * deadline budget (the commit deadline counts only the plugin's own wall

@@ -1,21 +1,3 @@
-// Source/Test/Benchmark/Test.ts - the P4 REPLAY BENCHMARK, measured on the
-// HISTORY path: the fixed fifty-call sequence (Variable/Sequence) is replayed
-// through the REAL built listener with a session history COMMITTED through the
-// projection drive per lane, the emitted notes are scored by Function/Benchmark
-// against the companions the fixture says the lane really touched, and the
-// precision/recall/first-note numbers are printed. The determinism is proven by
-// a second identical replay, and the threshold floor is shown not to lower the
-// synthetic family's own 0.75 gate.
-//
-// THE EXPECTED SET IS THE FIXTURE: the built-in target lists are retired, so
-// the recall measures whether the history path names the companions the session
-// actually touched - never a literal pack row.
-//
-// THE FIXTURE IS HERMETIC: one temp workspace holds a salted `History/<lane>/`
-// tree (an anchor and four companions per lane), so a companion path can
-// never collide with another call's path, and the lane's FIRST call is
-// re-pointed at the absolute anchor. Every later call keeps its Sequence
-// path and therefore abstains.
 import assert from "node:assert/strict";
 import Benchmark from "../../Function/Benchmark.js";
 import type { Note } from "../../Interface/Benchmark.js";
@@ -36,35 +18,72 @@ import {
 	Workspace,
 } from "../Harness.js";
 
-/** The benchmark's config: the default surface with the documented threshold floor. */
+/**
+ * @module Test
+ *
+ * The P4 REPLAY BENCHMARK test, measured on the HISTORY path.
+ *
+ * @remarks
+ *
+ * The fixed fifty-call sequence (Variable/Sequence) is replayed through the
+ * REAL built listener with a session history COMMITTED through the
+ * projection drive per lane, the emitted notes are scored by
+ * Function/Benchmark against the companions the fixture says the lane really
+ * touched, and the precision/recall/first-note numbers are printed. The
+ * determinism is proven by a second identical replay, and the threshold
+ * floor is shown not to lower the synthetic family's own 0.75 gate.
+ *
+ * THE EXPECTED SET IS THE FIXTURE: the built-in target lists are retired, so
+ * the recall measures whether the history path names the companions the
+ * session actually touched - never a literal pack row.
+ *
+ * THE FIXTURE IS HERMETIC: one temp workspace holds a salted
+ * `History/<lane>/` tree (an anchor and four companions per lane), so a
+ * companion path can never collide with another call's path, and the lane's
+ * FIRST call is re-pointed at the absolute anchor. Every later call keeps
+ * its Sequence path and therefore abstains.
+ */
+/**
+ * The benchmark's config: the default surface with the documented threshold floor.
+ */
 const Bench = (): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, threshold: 0.6 }));
 };
 
-/** One lane: the agent id, its salted anchor and its four companions. */
+/**
+ * One lane: the agent id, its salted anchor and its four companions.
+ */
 const Lanes = ["version", "test", "doc", "config", "symbol"].map((Id) => ({
 	Id,
 	Anchor: `History/${Id}/anchor.ts`,
 	Companions: [0, 1, 2, 3].map((Index) => `History/${Id}/c${Index}.ts`),
 }));
 
-/** The temp workspace holding every lane's salted tree. */
+/**
+ * The temp workspace holding every lane's salted tree.
+ */
 const Space = Workspace(Lanes.flatMap((Lane) => [Lane.Anchor, ...Lane.Companions]));
 
-/** The hand-labelled eventual target set: the seed itself, under the family. */
+/**
+ * The hand-labelled eventual target set: the seed itself, under the family.
+ */
 const Expected = {
 	History: Lanes.flatMap((Lane) => Lane.Companions),
 };
 
-/** Seed every lane's history. */
+/**
+ * Seed every lane's history.
+ */
 const Seed = (Run: any): void => {
 	for (const Lane of Lanes) {
 		SeedHistory(Run, Lane.Id, Space.At(Lane.Anchor), Lane.Companions);
 	}
 };
 
-/** The note's candidate paths (the "- <path>[ (n)] - <reason>" lines). */
+/**
+ * The note's candidate paths (the "- <path>[ (n)] - <reason>" lines).
+ */
 const Candidates = (Text: string): string[] =>
 	Text.split("\n")
 		.filter((Line) => Line.startsWith("- "))
@@ -75,7 +94,9 @@ const Candidates = (Text: string): string[] =>
 			return Head.replace(/ \(\d+\)$/, "");
 		});
 
-/** Replay the fixed sequence and collect the emitted notes. */
+/**
+ * Replay the fixed sequence and collect the emitted notes.
+ */
 const Replay = async (Run: any): Promise<Note[]> => {
 	const Notes: Note[] = [];
 	const Seen = new Set<string>();

@@ -1,9 +1,12 @@
+import type { State } from "@playform/ets-base-dsh";
+
 /**
  * @module Seam
  *
  * The probe-once accessor for an OPTIONAL service.
  *
  * @remarks
+ *
  * The documented optional-dep probe, `ctx.get(name)` - tutorial 03:82-90. NEVER the direct
  * accessor fallback: `ctx.<name>` (e.g. `ctx.subprocess`) THROWS on service accessors without
  * inject ("cannot get property ... without inject" - live-verified 2026-10-03); the probe is the
@@ -12,8 +15,6 @@
  * builder uses this exact accessor for the "subprocess" seam; new optional seams (storageDomain,
  * jobs) should prefer it over ad-hoc probes.
  */
-import type { State } from "@playform/ets-base-dsh";
-
 export default (State: State, Name: string): unknown => {
 	switch (true) {
 		case State.Seams.has(Name):

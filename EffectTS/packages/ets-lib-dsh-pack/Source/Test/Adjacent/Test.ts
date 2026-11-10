@@ -1,7 +1,3 @@
-// Source/Test/Adjacent/Test.ts - the session-history fold, the co-touch
-// ranker, the workspace-root walk and the built-in opt-out: the fold against
-// pure in-memory fixtures, the root walk and the resolution against REAL
-// temporary trees and a temporary home (never the real ~/.dsh).
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -12,14 +8,30 @@ import {
 	Tree,
 } from "../Harness.js";
 
-/** One fold input event (a tool call naming a path). */
+/**
+ * @module Test
+ *
+ * The session-history fold, the co-touch ranker, the workspace-root walk and
+ * the built-in opt-out.
+ *
+ * @remarks
+ *
+ * The folder proves the fold against pure in-memory fixtures, and the root
+ * walk and the resolution against REAL temporary trees and a temporary home
+ * (never the real ~/.dsh).
+ */
+/**
+ * One fold input event (a tool call naming a path).
+ */
 const Call = (Name: string, Path: string, Type = "tool/call"): { type?: string; name?: string; arguments?: unknown } => ({
 	type: Type,
 	name: Name,
 	arguments: typeof Path === "string" && Path.startsWith("{") ? Path : JSON.stringify({ file_path: Path }),
 });
 
-/** A folded touch list from a plain path sequence. */
+/**
+ * A folded touch list from a plain path sequence.
+ */
 const Fold = (Paths: string[]): ReturnType<typeof Library.Fold>[] =>
 	Paths.flatMap((Entry_, Seq) => {
 		const Touch = Library.Fold(Call("Edit", Entry_), Seq);

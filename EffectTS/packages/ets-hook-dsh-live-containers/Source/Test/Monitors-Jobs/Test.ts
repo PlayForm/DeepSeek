@@ -1,9 +1,3 @@
-// Source/Test/Monitors-Jobs/Test.ts - the D-series runner tests: the
-// dispatch through the SHIPPED G2 wrapper with the exact re-dispatch spec,
-// the settle mapping (clean only from an observed exit 0 of the exact
-// version), the problem tail, the head-keep capture, the killed and
-// sandbox-denied mappings, the deadline kill, the fail-open paths and the
-// teardown. Every ledger assertion is byte-exact.
 import assert from "node:assert/strict";
 import * as JobsModule from "../../../Target/Function/Jobs.js";
 import {
@@ -27,7 +21,22 @@ import {
 } from "../Harness.js";
 import type { MonitorEntry } from "../../../Target/Interface/Events.js";
 
-/** A standard jobs mount. */
+/**
+ * @module Test
+ *
+ * The D-series runner tests.
+ *
+ * @remarks
+ *
+ * The test covers the dispatch through the SHIPPED G2 wrapper with the
+ * exact re-dispatch spec, the settle mapping (clean only from an observed
+ * exit 0 of the exact version), the problem tail, the head-keep capture,
+ * the killed and sandbox-denied mappings, the deadline kill, the fail-open
+ * paths and the teardown. Every ledger assertion is byte-exact.
+ */
+/**
+ * A standard jobs mount.
+ */
 const Setup = (Config: any = {}, BreakStart = false): { Jobs: any; Shell: any; Run: any } => {
 	const Jobs = FakeJobsHub();
 	if (BreakStart) {
@@ -55,7 +64,9 @@ const Setup = (Config: any = {}, BreakStart = false): { Jobs: any; Shell: any; R
 const Entry = (Run: any, Path = "/repo/src/App.ts"): MonitorEntry =>
 	Run.State.Monitors.get("agent-a")?.get(Path) as MonitorEntry;
 
-/** Enroll, cross the debounce window and run one assemble checkpoint. */
+/**
+ * Enroll, cross the debounce window and run one assemble checkpoint.
+ */
 const Dispatch = async (Run: any, Path = "/repo/src/App.ts", Version = "1"): Promise<void> => {
 	FireObserved(Run, Path, Version);
 	Advance(2000);

@@ -1,3 +1,12 @@
+import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
+
+import type Catalog from "@Interface/Catalog.js";
+import type Config from "@Interface/Config.js";
+import type PricingPreview from "@Interface/PricingPreview.js";
+import type PricingService from "@Interface/PricingService.js";
+import type RateRow from "@Interface/RateRow.js";
+import type Revision from "@Interface/Revision.js";
+
 /**
  * @module Pricing
  *
@@ -7,6 +16,7 @@
  * re-prices one session's recorded usage under a selected revision.
  *
  * @remarks
+ *
  * THE READS are plain SELECTs. `catalogs` answers every catalog in creation
  * order; `revisions` answers one catalog's revisions newest first, the
  * order a history reads; `rates` answers one revision's rate rows in card
@@ -88,15 +98,6 @@
  * nothing. Both totals cover the same calls (the ones the revision prices
  * in that currency), so `difference` compares like with like.
  */
-import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
-
-import type Catalog from "@Interface/Catalog.js";
-import type Config from "@Interface/Config.js";
-import type PricingPreview from "@Interface/PricingPreview.js";
-import type PricingService from "@Interface/PricingService.js";
-import type RateRow from "@Interface/RateRow.js";
-import type Revision from "@Interface/Revision.js";
-
 /**
  * One rate row as the engine reads it: the resolved row and every row of
  * its family share this shape, so one mapper serves the resolution and the

@@ -1,4 +1,6 @@
 import type Proposal from "@Interface/Proposal.js";
+import type Proposal from "@Interface/Proposal.js";
+
 /**
  * @module Entry
  *
@@ -6,12 +8,11 @@ import type Proposal from "@Interface/Proposal.js";
  * itself plus the board's own status.
  *
  * @remarks
+ *
  * The status starts `proposed` and moves exactly once per decision
  * (approved / denied / expired); the board never decides - it reflects what
  * the decision hook delivered into the same inbox channel.
  */
-import type Proposal from "@Interface/Proposal.js";
-
 /**
  * The board's record for one spliced proposal.
  */

@@ -1,9 +1,16 @@
+import type { FsTarget } from "@deepseek-ai/dsh-fs";
+import type State from "@Interface/State.js";
+import type PluginFactory from "@playform/ets-plugin-dsh-factory";
+
+import { Envelope } from "./Dispatch.js";
+
 /**
  * @module Settle
  *
  * The post-completion stage of the update continuation.
  *
  * @remarks
+ *
  * It updates the per-dir circuit breaker, reports the failure line (the
  * module's own ledger string, via the FACTORY's Append - State.Module
  * supplies the "hook-dsh-governor-cargo" prefix), then runs U₂ so the
@@ -35,12 +42,6 @@
  * module never invokes it standalone, so no runPromise boundary is added
  * here - the settlement half of the same pair.
  */
-import type { FsTarget } from "@deepseek-ai/dsh-fs";
-import type State from "@Interface/State.js";
-import type PluginFactory from "@playform/ets-plugin-dsh-factory";
-
-import { Envelope } from "./Dispatch.js";
-
 export default (
 	Factory: PluginFactory,
 	State: State,

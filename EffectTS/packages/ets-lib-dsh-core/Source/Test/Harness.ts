@@ -1,20 +1,28 @@
-// Source/Test/Harness.ts - the shared test harness for the CORE unit tests.
-// The core is a pure unit: NO fake ctx, NO factory - every test imports the
-// REAL built Target/Library.js of its own bundle only, so the harness here is
-// minimal: the Check counter (one Check per source-suite ok group; the
-// callback carries that group's assertions byte-identical and in source
-// order), the Finish guard, and the tmpdir fixture for the Policy folder.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly (the negative control for the harness
-// itself); prepublishOnly.sh gates the build on it. Imported as a library,
-// this module only exports.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the CORE unit tests: minimal, because the core
+ * is a pure unit.
+ *
+ * @remarks
+ *
+ * The core needs NO fake ctx and NO factory - every test imports the REAL
+ * built Target/Library.js of its own bundle only, so the harness here is
+ * minimal: the Check counter (one Check per source-suite ok group; the
+ * callback carries that group's assertions byte-identical and in source
+ * order), the Finish guard, and the tmpdir fixture for the Policy folder.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly (the negative control for the harness
+ * itself); prepublishOnly.sh gates the build on it. Imported as a library,
+ * this module only exports.
+ */
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks.
  * Passed by reference so Check can bump it from inside its callback.

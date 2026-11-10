@@ -1,3 +1,43 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
+import {
+	GovernService,
+	JournalService,
+	LedgerService,
+	materialize,
+	WriteService,
+	type Gate as Decision,
+	type Services as FactoryRuntime,
+	type Registry as GovernRegistry,
+	type Selection as GovernSelection,
+	type Options as Setup,
+	type State as Shape,
+	type Transform,
+	type Over as WriteOver,
+} from "@playform/ets-base-dsh";
+import { Names } from "@playform/ets-lib-dsh-trace";
+import { Effect } from "effect";
+
+import AttachEffects from "./Function/Attach.js";
+import Continue from "./Function/Continue.js";
+import DecideFn from "./Function/Decide.js";
+import Discover from "./Function/Discover.js";
+import Gate from "./Function/Gate.js";
+import Match from "./Function/Match.js";
+import Parse from "./Function/Parse.js";
+import PolicyFn from "./Function/Policy.js";
+import RefreshFn from "./Function/Refresh.js";
+import Resolve from "./Function/Resolve.js";
+import SchemaFn from "./Function/Schema.js";
+import SeamFn from "./Function/Seam.js";
+import Build from "./Function/State.js";
+import CreateTrace from "./Function/Trace.js";
+import UpdateKey from "./Function/UpdateKey.js";
+import Wire from "./Function/Wire.js";
+import type Allowlist from "./Interface/Allowlist.js";
+import type Trace from "./Interface/Trace.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +45,7 @@
  * plugin in the governance family (docs/user/develop/framework/service.md).
  *
  * @remarks
+ *
  * Loader contract: the class form - `export default class PluginFactory extends Service` with
  * `super(Context, "pluginFactory")`, registered immediately on construction and removed with its
  * owning fiber; `static inject = ["fs"]` because the factory's primitives call ctx.fs (the
@@ -78,46 +119,6 @@
  * parameterized machinery (the unreadable-policy line, the suppressed-error lines prefixed with
  * State.Module) and stay byte-identical when the module keeps its historical name.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
-import {
-	GovernService,
-	JournalService,
-	LedgerService,
-	materialize,
-	WriteService,
-	type Gate as Decision,
-	type Services as FactoryRuntime,
-	type Registry as GovernRegistry,
-	type Selection as GovernSelection,
-	type Options as Setup,
-	type State as Shape,
-	type Transform,
-	type Over as WriteOver,
-} from "@playform/ets-base-dsh";
-import { Names } from "@playform/ets-lib-dsh-trace";
-import { Effect } from "effect";
-
-import AttachEffects from "./Function/Attach.js";
-import Continue from "./Function/Continue.js";
-import DecideFn from "./Function/Decide.js";
-import Discover from "./Function/Discover.js";
-import Gate from "./Function/Gate.js";
-import Match from "./Function/Match.js";
-import Parse from "./Function/Parse.js";
-import PolicyFn from "./Function/Policy.js";
-import RefreshFn from "./Function/Refresh.js";
-import Resolve from "./Function/Resolve.js";
-import SchemaFn from "./Function/Schema.js";
-import SeamFn from "./Function/Seam.js";
-import Build from "./Function/State.js";
-import CreateTrace from "./Function/Trace.js";
-import UpdateKey from "./Function/UpdateKey.js";
-import Wire from "./Function/Wire.js";
-import type Allowlist from "./Interface/Allowlist.js";
-import type Trace from "./Interface/Trace.js";
-import Version from "./Variable/Version.js";
-
 /**
  * The NAMED TYPE exports (P0-1): the four structural contracts + the output
  * shape, re-exported from the entry so consumers can

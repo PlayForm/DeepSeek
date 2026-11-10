@@ -6,6 +6,7 @@
  * fold enforces, and the persisted-state version the cache compares.
  *
  * @remarks
+ *
  * The key is host-only (the unit declares no `wire` block), so it never joins
  * `SessionProjectionMap` and no client value is derived from it.
  *

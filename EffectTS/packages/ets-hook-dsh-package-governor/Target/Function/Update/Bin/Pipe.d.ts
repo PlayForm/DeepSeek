@@ -1,4 +1,4 @@
-import type State from "../../../Interface/State.js";
+import type State from "@Interface/State.js";
 export default _default;
 /**
  * @module Pipe
@@ -6,6 +6,7 @@ export default _default;
  * Handles one collected stream chunk.
  *
  * @remarks
+ *
  * The chunk becomes the ledger line (the smoke's arbiter) and, when a job ring
  * is attached (P1), the same text goes into the ring.
  */

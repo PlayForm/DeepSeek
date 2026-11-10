@@ -1,3 +1,5 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "../Interface/Config.js";
 /**
  * @module Apply
  *
@@ -5,6 +7,7 @@
  * activation.
  *
  * @remarks
+ *
  * Every service is provided with ctx.provide, so it is removed with the
  * plugin. When the Config enabled is false the read endpoints still register
  * but every method returns a `rejected` failure, and the plain-field bridge
@@ -21,6 +24,4 @@
  * bus), so the forwarder is named `panelFamilyTrace` here; the browser half
  * re-publishes it as `trace` (Source/Function/Client.ts).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
 export default function Apply(ctx: Context, config: Config): void;

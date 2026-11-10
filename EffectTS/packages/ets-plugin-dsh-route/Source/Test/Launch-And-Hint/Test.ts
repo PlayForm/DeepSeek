@@ -1,14 +1,3 @@
-// Source/Test/Launch-And-Hint/Test.ts - THE LAUNCH SEAM (the completion
-// wave's arbiter): the routing hint lands in the child's prompt through the
-// harness's own `agent/pre-step` waterfall (the service-spawned child that
-// never passes through a tool), the tool path appends the same hint to the
-// launch prompt, the escalation marker picks the ladder, and the LIVE catalog
-// (`list_subagent_models`' source) decides the rung's model.
-//
-// Every assertion is byte-exact: the hint template
-// `[route: <taskType> <provider> <model> <effort>]`, the ledger line
-// `hint <taskType> <provider> <model> <effort>`, and the unchanged
-// `route <taskType> <source> <provider> <model> <effort>` audit line.
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -26,11 +15,32 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * THE LAUNCH SEAM (the completion wave's arbiter): the routing hint lands in
+ * the child's prompt through the harness's own `agent/pre-step` waterfall
+ * (the service-spawned child that never passes through a tool), the tool path
+ * appends the same hint to the launch prompt, the escalation marker picks the
+ * ladder, and the LIVE catalog (`list_subagent_models`' source) decides the
+ * rung's model.
+ *
+ * @remarks
+ *
+ * Every assertion is byte-exact: the hint template
+ * `[route: <taskType> <provider> <model> <effort>]`, the ledger line
+ * `hint <taskType> <provider> <model> <effort>`, and the unchanged
+ * `route <taskType> <source> <provider> <model> <effort>` audit line.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = (Config: Record<string, unknown> = {}, Attach?: (C: any) => void): any =>
 	Make(Validate({ enabled: true, ...Config }), Attach);
 
-/** The `agent/pre-step` payload for one child (or the main agent at depth 0). */
+/**
+ * The `agent/pre-step` payload for one child (or the main agent at depth 0).
+ */
 const Step = (Agent: any): any => ({ agent: Agent, messages: [], turn: 1, step: 1 });
 
 export const runTest = async (): Promise<number> => {

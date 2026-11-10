@@ -1,22 +1,3 @@
-// Source/Test/Harness.ts - the shared test harness for the GIT-GUARD tests:
-// the fake ctx (ctx listener capture for the tools/pre-execute waterfall, a
-// DISTINCT root object, reflect.provide capture, the effect runner, logger
-// capture + the fs seam) + the REAL @playform/plugin-dsh-gitguard apply from
-// its built Target + the REAL @playform/ets-plugin-dsh-factory instance from its
-// built Target (the guard's exclusion match runs on the factory's own Match)
-// - the family fake-ctx + real-factory harness pattern, written ONCE per
-// package and imported by every test folder. Each folder process gets a
-// fresh set, so every folder is standalone-green and the aggregate replays
-// the same seams per folder.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// NO FAKE CLOCK: the guard has no clock dependency at all - every assertion
-// is on the classification, the listener capture, and the ledger lines.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -24,6 +5,34 @@ import * as Path from "node:path";
 import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the GIT-GUARD tests: the fake ctx plus the
+ * REAL apply and factory instances from their built Targets.
+ *
+ * @remarks
+ *
+ * The fake ctx covers the ctx listener capture for the tools/pre-execute
+ * waterfall, a DISTINCT root object, the reflect.provide capture, the
+ * effect runner, the logger capture and the fs seam. The REAL
+ * @playform/plugin-dsh-gitguard apply comes from its built Target and the
+ * REAL @playform/ets-plugin-dsh-factory instance comes from its built
+ * Target (the guard's exclusion match runs on the factory's own Match) -
+ * the family fake-ctx + real-factory harness pattern, written ONCE per
+ * package and imported by every test folder. Each folder process gets a
+ * fresh set, so every folder is standalone-green and the aggregate replays
+ * the same seams per folder.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * wires the plugin (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * NO FAKE CLOCK: the guard has no clock dependency at all - every assertion
+ * is on the classification, the listener capture, and the ledger lines.
+ */
 export { Plugin };
 
 /**

@@ -1,12 +1,21 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the
-// batch-state board: the shared block's defaults in the schema and on the
-// built State (`Allow` - the factory's shared `Policy` is the global policy
-// file path), the override, and the recorder posture.
 import assert from "node:assert/strict";
 
 import { Check, Finish, Ledger, Make, MakeCounter, StateFile, Validate } from "../Harness.js";
 
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * @module Test
+ *
+ * THE POLICY BLOCK (D6) on the batch-state board.
+ *
+ * @remarks
+ *
+ * The folder proves the shared block's defaults in the schema and on the
+ * built State (`Allow` - the factory's shared `Policy` is the global policy
+ * file path), the override, and the recorder posture.
+ */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",

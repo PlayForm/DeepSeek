@@ -1,22 +1,3 @@
-// Replace - the reflective replace op (Function/Replace): ONE call bundling
-// the replacement of a block's span with new text.
-//
-// TWO TARGET FORMS:
-//   * a NODE TARGET (`node` + `fingerprint`): the span is resolved through the
-//     GRAPH's node (Function/Locate - the AST source), the node's path must be
-//     the operation's path, and the content-derived fingerprint of the span is
-//     VERIFIED against the current text before anything is written. A mismatch
-//     refuses with `rejected <path> (fingerprint mismatch)` - the file changed
-//     under the caller's node and the operation never guesses. When the graph
-//     is absent (or does not know the node) the caller's explicit span is the
-//     fallback, and the fingerprint is still verified.
-//   * a TEXTUAL SPAN (`startLine`/`endLine` only): the pre-AST form, unchanged.
-//
-// The span is 1-based and inclusive; the replacement text replaces the span's
-// lines exactly (an empty text deletes the span). The span guard: the span must
-// be within the file and no wider than config `maxBlockLines` - a whole-file
-// replacement smuggled in as a "block" op is rejected, never applied. The
-// publish goes through Function/Publish (the version fence).
 import Carry from "@Function/Carry.js";
 import Fingerprint from "@Function/Fingerprint.js";
 import Locate from "@Function/Locate.js";
@@ -27,6 +8,32 @@ import type Reply from "@Interface/Reply.js";
 import type State from "@Interface/State.js";
 import { Decide } from "@playform/ets-plugin-dsh-factory";
 
+/**
+ * @module Replace
+ *
+ * The reflective replace op: ONE call bundling the replacement of a block's
+ * span with new text.
+ *
+ * @remarks
+ *
+ * TWO TARGET FORMS:
+ *
+ * - a NODE TARGET (`node` + `fingerprint`): the span is resolved through the
+ *   GRAPH's node (Function/Locate - the AST source), the node's path must be
+ *   the operation's path, and the content-derived fingerprint of the span is
+ *   VERIFIED against the current text before anything is written. A mismatch
+ *   refuses with `rejected <path> (fingerprint mismatch)` - the file changed
+ *   under the caller's node and the operation never guesses. When the graph
+ *   is absent (or does not know the node) the caller's explicit span is the
+ *   fallback, and the fingerprint is still verified.
+ * - a TEXTUAL SPAN (`startLine`/`endLine` only): the pre-AST form, unchanged.
+ *
+ * The span is 1-based and inclusive; the replacement text replaces the span's
+ * lines exactly (an empty text deletes the span). The span guard: the span
+ * must be within the file and no wider than config `maxBlockLines` - a
+ * whole-file replacement smuggled in as a "block" op is rejected, never
+ * applied. The publish goes through Function/Publish (the version fence).
+ */
 const Refuse = (State: State, Path: string, Reason: string): Reply => {
 	State.Factory.Append(State, `rejected ${Path} (${Reason})`);
 	return { status: "rejected", detail: Reason, version: undefined };

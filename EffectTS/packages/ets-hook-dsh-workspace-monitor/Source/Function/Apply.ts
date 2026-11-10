@@ -1,3 +1,10 @@
+import type { Context } from "@deepseek-ai/cordis";
+import Watch from "@Function/Watch.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
+
 /**
  * @module Apply
  *
@@ -5,6 +12,7 @@
  * activation proof, the fs/observed listener and the test probe attachment.
  *
  * @remarks
+ *
  * The contract is Documentation/Plans/Workspace-Family/MONITOR.md.
  *
  * THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default
@@ -15,13 +23,6 @@
  * silently kills event delivery). The test probe is the
  * `ctx.__hookDshWorkspaceMonitorState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import Watch from "@Function/Watch.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
-
 /**
  * Unwrap one possibly-volatile config cell (a `{ get }` reference or value).
  */

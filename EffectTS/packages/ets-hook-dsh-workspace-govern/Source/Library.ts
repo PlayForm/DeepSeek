@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +9,7 @@
  * (@playform/hook-dsh-workspace-govern).
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` + `export
  * const Config` + `export const inject` + `export default { name, apply,
  * Config, inject }` - the ONLY named exports in the tree (cordis requires
@@ -49,10 +54,6 @@
  * (Function/Service) and is registered from apply - the same posture the
  * workspace-observe hook uses.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "hook-dsh-workspace-govern";
 
 /**

@@ -1,13 +1,3 @@
-// Source/Test/Factory-Wiring/Test.ts - one singular test: the factory wiring
-// (the silence/sync contract, the real factory instance with the P9
-// probe-once seam, the chain pass through Furnace.Continue's Inflight
-// lifecycle, the write through Furnace.GuardedWrite's signal + P4 fence, the
-// keep-list through Furnace.ResolvePolicy, the attach P5 domain drain, the
-// g1 gates through Furnace.Gate's log-nothing contract, and the ledger
-// prefix composed by the factory's Append).
-// Runs standalone (`node Target/Test/Factory-Wiring/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-cargo-governor.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -29,6 +19,25 @@ import {
 	SeamStub,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the factory wiring.
+ *
+ * @remarks
+ *
+ * The test covers the silence/sync contract, the real factory instance with
+ * the P9 probe-once seam, the chain pass through Furnace.Continue's Inflight
+ * lifecycle, the write through Furnace.GuardedWrite's signal + P4 fence, the
+ * keep-list through Furnace.ResolvePolicy, the attach P5 domain drain, the
+ * g1 gates through Furnace.Gate's log-nothing contract, and the ledger
+ * prefix composed by the factory's Append.
+ *
+ * Runs standalone (`node Target/Test/Factory-Wiring/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-cargo-governor.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

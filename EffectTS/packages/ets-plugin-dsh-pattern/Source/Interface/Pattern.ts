@@ -5,6 +5,7 @@
  * node kinds bound to one intent label.
  *
  * @remarks
+ *
  * PATTERN-GRAPH-PLUGIN.md section 2, the behavior graph. This interface keeps
  * the v1 serializable projection: plain strings, globs and numbers, so a
  * pattern can come from the static catalog, from a host pack, or later from

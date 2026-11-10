@@ -5,6 +5,7 @@
  * contained continuation, re-exported from the factory's named type exports.
  *
  * @remarks
+ *
  * The v0.1.1 declaration fix made the structural mirror unnecessary - the
  * factory calls it exactly once per continuation with: `current` the raw file
  * text (null when the read failed; the module decodes inside), `section` the

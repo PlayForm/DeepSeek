@@ -1,9 +1,3 @@
-// Source/Test/Wiring-And-Stamps/Test.ts - the wiring and the recorder: the
-// loader contract (apply returns nothing), the IDLE-forever cold mount, the
-// root-context registration with the distinct root identity, the service
-// registered from apply, the activation proof, the stamp recording (the
-// monotonic sequence, the event version, the origin), the absent
-// observation, and the fail-loud validation.
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -18,7 +12,22 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * The wiring and the recorder of the observe hook.
+ *
+ * @remarks
+ *
+ * The folder proves the loader contract (apply returns nothing), the
+ * IDLE-forever cold mount, the root-context registration with the distinct
+ * root identity, the service registered from apply, the activation proof,
+ * the stamp recording (the monotonic sequence, the event version, the
+ * origin), the absent observation, and the fail-loud validation.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = (): any => {
 	rm();
 	const Run = Make(Validate({ logFile: Ledger, enabled: true }));

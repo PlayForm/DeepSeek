@@ -1,3 +1,16 @@
+import type { FsTarget, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
+import type State from "../Interface/State.js";
+import { Context, Effect, Layer } from "effect";
+import { type Over } from "../Function/Write.js";
+declare const Write_base: Context.ServiceClass<Write, "dsh.factory.Write", {
+    /**
+     * The one shared write executor: the Over bundle
+     * (intent/signal/policy/actor/observe/stash/transform) resolved inside
+     * the effect. Fails with the underlying seam's error (unknown) - the
+     * callers own containment.
+     */
+    write(State: State, Target: FsTarget, Content: string, Over?: Over): Effect.Effect<FsWriteOutcome, unknown>;
+}>;
 /**
  * @module Write
  *
@@ -5,6 +18,7 @@
  * Library's `Write` and `GuardedWrite` methods.
  *
  * @remarks
+ *
  * The family's one shared write executor - the Over bundle, the P4 fence, the
  * Stash pre-registration, the root-emit with the wrapped-actor marker and the
  * observe flag - stays one implementation: the effect body is
@@ -27,19 +41,6 @@
  * what honors it - the executor never mutates an actor, so the Gate matrix
  * and the emitted events stay byte-identical.
  */
-import type { FsTarget, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
-import type State from "../Interface/State.js";
-import { Context, Effect, Layer } from "effect";
-import { type Over } from "../Function/Write.js";
-declare const Write_base: Context.ServiceClass<Write, "dsh.factory.Write", {
-    /**
-     * The one shared write executor: the Over bundle
-     * (intent/signal/policy/actor/observe/stash/transform) resolved inside
-     * the effect. Fails with the underlying seam's error (unknown) - the
-     * callers own containment.
-     */
-    write(State: State, Target: FsTarget, Content: string, Over?: Over): Effect.Effect<FsWriteOutcome, unknown>;
-}>;
 export declare class Write extends Write_base {
 }
 export declare const layer: () => Layer.Layer<Write>;

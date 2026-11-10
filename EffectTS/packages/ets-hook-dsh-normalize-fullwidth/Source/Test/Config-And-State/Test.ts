@@ -1,10 +1,3 @@
-// Source/Test/Config-And-State/Test.ts - one singular test: the Run-1
-// defaults - the volatile config cells, the schema defaults, the listener
-// registration posture, the State wiring and the byte-exact activation line.
-// Runs standalone (`node Target/Test/Config-And-State/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Smoke of @playform/ets-hook-dsh-normalize-fullwidth: the fake ctx + the REAL
-// factory + the REAL fullwidth apply (the seams live in ../Harness.js).
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -17,6 +10,23 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The singular Run-1 defaults test.
+ *
+ * @remarks
+ *
+ * Run 1 covers the volatile config cells, the schema defaults, the listener
+ * registration posture, the State wiring and the byte-exact activation line.
+ *
+ * The file runs standalone (`node Target/Test/Config-And-State/Test.js`) and
+ * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * It smokes @playform/ets-hook-dsh-normalize-fullwidth: the fake ctx plus
+ * the REAL factory plus the REAL fullwidth apply (the seams live in
+ * `../Harness.js`).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

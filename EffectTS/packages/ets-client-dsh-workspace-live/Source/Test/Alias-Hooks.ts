@@ -1,25 +1,34 @@
-// Source/Test/Alias-Hooks.ts - the module-resolution hooks for the
-// workspace-live client half's smoke suite. The built client half
-// (Target/Client.js, Target/Function/Client.js, Target/Library.js) keeps
-// the source aliases `@Function/*` and `@Variable/*` external (bundle:
-// false), so a plain Node run cannot import it without help. This hook
-// maps the aliases back onto the real built Target (and the real JSON
-// dictionaries, which the transpile-only plugin build does not copy into
-// Target) so the suite loads the REAL built client code - never a mock
-// (the smoke-writing law).
-//
-// The mapping is rooted at the package root (the parentURL of the
-// importing Target file, cut at its `/Target/` marker). Everything else
-// (react, schemastery, node builtins, relative imports) falls through to
-// the default resolver untouched.
-//
-// Registered with `module.registerHooks` (the in-thread hook API), so the
-// registration is synchronous and applies to the dynamic imports the
-// Harness performs right after loading this module.
 import * as FileSystem from "node:fs";
 import * as Module from "node:module";
 
-/** The package-root URL of the module currently resolving an alias. */
+/**
+ * @module Alias-Hooks
+ *
+ * The module-resolution hooks for the workspace-live client half's smoke
+ * suite.
+ *
+ * @remarks
+ *
+ * The built client half (Target/Client.js, Target/Function/Client.js,
+ * Target/Library.js) keeps the source aliases `@Function/*` and
+ * `@Variable/*` external (bundle: false), so a plain Node run cannot import
+ * it without help. This hook maps the aliases back onto the real built
+ * Target (and the real JSON dictionaries, which the transpile-only plugin
+ * build does not copy into Target) so the suite loads the REAL built client
+ * code - never a mock (the smoke-writing law).
+ *
+ * The mapping is rooted at the package root (the parentURL of the
+ * importing Target file, cut at its `/Target/` marker). Everything else
+ * (react, schemastery, node builtins, relative imports) falls through to
+ * the default resolver untouched.
+ *
+ * Registered with `module.registerHooks` (the in-thread hook API), so the
+ * registration is synchronous and applies to the dynamic imports the
+ * Harness performs right after loading this module.
+ */
+/**
+ * The package-root URL of the module currently resolving an alias.
+ */
 const Root = (Context: any): string => {
 	const Parent = String(Context.parentURL ?? "");
 	const Marker = Parent.indexOf("/Target/");

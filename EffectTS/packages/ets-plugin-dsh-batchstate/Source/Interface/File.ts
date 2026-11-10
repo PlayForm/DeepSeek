@@ -1,4 +1,7 @@
 import type Entry from "@Interface/Entry.js";
+import type Gate from "@Interface/Gate.js";
+import type Member from "@Interface/Member.js";
+
 /**
  * @module File
  *
@@ -7,17 +10,12 @@ import type Entry from "@Interface/Entry.js";
  * gates.
  *
  * @remarks
+ *
  * ONE shape, TWO sources: the JSON fallback's file (Function/Recover reads
  * it) and the KV domain's four tables (Function/Storage projects them onto
  * it), so the recovery (Function/Restore) is written once and both stores
  * feed it.
  */
-import type Entry from "@Interface/Entry.js";
-import type Gate from "@Interface/Gate.js";
-import type Gate from "@Interface/Gate.js";
-import type Member from "@Interface/Member.js";
-import type Member from "@Interface/Member.js";
-
 /**
  * The persisted state shape both stores project onto.
  */

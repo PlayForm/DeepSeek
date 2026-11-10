@@ -4,6 +4,7 @@
  * The gate's output (plan section 2, BatchDecision).
  *
  * @remarks
+ *
  * Produced by the decision workflow (hook-dsh-batch-decision); the ingester requires it
  * before applying anything.
  */

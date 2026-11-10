@@ -1,9 +1,3 @@
-// Source/Test/Wiring-And-Lines/Test.ts - the wiring and the recorder: the
-// loader contract (apply returns nothing), the IDLE-forever cold mount, the
-// root-context registration with the distinct root identity, the service
-// registered from apply, the activation proof, the OutcomeEvidence recording
-// (the monotonic sequence, the parent pointer, success vs failure), the
-// guard chain, the malformed-event containment, and the fail-loud validation.
 import assert from "node:assert/strict";
 import {
 	Boot,
@@ -21,7 +15,23 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * The singular test of the wiring and the recorder.
+ *
+ * @remarks
+ *
+ * The wiring covers the loader contract (apply returns nothing), the
+ * IDLE-forever cold mount, the root-context registration with the distinct
+ * root identity, the service registered from apply, the activation proof,
+ * and the fail-loud validation. The recorder covers the OutcomeEvidence
+ * recording (the monotonic sequence, the parent pointer, success vs
+ * failure), the guard chain, and the malformed-event containment.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = async (Config: Record<string, unknown> = {}): Promise<any> => {
 	rm();
 	const Run = Make(Validate({ logFile: Ledger, enabled: true, ...Config }));

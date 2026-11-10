@@ -1,9 +1,15 @@
+import * as FileSystem from "node:fs";
+import { join as Join, dirname as Parent } from "node:path";
+
+import type State from "@Interface/State.js";
+
 /**
  * @module Resolve
  *
  * Resolves the host-side update-policy path.
  *
  * @remarks
+ *
  * Order: the configured global policyFile -> the file's own directory ->
  * co-located with the discovered registry -> "" (the built-in default, handled
  * inside the update job when no policy file resolves).
@@ -13,11 +19,6 @@
  * same exemption as Function/Discover. The governed manifest is never touched
  * here.
  */
-import * as FileSystem from "node:fs";
-import { join as Join, dirname as Parent } from "node:path";
-
-import type State from "@Interface/State.js";
-
 export default (State: State, Dir: string, Found: string | null): string => {
 	switch (true) {
 		case !!State.Policy && FileSystem.existsSync(State.Policy):

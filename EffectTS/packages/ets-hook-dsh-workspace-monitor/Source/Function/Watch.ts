@@ -1,3 +1,10 @@
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import Classify from "@Function/Classify.js";
+import Clock from "@Function/Clock.js";
+import Sweep from "@Function/Sweep.js";
+import type State from "@Interface/State.js";
+import type WatchEntry from "@Interface/WatchEntry.js";
+
 /**
  * @module Watch
  *
@@ -5,6 +12,7 @@
  * context through the factory's Wire.
  *
  * @remarks
+ *
  * Registration uses the exact `Context.root.on("fs/observed", ...)` posture.
  * The watch form of the monitor role: the listener records the observation
  * into the watch map with a debounce deadline computed from the module's
@@ -26,13 +34,6 @@
  * - the listener NEVER THROWS: the whole body is one try/catch - a malformed
  *   event is caught and ledgered as `failed <path> (<reason>)`.
  */
-import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
-import Classify from "@Function/Classify.js";
-import Clock from "@Function/Clock.js";
-import Sweep from "@Function/Sweep.js";
-import type State from "@Interface/State.js";
-import type WatchEntry from "@Interface/WatchEntry.js";
-
 export default (
 	State: State,
 	Target: FsTarget | undefined,

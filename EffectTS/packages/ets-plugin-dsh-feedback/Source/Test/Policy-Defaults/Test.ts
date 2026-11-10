@@ -1,13 +1,22 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the
-// feedback member: the shared block's defaults in the schema and on the
-// built State (`State.Config.policy` - the class form has no factory State),
-// the override, and the passive-collector posture (record/suggest automatic,
-// the write path never taken).
 import assert from "node:assert/strict";
 
 import { Check, Finish, Ledger, Make, MakeCounter, Validate } from "../Harness.js";
 
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * @module Test
+ *
+ * THE POLICY BLOCK (D6) on the feedback member.
+ *
+ * @remarks
+ *
+ * The folder proves the shared block's defaults in the schema and on the
+ * built State (`State.Config.policy` - the class form has no factory
+ * State), the override, and the passive-collector posture (record/suggest
+ * automatic, the write path never taken).
+ */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",

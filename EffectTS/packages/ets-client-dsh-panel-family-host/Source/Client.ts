@@ -1,17 +1,18 @@
+import type { Context } from "@deepseek-ai/cordis";
+import ClientApply from "@Function/Client.js";
+
 /**
  * @module Client
  *
  * The client half entry of @playform/ets-client-dsh-panel-family-host.
  *
  * @remarks
+ *
  * The built `./client` export; the module system serves it as a lazy-CJS
  * factory. The named `inject` (the harness's Remote gateway) and the named
  * `apply(ctx)`; the body lives in Function/Client.ts - this entry is wiring
  * only.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import ClientApply from "@Function/Client.js";
-
 /**
  * Required client service: the harness's Remote gateway face.
  */

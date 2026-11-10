@@ -1,3 +1,14 @@
+import type { Context } from "@deepseek-ai/cordis";
+import Observe from "@Function/Observe.js";
+import ServiceClass from "@Function/Service.js";
+import Storage from "@Function/Storage.js";
+import * as Tools from "@Function/Tools.js";
+import Validate from "@Function/Validate.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
+
 /**
  * @module Apply
  *
@@ -6,6 +17,7 @@
  * the two tools and the own P5-style storage effect.
  *
  * @remarks
+ *
  * The service (Function/Service - `workspaceOperate`) is constructed here so
  * `ctx.workspaceOperate` resolves. The fence tracker rides the factory's
  * Wire on the ROOT context - the staleness rule's data source, silent by
@@ -23,17 +35,6 @@
  * silently kills event delivery). The test probe is the
  * `ctx.__hookDshWorkspaceOperateState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import Observe from "@Function/Observe.js";
-import ServiceClass from "@Function/Service.js";
-import Storage from "@Function/Storage.js";
-import * as Tools from "@Function/Tools.js";
-import Validate from "@Function/Validate.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
-
 export default (Context: Context, Options: Config): void => {
 	Validate(Options);
 	const Factory = Context.pluginFactory as unknown as FactoryHandle;

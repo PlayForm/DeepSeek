@@ -1,9 +1,16 @@
+import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
+import type State from "@Interface/State.js";
+import { ToolResults } from "@playform/ets-base-dsh";
+
+import { Rewrite } from "./Normalize.js";
+
 /**
  * @module Overpass
  *
  * The plugin's THIN DELEGATE over the ETS base's tool-results arm factory.
  *
  * @remarks
+ *
  * The generic machinery lives in the base
  * (@playform/ets-base-dsh/Overpass/ToolResults); this file supplies only what
  * makes it THE NORMALIZE-FILE:
@@ -22,12 +29,6 @@
  * Function/Apply's `{ prepend: true }` registration and the import path stay
  * untouched.
  */
-import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
-import type State from "@Interface/State.js";
-import { ToolResults } from "@playform/ets-base-dsh";
-
-import { Rewrite } from "./Normalize.js";
-
 /**
  * The schema-default scopes (the fallback for a hand-built config).
  */

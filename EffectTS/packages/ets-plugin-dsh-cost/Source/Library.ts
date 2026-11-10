@@ -1,9 +1,14 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
  * The entry module of the COST TRACKER (@playform/ets-plugin-dsh-cost).
  *
  * @remarks
+ *
  * THE EXPORT SURFACE AND THE LOADER CONTRACT: `export const name` +
  * `export const apply` + `export const Config` + `export const inject` +
  * `export default { name, apply, Config, inject }` - the ONLY named exports
@@ -28,10 +33,6 @@
  * is the session listeners (the engine lane's capture and flush) and the
  * human commands only.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 /**
  * The plugin's loader name.
  */

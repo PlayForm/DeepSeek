@@ -1,3 +1,9 @@
+import Digest from "@Function/Digest.js";
+import Gate from "@Function/Gate.js";
+import type Batch from "@Interface/Batch.js";
+import type Preview from "@Interface/Preview.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Preview
  *
@@ -5,16 +11,11 @@
  * the intended contents.
  *
  * @remarks
+ *
  * Nothing is written, ever; a caller previews, then commits the same
  * operations, and the applied bytes are verified against the intended
  * content per file (Function/CommitOne).
  */
-import Digest from "@Function/Digest.js";
-import Gate from "@Function/Gate.js";
-import type Batch from "@Interface/Batch.js";
-import type Preview from "@Interface/Preview.js";
-import type State from "@Interface/State.js";
-
 export default async (State: State, Request: Batch): Promise<Preview> => {
 	const Operations = Array.isArray(Request.operations) ? Request.operations : [];
 	const Checked = await Gate(State, Operations);

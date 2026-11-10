@@ -1,3 +1,11 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
+
+import Intent from "./Intent.js";
+import Overpass from "./Overpass.js";
+
 /**
  * @module Apply
  *
@@ -7,6 +15,7 @@
  * State for the smoke probes.
  *
  * @remarks
+ *
  * The State is built through `Factory.State` (the cell unwrap, the shared
  * mappings Ledger<-logFile / Enabled<-log and the module's own fields via
  * the setup `fields` map - factory SCHEME.md section 2.10); the durable
@@ -59,14 +68,6 @@
  * through the merged Events declaration, and the agent-step payload through
  * the harness's own event augmentation.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
-
-import Intent from "./Intent.js";
-import Overpass from "./Overpass.js";
-
 /**
  * The core arm factory's scope-gate adapter (see the header).
  */

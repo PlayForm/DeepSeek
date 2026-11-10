@@ -5,6 +5,7 @@
  * tool-line fallback table, and the traceability one-liner.
  *
  * @remarks
+ *
  * Every template is filled by Function/Compose with a single-pass placeholder
  * scanner: known placeholders are replaced, user data is escaped (`${` ->
  * `$${`) BEFORE insertion, so composed output never gains a NEW unfilled

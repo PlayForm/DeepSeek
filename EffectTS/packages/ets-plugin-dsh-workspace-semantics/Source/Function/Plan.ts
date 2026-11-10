@@ -1,27 +1,36 @@
-// Plan - the rename semantics (Function/Plan), the service's rename(). The
-// rename means different things per format (the .ts symbol vs the .docx
-// displayed text vs the .rs item), so the plan is the ADAPTER's answer: the
-// adapter computes the edits from its reference list plus its own symbol
-// resolution, and an adapter that cannot be certain returns undefined - the
-// refusal-to-guess rule (PITFALLS-LOG: the semantic uncertainty per type).
-// This service never writes a file: the plan goes to the operate proposals.
-//
-// THE DEEPENING COMES FIRST: when a deepener is registered for the extension
-// (Function/Deepen - the harness LSP seam, Function/Lsp) its scope-resolved
-// plan is used when it answers; `undefined` (the seam is absent, has no
-// provider, failed, or found no same-file use site) falls through to the
-// adapter's lexical plan. The ledger line is the same for both - the plan's
-// reach and certainty are the adapter's declared contract.
-//
-// The model is built on demand: an unresolved path resolves first (the plan
-// needs the text and the references).
 import Build from "@Function/Build.js";
 import Select from "@Function/Select.js";
 import type RenamePlan from "@Interface/RenamePlan.js";
 import type Span from "@Interface/Span.js";
 import type State from "@Interface/State.js";
 
-/** The workspace root the deepener's queries resolve against. */
+/**
+ * @module Plan
+ *
+ * The rename semantics, the service's rename().
+ *
+ * @remarks
+ *
+ * The rename means different things per format (the .ts symbol vs the .docx
+ * displayed text vs the .rs item), so the plan is the ADAPTER's answer: the
+ * adapter computes the edits from its reference list plus its own symbol
+ * resolution, and an adapter that cannot be certain returns undefined - the
+ * refusal-to-guess rule (PITFALLS-LOG: the semantic uncertainty per type).
+ * This service never writes a file: the plan goes to the operate proposals.
+ *
+ * THE DEEPENING COMES FIRST: when a deepener is registered for the extension
+ * (Function/Deepen - the harness LSP seam, Function/Lsp) its scope-resolved
+ * plan is used when it answers; `undefined` (the seam is absent, has no
+ * provider, failed, or found no same-file use site) falls through to the
+ * adapter's lexical plan. The ledger line is the same for both - the plan's
+ * reach and certainty are the adapter's declared contract.
+ *
+ * The model is built on demand: an unresolved path resolves first (the plan
+ * needs the text and the references).
+ */
+/**
+ * The workspace root the deepener's queries resolve against.
+ */
 const Root = (State: State): string => (State.Root.length > 0 ? State.Root : process.cwd());
 
 export default async (

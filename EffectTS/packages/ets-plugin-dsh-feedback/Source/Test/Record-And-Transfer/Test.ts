@@ -1,7 +1,3 @@
-// Source/Test/Record-And-Transfer/Test.ts - the council record and the
-// transfer: the constructor wiring, the record with its journal event and
-// the cap, the restore (same agent, newer block), the mechanical Push hop,
-// the no-ops (disabled, same session, chain cap), and the Render format.
 import assert from "node:assert/strict";
 import {
 	Block,
@@ -16,6 +12,18 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The council record and the transfer of the feedback member.
+ *
+ * @remarks
+ *
+ * The folder proves the constructor wiring, the record with its journal
+ * event and the cap, the restore (same agent, newer block), the mechanical
+ * Push hop, the no-ops (disabled, same session, chain cap), and the Render
+ * format.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

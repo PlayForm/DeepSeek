@@ -1,9 +1,13 @@
+import type Options from "../Interface/Options.js";
+import type Pack from "../Interface/Pack.js";
+export default _default;
 /**
  * @module Resolve
  *
  * Runs the layered resolution (D2), the heart of the library.
  *
  * @remarks
+ *
  * The steps:
  *
  * 1. read the repo layer (`<root>/.dsh/pack.yml`) to discover a declared
@@ -20,7 +24,4 @@
  * The merge rules live in `Function/Merge`; the parser decision in
  * `Function/Parse`. The result is a normalized Pack (`Function/Normalize`).
  */
-import type Options from "../Interface/Options.js";
-import type Pack from "../Interface/Pack.js";
-export default _default;
 declare function _default(Root: string, Options?: Options): Pack | undefined;

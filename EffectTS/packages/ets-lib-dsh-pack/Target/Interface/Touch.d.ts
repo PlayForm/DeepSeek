@@ -6,6 +6,7 @@
  * it touched and the tool that touched it.
  *
  * @remarks
+ *
  * Every suggester derives its candidates by folding these instead of reading a
  * literal pack.
  */

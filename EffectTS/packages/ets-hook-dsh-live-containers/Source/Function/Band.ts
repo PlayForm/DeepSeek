@@ -1,9 +1,14 @@
+import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
+import type { CheckResult, MonitorEntry } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Band
  *
  * Renders the monitor stanza's bands byte-exactly from the per-agent monitor state.
  *
  * @remarks
+ *
  * The byte-exact renderer of the monitor stanza (the FILE-MONITOR design section 6 - the
  * C3 implements to these bytes). Pure functions over the per-agent monitor state; no I/O,
  * no eval.
@@ -17,10 +22,6 @@
  * text changes only on the events of the design section 5.2 set (the retirement closing
  * line is the one documented exception - a terminal one-time change).
  */
-import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
-import type { CheckResult, MonitorEntry } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
-
 /**
  * The clean glyph: U+2204 THERE DOES NOT EXIST (the escaped source form).
  */

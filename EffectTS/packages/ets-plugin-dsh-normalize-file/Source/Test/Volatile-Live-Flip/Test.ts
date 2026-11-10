@@ -1,16 +1,19 @@
-// Source/Test/Volatile-Live-Flip/Test.ts - one singular test: the P10
-// volatile live-flip and the files scope gate - the replacement arriving as
-// a hand-built stable volatile cell and being refreshed in place by the
-// factory's loader/volatile-update dispatch (no remount, identity
-// preserved, the next tool call picking up the new value), and the
-// scopes.files gate turning the tool off and back on live.
-// Runs standalone (`node Target/Test/Volatile-Live-Flip/Test.js`) AND under
-// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-plugin-dsh-normalize-file: the fake ctx + the REAL
-// factory + the REAL normalize-file apply, from the Harness.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Ledger } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the P10 volatile live-flip and the files scope gate - the
+ * replacement arriving as a hand-built stable volatile cell and being
+ * refreshed in place by the factory's loader/volatile-update dispatch (no
+ * remount, identity preserved, the next tool call picking up the new value),
+ * and the scopes.files gate turning the tool off and back on live. Runs
+ * standalone (`node Target/Test/Volatile-Live-Flip/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-plugin-dsh-normalize-file: the fake ctx + the REAL factory +
+ * the REAL normalize-file apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

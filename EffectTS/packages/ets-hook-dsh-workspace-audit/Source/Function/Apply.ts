@@ -1,3 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import Observe from "@Function/Observe.js";
+import ServiceClass from "@Function/Service.js";
+import Storage from "@Function/Storage.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
+
 /**
  * @module Apply
  *
@@ -6,6 +16,7 @@
  * the own storage effect.
  *
  * @remarks
+ *
  * The contract is Documentation/Plans/Workspace-Family/AUDIT.md +
  * WORKSPACE-FAMILY-V4-1.md section 2 item 6.
  *
@@ -22,16 +33,6 @@
  * silently kills event delivery). The test probe is the
  * `ctx.__hookDshWorkspaceAuditState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
-import Observe from "@Function/Observe.js";
-import ServiceClass from "@Function/Service.js";
-import Storage from "@Function/Storage.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
  */

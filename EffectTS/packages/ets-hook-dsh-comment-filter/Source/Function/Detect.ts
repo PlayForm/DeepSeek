@@ -1,3 +1,5 @@
+import type Syntax from "@Interface/Syntax.js";
+
 /**
  * @module Detect
  *
@@ -5,6 +7,7 @@
  * Function-shaped leaf: one default export, one table, one rule).
  *
  * @remarks
+ *
  * The strip transform asks Detect for the file's comment/string vocabulary;
  * an UNKNOWN extension returns `undefined`, and Function/Strip then keeps
  * the text block BY IDENTITY - never strip what cannot be parsed. `md`,
@@ -42,8 +45,6 @@
  * scanner treats them as read-only, and one family object is one auditable
  * vocabulary.
  */
-import type Syntax from "@Interface/Syntax.js";
-
 /**
  * The C family's plain dialect: the slash line token plus the slash-star
  * pair.

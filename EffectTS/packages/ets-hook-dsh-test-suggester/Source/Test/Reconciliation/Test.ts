@@ -1,28 +1,3 @@
-// Source/Test/Reconciliation/Test.ts - THE RECONCILIATION (the completion
-// spec's wave 2c re-spec): on a judged call in a package, the package's smoke
-// claims are compared with the tree - the folder READMEs' `## Expected
-// count`, the folders, the suite files, the aggregate runner's roster, and
-// (when the graph is present) its `Test` nodes.
-//
-// The scenarios, against REAL temp package trees:
-//   * a consistent tree logs the clear line ONCE and stays silent (the
-//     documented abstention);
-//   * a drifting tree emits ONE note naming every drifted file and the
-//     expected/actual counts (byte-exact), and the ledger line is byte-exact;
-//   * a folder without a README is named; a README count whose Test.ts is
-//     gone is named; a suite the runner never runs is named;
-//   * the graph-present path names a stale Test node; the graph-absent path
-//     of the same tree does not (an unpopulated graph contributes nothing);
-//   * the gate: the dedupe holds an unchanged signature, the cooldown
-//     suppresses a changed one, and the per-turn cap suppresses the next;
-//   * a package with no Source/Test tree is silent; a foreign workspace is
-//     silent (the gate runs first);
-//   * the reconciliation is READ-ONLY: ZERO ctx.fs operations.
-//
-// The suite tests the DRIFT ROWS and the GRAPH PROBE only. The candidate
-// source is the session history (Function/Apply), and these fixtures seed
-// none and ship no pack, so a consistent tree falls through to the
-// `abstained no-history  0.00` line - never to a pack candidate.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -39,7 +14,44 @@ import {
 	Setup,
 } from "../Harness.js";
 
-/** Write one file under the tree (parents created). */
+/**
+ * @module Test
+ *
+ * THE RECONCILIATION test (the completion spec's wave 2c re-spec): on a
+ * judged call in a package, the package's smoke claims are compared with
+ * the tree.
+ *
+ * @remarks
+ *
+ * The comparison covers the folder READMEs' `## Expected count`, the
+ * folders, the suite files, the aggregate runner's roster, and (when the
+ * graph is present) its `Test` nodes.
+ *
+ * The scenarios, against REAL temp package trees:
+ *   - a consistent tree logs the clear line ONCE and stays silent (the
+ *     documented abstention);
+ *   - a drifting tree emits ONE note naming every drifted file and the
+ *     expected/actual counts (byte-exact), and the ledger line is
+ *     byte-exact;
+ *   - a folder without a README is named; a README count whose Test.ts is
+ *     gone is named; a suite the runner never runs is named;
+ *   - the graph-present path names a stale Test node; the graph-absent
+ *     path of the same tree does not (an unpopulated graph contributes
+ *     nothing);
+ *   - the gate: the dedupe holds an unchanged signature, the cooldown
+ *     suppresses a changed one, and the per-turn cap suppresses the next;
+ *   - a package with no Source/Test tree is silent; a foreign workspace is
+ *     silent (the gate runs first);
+ *   - the reconciliation is READ-ONLY: ZERO ctx.fs operations.
+ *
+ * The suite tests the DRIFT ROWS and the GRAPH PROBE only. The candidate
+ * source is the session history (Function/Apply), and these fixtures seed
+ * none and ship no pack, so a consistent tree falls through to the
+ * `abstained no-history  0.00` line - never to a pack candidate.
+ */
+/**
+ * Write one file under the tree (parents created).
+ */
 const Put = (Root: string, Relative: string, Body = "x"): string => {
 	const Full = Path.join(Root, Relative);
 	FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
@@ -47,7 +59,9 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
-/** A temp workspace root carrying the repo marker and a `package.json`. */
+/**
+ * A temp workspace root carrying the repo marker and a `package.json`.
+ */
 const Workspace = (Prefix: string): string => {
 	const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
 	Put(Root, "Documentation/ARCHIVE-STYLE.md");
@@ -55,16 +69,24 @@ const Workspace = (Prefix: string): string => {
 	return Root;
 };
 
-/** The optional harness service the probe reads (the real shape: get(session)). */
+/**
+ * The optional harness service the probe reads (the real shape: get(session)).
+ */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** The neutral judged probe: no history and no pack, so only the reconciliation can note. */
+/**
+ * The neutral judged probe: no history and no pack, so only the reconciliation can note.
+ */
 const PROBE = { pattern: "zzz" };
 
-/** A README with one declared count. */
+/**
+ * A README with one declared count.
+ */
 const Counted = (Count: number): string => `# Suite\n\n## Expected count\n\n${Count} PASS.\n`;
 
-/** The consistent tree: two counted, suite-bearing, rostered folders. */
+/**
+ * The consistent tree: two counted, suite-bearing, rostered folders.
+ */
 const Consistent = (Root: string): void => {
 	Put(Root, "Source/Test/Alpha/README.md", Counted(4));
 	Put(Root, "Source/Test/Alpha/Test.ts");
@@ -74,7 +96,10 @@ const Consistent = (Root: string): void => {
 	Put(Root, "Target/Test/Beta/Test.js");
 };
 
-/** The drifting tree: a counted-but-suite-less folder, a suite without a README, an unrostered suite. */
+/**
+ * The drifting tree: a counted-but-suite-less folder, a suite without a README, an unrostered
+ * suite.
+ */
 const Drifting = (Root: string): void => {
 	Put(Root, "Source/Test/Alpha/README.md", Counted(4));
 	Put(Root, "Source/Test/Alpha/Test.ts");
@@ -85,7 +110,9 @@ const Drifting = (Root: string): void => {
 	Put(Root, "Source/Test/Epsilon/Test.ts");
 };
 
-/** The graph fake: only the `find` facet the probe uses. */
+/**
+ * The graph fake: only the `find` facet the probe uses.
+ */
 const Graph = (Paths: string[]): { find: () => { path: string }[] } => ({
 	find: () => Paths.map((Path_) => ({ path: Path_ })),
 });

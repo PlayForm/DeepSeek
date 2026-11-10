@@ -1,13 +1,3 @@
-/**
- * @module Present
- *
- * Decides whether a directory can be a workspace at all.
- *
- * @remarks
- * A candidate carries a repo layer, a user layer for its slug, or the default
- * signature. The locator skips every other ancestor without loading a pack, so
- * the walk stays cheap on a deep path.
- */
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 
@@ -17,6 +7,17 @@ import Repository from "./Repository.js";
 import Slug from "./Slug.js";
 import User from "./User.js";
 
+/**
+ * @module Present
+ *
+ * Decides whether a directory can be a workspace at all.
+ *
+ * @remarks
+ *
+ * A candidate carries a repo layer, a user layer for its slug, or the default
+ * signature. The locator skips every other ancestor without loading a pack, so
+ * the walk stays cheap on a deep path.
+ */
 export default (Root: string, Home: string): boolean =>
 	Pick(Repository(Root)) !== undefined ||
 	Pick(User(Slug(Root), Home)) !== undefined ||

@@ -1,10 +1,3 @@
-// Source/Test/Tables/Test.ts - one singular test: the six normalization tables
-// carry their exact contents - the four character classes (Dashes, Ellipsis,
-// Spaces, Invisible) with the g flag and their pattern sources verbatim, and
-// the two maps (Quotes, Fullwidth) with their exact entries.
-// Runs standalone (`node Target/Test/Tables/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-lib-dsh-core: the REAL built entry only.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter } from "../Harness.js";
 import {
@@ -16,6 +9,21 @@ import {
 	Spaces,
 } from "../../../Target/Library.js";
 
+/**
+ * @module Test
+ *
+ * The six normalization tables carry their exact contents.
+ *
+ * @remarks
+ *
+ * The singular test proves the four character classes (Dashes, Ellipsis,
+ * Spaces, Invisible) with the g flag and their pattern sources verbatim, and
+ * the two maps (Quotes, Fullwidth) with their exact entries.
+ *
+ * Runs standalone (`node Target/Test/Tables/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-lib-dsh-core: the REAL built entry only.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

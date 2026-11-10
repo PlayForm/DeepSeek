@@ -1,3 +1,6 @@
+import type Mark from "@Interface/Mark.js";
+import type Syntax from "@Interface/Syntax.js";
+
 /**
  * @module Scan
  *
@@ -6,6 +9,7 @@
  * removed out.
  *
  * @remarks
+ *
  * It is the only place in the plugin that decides "is this really a
  * comment", and its bias is stated once, loudly:
  *
@@ -41,9 +45,6 @@
  *
  * Pure per line: the only mutation is the caller's Mark (the carry state).
  */
-import type Mark from "@Interface/Mark.js";
-import type Syntax from "@Interface/Syntax.js";
-
 /**
  * The end index of a normal quoted string, or -1 (backslash escapes).
  */

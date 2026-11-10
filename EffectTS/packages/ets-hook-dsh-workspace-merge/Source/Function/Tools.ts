@@ -1,16 +1,3 @@
-/**
- * @module Tools
- *
- * The merge hook's one model surface: the `workspace_merge` tool.
- *
- * @remarks
- * The live-containers MonitorTools idiom: the tool lives inside its owning
- * hook (MERGE.md; the ccr registers ccr_retrieve). The commit action is
- * the only write path the hook exposes, and it writes only through the
- * factory's Write executor with an explicit version fence.
- *
- *   workspace_merge  - preview | commit | batch | list | stats.
- */
 import { defineTool } from "@deepseek-ai/dsh-tools";
 import type { JsonValue } from "@deepseek-ai/dsh-util-values";
 import Commit from "@Function/Commit.js";
@@ -18,6 +5,20 @@ import PreviewFn from "@Function/Preview.js";
 import * as Query from "@Function/Query.js";
 import type State from "@Interface/State.js";
 
+/**
+ * @module Tools
+ *
+ * The merge hook's one model surface: the `workspace_merge` tool.
+ *
+ * @remarks
+ *
+ * The live-containers MonitorTools idiom: the tool lives inside its owning
+ * hook (MERGE.md; the ccr registers ccr_retrieve). The commit action is
+ * the only write path the hook exposes, and it writes only through the
+ * factory's Write executor with an explicit version fence.
+ *
+ *   workspace_merge  - preview | commit | batch | list | stats.
+ */
 const Read = (Args: unknown, Key: string): unknown =>
 	Args !== null && typeof Args === "object" ? (Args as Record<string, unknown>)[Key] : undefined;
 

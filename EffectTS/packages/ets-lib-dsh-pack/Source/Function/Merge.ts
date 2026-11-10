@@ -1,9 +1,14 @@
+import type Family from "../Interface/Family.js";
+import type Pack from "../Interface/Pack.js";
+import type Target from "../Interface/Target.js";
+
 /**
  * @module Merge
  *
  * Applies the pack merge rules (D2, documented in SCHEME.md).
  *
  * @remarks
+ *
  * Families merge BY ID (the domain-qualified key): the override's DECLARED
  * scalar fields replace the base family's; its signals array replaces; its
  * targets merge BY PATH (a same-path target replaces the base target in
@@ -19,10 +24,6 @@
  * The override is the LATER layer: the extends chain is the base, then the
  * user layer, then the repo layer.
  */
-import type Family from "../Interface/Family.js";
-import type Pack from "../Interface/Pack.js";
-import type Target from "../Interface/Target.js";
-
 /**
  * Merges two target lists by path.
  */

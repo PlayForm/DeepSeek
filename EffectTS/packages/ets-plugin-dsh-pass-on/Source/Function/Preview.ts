@@ -1,13 +1,14 @@
+import type Preview from "../Interface/Preview.js";
+
 /**
  * @module Preview
  *
  * The bounded before/after per target: the diff region, not the full files.
  *
  * @remarks
+ *
  * Plan section 3. Each side is capped at maxPreviewBytes per entry.
  */
-import type Preview from "../Interface/Preview.js";
-
 /**
  * Bound one side of the preview.
  */

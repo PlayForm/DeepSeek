@@ -1,11 +1,16 @@
-// FileTable - the Files view table: one row per file the conversation
-// touched, the ten columns of the research's section 5, the share bar that
-// puts this conversation over the file's lifetime, and the totals row. A
-// file row expands into the conversations that contributed to that file's
-// cost: the toggle in the File cell fetches the engine's contribution read
-// the first time the row opens and caches the answer per path, so a reopen
-// renders the same rows without a second request. The expansion is the
-// table's own state - the view above it never learns which row is open.
+/**
+ * @module FileTable
+ *
+ * The Files view table: one row per file the conversation touched, the ten columns of the
+ * research's section 5, the share bar that puts this conversation over the file's lifetime, and
+ * the totals row.
+ *
+ * @remarks
+ * A file row expands into the conversations that contributed to that file's cost: the toggle in
+ * the File cell fetches the engine's contribution read the first time the row opens and caches the
+ * answer per path, so a reopen renders the same rows without a second request. The expansion is
+ * the table's own state - the view above it never learns which row is open.
+ */
 import { Tooltip } from "@deepseek-ai/dsh-client-ui-primitives";
 import Count from "@Function/Count";
 import { Contributions } from "@Function/Fetch";
@@ -20,9 +25,11 @@ import Dash from "@Variable/Dash";
 import EN_DICTIONARY from "@Variable/Locale-en.json";
 import { createElement, Fragment, useState } from "react";
 
-// The one column definition: the names are the shipped locale keys under
-// files.column, in the shipped order, and the width record beside it carries
-// the shipped column widths. A new column is one tuple entry plus its width.
+/**
+ * The one column definition: the names are the shipped locale keys under `files.column`, in the
+ * shipped order, and the width record beside it carries the shipped column widths. A new column is
+ * one tuple entry plus its width.
+ */
 const COLUMNS = [
 	"file",
 	"touches",
@@ -51,9 +58,10 @@ const COLUMN_WIDTHS: Record<Column, number> = {
 	verdict: 6,
 };
 
-// The stage tone map the turn and step rows share: the same palette, keyed
-// by the same stage words, so a file's first stage reads as the same color
-// in every view.
+/**
+ * The stage tone map the turn and step rows share: the same palette, keyed by the same stage
+ * words, so a file's first stage reads as the same color in every view.
+ */
 const StageTones: Record<string, number> = {
 	discover: 5,
 	read: 0,
@@ -71,8 +79,10 @@ const S = (Value: unknown): string => (typeof Value === "string" ? Value : "");
 const Epoch = (Value: unknown): number | null =>
 	typeof Value === "number" && Number.isFinite(Value) ? Value : null;
 
-// StageList - one row's stage set, read defensively: the envelope may carry
-// no stage list at all, and a stage that is not a string is not a stage.
+/**
+ * StageList - one row's stage set, read defensively: the envelope may carry no stage list at all,
+ * and a stage that is not a string is not a stage.
+ */
 const StageList = (Value: unknown): readonly string[] =>
 	Array.isArray(Value) ? Value.filter((Item: unknown) => typeof Item === "string") : [];
 
@@ -81,14 +91,18 @@ const BaseName = (Path: string): string => {
 	return Cut === -1 ? Path : Path.slice(Cut + 1);
 };
 
-// ShortSession - the session id's short tail: the last eight characters of
-// an id the ledger stored no title for, prefixed with an ellipsis when the
-// id is longer, so the conversation cell stays a column and not a paragraph.
+/**
+ * ShortSession - the session id's short tail: the last eight characters of an id the ledger stored
+ * no title for, prefixed with an ellipsis when the id is longer, so the conversation cell stays a
+ * column and not a paragraph.
+ */
 const ShortSession = (SessionId: string): string =>
 	SessionId.length <= 8 ? SessionId : `...${SessionId.slice(-8)}`;
 
-// Models - one contribution row's model list, read defensively: the rows
-// cross the route as JSON, and an entry that is not a string is not a model.
+/**
+ * Models - one contribution row's model list, read defensively: the rows cross the route as JSON,
+ * and an entry that is not a string is not a model.
+ */
 const Models = (Value: unknown): readonly string[] =>
 	Array.isArray(Value) ? Value.filter((Item: unknown) => typeof Item === "string") : [];
 
@@ -96,15 +110,19 @@ const ToneClass = (Tone: number): string => `playform-cost-tone${Tone}`;
 
 const StageTone = (Stage: string): number => StageTones[Stage] ?? 7;
 
-// Word - the shipped stage.* and files.verdict.* words; a word the dictionary
-// does not carry is shown as the ledger spelled it rather than as a key.
+/**
+ * Word - the shipped `stage.*` and `files.verdict.*` words; a word the dictionary does not carry
+ * is shown as the ledger spelled it rather than as a key.
+ */
 const Word = (Key: string, Fallback: string, t: Translate): string => {
 	const Known = (EN_DICTIONARY as unknown as Record<string, string>)[Key];
 	return Known === undefined ? Fallback : t(Key);
 };
 
-// VerdictClass - the one tone a verdict carries: a change that survived, a
-// change that was reverted, and the neutral read.
+/**
+ * VerdictClass - the one tone a verdict carries: a change that survived, a change that was
+ * reverted, and the neutral read.
+ */
 const VerdictClass = (Verdict: string): string | null => {
 	switch (true) {
 		case Verdict === "changed":
@@ -116,16 +134,20 @@ const VerdictClass = (Verdict: string): string | null => {
 	}
 };
 
-// ContributionEntry - one file's contribution read as the table holds it: the
-// phase the expanded row renders (the fetch is lazy, so an open row starts in
-// "loading") and the rows the answer carried.
+/**
+ * ContributionEntry - one file's contribution read as the table holds it: the phase the expanded
+ * row renders (the fetch is lazy, so an open row starts in "loading") and the rows the answer
+ * carried.
+ */
 type ContributionEntry = {
 	Phase: "loading" | "ready" | "failed";
 	Rows: readonly CostContributionRow[];
 };
 
-// The contribution sub-table's one column definition: the names are the
-// locale keys under files.contributions.column, in the shipped order.
+/**
+ * The contribution sub-table's one column definition: the names are the locale keys under
+ * `files.contributions.column`, in the shipped order.
+ */
 const CONTRIBUTION_COLUMNS = [
 	"conversation",
 	"calls",
@@ -136,8 +158,10 @@ const CONTRIBUTION_COLUMNS = [
 	"models",
 ] as const;
 
-// ContributionLabel - the conversation's stored title, or the session id's
-// short tail when the ledger stored none.
+/**
+ * ContributionLabel - the conversation's stored title, or the session id's short tail when the
+ * ledger stored none.
+ */
 const ContributionLabel = (Row: CostContributionRow): string => {
 	const Title = S(Row.title);
 	switch (true) {
@@ -148,8 +172,10 @@ const ContributionLabel = (Row: CostContributionRow): string => {
 	}
 };
 
-// ModelsCell - the contribution's models: the first as one pill and the
-// count of the further ones beside it; the tooltip names every model.
+/**
+ * ModelsCell - the contribution's models: the first as one pill and the count of the further ones
+ * beside it; the tooltip names every model.
+ */
 const ModelsCell = (Cell: string, List: readonly string[]): ReturnType<typeof createElement> => {
 	switch (true) {
 		case List.length === 0:
@@ -178,11 +204,12 @@ const ModelsCell = (Cell: string, List: readonly string[]): ReturnType<typeof cr
 	}
 };
 
-// ContributionRow - the expanded row under one file: the head naming the
-// file, then the conversations that paid for it - the conversation, its
-// calls, the direct and amortized money, their total, its share of the
-// file's lifetime total, and its models - with one line for the loading, the
-// failed, and the empty read.
+/**
+ * ContributionRow - the expanded row under one file: the head naming the file, then the
+ * conversations that paid for it - the conversation, its calls, the direct and amortized money,
+ * their total, its share of the file's lifetime total, and its models - with one line for the
+ * loading, the failed, and the empty read.
+ */
 const ContributionRow = (
 	Path: string,
 	Entry: ContributionEntry | undefined,
@@ -339,9 +366,10 @@ const MoneyCell = (
 		createElement("span", { className: "playform-cost-money" }, Price(Value, Currency)),
 	);
 
-// TouchPill - one compact kind pill: the kind's locale word and its count
-// through Count. No tone dot: three of these share a narrow column, and the
-// word is what tells them apart.
+/**
+ * TouchPill - one compact kind pill: the kind's locale word and its count through Count. No tone
+ * dot: three of these share a narrow column, and the word is what tells them apart.
+ */
 const TouchPill = (Key: string, Value: number, t: Translate): ReturnType<typeof createElement> =>
 	createElement(
 		"span",
@@ -349,8 +377,10 @@ const TouchPill = (Key: string, Value: number, t: Translate): ReturnType<typeof 
 		`${t(Key)} ${Count(Value)}`,
 	);
 
-// ShareCell - this conversation over the file's lifetime: a linear bar (a
-// share is a proportion, not a magnitude) with the percentage beside it.
+/**
+ * ShareCell - this conversation over the file's lifetime: a linear bar (a share is a proportion,
+ * not a magnitude) with the percentage beside it.
+ */
 const ShareCell = (
 	Cell: string,
 	Total: number,
@@ -386,8 +416,10 @@ const ShareCell = (
 	);
 };
 
-// StageCell - the first stage as one pill, with the count of the further
-// stages beside it; the tooltip names every stage the file reached.
+/**
+ * StageCell - the first stage as one pill, with the count of the further stages beside it; the
+ * tooltip names every stage the file reached.
+ */
 const StageCell = (
 	Cell: string,
 	Stages: readonly string[],
@@ -431,8 +463,10 @@ const StageCell = (
 	}
 };
 
-// VerdictCell - the session outcome as one word, toned for a change that
-// survived and for a change that was reverted.
+/**
+ * VerdictCell - the session outcome as one word, toned for a change that survived and for a change
+ * that was reverted.
+ */
 const VerdictCell = (
 	Cell: string,
 	Verdict: string,
@@ -457,8 +491,10 @@ const VerdictCell = (
 	}
 };
 
-// LinesCell - the change contribution: the added lines, the removed lines,
-// and a dash when the conversation changed no line at all.
+/**
+ * LinesCell - the change contribution: the added lines, the removed lines, and a dash when the
+ * conversation changed no line at all.
+ */
 const LinesCell = (
 	Cell: string,
 	Added: number,

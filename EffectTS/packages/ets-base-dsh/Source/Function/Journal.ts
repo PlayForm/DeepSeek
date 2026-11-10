@@ -1,3 +1,6 @@
+import type State from "@Interface/State.js";
+import { Effect } from "effect";
+
 /**
  * @module Journal
  *
@@ -5,6 +8,7 @@
  * optional storage journal.
  *
  * @remarks
+ *
  * The effect body behind the JournalService. The call sites are the module's
  * lifecycle events: activated, excluded, governed/pinned, dispatched,
  * update-failed. Purely best-effort: the sink is one of the three routing
@@ -41,9 +45,6 @@
  * captured instance - the shell resets them between scenarios, so a snapshot
  * would leak records.
  */
-import type State from "@Interface/State.js";
-import { Effect } from "effect";
-
 export default (
 	Factory: {
 		SharedJournal?: (Event: string, Path: string, Detail: string, At?: number) => void;

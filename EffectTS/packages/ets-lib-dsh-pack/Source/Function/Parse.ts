@@ -4,6 +4,7 @@
  * Parses the pack schema with a STRICT YAML-SUBSET parser.
  *
  * @remarks
+ *
  * The workspace does not carry the `yaml` package in its own dependency graph
  * (the symbol only resolves through the enclosing machine's pnpm store, which
  * a checkout elsewhere would not have), so the library stays dependency-light

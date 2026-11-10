@@ -6,6 +6,7 @@ import type State from "@Interface/State.js";
  * Handles one collected stream chunk.
  *
  * @remarks
+ *
  * The chunk becomes the ledger line (the smoke's arbiter) and, when a job ring
  * is attached (P1), the same text goes into the ring.
  */

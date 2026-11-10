@@ -8,6 +8,7 @@
  * arguments cannot measure.
  *
  * @remarks
+ *
  * The marker is "removal-unknown" when the call carries one side only - a
  * write supplies the new content and never the before content, and a batch
  * operation that replaces or removes a match carries the matched text only

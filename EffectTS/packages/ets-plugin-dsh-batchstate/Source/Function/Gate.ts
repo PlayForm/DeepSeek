@@ -1,3 +1,8 @@
+import Emit from "@Function/Emit.js";
+import Persist from "@Function/Persist.js";
+import type { GateState } from "@Interface/Gate.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Gate
  *
@@ -6,6 +11,7 @@
  * compiler renders).
  *
  * @remarks
+ *
  * The parent (the lane that ran the gate) reports it; the board holds it
  * and the compiled context carries it to every lane.
  *
@@ -14,11 +20,6 @@
  * instead of painting a wrong arbiter truth. The write is ledgered,
  * persisted and emitted after the state moved.
  */
-import Emit from "@Function/Emit.js";
-import Persist from "@Function/Persist.js";
-import type { GateState } from "@Interface/Gate.js";
-import type State from "@Interface/State.js";
-
 /**
  * The closed gate-state vocabulary.
  */

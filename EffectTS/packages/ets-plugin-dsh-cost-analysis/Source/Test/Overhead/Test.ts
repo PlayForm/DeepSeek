@@ -1,7 +1,3 @@
-// Source/Test/Overhead/Test.ts - THE EXPLORATION SHARE (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 12): the money a call spent that no file paid
-// for - the Allocation rows with FileId IS NULL - over the session's total,
-// so the ratio is 1 when nothing is attributed and 0 when everything is.
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -14,6 +10,18 @@ import Analysis from "../../../Target/Function/Analysis.js";
 import Reader from "../../../Target/Function/Open.js";
 import { Check, Finish, Make, MakeCounter, Validate } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE EXPLORATION SHARE (Documentation/Plans/COST-TRACK-PLUGIN.md section
+ * 12) of the cost-analysis plugin.
+ *
+ * @remarks
+ *
+ * The metric is the money a call spent that no file paid for - the
+ * Allocation rows with FileId IS NULL - over the session's total, so the
+ * ratio is 1 when nothing is attributed and 0 when everything is.
+ */
 // The ledger half's validated config (the ledger package's own schema): the
 // fixture price row - input 1, output 2 per million - under one client, at
 // the temporary database.

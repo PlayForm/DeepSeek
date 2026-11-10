@@ -1,3 +1,7 @@
+import { randomUUID } from "node:crypto";
+
+import type { MessageSource, UserMessage } from "@deepseek-ai/dsh-llm";
+
 /**
  * @module Note
  *
@@ -7,6 +11,7 @@
  * additionalContexts.
  *
  * @remarks
+ *
  * THE SOURCE LABEL IS LOAD-BEARING: an unlabeled context would render as a
  * user prompt in derived history. The label is
  * `{ kind: 'doc-suggester', form: 'notice', summary }` - the
@@ -19,10 +24,6 @@
  * bundles the same helper instead of importing it, so the built Target
  * carries no runtime import of the harness's own packages.
  */
-import { randomUUID } from "node:crypto";
-
-import type { MessageSource, UserMessage } from "@deepseek-ai/dsh-llm";
-
 // The suggester's own source kind, declared in the suggester's own module
 // (the MessageSource vocabulary is merge-extensible by design).
 declare module "@deepseek-ai/dsh-llm" {

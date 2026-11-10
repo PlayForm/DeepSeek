@@ -1,12 +1,3 @@
-// Source/Test/Overpass/Test.ts - one singular test: the overpass arms and the
-// human command (Run O) - the tool-results arm (tools/post-execute), the
-// step-batch arm (agent/pre-step), the normalize-overpass command, the
-// ordering guard and the history-safety invariant, with the volatile flips
-// (O2/O10) and the one-shot batch grammar (O12).
-// Runs standalone (`node Target/Test/Overpass/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Smoke of @playform/ets-hook-dsh-normalize-fullwidth: the fake ctx + the REAL
-// factory + the REAL fullwidth apply (the seams live in ../Harness.js).
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -18,6 +9,25 @@ import {
 	rm,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The singular Run O test of the overpass arms and the human command.
+ *
+ * @remarks
+ *
+ * Run O covers the tool-results arm (`tools/post-execute`), the step-batch
+ * arm (`agent/pre-step`), the `normalize-overpass` command, the ordering
+ * guard and the history-safety invariant, with the volatile flips (O2/O10)
+ * and the one-shot batch grammar (O12).
+ *
+ * The file runs standalone (`node Target/Test/Overpass/Test.js`) and under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * It smokes @playform/ets-hook-dsh-normalize-fullwidth: the fake ctx plus
+ * the REAL factory plus the REAL fullwidth apply (the seams live in
+ * `../Harness.js`).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

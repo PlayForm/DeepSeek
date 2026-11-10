@@ -9,6 +9,7 @@ import type { MessageSource, UserMessage } from "@deepseek-ai/dsh-llm";
  * SEARCH-SUGGESTER-PLUGIN.md §4.6 surface 1; the tool-coach precedent).
  *
  * @remarks
+ *
  * Builds the labeled UserMessage the post-execute listener prepends to the
  * downstream decision's additionalContexts.
  *
@@ -25,7 +26,6 @@ import type { MessageSource, UserMessage } from "@deepseek-ai/dsh-llm";
  * the same helper instead of importing it, so the built Target carries no
  * runtime import of the harness's own packages.
  */
-
 // The suggester's own source kind, declared in its own module (the
 // MessageSourceMap vocabulary is merge-extensible by design).
 declare module "@deepseek-ai/dsh-llm" {
@@ -56,7 +56,9 @@ const DeepFreeze = <T>(Value: T): T => {
 	return Value;
 };
 
-/** Bind a notice summary to the harness's 120-char limit (ellipsized). */
+/**
+ * Bind a notice summary to the harness's 120-char limit (ellipsized).
+ */
 export const BoundSummary = (Summary: string): string => {
 	if (Summary.length <= SUMMARY_MAX) {
 		return Summary;

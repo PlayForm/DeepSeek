@@ -3,6 +3,26 @@ import type Scope from "../Interface/Scope.js";
 import type Snapshot from "../Interface/Snapshot.js";
 import type State from "../Interface/State.js";
 /**
+ * @module Compile
+ *
+ * The presentation compiler (BATCH-STATE-PLUGIN.md section 7.1): pure,
+ * deterministic functions over the state.
+ *
+ * @remarks
+ *
+ * Every block the agents receive is a COMPILED OUTPUT - the LLM's only role
+ * is to READ it and act; the batch state is never described ad-hoc by any
+ * agent. The blocks are bounded (the compact TOC + the scope + the pending -
+ * never the histories; plan section 3 item 5).
+ *
+ *   State(State)    -> the full snapshot (getState);
+ *   Context(State, agent) -> the dynamic table-of-contents block (getContext);
+ *   Scope(State, agent)   -> the compiled scope view (getScope);
+ *   Else(State, agent)    -> the "you are never alone" block (whoElse);
+ *   Gates(State)          -> the arbiter truth (the Gates block);
+ *   Schedule(State)       -> the queue projection (the queue's own line).
+ */
+/**
  * The surfaces another lane owns exclusively - the OFF-LIMITS list for one
  * agent. A surface the agent shares with the owner is NOT off-limits (it
  * is a shared overlap, reported by Scope).

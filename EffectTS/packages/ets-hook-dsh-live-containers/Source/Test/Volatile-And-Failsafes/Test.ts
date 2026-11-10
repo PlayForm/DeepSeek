@@ -1,12 +1,3 @@
-// Source/Test/Volatile-And-Failsafes/Test.ts - the volatile-flip and
-// fail-open discipline tests: every knob flips through its volatile cell
-// (the cosmokit hot-edit write + the captured loader/volatile-update
-// listener) and the NEXT assembly respects the flip WITHOUT a remount (the
-// state object identity is preserved); the skip-reason ledger lines are
-// byte-exact and quiet on steady state; the fail-open negatives (a render
-// failure skips the block, the assembly still resolves; a throwing clock
-// degrades; a malformed pre-step payload never throws); the cold-mount
-// IDLE-forever posture (full passthrough, zero noise).
 import assert from "node:assert/strict";
 import {
 	Assemble,
@@ -28,6 +19,22 @@ import {
 	LiveSection,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The volatile-flip and fail-open discipline tests.
+ *
+ * @remarks
+ *
+ * Every knob flips through its volatile cell (the cosmokit hot-edit write
+ * + the captured loader/volatile-update listener) and the NEXT assembly
+ * respects the flip WITHOUT a remount (the state object identity is
+ * preserved); the skip-reason ledger lines are byte-exact and quiet on
+ * steady state; the fail-open negatives (a render failure skips the
+ * block, the assembly still resolves; a throwing clock degrades; a
+ * malformed pre-step payload never throws); the cold-mount IDLE-forever
+ * posture (full passthrough, zero noise).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

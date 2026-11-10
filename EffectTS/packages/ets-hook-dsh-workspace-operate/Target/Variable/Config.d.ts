@@ -1,3 +1,4 @@
+import Schema from "@deepseek-ai/schemastery";
 /**
  * @module Config
  *
@@ -5,6 +6,7 @@
  * at load).
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills
  * every default, so invalid configuration fails LOUD at load, and `apply`
  * receives a validated plain config object. The shape this schema produces
@@ -26,7 +28,6 @@
  * This is one of the modules in the tree with a runtime import of
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance).
  */
-import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     log: Schema<boolean, boolean, "volatile-defined">;
     logFile: Schema<string, string, "volatile-defined">;

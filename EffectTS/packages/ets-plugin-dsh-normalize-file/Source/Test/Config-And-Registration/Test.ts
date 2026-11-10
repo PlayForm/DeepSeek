@@ -1,16 +1,19 @@
-// Source/Test/Config-And-Registration/Test.ts - one singular test: the
-// apply-time wiring of the file flavor - the config cells and the minimal
-// schema, the listener-less posture (three listeners, no stream listener),
-// the tool registration and its input schema, the state unwraps, the
-// activation line, the apply-journals-nothing posture, and the
-// fresh-state-per-apply probe.
-// Runs standalone (`node Target/Test/Config-And-Registration/Test.js`) AND
-// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-plugin-dsh-normalize-file: the fake ctx + the REAL
-// factory + the REAL normalize-file apply, from the Harness.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the apply-time wiring of the file flavor - the config
+ * cells and the minimal schema, the listener-less posture (three listeners, no
+ * stream listener), the tool registration and its input schema, the state
+ * unwraps, the activation line, the apply-journals-nothing posture, and the
+ * fresh-state-per-apply probe. Runs standalone (`node
+ * Target/Test/Config-And-Registration/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-plugin-dsh-normalize-file: the fake ctx + the REAL factory +
+ * the REAL normalize-file apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

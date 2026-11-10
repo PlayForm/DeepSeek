@@ -1,3 +1,14 @@
+import {
+	Dashes,
+	Ellipsis,
+	Fullwidth,
+	Invisible,
+	Quotes,
+	Replace,
+	ReplaceMap,
+	Spaces,
+} from "@playform/ets-lib-dsh-core";
+
 /**
  * @module Rewrite
  *
@@ -8,6 +19,7 @@
  * content).
  *
  * @remarks
+ *
  * The transforms are the core's tables and replacers, imported directly - the
  * same source the six stream flavors delegate to:
  *
@@ -38,17 +50,6 @@
  *     flavors, applied in the family order (unknown names match nothing and
  *     are ignored by construction; an empty selection is verbatim).
  */
-import {
-	Dashes,
-	Ellipsis,
-	Fullwidth,
-	Invisible,
-	Quotes,
-	Replace,
-	ReplaceMap,
-	Spaces,
-} from "@playform/ets-lib-dsh-core";
-
 /**
  * The family's fixed order - the flavor names the tool's schema enumerates.
  */

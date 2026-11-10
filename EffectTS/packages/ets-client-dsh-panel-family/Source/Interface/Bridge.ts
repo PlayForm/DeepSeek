@@ -5,6 +5,7 @@
  * PHASE-7-PLAIN-FIELD-BRIDGE.md): the one trusted full-config write surface.
  *
  * @remarks
+ *
  * A plain (non-volatile) Config field cannot ride the settings mutate without
  * remounting its plugin, so the form routes it through `editFull(namespace,
  * patch)`, which the host half implements over `ctx.configEditor.edit()`

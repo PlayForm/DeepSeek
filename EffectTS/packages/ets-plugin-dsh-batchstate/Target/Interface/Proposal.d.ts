@@ -5,6 +5,7 @@
  * batch contract of PASS-ON-AND-INGESTER.md section 2).
  *
  * @remarks
+ *
  * Declared STRUCTURALLY: the family's self-contained rule forbids importing
  * the pass-on / decision packages, so this file is the board's own copy of
  * the contract and the inbox envelope is the only wire between the

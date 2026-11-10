@@ -1,3 +1,5 @@
+import type Hunk from "../Interface/Edit.js";
+
 /**
  * @module Edit
  *
@@ -6,6 +8,7 @@
  * call produces.
  *
  * @remarks
+ *
  * One row per edit entry of an "edit" or "multi_edit" call (a single entry
  * object or an "edits" array), one row from the written content of a
  * "write" call, one row from the added and removed lines of an
@@ -23,8 +26,6 @@
  * file and a batch operation that replaces or removes a match carry the
  * same marker for the same reason.
  */
-import type Hunk from "../Interface/Edit.js";
-
 /**
  * The line count of one side of a hunk, counted with a split: a non-empty
  * string is its newline count plus one, so a one-line replacement reads as

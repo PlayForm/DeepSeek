@@ -17,6 +17,7 @@
  *   U+FEFF         zero-width no-break space (the BOM character)
  *
  * @remarks
+ *
  * Carries the `g` flag per the family convention; the generic Replace never
  * mutates it - it builds a fresh per-call regex from `source` alone.
  */

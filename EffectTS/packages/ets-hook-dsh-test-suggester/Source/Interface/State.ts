@@ -1,3 +1,8 @@
+import type Config from "@Interface/Config.js";
+import type { CompiledIntent } from "@Interface/Pack.js";
+import type Factory from "@playform/ets-plugin-dsh-factory";
+import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module State
  *
@@ -6,6 +11,7 @@
  * with the test-suggester hook's own fields.
  *
  * @remarks
+ *
  * The shared half comes from the factory's NAMED type export (`State`): the
  * built Target/Library.d.ts ships RELATIVE specifiers, so a consumer's
  * tsconfig paths never hijack the declaration imports. The machinery that
@@ -44,11 +50,6 @@
  * detection time through `stateOf(session, key)`. Nothing here holds it, and
  * no WeakMap in this module is keyed on the session object.
  */
-import type Config from "@Interface/Config.js";
-import type { CompiledIntent } from "@Interface/Pack.js";
-import type Factory from "@playform/ets-plugin-dsh-factory";
-import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
-
 export default interface State extends Shared {
 	/**
 	 * The master switch (config `enabled`, volatile).

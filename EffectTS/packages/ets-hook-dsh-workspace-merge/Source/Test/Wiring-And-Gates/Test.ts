@@ -1,9 +1,3 @@
-// Source/Test/Wiring-And-Gates/Test.ts - the loader contract, the service
-// registration, the cold-mount idle-forever posture, the activation proof,
-// the fail-loud validation, and the ATOMIC GATES in their frozen order:
-// empty batch, size, bytes, duplicates, the missing version fence, the
-// version conflict (all-or-nothing rejects the whole batch), and the
-// no-write preview (gates + digest, zero writeText calls).
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import {
@@ -20,6 +14,20 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The loader contract, the service registration, and the ATOMIC GATES of the
+ * merge hook in their frozen order.
+ *
+ * @remarks
+ *
+ * The folder proves the cold-mount idle-forever posture, the activation
+ * proof, the fail-loud validation, and the gates in their frozen order: the
+ * empty batch, size, bytes, duplicates, the missing version fence, the
+ * version conflict (all-or-nothing rejects the whole batch), and the
+ * no-write preview (gates + digest, zero writeText calls).
+ */
 /** A standard enabled mount with overrides. The D6 policy gate is OPENED
  *  here (`commit: auto`) because this folder exercises the gates and the
  *  commit; the shipped `commit: approve` is arbitrated by
@@ -29,7 +37,9 @@ const Setup = (Config: Record<string, unknown> = {}): any => {
 	return Make(Validate({ logFile: Ledger, enabled: true, policy: { commit: "auto" }, ...Config }));
 };
 
-/** Drive one folder's checks. */
+/**
+ * Drive one folder's checks.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

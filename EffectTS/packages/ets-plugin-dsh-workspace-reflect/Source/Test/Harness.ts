@@ -1,28 +1,3 @@
-// Source/Test/Harness.ts - the shared test harness for the WORKSPACE-REFLECT
-// tests: the fake ctx (root listener capture with a DISTINCT root object, the
-// ctx listener capture, reflect.provide capture, the effect runner, logger
-// capture + the fs seam) + the REAL @playform/ets-plugin-dsh-factory instance
-// from its built Target + the REAL workspace-reflect apply from its built
-// Target - the family fake-ctx + real-factory harness pattern, written ONCE
-// per package and imported by every test folder. Each folder process gets a
-// fresh set, so every folder is standalone-green and the aggregate replays
-// the same seams per folder.
-//
-// The fs seam is a WORKING fake (unlike the observe/approve zero-write
-// fakes): the reflective ops' ONLY write path is the factory's GuardedWrite,
-// which ends in fs.writeText - the fake implements the replaceIfVersion
-// version fence (a stale intent throws, a matching intent writes and bumps
-// the version), so the conflict and applied paths run through the REAL
-// factory code, not a mock of it.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// NO FAKE CLOCK: the plugin has no clock dependency at all - the harness
-// needs no time seam.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -30,6 +5,37 @@ import * as Path from "node:path";
 import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the WORKSPACE-REFLECT tests: the fake ctx (root
+ * listener capture with a DISTINCT root object, the ctx listener capture,
+ * reflect.provide capture, the effect runner, logger capture + the fs seam) +
+ * the REAL @playform/ets-plugin-dsh-factory instance from its built Target +
+ * the REAL workspace-reflect apply from its built Target - the family
+ * fake-ctx + real-factory harness pattern, written ONCE per package and
+ * imported by every test folder. Each folder process gets a fresh set, so
+ * every folder is standalone-green and the aggregate replays the same seams
+ * per folder.
+ *
+ * @remarks
+ *
+ * The fs seam is a WORKING fake (unlike the observe/approve zero-write
+ * fakes): the reflective ops' ONLY write path is the factory's GuardedWrite,
+ * which ends in fs.writeText - the fake implements the replaceIfVersion
+ * version fence (a stale intent throws, a matching intent writes and bumps
+ * the version), so the conflict and applied paths run through the REAL
+ * factory code, not a mock of it.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * wires the plugin (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * NO FAKE CLOCK: the plugin has no clock dependency at all - the harness
+ * needs no time seam.
+ */
 export { Plugin };
 
 /**

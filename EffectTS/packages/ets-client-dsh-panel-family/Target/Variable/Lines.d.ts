@@ -5,6 +5,7 @@
  * is a pure browser module, so its lines go through the client logger).
  *
  * @remarks
+ *
  * Every line is a byte-exact contract asserted by the smoke suites and
  * documented in SCHEME section 6:
  *

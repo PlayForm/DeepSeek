@@ -1,3 +1,6 @@
+import type Binding from "@Interface/Binding.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Storage
  *
@@ -5,6 +8,7 @@
  * Function/{Open,Attach}.ts pattern, the observe hook precedent).
  *
  * @remarks
+ *
  * THE DOMAIN: the hook's OWN domain, named config `domain` (default
  * workspace_approve) - NOT extension records in the shared
  * package_governance domain. Version 1, layout per-record,
@@ -31,9 +35,6 @@
  * bundle load - the factory's live-verified pitfall); the type-only devDeps
  * pin them to the host-era versions.
  */
-import type Binding from "@Interface/Binding.js";
-import type State from "@Interface/State.js";
-
 /**
  * The structural shape of one persisted binding (the validation filter).
  */

@@ -7,6 +7,7 @@
  * change, never continuously).
  *
  * @remarks
+ *
  * A section is the unit the live view frames: the workspace agent's
  * operational view, the client panels and the later lens surfaces all emit
  * THESE shapes, and the render helpers below turn them into text.

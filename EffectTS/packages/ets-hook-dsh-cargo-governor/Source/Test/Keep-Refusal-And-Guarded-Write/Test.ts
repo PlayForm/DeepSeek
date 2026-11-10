@@ -1,13 +1,3 @@
-// Source/Test/Keep-Refusal-And-Guarded-Write/Test.ts - one singular test: the
-// keep-list discovery (directory pin-policy.json, the configured global
-// keepFile, the registry-adjacent source), the refusal guard (the unmatched
-// plan aborts and skips the update stage), the designed silence (non-TOML and
-// vanished manifests), and the guarded write + P3 (the versioned intent, the
-// Stash pre-registration, the same-actor re-emit, both sandbox postures, the
-// contained racing write).
-// Runs standalone (`node Target/Test/Keep-Refusal-And-Guarded-Write/Test.js`)
-// AND under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-cargo-governor.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -30,6 +20,28 @@ import {
 	SeamStub,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the keep-list discovery, the refusal guard, the
+ * designed silence, and the guarded write + P3.
+ *
+ * @remarks
+ *
+ * The keep-list discovery covers the directory pin-policy.json, the
+ * configured global keepFile, and the registry-adjacent source. The
+ * refusal guard aborts an unmatched plan and skips the update stage. The
+ * designed silence covers non-TOML and vanished manifests. The guarded
+ * write + P3 covers the versioned intent, the Stash pre-registration, the
+ * same-actor re-emit, both sandbox postures, and the contained racing
+ * write.
+ *
+ * Runs standalone
+ * (`node Target/Test/Keep-Refusal-And-Guarded-Write/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-cargo-governor.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

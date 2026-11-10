@@ -1,9 +1,14 @@
+import Record from "@Function/Record.js";
+import type Binding from "@Interface/Binding.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Decide
  *
  * The human decision paths (Function/Decide): approve, deny, revoke.
  *
  * @remarks
+ *
  * The decision records the COMMITMENT (who accepted responsibility - NOT the
  * authorization machinery itself, which is the authority's job two steps
  * earlier in the flow) and flips the binding's lifecycle state.
@@ -19,10 +24,6 @@
  *   - Any other transition is refused with its own ledger line and the
  *     binding is returned unchanged.
  */
-import Record from "@Function/Record.js";
-import type Binding from "@Interface/Binding.js";
-import type State from "@Interface/State.js";
-
 export default (
 	State: State,
 	Id: string,

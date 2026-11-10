@@ -4,6 +4,7 @@
  * The queue's task schema: the task as DATA.
  *
  * @remarks
+ *
  * SUBAGENT-QUEUE-PLUGIN.md section 2.1. Each task carries the id, the spec
  * (the full self-contained prompt - the queue NEVER alters it, the dispatcher
  * only schedules), the role/task type for the routing, the priority and the

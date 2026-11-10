@@ -7,6 +7,7 @@
  * from.
  *
  * @remarks
+ *
  * ParentRevisionId names the revision this one corrects (NULL for the first
  * revision of a catalog), so a correction to a past period is a new
  * revision that supersedes its parent while its rate rows keep the original

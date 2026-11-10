@@ -1,3 +1,7 @@
+import * as FileSystem from "node:fs";
+
+import type Entry from "@Interface/Entry.js";
+
 /**
  * @module Store
  *
@@ -6,6 +10,7 @@
  * journal).
  *
  * @remarks
+ *
  * The plan §3 keeps the factory's journal a typed LIFECYCLE ledger; reusing
  * it for MB-size BLOBs would corrupt the governance domain's contract; the
  * factory journal keeps only the plugin's lifecycle/ledger lines.
@@ -30,10 +35,6 @@
  * its evictions to the CALLER: the ledger strings are the module's own
  * (Function/Apply composes them via Factory.Append), the store logs nothing.
  */
-import * as FileSystem from "node:fs";
-
-import type Entry from "@Interface/Entry.js";
-
 /**
  * One eviction reported to the caller (the reason tags the ledger line).
  */

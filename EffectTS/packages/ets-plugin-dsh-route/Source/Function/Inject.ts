@@ -1,9 +1,19 @@
+import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
+import CatalogFn from "@Function/Catalog.js";
+import HintFn, { PREFIX } from "@Function/Hint.js";
+import MarkerFn from "@Function/Marker.js";
+import ResolveFn from "@Function/Resolve.js";
+import type Request from "@Interface/Request.js";
+import type Route from "@Interface/Route.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Inject
  *
  * The silent route injection listener on the `subagent` tool's launch path.
  *
  * @remarks
+ *
  * ROUTING-ENFORCER-PLUGIN.md section 2.2: a tools/pre-execute waterfall
  * listener that intercepts the `subagent` tool (the launch path in the
  * current harness - the subagent tool's agentOptions carry provider / model
@@ -36,15 +46,6 @@
  * prompt that already carries a hint is left alone (Function/Launch adds the
  * hint for children started outside this tool, and the two never double up).
  */
-import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
-import CatalogFn from "@Function/Catalog.js";
-import HintFn, { PREFIX } from "@Function/Hint.js";
-import MarkerFn from "@Function/Marker.js";
-import ResolveFn from "@Function/Resolve.js";
-import type Request from "@Interface/Request.js";
-import type Route from "@Interface/Route.js";
-import type State from "@Interface/State.js";
-
 /**
  * The launch fields of the subagent tool's execution, loosely typed (the
  * agentOptions vocabulary is the harness's: provider/model/reasoningEffort/

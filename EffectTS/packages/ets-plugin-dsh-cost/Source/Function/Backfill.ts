@@ -1,3 +1,11 @@
+import type { DatabaseSync } from "node:sqlite";
+
+import type { Context } from "@deepseek-ai/cordis";
+
+import type Config from "../Interface/Config.js";
+import Capture from "./Capture.js";
+import Drain from "./Drain.js";
+
 /**
  * @module Backfill
  *
@@ -6,6 +14,7 @@
  * ledger is empty and every past conversation is unpriced.
  *
  * @remarks
+ *
  * The walk reads the session-history query service (probed with ctx.get -
  * the service is optional and the plugin does not inject it), reads each
  * session's events, and pushes them through the same Capture/Drain path the
@@ -28,14 +37,6 @@
  * zero cursor means nothing was booked, so the normal fold already covers
  * the whole log and no prefix is replayed.
  */
-import type { DatabaseSync } from "node:sqlite";
-
-import type { Context } from "@deepseek-ai/cordis";
-
-import type Config from "../Interface/Config.js";
-import Capture from "./Capture.js";
-import Drain from "./Drain.js";
-
 /**
  * One raw session-log event: the fields the drain folds.
  */

@@ -1,3 +1,4 @@
+import Version from "./Variable/Version.js";
 /**
  * @module Library
  *
@@ -9,6 +10,7 @@
  * `ets-base-dsh` precedent).
  *
  * @remarks
+ *
  * Three exports, the SHARED-LIBRARY.md commonality split (the render/collapse
  * half; the consumers keep their own ledger strings, tools and configs - the
  * module leaves are never absorbed):
@@ -24,7 +26,6 @@
  *   eight-line WORKSPACE/SCOPE/MAP/FOCUS/NEIGHBORS/EVIDENCE/OPEN/STALE
  *   grammar.
  */
-import Version from "./Variable/Version.js";
 /**
  * The compiled package version (`Source/Variable/Version`, built in by the
  * ESBuild define). This package has NO loader contract and NO Config - the

@@ -1,3 +1,9 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { Touch } from "@playform/ets-lib-dsh-pack";
+
+import type { ProbingContext, ProjectionRegistry } from "../Interface/Projection.js";
+import { ProjectionKey } from "../Variable/Projection.js";
+
 /**
  * @module History
  *
@@ -7,6 +13,7 @@
  * without computing unrelated views").
  *
  * @remarks
+ *
  * WHY `ctx.get` AND NOT `ctx.sessionProjections`: the service is NOT in the
  * plugin's `inject` array (the hook must load without the registry), and a
  * property read on an undeclared service throws. The documented rule is
@@ -30,12 +37,6 @@
  * keyed per session by the registry, so a call that carries no session reads
  * the empty history instead of a shared one.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { Touch } from "@playform/ets-lib-dsh-pack";
-
-import type { ProbingContext, ProjectionRegistry } from "../Interface/Projection.js";
-import { ProjectionKey } from "../Variable/Projection.js";
-
 export default (Context: Context, Session: unknown): readonly Touch[] => {
 	try {
 		if (Session === undefined || Session === null) {

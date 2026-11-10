@@ -1,9 +1,14 @@
+import type BatchRecord from "@Interface/Batch.js";
+import type EntryRecord from "@Interface/Entry.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Storage
  *
  * The hook's own P5-style storage-domain open and recovery.
  *
  * @remarks
+ *
  * The observe hook's exact pattern. THE DOMAIN: the hook's OWN domain,
  * named config `domain` (default workspace_journal). Version 1, layout
  * per-record, invalidRecords backup-and-skip, THREE tables:
@@ -24,10 +29,6 @@
  * record rebuilds the ring. A record that fails validation is skipped,
  * never guessed.
  */
-import type BatchRecord from "@Interface/Batch.js";
-import type EntryRecord from "@Interface/Entry.js";
-import type State from "@Interface/State.js";
-
 /**
  * The structural validation filter for a persisted batch record.
  */

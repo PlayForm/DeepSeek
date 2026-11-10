@@ -1,3 +1,5 @@
+import Touch from "./Touch.js";
+
 /**
  * @module Mass
  *
@@ -6,6 +8,7 @@
  * call being priced.
  *
  * @remarks
+ *
  * Each surface message (system, user, assistant, tool result) is priced by
  * the estimator into Surface, and each tool result's tokens are carried to
  * the files its originating tool/call targeted - resolved from the same
@@ -24,8 +27,6 @@
  * Cached and CachedSurface. PerPath stays the TOTAL mass (cached plus
  * uncached), so the allocator and every existing caller keep their meaning.
  */
-import Touch from "./Touch.js";
-
 /**
  * The session surface walk: one call's context masses over the files its
  * replay named.

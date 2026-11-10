@@ -5,6 +5,7 @@
  * translation to a RegExp, anchored at both ends.
  *
  * @remarks
+ *
  * A double star crosses directories; a single star does not. No dependency on
  * an external glob library (the PO C self-containment rule).
  */

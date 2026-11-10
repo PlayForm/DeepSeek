@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -6,6 +10,7 @@
  * 7.
  *
  * @remarks
+ *
  * THE EXPORT SURFACE AND THE LOADER CONTRACT: `export const name` +
  * `export const apply` + `export const Config` + `export const inject` +
  * `export default { name, apply, Config, inject }` - the ONLY named exports
@@ -36,10 +41,6 @@
  * `batchstate` service is a Service subclass in its own module
  * (Function/Service) and is registered from apply.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 /**
  * The plugin's loader name.
  */

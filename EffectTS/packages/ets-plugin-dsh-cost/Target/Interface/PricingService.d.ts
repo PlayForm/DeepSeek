@@ -15,6 +15,7 @@ import type Revision from "./Revision.js";
  * row.
  *
  * @remarks
+ *
  * The contract is deliberately small and versioned rather than a copied
  * configuration object: `catalogs`, `revisions` and `rates` are the reads a
  * settings view lists, `publish` is the only write (one transaction that

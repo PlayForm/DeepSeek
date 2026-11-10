@@ -1,3 +1,10 @@
+import type Entry from "@Interface/Entry.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type Gate from "@Interface/Gate.js";
+import type Handle from "@Interface/Handle.js";
+import type Member from "@Interface/Member.js";
+import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module State
  *
@@ -5,6 +12,7 @@
  * plus the batch-state's own fields.
  *
  * @remarks
+ *
  * The SHARED shape carries Context, Module, Enabled/Ledger, the machinery
  * maps, and the P10 volatile refresh the factory's State builder registers.
  *
@@ -14,13 +22,6 @@
  * `name` export (plugin-dsh-batchstate); the ledger prefix is the module's
  * OWN contract string.
  */
-import type Entry from "@Interface/Entry.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type Gate from "@Interface/Gate.js";
-import type Handle from "@Interface/Handle.js";
-import type Member from "@Interface/Member.js";
-import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
-
 interface Extra {
 	/**
 	 * The master switch (config `enabled` - the IDLE-forever posture).

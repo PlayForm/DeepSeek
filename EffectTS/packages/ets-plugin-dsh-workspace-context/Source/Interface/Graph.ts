@@ -1,10 +1,17 @@
-// Graph - the SELF-CONTAINED declaration of the sibling workspace-graph
-// service's shape (the W1 contract, WAVE-1-BRIEF.md section 4.3). The
-// end-phase wires the real import; until then the context service consumes
-// the graph through this structural handle only (the injected
-// `workspaceGraph` accessor is probed at packet time - an absent sibling is
-// an honest OPEN line, never a crash). Kept minimal: only the fields and
-// methods the packet builder reads.
+/**
+ * @module Graph
+ *
+ * The self-contained declaration of the sibling workspace-graph's shape.
+ *
+ * @remarks
+ *
+ * The W1 contract, WAVE-1-BRIEF.md section 4.3. The end-phase wires the
+ * real import; until then the context service consumes the graph through
+ * this structural handle only (the injected `workspaceGraph` accessor is
+ * probed at packet time - an absent sibling is an honest OPEN line, never a
+ * crash). Kept minimal: only the fields and methods the packet builder
+ * reads.
+ */
 interface Span {
 	startLine: number;
 	endLine: number;

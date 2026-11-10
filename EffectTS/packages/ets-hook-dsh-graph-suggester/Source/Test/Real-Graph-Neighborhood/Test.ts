@@ -1,14 +1,3 @@
-// Source/Test/Real-Graph-Neighborhood/Test.ts - the Neighborhood intent
-// against a REAL populated graph: the real workspace-graph service (from its
-// built Target) is indexed through its own indexing trigger over a
-// deterministic file map, and the suggester's declared `neighborhood` query
-// answers from the real `contains`/`imports` edges. Today every other folder
-// proves the intent against FakeGraph; this one proves the consumer chain the
-// POC gap analysis named ("the live graph is empty; only FakeGraph-proven").
-// The graph is the ONLY candidate source: an anchor the graph does not know
-// abstains `no-companions` rather than naming a literal path, and the anchor
-// the graph DOES know is excluded from the targets - the component includes
-// the file the agent just touched, and the note must never name it back.
 import assert from "node:assert/strict";
 import {
 	Call,
@@ -20,6 +9,26 @@ import {
 	Setup,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The Neighborhood intent against a REAL populated graph.
+ *
+ * @remarks
+ *
+ * The real workspace-graph service (from its built Target) is indexed
+ * through its own indexing trigger over a deterministic file map, and the
+ * suggester's declared `neighborhood` query answers from the real
+ * `contains`/`imports` edges. Today every other folder proves the intent
+ * against FakeGraph; this one proves the consumer chain the POC gap
+ * analysis named ("the live graph is empty; only FakeGraph-proven").
+ *
+ * The graph is the ONLY candidate source: an anchor the graph does not
+ * know abstains `no-companions` rather than naming a literal path, and the
+ * anchor the graph DOES know is excluded from the targets - the component
+ * includes the file the agent just touched, and the note must never name
+ * it back.
+ */
 const CORE = "export function core(): number {\n\treturn 1;\n}\n";
 const USE = 'import { core } from "./Core.ts";\n\nexport const used = core;\n';
 const TEST_FILE = 'import { core } from "./Core.ts";\n\nexport const suite = core;\n';
@@ -32,7 +41,9 @@ const FILES = {
 	"/ws/README.md": MARKDOWN,
 };
 
-/** The full-evidence Neighborhood probe: the anchor the graph is asked about. */
+/**
+ * The full-evidence Neighborhood probe: the anchor the graph is asked about.
+ */
 const ARGS = {
 	file_path: "/ws/Source/Core.ts",
 	pattern: "export function",

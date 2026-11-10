@@ -1,3 +1,12 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import ClassifyFn from "@Function/Classify.js";
+import EscalateFn from "@Function/Escalate.js";
+import ResolveFn from "@Function/Resolve.js";
+import type { KeywordTable, PolicyShape, Role } from "@Interface/Policy.js";
+import type Request from "@Interface/Request.js";
+import type Route from "@Interface/Route.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Enforcer
  *
@@ -5,6 +14,7 @@
  * surface.
  *
  * @remarks
+ *
  * The factory's class/service pattern
  * (docs/user/develop/framework/service.md). Registered as `dshRoute`
  * immediately on construction and removed with its owning fiber; it holds
@@ -21,15 +31,6 @@
  * remount. The service logs NOTHING here - the launch path's listener
  * (Function/Inject) owns the ledger lines.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import ClassifyFn from "@Function/Classify.js";
-import EscalateFn from "@Function/Escalate.js";
-import ResolveFn from "@Function/Resolve.js";
-import type { KeywordTable, PolicyShape, Role } from "@Interface/Policy.js";
-import type Request from "@Interface/Request.js";
-import type Route from "@Interface/Route.js";
-import type State from "@Interface/State.js";
-
 export default class Enforcer extends Service {
 	private State: State;
 

@@ -1,3 +1,8 @@
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import Duplicate from "@Function/Duplicate.js";
+import Write from "@Function/Write.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Observe
  *
@@ -5,6 +10,7 @@
  * write.
  *
  * @remarks
+ *
  * Registered on the ROOT context through the factory's Wire. Discipline: NO
  * awaits, NO I/O, NO throws, no file content ever read.
  *
@@ -24,11 +30,6 @@
  * observed write was already recorded, and the last distinct version always
  * wins. The service's manual lines are never guarded.
  */
-import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
-import Duplicate from "@Function/Duplicate.js";
-import Write from "@Function/Write.js";
-import type State from "@Interface/State.js";
-
 export default (
 	State: State,
 	Target: FsTarget | undefined,

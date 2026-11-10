@@ -1,3 +1,8 @@
+import type Family from "./Family.js";
+import type Indexer from "./Indexer.js";
+import type Learning from "./Learning.js";
+import type Policy from "./Policy.js";
+
 /**
  * @module Pack
  *
@@ -6,6 +11,7 @@
  * allowlist, the learning settings, and the `extends` chain.
  *
  * @remarks
+ *
  * EVERY section is optional: a pack may declare only its signature, only its
  * families, or only a learning policy. A missing pack means the built-in pack
  * (this monorepo) and, outside its signature, silence.
@@ -18,11 +24,6 @@
  *
  * It may `extends:` another user-layer pack (the base is merged underneath).
  */
-import type Family from "./Family.js";
-import type Indexer from "./Indexer.js";
-import type Learning from "./Learning.js";
-import type Policy from "./Policy.js";
-
 export default interface Pack {
 	/**
 	 * The repo slug override (absent = the repo root's basename, lowercased).

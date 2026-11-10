@@ -7,6 +7,7 @@ import type { CompiledIntent, Intent, Match } from "@Interface/Pack.js";
  * O(intents x rules) + a map lookup).
  *
  * @remarks
+ *
  * Given the compiled rules (the synthesized `Repeat` family first, then an
  * explicit pack's families) and a call probe (the tool name + the JSON of its
  * arguments), it returns the winning Match or null - the algebra's identity
@@ -22,7 +23,6 @@ import type { CompiledIntent, Intent, Match } from "@Interface/Pack.js";
  * once per root and the synthesized family once per call) - this leaf never
  * compiles a regex itself.
  */
-
 /**
  * The plan's bias constant (§3.5): keeps a single weak signal below the gate.
  */

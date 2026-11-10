@@ -1,3 +1,4 @@
+import { Stream } from "effect";
 /**
  * @module Gate
  *
@@ -5,6 +6,7 @@
  * stream-normalization family.
  *
  * @remarks
+ *
  * The pure reducers (Stream/Chunk, Stream/Block, Stream/Strip) stay
  * byte-identical; this module lifts them into a real `Stream<A, E, R>` so the
  * waterfall boundary (docs/subsystems/llm-streaming.md, the plan's boundary
@@ -71,7 +73,6 @@
  * normalized-character count (marker strips excluded - the reducers keep
  * count 0 for those) exactly once, after the last chunk.
  */
-import { Stream } from "effect";
 type BlockShape = {
     type: "text";
     text: string;

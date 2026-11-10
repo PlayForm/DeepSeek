@@ -1,3 +1,6 @@
+import { existsSync, readdirSync, statSync } from "node:fs";
+import { dirname, isAbsolute, join, resolve } from "node:path";
+
 /**
  * @module Exists
  *
@@ -5,6 +8,7 @@
  * any of the call's three path bases?
  *
  * @remarks
+ *
  * The embedded packs are this repo's conventions as DATA, and they mix three
  * bases:
  * - Repo-relative (`CHANGELOG.md` and any other repo-relative path).
@@ -32,9 +36,6 @@
  * - A target carrying a `<...>` placeholder
  *   (`Source/Test/<Suite>/Test.ts`) is illustrative and always kept.
  */
-import { existsSync, readdirSync, statSync } from "node:fs";
-import { dirname, isAbsolute, join, resolve } from "node:path";
-
 /**
  * An illustrative target placeholder (`Source/Test/<Suite>/Test.ts`).
  */
@@ -128,16 +129,24 @@ const Prefix = (Companion: string, Paths: string[]): boolean => {
 };
 
 export default (
-	/** The companion path or glob (one of the pack's three bases). */
+	/**
+	 * The companion path or glob (one of the pack's three bases).
+	 */
 	Companion: string,
 
-	/** The call path the pack is judged against (absolute or cwd-relative). */
+	/**
+	 * The call path the pack is judged against (absolute or cwd-relative).
+	 */
 	CallPath: string,
 
-	/** The resolved workspace root (the gate's root). */
+	/**
+	 * The resolved workspace root (the gate's root).
+	 */
 	Root: string,
 
-	/** The session cwd, when the harness service exposes one. */
+	/**
+	 * The session cwd, when the harness service exposes one.
+	 */
 	Cwd: string | undefined,
 ): boolean => {
 	const Resolved = isAbsolute(CallPath) ? CallPath : resolve(Cwd ?? process.cwd(), CallPath);

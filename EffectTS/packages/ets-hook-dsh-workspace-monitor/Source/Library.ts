@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +9,7 @@
  * (@playform/hook-dsh-workspace-monitor).
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` + `export
  * const Config` + `export const inject` + `export default { name, apply,
  * Config, inject }` - the ONLY named exports in the tree (cordis requires
@@ -29,10 +34,6 @@
  * posture: it never appears in the profile's bundles and enables only by an
  * explicit ACTIVATE.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "hook-dsh-workspace-monitor";
 
 /**

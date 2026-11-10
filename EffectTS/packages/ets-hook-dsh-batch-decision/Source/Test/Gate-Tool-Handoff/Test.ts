@@ -1,9 +1,3 @@
-// Source/Test/Gate-Tool-Handoff/Test.ts - the integrated decision flow: the
-// batch/proposed listener's record and revision-ignore paths with their
-// byte-exact lines, the expiry-first gate, the policy auto-approval emitted
-// on the batch/decision bus, and the batch_decision tool's every path
-// (list, unknown, missing-approve, already-decided, approve, deny) with the
-// ingester handoff through the Context.get seam.
 import assert from "node:assert/strict";
 import GateModule from "../../../Target/Function/Gate.js";
 import {
@@ -19,7 +13,23 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The built gate module (a nameless default export). */
+/**
+ * @module Test
+ *
+ * The integrated decision flow: the batch/proposed listener, the gate, and
+ * the batch_decision tool's every path.
+ *
+ * @remarks
+ *
+ * The test covers the batch/proposed listener's record and revision-ignore
+ * paths with their byte-exact lines, the expiry-first gate, the policy
+ * auto-approval emitted on the batch/decision bus, and the batch_decision
+ * tool's every path (list, unknown, missing-approve, already-decided,
+ * approve, deny) with the ingester handoff through the Context.get seam.
+ */
+/**
+ * The built gate module (a nameless default export).
+ */
 const Gate: (State: any, Proposal: any, Outcome: "approved" | "denied", By: "user" | "policy") => any =
 	GateModule as never;
 

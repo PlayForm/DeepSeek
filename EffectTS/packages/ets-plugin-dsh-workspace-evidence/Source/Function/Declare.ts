@@ -1,3 +1,7 @@
+import type State from "@Interface/State.js";
+import type { TruthKind } from "@Interface/TruthKind.js";
+import type Validation from "@Interface/Validation.js";
+
 /**
  * @module Declare
  *
@@ -6,17 +10,16 @@
  * status.
  *
  * @remarks
+ *
  * A revalidation of the same id SUPERSEDES the previous object (never
  * resurrected to fresh implicitly; the new object is the only fresh one). The
  * store cap: when the store exceeds `maxValidations`, the oldest objects by
  * sequence drop first (the observe ring's cap pattern). The sequence is the
  * service's own monotonic counter - never a wall clock.
  */
-import type State from "@Interface/State.js";
-import type { TruthKind } from "@Interface/TruthKind.js";
-import type Validation from "@Interface/Validation.js";
-
-/** The four kinds of truth (the Representation-First taxonomy). */
+/**
+ * The four kinds of truth (the Representation-First taxonomy).
+ */
 const Kinds: readonly string[] = ["reality", "observation", "representation", "intent"];
 
 export default (

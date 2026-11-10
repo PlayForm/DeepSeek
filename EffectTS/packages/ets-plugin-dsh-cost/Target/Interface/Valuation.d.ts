@@ -10,6 +10,7 @@
  * hypothetical catalog).
  *
  * @remarks
+ *
  * RevisionId names the catalog revision it evaluates against, PolicyVersion
  * names the attribution policy that splits the money across files, and
  * EvidenceCutoff pins the evidence scope (NULL is the whole ledger) so a

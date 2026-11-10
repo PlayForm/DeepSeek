@@ -4,6 +4,7 @@
  * The structural view of the opaque actor the fs/* events carry.
  *
  * @remarks
+ *
  * subsystems/filesystem.md: "an opaque `object` actor - no model-facing
  * concepts". The modules key off exactly one field: the tool name of the
  * mutating actor, the same one-field narrowing `@deepseek-ai/dsh-fs` uses for

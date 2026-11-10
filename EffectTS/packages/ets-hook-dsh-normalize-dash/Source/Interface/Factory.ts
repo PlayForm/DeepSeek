@@ -1,3 +1,5 @@
+import type Factory from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Factory
  *
@@ -5,6 +7,7 @@
  * service (the family's class/service plugin, factory SCHEME.md §0-§2).
  *
  * @remarks
+ *
  * The dash normalizer is the factory's SECOND consumer and the first
  * NON-MANIFEST module: it consumes the State builder (cell unwrap + shared
  * fields, §2.10), the ledger (Append, §2.1) and the probe-once Seam accessor
@@ -23,8 +26,6 @@
  * `'llm/stream'` (options: GenerateOptions, next) => AsyncIterable<StreamChunk>
  * - re-declaring it would be a conflicting duplicate.
  */
-import type Factory from "@playform/ets-plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

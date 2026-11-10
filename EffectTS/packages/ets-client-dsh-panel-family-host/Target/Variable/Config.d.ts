@@ -1,3 +1,4 @@
+import Schema from "@deepseek-ai/schemastery";
 /**
  * @module Config
  *
@@ -5,11 +6,11 @@
  * at load).
  *
  * @remarks
+ *
  * The loader validates it and fills every default, so invalid configuration
  * fails loud at load. Every knob is volatile - hot edits commit without
  * remounting.
  */
-import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     enabled: Schema<boolean, boolean, "volatile-defined">;
     logRoot: Schema<string, string, "volatile-defined">;

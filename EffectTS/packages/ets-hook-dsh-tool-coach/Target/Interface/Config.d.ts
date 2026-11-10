@@ -1,9 +1,11 @@
+import type { CoachNotes, CoachRow } from "@Interface/Execution.js";
 /**
  * @module Config
  *
  * The validated plugin-config shape the loader hands to `apply`.
  *
  * @remarks
+ *
  * Cordis validates the exported Schemastery schema while the plugin loads and
  * fills every default (docs/user/develop/basic/config.md:45), so `apply`
  * receives a plain object of exactly this shape. The schema that produces it
@@ -17,7 +19,6 @@
  * governs the DURABLE ledger file only; the coach's own `enabled` cell is the
  * master switch for the coaching itself.
  */
-import type { CoachNotes, CoachRow } from "./Execution.js";
 export default interface Config {
     /**
      * Ledger enabled - write the durable log file (the shared `log` cell).

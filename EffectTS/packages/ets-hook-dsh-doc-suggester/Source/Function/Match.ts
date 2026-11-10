@@ -6,6 +6,7 @@
  * subsequently touched").
  *
  * @remarks
+ *
  * The pack mixes three path bases (repo-relative, package-relative and
  * sibling globs), and a call path may be absolute or cwd-relative, so the
  * rules mirror the existence filter's and the search consumer's graph match:
@@ -33,10 +34,14 @@ const Pattern = (Glob: string): RegExp => {
 };
 
 export default (
-	/** The companion path or glob the note named. */
+	/**
+	 * The companion path or glob the note named.
+	 */
 	Companion: string,
 
-	/** The judged call's path. */
+	/**
+	 * The judged call's path.
+	 */
 	CallPath: string,
 ): boolean => {
 	switch (true) {

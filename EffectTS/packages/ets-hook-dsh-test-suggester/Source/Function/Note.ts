@@ -1,3 +1,7 @@
+import { randomUUID } from "node:crypto";
+
+import type { MessageSource, UserMessage } from "@deepseek-ai/dsh-llm";
+
 /**
  * @module Note
  *
@@ -7,6 +11,7 @@
  * downstream decision's additionalContexts.
  *
  * @remarks
+ *
  * THE SOURCE LABEL IS LOAD-BEARING (the tool-coach precedent): an unlabeled
  * context would render as a user prompt in derived history. The label is
  * `{ kind: 'test-suggester', form: 'notice', summary }` - the merge-
@@ -20,10 +25,6 @@
  * the same helper instead of importing it, so the built Target carries no
  * runtime import of the harness's own packages.
  */
-import { randomUUID } from "node:crypto";
-
-import type { MessageSource, UserMessage } from "@deepseek-ai/dsh-llm";
-
 /**
  * The suggester's own source kind, declared in its own module (the
  * MessageSourceMap vocabulary is merge-extensible by design).

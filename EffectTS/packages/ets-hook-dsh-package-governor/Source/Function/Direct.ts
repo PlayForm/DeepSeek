@@ -1,3 +1,15 @@
+import { dirname as Parent } from "node:path";
+
+import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import type Passage from "@Interface/Passage.js";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+import { Suppress } from "@playform/ets-lib-dsh-core";
+
+import Decode from "./Decode.js";
+import Follow from "./Follow.js";
+import Transform from "./Transform.js";
+
 /**
  * @module Direct
  *
@@ -5,6 +17,7 @@
  * for the "package.json" basename.
  *
  * @remarks
+ *
  * Registered in the factory's GovernSteps registry (SCHEME.md §2.16-2.17). The
  * steps reuse the event-path pieces - Function/Transform (the chain pass),
  * Function/Follow (the update-stage trigger), Function/Decode, the factory's
@@ -35,18 +48,6 @@
  * completion (its guarded write + its ledger line) before the next step reads
  * the file - the steps' version-guarded writes can never race.
  */
-import { dirname as Parent } from "node:path";
-
-import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
-import type Passage from "@Interface/Passage.js";
-import type Registry from "@Interface/Registry.js";
-import type State from "@Interface/State.js";
-import { Suppress } from "@playform/ets-lib-dsh-core";
-
-import Decode from "./Decode.js";
-import Follow from "./Follow.js";
-import Transform from "./Transform.js";
-
 /**
  * The chain pass WITHOUT the update follow: the direct-path counterpart of the
  * Observe's g2 + seed + Continue sequence.

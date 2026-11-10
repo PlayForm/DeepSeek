@@ -1,3 +1,6 @@
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +8,7 @@
  * panel package of the UI family).
  *
  * @remarks
+ *
  * Loader contract (cordis): `export const name` + `export const apply` +
  * `export const Config` + `export const inject` +
  * `export default { name, apply, Config, inject }`.
@@ -24,9 +28,6 @@
  * tunables; the client half reads them through the validated config object
  * that the Loader row carries.
  */
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "client-dsh-panel-family";
 
 export const Config = Definition;

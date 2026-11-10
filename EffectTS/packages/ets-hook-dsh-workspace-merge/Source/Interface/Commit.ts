@@ -1,3 +1,5 @@
+import type Reply from "@Interface/Reply.js";
+
 /**
  * @module Commit
  *
@@ -5,13 +7,12 @@
  * the per-file replies.
  *
  * @remarks
+ *
  * The batch-level status is `rejected` when the atomic gates refused the
  * whole batch (the per-file replies then all say `rejected` with the gate
  * reason), `partial` when the batch was interrupted (recovery-required
  * replies present), `applied` otherwise.
  */
-import type Reply from "@Interface/Reply.js";
-
 export default interface Commit {
 	id: string;
 	status: "applied" | "partial" | "rejected";

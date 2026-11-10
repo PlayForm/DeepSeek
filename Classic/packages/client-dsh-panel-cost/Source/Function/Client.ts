@@ -1,9 +1,14 @@
-// Client - the client body: register the dictionaries, then mount the tab.
-// Both registrations go through ctx.effect so the disposers remove the
-// dictionary and the tab when the plugin deactivates, following the family
-// pattern. The label falls back to the English table because the locale
-// service resolves the localized label through the registered namespace
-// once the dictionaries land; EN_DICTIONARY.tab is the pre-locale answer.
+/**
+ * @module Client
+ *
+ * The client body: register the dictionaries, then mount the tab.
+ *
+ * @remarks
+ * Both registrations go through `ctx.effect` so the disposers remove the dictionary and the tab
+ * when the plugin deactivates, following the family pattern. The label falls back to the English
+ * table because the locale service resolves the localized label through the registered namespace
+ * once the dictionaries land; `EN_DICTIONARY.tab` is the pre-locale answer.
+ */
 import View from "@Function/View.js";
 import type { ClientContext } from "@Interface/Client.js";
 import EN_DICTIONARY from "@Variable/Locale-en.json";

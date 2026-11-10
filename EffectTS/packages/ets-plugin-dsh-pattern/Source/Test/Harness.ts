@@ -1,41 +1,50 @@
-// Source/Test/Harness.ts - the shared test harness for the PATTERN service
-// tests: the fake ctx (reflect.provide capture for the Service base, the
-// logger capture, the effect runner, the probe-once `get`) + the REAL
-// PatternService class from its built Target - the family fake-ctx +
-// real-built-library harness pattern, written ONCE per package and imported
-// by every test folder. Each folder process gets a fresh set, so every folder
-// is standalone-green.
-//
-// THE STORE SEAMS: the JSON fallback uses the REAL node fs/promises against
-// `~/.dsh/pattern/registry.json` - the harness redirects $HOME to a fresh OS
-// temp directory BEFORE any construction, so the service never reads or
-// writes the user's real home directory, and every scenario starts from an
-// empty (or explicitly seeded) store. The storage-domain PRIMARY is exercised
-// with FakeStorage (the authority/evidence fake-storage pattern: the open
-// capture, the map-backed tables, the seed hook and the version fence) - the
-// facility is attached to the fake ctx BEFORE construction.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the Service constructor (the vacuously-green backstop).
-//
-// NO FAKE CLOCK: Record and Decay take an explicit `Now` argument, so every
-// timing assertion is on the passed value - the no-wall-clock rule holds
-// without a time seam.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
 import PatternService from "../../Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the PATTERN service tests: the fake ctx
+ * (reflect.provide capture for the Service base, the logger capture, the
+ * effect runner, the probe-once `get`) + the REAL PatternService class from
+ * its built Target - the family fake-ctx + real-built-library harness
+ * pattern, written ONCE per package and imported by every test folder. Each
+ * folder process gets a fresh set, so every folder is standalone-green.
+ *
+ * @remarks
+ *
+ * THE STORE SEAMS: the JSON fallback uses the REAL node fs/promises against
+ * `~/.dsh/pattern/registry.json` - the harness redirects $HOME to a fresh OS
+ * temp directory BEFORE any construction, so the service never reads or
+ * writes the user's real home directory, and every scenario starts from an
+ * empty (or explicitly seeded) store. The storage-domain PRIMARY is exercised
+ * with FakeStorage (the authority/evidence fake-storage pattern: the open
+ * capture, the map-backed tables, the seed hook and the version fence) - the
+ * facility is attached to the fake ctx BEFORE construction.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * wires the Service constructor (the vacuously-green backstop).
+ *
+ * NO FAKE CLOCK: Record and Decay take an explicit `Now` argument, so every
+ * timing assertion is on the passed value - the no-wall-clock rule holds
+ * without a time seam.
+ */
 export { PatternService };
 
-/** The fresh temp home: the service's `~/.dsh` paths resolve inside it. */
+/**
+ * The fresh temp home: the service's `~/.dsh` paths resolve inside it.
+ */
 export const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "pattern-smoke-home-"));
 process.env["HOME"] = Home;
 
-/** The per-folder counter. */
+/**
+ * The per-folder counter.
+ */
 export type Counter = {
 	N: number;
 	F: number;
@@ -211,7 +220,9 @@ export const FakeStorage = (Options: { failOpen?: boolean; version?: number } = 
 		},
 	};
 
-	/** Seed one record (the restart scenario: the store outlives the process). */
+	/**
+	 * Seed one record (the restart scenario: the store outlives the process).
+	 */
 	Store.seed = (Name: string, Key: string, Value: unknown): void => {
 		if (!Store.tables.has(Name)) {
 			Store.tables.set(Name, new Map());

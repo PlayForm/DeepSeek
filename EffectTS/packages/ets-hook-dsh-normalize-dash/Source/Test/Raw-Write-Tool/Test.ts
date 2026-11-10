@@ -1,17 +1,27 @@
-// Source/Test/Raw-Write-Tool/Test.ts - one singular test: the raw-write tool
-// surface - the captured registration (name, input schema with the OPTIONAL
-// normalize/govern unions, output envelope), the execution path (verbatim by
-// default, all six transforms on, the real before/after of an overwrite, the
-// pre-aborted rejection), the per-call flavor selection with the family
-// order, the presenters' selection-aware view, and the govern call path with
-// the wrapped actor, the sequential fold and the omission rule.
-// Runs standalone (`node Target/Test/Raw-Write-Tool/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the REAL
-// factory + the REAL dash apply, from the Harness.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the raw-write tool surface.
+ *
+ * @remarks
+ *
+ * The test covers the captured registration (name, input schema with the
+ * OPTIONAL normalize/govern unions, output envelope), the execution path
+ * (verbatim by default, all six transforms on, the real before/after of an
+ * overwrite, the pre-aborted rejection), the per-call flavor selection with
+ * the family order, the presenters' selection-aware view, and the govern
+ * call path with the wrapped actor, the sequential fold and the omission
+ * rule.
+ *
+ * Runs standalone (`node Target/Test/Raw-Write-Tool/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the
+ * REAL factory + the REAL dash apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

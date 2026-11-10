@@ -5,6 +5,7 @@
  * an invalid config throws at load, never silently defaults.
  *
  * @remarks
+ *
  * The rules mirror the Schemastery schema (Variable/Config.ts).
  */
 export default (Options: unknown): void => {

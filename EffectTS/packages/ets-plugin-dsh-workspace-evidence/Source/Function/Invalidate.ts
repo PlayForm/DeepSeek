@@ -1,3 +1,5 @@
+import type State from "@Interface/State.js";
+
 /**
  * @module Invalidate
  *
@@ -5,6 +7,7 @@
  * dependencies include the key goes stale, in one pass.
  *
  * @remarks
+ *
  * The Acar seam and the incremental-computation principle. A stale object is
  * never guessed back to fresh: a revalidation is a new validation object (the
  * Declare path). The return is the number of objects invalidated.
@@ -13,8 +16,6 @@
  * Function/Watch) and the service's explicit invalidate(key) - any dependency
  * key, not just a file path.
  */
-import type State from "@Interface/State.js";
-
 export default (State: State, Key: string): number => {
 	let Count = 0;
 	for (const [Id, Object] of State.Store) {

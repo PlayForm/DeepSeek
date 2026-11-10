@@ -8,6 +8,7 @@
  * recorded must keep pointing at the same identity.
  *
  * @remarks
+ *
  * The "bootstrap" catalog is the one the v7 rung seeds from the
  * capture-time Price book, so the shipped defaults are an identified
  * catalog rather than an untraceable source of truth. The field names are

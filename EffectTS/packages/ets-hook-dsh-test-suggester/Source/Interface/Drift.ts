@@ -5,6 +5,7 @@
  * the one-phrase reason the note carries, and the two counts.
  *
  * @remarks
+ *
  * THE NUMBERS ARE PASS COUNTS (the note's contract): `expected` is what the
  * smoke README claims for the entry, `actual` is what the aggregate runner
  * would actually run for it (0 when it would run nothing). The GRAPH row is

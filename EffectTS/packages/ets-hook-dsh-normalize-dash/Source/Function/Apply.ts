@@ -1,3 +1,21 @@
+import type { Context, Events } from "@deepseek-ai/cordis";
+import type { GenerateOptions, StreamChunk } from "@deepseek-ai/dsh-llm";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
+import { Activate, StreamGate as Gate } from "@playform/ets-base-dsh";
+import { Effect, Scope, Stream } from "effect";
+
+import Command, {
+	type CommandsService,
+	type ConfigEditorService,
+	type SettingsService,
+} from "./Command.js";
+import Normalize from "./Normalize.js";
+import Overpass from "./Overpass.js";
+import Replace from "./Replace.js";
+import StepBatch from "./StepBatch.js";
+import Write from "./Write.js";
+
 /**
  * @module Apply
  *
@@ -8,6 +26,7 @@
  * TOOL.
  *
  * @remarks
+ *
  * The State build covers the cell unwrap, the shared mappings
  * Ledger<-logFile / Enabled<-log and the module's own fields via the setup
  * `fields` map (factory SCHEME.md §2.10). The durable activation proof is the
@@ -94,24 +113,6 @@
  * is injected: the ledger append is the factory's own plain-fs exemption, and
  * the chunk vocabulary arrives through the waterfall, not through an import.
  */
-import type { Context, Events } from "@deepseek-ai/cordis";
-import type { GenerateOptions, StreamChunk } from "@deepseek-ai/dsh-llm";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
-import { Activate, StreamGate as Gate } from "@playform/ets-base-dsh";
-import { Effect, Scope, Stream } from "effect";
-
-import Command, {
-	type CommandsService,
-	type ConfigEditorService,
-	type SettingsService,
-} from "./Command.js";
-import Normalize from "./Normalize.js";
-import Overpass from "./Overpass.js";
-import Replace from "./Replace.js";
-import StepBatch from "./StepBatch.js";
-import Write from "./Write.js";
-
 export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
 	// augmentation; guaranteed present by the inject declaration).

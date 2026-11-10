@@ -1,9 +1,14 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import type { State } from "@playform/ets-base-dsh";
+
 /**
  * @module Wire
  *
  * The fs/observed listener registration.
  *
  * @remarks
+ *
  * The listener is registered on the ROOT context - `Context.root.on("fs/observed", Observe)` -
  * not on the module's own plugin context. Rationale: cordis dispatches events through the shared
  * root bus and filters by the emitting scope, so a listener registered on one plugin's context
@@ -25,10 +30,6 @@
  * summary line and logs it through Factory.Append (and Factory.Journal with the "activated"
  * event) before/after calling Wire - the factory never owns the string.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
-import type { State } from "@playform/ets-base-dsh";
-
 export default (
 	Context: Context,
 	// Accepted for signature stability (every module passes its built State);

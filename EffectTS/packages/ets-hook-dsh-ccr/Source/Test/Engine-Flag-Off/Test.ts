@@ -1,13 +1,3 @@
-// Source/Test/Engine-Flag-Off/Test.ts - one singular test: the fully inert
-// postures with the engine flag OFF (the default) - no engine runtime, no
-// agent/pre-step listener, no engine traces from post-execute traffic - plus
-// the byte-identical pass-throughs that hold regardless of the engine: the
-// six exempt tools, the failing result, the value-carrying accepted decision
-// and the block decision.
-// Runs standalone (`node Target/Test/Engine-Flag-Off/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-ccr: the fake ctx + the REAL factory +
-// the REAL CCR apply, from the Harness.
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -24,6 +14,26 @@ import {
 	PlainText,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the fully inert postures with the engine flag OFF (the
+ * default), plus the byte-identical pass-throughs.
+ *
+ * @remarks
+ *
+ * With the engine flag OFF there is no engine runtime, no agent/pre-step
+ * listener, and no engine traces from post-execute traffic. The
+ * byte-identical pass-throughs that hold regardless of the engine are the
+ * six exempt tools, the failing result, the value-carrying accepted
+ * decision and the block decision.
+ *
+ * Runs standalone (`node Target/Test/Engine-Flag-Off/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-ccr: the fake ctx + the REAL
+ * factory + the REAL CCR apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

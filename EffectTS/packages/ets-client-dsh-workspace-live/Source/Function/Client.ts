@@ -1,3 +1,16 @@
+import Section from "@Function/Section.js";
+import StoreFn from "@Function/Store.js";
+import TraceFn from "@Function/Trace.js";
+import View from "@Function/View.js";
+import type { ClientContext } from "@Interface/Client.js";
+import type { LiveView } from "@Interface/Presentation.js";
+import type LiveTrace from "@Interface/Trace.js";
+import EN_DICTIONARY from "@Variable/Locale-en.json";
+import ZH_DICTIONARY from "@Variable/Locale-zh.json";
+import SectionIdentity from "@Variable/Section.js";
+import Slots from "@Variable/Slots.js";
+import { createElement, useEffect, useState, type ReactNode } from "react";
+
 /**
  * @module Client
  *
@@ -5,6 +18,7 @@
  * here).
  *
  * @remarks
+ *
  * The wiring:
  *
  *   1. Provide the workspaceLive service (the Store): snapshot / subscribe /
@@ -31,19 +45,6 @@
  * (namespace "client-dsh-workspace-live"); the visible strings live in
  * Variable/Locale-en.json / Variable/Locale-zh.json.
  */
-import Section from "@Function/Section.js";
-import StoreFn from "@Function/Store.js";
-import TraceFn from "@Function/Trace.js";
-import View from "@Function/View.js";
-import type { ClientContext } from "@Interface/Client.js";
-import type { LiveView } from "@Interface/Presentation.js";
-import type LiveTrace from "@Interface/Trace.js";
-import EN_DICTIONARY from "@Variable/Locale-en.json";
-import ZH_DICTIONARY from "@Variable/Locale-zh.json";
-import SectionIdentity from "@Variable/Section.js";
-import Slots from "@Variable/Slots.js";
-import { createElement, useEffect, useState, type ReactNode } from "react";
-
 const NAMESPACE = "client-dsh-workspace-live";
 
 /**

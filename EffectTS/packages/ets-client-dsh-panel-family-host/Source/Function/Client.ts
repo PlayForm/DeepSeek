@@ -1,3 +1,7 @@
+import type { Context } from "@deepseek-ai/cordis";
+import BrowserStream from "@Function/BrowserStream.js";
+import type HostTrace from "@Interface/Trace.js";
+
 /**
  * @module Client
  *
@@ -5,6 +9,7 @@
  * `./client` export; the module system serves it as a lazy-CJS factory).
  *
  * @remarks
+ *
  * The host process owns the implementations: `panelFamilyBridge` over
  * ctx.configEditor.edit() and `panelFamilyTrace` over ctx.trace. This half is
  * the forwarding path into the browser: it waits for the harness's generated
@@ -16,10 +21,6 @@
  * panel keeps its documented fallbacks (plain fields read-only, static
  * status).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import BrowserStream from "@Function/BrowserStream.js";
-import type HostTrace from "@Interface/Trace.js";
-
 type RemoteFace = {
 	editFull?(namespace: string, patch: Record<string, unknown>): Promise<unknown>;
 	trace?: HostTrace;

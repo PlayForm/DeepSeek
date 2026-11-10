@@ -1,3 +1,5 @@
+import type { AgentState, CoachClass, Match } from "@Interface/Execution.js";
+
 /**
  * @module Enforce
  *
@@ -5,6 +7,7 @@
  * tools/pre-execute listener BEFORE the terminal call runs.
  *
  * @remarks
+ *
  * Discovery and control are NEVER denied, even at enforce: "all" (plan Part 2
  * §2.4) - the deniable classes are write always, plus read and search at
  * enforce: "all".
@@ -17,8 +20,6 @@
  * tools/post-execute, where it is counted like any other offense
  * (repeat-tool-reminder README:83).
  */
-import type { AgentState, CoachClass, Match } from "@Interface/Execution.js";
-
 /**
  * The knobs Enforce reads (the live State values, already unwrapped).
  */

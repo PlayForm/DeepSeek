@@ -1,3 +1,10 @@
+import type { DatabaseSync } from "node:sqlite";
+
+import type Config from "../Interface/Config.js";
+import type Price from "../Interface/Price.js";
+import type Rule from "../Interface/Rule.js";
+import type Usage from "../Interface/Usage.js";
+
 /**
  * @module Price
  *
@@ -5,6 +12,7 @@
  * (Documentation/Plans/COST-TRACK-PLUGIN.md sections 2, 17.1 and 17.2).
  *
  * @remarks
+ *
  * A call is priced at the most specific ledger price row in force at the
  * call's own time - an exact Mode or Region match wins over a NULL ("any")
  * row, the greatest EffectiveFrom wins among equals, and a call in an
@@ -24,13 +32,6 @@
  * null rate) costs zero. The input side is the UNCACHED remainder plus the
  * cache buckets, never the whole input.
  */
-import type { DatabaseSync } from "node:sqlite";
-
-import type Config from "../Interface/Config.js";
-import type Price from "../Interface/Price.js";
-import type Rule from "../Interface/Rule.js";
-import type Usage from "../Interface/Usage.js";
-
 /**
  * One tier row of a rate card: the window the tier covers and the rates
  * every bucket prices at inside it (a null rate is an unpriced bucket).

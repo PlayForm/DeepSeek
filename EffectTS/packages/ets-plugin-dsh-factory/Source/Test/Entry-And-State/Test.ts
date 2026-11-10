@@ -1,14 +1,3 @@
-// Source/Test/Entry-And-State/Test.ts - one singular test: the service entry
-// contract (class extends Service, static inject, registration) plus the
-// State builder (the volatile-cell unwrap, the shared mappings, the module
-// fields, the P9 probe-once subprocess seam, the probe-once Seam accessor,
-// the bare-config tolerance, the UpdateKey namespace) and the P10 volatile
-// refresh (the instance-local loader/volatile-update listener updating the
-// State in place).
-// Runs standalone (`node Target/Test/Entry-And-State/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-plugin-dsh-factory: the fake ctx + the REAL factory
-// class, from the Harness.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -21,6 +10,26 @@ import {
 	FactoryClass,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The service entry contract and the State builder of the factory, plus the
+ * P10 volatile refresh.
+ *
+ * @remarks
+ *
+ * The singular test proves the entry contract (class extends Service,
+ * static inject, registration) plus the State builder (the volatile-cell
+ * unwrap, the shared mappings, the module fields, the P9 probe-once
+ * subprocess seam, the probe-once Seam accessor, the bare-config tolerance,
+ * the UpdateKey namespace) and the P10 volatile refresh (the instance-local
+ * loader/volatile-update listener updating the State in place).
+ *
+ * Runs standalone (`node Target/Test/Entry-And-State/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-plugin-dsh-factory: the fake ctx + the REAL factory class,
+ * from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

@@ -1,3 +1,5 @@
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Config
  *
@@ -5,12 +7,11 @@
  * for the operate hook.
  *
  * @remarks
+ *
  * Every field is volatile (the factory's State builder refreshes these in
  * place on a hot edit). The contract is
  * Documentation/Plans/Workspace-Family/OPERATE.md.
  */
-import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
-
 export default interface Config {
 	/**
 	 * The IDLE-forever switch: false means disabled, wired to nothing.

@@ -1,3 +1,6 @@
+import Normalize, { Rank, Segments } from "@Function/Normalize.js";
+import type { CoachRow, Detection, Match } from "@Interface/Execution.js";
+
 /**
  * @module Detect
  *
@@ -8,6 +11,7 @@
  * the authority.
  *
  * @remarks
+ *
  * The evaluation order per pipeline (a maximal run of segments joined by `|`,
  * pipelines split on `;`/`&&`/`||`/`&`):
  *
@@ -36,9 +40,6 @@
  *   - wrappers (sh -c / bash -c / eval / xargs / find -exec) never exempt:
  *     the INNER payload is re-scanned through the same rows.
  */
-import Normalize, { Rank, Segments } from "@Function/Normalize.js";
-import type { CoachRow, Detection, Match } from "@Interface/Execution.js";
-
 /**
  * The command-word position markers that begin a wrapper payload.
  */

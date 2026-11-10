@@ -4,6 +4,7 @@
  * The carry-across-lines state of the comment scanner.
  *
  * @remarks
+ *
  * The read tool's body is a sequence of numbered lines, and a comment or a
  * string can open on one line and close on a later one (a slash-star
  * star-slash block comment, a Python `"""` docstring, a JS template literal,

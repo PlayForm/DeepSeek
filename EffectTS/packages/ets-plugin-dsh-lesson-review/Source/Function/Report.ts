@@ -1,3 +1,6 @@
+import FileSystem from "node:fs/promises";
+import Path from "node:path";
+
 /**
  * @module Report
  *
@@ -5,6 +8,7 @@
  * timestamped directory per run.
  *
  * @remarks
+ *
  * WHY A FILE AND NOT JUST THE LEDGER: the ledger is a line-per-event contract
  * that every plugin in the family shares, so it must stay terse and
  * byte-stable. A review needs more than a line - the digest size, the model
@@ -16,9 +20,6 @@
  * unchanged. The review already happened; losing its paperwork must not turn a
  * successful pass into an error.
  */
-import FileSystem from "node:fs/promises";
-import Path from "node:path";
-
 /**
  * One run's record.
  */

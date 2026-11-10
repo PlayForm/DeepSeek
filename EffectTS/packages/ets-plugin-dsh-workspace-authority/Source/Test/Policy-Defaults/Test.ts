@@ -1,23 +1,30 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the
-// authority service: the shared block's defaults in the schema and on the
-// built State (`Allow`), the per-action override, and the service's
-// read-only/record posture - its own action classes are automatic, so it has
-// NO gated action and no verdict can refuse a call.
-//
-// The D6 key is `automation`, NOT `policy`: this package's `policy` is
-// already the residency RULE TABLE (kind -> disposition), a different
-// contract (the plugin-dsh-route precedent).
-//
-// The representative actions are `grant` (the record class) and `authorize`
-// (the read class): the cheapest real calls in the service's surface, which
-// prove the automatic posture lets a record proceed and that the call
-// touches no file content.
 import assert from "node:assert/strict";
 
 import { Decide } from "../../../../ets-plugin-dsh-factory/Target/Library.js";
 import { Check, Finish, LinesWith, Make, MakeCounter, Validate, rm } from "../Harness.js";
 
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * @module Test
+ *
+ * THE POLICY BLOCK (D6) on the authority service: the shared block's defaults
+ * in the schema and on the built State (`Allow`), the per-action override,
+ * and the service's read-only/record posture - its own action classes are
+ * automatic, so it has NO gated action and no verdict can refuse a call.
+ *
+ * @remarks
+ *
+ * The D6 key is `automation`, NOT `policy`: this package's `policy` is
+ * already the residency RULE TABLE (kind -> disposition), a different
+ * contract (the plugin-dsh-route precedent).
+ *
+ * The representative actions are `grant` (the record class) and `authorize`
+ * (the read class): the cheapest real calls in the service's surface, which
+ * prove the automatic posture lets a record proceed and that the call
+ * touches no file content.
+ */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",
@@ -29,7 +36,9 @@ const Defaults = {
 	message: "auto",
 };
 
-/** An enabled service with an empty ledger (the ledger path never writes). */
+/**
+ * An enabled service with an empty ledger (the ledger path never writes).
+ */
 const Setup = (Raw: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: "/nonexistent/authority.log", enabled: true, ...Raw }));

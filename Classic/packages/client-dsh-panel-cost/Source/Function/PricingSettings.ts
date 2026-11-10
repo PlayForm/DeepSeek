@@ -1,50 +1,48 @@
-// PricingSettings - the Cost tab's Pricing view (Temporary/Cost-Research/
-// Plan.md lane B4f; the research's A4 sections 1-3 and A6 section 6): the
-// rate book of one published catalog revision, the local draft one Edit
-// action opens, the impact preview that prices the selected session under the
-// revision, and the one publish action that turns the draft into a new
-// revision.
-//
-// THE READS: the catalogs route answers every catalog and revision the ledger
-// carries, the rates route answers one revision's rate rows. Both are the
-// host half's own GETs (Function/Fetch), and both resolve to an empty answer
-// instead of throwing, so a ledger without a pricing surface renders a state
-// rather than a crash.
-//
-// THE SELECTOR lists published revisions only: the engine can preview a draft
-// revision, but a settings view pins what a valuation may select, and only a
-// published revision may be pinned. The first read adopts the first catalog
-// and its newest published revision; a read after a publish keeps the user's
-// selection and only refreshes the options, because the publish selects the
-// new revision itself.
-//
-// THE DRAFT is local state: Edit opens the row's five rate fields, its
-// valid-from and valid-until instants and the revision's reason, and every
-// keystroke writes React state alone. Nothing reaches the ledger until
-// Publish, and a publish the engine refuses leaves the draft exactly as it
-// was. The table itself always shows the selected revision's recorded rates,
-// so a draft value is never mixed into the book it is being compared against.
-//
-// THE PUBLISH posts the whole edited row set with the base revision and the
-// reason - the engine inserts one published revision and its rate rows in one
-// transaction, and touches nothing observed - then refreshes the catalogs
-// answer, selects the new revision, drops the draft and shows the new
-// revision id, or the one actionable line of the refusal, inline.
-//
-// THE IMPACT PREVIEW is the research's before-you-save question: recorded
-// total, revised total, difference and the unpriced count, read from the
-// session route with the selected revision pinned. It is shown only for a
-// published revision with no unpublished edit; while the draft differs from
-// the book there is no published revision to price it, so the pane says
-// "available after publish" instead of inventing a figure. The unpriced count
-// is the preview's own count of the calls that revision could not price - the
-// recorded summary's count answers a different question - and its tooltip
-// names the revision it belongs to.
-//
-// THE RATE UNIT: every rate is money per 1,000,000 tokens in the row's own
-// currency, and a rate the book does not separately price is a dash with the
-// "not separately priced" title - never a zero, because a missing rate is
-// unpriced and a zero is a free bucket.
+/**
+ * @module PricingSettings
+ *
+ * The Cost tab's Pricing view: the rate book of one published catalog revision, the local draft one
+ * Edit action opens, the impact preview that prices the selected session under the revision, and
+ * the one publish action that turns the draft into a new revision.
+ *
+ * @remarks
+ * The research source is `Temporary/Cost-Research/Plan.md` lane B4f, with the research's A4
+ * sections 1-3 and A6 section 6.
+ *
+ * THE READS: the catalogs route answers every catalog and revision the ledger carries, the rates
+ * route answers one revision's rate rows. Both are the host half's own GETs (`Function/Fetch`),
+ * and both resolve to an empty answer instead of throwing, so a ledger without a pricing surface
+ * renders a state rather than a crash.
+ *
+ * THE SELECTOR lists published revisions only: the engine can preview a draft revision, but a
+ * settings view pins what a valuation may select, and only a published revision may be pinned. The
+ * first read adopts the first catalog and its newest published revision; a read after a publish
+ * keeps the user's selection and only refreshes the options, because the publish selects the new
+ * revision itself.
+ *
+ * THE DRAFT is local state: Edit opens the row's five rate fields, its valid-from and valid-until
+ * instants and the revision's reason, and every keystroke writes React state alone. Nothing
+ * reaches the ledger until Publish, and a publish the engine refuses leaves the draft exactly as
+ * it was. The table itself always shows the selected revision's recorded rates, so a draft value
+ * is never mixed into the book it is being compared against.
+ *
+ * THE PUBLISH posts the whole edited row set with the base revision and the reason - the engine
+ * inserts one published revision and its rate rows in one transaction, and touches nothing
+ * observed - then refreshes the catalogs answer, selects the new revision, drops the draft and
+ * shows the new revision id, or the one actionable line of the refusal, inline.
+ *
+ * THE IMPACT PREVIEW is the research's before-you-save question: recorded total, revised total,
+ * difference and the unpriced count, read from the session route with the selected revision
+ * pinned. It is shown only for a published revision with no unpublished edit; while the draft
+ * differs from the book there is no published revision to price it, so the pane says "available
+ * after publish" instead of inventing a figure. The unpriced count is the preview's own count of
+ * the calls that revision could not price - the recorded summary's count answers a different
+ * question - and its tooltip names the revision it belongs to.
+ *
+ * THE RATE UNIT: every rate is money per 1,000,000 tokens in the row's own currency, and a rate
+ * the book does not separately price is a dash with the "not separately priced" title - never a
+ * zero, because a missing rate is unpriced and a zero is a free bucket.
+ */
 import Count from "@Function/Count";
 import Fetch, {
 	Catalogs,
@@ -62,10 +60,11 @@ import type { RateRow, Revision } from "@playform/plugin-dsh-cost/service";
 import Dash from "@Variable/Dash";
 import { createElement, Fragment, useCallback, useEffect, useState } from "react";
 
-// The one column definition of the rate table: the shipped order, the widths
-// that add up to the full table, and the columns the sheet left-aligns. The
-// header, the colgroup and every body cell read this one list, so a column
-// cannot drift from its width.
+/**
+ * The one column definition of the rate table: the shipped order, the widths that add up to the
+ * full table, and the columns the sheet left-aligns. The header, the colgroup and every body cell
+ * read this one list, so a column cannot drift from its width.
+ */
 const Columns = [
 	"provider",
 	"model",
@@ -106,8 +105,9 @@ const Widths: Record<Column, number> = {
 	edit: 7,
 };
 
-// Left - the text columns: the identity fields read as text, every rate and
-// bound as a metric.
+/**
+ * Left - the text columns: the identity fields read as text, every rate and bound as a metric.
+ */
 const Left: ReadonlySet<Column> = new Set<Column>([
 	"provider",
 	"model",
@@ -117,9 +117,11 @@ const Left: ReadonlySet<Column> = new Set<Column>([
 	"window",
 ]);
 
-// Titles - the header tooltips whose column the label alone does not explain:
-// the rate unit, the half-open interval and the tiling tier bands. A column
-// without an entry renders no title, which is why the record is the key set.
+/**
+ * Titles - the header tooltips whose column the label alone does not explain: the rate unit, the
+ * half-open interval and the tiling tier bands. A column without an entry renders no title, which
+ * is why the record is the key set.
+ */
 const Titles: Readonly<Record<string, string>> = {
 	input: "pricing.column.input.title",
 	output: "pricing.column.output.title",
@@ -132,10 +134,11 @@ const Titles: Readonly<Record<string, string>> = {
 	tierTo: "pricing.column.tierTo.title",
 };
 
-// Draft - one row's editable fields as the form holds them: text, because a
-// half-typed number is not a number yet. The five rate fields, the two
-// instants and the row's identity are the whole draft; the revision's reason
-// rides beside it and is shared by every row.
+/**
+ * Draft - one row's editable fields as the form holds them: text, because a half-typed number is
+ * not a number yet. The five rate fields, the two instants and the row's identity are the whole
+ * draft; the revision's reason rides beside it and is shared by every row.
+ */
 type Draft = {
 	readonly Input: string;
 	readonly Output: string;
@@ -146,18 +149,21 @@ type Draft = {
 	readonly ValidTo: string;
 };
 
-// PublishOutcome - the publish answer as the bar renders it: the new
-// revision's id, or the one line that says why nothing was published.
+/**
+ * PublishOutcome - the publish answer as the bar renders it: the new revision's id, or the one
+ * line that says why nothing was published.
+ */
 type PublishOutcome = {
 	readonly Kind: "published" | "failed";
 	readonly RevisionId: number | null;
 	readonly Message: string | null;
 };
 
-// PreviewState - the impact preview's one state record, flat so the renderer
-// reads a field rather than narrowing a union: the phase, the comparison
-// block when one was read, the revision's own unpriced count, its currency and
-// the failure line.
+/**
+ * PreviewState - the impact preview's one state record, flat so the renderer reads a field rather
+ * than narrowing a union: the phase, the comparison block when one was read, the revision's own
+ * unpriced count, its currency and the failure line.
+ */
 type PreviewState = {
 	readonly Phase: "idle" | "loading" | "ready" | "failed";
 	readonly Block: Valuation | null;
@@ -166,38 +172,48 @@ type PreviewState = {
 	readonly Message: string | null;
 };
 
-// RatePhase - the rate read's three states.
+/**
+ * RatePhase - the rate read's three states.
+ */
 type RatePhase = "idle" | "loading" | "failed";
 
-// Answer - one numeric draft field: the value the row will publish and
-// whether the text was usable. A required field falls back to the rate the
-// revision already carries so the merged row stays well formed, and Ok is
-// what the publish button reads.
+/**
+ * Answer - one numeric draft field: the value the row will publish and whether the text was
+ * usable. A required field falls back to the rate the revision already carries so the merged row
+ * stays well formed, and Ok is what the publish button reads.
+ */
 type Answer = { readonly Value: number; readonly Ok: boolean };
 
-// OptionalAnswer - one optional rate field: an empty text is a bucket the
-// book does not separately price, which is a valid null, never a zero.
+/**
+ * OptionalAnswer - one optional rate field: an empty text is a bucket the book does not separately
+ * price, which is a valid null, never a zero.
+ */
 type OptionalAnswer = { readonly Value: number | null; readonly Ok: boolean };
 
-// Built - the whole draft as the publish body: the rows the revision would
-// carry and the first problem the form holds, or null when it can publish.
+/**
+ * Built - the whole draft as the publish body: the rows the revision would carry and the first
+ * problem the form holds, or null when it can publish.
+ */
 type Built = { readonly Rows: readonly PublishRow[]; readonly Problem: string | null };
 
 const Pad = (Value: number): string => String(Value).padStart(2, "0");
 
-// Written - the text a change event carries. The DOM overload of
-// createElement cannot infer the element type from a string tag, so the event
-// arrives as unknown and the field is read defensively.
+/**
+ * Written - the text a change event carries. The DOM overload of createElement cannot infer the
+ * element type from a string tag, so the event arrives as unknown and the field is read
+ * defensively.
+ */
 const Written = (Event: unknown): string => {
 	const Target = (Event as { target?: unknown } | null)?.target;
 	const Text = (Target as { value?: unknown } | null)?.value;
 	return typeof Text === "string" ? Text : "";
 };
 
-// Day - one instant as the table and the form show it: the local date and
-// minute, zero padded, and the empty string for a missing or malformed value
-// (the caller renders the dash). An invalid Date is what a non-finite input
-// becomes, so the formatter needs no separate guard.
+/**
+ * Day - one instant as the table and the form show it: the local date and minute, zero padded, and
+ * the empty string for a missing or malformed value (the caller renders the dash). An invalid Date
+ * is what a non-finite input becomes, so the formatter needs no separate guard.
+ */
 const Day = (Value: number | null): string => {
 	const Moment = new Date(
 		typeof Value === "number" && Number.isFinite(Value) ? Value : Number.NaN,
@@ -212,9 +228,11 @@ const Day = (Value: number | null): string => {
 	}
 };
 
-// Instant - one typed instant: a local date and minute, or a bare date read
-// as local midnight so a typed date never lands on the previous day through
-// the UTC reading of a date-only string. Unparseable text is null.
+/**
+ * Instant - one typed instant: a local date and minute, or a bare date read as local midnight so a
+ * typed date never lands on the previous day through the UTC reading of a date-only string.
+ * Unparseable text is null.
+ */
 const Instant = (Text: string): number | null => {
 	const Trimmed = Text.trim();
 	switch (true) {
@@ -231,8 +249,10 @@ const Instant = (Text: string): number | null => {
 	}
 };
 
-// Required - one required rate: a non-negative finite number, else the
-// fallback the revision already carries and Ok false.
+/**
+ * Required - one required rate: a non-negative finite number, else the fallback the revision
+ * already carries and Ok false.
+ */
 const Required = (Text: string, Fallback: number): Answer => {
 	const Trimmed = Text.trim();
 	switch (true) {
@@ -250,8 +270,10 @@ const Required = (Text: string, Fallback: number): Answer => {
 	}
 };
 
-// Optional - one optional rate: an empty text is null, a non-negative finite
-// number is itself, and anything else keeps the fallback and fails.
+/**
+ * Optional - one optional rate: an empty text is null, a non-negative finite number is itself, and
+ * anything else keeps the fallback and fails.
+ */
 const Optional = (Text: string, Fallback: number | null): OptionalAnswer => {
 	const Trimmed = Text.trim();
 	switch (true) {
@@ -269,10 +291,12 @@ const Optional = (Text: string, Fallback: number | null): OptionalAnswer => {
 	}
 };
 
-// From - the valid-from instant: the exact instant the revision already
-// carries while the form still shows it (opening a form and publishing it
-// cannot move the boundary by a second), the parsed instant once the text
-// changes, and the fallback with Ok false when the text does not parse.
+/**
+ * From - the valid-from instant: the exact instant the revision already carries while the form
+ * still shows it (opening a form and publishing it cannot move the boundary by a second), the
+ * parsed instant once the text changes, and the fallback with Ok false when the text does not
+ * parse.
+ */
 const From = (Text: string, Shown: string, Fallback: number): Answer => {
 	const Trimmed = Text.trim();
 	switch (true) {
@@ -285,8 +309,10 @@ const From = (Text: string, Shown: string, Fallback: number): Answer => {
 	}
 };
 
-// Until - the valid-until instant: the same exactness rule as From, with the
-// empty text as the open end every row may declare.
+/**
+ * Until - the valid-until instant: the same exactness rule as From, with the empty text as the
+ * open end every row may declare.
+ */
 const Until = (Text: string, Shown: string, Fallback: number | null): OptionalAnswer => {
 	const Trimmed = Text.trim();
 	switch (true) {
@@ -299,8 +325,10 @@ const Until = (Text: string, Shown: string, Fallback: number | null): OptionalAn
 	}
 };
 
-// DraftOf - one row as the form opens it: every rate and instant the revision
-// carries, and an empty text for a bucket the book does not separately price.
+/**
+ * DraftOf - one row as the form opens it: every rate and instant the revision carries, and an
+ * empty text for a bucket the book does not separately price.
+ */
 const DraftOf = (Source: RateRow): Draft => ({
 	Input: String(Source.InputRate),
 	Output: String(Source.OutputRate),
@@ -311,9 +339,10 @@ const DraftOf = (Source: RateRow): Draft => ({
 	ValidTo: Source.ValidTo === null ? "" : Day(Source.ValidTo),
 });
 
-// Row - one recorded rate row as the publish body carries it: every field the
-// engine inserts, and neither ledger-assigned id, because the publish assigns
-// the revision and the row ids itself.
+/**
+ * Row - one recorded rate row as the publish body carries it: every field the engine inserts, and
+ * neither ledger-assigned id, because the publish assigns the revision and the row ids itself.
+ */
 const Row = (Source: RateRow): PublishRow => ({
 	Provider: Source.Provider,
 	Model: Source.Model,
@@ -333,10 +362,11 @@ const Row = (Source: RateRow): PublishRow => ({
 	Note: Source.Note,
 });
 
-// Merged - one draft over its recorded row: the fields the form edits, the
-// first problem the form holds, and the recorded values everywhere else. The
-// interval order is checked here as well as in the transport, so a publish
-// button never sends a book the route would only refuse.
+/**
+ * Merged - one draft over its recorded row: the fields the form edits, the first problem the form
+ * holds, and the recorded values everywhere else. The interval order is checked here as well as in
+ * the transport, so a publish button never sends a book the route would only refuse.
+ */
 const Merged = (
 	Source: RateRow,
 	Draft: Draft,
@@ -386,8 +416,10 @@ const Merged = (
 	};
 };
 
-// Build - the whole edited row set: every rate row of the revision, each with
-// its draft applied when one is open, and the first problem any draft holds.
+/**
+ * Build - the whole edited row set: every rate row of the revision, each with its draft applied
+ * when one is open, and the first problem any draft holds.
+ */
 const Build = (
 	Book: readonly RateRow[],
 	Drafts: Readonly<Record<number, Draft>>,
@@ -410,8 +442,10 @@ const Build = (
 	return { Rows, Problem };
 };
 
-// Newest - the catalog's newest published revision: the one the view opens
-// on, because a valuation may pin only a published revision.
+/**
+ * Newest - the catalog's newest published revision: the one the view opens on, because a valuation
+ * may pin only a published revision.
+ */
 const Newest = (Revisions: readonly Revision[], CatalogId: number): number | null => {
 	let Found: number | null = null;
 	for (const One of Revisions) {
@@ -421,11 +455,12 @@ const Newest = (Revisions: readonly Revision[], CatalogId: number): number | nul
 	return Found;
 };
 
-// Comparison - the envelope's valuation block, or undefined when the read
-// carried none. The block is read defensively like every other envelope
-// field: a malformed body must not throw and must not render a half-filled
-// comparison, so a block without the revision's own unpriced figure is read as
-// absent rather than shown as a zero the revision never claimed.
+/**
+ * Comparison - the envelope's valuation block, or undefined when the read carried none. The block
+ * is read defensively like every other envelope field: a malformed body must not throw and must
+ * not render a half-filled comparison, so a block without the revision's own unpriced figure is
+ * read as absent rather than shown as a zero the revision never claimed.
+ */
 const Comparison = (Envelope: CostResponse): Valuation | undefined => {
 	// Early returns, because the narrowing has to survive into the figure
 	// checks; a switch (true) arm cannot carry it.
@@ -443,9 +478,10 @@ const Comparison = (Envelope: CostResponse): Valuation | undefined => {
 	return Block;
 };
 
-// Picker - one native select of the settings block: the house pattern for an
-// enum, wrapped in its label so the visible word is the control's accessible
-// name.
+/**
+ * Picker - one native select of the settings block: the house pattern for an enum, wrapped in its
+ * label so the visible word is the control's accessible name.
+ */
 const Picker = (
 	Label: string,
 	Value: string,

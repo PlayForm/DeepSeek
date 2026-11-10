@@ -6,6 +6,7 @@
  * OFF-LIMITS surfaces (owned by another lane only).
  *
  * @remarks
+ *
  * Derived from the file-ownership matrix at call time - pre-baked, never
  * negotiated.
  */

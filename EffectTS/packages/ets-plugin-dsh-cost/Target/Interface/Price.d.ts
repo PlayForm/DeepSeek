@@ -7,6 +7,7 @@
  * rate is an unpriced bucket charged at zero, never guessed.
  *
  * @remarks
+ *
  * EffectiveFrom is the epoch millisecond the row came in force; a call is
  * priced at the row with the greatest EffectiveFrom that is not after the
  * call's time - never the newest row - so a historical invoice stays

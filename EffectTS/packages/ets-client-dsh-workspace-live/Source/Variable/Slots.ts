@@ -4,6 +4,7 @@
  * The live view's slot vocabulary.
  *
  * @remarks
+ *
  * `tab` is the host slot the workspace tab mounts into; `section` is the
  * CHILD slot the tab declares (the panel family's v4.1 model: a
  * registration's `children` table declares the child slots it owns, and the

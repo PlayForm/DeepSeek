@@ -4,6 +4,7 @@
  * Declares the DEFAULT weight table of the pickable heuristics as data.
  *
  * @remarks
+ *
  * The current formula as DATA (completion spec 03-SUGGESTERS section 2: "the pickable
  * heuristics table with weights").
  *

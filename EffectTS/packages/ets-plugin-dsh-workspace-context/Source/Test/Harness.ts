@@ -1,21 +1,3 @@
-// Source/Test/Harness.ts - the shared test harness for the WORKSPACE-CONTEXT
-// tests: the fake ctx (registration capture with a DISTINCT root object, the
-// ctx listener capture, reflect.provide capture, the effect runner, the
-// logger capture, the tools facility capture, the fs purity capture) + the
-// REAL @playform/ets-plugin-dsh-factory instance from its built Target + the REAL
-// workspace-context apply from its built Target - the family fake-ctx +
-// real-factory harness pattern, written ONCE per package and imported by
-// every test folder. Each folder process gets a fresh set, so every folder is
-// standalone-green and the aggregate replays the same seams per folder.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// NO FAKE CLOCK: the packet builder has no clock dependency - the sequence is
-// the service's own counters (the no-wall-clock rule).
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -24,6 +6,30 @@ import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 import GraphClass from "../../../ets-plugin-dsh-workspace-graph/Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the WORKSPACE-CONTEXT tests: the fake ctx
+ * (registration capture with a DISTINCT root object, the ctx listener
+ * capture, reflect.provide capture, the effect runner, the logger capture,
+ * the tools facility capture, the fs purity capture) + the REAL
+ * @playform/ets-plugin-dsh-factory instance from its built Target + the REAL
+ * workspace-context apply from its built Target - the family fake-ctx +
+ * real-factory harness pattern, written ONCE per package and imported by
+ * every test folder. Each folder process gets a fresh set, so every folder is
+ * standalone-green and the aggregate replays the same seams per folder.
+ *
+ * @remarks
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * wires the plugin (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * NO FAKE CLOCK: the packet builder has no clock dependency - the sequence is
+ * the service's own counters (the no-wall-clock rule).
+ */
 export { Plugin };
 
 /**

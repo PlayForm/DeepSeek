@@ -1,6 +1,12 @@
-// CountShort - the compact token formatter of the tokens column: the K and
-// M ladder the harness tokens cells use, with two decimals below 1,000, one
-// decimal from 1,000 up, and one decimal M from 10,000,000 up.
+/**
+ * @module CountShort
+ *
+ * The compact token formatter of the tokens column: the K and M ladder the harness tokens cells
+ * use.
+ *
+ * @remarks
+ * Two decimals below 1,000, one decimal from 1,000 up, and one decimal M from 10,000,000 up.
+ */
 import Dash from "@Variable/Dash";
 
 export default function CountShort(Value: number | null): string {

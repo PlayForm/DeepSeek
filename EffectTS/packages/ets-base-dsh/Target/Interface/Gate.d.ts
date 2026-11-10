@@ -4,6 +4,7 @@
  * The pass decision the g1 gate set returns (Function/Gate).
  *
  * @remarks
+ *
  * The gate itself logs nothing: the caller (the module's fs/observed listener)
  * composes its own ledger lines for the outcomes it cares about -
  * traditionally at least the `excluded` one (`skipped (excluded) <path>`),

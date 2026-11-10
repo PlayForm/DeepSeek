@@ -1,13 +1,3 @@
-// Source/Test/Chain-And-Rewrite/Test.ts - one singular test: the chain pass's
-// canonicalization (member table, idempotence, pinStyle exact, the target and
-// workspace tables, inline tables), the rewrite contract (comment/formatting
-// preservation byte-equality through the string-next path, the governed
-// ledger line), the strict stripping (whole-entry, table-style, the
-// no-registry case), and the full-version normalization (shorthand cores,
-// exact prefix, prerelease/build, complex forms).
-// Runs standalone (`node Target/Test/Chain-And-Rewrite/Test.js`) AND
-// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-cargo-governor.
 import assert from "node:assert/strict";
 import * as Path from "node:path";
 import {
@@ -27,6 +17,27 @@ import {
 	SeamStub,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the chain pass's canonicalization, the rewrite
+ * contract, the strict stripping, and the full-version normalization.
+ *
+ * @remarks
+ *
+ * The canonicalization covers the member table, idempotence, pinStyle
+ * exact, the target and workspace tables, inline tables. The rewrite
+ * contract covers comment/formatting preservation byte-equality through the
+ * string-next path and the governed ledger line. The strict stripping
+ * covers whole-entry, table-style, and the no-registry case. The
+ * full-version normalization covers shorthand cores, exact prefix,
+ * prerelease/build, and complex forms.
+ *
+ * Runs standalone (`node Target/Test/Chain-And-Rewrite/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-cargo-governor.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

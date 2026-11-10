@@ -6,6 +6,7 @@
  * BUILT-IN pack.
  *
  * @remarks
+ *
  * Production passes nothing (HOME, then `os.homedir()`; the built-in fallback
  * on); a smoke passes a temporary home so it never reads or writes the real
  * `~/.dsh`, and `builtin: false` makes a layer-less workspace resolve to

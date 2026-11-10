@@ -1,3 +1,5 @@
+import type Factory from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Factory
  *
@@ -5,6 +7,7 @@
  * service (the family's class/service plugin, factory SCHEME.md §0-§2).
  *
  * @remarks
+ *
  * The test-suggester hook is the factory's NON-MANIFEST consumer: it uses the
  * State builder (cell unwrap + shared fields, §2.10) and the ledger (Append,
  * §2.1) - but NOT the fs/observed Wire (§2.11, fs/observed-hardwired to this
@@ -21,8 +24,6 @@
  * `Events` with `'tools/post-execute'` - re-declaring it would be a
  * conflicting duplicate.
  */
-import type Factory from "@playform/ets-plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

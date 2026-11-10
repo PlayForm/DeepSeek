@@ -1,9 +1,3 @@
-// Source/Test/Workspace-Gate/Test.ts - the workspace gate against the fake
-// ctx and REAL temp trees: (a) a call path with NO `.git`/`package.json` root
-// and no session cwd abstains `foreign-workspace`; (b) a call inside a temp
-// root that carries `.git` emits the HISTORY note naming the companions the
-// session touched right after the anchor, and the same root with no history
-// abstains `no-history`.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -20,10 +14,27 @@ import {
 	Setup,
 } from "../Harness.js";
 
-/** A temp tree under the OS temp dir (fresh per folder process). */
+/**
+ * @module Test
+ *
+ * The workspace gate against the fake ctx and REAL temp trees.
+ *
+ * @remarks
+ *
+ * (a) A call path with NO `.git`/`package.json` root and no session cwd
+ * abstains `foreign-workspace`. (b) A call inside a temp root that carries
+ * `.git` emits the HISTORY note naming the companions the session touched
+ * right after the anchor, and the same root with no history abstains
+ * `no-history`.
+ */
+/**
+ * A temp tree under the OS temp dir (fresh per folder process).
+ */
 const Tree = (Prefix: string): string => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
 
-/** Write one file under the tree (parents created). */
+/**
+ * Write one file under the tree (parents created).
+ */
 const Put = (Root: string, Relative: string, Body = "x"): string => {
 	const Full = Path.join(Root, Relative);
 	FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
@@ -31,17 +42,23 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
-/** The optional harness service the probe reads (the real shape: get(session)). */
+/**
+ * The optional harness service the probe reads (the real shape: get(session)).
+ */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** A judged write call. */
+/**
+ * A judged write call.
+ */
 const Write = (Path_: string, Id: string): any => ({
 	name: "write",
 	arguments: { file_path: Path_ },
 	agent: AgentOf(Id),
 });
 
-/** The history note's byte-exact text (k = 0.60 + 0.05 * 2). */
+/**
+ * The history note's byte-exact text (k = 0.60 + 0.05 * 2).
+ */
 const HistoryText = [
 	"[convention-suggester] intent=History confidence=0.70",
 	"targets (2):",
@@ -62,11 +79,15 @@ const Seed = (Run: any, Id: string, Anchor: string): void => {
 	Commit(Run, Id, "README.md");
 };
 
-/** The FOREIGN tree: no `.git`, no `package.json`, and no session cwd. */
+/**
+ * The FOREIGN tree: no `.git`, no `package.json`, and no session cwd.
+ */
 const Foreign = Tree("convention-suggester-foreign-");
 const ForeignApply = Put(Foreign, "Source/Function/Apply.ts");
 
-/** The ROOTED tree: a `.git` marker, the anchor and the two companions. */
+/**
+ * The ROOTED tree: a `.git` marker, the anchor and the two companions.
+ */
 const Rooted = Tree("convention-suggester-rooted-");
 FileSystem.mkdirSync(Path.join(Rooted, ".git"));
 const RootedAnchor = Put(Rooted, "Source/Function/Apply.ts");

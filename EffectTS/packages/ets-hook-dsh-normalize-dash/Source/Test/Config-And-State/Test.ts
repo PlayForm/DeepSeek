@@ -1,13 +1,23 @@
-// Source/Test/Config-And-State/Test.ts - one singular test: the apply-time
-// wiring - the config defaults and volatile cells, the listener set, the
-// state unwraps, and the fresh-state-per-apply posture (no module-level
-// globals). Runs standalone (`node Target/Test/Config-And-State/Test.js`) AND
-// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the REAL
-// factory + the REAL dash apply, from the Harness.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the apply-time wiring.
+ *
+ * @remarks
+ *
+ * The test covers the config defaults and volatile cells, the listener
+ * set, the state unwraps, and the fresh-state-per-apply posture (no
+ * module-level globals).
+ *
+ * Runs standalone (`node Target/Test/Config-And-State/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the
+ * REAL factory + the REAL dash apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

@@ -1,3 +1,7 @@
+import type Decision from "../Interface/Decision.js";
+import type { CompanionDecision, HeuristicValues } from "../Interface/Decision.js";
+import type Learning from "../Interface/Learning.js";
+
 /**
  * @module Decide
  *
@@ -7,6 +11,7 @@
  * weight, value, outcome }").
  *
  * @remarks
+ *
  * The record is built from the values the score ALREADY used - the same
  * CompanionDecision rows the note was ranked from, or the would-be rows a
  * gated silence measured - plus the effective weight table and the enabled
@@ -16,24 +21,30 @@
  * stays `pending` by design: no note was emitted, so there is no window to
  * close - the placeholder is the honest "no outcome exists".
  */
-import type Decision from "../Interface/Decision.js";
-import type { CompanionDecision, HeuristicValues } from "../Interface/Decision.js";
-import type Learning from "../Interface/Learning.js";
-
 export default (
-	/** The learned layer (the store that persists the record). */
+	/**
+	 * The learned layer (the store that persists the record).
+	 */
 	Learning: Learning,
 
-	/** The pack family that won the detection. */
+	/**
+	 * The pack family that won the detection.
+	 */
 	Family: string,
 
-	/** The family's confidence kappa. */
+	/**
+	 * The family's confidence kappa.
+	 */
 	Kappa: number,
 
-	/** The ranked rows the score produced (or the silence's would-be rows). */
+	/**
+	 * The ranked rows the score produced (or the silence's would-be rows).
+	 */
 	Companions: CompanionDecision[],
 
-	/** The effective weight table plus the enabled heuristic names. */
+	/**
+	 * The effective weight table plus the enabled heuristic names.
+	 */
 	Table: { enabled: string[]; weights: HeuristicValues },
 ): Decision => {
 	const Record: Decision = {

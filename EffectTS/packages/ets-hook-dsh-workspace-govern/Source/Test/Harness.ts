@@ -1,21 +1,3 @@
-// Source/Test/Harness.ts - the shared test harness for the WORKSPACE-GOVERN
-// tests: the fake ctx (the ctx listener capture for the two waterfall
-// listeners, reflect.provide capture, logger capture, the throwing fs) + the
-// REAL @playform/ets-plugin-dsh-factory instance from its built Target + the
-// REAL workspace-govern apply from its built Target - the family fake-ctx +
-// real-factory harness pattern, written ONCE per package and imported by
-// every test folder. Each folder process gets a fresh set, so every folder
-// is standalone-green and the aggregate replays the same seams per folder.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// NO CLOCK: the govern gate has no time dependency - decisions are sequenced
-// by the plugin's own monotonic counter (the no-wall-clock rule), so the
-// harness needs no time seam.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -23,6 +5,32 @@ import * as Path from "node:path";
 import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the WORKSPACE-GOVERN tests.
+ *
+ * @remarks
+ *
+ * The harness wires the fake ctx (the ctx listener capture for the two
+ * waterfall listeners, reflect.provide capture, logger capture, the
+ * throwing fs) plus the REAL @playform/ets-plugin-dsh-factory instance from
+ * its built Target plus the REAL workspace-govern apply from its built
+ * Target - the family fake-ctx + real-factory harness pattern, written ONCE
+ * per package and imported by every test folder. Each folder process gets a
+ * fresh set, so every folder is standalone-green and the aggregate replays
+ * the same seams per folder.
+ *
+ * The standalone selfcheck `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass plus one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * wires the plugin (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * There is NO CLOCK: the govern gate has no time dependency - decisions are
+ * sequenced by the plugin's own monotonic counter (the no-wall-clock rule),
+ * so the harness needs no time seam.
+ */
 export { Plugin };
 
 /**

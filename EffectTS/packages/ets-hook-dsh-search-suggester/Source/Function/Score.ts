@@ -1,9 +1,14 @@
+import type { Candidate, Detection, KnowledgeRow, Verdict } from "../Interface/Execution.js";
+import type Projection from "../Interface/Projection.js";
+import Measure from "./Measure.js";
+
 /**
  * @module Score
  *
  * The confidence and the gate (plan sections 3.5-3.7, 4.7).
  *
  * @remarks
+ *
  *   k = sigmoid(sum(weights) + b), b = -0.6, so a single weak signal does not
  *   cross the default threshold;
  *
@@ -33,10 +38,6 @@
  * every candidate the verdict is the `dismissed` suppression, not the
  * ambiguous-target abstention - the list was not empty, it was refused.
  */
-import type { Candidate, Detection, KnowledgeRow, Verdict } from "../Interface/Execution.js";
-import type Projection from "../Interface/Projection.js";
-import Measure from "./Measure.js";
-
 /**
  * The plan's bias: a single weak signal stays under the default threshold.
  */

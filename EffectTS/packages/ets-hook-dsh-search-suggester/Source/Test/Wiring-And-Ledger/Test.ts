@@ -1,16 +1,3 @@
-// Source/Test/Wiring-And-Ledger/Test.ts - the wiring and the ledger: the
-// loader contract (the default object carries name/apply/Config/inject,
-// apply returns nothing), the five-listener registration with the distinct
-// root identity, the byte-exact activation and disabled lines (logger form
-// and durable `[ISO]` form), the config fail-loud, the schema defaults and
-// the knowledge load on the built State, and the fs purity (the suggester
-// writes its knowledge through its own node:fs channel, never ctx.fs).
-//
-// THE HISTORY MODEL: the activation's second segment is `history` (there is no
-// boot pack), `State.Pack` is empty at apply, the per-session history is a
-// session-projection unit registered through `ctx.inject` (no `State` field,
-// no listener of its own), and the candidates come from the committed session
-// history.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {
@@ -37,6 +24,27 @@ import {
 	Workspace,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The singular test of the wiring and the ledger.
+ *
+ * @remarks
+ *
+ * The wiring covers the loader contract (the default object carries
+ * name/apply/Config/inject, apply returns nothing), the five-listener
+ * registration with the distinct root identity, the byte-exact activation
+ * and disabled lines (logger form and durable `[ISO]` form), the config
+ * fail-loud, the schema defaults and the knowledge load on the built State.
+ * The ledger covers the fs purity (the suggester writes its knowledge
+ * through its own `node:fs` channel, never ctx.fs).
+ *
+ * THE HISTORY MODEL: the activation's second segment is `history` (there is
+ * no boot pack), `State.Pack` is empty at apply, the per-session history is
+ * a session-projection unit registered through `ctx.inject` (no `State`
+ * field, no listener of its own), and the candidates come from the
+ * committed session history.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

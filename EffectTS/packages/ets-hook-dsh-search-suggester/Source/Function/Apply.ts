@@ -1,3 +1,31 @@
+import { dirname } from "node:path";
+
+import type { Context } from "@deepseek-ai/cordis";
+import type { UserMessage } from "@deepseek-ai/dsh-llm";
+import type { AssembleContext, PromptAssembly } from "@deepseek-ai/dsh-system-prompt";
+import type { PostToolDecision, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
+import { Activate } from "@playform/ets-base-dsh";
+import { Adjacent, Families, Home, Resolve, Root as RootOf } from "@playform/ets-lib-dsh-pack";
+
+import type Config from "../Interface/Config.js";
+import type { CallView, Intent, Verdict } from "../Interface/Execution.js";
+import type Projection from "../Interface/Projection.js";
+import type State from "../Interface/State.js";
+import Version from "../Variable/Version.js";
+import Detect from "./Detect.js";
+import DismissTool from "./Dismiss.js";
+import Filter from "./Filter.js";
+import ReadHistory from "./History.js";
+import { Match } from "./Measure.js";
+import BuildNote, { Prepend, Text } from "./Note.js";
+import Load, { Dismissed, Emitted, Followed, Ignored, Row, Save } from "./Persist.js";
+import Projected from "./Projected.js";
+import BuildProjection from "./Projection.js";
+import Register from "./Register.js";
+import Ring, { type RingState } from "./Ring.js";
+import Score, { NoteKey } from "./Score.js";
+import Seed from "./Seed.js";
+
 /**
  * @module Apply
  *
@@ -6,6 +34,7 @@
  * the FOUR listeners of the suggester's surfaces (plan section 4.2).
  *
  * @remarks
+ *
  * The listeners:
  *
  *   1. tools/post-execute (waterfall, plain registration - AFTER the ccr's
@@ -94,34 +123,6 @@
  * the host exposes `ctx.tools` - the batch-decision precedent, a guarded
  * registration so a bare mount still applies.
  */
-import { dirname } from "node:path";
-
-import type { Context } from "@deepseek-ai/cordis";
-import type { UserMessage } from "@deepseek-ai/dsh-llm";
-import type { AssembleContext, PromptAssembly } from "@deepseek-ai/dsh-system-prompt";
-import type { PostToolDecision, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
-import { Activate } from "@playform/ets-base-dsh";
-import { Adjacent, Families, Home, Resolve, Root as RootOf } from "@playform/ets-lib-dsh-pack";
-
-import type Config from "../Interface/Config.js";
-import type { CallView, Intent, Verdict } from "../Interface/Execution.js";
-import type Projection from "../Interface/Projection.js";
-import type State from "../Interface/State.js";
-import Version from "../Variable/Version.js";
-import Detect from "./Detect.js";
-import DismissTool from "./Dismiss.js";
-import Filter from "./Filter.js";
-import ReadHistory from "./History.js";
-import { Match } from "./Measure.js";
-import BuildNote, { Prepend, Text } from "./Note.js";
-import Load, { Dismissed, Emitted, Followed, Ignored, Row, Save } from "./Persist.js";
-import Projected from "./Projected.js";
-import BuildProjection from "./Projection.js";
-import Register from "./Register.js";
-import Ring, { type RingState } from "./Ring.js";
-import Score, { NoteKey } from "./Score.js";
-import Seed from "./Seed.js";
-
 /**
  * The learning-only tools: observed for the follow/ignore rules, never noted.
  */

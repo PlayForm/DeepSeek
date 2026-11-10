@@ -1,3 +1,10 @@
+import { basename as Base } from "node:path";
+
+import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import { Context, Effect, Layer } from "effect";
+
+import GovernFn, { type Registry, type Selection } from "../Function/Govern.js";
+
 /**
  * @module Govern
  *
@@ -5,6 +12,7 @@
  * `Govern` method.
  *
  * @remarks
+ *
  * The sequential fold (the raw-write tool's post-write call) re-expressed as
  * a typed effect over the Function/Govern.ts body, wrapped in the
  * `dsh.govern` root span (target + basename as read-only attributes) with one
@@ -28,13 +36,6 @@
  * family's silence invariant), so a throwing step never propagates and later
  * steps still run, in both modes.
  */
-import { basename as Base } from "node:path";
-
-import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
-import { Context, Effect, Layer } from "effect";
-
-import GovernFn, { type Registry, type Selection } from "../Function/Govern.js";
-
 // Govern - the service tag.
 export class Govern extends Context.Service<
 	Govern,

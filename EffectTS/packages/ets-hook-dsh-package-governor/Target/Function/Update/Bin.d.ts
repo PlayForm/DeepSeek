@@ -1,3 +1,6 @@
+import type Invocation from "@Interface/Invocation.js";
+import type State from "@Interface/State.js";
+export default _default;
 /**
  * @module Bin
  *
@@ -5,6 +8,7 @@
  * path).
  *
  * @remarks
+ *
  * ncu's -x/--reject and -a/--allow take ONE comma-or-space-delimited argument;
  * separate argv entries become positional FILTERS (ncu scans only those
  * packages) - verified ncu 23.0.0, 2026-10-02.
@@ -30,7 +34,4 @@
  * ledger+ring pipe) and Collect (the stream reader) - the same role names the
  * cargo governor's Upgrade split uses (the naming unification, P4).
  */
-import type Invocation from "../../Interface/Invocation.js";
-import type State from "../../Interface/State.js";
-export default _default;
 declare function _default(State: State, Invocation: Invocation, Binary: string, Root: string, Groups: string[], Concurrency: number, Reject: string[], Allow: string[] | undefined, Signal: AbortSignal, Emit?: (text: string) => void): Promise<boolean>;

@@ -6,6 +6,7 @@
  * emits on the bus and the plugins' adapters consume.
  *
  * @remarks
+ *
  * The library owns the strings; no plugin re-declares them (the one place a
  * new event name is added).
  */

@@ -1,3 +1,6 @@
+import type { PanelSection } from "@Interface/Panel.js";
+import Trace from "@Variable/Trace.js";
+
 /**
  * @module Suggester
  *
@@ -6,12 +9,10 @@
  * re-spec).
  *
  * @remarks
+ *
  * Its schema is fully volatile, so its form writes ride the revision-fenced
  * settings mutate, and the D5 trace feeds its live tail.
  */
-import type { PanelSection } from "@Interface/Panel.js";
-import Trace from "@Variable/Trace.js";
-
 export default {
 	id: "adapter-hook-dsh-convention-suggester",
 	bundle: "@playform/ets-hook-dsh-convention-suggester",

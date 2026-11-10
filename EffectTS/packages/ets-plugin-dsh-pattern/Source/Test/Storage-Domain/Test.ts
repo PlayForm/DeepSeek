@@ -1,10 +1,3 @@
-// Source/Test/Storage-Domain/Test.ts - the storage-domain PRIMARY store and
-// the JSON fallback: the byte-exact domain spec (name/version/layout/tables,
-// NO compatibleVersions), the open, the per-mutation round-trip (Record and
-// Decay write the KV records), the explicit Save (every pattern plus the meta
-// timestamp), the reopen (restart) restoring the registry, the absent-facility
-// fallback still writing and reading the JSON snapshot, and the
-// domain-version failure mode (a loud line, then the JSON fallback).
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -18,15 +11,32 @@ import {
 	MakeCounter,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The storage-domain PRIMARY store and the JSON fallback: the byte-exact
+ * domain spec (name/version/layout/tables, NO compatibleVersions), the open,
+ * the per-mutation round-trip (Record and Decay write the KV records), the
+ * explicit Save (every pattern plus the meta timestamp), the reopen (restart)
+ * restoring the registry, the absent-facility fallback still writing and
+ * reading the JSON snapshot, and the domain-version failure mode (a loud
+ * line, then the JSON fallback).
+ */
 const Day = 86_400_000;
 
-/** The default snapshot path inside the redirected home. */
+/**
+ * The default snapshot path inside the redirected home.
+ */
 const SnapshotPath = (): string => Path.join(Home, ".dsh", "pattern", "registry.json");
 
-/** The activation line every mount logs (the byte-exact contract). */
+/**
+ * The activation line every mount logs (the byte-exact contract).
+ */
 const Activated = "pattern: activated (seeded 4 patterns) (logFile ~/.dsh/playform/ets-plugin-dsh-pattern.log)";
 
-/** A custom pattern (the seed/restart fixtures). */
+/**
+ * A custom pattern (the seed/restart fixtures).
+ */
 const Pattern = (Id: string, Confidence: number, UpdatedAt: number): any => ({
 	id: Id,
 	intent: Id,
@@ -39,7 +49,9 @@ const Pattern = (Id: string, Confidence: number, UpdatedAt: number): any => ({
 	updatedAt: UpdatedAt,
 });
 
-/** Write the JSON fallback snapshot (the degraded-store fixtures). */
+/**
+ * Write the JSON fallback snapshot (the degraded-store fixtures).
+ */
 const SeedJson = (Patterns: any[]): void => {
 	FileSystem.mkdirSync(Path.dirname(SnapshotPath()), { recursive: true });
 	FileSystem.writeFileSync(
@@ -49,7 +61,9 @@ const SeedJson = (Patterns: any[]): void => {
 	);
 };
 
-/** One mount over the fake KV domain (the facility attached BEFORE the probe). */
+/**
+ * One mount over the fake KV domain (the facility attached BEFORE the probe).
+ */
 const Mount = (Knobs: Record<string, unknown>, Store: any): any =>
 	Make({ storagePath: SnapshotPath(), ...Knobs }, (Context: any) => {
 		Context.storageDomain = Store.facility;

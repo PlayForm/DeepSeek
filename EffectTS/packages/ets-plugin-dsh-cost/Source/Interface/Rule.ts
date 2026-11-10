@@ -6,6 +6,7 @@
  * ledger Modifier row parsed to its arithmetic shape.
  *
  * @remarks
+ *
  * Kind is the pricing mode the rule applies to (batch, flex, priority,
  * ultrafast), Model NULL means the rule is provider-wide, and
  * EffectiveFrom/EffectiveTo bound the window in epoch milliseconds (a NULL

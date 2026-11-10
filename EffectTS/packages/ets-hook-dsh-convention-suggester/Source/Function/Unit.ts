@@ -1,3 +1,13 @@
+import { Fold, type Touch } from "@playform/ets-lib-dsh-pack";
+
+import type {
+	ProjectionUnit,
+	SessionEvent,
+	SessionHistory,
+	StateSchema,
+} from "../Interface/Projection.js";
+import { ProjectionCap, ProjectionKey, ProjectionVersion } from "../Variable/Projection.js";
+
 /**
  * @module Unit
  *
@@ -5,6 +15,7 @@
  * pure fold over the committed `tool/call` events of one session.
  *
  * @remarks
+ *
  * THE FRAMEWORK DRIVES, THE DOMAIN COMPUTES: the registry subscribes to
  * `session/event` once and passes every committed event through `apply`, so
  * this module holds no subscription, no timer and no WeakMap - the same
@@ -33,16 +44,6 @@
  * `tool/call` with no result `TOOL_OUTCOME_UNKNOWN`), before dispatch, so
  * the anchor's prior touches are present without any post-execute append.
  */
-import { Fold, type Touch } from "@playform/ets-lib-dsh-pack";
-
-import type {
-	ProjectionUnit,
-	SessionEvent,
-	SessionHistory,
-	StateSchema,
-} from "../Interface/Projection.js";
-import { ProjectionCap, ProjectionKey, ProjectionVersion } from "../Variable/Projection.js";
-
 /**
  * A non-negative integer, or the fallback (a corrupt persisted row).
  */

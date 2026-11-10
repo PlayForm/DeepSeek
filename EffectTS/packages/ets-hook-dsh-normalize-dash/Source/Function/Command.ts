@@ -1,3 +1,5 @@
+import { Command } from "@playform/ets-base-dsh";
+
 /**
  * @module Command
  *
@@ -5,6 +7,7 @@
  * handler (@playform/ets-base-dsh/Overpass/Command).
  *
  * @remarks
+ *
  * The grammar, the `scopes` report, the `batch` one-shot arm, the `results
  * on|off` settings/editor paths, the usage line and the `files` decline line
  * all live in the base; the module keeps:
@@ -19,8 +22,6 @@
  * The service types are re-exported because Function/Apply imports them from
  * this module (the import path stays untouched).
  */
-import { Command } from "@playform/ets-base-dsh";
-
 export type {
 	CommandResult,
 	CommandsService,

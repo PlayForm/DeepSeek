@@ -4,6 +4,7 @@
  * The bounded before/after of one target.
  *
  * @remarks
+ *
  * The same shape the pass-on declares.
  */
 export default interface Preview {

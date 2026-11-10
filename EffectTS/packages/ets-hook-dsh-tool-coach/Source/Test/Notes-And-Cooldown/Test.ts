@@ -1,13 +1,3 @@
-// Source/Test/Notes-And-Cooldown/Test.ts - one singular test: tier 1 of the
-// coaching ladder - detection + strikes (R2) and the cooldown gating (R3).
-// The two tiers share one run on purpose: R3's counts continue the exact
-// run R2 built (R3's strike/suppression arithmetic is relative to R2's
-// history), so the folder replays R2's four setup calls before R3's
-// fresh-agent sequence. Runs standalone
-// (`node Target/Test/Notes-And-Cooldown/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions are moved
-// verbatim from Classic/smokes/tool-coach-smoke.mjs (R2 + R3).
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {
@@ -27,6 +17,25 @@ import {
 	SED_ROW,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The singular test of tier 1 of the coaching ladder: detection plus
+ * strikes (R2) and the cooldown gating (R3).
+ *
+ * @remarks
+ *
+ * The two tiers share one run on purpose: R3's counts continue the exact
+ * run R2 built (R3's strike/suppression arithmetic is relative to R2's
+ * history), so the folder replays R2's four setup calls before R3's
+ * fresh-agent sequence.
+ *
+ * The file runs standalone (`node Target/Test/Notes-And-Cooldown/Test.js`)
+ * and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * It is a unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions
+ * are moved verbatim from `Classic/smokes/tool-coach-smoke.mjs` (R2 + R3).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

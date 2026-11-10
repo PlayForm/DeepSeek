@@ -4,6 +4,7 @@
  * The minimal structural type of the harness JobRegistry seam (`ctx.jobs`).
  *
  * @remarks
+ *
  * Probed at runtime and never injected (`ctx.jobs` is agent-scoped; a root
  * plugin probes it as an optional dependency). The spec/handle/hooks/outcome
  * shapes are inlined structurally: only the members the governor consumes are
@@ -30,20 +31,34 @@ export default interface Jobs {
 	 * job's producer face; returns the registry-issued `<kind>-N` id.
 	 */
 	start(spec: {
-		/** Producer kind — also the id prefix. */
+		/**
+		 * Producer kind — also the id prefix.
+		 */
 		kind: string;
-		/** One-line label (the update stage's `ncu <dir>`). */
+		/**
+		 * One-line label (the update stage's `ncu <dir>`).
+		 */
 		label: string;
-		/** Owning session; `undefined` creates an unowned job open to any caller. */
+		/**
+		 * Owning session; `undefined` creates an unowned job open to any caller.
+		 */
 		owner?: string;
-		/** Synchronous starter; a throw leaves nothing registered. */
+		/**
+		 * Synchronous starter; a throw leaves nothing registered.
+		 */
 		run(job: {
-			/** Append one chunk to the job's output ring. */
+			/**
+			 * Append one chunk to the job's output ring.
+			 */
 			append(text: string, options?: { label?: string }): void;
 		}): {
-			/** Request termination; synchronous, idempotent, eventually settles done. */
+			/**
+			 * Request termination; synchronous, idempotent, eventually settles done.
+			 */
 			cancel(reason?: string): void;
-			/** Terminal outcome; must not reject. */
+			/**
+			 * Terminal outcome; must not reject.
+			 */
 			done: Promise<{
 				status: "completed" | "killed" | "failed";
 				detail?: string;

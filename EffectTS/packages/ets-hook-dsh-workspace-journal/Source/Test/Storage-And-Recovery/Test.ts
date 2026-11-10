@@ -1,9 +1,3 @@
-// Source/Test/Storage-And-Recovery/Test.ts - the storage domain and the
-// restart recovery: the byte-exact domain spec (name/version/layout/
-// invalidRecords/three tables), the batch/entry/ring persistence, the
-// restart recovery with the rebuilds, the validation filter (a bad record is
-// skipped, never guessed), the absent facility (silent skip), the loud open
-// failure, and the effect's disposer closing the handle.
 import assert from "node:assert/strict";
 import {
 	Boot,
@@ -20,7 +14,22 @@ import {
 	FakeStorage,
 } from "../Harness.js";
 
-/** A standard enabled mount with the fake storage attached. */
+/**
+ * @module Test
+ *
+ * The storage domain and the restart recovery of the journal hook.
+ *
+ * @remarks
+ *
+ * The folder proves the byte-exact domain spec (name/version/layout/
+ * invalidRecords/three tables), the batch/entry/ring persistence, the restart
+ * recovery with the rebuilds, the validation filter (a bad record is skipped,
+ * never guessed), the absent facility (silent skip), the loud open failure,
+ * and the effect's disposer closing the handle.
+ */
+/**
+ * A standard enabled mount with the fake storage attached.
+ */
 const Setup = async (Config: Record<string, unknown> = {}, Facility: unknown = undefined): Promise<any> => {
 	rm();
 	const Run = Make(
@@ -35,7 +44,9 @@ const Setup = async (Config: Record<string, unknown> = {}, Facility: unknown = u
 	return Run;
 };
 
-/** Let the effect's void Storage open settle. */
+/**
+ * Let the effect's void Storage open settle.
+ */
 const Settle = async (): Promise<void> => {
 	await new Promise((Resolve) => setImmediate(Resolve));
 };

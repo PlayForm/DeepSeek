@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The service's Schemastery Config schema, built once at load.
  *
  * @remarks
+ *
  * A Variable: one constant built once at load. Cordis validates the
  * exported schema while the plugin loads and fills every default, so
  * invalid configuration fails LOUD at load, and `apply` receives a
@@ -25,9 +29,6 @@
  * registers and reads honestly, but grants and leases nothing until
  * enabled.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
-
 export default Compose(false, {
 	logFile: Schema.string()
 		.default("~/.dsh/playform/ets-plugin-dsh-workspace-authority.log")

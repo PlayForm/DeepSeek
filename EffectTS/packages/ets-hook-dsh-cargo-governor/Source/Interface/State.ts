@@ -1,3 +1,7 @@
+import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
+import type PluginFactory from "@playform/ets-plugin-dsh-factory";
+import type { Scope } from "effect";
+
 /**
  * @module State
  *
@@ -8,6 +12,7 @@
  * values specially, a live-verified lesson).
  *
  * @remarks
+ *
  * THE SHAPE: the factory's shared State (its named type export `State` -
  * the v0.1.1 declaration fix: the built Target/Library.d.ts ships RELATIVE
  * specifiers, so the extracted shared shape is the real one and the
@@ -34,10 +39,6 @@
  * compares them but never parses or computes them
  * (subsystems/filesystem.md).
  */
-import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
-import type PluginFactory from "@playform/ets-plugin-dsh-factory";
-import type { Scope } from "effect";
-
 export default interface State extends Shared {
 	/**
 	 * The injected @playform/ets-plugin-dsh-factory service (the P2 UpdateKey

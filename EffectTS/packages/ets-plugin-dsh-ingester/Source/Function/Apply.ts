@@ -1,16 +1,3 @@
-/**
- * @module Apply
- *
- * The batch's write path.
- *
- * @remarks
- * Plan section 4. The path validates the decision, then per target, in the proposal's order:
- * resolve, verify the version fence (the content sha256 must still match), apply the operations
- * through the governed filesystem (fs.editText with the version guard - the
- * version-fenced literal edit), journal before and after. A conflict stops
- * at that target (when stopOnConflict); the applied targets are reported
- * honestly - no invisible intermediate state.
- */
 import { createHash as Hash } from "node:crypto";
 
 import type Decision from "../Interface/Decision.js";
@@ -20,6 +7,20 @@ import type State from "../Interface/State.js";
 import JournalFn from "./Journal.js";
 import ValidateFn from "./Validate.js";
 
+/**
+ * @module Apply
+ *
+ * The batch's write path.
+ *
+ * @remarks
+ *
+ * Plan section 4. The path validates the decision, then per target, in the proposal's order:
+ * resolve, verify the version fence (the content sha256 must still match), apply the operations
+ * through the governed filesystem (fs.editText with the version guard - the
+ * version-fenced literal edit), journal before and after. A conflict stops
+ * at that target (when stopOnConflict); the applied targets are reported
+ * honestly - no invisible intermediate state.
+ */
 export default async (State: State, Proposal: Proposal, Decision: Decision): Promise<Result> => {
 	const PerTarget: Result["perTarget"] = [];
 	let Applied = 0;

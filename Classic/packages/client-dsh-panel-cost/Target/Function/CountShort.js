@@ -1,1 +1,0 @@
-import r from"../Variable/Dash.js";function e(t){if(typeof t!="number"||!Number.isFinite(t))return r;switch(!0){case t>=1e7:return`${(t/1e6).toFixed(1)}M`;case t>=1e3:return`${(t/1e3).toFixed(1)}K`;default:return`${(t/1e3).toFixed(2)}K`}}export{e as default};

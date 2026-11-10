@@ -1,20 +1,3 @@
-// Source/Test/Parallel-Marker/Test.ts - one singular test: the ETS-only #14
-// PARALLEL MARKER additive coverage - the `{ steps, parallel }` form of the
-// direct-govern selection. The inner selection resolves exactly as before,
-// `parallel: true` switching the fold's concurrency to unbounded
-// (Effect.all, fiber scheduling). Sequential is the DEFAULT (the
-// live-verified race fix - unchanged). The marker's documented SAFETY
-// CONDITION: disjoint targets only; same-file steps race. Accordingly this
-// test exercises only DISJOINT-safe steps - each step's effects land on its
-// OWN file - and asserts the marker semantics (accepted, all steps run and
-// complete, real overlap) plus the containment invariants; the conflicting
-// same-file race outcomes are deliberately NOT asserted (nothing else
-// changes: every pre-existing assertion in the other folders stays
-// byte-identical, sequential is still the default).
-// Runs standalone (`node Target/Test/Parallel-Marker/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-plugin-dsh-factory: the fake ctx + the REAL
-// factory class, from the Harness.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -27,6 +10,31 @@ import {
 	FactoryClass,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The ETS-only #14 PARALLEL MARKER additive coverage: the
+ * `{ steps, parallel }` form of the direct-govern selection.
+ *
+ * @remarks
+ *
+ * The inner selection resolves exactly as before, `parallel: true`
+ * switching the fold's concurrency to unbounded (Effect.all, fiber
+ * scheduling). Sequential is the DEFAULT (the live-verified race fix -
+ * unchanged). The marker's documented SAFETY CONDITION: disjoint targets
+ * only; same-file steps race. Accordingly this test exercises only
+ * DISJOINT-safe steps - each step's effects land on its OWN file - and
+ * asserts the marker semantics (accepted, all steps run and complete, real
+ * overlap) plus the containment invariants; the conflicting same-file race
+ * outcomes are deliberately NOT asserted (nothing else changes: every
+ * pre-existing assertion in the other folders stays byte-identical,
+ * sequential is still the default).
+ *
+ * Runs standalone (`node Target/Test/Parallel-Marker/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-plugin-dsh-factory: the fake ctx + the REAL factory class,
+ * from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

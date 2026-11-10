@@ -7,6 +7,7 @@ import { Section } from "@playform/ets-lib-dsh-core";
  * Variable/Section (the family's single source).
  *
  * @remarks
+ *
  * The circuit breaker (Function/Transform's refusal guard) allows ONLY these
  * to differ between the author's manifest and the governed one - the governor
  * can never restructure a file; a difference in any other section refuses the

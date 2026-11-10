@@ -1,8 +1,3 @@
-// Source/Test/Monitors-Boards/Test.ts - the monitors board tests: the rows
-// from the members' monitor settles, the [live-report] monitored fold (the
-// outcome-first payload, the path with spaces), the SKIP GUARD (a member's
-// monitor settle never flips the member's task row), and the unchanged
-// close/withdraw lifecycle for ordinary job settles.
 import assert from "node:assert/strict";
 import {
 	Advance,
@@ -25,7 +20,22 @@ import {
 	AgentA,
 } from "../Harness.js";
 
-/** A standard boards mount. */
+/**
+ * @module Test
+ *
+ * The monitors board tests.
+ *
+ * @remarks
+ *
+ * The test covers the rows from the members' monitor settles, the
+ * [live-report] monitored fold (the outcome-first payload, the path with
+ * spaces), the SKIP GUARD (a member's monitor settle never flips the
+ * member's task row), and the unchanged close/withdraw lifecycle for
+ * ordinary job settles.
+ */
+/**
+ * A standard boards mount.
+ */
 const Setup = (Config: any = {}): { Jobs: any; Shell: any; Run: any } => {
 	const Jobs = FakeJobsHub();
 	const Shell = FakeShell();
@@ -41,7 +51,9 @@ const Setup = (Config: any = {}): { Jobs: any; Shell: any; Run: any } => {
 	return { Jobs, Shell, Run };
 };
 
-/** The board text of one assemble pass. */
+/**
+ * The board text of one assemble pass.
+ */
 const BoardText = async (Run: any): Promise<string> =>
 	(await WaveAssemble(Run)).sections.find((S: any) => S.name === "live-containers")?.text ?? "";
 

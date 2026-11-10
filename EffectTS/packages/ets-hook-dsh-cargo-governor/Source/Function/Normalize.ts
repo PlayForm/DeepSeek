@@ -4,6 +4,7 @@
  * The FULL-VERSION NORMALIZATION rule (a Cargo-module directive).
  *
  * @remarks
+ *
  * Every simple version value in the dependency sections must be expanded to
  * its MOST SPECIFIC form - no shorthand like "1.0" may remain in a governed
  * Cargo.toml.

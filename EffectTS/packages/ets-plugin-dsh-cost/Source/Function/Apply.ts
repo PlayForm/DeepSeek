@@ -1,3 +1,22 @@
+import { basename } from "node:path";
+
+import type { Context } from "@deepseek-ai/cordis";
+import type { CommandResult } from "@playform/ets-base-dsh";
+import type Factory from "@playform/ets-plugin-dsh-factory";
+
+import type Config from "../Interface/Config.js";
+import Annotate from "./Annotate.js";
+import Assess from "./Assess.js";
+import Backfill from "./Backfill.js";
+import Capture from "./Capture.js";
+import Drain from "./Drain.js";
+import Export from "./Export.js";
+import Forecast from "./Forecast.js";
+import Open from "./Open.js";
+import Report from "./Report.js";
+import Rollup from "./Rollup.js";
+import CostPricing from "./Service.js";
+
 /**
  * @module Apply
  *
@@ -7,6 +26,7 @@
  * (Documentation/Plans/COST-TRACK-PLUGIN.md section 5).
  *
  * @remarks
+ *
  * The effect opens the ledger, registers the two session listeners while
  * the ledger is open and closes it on dispose. The five /cost verbs -
  * report, export, annotate, assess, forecast - plus the backfill job run
@@ -37,25 +57,6 @@
  * itself never runs on the boot path), and the jobs stack being absent is a
  * ledger line, not a crash.
  */
-import { basename } from "node:path";
-
-import type { Context } from "@deepseek-ai/cordis";
-import type { CommandResult } from "@playform/ets-base-dsh";
-import type Factory from "@playform/ets-plugin-dsh-factory";
-
-import type Config from "../Interface/Config.js";
-import Annotate from "./Annotate.js";
-import Assess from "./Assess.js";
-import Backfill from "./Backfill.js";
-import Capture from "./Capture.js";
-import Drain from "./Drain.js";
-import Export from "./Export.js";
-import Forecast from "./Forecast.js";
-import Open from "./Open.js";
-import Report from "./Report.js";
-import Rollup from "./Rollup.js";
-import CostPricing from "./Service.js";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

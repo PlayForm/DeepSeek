@@ -1,3 +1,6 @@
+import type { PanelSection } from "@Interface/Panel.js";
+import Trace from "@Variable/Trace.js";
+
 /**
  * @module Invisible
  *
@@ -5,14 +8,12 @@
  * remaining normalize flavors (order 14).
  *
  * @remarks
+ *
  * Same reference pattern: the child slot, the settings namespace, the static
  * activation posture, and the D5 trace names. The invisible schema carries
  * the volatile `replacement` knob (the empty string by default: removal, not
  * rewrite).
  */
-import type { PanelSection } from "@Interface/Panel.js";
-import Trace from "@Variable/Trace.js";
-
 export default {
 	id: "adapter-hook-dsh-normalize-invisible",
 	bundle: "@playform/ets-hook-dsh-normalize-invisible",

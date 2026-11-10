@@ -1,29 +1,3 @@
-// Source/Test/Harness.ts - the shared test harness for the TEST-SUGGESTER
-// tests: the fake ctx (ctx listener capture, reflect.provide capture, the
-// effect runner, the logger capture, the fs capture that must stay untouched,
-// the distinct root seam, the optional `inject` seam) + the fake
-// `sessionProjections` registry (register + stateOf + the eager drive the
-// tests commit `tool/call` events through) + the REAL
-// @playform/ets-plugin-dsh-factory instance from its built Target + the REAL
-// test-suggester apply from its built Target - the family fake-ctx +
-// real-factory harness pattern, written ONCE per package and imported by
-// every test folder. Each folder process gets a fresh set, so every folder is
-// standalone-green.
-//
-// THE PROJECTION FAKE IS THE POINT: the history is no longer seeded into a
-// `State` WeakMap (there is none), so every history assertion must travel the
-// seam the plugin actually uses - `register(definition)` installs the unit,
-// `Commit` folds one committed `tool/call` event through `apply` for the
-// session it belongs to, and `stateOf(session, key)` serves the folded state
-// to the detection. A test that bypassed the drive would prove nothing.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// NO FAKE CLOCK: the plugin has no clock dependency at all.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -32,6 +6,40 @@ import { fileURLToPath } from "node:url";
 import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the TEST-SUGGESTER tests.
+ *
+ * @remarks
+ *
+ * The harness wires the fake ctx (ctx listener capture, reflect.provide
+ * capture, the effect runner, the logger capture, the fs capture that must
+ * stay untouched, the distinct root seam, the optional `inject` seam) plus
+ * the fake `sessionProjections` registry (register + stateOf + the eager
+ * drive the tests commit `tool/call` events through) plus the REAL
+ * @playform/ets-plugin-dsh-factory instance from its built Target plus the
+ * REAL test-suggester apply from its built Target - the family fake-ctx +
+ * real-factory harness pattern, written ONCE per package and imported by
+ * every test folder. Each folder process gets a fresh set, so every folder
+ * is standalone-green.
+ *
+ * THE PROJECTION FAKE IS THE POINT: the history is no longer seeded into a
+ * `State` WeakMap (there is none), so every history assertion must travel
+ * the seam the plugin actually uses - `register(definition)` installs the
+ * unit, `Commit` folds one committed `tool/call` event through `apply` for
+ * the session it belongs to, and `stateOf(session, key)` serves the folded
+ * state to the detection. A test that bypassed the drive would prove
+ * nothing.
+ *
+ * The standalone selfcheck `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass plus one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * wires the plugin (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * There is NO FAKE CLOCK: the plugin has no clock dependency at all.
+ */
 export { Plugin };
 
 /**
@@ -219,7 +227,9 @@ const MakeProjections = () => {
 		stateOf: StateOf,
 	};
 
-	/** Fold ONE committed event through every registered unit (the eager drive). */
+	/**
+	 * Fold ONE committed event through every registered unit (the eager drive).
+	 */
 	const Commit = (Session: any, Event: any): void => {
 		for (const [Key, Unit] of Units) {
 			const Next = Unit.apply(StateOf(Session, Key), Event);

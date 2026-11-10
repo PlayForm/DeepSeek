@@ -6,6 +6,7 @@
  * in creation order inside the exported Ddl array.
  *
  * @remarks
+ *
  * A fresh file creates the v7 schema directly, with the price book's tier,
  * mode and region columns inline, the Modifier, Factor and CallFactor
  * tables of the factor layer, the Edit table of the edit grain, the

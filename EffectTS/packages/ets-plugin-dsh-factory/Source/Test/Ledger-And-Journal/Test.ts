@@ -1,13 +1,3 @@
-// Source/Test/Ledger-And-Journal/Test.ts - one singular test: the ledger
-// Append semantics (the [ISO] file line, the module-prefixed logger line, the
-// Enabled gate, the never-throws posture), the Journal sink (the pre-bind
-// buffer, the per-State fallback, the silent containment), and the Attach
-// effects (the P1 jobs controller, the P2 inflight disposal, the P5 storage
-// open/drain/close and its loud failed-open ledger line).
-// Runs standalone (`node Target/Test/Ledger-And-Journal/Test.js`) AND under
-// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-plugin-dsh-factory: the fake ctx + the REAL factory
-// class, from the Harness.
 import assert from "node:assert/strict";
 import { readFileSync, statSync } from "node:fs";
 import * as Path from "node:path";
@@ -21,6 +11,26 @@ import {
 	FactoryClass,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The ledger Append semantics, the Journal sink and the Attach effects of
+ * the factory.
+ *
+ * @remarks
+ *
+ * The singular test proves the ledger Append semantics (the [ISO] file
+ * line, the module-prefixed logger line, the Enabled gate, the never-throws
+ * posture), the Journal sink (the pre-bind buffer, the per-State fallback,
+ * the silent containment), and the Attach effects (the P1 jobs controller,
+ * the P2 inflight disposal, the P5 storage open/drain/close and its loud
+ * failed-open ledger line).
+ *
+ * Runs standalone (`node Target/Test/Ledger-And-Journal/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-plugin-dsh-factory: the fake ctx + the REAL factory class,
+ * from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

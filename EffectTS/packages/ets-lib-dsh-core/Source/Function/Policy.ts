@@ -1,9 +1,12 @@
+import * as FileSystem from "node:fs";
+
 /**
  * @module Policy
  *
  * The UPDATE-POLICY LOADER mechanics (pure, harness-free).
  *
  * @remarks
+ *
  * Read the policy file (a plain fs read - an auxiliary configuration file,
  * part of the registry/policy discovery exemption) when given and readable;
  * any failure falls back to the module's BUILT-IN DEFAULT with the family's
@@ -18,8 +21,6 @@
  * update job). The file may be read twice per cycle; both reads are
  * best-effort.
  */
-import * as FileSystem from "node:fs";
-
 export default <T>(
 	Append: (Message: string) => void,
 	File: string,

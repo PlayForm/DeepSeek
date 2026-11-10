@@ -1,3 +1,9 @@
+import Emit from "@Function/Emit.js";
+import Ensure from "@Function/Ensure.js";
+import Persist from "@Function/Persist.js";
+import type Shape from "@Interface/Member.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Status
  *
@@ -5,6 +11,7 @@
  * -> active -> completed -> failed -> interrupted; the queue movements).
  *
  * @remarks
+ *
  * A terminal status (completed/failed/interrupted) stamps finishedAt once,
  * drops the member from the queue (the members behind shift up), and
  * appends the completion to the bounded ring (the oldest drop is implicit -
@@ -12,12 +19,6 @@
  * to active clears finishedAt. The transition is ledgered and emitted AFTER
  * the state is updated.
  */
-import Emit from "@Function/Emit.js";
-import Ensure from "@Function/Ensure.js";
-import Persist from "@Function/Persist.js";
-import type Shape from "@Interface/Member.js";
-import type State from "@Interface/State.js";
-
 export default (State: State, Agent: string, Status: string): void => {
 	const Member = Ensure(State, Agent);
 	switch (true) {

@@ -1,9 +1,14 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Policy } from "@playform/ets-plugin-dsh-factory";
+import { DEFAULT_KINDS } from "@Variable/Kinds.js";
+
 /**
  * @module Config
  *
  * The plugin's Schemastery Config schema: one constant built once at load.
  *
  * @remarks
+ *
  * Every tunable is a field; the shape this schema produces is
  * Interface/Config.ts.
  *
@@ -17,10 +22,6 @@
  * READ-ONLY - it never writes a file (plan section 3), so its idle risk is
  * nil; the write path lives entirely in the ingester.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Policy } from "@playform/ets-plugin-dsh-factory";
-import { DEFAULT_KINDS } from "@Variable/Kinds.js";
-
 export default Schema.object({
 	enabled: Schema.boolean().default(true),
 	logFile: Schema.string().default("~/.dsh/playform/ets-plugin-dsh-pass-on.log"),

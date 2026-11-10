@@ -1,3 +1,5 @@
+import Schema from "@deepseek-ai/schemastery";
+
 /**
  * @module Config
  *
@@ -5,13 +7,12 @@
  * at load).
  *
  * @remarks
+ *
  * The loader validates it and fills every default, so invalid configuration
  * fails loud at load. Every knob is volatile - hot edits commit without
  * remounting (the package is a pure client module, so the client half
  * re-reads the fields on the next render pass).
  */
-import Schema from "@deepseek-ai/schemastery";
-
 export default Schema.object({
 	enabled: Schema.boolean().default(true).volatile(),
 	tabOrder: Schema.number().default(20).volatile(),

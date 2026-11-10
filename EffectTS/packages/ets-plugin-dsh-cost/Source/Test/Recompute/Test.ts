@@ -1,9 +1,3 @@
-// Source/Test/Recompute/Test.ts - THE RECOMPUTE (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 2.4): every number a formula consumes is
-// stored - Call holds the usage and the priced cost columns and the surface
-// tokens, Touch holds the byte deltas, ContextMass holds the per-file mass -
-// so dropping Allocation and Rollup and rebuilding them from those tables
-// alone lands byte-identical totals. No session log is read.
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -16,6 +10,20 @@ import Recompute from "../../../Target/Function/Recompute.js";
 import Rollup from "../../../Target/Function/Rollup.js";
 import { Check, Finish, Make, MakeCounter, Validate } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE RECOMPUTE (Documentation/Plans/COST-TRACK-PLUGIN.md section 2.4) of
+ * the cost plugin.
+ *
+ * @remarks
+ *
+ * Every number a formula consumes is stored - Call holds the usage and the
+ * priced cost columns and the surface tokens, Touch holds the byte deltas,
+ * ContextMass holds the per-file mass - so dropping Allocation and Rollup
+ * and rebuilding them from those tables alone lands byte-identical totals.
+ * No session log is read.
+ */
 // The snapshot: the two rebuilt tables, ordered by their keys, the surrogate
 // allocation id and the rollup's refresh stamp excluded (both are reassigned
 // by the rebuild; the money is what must be byte-identical).

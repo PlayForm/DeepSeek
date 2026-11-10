@@ -1,3 +1,10 @@
+import Projection from "@Function/Projection.js";
+import type Gate from "@Interface/Gate.js";
+import type Member from "@Interface/Member.js";
+import type Scope from "@Interface/Scope.js";
+import type Snapshot from "@Interface/Snapshot.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Compile
  *
@@ -5,6 +12,7 @@
  * deterministic functions over the state.
  *
  * @remarks
+ *
  * Every block the agents receive is a COMPILED OUTPUT - the LLM's only role
  * is to READ it and act; the batch state is never described ad-hoc by any
  * agent. The blocks are bounded (the compact TOC + the scope + the pending -
@@ -17,13 +25,6 @@
  *   Gates(State)          -> the arbiter truth (the Gates block);
  *   Schedule(State)       -> the queue projection (the queue's own line).
  */
-import Projection from "@Function/Projection.js";
-import type Gate from "@Interface/Gate.js";
-import type Member from "@Interface/Member.js";
-import type Scope from "@Interface/Scope.js";
-import type Snapshot from "@Interface/Snapshot.js";
-import type State from "@Interface/State.js";
-
 /**
  * The surfaces another lane owns exclusively - the OFF-LIMITS list for one
  * agent. A surface the agent shares with the owner is NOT off-limits (it

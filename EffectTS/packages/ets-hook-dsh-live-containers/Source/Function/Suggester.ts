@@ -1,3 +1,9 @@
+import Clock from "@Function/Clock.js";
+import type { Log } from "@Function/Render.js";
+import type { BoardState, Suggestion } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
+import { Compressed, Entry } from "@Variable/Catalog.js";
+
 /**
  * @module Suggester
  *
@@ -5,6 +11,7 @@
  * verdict.
  *
  * @remarks
+ *
  * The CAN-5 mini-conversation suggester (I6 SUGGESTER-CONFIGURED;
  * IMPLEMENTATION-DESIGN.md sections 2.6, 3.8, 4.5 as amended). The suggester does not
  * suggest a template NAME; it suggests a CONFIGURED block: a one-shot detached subagent
@@ -24,12 +31,6 @@
  * suggester "off" nothing spawns (the zero-subagent guarantee, provable by the smoke
  * harness's spawn counter).
  */
-import Clock from "@Function/Clock.js";
-import type { Log } from "@Function/Render.js";
-import type { BoardState, Suggestion } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
-import { Compressed, Entry } from "@Variable/Catalog.js";
-
 /**
  * The suggestion id grammar (I6 3.3): `sug-<4 hex>`, per-agent-keyed.
  */

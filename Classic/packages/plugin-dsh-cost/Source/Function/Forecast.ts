@@ -1,13 +1,20 @@
-// Forecast - the projection the plan asks to stay a query, not a stored
-// guess (Documentation/Plans/COST-TRACK-PLUGIN.md section 17.5): over the
-// Rollup's daily rate per (Scope, Key) across the last window of days -
-// anchored at each key's own latest day, so an old ledger still projects -
-// the mean, the median, the mean of the last seven days, and the projection
-// to a thirty-day period as the mean times thirty with the confidence band
-// from the daily minimum and maximum times thirty. A history of fewer than
-// two days projects with no spread (minimum and maximum both at the
-// projection). The forecast never writes a row; the caller labels it an
-// estimate in every export.
+/**
+ * @module Forecast
+ *
+ * The projection the plan asks to stay a query, not a stored guess: the daily
+ * rate per (Scope, Key) over the Rollup's last window of days, projected to a
+ * thirty-day period with its confidence band.
+ *
+ * @remarks
+ * The projection follows `Documentation/Plans/COST-TRACK-PLUGIN.md` section
+ * 17.5. It is anchored at each key's own latest day, so an old ledger still
+ * projects, and answers the mean, the median, the mean of the last seven days,
+ * and the projection to a thirty-day period as the mean times thirty with the
+ * confidence band from the daily minimum and maximum times thirty. A history of
+ * fewer than two days projects with no spread (minimum and maximum both at the
+ * projection). The forecast never writes a row; the caller labels it an
+ * estimate in every export.
+ */
 import type { DatabaseSync } from "node:sqlite";
 
 type Row = {

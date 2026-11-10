@@ -5,6 +5,7 @@
  * subsystems/jobs.md).
  *
  * @remarks
+ *
  * Probed at runtime and never injected (`ctx.jobs` is agent-scoped; a root
  * plugin probes it as an optional dependency). The spec/handle/hooks/outcome
  * shapes are inlined structurally: only the members the factory and its

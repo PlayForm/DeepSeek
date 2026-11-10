@@ -1,14 +1,18 @@
-// Source/Test/Stability/Test.ts - the A5 invariants: re-indexing the
-// unchanged file keeps every id and every fingerprint; changing one symbol
-// changes that symbol's fingerprint, the file's and its block's, and leaves
-// the other symbols' intact; the id set is unchanged across the edit; every
-// node carries the file version token from stat time; the revision increments
-// per successful index. Unit smoke of @playform/plugin-dsh-workspace-graph:
-// the fake ctx + the REAL built class, from the Harness.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { Check, Finish, MakeCounter, MakeGraph } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The A5 invariants: re-indexing the unchanged file keeps every id and every
+ * fingerprint; changing one symbol changes that symbol's fingerprint, the
+ * file's and its block's, and leaves the other symbols' intact; the id set is
+ * unchanged across the edit; every node carries the file version token from
+ * stat time; the revision increments per successful index. Unit smoke of
+ * @playform/plugin-dsh-workspace-graph: the fake ctx + the REAL built class,
+ * from the Harness.
+ */
 const FIXTURE_TS = readFileSync(
 	new URL("../../../Source/Test/Parse-And-Fingerprint/Fixture.ts", import.meta.url),
 	"utf8",

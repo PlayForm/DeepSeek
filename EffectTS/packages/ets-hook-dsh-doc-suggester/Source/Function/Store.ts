@@ -1,3 +1,9 @@
+import type { Context } from "@deepseek-ai/cordis";
+
+import type Decision from "../Interface/Decision.js";
+import type Learning from "../Interface/Learning.js";
+import Table from "./Table.js";
+
 /**
  * @module Store
  *
@@ -6,6 +12,7 @@
  * (completion spec D8 + 03-SUGGESTERS section 2).
  *
  * @remarks
+ *
  * THE PRIMARY IS THE SHARED PATTERN SERVICE, PROBED PER USE
  * (`ctx.get("pattern")`, NEVER AN INJECT): the service is optional and may
  * load after this plugin, so the probe runs on every read/write and a
@@ -44,12 +51,6 @@
  * contract, so the record is projected onto its string fields rather than
  * extending it).
  */
-import type { Context } from "@deepseek-ai/cordis";
-
-import type Decision from "../Interface/Decision.js";
-import type Learning from "../Interface/Learning.js";
-import Table from "./Table.js";
-
 /**
  * The neutral rate: the Laplace prior with zero observations (today's score).
  */
@@ -142,23 +143,35 @@ interface Registry {
 }
 
 export default (
-	/** The plugin context (the optional service probe). */
+	/**
+	 * The plugin context (the optional service probe).
+	 */
 	Context: Context,
 
-	/** The module id (the key prefix and the rate records' arbiter). */
+	/**
+	 * The module id (the key prefix and the rate records' arbiter).
+	 */
 	Module: string,
 
-	/** The memory fallback's bound (config `storeLimit`). */
+	/**
+	 * The memory fallback's bound (config `storeLimit`).
+	 */
 	Limit: number,
 ): Learning => {
-	/** The fallback's rates: key -> learned rate (insertion-ordered, bounded). */
+	/**
+	 * The fallback's rates: key -> learned rate (insertion-ordered, bounded).
+	 */
 	const Memory = new Map<string, number>();
 
-	/** The decision ring: key -> record (bounded; also the Resolve index). */
+	/**
+	 * The decision ring: key -> record (bounded; also the Resolve index).
+	 */
 	const Decisions = new Map<string, Decision>();
 	const Bound = Math.max(1, Math.trunc(Number.isFinite(Limit) ? Limit : 512));
 
-	/** The optional pattern service, when it answers the whole contract. */
+	/**
+	 * The optional pattern service, when it answers the whole contract.
+	 */
 	const Probe = (): Registry | undefined => {
 		try {
 			const Service = Context.get?.("pattern") as Registry | undefined;
@@ -172,15 +185,21 @@ export default (
 		}
 	};
 
-	/** The rate key of a family (Path "") or a companion. */
+	/**
+	 * The rate key of a family (Path "") or a companion.
+	 */
 	const Key = (Family: string, Path: string): string =>
 		Path === "" ? `${Module}:family:${Family}` : `${Module}:companion:${Path}`;
 
-	/** The decision key: the family plus its sorted companion set. */
+	/**
+	 * The decision key: the family plus its sorted companion set.
+	 */
 	const DecisionKey = (Family: string, Paths: string[]): string =>
 		`${Module}:decision:${Family}:${Paths.slice().sort().join("|")}`;
 
-	/** Read one rate: the service's record, else the memory row, else neutral. */
+	/**
+	 * Read one rate: the service's record, else the memory row, else neutral.
+	 */
 	const Read = (Service: Registry | undefined, Id: string): number => {
 		switch (true) {
 			case Service === undefined:
@@ -198,7 +217,9 @@ export default (
 		}
 	};
 
-	/** A rate record, seeded at the current rate before its first outcome. */
+	/**
+	 * A rate record, seeded at the current rate before its first outcome.
+	 */
 	const RateRecord = (Id: string, Family: string, Path: string): Stored => ({
 		id: Id,
 		intent: Family,
@@ -213,7 +234,9 @@ export default (
 		updatedAt: Date.now(),
 	});
 
-	/** The decision record projected onto the pattern schema's string fields. */
+	/**
+	 * The decision record projected onto the pattern schema's string fields.
+	 */
 	const DecisionRecord = (
 		Id: string,
 		Family: string,
@@ -238,7 +261,9 @@ export default (
 		updatedAt: Date.now(),
 	});
 
-	/** The bounded insert: evict the oldest entry when the bound is reached. */
+	/**
+	 * The bounded insert: evict the oldest entry when the bound is reached.
+	 */
 	const Hold = <T>(Table_: Map<string, T>, Id: string, Value: T): void => {
 		if (!Table_.has(Id) && Table_.size >= Bound) {
 			const Oldest = Table_.keys().next().value;

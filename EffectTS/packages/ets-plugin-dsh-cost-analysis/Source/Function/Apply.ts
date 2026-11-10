@@ -1,3 +1,12 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { CommandResult } from "@playform/ets-base-dsh";
+import type Factory from "@playform/ets-plugin-dsh-factory";
+
+import type Config from "../Interface/Config.js";
+import type Metric from "../Interface/Metric.js";
+import Analysis from "./Analysis.js";
+import Open from "./Open.js";
+
 /**
  * @module Apply
  *
@@ -6,6 +15,7 @@
  * COST-TRACK-PLUGIN.md section 13).
  *
  * @remarks
+ *
  * ONE command, `/cost analysis [scope]`, registered through the commands
  * service. The registry's name law allows no spaces in a command name, so
  * the plugin registers under the family's "cost" name with the "analysis"
@@ -21,15 +31,6 @@
  * open failure is recorded, the plugin still loads, and the command says so
  * when it is invoked.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { CommandResult } from "@playform/ets-base-dsh";
-import type Factory from "@playform/ets-plugin-dsh-factory";
-
-import type Config from "../Interface/Config.js";
-import type Metric from "../Interface/Metric.js";
-import Analysis from "./Analysis.js";
-import Open from "./Open.js";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

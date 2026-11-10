@@ -1,3 +1,5 @@
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -6,6 +8,7 @@
  * named exports.
  *
  * @remarks
+ *
  * This follows the harness convention - the core is NOT a plugin bundle: no
  * cordis patch, no loader contract, publishable on its own. The modules'
  * transforms import the helpers directly; the factory re-exports NOTHING
@@ -33,8 +36,6 @@
  * nothing from effect and re-exports neither. Its surface is the thirteen
  * names below.
  */
-import Version from "./Variable/Version.js";
-
 /**
  * The compiled package version (Source/Variable/Version, built in by the
  * ESBuild define). This package has NO loader contract and NO Config - the

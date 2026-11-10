@@ -11,6 +11,7 @@
  * written `Provider/Model` and sorted.
  *
  * @remarks
+ *
  * The money rounds to six decimals and the share is a ratio in [0, 1]
  * computed from those same rounded totals - this row's total over the
  * file's rounded lifetime - so the rows of one file sum to one up to the

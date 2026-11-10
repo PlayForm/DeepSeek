@@ -1,12 +1,3 @@
-// Source/Test/Render-And-Frames/Test.ts - the R-series: the section shape
-// (exactly one appended section named live-containers, interpolate: false),
-// the byte-exact LIVE CONTAINER frame for every phase-1 block kind, the
-// variable table (time/date/tz under the FAKE CLOCK, counters, manifest,
-// gauge), the per-block vars override, the {{token}} replace-only engine
-// (unknown tokens render literally + ledger `render unknown <id> <token>`),
-// and the budget failsafe (the oldest frames collapse to one-line summaries
-// + ledger `failsafe section-collapse <n>`). Every assertion lands on the
-// rendered section text or a ledger line - never on "no throw".
 import assert from "node:assert/strict";
 import {
 	Advance,
@@ -30,6 +21,23 @@ import {
 	Post,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The R-series: the section shape and the frame rendering.
+ *
+ * @remarks
+ *
+ * The test covers the section shape (exactly one appended section named
+ * live-containers, interpolate: false), the byte-exact LIVE CONTAINER
+ * frame for every phase-1 block kind, the variable table (time/date/tz
+ * under the FAKE CLOCK, counters, manifest, gauge), the per-block vars
+ * override, the {{token}} replace-only engine (unknown tokens render
+ * literally + ledger `render unknown <id> <token>`), and the budget
+ * failsafe (the oldest frames collapse to one-line summaries + ledger
+ * `failsafe section-collapse <n>`). Every assertion lands on the rendered
+ * section text or a ledger line - never on "no throw".
+ */
 const Now0 = ClockBox.Now;
 
 const Frame1 = (ID: string, Body: string): string => Frame("---", ID, Body);

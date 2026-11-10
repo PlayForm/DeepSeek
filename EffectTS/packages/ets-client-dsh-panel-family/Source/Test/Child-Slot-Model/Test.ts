@@ -1,21 +1,29 @@
-// Source/Test/Child-Slot-Model/Test.ts - the v4.1 CHILD-SLOT model, proven
-// against the real built client apply: both panels declare their child slots
-// in the registration's `children` table, the thirteen shipped adapters
-// inject the section slot and register one child each with its manifest
-// through the inject face, and the slot-aware registry enforces one adapter
-// per bundle per slot (the documented refusal line), maps a legacy `mount`
-// onto a slot, filters entries by slot, and releases ownership on
-// unregister. The second panel (the overlay) proves the same declaration on
-// a different mount, and each panel hands its declared child slot to the
-// renderer through renderSlot.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The v4.1 CHILD-SLOT model, proven against the real built client apply.
+ *
+ * @remarks
+ *
+ * Both panels declare their child slots in the registration's `children`
+ * table, the thirteen shipped adapters inject the section slot and register
+ * one child each with its manifest through the inject face, and the
+ * slot-aware registry enforces one adapter per bundle per slot (the
+ * documented refusal line), maps a legacy `mount` onto a slot, filters
+ * entries by slot, and releases ownership on unregister. The second panel
+ * (the overlay) proves the same declaration on a different mount, and each
+ * panel hands its declared child slot to the renderer through renderSlot.
+ */
 const SECTION = "playform.panel.section";
 const OVERLAY = "playform.panel.overlay";
 const NAMESPACE = "client-dsh-panel-family";
 
-/** A minimal slot-aware adapter manifest (one per bundle per slot). */
+/**
+ * A minimal slot-aware adapter manifest (one per bundle per slot).
+ */
 const Adapter = (Id: string, Bundle: string, Order = 50, Slot: any = SECTION): any => ({
 	id: Id,
 	bundle: Bundle,

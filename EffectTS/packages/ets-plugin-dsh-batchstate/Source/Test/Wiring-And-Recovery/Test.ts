@@ -1,9 +1,3 @@
-// Source/Test/Wiring-And-Recovery/Test.ts - the wiring and the recovery:
-// the loader contract (the default object carries name/apply/Config/inject,
-// apply returns nothing), the IDLE-forever cold mount, the activation proof,
-// the service registered from apply, the fail-loud validation, the state
-// file recovery (missing, seeded, corrupt; the honest active downgrade),
-// and the zero context-fs guarantee.
 import assert from "node:assert/strict";
 import * as Path from "node:path";
 import {
@@ -20,7 +14,22 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * The wiring and the recovery of the batch-state board.
+ *
+ * @remarks
+ *
+ * The folder proves the loader contract (the default object carries
+ * name/apply/Config/inject, apply returns nothing), the IDLE-forever cold
+ * mount, the activation proof, the service registered from apply, the
+ * fail-loud validation, the state file recovery (missing, seeded, corrupt;
+ * the honest active downgrade), and the zero context-fs guarantee.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = (Config: Record<string, unknown> = {}, Attach?: (C: any, R: any) => void): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, stateFile: StateFile, ...Config }), Attach);

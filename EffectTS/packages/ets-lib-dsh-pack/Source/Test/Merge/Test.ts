@@ -1,11 +1,21 @@
-// Source/Test/Merge/Test.ts - the merge rules in isolation: families by
-// id, targets by path, scalars replace, arrays replace, and the section
-// objects merge key by key. Pure object fixtures: no filesystem.
 import assert from "node:assert/strict";
 
 import { Check, Finish, Library, MakeCounter } from "../Harness.js";
 
-/** One family row with the given priority/threshold/targets. */
+/**
+ * @module Test
+ *
+ * The merge rules in isolation, over pure object fixtures with no
+ * filesystem.
+ *
+ * @remarks
+ *
+ * The folder proves families merge by id, targets by path, scalars replace,
+ * arrays replace, and the section objects merge key by key.
+ */
+/**
+ * One family row with the given priority/threshold/targets.
+ */
 const Family = (
 	Priority: number,
 	Threshold: number,
@@ -21,7 +31,9 @@ const Family = (
 	targets: Targets,
 });
 
-/** One target row. */
+/**
+ * One target row.
+ */
 const Target = (Path: string, Reason: string): Library.Target => ({
 	path: Path,
 	kind: "doc",

@@ -1,3 +1,12 @@
+import { readdirSync } from "node:fs";
+import { dirname as Dir, isAbsolute, resolve as ResolvePath } from "node:path";
+
+import type { FsObservation, FsTarget, FsVersion } from "@Interface/Fs.js";
+import type { MachineRecord, OpLine, ProcessCell, SearchSpec } from "@Interface/Process.js";
+import type State from "@Interface/State.js";
+
+import * as Ledger from "./Ledger.js";
+
 /**
  * @module Machine
  *
@@ -8,6 +17,7 @@
  * fail-loud at open - the live containers' Apply.ts Validate precedent).
  *
  * @remarks
+ *
  * THE EVENT-LOOP LAW: the fs/observed observer (OnObserved) is a SYNCHRONOUS
  * cell-flipper only - no awaits, no throws, no I/O; all async work (reads,
  * previews, writes) runs inside the tool's execute through Ops.ts. The
@@ -21,15 +31,6 @@
  * 2) and every event the machine's own Stash idempotence gate catches - the
  * machine never halts on its own reconciliations.
  */
-import { readdirSync } from "node:fs";
-import { dirname as Dir, isAbsolute, resolve as ResolvePath } from "node:path";
-
-import type { FsObservation, FsTarget, FsVersion } from "@Interface/Fs.js";
-import type { MachineRecord, OpLine, ProcessCell, SearchSpec } from "@Interface/Process.js";
-import type State from "@Interface/State.js";
-
-import * as Ledger from "./Ledger.js";
-
 /**
  * The maximum glob expansion per pattern (the eviction-adjacent cap).
  */

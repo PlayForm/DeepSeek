@@ -5,6 +5,7 @@
  * and the exclusion list.
  *
  * @remarks
+ *
  * Supported syntax, deliberately minimal: `**` crosses directory
  * separators, `*` matches within one segment, `?` matches one character;
  * everything else is literal. A pattern without a slash anchors at the

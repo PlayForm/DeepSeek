@@ -1,9 +1,12 @@
+import Match from "./Match.js";
+
 /**
  * @module Ring
  *
  * Holds the per-agent state the suggester needs between judged calls.
  *
  * @remarks
+ *
  * The per-agent state (the tool-coach precedent): a WeakMap keyed on the Agent object
  * holding the paths touched since the last user message, the cooldown counters, the
  * dedupe set, the per-turn note count, and the OPEN NOTE the follow-through watches
@@ -18,8 +21,6 @@
  * open note without a verdict (the turn boundary is not a judged call), so a reset never
  * invents an outcome.
  */
-import Match from "./Match.js";
-
 /**
  * One open note awaiting its follow-through verdict.
  */

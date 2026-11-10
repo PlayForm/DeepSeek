@@ -1,3 +1,13 @@
+import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import type Jobs from "@Interface/Jobs.js";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+import { Update } from "@playform/ets-base-dsh";
+import type PluginFactory from "@playform/ets-plugin-dsh-factory";
+import { Effect, Scope } from "effect";
+
+import Run from "./Run.js";
+
 /**
  * @module Dispatch
  *
@@ -6,6 +16,7 @@
  * async continuation.
  *
  * @remarks
+ *
  * The probed runtime is `ctx.get("jobs")` - never the direct accessor, which
  * throws on a root context. Live-verified 2026-10-03: a root plugin's
  * `ctx.jobs` probe DOES serve a controller (the earlier "ctx.jobs is
@@ -75,16 +86,6 @@
  * defensive catch); the FACTORY's Attach disposal effect aborts every
  * remaining controller on unload.
  */
-import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
-import type Jobs from "@Interface/Jobs.js";
-import type Registry from "@Interface/Registry.js";
-import type State from "@Interface/State.js";
-import { Update } from "@playform/ets-base-dsh";
-import type PluginFactory from "@playform/ets-plugin-dsh-factory";
-import { Effect, Scope } from "effect";
-
-import Run from "./Run.js";
-
 /**
  * The envelope factory: the cargo module's explicit Factory parameter is the
  * drift the core's flow does not carry, so the injected dependencies close

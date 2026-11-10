@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Policy } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The plugin's Schemastery Config schema.
  *
  * @remarks
+ *
  * A Variable: one constant built once at load. Every tunable is a field; the shape this schema
  * produces is Interface/Config.ts.
  *
@@ -18,9 +22,6 @@
  * is the ledger size, capped by maxSessions. The bundle patch still ships `enabled: true`
  * explicit so the activation is visible in the patch.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Policy } from "@playform/ets-plugin-dsh-factory";
-
 export default Schema.object({
 	enabled: Schema.boolean().default(true),
 	logFile: Schema.string().default("~/.dsh/playform/ets-plugin-dsh-feedback.log"),

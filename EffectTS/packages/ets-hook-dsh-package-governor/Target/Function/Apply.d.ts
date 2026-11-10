@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "@Interface/Config.js";
+export default _default;
 /**
  * @module Apply
  *
@@ -6,6 +9,7 @@
  * proof and wires the fs/observed hook.
  *
  * @remarks
+ *
  * The factory owns the scaffolding: `Factory.State` performs the cell unwrap
  * and the shared mappings Tool<-mutationTools, Policy<-policyFile,
  * Ledger<-logFile, Enabled<-log, List<-exclude, and the machinery structures
@@ -33,7 +37,4 @@
  * controller (Factory.Attach); the subprocess seam (bin mode) is probed once
  * by the factory's State builder (P9).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
-export default _default;
 declare function _default(Context: Context, Options: Config): void;

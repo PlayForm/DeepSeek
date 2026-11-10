@@ -1,9 +1,13 @@
+import type Stamp from "@Interface/Stamp.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Storage
  *
  * The hook's own P5-style storage-domain open and recovery.
  *
  * @remarks
+ *
  * The pattern is the factory's Function/{Open,Attach}.ts pattern, the
  * live-containers monitor domain precedent.
  *
@@ -38,9 +42,6 @@
  * library rejects [1] against version 1 at validation time), so version 1
  * declares no compatible predecessors.
  */
-import type Stamp from "@Interface/Stamp.js";
-import type State from "@Interface/State.js";
-
 /**
  * The structural shape of one persisted stamp (the validation filter).
  */

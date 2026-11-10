@@ -1,3 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import Dispatcher from "@Function/Dispatcher.js";
+import ToolEnqueue from "@Function/ToolEnqueue.js";
+import ToolStatus from "@Function/ToolStatus.js";
+import Validate from "@Function/Validate.js";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
+import Version from "@Variable/Version.js";
+
 /**
  * @module Apply
  *
@@ -6,6 +16,7 @@
  * registrations, and the unload effect.
  *
  * @remarks
+ *
  * The State build is the factory's cell unwrap plus the P10 volatile refresh.
  * The unload effect cancels in-flight spawned children. The function returns
  * NOTHING (the loader treats apply returns specially - a returned value
@@ -24,16 +35,6 @@
  * posture is visible on the per-task lines (`spawned` / `spawn skipped` /
  * `spawn failed`), not on the activation proof.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import Dispatcher from "@Function/Dispatcher.js";
-import ToolEnqueue from "@Function/ToolEnqueue.js";
-import ToolStatus from "@Function/ToolStatus.js";
-import Validate from "@Function/Validate.js";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
-import Version from "@Variable/Version.js";
-
 export default (Context: Context, Options: Config): void => {
 	// Fail-loud validation BEFORE the State build: invalid config throws at
 	// load, never silently defaults (the tool-coach precedent).

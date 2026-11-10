@@ -1,3 +1,6 @@
+import type { PanelSection } from "@Interface/Panel.js";
+import Trace from "@Variable/Trace.js";
+
 /**
  * @module ToolCoach
  *
@@ -6,13 +9,11 @@
  * config form).
  *
  * @remarks
+ *
  * Every knob in the coach's schema is volatile, so its form writes all ride
  * the revision-fenced settings mutate; the ladder section's live tail is the
  * D5 trace when the host exposes it.
  */
-import type { PanelSection } from "@Interface/Panel.js";
-import Trace from "@Variable/Trace.js";
-
 export default {
 	id: "adapter-hook-dsh-tool-coach",
 	bundle: "@playform/ets-hook-dsh-tool-coach",

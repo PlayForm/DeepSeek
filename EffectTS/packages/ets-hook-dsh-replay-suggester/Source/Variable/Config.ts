@@ -8,6 +8,7 @@ import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
  * at load).
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every
  * default, so invalid configuration fails LOUD at load instead of silently
  * falling back per-field, and `apply` receives a validated plain config

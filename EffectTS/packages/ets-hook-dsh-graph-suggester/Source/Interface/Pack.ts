@@ -4,6 +4,7 @@
  * Declares the intent types the classifier and the note builder consume.
  *
  * @remarks
+ *
  * SEARCH-SUGGESTER-PLUGIN.md §8.2, the pack-as-data contract; the graph consumer's
  * projection per §9.2.
  *

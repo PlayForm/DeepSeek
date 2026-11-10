@@ -1,14 +1,3 @@
-// Source/Test/Abstention/Test.ts - the plan's suite 4: the abstention path.
-// The six reasons the plugin can give (no-signal, low-confidence,
-// no-companions, ambiguous-target, foreign-workspace, no-history), each with
-// its byte-exact ledger line, the downstream decision returned UNCHANGED, the
-// durable `[ISO]` form, and the standing rule that an abstention is silence:
-// no note, ever.
-//
-// THE SOURCE SPLIT: the four classifier reasons are driven by an EXPLICIT
-// `.dsh/pack.yml` (the pack is an override only), while `foreign-workspace`
-// and `no-history` are the two reasons a workspace with no explicit pack and
-// no session history gives.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -28,10 +17,32 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A temp tree under the OS temp dir (fresh per folder process). */
+/**
+ * @module Test
+ *
+ * The plan's suite 4: the abstention path test.
+ *
+ * @remarks
+ *
+ * The suite covers the six reasons the plugin can give (no-signal,
+ * low-confidence, no-companions, ambiguous-target, foreign-workspace,
+ * no-history), each with its byte-exact ledger line, the downstream decision
+ * returned UNCHANGED, the durable `[ISO]` form, and the standing rule that
+ * an abstention is silence: no note, ever.
+ *
+ * THE SOURCE SPLIT: the four classifier reasons are driven by an EXPLICIT
+ * `.dsh/pack.yml` (the pack is an override only), while `foreign-workspace`
+ * and `no-history` are the two reasons a workspace with no explicit pack and
+ * no session history gives.
+ */
+/**
+ * A temp tree under the OS temp dir (fresh per folder process).
+ */
 const Tree = (Prefix: string): string => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
 
-/** Write one file under the tree (parents created). */
+/**
+ * Write one file under the tree (parents created).
+ */
 const Put = (Root: string, Relative: string, Body = "x"): string => {
 	const Full = Path.join(Root, Relative);
 	FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
@@ -39,10 +50,14 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
-/** The optional harness service the probe reads (the real shape: get(session)). */
+/**
+ * The optional harness service the probe reads (the real shape: get(session)).
+ */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** A dedicated parent for the fixture trees. */
+/**
+ * A dedicated parent for the fixture trees.
+ */
 const Parent = Tree("search-suggester-abstention-");
 const Branch = (Name: string): string => {
 	const Full = Path.join(Parent, Name);
@@ -50,7 +65,9 @@ const Branch = (Name: string): string => {
 	return Full;
 };
 
-/** The temp pack: one search/Version family, its own gate at the 0.5 floor. */
+/**
+ * The temp pack: one search/Version family, its own gate at the 0.5 floor.
+ */
 const Pack = `families:
   "search/Version":
     id: Version
@@ -67,29 +84,39 @@ const Pack = `families:
         reason: the temp versions
 `;
 
-/** The PACKED workspace: the manifest, the pack and its companion. */
+/**
+ * The PACKED workspace: the manifest, the pack and its companion.
+ */
 const Packed = Branch("packed");
 Put(Packed, "package.json", "{}");
 Put(Packed, ".dsh/pack.yml", Pack);
 const PackedRead = Put(Packed, "README.md");
 Put(Packed, "VERSIONS.md");
 
-/** The EMPTY workspace: the pack whose companion does not exist. */
+/**
+ * The EMPTY workspace: the pack whose companion does not exist.
+ */
 const Empty = Branch("empty");
 Put(Empty, "package.json", "{}");
 Put(Empty, ".dsh/pack.yml", Pack);
 const EmptyRead = Put(Empty, "README.md");
 
-/** The BARE rooted workspace: a manifest, no pack, no history. */
+/**
+ * The BARE rooted workspace: a manifest, no pack, no history.
+ */
 const Bare = Branch("bare");
 Put(Bare, "package.json", "{}");
 const BareRead = Put(Bare, "README.md");
 
-/** The FOREIGN workspace: no manifest, no cwd. */
+/**
+ * The FOREIGN workspace: no manifest, no cwd.
+ */
 const Foreign = Branch("foreign");
 const ForeignRead = Put(Foreign, "README.md");
 
-/** One judged grep. */
+/**
+ * One judged grep.
+ */
 const Grep = (Pattern: string, Path_: string, Id: string): any => ({
 	name: "grep",
 	arguments: { pattern: Pattern, path: Path_ },

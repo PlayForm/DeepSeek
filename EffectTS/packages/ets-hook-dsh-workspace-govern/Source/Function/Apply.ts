@@ -1,3 +1,20 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type {
+	PostToolDecision,
+	PreToolDecision,
+	ToolExecution,
+	ToolExecutionResult,
+} from "@deepseek-ai/dsh-tools";
+import Decide from "@Function/Decide.js";
+import Extract from "@Function/Extract.js";
+import Guard from "@Function/Guard.js";
+import Match from "@Function/Match.js";
+import ServiceClass from "@Function/Service.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
+
 /**
  * @module Apply
  *
@@ -5,6 +22,7 @@
  * service registration, the activation proof, and the gate listeners.
  *
  * @remarks
+ *
  * The State build is the factory's cell unwrap + the P10 volatile refresh.
  * The service is Function/Service as `workspaceGovern`.
  *
@@ -31,23 +49,6 @@
  * The function returns NOTHING (the loader contract). The test probe is the
  * `ctx.__hookDshWorkspaceGovernState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type {
-	PostToolDecision,
-	PreToolDecision,
-	ToolExecution,
-	ToolExecutionResult,
-} from "@deepseek-ai/dsh-tools";
-import Decide from "@Function/Decide.js";
-import Extract from "@Function/Extract.js";
-import Guard from "@Function/Guard.js";
-import Match from "@Function/Match.js";
-import ServiceClass from "@Function/Service.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
  */

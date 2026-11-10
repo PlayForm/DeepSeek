@@ -1,18 +1,26 @@
-// Source/Test/Stream-Gate/Test.ts - one singular test: the stream gate as a
-// real `Stream` transformer (the base's own additive surface) - reducer
-// equivalence with the Chunk dispatch, per-call raw-marker state, error
-// propagation, the completion-only count summary, and fresh state per
-// materialization.
-// Runs standalone (`node Target/Test/Stream-Gate/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// This folder is the ETS-only additive coverage re-homed from the ETS core
-// smoke's section 10; there is no Classic twin.
 import assert from "node:assert/strict";
 import { CheckAsync, Finish, MakeCounter } from "../Harness.js";
 import { Dashes, Replace } from "../../../../ets-lib-dsh-core/Target/Library.js";
 import { Chunk, StreamGate as Gate } from "../../../Target/Library.js";
 import { Stream } from "effect";
 
+/**
+ * @module Test
+ *
+ * One singular test: the stream gate as a real `Stream` transformer.
+ *
+ * @remarks
+ *
+ * The gate is the base's own additive surface: reducer equivalence with the
+ * Chunk dispatch, per-call raw-marker state, error propagation, the
+ * completion-only count summary, and fresh state per materialization.
+ *
+ * Runs standalone (`node Target/Test/Stream-Gate/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * This folder is the ETS-only additive coverage re-homed from the ETS core
+ * smoke's section 10; there is no Classic twin.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

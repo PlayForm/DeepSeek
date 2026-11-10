@@ -1,9 +1,13 @@
+import type Proposal from "@Interface/Proposal.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Storage
  *
  * The hook's own P5-style storage-domain open and recovery.
  *
  * @remarks
+ *
  * The pattern is the observe hook's Function/Storage pattern, the factory's
  * {Open,Attach} precedent.
  *
@@ -28,9 +32,6 @@
  * The dynamic imports keep the optional packages off the module-load path
  * (the factory's live-verified pitfall); the type-only devDeps pin them.
  */
-import type Proposal from "@Interface/Proposal.js";
-import type State from "@Interface/State.js";
-
 /**
  * The structural shape of one persisted proposal (the validation filter).
  */

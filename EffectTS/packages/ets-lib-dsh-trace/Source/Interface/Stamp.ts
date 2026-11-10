@@ -5,6 +5,7 @@
  * hook records (the path, the observed version, the origin).
  *
  * @remarks
+ *
  * The graph's adapter consumes exactly this shape; the hook's own KV record
  * adds its monotonic sequence, which the trace does not carry (the sequence
  * stays the hook's private ledger).

@@ -1,3 +1,9 @@
+import type { PreStepDecision } from "@deepseek-ai/dsh-agent";
+import type State from "@Interface/State.js";
+import { StepBatch } from "@playform/ets-base-dsh";
+
+import Replace from "./Replace.js";
+
 /**
  * @module StepBatch
  *
@@ -5,6 +11,7 @@
  * factory (@playform/ets-base-dsh/Overpass/StepBatch).
  *
  * @remarks
+ *
  * The generic machinery lives in the base; this file supplies only what
  * makes it THE NORMALIZE-QUOTES:
  *
@@ -20,12 +27,6 @@
  * The default export is the listener itself (the factory's return), so
  * Function/Apply's registration and the import path stay untouched.
  */
-import type { PreStepDecision } from "@deepseek-ai/dsh-agent";
-import type State from "@Interface/State.js";
-import { StepBatch } from "@playform/ets-base-dsh";
-
-import Replace from "./Replace.js";
-
 export default StepBatch<State, { turn?: unknown; step?: unknown }, PreStepDecision>(
 	// The FLAVOR: the quotes transform (the one-argument delegate).
 	(Text) => Replace(Text),

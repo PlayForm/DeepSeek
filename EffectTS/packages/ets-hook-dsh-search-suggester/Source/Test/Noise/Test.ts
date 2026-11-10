@@ -1,11 +1,3 @@
-// Source/Test/Noise/Test.ts - the plan's suite 8: the ZERO-NOTE contract.
-// Twenty legitimate calls (unrelated searches, search literals with no
-// session history behind them, and tools the suggester never judges) must
-// produce EXACTLY zero notes - the suite asserts the count, not merely the
-// absence of an error (the vacuous-green trap), and it asserts that the
-// silence is measured: every judged call that stayed silent left its
-// `no-history` abstention line (the workspace is rooted, the history is
-// empty, and no explicit pack is present).
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -19,10 +11,29 @@ import {
 	Workspace,
 } from "../Harness.js";
 
-/** The temp workspace the judged calls run in (rooted, history-less). */
+/**
+ * @module Test
+ *
+ * The plan's suite 8: the ZERO-NOTE contract test.
+ *
+ * @remarks
+ *
+ * Twenty legitimate calls (unrelated searches, search literals with no
+ * session history behind them, and tools the suggester never judges) must
+ * produce EXACTLY zero notes. The suite asserts the count, not merely the
+ * absence of an error (the vacuous-green trap), and it asserts that the
+ * silence is measured: every judged call that stayed silent left its
+ * `no-history` abstention line (the workspace is rooted, the history is
+ * empty, and no explicit pack is present).
+ */
+/**
+ * The temp workspace the judged calls run in (rooted, history-less).
+ */
 const Space = Workspace(["package.json"]);
 
-/** One judged grep against the workspace manifest (a rooted, history-less call). */
+/**
+ * One judged grep against the workspace manifest (a rooted, history-less call).
+ */
 const Grep = (Run: any, Agent: string, Pattern: string): Promise<any> =>
 	Post(Run, {
 		name: "grep",
@@ -30,7 +41,9 @@ const Grep = (Run: any, Agent: string, Pattern: string): Promise<any> =>
 		agent: AgentOf(Agent),
 	});
 
-/** One call the suggester never judges. */
+/**
+ * One call the suggester never judges.
+ */
 const Other = (Run: any, Name: string, Args: Record<string, unknown>): Promise<any> =>
 	Post(Run, { name: Name, arguments: Args, agent: AgentOf("noise") });
 

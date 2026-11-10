@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The pattern service's Schemastery schema: one constant built once at load.
  *
  * @remarks
+ *
  * Composed with the factory's standalone Schema helper (`shared: false` - the
  * minimal block, only the universal log/logFile volatile cells; the service
  * hooks no fs/observed machinery). Every knob is a volatile cell so a hot
@@ -14,9 +18,6 @@
  * Match returns the empty result (the abstention) while the service stays
  * resolvable.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
-
 export default Compose(false, {
 	enabled: Schema.boolean().default(false).volatile(),
 	logFile: Schema.string().default("~/.dsh/playform/ets-plugin-dsh-pattern.log").volatile(),

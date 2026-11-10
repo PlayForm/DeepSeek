@@ -1,9 +1,16 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
+
+import Names from "./Heuristics.js";
+import Defaults from "./Weights.js";
+
 /**
  * @module Config
  *
  * Declares the plugin's Schemastery Config schema as one constant built once at load.
  *
  * @remarks
+ *
  * A Variable: one constant built once at load. Cordis validates the exported schema while
  * the plugin loads and fills every default, so invalid configuration fails LOUD at load,
  * and `apply` receives a validated plain config object.
@@ -19,12 +26,6 @@
  * matching the tool-coach's posture. There is no structural knob: the pack is an explicit
  * repo/user file resolved per call, never a config path.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
-
-import Names from "./Heuristics.js";
-import Defaults from "./Weights.js";
-
 export default Compose(false, {
 	// Ledger file - the edit suggester's ledger, SEPARATE from the family's
 	// logs (one log per module) - volatile: hot-editable without remounting.

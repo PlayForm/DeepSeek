@@ -1,3 +1,5 @@
+import type Config from "../Interface/Config.js";
+
 /**
  * @module Capture
  *
@@ -5,6 +7,7 @@
  * section 1): the session/event listener's only duty.
  *
  * @remarks
+ *
  * Push stores one event in its session's queue when the capture gates allow
  * (capture.sessions for every session; capture.subagents additionally
  * required once the session's origin is known to be "subagent", learned
@@ -16,8 +19,6 @@
  * stays beside them. Size reports the queued count, and the per-session
  * bound keeps a queue whose drain keeps failing from growing without limit.
  */
-import type Config from "../Interface/Config.js";
-
 /**
  * The per-session ceiling: past it the oldest pending events are dropped,
  * so a batch that never commits costs a bounded amount of memory.

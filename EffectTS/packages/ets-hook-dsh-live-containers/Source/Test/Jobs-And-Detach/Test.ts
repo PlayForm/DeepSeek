@@ -1,8 +1,3 @@
-// Source/Test/Jobs-And-Detach/Test.ts - the J-series tests: the live
-// tool-call transform's decision arm, carrier arm, re-dispatch spec, dedup,
-// live-timeout, awaited skip, capacity, history heuristics, and the
-// {"__await":true first-key marker. Every ledger assertion is byte-exact;
-// every negative (fail-open) path proves the inline fallback.
 import assert from "node:assert/strict";
 import {
 	Advance,
@@ -26,6 +21,18 @@ import {
 	rm,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The J-series tests: the live tool-call transform's decision arm, carrier
+ * arm, re-dispatch spec, dedup, live-timeout, awaited skip, capacity,
+ * history heuristics, and the {"__await":true first-key marker.
+ *
+ * @remarks
+ *
+ * Every ledger assertion is byte-exact; every negative (fail-open) path
+ * proves the inline fallback.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	const MARKER = (JobID: string): string =>

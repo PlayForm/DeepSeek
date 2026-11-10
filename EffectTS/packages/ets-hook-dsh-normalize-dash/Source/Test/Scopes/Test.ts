@@ -1,14 +1,23 @@
-// Source/Test/Scopes/Test.ts - one singular test: the granular scope gates -
-// each scope on/off with everything else at defaults (conversation,
-// reasoning, toolInput with the deprecated-field OR), and the S5 volatile
-// scope flip that changes the NEXT stream's gate without remount.
-// Runs standalone (`node Target/Test/Scopes/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the REAL
-// factory + the REAL dash apply, from the Harness.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Ledger } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the granular scope gates.
+ *
+ * @remarks
+ *
+ * Each scope runs on/off with everything else at defaults (conversation,
+ * reasoning, toolInput with the deprecated-field OR), and the S5 volatile
+ * scope flip changes the NEXT stream's gate without remount.
+ *
+ * Runs standalone (`node Target/Test/Scopes/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the
+ * REAL factory + the REAL dash apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

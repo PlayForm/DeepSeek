@@ -7,6 +7,7 @@
  * message).
  *
  * @remarks
+ *
  * The calls are the plan's release / test / doc / config / symbol lanes
  * reduced to their literals: the first call of a lane carries the strong
  * signal, the rest repeat the same intent through the variants the evidence

@@ -1,3 +1,8 @@
+import { defineTool } from "@deepseek-ai/dsh-tools";
+import type State from "@Interface/State.js";
+
+import { Text as Joined } from "./Classify.js";
+
 /**
  * @module Retrieve
  *
@@ -6,6 +11,7 @@
  * become 1).
  *
  * @remarks
+ *
  * The model calls it with the hash from a marker to restore the original
  * bytes; the optional `range` applies a granular line slice (R:199-203:
  * prefer granular, batch retrievals) to the joined text. The contract:
@@ -28,11 +34,6 @@
  * post-execute listener). `exec.signal` is honored: the registry rejects a
  * pre-aborted invocation before the body runs, and the body rechecks.
  */
-import { defineTool } from "@deepseek-ai/dsh-tools";
-import type State from "@Interface/State.js";
-
-import { Text as Joined } from "./Classify.js";
-
 export default (State: State) => {
 	// The restored text for one call: the joined original, or the requested
 	// line slice of it (0-based `start`, `count` lines from there; out-of-range

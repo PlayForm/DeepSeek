@@ -11,6 +11,7 @@
  * file (`Touched`) or only carried it in its context.
  *
  * @remarks
+ *
  * The money rounds to six decimals, so a call row agrees with the
  * conversation row above it and with the file row of the report reads;
  * `Stage` stays null when the call recorded no touch (the context-only

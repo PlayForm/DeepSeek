@@ -1,9 +1,14 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type HostTrace from "@Interface/Trace.js";
+import type { PanelEnvelope } from "@Interface/Trace.js";
+
 /**
  * @module Trace
  *
  * The host's forwarding face over the D5 bus.
  *
  * @remarks
+ *
  * The bus itself is `ctx.trace` (provided once by
  * @playform/ets-plugin-dsh-factory); the host context already owns that
  * service name, so the package exposes the forwarder as `panelFamilyTrace`
@@ -14,10 +19,6 @@
  * bus exposes no forwarder: the panel's documented static fallback (empty
  * tail, `live: false`) is the honest state.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type HostTrace from "@Interface/Trace.js";
-import type { PanelEnvelope } from "@Interface/Trace.js";
-
 type Bus = {
 	on(kind: string, listener: (envelope: PanelEnvelope) => void): () => void;
 	ring?(limit?: number): PanelEnvelope[];

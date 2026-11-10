@@ -1,22 +1,35 @@
-// Markdown - the Markdown adapter (Function/Markdown): the headings are the
-// file's symbols and the link TARGETS are its references (a link target is a
-// reference by construction, whether it names a local file, a URL or an
-// anchor). The rename renames LINK TARGETS only: a heading rename would need
-// the anchor slug the renderer derives, which is not derivable honestly from
-// the text (the refusal-to-guess rule), so a span that is not a link target is
-// the adapter's `undefined`.
 import type Adapter from "@Interface/Adapter.js";
 import type ReferenceNode from "@Interface/ReferenceNode.js";
 import type Span from "@Interface/Span.js";
 import type SymbolNode from "@Interface/SymbolNode.js";
 
-/** One ATX heading: group 1 is the hashes, group 2 the heading text. */
+/**
+ * @module Markdown
+ *
+ * The Markdown adapter: the headings are the file's symbols and the link
+ * TARGETS are its references.
+ *
+ * @remarks
+ *
+ * A link target is a reference by construction, whether it names a local file,
+ * a URL or an anchor. The rename renames LINK TARGETS only: a heading rename
+ * would need the anchor slug the renderer derives, which is not derivable
+ * honestly from the text (the refusal-to-guess rule), so a span that is not a
+ * link target is the adapter's `undefined`.
+ */
+/**
+ * One ATX heading: group 1 is the hashes, group 2 the heading text.
+ */
 const Heading = /^(#{1,6})[ \t]+(.+?)[ \t]*#*[ \t]*$/gm;
 
-/** One inline link: group 1 is the target. */
+/**
+ * One inline link: group 1 is the target.
+ */
 const Link = /\[[^\]]*\]\(([^)\s]+)(?:[ \t]+"[^"]*")?\)/g;
 
-/** Every link target with its exact range. */
+/**
+ * Every link target with its exact range.
+ */
 const Targets = (Text: string): { text: string; span: Span }[] => {
 	const Found: { text: string; span: Span }[] = [];
 	for (const Match of Text.matchAll(Link)) {

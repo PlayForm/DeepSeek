@@ -1,1 +1,1 @@
-import f from"../Variable/Section.js";var i=(t,r)=>{for(const o of f){const e=t?.[o];if(!0!==(!e||typeof e!="object")){for(const s of Object.keys(e))if(!0===!(s in(r?.effectiveLatest??{})))return!0}}return!1};export{i as default};
+import f from"@Variable/Section.js";var i=(t,r)=>{for(const o of f){const e=t?.[o];if(!0!==(!e||typeof e!="object")){for(const s of Object.keys(e))if(!0===!(s in(r?.effectiveLatest??{})))return!0}}return!1};export{i as default};

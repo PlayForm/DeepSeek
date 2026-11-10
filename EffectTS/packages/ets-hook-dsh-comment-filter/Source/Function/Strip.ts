@@ -1,3 +1,9 @@
+import type Mark from "@Interface/Mark.js";
+import type State from "@Interface/State.js";
+
+import Detect from "./Detect.js";
+import Scan from "./Scan.js";
+
 /**
  * @module Strip
  *
@@ -5,6 +11,7 @@
  * the shared tool-results arm factory calls once per text block.
  *
  * @remarks
+ *
  * It understands exactly ONE shape, the `read` tool's model-facing envelope
  * (the harness contract, byte-for-byte):
  *
@@ -42,12 +49,6 @@
  * correctly on a later one. Pure per call: the Mark is local, and the input
  * string is never mutated.
  */
-import type Mark from "@Interface/Mark.js";
-import type State from "@Interface/State.js";
-
-import Detect from "./Detect.js";
-import Scan from "./Scan.js";
-
 /**
  * The read tool's model-facing envelope (the harness contract).
  */

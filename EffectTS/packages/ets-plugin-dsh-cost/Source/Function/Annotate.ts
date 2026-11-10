@@ -1,3 +1,11 @@
+import { resolve, resolve } from "node:path";
+import type { DatabaseSync } from "node:sqlite";
+
+import type { Context } from "@deepseek-ai/cordis";
+
+import type Config from "../Interface/Config.js";
+import Language from "./Language.js";
+
 /**
  * @module Annotate
  *
@@ -7,6 +15,7 @@
  * delimiters in the file's own comment language.
  *
  * @remarks
+ *
  * The rendered block is written through the factory's write executor so the
  * fresh-stat version guard applies - an existing block is replaced in place
  * (its line count may change), an absent block is appended after one blank
@@ -16,16 +25,7 @@
  * Config.annotate.enabled (off by default) refuses the write before
  * anything is read. Every successful write leaves one Annotation row: what
  * was written, into which file, at what price, when.
- */ import { resolve, resolve } from "node:path";
-import type { DatabaseSync, DatabaseSync } from "node:sqlite";
-
-import type { Context, Context } from "@deepseek-ai/cordis";
-
-import type Config from "../Interface/Config.js";
-import type Config from "../Interface/Config.js";
-import Language from "./Language.js";
-import Language from "./Language.js";
-
+ */
 /**
  * One file's accumulated cost totals.
  */

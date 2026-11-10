@@ -1,3 +1,6 @@
+import type Enforcer from "@Function/Enforcer.js";
+import type Factory from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Service
  *
@@ -5,6 +8,7 @@
  * the cordis Context.
  *
  * @remarks
+ *
  * Plugin-development skill, item 12. The service registers as `dshRoute`
  * (Function/Enforcer), so the sibling orchestration plugins (the subagent
  * queue's dispatcher) can consume the resolution through `ctx.dshRoute` -
@@ -21,9 +25,6 @@
  * package (erased at build), so `ctx.pluginFactory` is fully typed at every
  * consumption site.
  */
-import type Enforcer from "@Function/Enforcer.js";
-import type Factory from "@playform/ets-plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

@@ -1,14 +1,3 @@
-// Source/Test/Schema-Wire-Govern/Test.ts - one singular test: the Schema
-// factory (the shared volatile fields, the per-module defaults, the real
-// validation + unwrap, the module field slots appended verbatim), the Wire
-// registration (the fiber-owned fs/observed listener + the module-supplied
-// activation proof) and the direct-govern registry (RegisterGovern storage,
-// selection resolution, basename routing, per-step containment, in-place
-// re-registration).
-// Runs standalone (`node Target/Test/Schema-Wire-Govern/Test.js`) AND under
-// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-plugin-dsh-factory: the fake ctx + the REAL factory
-// class, from the Harness.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -24,6 +13,26 @@ import {
 import Unwrap from "../../../Target/Function/Unwrap.js";
 import SectionList from "../../../Target/Variable/Default.js";
 
+/**
+ * @module Test
+ *
+ * The Schema factory, the Wire registration and the direct-govern registry
+ * of the factory.
+ *
+ * @remarks
+ *
+ * The singular test proves the Schema factory (the shared volatile fields,
+ * the per-module defaults, the real validation + unwrap, the module field
+ * slots appended verbatim), the Wire registration (the fiber-owned
+ * fs/observed listener + the module-supplied activation proof) and the
+ * direct-govern registry (RegisterGovern storage, selection resolution,
+ * basename routing, per-step containment, in-place re-registration).
+ *
+ * Runs standalone (`node Target/Test/Schema-Wire-Govern/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-plugin-dsh-factory: the fake ctx + the REAL factory class,
+ * from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

@@ -1,3 +1,4 @@
+import type { AgentState, Decision, Match } from "@Interface/Execution.js";
 /**
  * @module Count
  *
@@ -8,6 +9,7 @@
  * counters are in JUDGED calls.
  *
  * @remarks
+ *
  * The state (per agent, in a WeakMap keyed like the repeat-tool-reminder's
  * chains): a sliding `window` of the last `window` judged calls (the offense
  * match or null when the call was clean), the cooldown counter sinceNote, the
@@ -31,7 +33,6 @@
  *      tools/pre-execute listener (before the call runs) when the offense's
  *      class has reached enforceThreshold strikes since the last note.
  */
-import type { AgentState, Decision, Match } from "../Interface/Execution.js";
 /**
  * The per-call knobs Count reads (the live State values, already unwrapped).
  */

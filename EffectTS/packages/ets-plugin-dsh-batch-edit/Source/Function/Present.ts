@@ -1,3 +1,7 @@
+import type { OutputCell } from "@Interface/Output.js";
+import type Output from "@Interface/Output.js";
+import type { MachineRecord } from "@Interface/Process.js";
+
 /**
  * @module Present
  *
@@ -6,15 +10,12 @@
  * model-facing prose renderer.
  *
  * @remarks
+ *
  * BOTH are pure functions of the machine state - no clocks, no relative ages,
  * no per-request variation - so an idle machine with no events produces
  * byte-identical assemblies and renders (the silence invariant as a property
  * of the renderer, not a rule bolted onto it).
  */
-import type { OutputCell } from "@Interface/Output.js";
-import type Output from "@Interface/Output.js";
-import type { MachineRecord } from "@Interface/Process.js";
-
 /**
  * The per-file cells in the canonical value: one entry per held process, in
  * the stable path-sorted order, each carrying its status, its held version,

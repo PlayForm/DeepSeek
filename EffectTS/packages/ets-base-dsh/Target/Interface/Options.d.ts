@@ -5,6 +5,7 @@
  * `State(ctx, config, options)`.
  *
  * @remarks
+ *
  * `module` - REQUIRED. The module identity ("hook-dsh-governor-package",
  * "hook-dsh-pinner-package", "hook-dsh-governor-cargo", ...). It is stored on
  * State.Module AND doubles as the logger/ledger prefix the factory's own

@@ -1,3 +1,5 @@
+import type Pattern from "@Interface/Pattern.js";
+
 /**
  * @module DefaultPatterns
  *
@@ -5,13 +7,12 @@
  * shares.
  *
  * @remarks
+ *
  * PATTERN-GRAPH-PLUGIN.md section 3: "the cold start is the static repo map
  * plus the family's conventions, not an empty registry". Confidence 0.5, not
  * seeded by evidence. The learner's offline mining replaces these with
  * session-derived patterns at the same ids (Put is idempotent by id).
  */
-import type Pattern from "@Interface/Pattern.js";
-
 export default [
 	{
 		id: "version-bump",

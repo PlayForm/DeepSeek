@@ -1,9 +1,13 @@
+import type { GraphHandle } from "@Interface/Graph.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Graph
  *
  * The probe-once workspaceGraph seam: the resolution rules' data source.
  *
  * @remarks
+ *
  * The service is probed through `ctx.get("workspaceGraph")` exactly once per
  * State lifetime and cached in State.Graph; an ABSENT service is a
  * legitimate state (the graph package may not be mounted) - the rules answer
@@ -12,9 +16,6 @@
  * absent for the same reason: a half-mounted graph is worse than an honest
  * refusal.
  */
-import type { GraphHandle } from "@Interface/Graph.js";
-import type State from "@Interface/State.js";
-
 /**
  * The structural shape check (the three methods the rules call).
  */

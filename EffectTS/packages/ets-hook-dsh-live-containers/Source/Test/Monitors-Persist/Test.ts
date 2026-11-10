@@ -1,8 +1,3 @@
-// Source/Test/Monitors-Persist/Test.ts - the storage tests: the P5-style
-// open with the byte-exact domain spec, the record shapes, the pre-bind
-// buffer and its cap, the absent facility (silent skip, honest degradation
-// after a restart), the loud open failure, the recovery (provenance, the
-// time-stale treatment) and the empty read (no fabricated clean).
 import assert from "node:assert/strict";
 import {
 	Advance,
@@ -26,7 +21,22 @@ import {
 } from "../Harness.js";
 import type { MonitorRecord } from "../../../Target/Interface/Events.js";
 
-/** A standard persist mount. */
+/**
+ * @module Test
+ *
+ * The storage tests.
+ *
+ * @remarks
+ *
+ * The test covers the P5-style open with the byte-exact domain spec, the
+ * record shapes, the pre-bind buffer and its cap, the absent facility
+ * (silent skip, honest degradation after a restart), the loud open
+ * failure, the recovery (provenance, the time-stale treatment) and the
+ * empty read (no fabricated clean).
+ */
+/**
+ * A standard persist mount.
+ */
 const Setup = (Config: any = {}): { Jobs: any; Shell: any; Run: any } => {
 	const Jobs = FakeJobsHub();
 	const Shell = FakeShell();
@@ -42,7 +52,9 @@ const Setup = (Config: any = {}): { Jobs: any; Shell: any; Run: any } => {
 	return { Jobs, Shell, Run };
 };
 
-/** The stanza text of one assemble pass. */
+/**
+ * The stanza text of one assemble pass.
+ */
 const Stanza = async (Run: any): Promise<string> =>
 	(await WaveAssemble(Run)).sections.find((S: any) => S.name === "live-containers")?.text ?? "";
 

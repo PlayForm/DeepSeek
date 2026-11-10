@@ -6,6 +6,7 @@ export default _default;
  * differ from the author's manifest.
  *
  * @remarks
+ *
  * If a module's own logic would EVER change a non-dependency section, the
  * rewrite is refused - never applied. The guard composes the family's
  * byte-identical line through the module's Append:

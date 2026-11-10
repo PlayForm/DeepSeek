@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +9,7 @@
  * guard on the terminal/exec tool surface.
  *
  * @remarks
+ *
  * ORCHESTRATION-PLUGINS.md section 3. Loader contract: `export const name` +
  * `export const apply` + `export const Config` + `export const inject` +
  * `export default { name, apply, Config, inject }` - the ONLY named exports in the tree (cordis
@@ -30,10 +35,6 @@
  * NO service (a plugin with no service is a valid archetype) and NO
  * fs/observed listener.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "plugin-dsh-gitguard";
 
 /**

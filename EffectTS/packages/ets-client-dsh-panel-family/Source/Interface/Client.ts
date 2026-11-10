@@ -1,9 +1,12 @@
+import type { Context } from "@deepseek-ai/cordis";
+
 /**
  * @module Client
  *
  * The client-half context face (Interface/Client).
  *
  * @remarks
+ *
  * The harness client SDK services (ctx.locale, ctx.slots) are not a
  * resolvable dependency of this package, so the package declares the two
  * members it uses as an intersection with cordis's own Context - never as a
@@ -17,8 +20,6 @@
  * entry-private data, and the renderer hands the entry a `renderSlot` prop
  * for each declared child.
  */
-import type { Context } from "@deepseek-ai/cordis";
-
 /**
  * The browser client context: cordis's Context plus the two client services.
  */

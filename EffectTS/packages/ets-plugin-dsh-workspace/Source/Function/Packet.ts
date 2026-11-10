@@ -1,28 +1,42 @@
-// Packet - the orientation packet builder (V4-1 §3.5): resolve the focus
-// (a node id or a query), assemble the PacketView from the graph snapshot,
-// rank the neighbors, and estimate the tokens against the budget. The
-// packet is the orient step of the orient -> drill -> act loop; it carries
-// the version always, so a stale view is detectable.
-//
-// HONESTY RULES (the smallest faithful readings, recorded in the SCHEME):
-// - Rank order is edge-kind strength: "imports" beats "contains" (V4-1 §3.5:
-//   a call beats a reference, a test beats a mention - the W1 graph has
-//   neither calls nor references, so only imports and contains are ranked).
-// - The OPEN lines name exactly what the W1 graph cannot answer (the
-//   references/calls/tests edges are deferred to W2+ and are NOT faked).
-// - The token estimate is characters / tokenCharsPerToken - no token counter
-//   is injected in v0; the budget enforcement is honest about being an
-//   estimate.
 import Role from "@Function/Role.js";
 import type { Edge, Node, WorkspaceGraph } from "@Interface/Graph.js";
 import type { PacketView } from "@Interface/Packet.js";
 import type { NodeRow } from "@Interface/Query.js";
 import type State from "@Interface/State.js";
 
-/** The edge-kind strength rank (higher wins; W1 has these two kinds). */
+/**
+ * @module Packet
+ *
+ * The orientation packet builder over the graph snapshot.
+ *
+ * @remarks
+ *
+ * V4-1 §3.5: resolve the focus (a node id or a query), assemble the
+ * PacketView from the graph snapshot, rank the neighbors, and estimate the
+ * tokens against the budget. The packet is the orient step of the
+ * orient -> drill -> act loop; it carries the version always, so a stale
+ * view is detectable.
+ *
+ * HONESTY RULES (the smallest faithful readings, recorded in the SCHEME):
+ *
+ * - Rank order is edge-kind strength: "imports" beats "contains" (V4-1
+ *   §3.5: a call beats a reference, a test beats a mention - the W1 graph
+ *   has neither calls nor references, so only imports and contains are
+ *   ranked).
+ * - The OPEN lines name exactly what the W1 graph cannot answer (the
+ *   references/calls/tests edges are deferred to W2+ and are NOT faked).
+ * - The token estimate is characters / tokenCharsPerToken - no token
+ *   counter is injected in v0; the budget enforcement is honest about being
+ *   an estimate.
+ */
+/**
+ * The edge-kind strength rank (higher wins; W1 has these two kinds).
+ */
 const Strength: Record<Edge["kind"], number> = { imports: 2, contains: 1 };
 
-/** Compact one node into the row shape the tools print. */
+/**
+ * Compact one node into the row shape the tools print.
+ */
 export const Row = (Node_: Node): NodeRow => ({
 	id: Node_.id,
 	kind: Node_.kind,
@@ -35,7 +49,9 @@ export const Row = (Node_: Node): NodeRow => ({
 	version: Node_.version,
 });
 
-/** Resolve the focus node: an exact id first, else the first find hit. */
+/**
+ * Resolve the focus node: an exact id first, else the first find hit.
+ */
 const Focus = (Graph_: WorkspaceGraph, IdOrQuery: string): Node | undefined => {
 	const Direct = Graph_.getNode(IdOrQuery);
 	if (Direct !== undefined) {

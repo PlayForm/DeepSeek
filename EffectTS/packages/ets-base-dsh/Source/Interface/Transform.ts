@@ -1,15 +1,16 @@
+import type Output from "@Interface/Output.js";
+
 /**
  * @module Transform
  *
  * The module-supplied pure transform of the governed file's content.
  *
  * @remarks
+ *
  * The heart of the detached contained continuation (Function/Continue):
  * signature documentation and the parameter contract live on the transform
  * interface below.
  */
-import type Output from "@Interface/Output.js";
-
 /**
  * The module-supplied pure function at the heart of the detached contained
  * continuation (Function/Continue).

@@ -1,3 +1,12 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
+import { Effect, Scope } from "effect";
+
+import * as Direct from "./Direct.js";
+import Observe from "./Observe.js";
+
 /**
  * @module Apply
  *
@@ -6,6 +15,7 @@
  * proof and wires the fs/observed hook.
  *
  * @remarks
+ *
  * The factory owns the scaffolding: `Factory.State` performs the cell unwrap
  * and the shared mappings Tool<-mutationTools, Policy<-policyFile,
  * Ledger<-logFile, Enabled<-log, List<-exclude, and the machinery structures
@@ -33,15 +43,6 @@
  * controller (Factory.Attach); the subprocess seam (bin mode) is probed once
  * by the factory's State builder (P9).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
-import { Effect, Scope } from "effect";
-
-import * as Direct from "./Direct.js";
-import Observe from "./Observe.js";
-
 export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
 	// augmentation; guaranteed present by the inject declaration).

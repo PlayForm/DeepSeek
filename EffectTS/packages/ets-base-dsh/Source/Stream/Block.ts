@@ -1,3 +1,5 @@
+import Strip from "./Strip.js";
+
 /**
  * @module Block
  *
@@ -5,6 +7,7 @@
  * `block-end` chunk.
  *
  * @remarks
+ *
  * The assembled block carries the fully-assembled block - the deltas and the
  * block must agree, or consumers see inconsistencies between the live stream
  * view and every assembler/replay consumer. A content block is normalized
@@ -80,8 +83,6 @@
  * above: it may rewrite `arguments` while keeping `count: 0` - marker removal
  * is not normalization, so the ledger must not count it.
  */
-import Strip from "./Strip.js";
-
 type BlockShape =
 	| { type: "text"; text: string }
 	| { type: "reasoning"; text?: string | undefined }

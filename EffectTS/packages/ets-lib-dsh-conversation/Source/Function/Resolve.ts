@@ -1,3 +1,5 @@
+import { resolve } from "node:path";
+
 /**
  * @module Resolve
  *
@@ -5,6 +7,7 @@
  * touch", written once instead of once per plugin).
  *
  * @remarks
+ *
  * One tool/call's name and arguments become the file touches it performs,
  * in argument order, resolved against the session's working directory and
  * normalized. A tool the vocabulary does not map and a malformed or alien
@@ -13,8 +16,6 @@
  * here alone. Pure: node:path reads no filesystem, and a relative path with
  * no session cwd resolves to nothing (never the process's own cwd).
  */
-import { resolve } from "node:path";
-
 type Kind = "read" | "write" | "edit" | "delete" | "search";
 
 type Touched = { Path: string; Kind: Kind };

@@ -1,3 +1,24 @@
+import { homedir as Home } from "node:os";
+
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
+
+import Delta from "./Function/Delta.js";
+import OutcomeFn from "./Function/Outcome.js";
+import Parse from "./Function/Parse.js";
+import PushFn from "./Function/Push.js";
+import ReadFn from "./Function/Read.js";
+import RecordFn from "./Function/Record.js";
+import Render from "./Function/Render.js";
+import SummaryFn from "./Function/Summary.js";
+import type FeedbackBlock from "./Interface/Block.js";
+import type Config from "./Interface/Config.js";
+import type Outcome from "./Interface/Outcome.js";
+import type State from "./Interface/State.js";
+import type Summary from "./Interface/Summary.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +26,7 @@
  * fourth orchestration member (Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md).
  *
  * @remarks
+ *
  * Class form (the factory's precedent): `export default class Feedback extends Service` with
  * `super(Context, "feedback")`, registered immediately on construction and removed with its
  * owning fiber; `static inject` declares nothing beyond the plugin's own needs (the feedback
@@ -30,27 +52,6 @@
  * adds one hop to the TRANSFERRED chain. The queue integration (end-phase) can also call Push
  * directly.
  */
-import { homedir as Home } from "node:os";
-
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
-
-import Delta from "./Function/Delta.js";
-import OutcomeFn from "./Function/Outcome.js";
-import Parse from "./Function/Parse.js";
-import PushFn from "./Function/Push.js";
-import ReadFn from "./Function/Read.js";
-import RecordFn from "./Function/Record.js";
-import Render from "./Function/Render.js";
-import SummaryFn from "./Function/Summary.js";
-import type FeedbackBlock from "./Interface/Block.js";
-import type Config from "./Interface/Config.js";
-import type Outcome from "./Interface/Outcome.js";
-import type State from "./Interface/State.js";
-import type Summary from "./Interface/Summary.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 const BLOCK = "[HONEST FEEDBACK";
 
 export default class Feedback extends Service {

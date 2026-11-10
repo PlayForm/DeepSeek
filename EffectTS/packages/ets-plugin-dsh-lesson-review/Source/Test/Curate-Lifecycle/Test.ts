@@ -1,20 +1,29 @@
-// Source/Test/Curate-Lifecycle/Test.ts - THE LIFECYCLE: the always-on,
-// token-free half of the review.
-//
-// A corpus that only grows is a corpus nobody loads. The pass is deterministic
-// on purpose, and its four protections are the whole contract: pinned entries do
-// not move, only `createdBy: agent` entries are in its jurisdiction, a zero-use
-// entry gets a grace floor, and an archive is a RENAME (its own undo).
 import assert from "node:assert/strict";
 import FileSystem from "node:fs";
 import * as Path from "node:path";
 
 import { CheckAsync, Exists, Finish, Home, Make, MakeCounter, Seed } from "../Harness.js";
 
-/** The day in ms (the knobs' unit). */
+/**
+ * @module Test
+ *
+ * THE LIFECYCLE: the always-on, token-free half of the review.
+ *
+ * @remarks
+ *
+ * A corpus that only grows is a corpus nobody loads. The pass is deterministic
+ * on purpose, and its four protections are the whole contract: pinned entries
+ * do not move, only `createdBy: agent` entries are in its jurisdiction, a
+ * zero-use entry gets a grace floor, and an archive is a RENAME (its own undo).
+ */
+/**
+ * The day in ms (the knobs' unit).
+ */
 const Day = 86_400_000;
 
-/** One usage record with the fields the lifecycle reads. */
+/**
+ * One usage record with the fields the lifecycle reads.
+ */
 const Record_ = (Name: string, Fields: Record<string, unknown> = {}) => ({
 	name: Name,
 	useCount: 1,
@@ -30,7 +39,9 @@ const Record_ = (Name: string, Fields: Record<string, unknown> = {}) => ({
 	...Fields,
 });
 
-/** Write the usage sidecar BEFORE a construction, so the service loads it. */
+/**
+ * Write the usage sidecar BEFORE a construction, so the service loads it.
+ */
 const Store = (Entries: unknown[]): void => {
 	const Target = Path.join(Home, ".dsh", "lesson", "usage.json");
 	FileSystem.mkdirSync(Path.dirname(Target), { recursive: true });

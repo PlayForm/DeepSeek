@@ -14,6 +14,7 @@
  * The self-contained declaration of the harness LLM catalog's shape.
  *
  * @remarks
+ *
  * The `ctx.llm` service behind the `list_subagent_models` tool. The PoC
  * rule: declare the sibling service's shape in your own Interface/, never
  * import the package that may not be wired.

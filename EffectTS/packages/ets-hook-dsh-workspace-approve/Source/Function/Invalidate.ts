@@ -1,3 +1,7 @@
+import Record from "@Function/Record.js";
+import type Binding from "@Interface/Binding.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Invalidate
  *
@@ -8,6 +12,7 @@
  * invalidated (decision `invalidated`).
  *
  * @remarks
+ *
  * The discipline, per the family contract:
  *
  *   - NO awaits, NO I/O on the listener path;
@@ -18,10 +23,6 @@
  *   - the listener NEVER THROWS: the whole body is one try/catch - a
  *     malformed event is caught and ledgered as `failed <path> (<reason>)`.
  */
-import Record from "@Function/Record.js";
-import type Binding from "@Interface/Binding.js";
-import type State from "@Interface/State.js";
-
 export default (
 	State: State,
 	Target: unknown,

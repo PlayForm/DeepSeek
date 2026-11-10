@@ -12,6 +12,7 @@ import { Expand } from "@playform/ets-base-dsh";
  * The JSON FALLBACK store (Function/Snapshot), the DEGRADED tier.
  *
  * @remarks
+ *
  * The PRIMARY store is the storage-domain KV domain `replay_history`
  * (Function/Storage); this file is written and read ONLY when the harness
  * provides no storage facility (or its open fails) - the documented fallback,
@@ -24,7 +25,6 @@ import { Expand } from "@playform/ets-base-dsh";
  * sleep. A stale, unreadable or wrong-version file is a silent miss - the
  * store starts fresh, never a throw.
  */
-
 /**
  * Read the fallback snapshot; null on any failure or version mismatch.
  */

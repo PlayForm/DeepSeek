@@ -1,14 +1,3 @@
-// Source/Test/Persistent-Section/Test.ts - one singular test: tier 2 of the
-// coaching ladder - the persistent system-prompt section: it turns on at the
-// escalation threshold, appends EXACTLY one section with every other assembly
-// field untouched (PTC + structured-output preserved), fills the verbatim
-// heading + fixed rules + the live-fetched tool table capped at
-// maxSectionTools, logs no rebuild line on the first build, and auto-clears
-// after the clean window with its byte-exact line. Runs standalone
-// (`node Target/Test/Persistent-Section/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions are moved
-// verbatim from Classic/smokes/tool-coach-smoke.mjs (R4).
 import assert from "node:assert/strict";
 import {
 	CheckAsync,
@@ -24,6 +13,27 @@ import {
 	Ledger,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The singular test of tier 2 of the coaching ladder: the persistent
+ * system-prompt section.
+ *
+ * @remarks
+ *
+ * Tier 2 turns on at the escalation threshold, appends EXACTLY one section
+ * with every other assembly field untouched (PTC + structured-output
+ * preserved), fills the verbatim heading + fixed rules + the live-fetched
+ * tool table capped at maxSectionTools, logs no rebuild line on the first
+ * build, and auto-clears after the clean window with its byte-exact line.
+ *
+ * The file runs standalone
+ * (`node Target/Test/Persistent-Section/Test.js`) and under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * It is a unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions
+ * are moved verbatim from `Classic/smokes/tool-coach-smoke.mjs` (R4).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	rm();

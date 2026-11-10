@@ -1,16 +1,3 @@
-/**
- * @module Field
- *
- * One config-form row: the field label with its write-route marker, the
- * control bound to the field's current value, and the provenance note.
- *
- * @remarks
- * The control commits through Apply (volatile -> the settings mutate, plain
- * -> the bridge, secret -> never). A secret field renders the "configured
- * (secret)" marker and no value: the host redacts secrets and the panel must
- * never display one (UI-FAMILY-V4-1 section 3.4). The row is a pure element
- * builder (no hooks), so the smoke suite can inspect the exact tree.
- */
 import Apply from "@Function/Apply.js";
 import type { PanelFormField, PanelFormView } from "@Interface/Form.js";
 import type { PanelSection } from "@Interface/Panel.js";
@@ -18,6 +5,20 @@ import type { PanelPorts } from "@Interface/Ports.js";
 import EN_DICTIONARY from "@Variable/Locale-en.json";
 import { createElement } from "react";
 
+/**
+ * @module Field
+ *
+ * One config-form row: the field label with its write-route marker, the
+ * control bound to the field's current value, and the provenance note.
+ *
+ * @remarks
+ *
+ * The control commits through Apply (volatile -> the settings mutate, plain
+ * -> the bridge, secret -> never). A secret field renders the "configured
+ * (secret)" marker and no value: the host redacts secrets and the panel must
+ * never display one (UI-FAMILY-V4-1 section 3.4). The row is a pure element
+ * builder (no hooks), so the smoke suite can inspect the exact tree.
+ */
 /**
  * Resolve one visible string through the locale service, else the en
  * dictionary.

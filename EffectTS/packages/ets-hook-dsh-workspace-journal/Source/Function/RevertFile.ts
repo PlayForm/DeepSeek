@@ -1,18 +1,19 @@
-/**
- * @module RevertFile
- *
- * One file's replay: the per-file half of Revert.
- *
- * @remarks
- * See Revert.ts for the semantics; this module holds the two replay arms
- * (the pre-image write-back and the absence unlink) and their ledger lines.
- */
 import * as FileSystem from "node:fs";
 
 import type EntryRecord from "@Interface/Entry.js";
 import type Result from "@Interface/Result.js";
 import type State from "@Interface/State.js";
 
+/**
+ * @module RevertFile
+ *
+ * One file's replay: the per-file half of Revert.
+ *
+ * @remarks
+ *
+ * See Revert.ts for the semantics; this module holds the two replay arms
+ * (the pre-image write-back and the absence unlink) and their ledger lines.
+ */
 export default async (
 	State: State,
 	BatchId: string,

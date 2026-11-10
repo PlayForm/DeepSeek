@@ -1,18 +1,3 @@
-/**
- * @module Section
- *
- * The section component one adapter registers into its declared child slot.
- *
- * @remarks
- * It renders the plugin's status (the activation state and the live trace
- * tail) and its config form (the fields derived from the plugin's schema by
- * Function/Form). The component receives its data through the slot
- * registration's inject face (`{ section, ports }`) plus the renderer's
- * standard locale `t`; it subscribes to the settings mirror and the trace
- * tail for live updates and unwinds every subscription on unmount. With no
- * settings client the form shows the documented "not composed" state; with no
- * trace the status is static - neither is an error.
- */
 import Field from "@Function/Field.js";
 import Form from "@Function/Form.js";
 import Status from "@Function/Status.js";
@@ -22,6 +7,22 @@ import type { PanelPorts } from "@Interface/Ports.js";
 import EN_DICTIONARY from "@Variable/Locale-en.json";
 import { createElement, useEffect, useState } from "react";
 
+/**
+ * @module Section
+ *
+ * The section component one adapter registers into its declared child slot.
+ *
+ * @remarks
+ *
+ * It renders the plugin's status (the activation state and the live trace
+ * tail) and its config form (the fields derived from the plugin's schema by
+ * Function/Form). The component receives its data through the slot
+ * registration's inject face (`{ section, ports }`) plus the renderer's
+ * standard locale `t`; it subscribes to the settings mirror and the trace
+ * tail for live updates and unwinds every subscription on unmount. With no
+ * settings client the form shows the documented "not composed" state; with no
+ * trace the status is static - neither is an error.
+ */
 /**
  * Resolve one visible string through the locale service, else the en
  * dictionary.

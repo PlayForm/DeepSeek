@@ -1,3 +1,8 @@
+import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
+
+import type ContributionRow from "@Interface/ContributionRow.js";
+import type FileCallRow from "@Interface/FileCallRow.js";
+
 /**
  * @module Contributions
  *
@@ -6,6 +11,7 @@
  * conversation's calls that allocated to that same file.
  *
  * @remarks
+ *
  * Each read carries the money it allocated to the file and its share of the
  * file's whole lifetime total; the deeper level carries each call's own
  * money, tokens, stage and touch evidence. This is the product question the
@@ -42,11 +48,6 @@
  * the future service (and the file-to-conversation command) call directly,
  * exactly as Function/Report and Function/Assess are called.
  */
-import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
-
-import type ContributionRow from "@Interface/ContributionRow.js";
-import type FileCallRow from "@Interface/FileCallRow.js";
-
 /**
  * The two read-only statements: FileScope pins the path, CallMoney
  * collapses the Allocation rows to one money row per call, Lifetime sums

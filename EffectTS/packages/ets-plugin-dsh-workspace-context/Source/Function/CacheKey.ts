@@ -1,9 +1,13 @@
+import type Query from "@Interface/Query.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module CacheKey
  *
  * The packet memo's cache key over every packet-changing input.
  *
  * @remarks
+ *
  * Every input that changes the built packet, in a fixed order - the query's
  * five fields and the service's own knobs (a volatile flip changes the
  * packet, so the memo must not survive it). The graph's indexRevision is
@@ -12,9 +16,6 @@
  * so a repeated identical query is served from the memo until the graph
  * says its basis changed.
  */
-import type Query from "@Interface/Query.js";
-import type State from "@Interface/State.js";
-
 export default (State: State, Options: Query): string =>
 	JSON.stringify([
 		Options.id ?? null,

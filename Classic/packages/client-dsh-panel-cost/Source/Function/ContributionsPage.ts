@@ -1,49 +1,47 @@
-// ContributionsPage - the Cost tab's Contributions view (Temporary/
-// Cost-Research/Plan.md lane B5b; the research's A1 section 8 and A2
-// section 7): one file, the conversations that allocated money to it, and -
-// one level deeper - the calls of a chosen conversation that allocated money
-// to that same file, each row carrying its own evidence.
-//
-// THE PATH is the pane's own question: a text field the reader types or pastes
-// a path into and one Read action that applies it. The field starts with the
-// path the Files view filtered by, because the view above this pane already
-// holds that filter state, so opening Contributions from a filtered Files
-// table asks the question the reader was just looking at. Typing never opens a
-// read: only the applied path does, so a half-typed path cannot reach the
-// ledger.
-//
-// THE TWO LEVELS: the first read is the engine's file-scoped contribution
-// read (Function/Fetch's Contributions), one row per conversation that paid
-// for the file, with its call count, its direct and amortized money, its total
-// and its share of the file's whole lifetime. A conversation row expands into
-// the engine's file-scoped call read (Function/Fetch's FileCalls), fetched
-// lazily on the first open and cached per conversation, so a reopened row
-// renders the same calls without a second request. The call table is the
-// compact grain: turn and step, the model, the token total, the direct,
-// amortized and total money, the stage the file reached in that call, and the
-// evidence label.
-//
-// THE EVIDENCE LABELS are the point of the second level: a call that touched
-// the file says "touched" (it paid the file's direct share), and a call that
-// only carried the file in its context says "context carry" (it paid the
-// amortized share). Both labels carry their own tooltip, so the difference is
-// readable without the research document.
-//
-// THE VERSION HISTORY is the artifact-lineage level (the research's sections
-// 3.C and 4): when a path is applied, a third block lists the file's content
-// versions newest first - the short hash the ledger recorded, the size and the
-// line count it measured, when it observed that content, the touches bound to
-// it with their distinct kinds, and how many conversations those touches came
-// from. The newest row is marked current, because it is the version the ledger
-// saw last; the block claims nothing about the bytes on disk now. It is a read
-// like the other two: no navigation, no write, and its own empty and failed
-// states render a line rather than a crash.
-//
-// EVERY STATE renders a line rather than a crash: the idle pane (no path
-// applied), the loading read, the failed read and the empty read for the
-// conversation level, the loading, failed and empty state of one
-// conversation's calls, and the same three states of the version chain. Both
-// fetches resolve instead of throwing, so the pane always has a state to show.
+/**
+ * @module ContributionsPage
+ *
+ * The Cost tab's Contributions view: one file, the conversations that allocated money to it, and -
+ * one level deeper - the calls of a chosen conversation that allocated money to that same file,
+ * each row carrying its own evidence.
+ *
+ * @remarks
+ * The research source is `Temporary/Cost-Research/Plan.md` lane B5b, with the research's A1
+ * section 8 and A2 section 7.
+ *
+ * THE PATH is the pane's own question: a text field the reader types or pastes a path into and one
+ * Read action that applies it. The field starts with the path the Files view filtered by, because
+ * the view above this pane already holds that filter state, so opening Contributions from a
+ * filtered Files table asks the question the reader was just looking at. Typing never opens a
+ * read: only the applied path does, so a half-typed path cannot reach the ledger.
+ *
+ * THE TWO LEVELS: the first read is the engine's file-scoped contribution read (`Function/Fetch`'s
+ * Contributions), one row per conversation that paid for the file, with its call count, its direct
+ * and amortized money, its total and its share of the file's whole lifetime. A conversation row
+ * expands into the engine's file-scoped call read (`Function/Fetch`'s FileCalls), fetched lazily
+ * on the first open and cached per conversation, so a reopened row renders the same calls without
+ * a second request. The call table is the compact grain: turn and step, the model, the token
+ * total, the direct, amortized and total money, the stage the file reached in that call, and the
+ * evidence label.
+ *
+ * THE EVIDENCE LABELS are the point of the second level: a call that touched the file says
+ * "touched" (it paid the file's direct share), and a call that only carried the file in its context
+ * says "context carry" (it paid the amortized share). Both labels carry their own tooltip, so the
+ * difference is readable without the research document.
+ *
+ * THE VERSION HISTORY is the artifact-lineage level (the research's sections 3.C and 4): when a
+ * path is applied, a third block lists the file's content versions newest first - the short hash
+ * the ledger recorded, the size and the line count it measured, when it observed that content, the
+ * touches bound to it with their distinct kinds, and how many conversations those touches came
+ * from. The newest row is marked current, because it is the version the ledger saw last; the block
+ * claims nothing about the bytes on disk now. It is a read like the other two: no navigation, no
+ * write, and its own empty and failed states render a line rather than a crash.
+ *
+ * EVERY STATE renders a line rather than a crash: the idle pane (no path applied), the loading
+ * read, the failed read and the empty read for the conversation level, the loading, failed and
+ * empty state of one conversation's calls, and the same three states of the version chain. Both
+ * fetches resolve instead of throwing, so the pane always has a state to show.
+ */
 import Count from "@Function/Count";
 import CountShort from "@Function/CountShort";
 import { Contributions, FileCalls, History } from "@Function/Fetch";
@@ -57,10 +55,11 @@ import Dash from "@Variable/Dash";
 import EN_DICTIONARY from "@Variable/Locale-en.json";
 import { createElement, Fragment, useCallback, useEffect, useState } from "react";
 
-// The conversation table's one column definition: the shipped order, the
-// percent widths that add up to the whole table, and the label and tooltip
-// keys each column resolves. The header, the colgroup and every body cell read
-// this one list, so a column cannot drift from its width.
+/**
+ * The conversation table's one column definition: the shipped order, the percent widths that add
+ * up to the whole table, and the label and tooltip keys each column resolves. The header, the
+ * colgroup and every body cell read this one list, so a column cannot drift from its width.
+ */
 const CONVERSATION_COLUMNS = [
 	"conversation",
 	"calls",
@@ -103,10 +102,11 @@ const CONVERSATION_WIDTHS: Record<ConversationColumn, number> = {
 	models: 16,
 };
 
-// The call table's one column definition, the same way: the compact grain of
-// the second level, from the turn and step through the evidence label. The
-// scope column reuses the panel's own Turn / step word, because the call grain
-// is the same grain the Turns table names.
+/**
+ * The call table's one column definition, the same way: the compact grain of the second level,
+ * from the turn and step through the evidence label. The scope column reuses the panel's own
+ * Turn / step word, because the call grain is the same grain the Turns table names.
+ */
 const CALL_COLUMNS = [
 	"scope",
 	"model",
@@ -153,10 +153,12 @@ const CALL_WIDTHS: Record<CallColumn, number> = {
 	evidence: 14,
 };
 
-// The version table's one column definition, the same way: the content chain's
-// grain, from the version's short hash through the size and line count the
-// ledger measured, the instant it observed that content, the touches bound to
-// the version and the conversations those touches came from.
+/**
+ * The version table's one column definition, the same way: the content chain's grain, from the
+ * version's short hash through the size and line count the ledger measured, the instant it
+ * observed that content, the touches bound to the version and the conversations those touches
+ * came from.
+ */
 const VERSION_COLUMNS = ["version", "bytes", "lines", "observed", "touches", "sessions"] as const;
 
 type VersionColumn = (typeof VERSION_COLUMNS)[number];
@@ -170,9 +172,10 @@ const VERSION_LABELS: Readonly<Record<VersionColumn, string>> = {
 	sessions: "contributions.version.column.sessions",
 };
 
-// The touches column carries its tooltip on the cell rather than the header,
-// because the kinds and the two times belong to one version row and not to the
-// column, so its header title is null.
+/**
+ * The touches column carries its tooltip on the cell rather than the header, because the kinds and
+ * the two times belong to one version row and not to the column, so its header title is null.
+ */
 const VERSION_TITLES: Readonly<Record<VersionColumn, string | null>> = {
 	version: "contributions.version.column.hash.title",
 	bytes: "contributions.version.column.bytes.title",
@@ -191,9 +194,10 @@ const VERSION_WIDTHS: Record<VersionColumn, number> = {
 	sessions: 10,
 };
 
-// The stage tone map the Files, turn and step rows share: the same palette,
-// keyed by the same stage words, so a call's stage reads as the same color in
-// every view.
+/**
+ * The stage tone map the Files, turn and step rows share: the same palette, keyed by the same
+ * stage words, so a call's stage reads as the same color in every view.
+ */
 const StageTones: Record<string, number> = {
 	discover: 5,
 	read: 0,
@@ -203,9 +207,11 @@ const StageTones: Record<string, number> = {
 	revert: 3,
 };
 
-// Reading - one level's read as the pane holds it: the phase the level renders
-// and the rows the answer carried. A level with no read yet is idle, which is
-// the state a conversation row starts in before its first open.
+/**
+ * Reading - one level's read as the pane holds it: the phase the level renders and the rows the
+ * answer carried. A level with no read yet is idle, which is the state a conversation row starts
+ * in before its first open.
+ */
 type Reading<Row> = {
 	Phase: "idle" | "loading" | "ready" | "failed";
 	Rows: readonly Row[];
@@ -219,14 +225,17 @@ const S = (Value: unknown): string => (typeof Value === "string" ? Value : "");
 const Epoch = (Value: unknown): number | null =>
 	typeof Value === "number" && Number.isFinite(Value) ? Value : null;
 
-// Models - one contribution row's model list, read defensively: the rows cross
-// the route as JSON, and an entry that is not a string is not a model.
+/**
+ * Models - one contribution row's model list, read defensively: the rows cross the route as JSON,
+ * and an entry that is not a string is not a model.
+ */
 const Models = (Value: unknown): readonly string[] =>
 	Array.isArray(Value) ? Value.filter((Item: unknown) => typeof Item === "string") : [];
 
-// Kinds - one version row's distinct touch kinds, read the same defensive way:
-// the rows cross the route as JSON, and an entry that is not a string is not a
-// kind.
+/**
+ * Kinds - one version row's distinct touch kinds, read the same defensive way: the rows cross the
+ * route as JSON, and an entry that is not a string is not a kind.
+ */
 const Kinds = (Value: unknown): readonly string[] =>
 	Array.isArray(Value) ? Value.filter((Item: unknown) => typeof Item === "string") : [];
 
@@ -235,9 +244,11 @@ const BaseName = (Path: string): string => {
 	return Cut === -1 ? Path : Path.slice(Cut + 1);
 };
 
-// ShortSession - the session id's short tail: the last eight characters of an
-// id the ledger stored no title for, prefixed with an ellipsis when the id is
-// longer, so the conversation cell stays a column and not a paragraph.
+/**
+ * ShortSession - the session id's short tail: the last eight characters of an id the ledger stored
+ * no title for, prefixed with an ellipsis when the id is longer, so the conversation cell stays a
+ * column and not a paragraph.
+ */
 const ShortSession = (SessionId: string): string =>
 	SessionId.length <= 8 ? SessionId : `...${SessionId.slice(-8)}`;
 
@@ -245,30 +256,38 @@ const ToneClass = (Tone: number): string => `playform-cost-tone${Tone}`;
 
 const StageTone = (Stage: string): number => StageTones[Stage] ?? 7;
 
-// Word - the shipped stage.* words; a word the dictionary does not carry is
-// shown as the ledger spelled it rather than as a key.
+/**
+ * Word - the shipped `stage.*` words; a word the dictionary does not carry is shown as the ledger
+ * spelled it rather than as a key.
+ */
 const Word = (Key: string, Fallback: string, t: Translate): string => {
 	const Known = (EN_DICTIONARY as unknown as Record<string, string>)[Key];
 	return Known === undefined ? Fallback : t(Key);
 };
 
-// Value - the text a change event carries. The DOM overload of createElement
-// cannot infer the element type from a string tag, so the event arrives as
-// unknown and the field is read defensively.
+/**
+ * Value - the text a change event carries. The DOM overload of createElement cannot infer the
+ * element type from a string tag, so the event arrives as unknown and the field is read
+ * defensively.
+ */
 const Value = (Event: unknown): string => {
 	const Target = (Event as { target?: unknown } | null)?.target;
 	const Text = (Target as { value?: unknown } | null)?.value;
 	return typeof Text === "string" ? Text : "";
 };
 
-// Key - the key name a keyboard event carries, read the same defensive way.
+/**
+ * Key - the key name a keyboard event carries, read the same defensive way.
+ */
 const Key = (Event: unknown): string => {
 	const Named = (Event as { key?: unknown } | null)?.key;
 	return typeof Named === "string" ? Named : "";
 };
 
-// Label - the conversation's stored title, or the session id's short tail when
-// the ledger stored none.
+/**
+ * Label - the conversation's stored title, or the session id's short tail when the ledger stored
+ * none.
+ */
 const Label = (Row: CostContributionRow): string => {
 	const Title = S(Row.title);
 	switch (true) {
@@ -279,8 +298,10 @@ const Label = (Row: CostContributionRow): string => {
 	}
 };
 
-// MoneyCell - one money column of either table: the same formatter and the
-// same class every money cell of the panel renders with.
+/**
+ * MoneyCell - one money column of either table: the same formatter and the same class every money
+ * cell of the panel renders with.
+ */
 const MoneyCell = (
 	Cell: string,
 	Value: number,
@@ -293,8 +314,10 @@ const MoneyCell = (
 		createElement("span", { className: "playform-cost-money" }, Price(Value, Currency)),
 	);
 
-// ModelsCell - the conversation's models: the first as one pill and the count
-// of the further ones beside it; the tooltip names every model.
+/**
+ * ModelsCell - the conversation's models: the first as one pill and the count of the further ones
+ * beside it; the tooltip names every model.
+ */
 const ModelsCell = (Cell: string, List: readonly string[]): ReturnType<typeof createElement> => {
 	switch (true) {
 		case List.length === 0:
@@ -323,8 +346,10 @@ const ModelsCell = (Cell: string, List: readonly string[]): ReturnType<typeof cr
 	}
 };
 
-// StageCell - the stage the file reached in one call: one pill with its tone
-// dot, and a dash when the call recorded no touch (the context-only case).
+/**
+ * StageCell - the stage the file reached in one call: one pill with its tone dot, and a dash when
+ * the call recorded no touch (the context-only case).
+ */
 const StageCell = (Cell: string, Stage: string, t: Translate): ReturnType<typeof createElement> => {
 	const Title = t("contributions.call.column.stage.title");
 	switch (true) {
@@ -346,10 +371,11 @@ const StageCell = (Cell: string, Stage: string, t: Translate): ReturnType<typeof
 	}
 };
 
-// EvidenceCell - the one evidence fact of a call row: a touched call paid the
-// file's direct share and says "touched"; a call that only carried the file
-// paid the amortized share and says "context carry". The muted pill separates
-// the weaker evidence without adding a color of its own.
+/**
+ * EvidenceCell - the one evidence fact of a call row: a touched call paid the file's direct share
+ * and says "touched"; a call that only carried the file paid the amortized share and says "context
+ * carry". The muted pill separates the weaker evidence without adding a color of its own.
+ */
 const EvidenceCell = (
 	Cell: string,
 	Touched: boolean,
@@ -374,9 +400,11 @@ const EvidenceCell = (
 		),
 	);
 
-// CallRow - one call of the expanded conversation: the turn and step with the
-// start time in the title, the model, the token total with its four buckets in
-// the title, the three money figures, the stage and the evidence label.
+/**
+ * CallRow - one call of the expanded conversation: the turn and step with the start time in the
+ * title, the model, the token total with its four buckets in the title, the three money figures,
+ * the stage and the evidence label.
+ */
 const CallRow = (
 	Row: CostFileCallRow,
 	Currency: string,
@@ -437,10 +465,11 @@ const CallRow = (
 	);
 };
 
-// CallTable - the expanded conversation's calls, or the one line of the
-// loading, the failed and the empty read. The sub-table is a table of its own,
-// because its grain is the call and the conversation table's grain is the
-// conversation.
+/**
+ * CallTable - the expanded conversation's calls, or the one line of the loading, the failed and
+ * the empty read. The sub-table is a table of its own, because its grain is the call and the
+ * conversation table's grain is the conversation.
+ */
 const CallTable = (
 	Entry: Reading<CostFileCallRow> | undefined,
 	Columns: number,
@@ -526,12 +555,13 @@ const CallTable = (
 	);
 };
 
-// VersionRow - one content version of the applied file: the short hash the
-// ledger recorded with the current marker on the newest row, the size and the
-// line count it measured, the instant it observed that content, the touches
-// bound to the version - their count and their distinct kinds - and the
-// distinct conversations those touches came from. A version no touch has bound
-// yet keeps its row: the count is zero and the kinds are none.
+/**
+ * VersionRow - one content version of the applied file: the short hash the ledger recorded with
+ * the current marker on the newest row, the size and the line count it measured, the instant it
+ * observed that content, the touches bound to the version - their count and their distinct kinds -
+ * and the distinct conversations those touches came from. A version no touch has bound yet keeps
+ * its row: the count is zero and the kinds are none.
+ */
 const VersionRow = (
 	Row: CostVersionRow,
 	Current: boolean,

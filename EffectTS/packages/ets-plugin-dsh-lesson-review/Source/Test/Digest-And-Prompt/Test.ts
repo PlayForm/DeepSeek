@@ -1,16 +1,24 @@
-// Source/Test/Digest-And-Prompt/Test.ts - WHAT THE REVIEW SENDS.
-//
-// Two bounded artifacts leave this package on every review: the digest (the
-// conversation, compressed) and the prompt (the rules, constant). Both are
-// asserted directly, because both are where an unattended review goes wrong
-// quietly - a digest that hides the correction, a prompt whose rules drifted.
 import assert from "node:assert/strict";
 
 import Digest from "../../../Target/Function/Digest.js";
 import Prompt from "../../../Target/Function/Prompt.js";
 import { Check, Finish, Make, MakeCounter } from "../Harness.js";
 
-/** A conversation of `Count` alternating messages. */
+/**
+ * @module Test
+ *
+ * WHAT THE REVIEW SENDS.
+ *
+ * @remarks
+ *
+ * Two bounded artifacts leave this package on every review: the digest (the
+ * conversation, compressed) and the prompt (the rules, constant). Both are
+ * asserted directly, because both are where an unattended review goes wrong
+ * quietly - a digest that hides the correction, a prompt whose rules drifted.
+ */
+/**
+ * A conversation of `Count` alternating messages.
+ */
 const Conversation = (Count: number) =>
 	Array.from({ length: Count }, (_, Index) => ({
 		role: Index % 2 === 0 ? "user" : "assistant",

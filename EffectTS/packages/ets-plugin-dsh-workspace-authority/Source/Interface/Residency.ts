@@ -4,6 +4,7 @@
  * The residency record: what stays in the store.
  *
  * @remarks
+ *
  * One of the three separate authority records (v4.1 section 3.9). The
  * WEIGHT is the representation's field: it ranks candidates for the
  * eviction pass but NEVER decides a disposition - the policy table (the

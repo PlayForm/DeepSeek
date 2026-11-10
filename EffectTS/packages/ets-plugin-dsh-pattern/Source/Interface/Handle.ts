@@ -5,6 +5,7 @@
  * consumes.
  *
  * @remarks
+ *
  * Interface/Handle. Declared here so the service never imports the storage
  * library's types (an absent storage package can then never break the module
  * load - the factory's live-verified pitfall). The library's Domain<S>

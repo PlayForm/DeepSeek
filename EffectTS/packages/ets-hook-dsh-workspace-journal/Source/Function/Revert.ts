@@ -1,3 +1,9 @@
+import Record from "@Function/Record.js";
+import RevertFile from "@Function/RevertFile.js";
+import type Result from "@Interface/Result.js";
+import type State from "@Interface/State.js";
+import { Decide } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Revert
  *
@@ -5,6 +11,7 @@
  * the ordered set replayed in reverse).
  *
  * @remarks
+ *
  * Per file, based on the entry's recorded pre-state:
  *
  *   * pre-state "present" - resolve the current target, read its current
@@ -32,12 +39,6 @@
  * `revert held (<n> files) (policy write=approve)` line, ZERO writes, no
  * state change and no record; `auto` proceeds.
  */
-import Record from "@Function/Record.js";
-import RevertFile from "@Function/RevertFile.js";
-import type Result from "@Interface/Result.js";
-import type State from "@Interface/State.js";
-import { Decide } from "@playform/ets-plugin-dsh-factory";
-
 export default async (State: State, BatchId: string): Promise<Result> => {
 	const Batch = State.Batches.get(BatchId);
 	if (Batch === undefined) {

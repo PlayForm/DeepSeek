@@ -1,3 +1,9 @@
+import type { EngineRuntime } from "@Function/Engine.js";
+import type Store from "@Function/Store.js";
+import type Config from "@Interface/Config.js";
+import type Factory from "@playform/ets-plugin-dsh-factory";
+import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module State
  *
@@ -6,6 +12,7 @@
  * with the CCR hook's own fields.
  *
  * @remarks
+ *
  * The shared half comes from the factory's NAMED type export (`State`): the
  * built Target/Library.d.ts ships RELATIVE specifiers, so a consumer's
  * tsconfig paths never hijack the declaration imports. The shared machinery
@@ -47,12 +54,6 @@
  * a return value from `apply` - the loader treats apply returns specially, a
  * live-verified lesson recorded in the plugin-development skill).
  */
-import type { EngineRuntime } from "@Function/Engine.js";
-import type Store from "@Function/Store.js";
-import type Config from "@Interface/Config.js";
-import type Factory from "@playform/ets-plugin-dsh-factory";
-import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
-
 export default interface State extends Shared {
 	/**
 	 * The allow-list of compressible tool names (config `targets`).

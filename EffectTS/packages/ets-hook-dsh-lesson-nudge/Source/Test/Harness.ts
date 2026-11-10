@@ -1,33 +1,45 @@
-// Source/Test/Harness.ts - the shared test harness for the LESSON-NUDGE hook:
-// the fake ctx (the listener capture, the logger, the probe-once `get`), the
-// fake plugin factory (the State builder + the ledger), the fake lesson service
-// and the fake agent - plus the REAL built `apply` from Target/Library.js. The
-// family fake-ctx + real-built-library pattern, written ONCE per package.
-//
-// THE LISTENER IS CAPTURED, NOT DISPATCHED: the hook registers through
-// `ctx.on("agent/status", fn)`, so the harness records each registration and the
-// scenario fires it by hand with a literal payload. That is what makes the idle
-// edge assertable without a live agent loop.
-//
-// THE AGENT'S MAINTENANCE IS SYNCHRONOUS-ENOUGH: `runMaintenance` records the
-// task and then runs it on the microtask queue, so `Settle()` is the whole
-// waiting story - no timers, no polling.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves the
-// counter counts, the fake factory writes the ledger, and the real `apply`
-// registers exactly one listener (the vacuously-green backstop).
 import assert from "node:assert/strict";
 
 import { apply, Config, inject, name } from "../../Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the LESSON-NUDGE hook: the fakes plus the
+ * REAL built `apply` from Target/Library.js.
+ *
+ * @remarks
+ *
+ * The harness carries the fake ctx (the listener capture, the logger, the
+ * probe-once `get`), the fake plugin factory (the State builder + the
+ * ledger), the fake lesson service, and the fake agent. The family
+ * fake-ctx + real-built-library pattern, written ONCE per package.
+ *
+ * THE LISTENER IS CAPTURED, NOT DISPATCHED: the hook registers through
+ * `ctx.on("agent/status", fn)`, so the harness records each registration
+ * and the scenario fires it by hand with a literal payload. That is what
+ * makes the idle edge assertable without a live agent loop.
+ *
+ * THE AGENT'S MAINTENANCE IS SYNCHRONOUS-ENOUGH: `runMaintenance` records
+ * the task and then runs it on the microtask queue, so `Settle()` is the
+ * whole waiting story - no timers, no polling.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves
+ * the counter counts, the fake factory writes the ledger, and the real
+ * `apply` registers exactly one listener (the vacuously-green backstop).
+ */
 export { apply, Config, inject, name };
 
-/** The per-folder counter. */
+/**
+ * The per-folder counter.
+ */
 export type Counter = { N: number; F: number };
 
 export const MakeCounter = (): Counter => ({ N: 0, F: 0 });
 
-/** One check = the source suite's ok group. */
+/**
+ * One check = the source suite's ok group.
+ */
 export const Check = (Count: Counter, Label: string, Assertions: () => void): void => {
 	Count.N++;
 	try {
@@ -40,7 +52,9 @@ export const Check = (Count: Counter, Label: string, Assertions: () => void): vo
 	}
 };
 
-/** The async variant of Check. */
+/**
+ * The async variant of Check.
+ */
 export const CheckAsync = async (
 	Count: Counter,
 	Label: string,
@@ -57,7 +71,9 @@ export const CheckAsync = async (
 	}
 };
 
-/** End-of-folder guard. */
+/**
+ * End-of-folder guard.
+ */
 export const Finish = (Count: Counter, Name: string): number => {
 	if (Count.F !== 0) {
 		throw new Error(`${Name}: ${Count.F} failed check(s)`);
@@ -65,14 +81,18 @@ export const Finish = (Count: Counter, Name: string): number => {
 	return Count.N;
 };
 
-/** Flush the detached maintenance task (the microtask queue, then the macrotask). */
+/**
+ * Flush the detached maintenance task (the microtask queue, then the macrotask).
+ */
 export const Settle = async (): Promise<void> => {
 	for (let Index = 0; Index < 4; Index++) {
 		await new Promise<void>((Resolve) => setImmediate(Resolve));
 	}
 };
 
-/** One captured listener registration. */
+/**
+ * One captured listener registration.
+ */
 export interface Registration {
 	name: string;
 	fn: (Payload: any) => void;
@@ -99,7 +119,9 @@ export const FakeFactory = (Lines: string[]): any => ({
 	},
 });
 
-/** The fake lesson service: the recorded calls and a settable `due`. */
+/**
+ * The fake lesson service: the recorded calls and a settable `due`.
+ */
 export const FakeLesson = (Options: { due?: boolean; snapshot?: unknown[]; outcome?: string } = {}): any => {
 	const Calls = { tick: [] as unknown[], snapshot: [] as unknown[], review: [] as any[] };
 	const Lesson = {
@@ -121,7 +143,9 @@ export const FakeLesson = (Options: { due?: boolean; snapshot?: unknown[]; outco
 	return Lesson;
 };
 
-/** The fake agent: an identity, a session id and a recording maintenance seam. */
+/**
+ * The fake agent: an identity, a session id and a recording maintenance seam.
+ */
 export const FakeAgent = (Id = "session-1"): any => {
 	const Tasks: ((Signal: AbortSignal) => Promise<unknown>)[] = [];
 	return {
@@ -186,7 +210,9 @@ export const Make = (
 	return Run;
 };
 
-/** Fire the hook's status listener by hand. */
+/**
+ * Fire the hook's status listener by hand.
+ */
 export const Status = (Run: any, Payload: { agent?: unknown; status?: string }): void => {
 	for (const Listener of Run.Listeners) {
 		if (Listener.name === "agent/status") {

@@ -5,6 +5,7 @@
  * version fence it was prepared against.
  *
  * @remarks
+ *
  * A fence is MANDATORY - the merge never issues an unconditional write
  * (the refusal-to-guess carried into the commit step).
  */

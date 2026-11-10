@@ -1,20 +1,3 @@
-// Source/Test/Harness.ts - the shared test harness for the PACKAGE GOVERNOR
-// tests: the fake ctx (on/emit/effect/get/fs/reflect capture + the root seam)
-// + the REAL @playform/ets-plugin-dsh-factory instance from its built Target + the
-// governor's REAL built Target - the seams from the source suite
-// (Classic/smokes/governor-smoke.mjs), written ONCE per package and imported
-// by every test folder. The suite-level fixtures (the tmp Root, the ledger, the
-// files map, the subprocess/jobs/storageDomain service stubs, the spawn knobs)
-// live here too: each folder process gets a fresh set (the module state is
-// per-process), so every folder is standalone-green and the aggregate replays
-// the same seams per folder.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually wires
-// the governor (the vacuously-green backstop for every folder's fixture);
-// prepublishOnly.sh gates the build on it. Imported as a library, this module
-// only exports.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -22,6 +5,30 @@ import * as Path from "node:path";
 import * as Governor from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the PACKAGE GOVERNOR tests.
+ *
+ * @remarks
+ *
+ * The harness wires the fake ctx (on/emit/effect/get/fs/reflect capture plus
+ * the root seam) plus the REAL @playform/ets-plugin-dsh-factory instance from
+ * its built Target plus the governor's REAL built Target - the seams from the
+ * source suite (`Classic/smokes/governor-smoke.mjs`), written ONCE per
+ * package and imported by every test folder. The suite-level fixtures (the
+ * tmp Root, the ledger, the files map, the subprocess/jobs/storageDomain
+ * service stubs, the spawn knobs) live here too: each folder process gets a
+ * fresh set (the module state is per-process), so every folder is
+ * standalone-green and the aggregate replays the same seams per folder.
+ *
+ * The standalone selfcheck `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass plus one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually wires
+ * the governor (the vacuously-green backstop for every folder's fixture);
+ * `prepublishOnly.sh` gates the build on it. Imported as a library, this
+ * module only exports.
+ */
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks.
  * Passed by reference so Check can bump it from inside its callback.

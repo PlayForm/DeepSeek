@@ -1,9 +1,13 @@
+import type Record from "@Interface/Record.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Storage
  *
  * The hook's own P5-style storage-domain open and recovery.
  *
  * @remarks
+ *
  * The observe hook's Function/Storage pattern. THE DOMAIN: the hook's OWN
  * domain, named config `domain` (default workspace_merge). Version 1,
  * layout per-record, invalidRecords backup-and-skip, TWO tables:
@@ -21,9 +25,6 @@
  *
  * The dynamic imports keep the optional packages off the module-load path.
  */
-import type Record from "@Interface/Record.js";
-import type State from "@Interface/State.js";
-
 /**
  * The structural shape of one persisted batch record (the validation
  * filter).

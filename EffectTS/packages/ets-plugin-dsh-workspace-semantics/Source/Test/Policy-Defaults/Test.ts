@@ -1,19 +1,27 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the
-// semantics service: the shared block's defaults in the schema and on the
-// built State (`Allow`), the per-action override, and the service's
-// read-only posture - its own action classes (read and index) are automatic,
-// so it has NO gated action and no verdict can refuse a call.
-//
-// The representative actions are the pure read projections (`statistics` and
-// `references`): no I/O, no building, no throwing - the cheapest real calls
-// in the service's surface, which prove the automatic posture lets a read
-// proceed and that it touches no file content.
 import assert from "node:assert/strict";
 
 import { Decide } from "../../../../ets-plugin-dsh-factory/Target/Library.js";
 import { Check, Finish, LinesWith, Make, MakeCounter, Validate, rm } from "../Harness.js";
 
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * @module Test
+ *
+ * THE POLICY BLOCK (D6) on the semantics service: the shared block's defaults
+ * in the schema and on the built State (`Allow`), the per-action override,
+ * and the service's read-only posture - its own action classes (read and
+ * index) are automatic, so it has NO gated action and no verdict can refuse a
+ * call.
+ *
+ * @remarks
+ *
+ * The representative actions are the pure read projections (`statistics` and
+ * `references`): no I/O, no building, no throwing - the cheapest real calls
+ * in the service's surface, which prove the automatic posture lets a read
+ * proceed and that it touches no file content.
+ */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",
@@ -25,7 +33,9 @@ const Defaults = {
 	message: "auto",
 };
 
-/** An enabled service with an empty ledger (the ledger path never writes). */
+/**
+ * An enabled service with an empty ledger (the ledger path never writes).
+ */
 const Setup = (Raw: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: "/nonexistent/semantics.log", enabled: true, ...Raw }));

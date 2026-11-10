@@ -1,3 +1,6 @@
+import { existsSync, statSync } from "node:fs";
+import { dirname, join } from "node:path";
+
 /**
  * @module Package
  *
@@ -5,6 +8,7 @@
  * that carries `package.json`, at or below the workspace root.
  *
  * @remarks
+ *
  * The embedded packs mix three path bases (repo-relative, package-relative,
  * sibling-relative), so the existence filter and the reconciliation both need
  * this answer before they can read anything.
@@ -16,9 +20,6 @@
  * the existence filter then checks the repo base only, and the reconciliation
  * stays silent (there is no smoke tree to reconcile).
  */
-import { existsSync, statSync } from "node:fs";
-import { dirname, join } from "node:path";
-
 /**
  * The nearest existing ancestor of a path (the path itself when it exists).
  */

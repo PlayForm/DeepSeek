@@ -4,6 +4,7 @@
  * One target of a proposal.
  *
  * @remarks
+ *
  * The same shape the pass-on declares
  * (the PO C self-containment rule: each package declares the batch contract
  * in its own Interface; the end-phase unifies the imports).

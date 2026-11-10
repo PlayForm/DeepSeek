@@ -1,9 +1,3 @@
-// Source/Test/Boards-And-Plants/Test.ts - the B-series tests: the planted
-// boards (CAN-2) and the I5 lease - the five-row board, the [live-report]
-// splice pickup, the stalled row, the failed row, the overflow, the lease
-// expiry with the byte-exact [stale] declaration, the report reset, the
-// coalescing, the close + withdrawal, the orphan STALE header, and the
-// per-agent scoping.
 import assert from "node:assert/strict";
 import {
 	AgentA,
@@ -24,6 +18,18 @@ import {
 	FakeJobsHub,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The B-series tests: the planted boards (CAN-2) and the I5 lease.
+ *
+ * @remarks
+ *
+ * The test covers the five-row board, the [live-report] splice pickup, the
+ * stalled row, the failed row, the overflow, the lease expiry with the
+ * byte-exact [stale] declaration, the report reset, the coalescing, the
+ * close + withdrawal, the orphan STALE header, and the per-agent scoping.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

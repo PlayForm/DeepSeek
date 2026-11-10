@@ -6,6 +6,7 @@
  * calls (config `judgeTools`); these rows classify the COMMAND text.
  *
  * @remarks
+ *
  * The boundary rule (Documentation/Skill/task-routing/SKILL.md:165-170 +
  * code-authoring/SKILL.md:25-32): the terminal runs COMMANDS; the tools handle
  * CONTENT. Any bash segment that (a) reads file content into the conversation
@@ -24,13 +25,21 @@
  * may not duplicate a default pattern (fail-loud, plan §3).
  */
 export interface PatternRow {
-    /** The RegExp source matched against the normalized command pipeline. */
+    /**
+     * The RegExp source matched against the normalized command pipeline.
+     */
     pattern: string;
-    /** The regression class this row assigns. */
+    /**
+     * The regression class this row assigns.
+     */
     class: "write" | "read" | "search" | "discovery" | "control";
-    /** The dedicated tool the coaching note names. */
+    /**
+     * The dedicated tool the coaching note names.
+     */
     tool: string;
-    /** Optional per-row override of the tier-1 note body. */
+    /**
+     * Optional per-row override of the tier-1 note body.
+     */
     note?: string;
 }
 /**

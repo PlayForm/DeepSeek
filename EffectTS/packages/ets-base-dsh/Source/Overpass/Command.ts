@@ -5,6 +5,7 @@
  * stream flavors.
  *
  * @remarks
+ *
  * A dependency-free factory leaf: the module's Function/Command is a thin
  * delegate that re-exports this handler and its service types, while the
  * module keeps its identity through `State.Module` (every composed line is

@@ -5,6 +5,7 @@
  * `exclude` and `include`).
  *
  * @remarks
+ *
  * The factory's Match is the segment match (any path segment equal to a
  * listed name); the hook's frozen default list is the glob triple
  * `node_modules`, `Target` and `.git` at any depth, so the module owns its

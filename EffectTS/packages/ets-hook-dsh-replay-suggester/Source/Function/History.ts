@@ -11,6 +11,7 @@ import type { ReplayRecord } from "@Interface/History.js";
  * apply, validates it leniently, and recalls records at use time.
  *
  * @remarks
+ *
  * A JSON read on the boot path, not the hot path - the plan §4.3 posture. A
  * missing store is not an error: it degrades to silence with a ledger line
  * (`history missing (starting empty)`), so a fresh machine works before the
@@ -25,7 +26,6 @@ import type { ReplayRecord } from "@Interface/History.js";
  * PRIVACY POSTURE (the plan §5.4): repo-relative paths only; the recall
  * compares literals only.
  */
-
 /**
  * Expand a `~`-prefixed path (the store lives under ~/.dsh).
  */

@@ -4,6 +4,7 @@
  * The shape of the SHARED policy block (D6): one key per action class a plugin can take.
  *
  * @remarks
+ *
  * Each key is valued "auto" (the plugin acts on its own) or "approve" (the action waits for the
  * user's approval). This is the TYPE of the block; the defaults live in Variable/Policy.ts, the
  * Schemastery builder is Function/Policy (the `Policy` named export of the entry), and the verdict

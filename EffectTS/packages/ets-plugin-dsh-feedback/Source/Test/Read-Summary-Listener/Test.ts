@@ -1,8 +1,3 @@
-// Source/Test/Read-Summary-Listener/Test.ts - the delta, the optional read,
-// the council summary, and the passive pickup listener: the parent's append
-// (never an edit), the recipient's choice (never forced, idempotent), the
-// aggregate signals, and the inbox splice pickup with its ignore rules and
-// fail-open containment.
 import assert from "node:assert/strict";
 import {
 	Block,
@@ -18,6 +13,18 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The delta, the optional read, the council summary, and the passive pickup
+ * listener of the feedback member.
+ *
+ * @remarks
+ *
+ * The folder proves the parent's append (never an edit), the recipient's
+ * choice (never forced, idempotent), the aggregate signals, and the inbox
+ * splice pickup with its ignore rules and fail-open containment.
+ */
 /** The transfer text a child's completion report carries (a hand-written
  *  fixture, independent of the plugin's own Render). */
 const SPLICE = [

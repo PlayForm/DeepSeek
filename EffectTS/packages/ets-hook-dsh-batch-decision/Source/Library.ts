@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +9,7 @@
  * (@playform/ets-hook-dsh-batch-decision).
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` +
  * `export const Config` + `export const inject` + `export default { name,
  * apply, Config, inject }` - the ONLY named exports in the tree (cordis
@@ -35,10 +40,6 @@
  * an explicit ACTIVATE; a cold mount logs `disabled (enabled=false)` and
  * every listener no-ops to a passthrough.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "hook-dsh-batch-decision";
 
 /**

@@ -1,3 +1,6 @@
+import type { Candidate, Detection, Verdict } from "../Interface/Execution.js";
+import Measure, { type MeasureInput } from "./Measure.js";
+
 /**
  * @module Score
  *
@@ -5,6 +8,7 @@
  * the pickable heuristic scorer).
  *
  * @remarks
+ *
  * `k = sigmoid(evidence + b)`, `b = -0.6`;
  * `score(c) = sum over the ENABLED heuristics of weight(h) * value(h)`
  *
@@ -31,9 +35,6 @@
  * Every row is measured by Function/Measure, the same leaf a gated
  * silence's decision record uses.
  */
-import type { Candidate, Detection, Verdict } from "../Interface/Execution.js";
-import Measure, { type MeasureInput } from "./Measure.js";
-
 /**
  * The plan's bias: a single weak signal stays under the default threshold.
  */
@@ -97,10 +98,14 @@ const Key = (Family: string, Paths: string[]): string =>
 	`${Family}:${Paths.slice().sort().join("|")}`;
 
 export default (
-	/** The ranked detections (Detect's output). */
+	/**
+	 * The ranked detections (Detect's output).
+	 */
 	Detections: Detection[],
 
-	/** The gate input. */
+	/**
+	 * The gate input.
+	 */
 	Input: Gate,
 ): Verdict => {
 	const Winner = Detections[0];

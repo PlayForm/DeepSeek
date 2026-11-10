@@ -1,3 +1,18 @@
+/**
+ * @module Ccr
+ *
+ * The adapter for hook-dsh-ccr, the tool-output compression hook (order 70,
+ * the last section of the family tab).
+ *
+ * @remarks
+ *
+ * Same reference pattern: the child slot, the settings namespace, the static
+ * activation posture, and the D5 trace names. Its schema's volatile cells
+ * (logFile, thresholdBytes, the multipliers object, previewMaxChars) ride the
+ * revision-fenced mutate; the structural knobs (targets, exempt, the store,
+ * the journal, autoExpand, the phase-4 context-engine flags) ride the plain
+ * bridge.
+ */
 declare const _default: {
     id: string;
     bundle: string;

@@ -1,3 +1,8 @@
+import type { Context } from "@deepseek-ai/cordis";
+
+import type Projection from "../Interface/Projection.js";
+import type { Fact } from "../Interface/Projection.js";
+
 /**
  * @module Projection
  *
@@ -7,6 +12,7 @@
  * 03-SUGGESTERS section 3).
  *
  * @remarks
+ *
  * The service is OPTIONAL and is PROBED through `ctx.get`, never injected: a
  * repo without the graph plugin must still emit (the neutral fallback), and
  * a graph mounted after this plugin's apply must still be found. One
@@ -27,11 +33,6 @@
  * then scores every candidate with the documented neutral literal 0.5 and
  * renders the static pack list (the PoC behavior, byte-identical).
  */
-import type { Context } from "@deepseek-ai/cordis";
-
-import type Projection from "../Interface/Projection.js";
-import type { Fact } from "../Interface/Projection.js";
-
 /**
  * Normalize a path to the graph's forward-slash form.
  */

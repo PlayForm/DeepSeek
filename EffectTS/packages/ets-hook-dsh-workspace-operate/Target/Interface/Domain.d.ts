@@ -5,6 +5,7 @@
  * (Interface/Domain).
  *
  * @remarks
+ *
  * One domain (named config `domain`, default workspace_operate), TWO tables:
  * `proposals` (one record per proposal, keyed by the id) and `meta` (ONE
  * record `__meta` carrying the sequence counter and the refusal count).

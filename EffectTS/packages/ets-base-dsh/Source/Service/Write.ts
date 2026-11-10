@@ -1,3 +1,9 @@
+import type { FsTarget, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
+import type State from "@Interface/State.js";
+import { Context, Effect, Layer } from "effect";
+
+import WriteFn, { type Over } from "../Function/Write.js";
+
 /**
  * @module Write
  *
@@ -5,6 +11,7 @@
  * Library's `Write` and `GuardedWrite` methods.
  *
  * @remarks
+ *
  * The family's one shared write executor - the Over bundle, the P4 fence, the
  * Stash pre-registration, the root-emit with the wrapped-actor marker and the
  * observe flag - stays one implementation: the effect body is
@@ -27,12 +34,6 @@
  * what honors it - the executor never mutates an actor, so the Gate matrix
  * and the emitted events stay byte-identical.
  */
-import type { FsTarget, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
-import type State from "@Interface/State.js";
-import { Context, Effect, Layer } from "effect";
-
-import WriteFn, { type Over } from "../Function/Write.js";
-
 // Write - the service tag.
 export class Write extends Context.Service<
 	Write,

@@ -1,5 +1,17 @@
 import type Proposal from "./Proposal.js";
 /**
+ * @module Entry
+ *
+ * One spliced proposal's board record (Interface/Entry): the proposal
+ * itself plus the board's own status.
+ *
+ * @remarks
+ *
+ * The status starts `proposed` and moves exactly once per decision
+ * (approved / denied / expired); the board never decides - it reflects what
+ * the decision hook delivered into the same inbox channel.
+ */
+/**
  * The board's record for one spliced proposal.
  */
 export default interface Entry {

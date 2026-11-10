@@ -7,6 +7,7 @@ import { Default } from "@playform/ets-lib-dsh-core";
  * `exclude` config field), re-exported from the CORE's Variable/Default.
  *
  * @remarks
+ *
  * The CORE's Variable/Default is the family's single source (byte-identical).
  * Every tool-layer write of a file named package.json is governed UNLESS its
  * path contains one of these segments: node_modules, .git, .dsh (the harness

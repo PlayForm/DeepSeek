@@ -1,3 +1,13 @@
+import CommitOne from "@Function/CommitOne.js";
+import Gate from "@Function/Gate.js";
+import Persist from "@Function/Persist.js";
+import type Batch from "@Interface/Batch.js";
+import type Commit from "@Interface/Commit.js";
+import type Operation from "@Interface/Operation.js";
+import type Reply from "@Interface/Reply.js";
+import type State from "@Interface/State.js";
+import { Decide } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Commit
  *
@@ -5,6 +15,7 @@
  * commits through the factory's write executor, ONE FILE AT A TIME.
  *
  * @remarks
+ *
  * The sequential fold: the version-guarded writes can never race. The
  * atomicity semantics:
  *
@@ -27,16 +38,6 @@
  * `merge held (<n> files) (policy commit=approve)` line; the reply is the
  * `rejected` commit shape and nothing is persisted. `auto` proceeds.
  */
-import CommitOne from "@Function/CommitOne.js";
-import Gate from "@Function/Gate.js";
-import Persist from "@Function/Persist.js";
-import type Batch from "@Interface/Batch.js";
-import type Commit from "@Interface/Commit.js";
-import type Operation from "@Interface/Operation.js";
-import type Reply from "@Interface/Reply.js";
-import type State from "@Interface/State.js";
-import { Decide } from "@playform/ets-plugin-dsh-factory";
-
 export default async (State: State, Request: Batch): Promise<Commit> => {
 	State.Sequence += 1;
 	const Id =

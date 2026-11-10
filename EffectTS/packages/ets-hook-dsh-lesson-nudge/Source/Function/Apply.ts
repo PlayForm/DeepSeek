@@ -1,3 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import { Activate } from "@playform/ets-base-dsh";
+
+import type {} from "../Interface/Agent.js";
+import type {} from "../Interface/Factory.js";
+
+import type Config from "../Interface/Config.js";
+import type State from "../Interface/State.js";
+import Version from "../Variable/Version.js";
+
 /**
  * @module Apply
  *
@@ -5,6 +15,7 @@
  * of the nudge's surface.
  *
  * @remarks
+ *
  * THE SURFACE IS `agent/status` (emit, idle <-> running). The idle edge is the only
  * moment a review may run: the turn is over, the driver is quiescent, and
  * `agent.runMaintenance` exists precisely to claim that phase for non-turn work.
@@ -30,16 +41,6 @@
  * and duplicating it here would give the same session two different digests depending on
  * who asked.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import { Activate } from "@playform/ets-base-dsh";
-
-import type {} from "../Interface/Agent.js";
-import type {} from "../Interface/Factory.js";
-
-import type Config from "../Interface/Config.js";
-import type State from "../Interface/State.js";
-import Version from "../Variable/Version.js";
-
 /**
  * The lesson service surface this hook consumes (structural, not imported).
  */

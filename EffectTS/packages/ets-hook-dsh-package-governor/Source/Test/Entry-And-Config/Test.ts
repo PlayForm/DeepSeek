@@ -1,16 +1,27 @@
-// Source/Test/Entry-And-Config/Test.ts - one singular test: the entry
-// contract (name/apply/Config/inject), the built Target's factory-consumption
-// posture (the ONLY factory import is the Config module's standalone Schema),
-// and the Config schema's volatile cells + defaults.
-// Runs standalone (`node Target/Test/Entry-And-Config/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-package-governor.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
 import { Check, EXCLUDE, Finish, Ledger, MakeCounter, NCU_BIN, TOOLS } from "../Harness.js";
 import * as Governor from "../../../Target/Library.js";
 
+/**
+ * @module Test
+ *
+ * The singular test of the entry contract, the built Target's posture and
+ * the Config schema.
+ *
+ * @remarks
+ *
+ * The entry contract covers name/apply/Config/inject. The built Target's
+ * factory-consumption posture allows exactly one factory import: the Config
+ * module's standalone Schema. The Config schema covers its volatile cells
+ * plus defaults.
+ *
+ * The file runs standalone (`node Target/Test/Entry-And-Config/Test.js`) and
+ * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * It is a unit smoke of @playform/ets-hook-dsh-package-governor.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

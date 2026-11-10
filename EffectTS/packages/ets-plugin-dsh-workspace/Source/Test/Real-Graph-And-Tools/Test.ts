@@ -1,10 +1,3 @@
-// Source/Test/Real-Graph-And-Tools/Test.ts - the FIVE tools over a REAL
-// populated graph (not FakeGraph): the real workspace-graph service is
-// constructed from its built Target, indexed over a deterministic file map
-// through `indexWorkspace`, and then addressed through workspace_index,
-// workspace_map, workspace_find, workspace_expand and workspace_context. Every
-// assertion reads real ids, real spans, real fingerprints and the real
-// indexRevision - the consumer chain the empty graph could never prove.
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -19,6 +12,17 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The FIVE tools over a REAL populated graph (not FakeGraph): the real
+ * workspace-graph service is constructed from its built Target, indexed over
+ * a deterministic file map through `indexWorkspace`, and then addressed
+ * through workspace_index, workspace_map, workspace_find, workspace_expand
+ * and workspace_context. Every assertion reads real ids, real spans, real
+ * fingerprints and the real indexRevision - the consumer chain the empty
+ * graph could never prove.
+ */
 const CORE = 'import { util } from "./util.ts";\n\nexport function core(): number {\n\treturn util;\n}\n';
 const UTIL = "export const util = 1;\n";
 const TEST_FILE = 'import { core } from "./core.ts";\n\nexport const suite = core;\n';
@@ -31,7 +35,9 @@ const FILES = {
 	"/ws/README.md": MARKDOWN,
 };
 
-/** A fresh enabled mount over a graph populated by the real indexing trigger. */
+/**
+ * A fresh enabled mount over a graph populated by the real indexing trigger.
+ */
 const Setup = async (): Promise<any> => {
 	rm();
 	const Graph = RealGraph(FILES);

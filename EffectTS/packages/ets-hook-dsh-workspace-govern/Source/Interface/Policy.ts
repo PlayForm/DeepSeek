@@ -4,6 +4,7 @@
  * One rule of the gate's policy table.
  *
  * @remarks
+ *
  * The plan's "a small table of rules per proposal kind, with defaults": the
  * kind matches the proposal kind exactly or "*", the decision is the gate
  * outcome the rule forces. First matching rule wins; no match means the

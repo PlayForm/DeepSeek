@@ -4,6 +4,7 @@
  * The read-only view of the skill corpus the judge needs.
  *
  * @remarks
+ *
  * The judge is a pure function of (proposal, corpus), so it takes the corpus as
  * this narrow interface rather than a path: the service implements it over the
  * usage store plus one directory probe, and the smokes implement it over a

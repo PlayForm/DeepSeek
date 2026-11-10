@@ -1,3 +1,5 @@
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -7,6 +9,7 @@
  * plugin bundle: no cordis patch, no loader contract, publishable on its own).
  *
  * @remarks
+ *
  * Three halves:
  *
  * Variable - the built-in pack for this monorepo (the union of the six
@@ -21,8 +24,6 @@
  * Interface - the pack schema (Pack, Family, Signal, Target, Indexer, Policy,
  * Learning), the locator's answer and the resolution seam.
  */
-import Version from "./Variable/Version.js";
-
 /**
  * The compiled package version (`Source/Variable/Version`, built in by the
  * ESBuild define). This package has NO loader contract and NO Config - the

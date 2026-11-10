@@ -1,3 +1,10 @@
+import { dirname as Parent } from "node:path";
+
+import type { FsTarget, FsWriteIntent, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
+import type { SandboxExecutionPolicy } from "@deepseek-ai/dsh-sandbox";
+import type State from "@Interface/State.js";
+import { Effect } from "effect";
+
 /**
  * @module Write
  *
@@ -5,6 +12,7 @@
  * WriteService, exposed as the Library's `Write` method.
  *
  * @remarks
+ *
  * SCHEME.md section 2.7's `GuardedWrite` is its guarded alias. Re-expressed
  * from the Classic promise chain as a typed effect: same semantics, every
  * step identical, the orchestration now composable with other Effect
@@ -76,13 +84,6 @@
  * original message ("...continuation error (suppressed): boom"), not a
  * wrapper's.
  */
-import { dirname as Parent } from "node:path";
-
-import type { FsTarget, FsWriteIntent, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
-import type { SandboxExecutionPolicy } from "@deepseek-ai/dsh-sandbox";
-import type State from "@Interface/State.js";
-import { Effect } from "effect";
-
 /**
  * The option bundle: what the caller adds on top of the shared pipeline.
  */

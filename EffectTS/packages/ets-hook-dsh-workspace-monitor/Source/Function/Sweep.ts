@@ -1,3 +1,6 @@
+import Clock from "@Function/Clock.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Sweep
  *
@@ -5,6 +8,7 @@
  * map inside the event-driven checkpoints.
  *
  * @remarks
+ *
  * Every fs/observed event calls the sweep from Function/Watch; nothing else
  * ever calls it. There is NO setTimeout and NO setInterval anywhere in the
  * module: the next event is the bound, exactly the live-containers monitor
@@ -18,9 +22,6 @@
  * so an all-quiet tree costs one Clock read and a loop - the quiet-ledger
  * discipline.
  */
-import Clock from "@Function/Clock.js";
-import type State from "@Interface/State.js";
-
 export default (State: State): void => {
 	const Now = Clock(State);
 	let Swept = 0;

@@ -1,13 +1,20 @@
-// Source/Test/Harness.ts - the shared test harness for the WORKSPACE-LIVE
-// library tests. The library is NOT a plugin bundle: it has no loader
-// contract, no config and no context - the tests call its PURE functions
-// directly through the real built Target/Library.js named exports, so the
-// harness is only the counter plus the selfcheck (the vacuously-green
-// backstop for every folder's fixture). NO FAKE CLOCK, NO FAKE CTX: nothing
-// here touches a context, the filesystem, or time.
 import assert from "node:assert/strict";
 import * as Library from "../../Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the WORKSPACE-LIVE library tests: only the
+ * counter plus the selfcheck, because the library is NOT a plugin bundle.
+ *
+ * @remarks
+ *
+ * The library has no loader contract, no config and no context - the tests
+ * call its PURE functions directly through the real built Target/Library.js
+ * named exports, so the harness is only the counter plus the selfcheck (the
+ * vacuously-green backstop for every folder's fixture). NO FAKE CLOCK, NO
+ * FAKE CTX: nothing here touches a context, the filesystem, or time.
+ */
 export const Render = Library.Render as (Section: any) => string;
 export const Collapse = Library.Collapse as (Sections: any[], Budget: number) => { text: string; collapsed: boolean }[];
 export const Packet = Library.Packet as (View: any) => string;

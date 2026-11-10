@@ -1,11 +1,3 @@
-// Source/Test/Tier/Test.ts - THE MARGINAL TIER WALK (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 17.2): a rate card of tier rows prices a
-// prompt that crosses a threshold marginally - the tokens below the
-// threshold at the lower rate, only the excess at the higher one, which is
-// the only reading that does not produce a cliff where one extra token
-// doubles a bill. The walk runs per bucket, each against its own rate
-// column, because a cached prefix that crosses the same boundary is priced
-// per portion too.
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -16,6 +8,21 @@ import Open from "../../../Target/Function/Open.js";
 import Price from "../../../Target/Function/Price.js";
 import { Check, Finish, MakeCounter, Validate } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE MARGINAL TIER WALK (Documentation/Plans/COST-TRACK-PLUGIN.md section
+ * 17.2) of the cost plugin.
+ *
+ * @remarks
+ *
+ * A rate card of tier rows prices a prompt that crosses a threshold
+ * marginally - the tokens below the threshold at the lower rate, only the
+ * excess at the higher one, which is the only reading that does not
+ * produce a cliff where one extra token doubles a bill. The walk runs per
+ * bucket, each against its own rate column, because a cached prefix that
+ * crosses the same boundary is priced per portion too.
+ */
 // One tier row of the test's rate card, inserted by hand: tier one prices
 // the first 200k tokens of every bucket at the low rates, tier two is the
 // open top tier and takes everything above.

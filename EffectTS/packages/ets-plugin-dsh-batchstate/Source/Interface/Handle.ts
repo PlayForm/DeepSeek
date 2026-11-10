@@ -5,6 +5,7 @@
  * KV facet the plugin consumes.
  *
  * @remarks
+ *
  * Declared here so the plugin never imports the storage library's types
  * (an absent storage package can then never break the module load - the
  * factory's live-verified pitfall). The library's Domain<S> satisfies this

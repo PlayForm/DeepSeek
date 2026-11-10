@@ -1,9 +1,3 @@
-// Source/Test/Wiring-And-Storage/Test.ts - the wiring and the storage: the
-// loader contract (apply returns nothing), the IDLE-forever cold mount, the
-// root-context registration with the distinct root identity, the service
-// registered from apply, the activation proof, the fail-loud validation, the
-// absent facility (silent skip), the loud open failure, and the restart
-// recovery with the continued sequence.
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -19,7 +13,23 @@ import {
 	FakeStorage,
 } from "../Harness.js";
 
-/** A standard enabled mount with an optional storage facility attached. */
+/**
+ * @module Test
+ *
+ * The singular test of the wiring and the storage.
+ *
+ * @remarks
+ *
+ * The wiring covers the loader contract (apply returns nothing), the
+ * IDLE-forever cold mount, the root-context registration with the distinct
+ * root identity, the service registered from apply, the activation proof,
+ * and the fail-loud validation. The storage covers the absent facility
+ * (silent skip), the loud open failure, and the restart recovery with the
+ * continued sequence.
+ */
+/**
+ * A standard enabled mount with an optional storage facility attached.
+ */
 const Setup = (Config: Record<string, unknown> = {}, Facility: unknown = undefined): any => {
 	rm();
 	return Make(

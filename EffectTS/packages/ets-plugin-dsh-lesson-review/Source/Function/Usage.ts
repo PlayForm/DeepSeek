@@ -1,3 +1,8 @@
+import FileSystem from "node:fs/promises";
+import Path from "node:path";
+
+import type Entry from "@Interface/Entry.js";
+
 /**
  * @module Usage
  *
@@ -5,6 +10,7 @@
  * chain.
  *
  * @remarks
+ *
  * THE STORE IS A SIDECAR, never the corpus itself: the corpus is directories of
  * markdown a human reads and edits, so bookkeeping must live beside it where a
  * bad write cannot corrupt a skill. The path is one JSON file
@@ -21,11 +27,6 @@
  * history costs a stale pass nothing (a record with no history is young), while
  * refusing to run costs the review entirely.
  */
-import FileSystem from "node:fs/promises";
-import Path from "node:path";
-
-import type Entry from "@Interface/Entry.js";
-
 /**
  * The load result: how many records, or why there are none.
  */

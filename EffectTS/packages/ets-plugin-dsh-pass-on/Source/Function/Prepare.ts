@@ -1,14 +1,3 @@
-/**
- * @module Prepare
- *
- * The pass-on's orchestration: resolve the targets, synthesize the
- * operations, render the preview, compute the digest.
- *
- * @remarks
- * Plan section 3. READ-ONLY: nothing is written. If the proposal is empty or
- * ambiguous (unknown kind, no effective operations), the pass-on returns no
- * batch - not an empty one.
- */
 import { createHash as Hash } from "node:crypto";
 import { readFileSync as Read } from "node:fs";
 
@@ -23,6 +12,18 @@ import Operate from "./Operate.js";
 import PreviewFn from "./Preview.js";
 import ResolveFn from "./Resolve.js";
 
+/**
+ * @module Prepare
+ *
+ * The pass-on's orchestration: resolve the targets, synthesize the
+ * operations, render the preview, compute the digest.
+ *
+ * @remarks
+ *
+ * Plan section 3. READ-ONLY: nothing is written. If the proposal is empty or
+ * ambiguous (unknown kind, no effective operations), the pass-on returns no
+ * batch - not an empty one.
+ */
 export default (State: State, Intent: Intent): Proposal | null => {
 	const Config_ = State.Config;
 	switch (true) {

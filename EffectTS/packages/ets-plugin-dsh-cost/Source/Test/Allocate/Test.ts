@@ -1,15 +1,23 @@
-// Source/Test/Allocate/Test.ts - THE ATTRIBUTION MODEL (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 2): the rows of one call sum to the call's own
-// price within 1e-9 (the conservation law, section 2.3, which the allocator
-// itself asserts), the written files split the output half by changed bytes,
-// and a file read early still carries its amortized mass into a later call it
-// no longer touches - the honest answer to "a single line change can cost a
-// whole conversation".
 import assert from "node:assert/strict";
 
 import Allocate from "../../../Target/Function/Allocate.js";
 import { Check, Finish, MakeCounter, Validate } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE ATTRIBUTION MODEL (Documentation/Plans/COST-TRACK-PLUGIN.md section
+ * 2) of the cost plugin.
+ *
+ * @remarks
+ *
+ * The rows of one call sum to the call's own price within 1e-9 (the
+ * conservation law, section 2.3, which the allocator itself asserts), the
+ * written files split the output half by changed bytes, and a file read
+ * early still carries its amortized mass into a later call it no longer
+ * touches - the honest answer to "a single line change can cost a whole
+ * conversation".
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	const Config = Validate({ enabled: true });

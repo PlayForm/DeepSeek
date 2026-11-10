@@ -1,3 +1,10 @@
+import Graph from "@Function/Graph.js";
+import type { GraphNode } from "@Interface/Graph.js";
+import type Outcome from "@Interface/Outcome.js";
+import type Proposal from "@Interface/Proposal.js";
+import type Refusal from "@Interface/Refusal.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Rules
  *
@@ -6,6 +13,7 @@
  * rule set's other half.
  *
  * @remarks
+ *
  * One entry point, three guard chains (one per kind), `switch (true)` arms
  * in the frozen order:
  *
@@ -26,13 +34,6 @@
  * observed version for the path is used ONLY if one was actually heard -
  * a version is never invented.
  */
-import Graph from "@Function/Graph.js";
-import type { GraphNode } from "@Interface/Graph.js";
-import type Outcome from "@Interface/Outcome.js";
-import type Proposal from "@Interface/Proposal.js";
-import type Refusal from "@Interface/Refusal.js";
-import type State from "@Interface/State.js";
-
 /**
  * The edge-kind compatibility table (the W1 graph's node/edge matrix).
  */

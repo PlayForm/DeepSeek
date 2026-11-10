@@ -1,19 +1,3 @@
-// Apply - the plugin entry function: fail-loud validation, the State build
-// (the factory's cell unwrap + the P10 volatile refresh), the durable
-// activation proof, and the FIVE tools (the only conversational surface -
-// WORKSPACE-AGENT.md section 2): the four navigation tools plus the
-// `workspace_index` indexing trigger that fills the graph. There are NO
-// event listeners in v0: the agent is a consumer of the graph service and the
-// surface for the conversation - the invisible flow (the stamps, the
-// indexes, the gates) belongs to the sibling hooks, not to the agent.
-//
-// THE DISABLED POSTURE: enabled=false ships default - the State build logs
-// `disabled (enabled=false)` and every tool no-ops to a clear refusal
-// (each checks State.On first).
-//
-// `inject: ["workspaceGraph", "pluginFactory", "tools"]` (Library.ts) - the
-// graph provides the data, the factory the State builder + the ledger, and
-// tools the registration surface.
 import type { Context } from "@deepseek-ai/cordis";
 import ToolContext from "@Function/ToolContext.js";
 import ToolExpand from "@Function/ToolExpand.js";
@@ -27,17 +11,46 @@ import type { Log } from "@Interface/State.js";
 import { Activate } from "@playform/ets-base-dsh";
 import Version from "@Variable/Version.js";
 
-/** Unwrap one possibly-volatile config cell (`{ get }` reference or value):
+/**
+ * @module Apply
+ *
+ * The plugin entry function: validation, the State build, the activation
+ * proof and the five tools.
+ *
+ * @remarks
+ *
+ * Fail-loud validation, then the State build (the factory's cell unwrap +
+ * the P10 volatile refresh), the durable activation proof, and the FIVE
+ * tools (the only conversational surface - WORKSPACE-AGENT.md section 2):
+ * the four navigation tools plus the `workspace_index` indexing trigger
+ * that fills the graph. There are NO event listeners in v0: the agent is a
+ * consumer of the graph service and the surface for the conversation - the
+ * invisible flow (the stamps, the indexes, the gates) belongs to the
+ * sibling hooks, not to the agent.
+ *
+ * THE DISABLED POSTURE: enabled=false ships default - the State build logs
+ * `disabled (enabled=false)` and every tool no-ops to a clear refusal (each
+ * checks State.On first).
+ *
+ * `inject: ["workspaceGraph", "pluginFactory", "tools"]` (Library.ts) - the
+ * graph provides the data, the factory the State builder + the ledger, and
+ * tools the registration surface.
+ */
+/**
+ * Unwrap one possibly-volatile config cell (`{ get }` reference or value):
  * the loader hands volatile fields as cells, so every validation read goes
- * through this (the batch-decision Apply precedent). */
+ * through this (the batch-decision Apply precedent).
+ */
 const Cell = (Value: unknown): unknown =>
 	typeof (Value as { get?: unknown } | null)?.get === "function"
 		? (Value as { get: () => unknown }).get()
 		: Value;
 
-/** The fail-loud validation (the schema always fills defaults; a hand-built
+/**
+ * The fail-loud validation (the schema always fills defaults; a hand-built
  * config in tests must still be complete). Every knob is read through the
- * Cell unwrap - volatile fields arrive as `{ get }` cells. */
+ * Cell unwrap - volatile fields arrive as `{ get }` cells.
+ */
 const Validate = (Options: Config): void => {
 	const Fail = (Message: string): never => {
 		throw new Error(`plugin-dsh-workspace: ${Message}`);

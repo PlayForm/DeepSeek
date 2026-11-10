@@ -1,13 +1,3 @@
-// Source/Test/Post-Execute-And-Ring/Test.ts - the listener behavior against
-// the fake ctx: the History emit path (the session's co-touch candidates
-// committed through the projection drive, the byte-exact note text, summary
-// and `suggest History` ledger line in both forms), the REAL projection path
-// (committed `tool/call` events folded by the registered unit and read back
-// through `stateOf`), the pass-through paths (a non-judged tool, next()
-// called first), the abstention paths (no-history with the empty-family
-// double-space line, low-confidence under a raised config threshold), the
-// suppress paths (cooldown, dedupe, cap), the block-decision shape, the
-// per-agent ring isolation, and the agent/pre-step per-turn reset.
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -27,13 +17,37 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The judged call's edit path (the history anchor). */
+/**
+ * @module Test
+ *
+ * The listener behavior against the fake ctx.
+ *
+ * @remarks
+ *
+ * The test covers the History emit path (the session's co-touch candidates
+ * committed through the projection drive, the byte-exact note text,
+ * summary and `suggest History` ledger line in both forms), the REAL
+ * projection path (committed `tool/call` events folded by the registered
+ * unit and read back through `stateOf`), the pass-through paths (a
+ * non-judged tool, next() called first), the abstention paths (no-history
+ * with the empty-family double-space line, low-confidence under a raised
+ * config threshold), the suppress paths (cooldown, dedupe, cap), the
+ * block-decision shape, the per-agent ring isolation, and the
+ * agent/pre-step per-turn reset.
+ */
+/**
+ * The judged call's edit path (the history anchor).
+ */
 const Anchor = "Source/Variable/Config.ts";
 
-/** The two companions touched right after the anchor. */
+/**
+ * The two companions touched right after the anchor.
+ */
 const Companions = ["README.md", "SCHEME.md"];
 
-/** One judged edit of the anchor. */
+/**
+ * One judged edit of the anchor.
+ */
 const ConfigEdit = (Id: string): any => ({
 	name: "edit",
 	arguments: { file_path: Anchor },
@@ -54,7 +68,9 @@ const Seed = (Run: any, Id: string): void => {
 	}
 };
 
-/** The byte-exact History note text (k = sigmoid(2.5 - 0.6) = 0.87). */
+/**
+ * The byte-exact History note text (k = sigmoid(2.5 - 0.6) = 0.87).
+ */
 const HistoryText = [
 	"[edit-suggester] family=History confidence=0.87",
 	"companions (2):",

@@ -1,3 +1,9 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type Entry from "../Interface/Entry.js";
+import type GateShape from "../Interface/Gate.js";
+import type Scope from "../Interface/Scope.js";
+import type Snapshot from "../Interface/Snapshot.js";
+import type State from "../Interface/State.js";
 /**
  * @module Service
  *
@@ -5,6 +11,7 @@
  * base and is REGISTERED FROM APPLY.
  *
  * @remarks
+ *
  * The loader contract for the object-form plugin: apply constructs the
  * service; the Service base constructor calls
  * ctx.reflect.provide("batchstate", this), so `ctx.batchstate` resolves.
@@ -32,12 +39,6 @@
  * give the LIVE state), the write methods the parent/orchestrator side and
  * the agents' phase reports use.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type Entry from "../Interface/Entry.js";
-import type GateShape from "../Interface/Gate.js";
-import type Scope from "../Interface/Scope.js";
-import type Snapshot from "../Interface/Snapshot.js";
-import type State from "../Interface/State.js";
 export default class BatchState extends Service {
     /**
      * The apply-built state the methods read and write.

@@ -1,9 +1,12 @@
+import type Handle from "@Interface/Handle.js";
+
 /**
  * @module Open
  *
  * The storage-domain open: the PRIMARY store of the service's own domain.
  *
  * @remarks
+ *
  * Function/Open. THE DOMAIN: the service's OWN domain, named by the config
  * `domain` (default `pattern`). Version 1, per-record layout,
  * backup-and-skip invalid records, and NO `compatibleVersions` - the library
@@ -18,8 +21,6 @@
  * whole bundle load - the factory's live-verified pitfall); the type-only
  * devDeps pin them to the host-era versions.
  */
-import type Handle from "@Interface/Handle.js";
-
 export default async (Name: string, Facility: unknown): Promise<Handle> => {
 	const [Domain, Zod] = await Promise.all([
 		import("@deepseek-ai/dsh-storage-domain"),

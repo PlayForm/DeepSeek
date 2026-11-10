@@ -1,3 +1,5 @@
+import type { ReviewMessage } from "@Interface/Review.js";
+
 /**
  * @module Snapshot
  *
@@ -5,6 +7,7 @@
  * that reads a harness object it does not own.
  *
  * @remarks
+ *
  * THE CONTRACT IS "MESSAGES IN", NOT "SESSION OUT". The service's `Review`
  * takes a snapshot (Interface/Review), exactly like the Hermes fork takes
  * `messages_snapshot`; this module is the adapter that produces one from a
@@ -26,8 +29,6 @@
  * every other block type is named rather than stringified (a tool-call block
  * stringified into a digest is noise the reviewer would treat as prose).
  */
-import type { ReviewMessage } from "@Interface/Review.js";
-
 /**
  * The role + content shape any candidate projection is expected to carry.
  */

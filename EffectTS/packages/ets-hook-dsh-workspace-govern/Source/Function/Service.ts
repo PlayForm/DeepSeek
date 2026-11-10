@@ -1,3 +1,10 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type Decision from "@Interface/Decision.js";
+import type Proposal from "@Interface/Proposal.js";
+import type State from "@Interface/State.js";
+
+import Decide from "./Decide.js";
+
 /**
  * @module Service
  *
@@ -5,6 +12,7 @@
  * registered from apply.
  *
  * @remarks
+ *
  * REGISTERED FROM APPLY (the loader contract for the object-form plugin:
  * apply constructs the service; the Service base constructor calls
  * ctx.reflect.provide("workspaceGovern", this), so `ctx.workspaceGovern`
@@ -20,13 +28,6 @@
  *   decisions(limit) - the decision ring, newest first;
  *   statistics()     - { decisions, sequence }.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type Decision from "@Interface/Decision.js";
-import type Proposal from "@Interface/Proposal.js";
-import type State from "@Interface/State.js";
-
-import Decide from "./Decide.js";
-
 export default class WorkspaceGovern extends Service {
 	/**
 	 * The apply-built state the methods read and write.

@@ -1,3 +1,10 @@
+import Section from "@Function/Section.js";
+import type { ClientContext } from "@Interface/Client.js";
+import type { PanelSection } from "@Interface/Panel.js";
+import type { PanelPorts } from "@Interface/Ports.js";
+import Slots from "@Variable/Slots.js";
+import { createElement } from "react";
+
 /**
  * @module Adapter
  *
@@ -5,6 +12,7 @@
  * adapter in both directions of the v4.1 contribution model.
  *
  * @remarks
+ *
  * 1. The data path: the manifest goes into the slot-aware registry
  *    (playformFamilyPanel), which enforces one adapter per bundle per slot.
  * 2. The React path: the client half injects the child slot the manifest
@@ -17,13 +25,6 @@
  * and its manifest with no residue. This is the template every per-bundle
  * adapter copies into its own client half.
  */
-import Section from "@Function/Section.js";
-import type { ClientContext } from "@Interface/Client.js";
-import type { PanelSection } from "@Interface/Panel.js";
-import type { PanelPorts } from "@Interface/Ports.js";
-import Slots from "@Variable/Slots.js";
-import { createElement } from "react";
-
 const NAMESPACE = "client-dsh-panel-family";
 
 /**

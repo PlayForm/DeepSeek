@@ -1,26 +1,37 @@
-// Source/Test/Parse-And-Judge/Test.ts - THE GATE: the strict reply parse and
-// the deterministic acceptance rules.
-//
-// The parse decides whether a reply IS a proposal; the judge decides whether a
-// proposal may land. Both are pure, and both are asserted per rule: a rule with
-// no test is a rule the next refactor deletes.
 import assert from "node:assert/strict";
 
 import Judge from "../../../Target/Function/Judge.js";
 import Parse from "../../../Target/Function/Parse.js";
 import { Check, Finish, Make, MakeCounter, Seed } from "../Harness.js";
 
-/** A corpus where `present` exists and `pinned` is also pinned. */
+/**
+ * @module Test
+ *
+ * THE GATE: the strict reply parse and the deterministic acceptance rules.
+ *
+ * @remarks
+ *
+ * The parse decides whether a reply IS a proposal; the judge decides whether a
+ * proposal may land. Both are pure, and both are asserted per rule: a rule
+ * with no test is a rule the next refactor deletes.
+ */
+/**
+ * A corpus where `present` exists and `pinned` is also pinned.
+ */
 const Corpus = (Present: string[] = [], Pinned: string[] = []) => ({
 	exists: (Name: string) => Present.includes(Name),
 	pinned: (Name: string) => Pinned.includes(Name),
 });
 
-/** A SKILL.md body with matching frontmatter. */
+/**
+ * A SKILL.md body with matching frontmatter.
+ */
 const Skill = (Name: string, Extra = ""): string =>
 	`---\nname: ${Name}\ndescription: what it does\n---\n\n# ${Name}\n\n${Extra}`;
 
-/** One operation, as the reviewer would write it. */
+/**
+ * One operation, as the reviewer would write it.
+ */
 const Op = (Fields: Record<string, unknown>): Record<string, unknown> => Fields;
 
 export const runTest = async (): Promise<number> => {

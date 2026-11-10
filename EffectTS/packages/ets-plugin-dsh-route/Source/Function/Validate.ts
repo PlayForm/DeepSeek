@@ -1,9 +1,12 @@
+import type { KeywordTable, PolicyShape, Role } from "@Interface/Policy.js";
+
 /**
  * @module Validate
  *
  * The fail-loud composition validation for the plugin's configuration.
  *
  * @remarks
+ *
  * The tool-coach precedent: invalid configuration throws at load, never
  * silently defaults. The schema already guarantees the types; this pass
  * enforces the COMPOSITION contracts the schema cannot express:
@@ -14,8 +17,6 @@
  *   enabled);
  * - the keyword table's keys must be the three roles.
  */
-import type { KeywordTable, PolicyShape, Role } from "@Interface/Policy.js";
-
 const Fail = (Message: string): never => {
 	throw new Error(`plugin-dsh-route: ${Message}`);
 };

@@ -1,8 +1,3 @@
-// Source/Test/Commit-And-Ops/Test.ts - the commit path: the two-phase
-// commit with its byte-exact ledger lines, the write through the factory's
-// executor with the replaceIfVersion intent, the governed-basename re-route
-// through Factory.Govern, the stale halt, the strict-mode error, the
-// designed no-op silence, the atomic gate, and the op executor / diff units.
 import assert from "node:assert/strict";
 import * as Ops from "../../../Target/Function/Ops.js";
 import {
@@ -17,6 +12,19 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The commit path of the batch-edit tool.
+ *
+ * @remarks
+ *
+ * The folder proves the two-phase commit with its byte-exact ledger lines,
+ * the write through the factory's executor with the replaceIfVersion intent,
+ * the governed-basename re-route through Factory.Govern, the stale halt, the
+ * strict-mode error, the designed no-op silence, the atomic gate, and the op
+ * executor / diff units.
+ */
 /** A standard enabled mount over the given file fixture. The D6 policy gate
  *  is opened explicitly (`policy.write: "auto"`): these scenarios exercise
  *  the commit itself, while the gate's shipped `approve` refusal is the
@@ -32,7 +40,9 @@ const Setup = (
 	);
 };
 
-/** Open a machine with one literal search and one replace op, return the run. */
+/**
+ * Open a machine with one literal search and one replace op, return the run.
+ */
 const OpenReplace = async (Run: any, Search: string, With: string, Files?: string[]): Promise<any> =>
 	Run.Tool.execute(
 		{

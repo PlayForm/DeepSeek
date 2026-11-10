@@ -1,10 +1,3 @@
-// Source/Test/Watch-Sweep-Clock/Test.ts - the clock discipline: the module's
-// own Clock seam (State.Now, the no-real-timers rule), the sweep's
-// event-driven deadline scan, the byte-exact sweep line, the 0-interval
-// "sweeps at every checkpoint" rule, the quiet-ledger discipline (an
-// all-quiet tree costs no sweep lines), the watch cap with its byte-exact
-// capped line, the no-timer invariant over the BUILT library, and the
-// volatile flip of the watch bound.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {
@@ -21,13 +14,31 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount with overrides. */
+/**
+ * @module Test
+ *
+ * The clock discipline of the monitor hook.
+ *
+ * @remarks
+ *
+ * The folder proves the module's own Clock seam (State.Now, the
+ * no-real-timers rule), the sweep's event-driven deadline scan, the
+ * byte-exact sweep line, the 0-interval "sweeps at every checkpoint" rule,
+ * the quiet-ledger discipline (an all-quiet tree costs no sweep lines), the
+ * watch cap with its byte-exact capped line, the no-timer invariant over the
+ * BUILT library, and the volatile flip of the watch bound.
+ */
+/**
+ * A standard enabled mount with overrides.
+ */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));
 };
 
-/** Drive one folder's checks. */
+/**
+ * Drive one folder's checks.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

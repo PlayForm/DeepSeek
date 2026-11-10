@@ -11,6 +11,7 @@ import Persist from "./Persist.js";
  * history.
  *
  * @remarks
+ *
  * Two tiers are written in one step:
  * - the in-memory RING, per agent (`AgentMemory.History`) and the durable
  *   tier's mirror (`State.History`), both newest-first and both bounded by
@@ -29,7 +30,6 @@ import Persist from "./Persist.js";
  * restored store continues from its highest), so the KV keys stay unique
  * across sessions and the episode window is deterministic.
  */
-
 /**
  * One call's draft: everything the entry needs except the sequence.
  */
@@ -42,13 +42,19 @@ export interface Draft {
 }
 
 export default (
-	/** The plugin state (the mirror, the sequence, the store chain). */
+	/**
+	 * The plugin state (the mirror, the sequence, the store chain).
+	 */
 	State: State,
 
-	/** The agent's memory (its own ring). */
+	/**
+	 * The agent's memory (its own ring).
+	 */
 	Memory: AgentMemory,
 
-	/** The call's draft fields. */
+	/**
+	 * The call's draft fields.
+	 */
 	Draft: Draft,
 ): Entry => {
 	const Entry_: Entry = { seq: State.Seq, ...Draft };

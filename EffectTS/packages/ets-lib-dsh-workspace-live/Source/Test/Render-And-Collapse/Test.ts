@@ -1,10 +1,17 @@
-// Source/Test/Render-And-Collapse/Test.ts - the section framer and the
-// budget collapse: the fixed frame byte-exact (with and without the version
-// stamp), the empty section, the fully-fitting budget, the overflow summary
-// (never a silent drop), and the order preservation.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Render, Collapse } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The section framer and the budget collapse of the workspace-live library.
+ *
+ * @remarks
+ *
+ * The folder proves the fixed frame byte-exact (with and without the
+ * version stamp), the empty section, the fully-fitting budget, the overflow
+ * summary (never a silent drop), and the order preservation.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

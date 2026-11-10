@@ -7,6 +7,7 @@
  * Documentation/Plans/Completion-Spec/03-SUGGESTERS.md section 3).
  *
  * @remarks
+ *
  * One projection is built from ONE `ctx.workspaceGraph.snapshot()` read and
  * answers three questions per pack candidate, all deterministic and all
  * graph-derived (no clock, no LLM, no I/O after the snapshot):

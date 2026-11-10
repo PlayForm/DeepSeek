@@ -6,6 +6,7 @@
  * off the workspace root under `.dsh/pack.<ext>`.
  *
  * @remarks
+ *
  * The extensions are probed in order; `.yml` is the documented form, `.yaml`
  * and `.json` are accepted so a repo can adopt the schema without a YAML
  * parser.

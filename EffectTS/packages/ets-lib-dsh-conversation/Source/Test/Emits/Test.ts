@@ -1,14 +1,22 @@
-// Source/Test/Emits/Test.ts - the emission's smokes over hand-written event
-// arrays (the conversation spine's section 3.1): the envelopes carry the
-// source event's seq and time; a tool call with two file arguments emits two
-// touches; the session end emits exactly one end envelope; an unknown event
-// shape emits nothing. No ctx, no factory, no fs - the emission is pure.
 import assert from "node:assert/strict";
 import { resolve } from "node:path";
 
 import { Emits, Names } from "../../../Target/Library.js";
 import { Check, Finish, MakeCounter } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The emission's smokes over hand-written event arrays (the conversation
+ * spine's section 3.1).
+ *
+ * @remarks
+ *
+ * The envelopes carry the source event's seq and time; a tool call with two
+ * file arguments emits two touches; the session end emits exactly one end
+ * envelope; an unknown event shape emits nothing. No ctx, no factory, no fs
+ * - the emission is pure.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

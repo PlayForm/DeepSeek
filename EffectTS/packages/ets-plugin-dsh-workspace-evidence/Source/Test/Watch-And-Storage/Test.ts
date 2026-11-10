@@ -1,8 +1,3 @@
-// Source/Test/Watch-And-Storage/Test.ts - the invalidation seam and the
-// storage domain: the fs/observed listener through the real root Wire (the
-// guard chain with its byte-exact lines), the domain spec, the persistence,
-// the restart recovery with the continued sequence, the loud open failure,
-// the absent facility, and the zero-fs purity.
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -17,7 +12,18 @@ import {
 	rm,
 } from "../Harness.js";
 
-/** An enabled mount with an empty ledger. */
+/**
+ * @module Test
+ *
+ * The invalidation seam and the storage domain: the fs/observed listener
+ * through the real root Wire (the guard chain with its byte-exact lines), the
+ * domain spec, the persistence, the restart recovery with the continued
+ * sequence, the loud open failure, the absent facility, and the zero-fs
+ * purity.
+ */
+/**
+ * An enabled mount with an empty ledger.
+ */
 const Setup = (Raw: Record<string, unknown> = {}, Facility?: any): any => {
 	rm();
 	return Make(Validate({ logFile: "/nonexistent/evidence.log", enabled: true, ...Raw }), (Context: any) => {

@@ -4,6 +4,7 @@
  * The slice of the opened storage domain the merge hook uses.
  *
  * @remarks
+ *
  * One domain (named config `domain`, default workspace_merge), TWO tables:
  * `batches` (one record per batch, keyed by the batch id) and `meta` (ONE
  * record `__meta` carrying the sequence counter). Puts are fire-and-forget

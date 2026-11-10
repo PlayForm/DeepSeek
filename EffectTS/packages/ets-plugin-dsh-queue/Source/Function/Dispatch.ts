@@ -1,3 +1,10 @@
+import { MAIN, Seat } from "@Function/Capacity.js";
+import ScheduleFn from "@Function/Schedule.js";
+import SpawnFn, { type Settle } from "@Function/Spawn.js";
+import type RouteService from "@Interface/Route.js";
+import type State from "@Interface/State.js";
+import { Decide } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Dispatch
  *
@@ -5,6 +12,7 @@
  * seat, flip the state to `dispatched`, and ledger the assignment.
  *
  * @remarks
+ *
  * Section 2.2. The step resolves the route per the user's policy when the
  * routing enforcer is present (the routed dispatch, silently - the queue
  * NEVER alters the spec, only schedules), writes the journal record and the
@@ -35,13 +43,6 @@
  * load block. The probe is once per dispatch, cheap, and typed through the
  * queue's own Interface/Route.ts (the self-contained sibling shape).
  */
-import { MAIN, Seat } from "@Function/Capacity.js";
-import ScheduleFn from "@Function/Schedule.js";
-import SpawnFn, { type Settle } from "@Function/Spawn.js";
-import type RouteService from "@Interface/Route.js";
-import type State from "@Interface/State.js";
-import { Decide } from "@playform/ets-plugin-dsh-factory";
-
 export default (
 	State: State,
 	Agent: string,

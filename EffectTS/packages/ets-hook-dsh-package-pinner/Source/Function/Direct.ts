@@ -14,6 +14,7 @@ import Transform from "./Transform.js";
  * the "package.json" basename.
  *
  * @remarks
+ *
  * Registered in the factory's GovernSteps registry (SCHEME.md §2.16-2.17). The
  * step reuses the event-path pieces - the factory's Continue and the module's
  * Transform - they do NOT re-implement machinery, and every ledger string

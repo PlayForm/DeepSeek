@@ -1,19 +1,3 @@
-// Source/Test/Harness.ts - the shared test harness for the REPLAY-SUGGESTER
-// tests: the fake ctx (ctx listener capture, reflect.provide capture, the
-// effect runner, the logger capture, the fs capture that must stay untouched,
-// the distinct root seam) + the REAL @playform/ets-plugin-dsh-factory instance
-// from its built Target + the REAL replay-suggester apply from its built
-// Target - the family fake-ctx + real-factory harness pattern, written ONCE
-// per package and imported by every test folder. Each folder process gets a
-// fresh set, so every folder is standalone-green.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// NO FAKE CLOCK: the plugin has no clock dependency at all.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -21,6 +5,30 @@ import * as Path from "node:path";
 import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the REPLAY-SUGGESTER tests.
+ *
+ * @remarks
+ *
+ * The harness wires the fake ctx (ctx listener capture, reflect.provide
+ * capture, the effect runner, the logger capture, the fs capture that must
+ * stay untouched, the distinct root seam) plus the REAL
+ * @playform/ets-plugin-dsh-factory instance from its built Target plus the
+ * REAL replay-suggester apply from its built Target - the family fake-ctx +
+ * real-factory harness pattern, written ONCE per package and imported by
+ * every test folder. Each folder process gets a fresh set, so every folder
+ * is standalone-green.
+ *
+ * The standalone selfcheck `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass plus one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * wires the plugin (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * There is NO FAKE CLOCK: the plugin has no clock dependency at all.
+ */
 export { Plugin };
 
 /**
@@ -99,7 +107,9 @@ export const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "replay-sugges
 export const Ledger = Path.join(Root, "replay-suggester.log");
 export const Store = Path.join(Root, "history.json");
 
-/** The producer's fallback-store counter: one fresh file per mount. */
+/**
+ * The producer's fallback-store counter: one fresh file per mount.
+ */
 let RecordCounter = 0;
 
 /**
@@ -411,7 +421,9 @@ export const FakeStorage = (Options: { failOpen?: boolean; version?: number } = 
 		},
 	};
 
-	/** Seed one record (the restart scenario: the store outlives the process). */
+	/**
+	 * Seed one record (the restart scenario: the store outlives the process).
+	 */
 	Facility.seed = (Name: string, Key: string, Value: unknown): void => {
 		if (!Facility.tables.has(Name)) {
 			Facility.tables.set(Name, new Map());

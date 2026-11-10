@@ -1,3 +1,9 @@
+import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
+
+import type PricingService from "@Interface/PricingService.js";
+import type ValuationBlock from "@Interface/ValuationBlock.js";
+import type ValuationSelection from "@Interface/ValuationSelection.js";
+
 /**
  * @module Valuation
  *
@@ -9,6 +15,7 @@
  * the comparison ran.
  *
  * @remarks
+ *
  * THE READER'S BLOCK, WITHOUT A READER: the Classic engine folds this block
  * into its session envelope (Function/Reader's `valuation` field). The twin
  * has not ported that envelope yet - its read family is Function/Report,
@@ -34,12 +41,6 @@
  * the two figures answer different questions, and a comparison labelled
  * with the recorded count would name the wrong revision.
  */
-import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
-
-import type PricingService from "@Interface/PricingService.js";
-import type ValuationBlock from "@Interface/ValuationBlock.js";
-import type ValuationSelection from "@Interface/ValuationSelection.js";
-
 /**
  * The one statement the block adds: the ledger's declared attribution
  * policy, read from the stored facts rather than from the caller - the

@@ -1,9 +1,12 @@
+import type Trace from "../Interface/Trace.js";
+export default _default;
 /**
  * @module Trace
  *
  * The trace-bus service body: the ONE bus the family shares.
  *
  * @remarks
+ *
  * Provided as `ctx.trace` by the factory's constructor (the factory is the family's
  * shared-machinery owner; the vocabulary and the detached loop live in
  * @playform/ets-lib-dsh-trace, the service lives here - D5: no separate indexer process and no
@@ -27,6 +30,4 @@
  *   subscription is a contained no-op (the service may be unmounted while an adapter still holds
  *   it).
  */
-import type Trace from "../Interface/Trace.js";
-export default _default;
 declare function _default(): Trace;

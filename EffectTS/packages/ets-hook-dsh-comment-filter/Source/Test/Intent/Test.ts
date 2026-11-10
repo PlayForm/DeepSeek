@@ -1,34 +1,55 @@
-// Source/Test/Intent/Test.ts - one singular test: the INTENT GATE - the
-// agent/pre-step stash (the observer returns the downstream decision
-// unchanged) and the per-task gate it feeds: a task ABOUT comments leaves the
-// read result untouched, a normal task strips it, the stash is PER AGENT, a
-// call with no agent identity falls back to the global text, a step with no
-// user message keeps the previous intent, `intent: false` always strips,
-// `enabled: false` never strips, and a filter switched off still records its
-// ACTIVATION line in the ledger (the switch maps onto `State.Active`, never
-// onto the factory's ledger gate). Runs standalone (`node Target/Test/Intent/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-comment-filter: the fake ctx + the REAL
-// factory + the REAL comment-filter apply, from the Harness.
 import assert from "node:assert/strict";
 
 import { Check, Finish, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
 
-/** The read tool's model-facing envelope (the harness contract, byte-exact). */
+/**
+ * @module Test
+ *
+ * One singular test: the INTENT GATE - the agent/pre-step stash and the
+ * per-task gate it feeds.
+ *
+ * @remarks
+ *
+ * The observer returns the downstream decision unchanged. The gate's facts:
+ * a task ABOUT comments leaves the read result untouched, a normal task
+ * strips it, the stash is PER AGENT, a call with no agent identity falls
+ * back to the global text, a step with no user message keeps the previous
+ * intent, `intent: false` always strips, `enabled: false` never strips, and
+ * a filter switched off still records its ACTIVATION line in the ledger
+ * (the switch maps onto `State.Active`, never onto the factory's ledger
+ * gate).
+ *
+ * Runs standalone (`node Target/Test/Intent/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-comment-filter: the fake ctx + the
+ * REAL factory + the REAL comment-filter apply, from the Harness.
+ */
+/**
+ * The read tool's model-facing envelope (the harness contract, byte-exact).
+ */
 const Envelope = (Path: string, Body: string): string =>
 	`<path>${Path}</path>\n<type>file</type>\n<content>\n${Body}\n</content>`;
 
-/** A numbered body: the numbered lines, the blank separator, the footer. */
+/**
+ * A numbered body: the numbered lines, the blank separator, the footer.
+ */
 const Body = (Lines: string[], Footer: string): string => [...Lines, "", Footer].join("\n");
 
-/** The omission notice line (module-owned, byte-exact). */
+/**
+ * The omission notice line (module-owned, byte-exact).
+ */
 const Omission =
 	"(Comments omitted. Use grep to inspect them, or ask the user to include comments.)";
 
-/** A settled tool result whose only content is one text block. */
+/**
+ * A settled tool result whose only content is one text block.
+ */
 const Outcome = (Value: string) => ({ isError: false, value: {}, content: [{ type: "text", text: Value }] });
 
-/** One agent/pre-step payload carrying one user message. */
+/**
+ * One agent/pre-step payload carrying one user message.
+ */
 const Step = (Agent: unknown, Text: string) => ({
 	agent: Agent,
 	messages: [{ role: "user", content: [{ type: "text", text: Text }] }],
@@ -37,7 +58,9 @@ const Step = (Agent: unknown, Text: string) => ({
 	signal: new AbortController().signal,
 });
 
-/** One tool execution identity (the agent field is optional, like the harness's). */
+/**
+ * One tool execution identity (the agent field is optional, like the harness's).
+ */
 const Exec = (Name: string, Agent?: unknown) => ({
 	callId: "call_smoke",
 	name: Name,
@@ -46,7 +69,9 @@ const Exec = (Name: string, Agent?: unknown) => ({
 	...(Agent === undefined ? {} : { agent: Agent }),
 });
 
-/** The downstream accept decision every post-execute case hands in. */
+/**
+ * The downstream accept decision every post-execute case hands in.
+ */
 const Accept = async () => ({ kind: "accept" });
 
 export const runTest = async (): Promise<number> => {

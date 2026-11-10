@@ -1,9 +1,3 @@
-// Source/Test/Storage-And-Service/Test.ts - the storage domain and the
-// service surface: the byte-exact domain spec, the record persistence (the
-// latest per path + the ring under the meta key), the restart recovery with
-// the continued sequence, the persisted cap, the manual stamp path, the
-// absent facility (silent skip), the loud open failure, and the ZERO
-// writeText/readText guarantee (B10).
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -20,7 +14,22 @@ import {
 	FakeStorage,
 } from "../Harness.js";
 
-/** A standard enabled mount with the fake storage attached. */
+/**
+ * @module Test
+ *
+ * The storage domain and the service surface of the observe hook.
+ *
+ * @remarks
+ *
+ * The folder proves the byte-exact domain spec, the record persistence (the
+ * latest per path + the ring under the meta key), the restart recovery with
+ * the continued sequence, the persisted cap, the manual stamp path, the
+ * absent facility (silent skip), the loud open failure, and the ZERO
+ * writeText/readText guarantee (B10).
+ */
+/**
+ * A standard enabled mount with the fake storage attached.
+ */
 const Setup = (
 	Config: Record<string, unknown> = {},
 	Facility: unknown = undefined,

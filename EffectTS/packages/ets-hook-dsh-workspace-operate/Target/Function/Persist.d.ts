@@ -1,3 +1,6 @@
+import type Proposal from "@Interface/Proposal.js";
+import type State from "@Interface/State.js";
+export default _default;
 /**
  * @module Persist
  *
@@ -5,11 +8,9 @@
  * `proposals` table plus the `__meta` record (sequence + refusals).
  *
  * @remarks
+ *
  * Never awaited by the caller; every failure is contained (the storage layer
  * is best-effort - the in-memory table and the ledger line are the truth
  * when the domain is absent).
  */
-import type Proposal from "../Interface/Proposal.js";
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(State: State, Proposal: Proposal | undefined): void;

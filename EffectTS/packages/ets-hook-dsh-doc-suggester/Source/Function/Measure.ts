@@ -1,3 +1,6 @@
+import type { CompanionDecision, HeuristicValues } from "../Interface/Decision.js";
+import type { Target } from "../Interface/Execution.js";
+
 /**
  * @module Measure
  *
@@ -6,6 +9,7 @@
  * section 2; D8).
  *
  * @remarks
+ *
  * `score(c) = sum over the enabled heuristics of weight(h) * value(h)`
  *
  * The values are the documented placeholders of this consumer plus the two
@@ -27,9 +31,6 @@
  * family's would-be companions through this same leaf, so the recorded
  * values and the emitted ones can never disagree.
  */
-import type { CompanionDecision, HeuristicValues } from "../Interface/Decision.js";
-import type { Target } from "../Interface/Execution.js";
-
 /**
  * The neutral graph-distance placeholder (no graph service in this consumer).
  */
@@ -83,10 +84,14 @@ const Excluded = (Path: string, Exclude: string[]): boolean =>
 	Exclude.some((Dir) => Path === Dir || Path.startsWith(`${Dir}/`) || Path.includes(`/${Dir}/`));
 
 export default (
-	/** The pack companion. */
+	/**
+	 * The pack companion.
+	 */
 	Target: Target,
 
-	/** The measure input. */
+	/**
+	 * The measure input.
+	 */
 	Input: MeasureInput,
 ): CompanionDecision | undefined => {
 	switch (true) {

@@ -4,6 +4,7 @@
  * The slice of the factory service the merge hook consumes.
  *
  * @remarks
+ *
  * The State builder, the ledger, the exclusion match, and the SHARED WRITE
  * EXECUTOR (the factory's Write method - the merge's per-file commits all
  * go through it: the explicit replaceIfVersion intent, the P4 sandbox

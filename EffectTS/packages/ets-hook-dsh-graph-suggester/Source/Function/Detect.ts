@@ -1,9 +1,12 @@
+import type { CompiledIntent, Intent, Match } from "@Interface/Pack.js";
+
 /**
  * @module Detect
  *
  * Classifies a call probe deterministically against compiled rules and returns the Match.
  *
  * @remarks
+ *
  * The DETERMINISTIC CLASSIFIER (the plan §4.3: pure function, no LLM, no I/O,
  * O(intents x rules) + a map lookup). Given the compiled rules and a call probe (the
  * tool name + the JSON of its arguments), it returns the winning Match or null - the
@@ -20,8 +23,6 @@
  * per judged call (one literal `.` pattern per intent), so the hot path never builds a
  * regex per signal.
  */
-import type { CompiledIntent, Intent, Match } from "@Interface/Pack.js";
-
 /**
  * The plan's bias constant (§3.5): keeps a single weak signal below the gate.
  */

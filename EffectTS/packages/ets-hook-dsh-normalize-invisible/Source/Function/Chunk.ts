@@ -1,3 +1,8 @@
+import type { StreamChunk } from "@deepseek-ai/dsh-llm";
+import { Chunk as CoreChunk } from "@playform/ets-base-dsh";
+
+import Replace from "./Replace.js";
+
 /**
  * @module Chunk
  *
@@ -5,6 +10,7 @@
  * the CORE's generic per-chunk dispatch with the transform INJECTED.
  *
  * @remarks
+ *
  * The dispatch structure (which chunk types, which fields, the identity
  * passthroughs, the reasoning gate, the tool-args gate - three-way since the
  * edit exemption and the per-call raw marker: a delta whose `name` is "edit"
@@ -22,11 +28,6 @@
  * template shape, with the Invisible class substituted for Dashes) - the
  * invisible smoke is the arbiter.
  */
-import type { StreamChunk } from "@deepseek-ai/dsh-llm";
-import { Chunk as CoreChunk } from "@playform/ets-base-dsh";
-
-import Replace from "./Replace.js";
-
 export default (
 	Input: StreamChunk,
 	Replacement: string,

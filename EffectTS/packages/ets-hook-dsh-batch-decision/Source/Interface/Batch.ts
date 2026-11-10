@@ -5,6 +5,7 @@
  * the shared artifact).
  *
  * @remarks
+ *
  * Pure data and declarations - no behavior. The batch schema is owned by the
  * batch package (the batch-edit tool's schema where it fits); this hook only
  * CONSUMES it, so the shapes are kept minimal: only the fields the decision

@@ -1,3 +1,6 @@
+import ClientApply from "@Function/Client.js";
+import type { ClientContext } from "@Interface/Client.js";
+
 /**
  * @module Client
  *
@@ -5,14 +8,12 @@
  * `./client` export; the module system serves it as a lazy-CJS factory).
  *
  * @remarks
+ *
  * The entry carries the named `inject` (required client services: the slots
  * registry and the locale service) and the named `apply(ctx)`; the body lives
  * in `Function/Client.ts` - this entry is wiring only, and the stylesheet mount
  * lives in `Source/Bundle.ts` so the ESM half stays style-free.
  */
-import ClientApply from "@Function/Client.js";
-import type { ClientContext } from "@Interface/Client.js";
-
 /**
  * Required client services: the slot registry and the locale service.
  */

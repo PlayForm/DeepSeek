@@ -15,6 +15,7 @@
  *   U+3000  ideographic space
  *
  * @remarks
+ *
  * (U+200B-U+200A's invisible zero-width neighbours live in the Invisible
  * table; U+FEFF is there too - Zs-adjacent but a format character.)
  *

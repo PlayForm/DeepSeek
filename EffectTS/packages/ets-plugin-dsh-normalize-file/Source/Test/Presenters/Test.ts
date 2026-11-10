@@ -1,15 +1,18 @@
-// Source/Test/Presenters/Test.ts - one singular test: the presenters (pure,
-// outcome-metadata driven) - the call-time generic card and the file
-// location, the presentationMeta projection for a changed outcome, the diff
-// card with the real before/after, and the no-op and error cases that
-// produce no card. Runs standalone (`node
-// Target/Test/Presenters/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-plugin-dsh-normalize-file: the fake ctx + the REAL
-// factory + the REAL normalize-file apply, from the Harness.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Validate, Ledger } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the presenters (pure, outcome-metadata driven) - the
+ * call-time generic card and the file location, the presentationMeta
+ * projection for a changed outcome, the diff card with the real before/after,
+ * and the no-op and error cases that produce no card. Runs standalone (`node
+ * Target/Test/Presenters/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-plugin-dsh-normalize-file: the fake ctx + the REAL factory +
+ * the REAL normalize-file apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

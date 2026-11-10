@@ -1,15 +1,16 @@
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The validated plugin-config shape for the lesson-review service.
  *
  * @remarks
+ *
  * The schema that produces it lives in Variable/Config.ts. Every knob is a volatile cell in the
  * schema; the service reads them through its Configure method, so a hot edit lands on the next
  * call without a remount.
  */
-import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
-
 export default interface Config {
 	/**
 	 * Master switch (default TRUE here, FALSE in the schema - see Knobs).

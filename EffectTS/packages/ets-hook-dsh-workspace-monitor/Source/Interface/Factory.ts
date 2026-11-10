@@ -1,9 +1,12 @@
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+
 /**
  * @module Factory
  *
  * The slice of the factory service the hook consumes, held structurally.
  *
  * @remarks
+ *
  * This follows the workspace-observe precedent: structural, so any future
  * refactor keeps the consumer honest. The hook holds the injected
  * `pluginFactory` instance and uses: the State builder (cell unwrap + shared
@@ -15,8 +18,6 @@
  * vocabulary on the cordis Context so `ctx.pluginFactory` is fully typed at
  * every consumption site (the workspace-observe precedent).
  */
-import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

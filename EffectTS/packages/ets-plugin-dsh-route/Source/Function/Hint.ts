@@ -1,9 +1,12 @@
+import type { Role } from "@Interface/Policy.js";
+
 /**
  * @module Hint
  *
  * The routing hint string builder for a routed lane's prompt.
  *
  * @remarks
+ *
  * The one-line statement of a routed lane that the child's prompt carries
  * (the completion spec's acceptance: "a routed prompt injects the hint
  * silently"). Byte-stable template:
@@ -18,8 +21,6 @@
  * The hint is model-facing context, not a ledger line: the audit line stays
  * `route <taskType> <source> <provider> <model> <effort>` (Function/Inject).
  */
-import type { Role } from "@Interface/Policy.js";
-
 /**
  * The hint's opening token (the idempotence marker).
  */

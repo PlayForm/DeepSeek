@@ -1,3 +1,12 @@
+import type Entry from "@Interface/Entry.js";
+import type Gate from "@Interface/Gate.js";
+import type Handle from "@Interface/Handle.js";
+import type Member from "@Interface/Member.js";
+import type State from "@Interface/State.js";
+
+import Recover from "./Recover.js";
+import Restore from "./Restore.js";
+
 /**
  * @module Storage
  *
@@ -5,6 +14,7 @@
  * store.
  *
  * @remarks
+ *
  * THE DOMAIN: the plugin's OWN domain, named by the config `domain`
  * (default `batch_state`). Version 1, per-record layout, backup-and-skip
  * invalid records, and NO `compatibleVersions` - the library rejects an
@@ -31,15 +41,6 @@
  * module-load path (a module-level import of an unresolvable package would
  * crash the whole bundle load - the factory's live-verified pitfall).
  */
-import type Entry from "@Interface/Entry.js";
-import type Gate from "@Interface/Gate.js";
-import type Handle from "@Interface/Handle.js";
-import type Member from "@Interface/Member.js";
-import type State from "@Interface/State.js";
-
-import Recover from "./Recover.js";
-import Restore from "./Restore.js";
-
 /**
  * One table's records, in store order (the untrusted rows Restore
  * filters).

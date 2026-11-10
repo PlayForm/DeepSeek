@@ -5,6 +5,7 @@
  * live view consumes.
  *
  * @remarks
+ *
  * Documentation/Plans/Workspace-Family/WAVE-1-BRIEF.md sections 4-5, the
  * frozen W1 contract. No runtime import of a sibling package exists yet; the
  * end-phase wires the real imports and these declarations become the

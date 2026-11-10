@@ -1,3 +1,8 @@
+import Emit from "@Function/Emit.js";
+import Ensure from "@Function/Ensure.js";
+import Persist from "@Function/Persist.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Task
  *
@@ -5,6 +10,7 @@
  * ACTIVITY, ledger the line, then emit the batch/state-change event.
  *
  * @remarks
+ *
  * The LIVE task - the agents report their phase changes; the parent sets
  * the task at the activation - is the plan's refresh trigger: the consumers
  * re-splice the compiled block. The FIRST active transition stamps
@@ -12,11 +18,6 @@
  * completed/failed/interrupted and reports a task is REACTIVATED (status
  * active, finishedAt cleared - the redo case).
  */
-import Emit from "@Function/Emit.js";
-import Ensure from "@Function/Ensure.js";
-import Persist from "@Function/Persist.js";
-import type State from "@Interface/State.js";
-
 export default (State: State, Agent: string, Task: string): void => {
 	const Member = Ensure(State, Agent);
 	Member.task = Task;

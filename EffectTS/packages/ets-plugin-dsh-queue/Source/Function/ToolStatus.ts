@@ -1,14 +1,15 @@
+import type State from "@Interface/State.js";
+
 /**
  * @module ToolStatus
  *
  * The `queue_status` tool: the queue record's surface.
  *
  * @remarks
+ *
  * The surface covers the active lanes and their tasks, the queued lanes, and
  * the board line. One canonical JSON value; the presenter is pure.
  */
-import type State from "@Interface/State.js";
-
 export default (State: State) => ({
 	name: "queue_status",
 	description:

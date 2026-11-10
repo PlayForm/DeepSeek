@@ -7,6 +7,7 @@
  * when they are known.
  *
  * @remarks
+ *
  * Both byte counts are null in the normal live case - a tool result carries
  * no size - so the delta stays null and the allocator's equal-split
  * fallback applies; a later refinement may enrich them.

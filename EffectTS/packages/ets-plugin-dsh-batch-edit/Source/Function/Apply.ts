@@ -1,3 +1,14 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
+import type Config from "@Interface/Config.js";
+import type FactoryService from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import Version from "@Variable/Version.js";
+
+import * as Machine from "./Machine.js";
+import ShieldSync from "./ShieldSync.js";
+import Tools from "./Tools.js";
+
 /**
  * @module Apply
  *
@@ -6,6 +17,7 @@
  * proof, and the listener set.
  *
  * @remarks
+ *
  * Registration ONLY - every behavior lives in its own Function module
  * (Machine, Ops, Tools, Present, Ledger).
  *
@@ -29,17 +41,6 @@
  * result is returned UNCHANGED. The function returns NOTHING (a returned
  * value silently kills event delivery).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
-import type Config from "@Interface/Config.js";
-import type FactoryService from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import Version from "@Variable/Version.js";
-
-import * as Machine from "./Machine.js";
-import ShieldSync from "./ShieldSync.js";
-import Tools from "./Tools.js";
-
 /**
  * Unwraps one possibly-volatile config cell (`{ get }` reference or value):
  * the loader hands volatile fields as cells, so every validation read goes

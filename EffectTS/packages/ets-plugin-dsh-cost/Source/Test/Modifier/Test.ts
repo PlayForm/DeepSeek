@@ -1,10 +1,3 @@
-// Source/Test/Modifier/Test.ts - THE MODIFIER PRODUCT (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 17.2): after the tier sum, the priced total
-// and every bucket are multiplied by the product of the applicable
-// modifiers' multipliers - a modifier applies when its Provider matches,
-// its Model is NULL or equals the model, its Kind matches the call's
-// pricing mode, and the call's time is inside its effective window - and a
-// model-specific modifier beats a provider-wide one of the same Kind.
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -14,6 +7,21 @@ import Open from "../../../Target/Function/Open.js";
 import Price from "../../../Target/Function/Price.js";
 import { Check, Finish, MakeCounter, Validate } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE MODIFIER PRODUCT (Documentation/Plans/COST-TRACK-PLUGIN.md section
+ * 17.2) of the cost plugin.
+ *
+ * @remarks
+ *
+ * After the tier sum, the priced total and every bucket are multiplied by
+ * the product of the applicable modifiers' multipliers - a modifier
+ * applies when its Provider matches, its Model is NULL or equals the
+ * model, its Kind matches the call's pricing mode, and the call's time is
+ * inside its effective window - and a model-specific modifier beats a
+ * provider-wide one of the same Kind.
+ */
 // Two explicit rules for the arithmetic's Modifiers argument: a
 // provider-wide batch rule at half, and a model-scoped batch rule at a
 // quarter - the shapes the config's own rows parse into.

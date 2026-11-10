@@ -1,3 +1,5 @@
+import type Stamp from "../Interface/Stamp.js";
+export default _default;
 /**
  * @module IsStamp
  *
@@ -5,9 +7,8 @@
  * origin, all strings.
  *
  * @remarks
+ *
  * The graph's adapter accepts only a guarded stamp - a malformed payload is
  * ignored (never guessed into a re-index).
  */
-import type Stamp from "../Interface/Stamp.js";
-export default _default;
 declare function _default(Value: unknown): Value is Stamp;

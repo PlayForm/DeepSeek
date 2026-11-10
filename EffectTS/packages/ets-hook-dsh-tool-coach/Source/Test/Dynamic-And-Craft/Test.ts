@@ -1,16 +1,3 @@
-// Source/Test/Dynamic-And-Craft/Test.ts - one singular test: the
-// dynamic-instruction engine (D1's engine paths) plus the craft library. The
-// engine paths: the fetch failure degrades to the static table (D2), the
-// section cap / mapped-class priority / top-up (D3), the section cache with
-// its TTL and tools/change rebuild paths (D4), and fetchLive=false plus the
-// volatile flips via the P10 loader/volatile-update dispatch (D5). The craft
-// library classifies every obfuscated variant correctly, including the
-// catch-all and the exemption rows. Runs standalone
-// (`node Target/Test/Dynamic-And-Craft/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions are moved
-// verbatim from Classic/smokes/tool-coach-smoke.mjs (D2 + D3 + D4 + D5 + the
-// craft battery).
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -32,6 +19,28 @@ import {
 	LiveSchemas,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The singular test of the dynamic-instruction engine (D1's engine paths)
+ * plus the craft library.
+ *
+ * @remarks
+ *
+ * The engine paths: the fetch failure degrades to the static table (D2),
+ * the section cap / mapped-class priority / top-up (D3), the section cache
+ * with its TTL and tools/change rebuild paths (D4), and fetchLive=false
+ * plus the volatile flips via the P10 loader/volatile-update dispatch (D5).
+ * The craft library classifies every obfuscated variant correctly,
+ * including the catch-all and the exemption rows.
+ *
+ * The file runs standalone (`node Target/Test/Dynamic-And-Craft/Test.js`)
+ * and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * It is a unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions
+ * are moved verbatim from `Classic/smokes/tool-coach-smoke.mjs` (D2 + D3 +
+ * D4 + D5 + the craft battery).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

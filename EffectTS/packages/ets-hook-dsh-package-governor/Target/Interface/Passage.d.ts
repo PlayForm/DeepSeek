@@ -1,4 +1,4 @@
-import type Manifest from "./Manifest.js";
+import type Manifest from "@Interface/Manifest.js";
 /**
  * @module Passage
  *
@@ -6,6 +6,7 @@ import type Manifest from "./Manifest.js";
  * Function/Transform) and the update stage that follows it (Function/Follow).
  *
  * @remarks
+ *
  * The factory's Continue owns the read, the write and the refresh, so the
  * module communicates across that boundary through this small object, created
  * fresh for every observed event and closed over by the transform and the
@@ -21,8 +22,12 @@ import type Manifest from "./Manifest.js";
  *   pre-refactor behavior.
  */
 export default interface Passage {
-    /** The decoded manifest from the transform — the update stage's input. */
+    /**
+     * The decoded manifest from the transform — the update stage's input.
+     */
     Current: Manifest | null;
-    /** Whether the update stage may follow the chain pass. */
+    /**
+     * Whether the update stage may follow the chain pass.
+     */
     Proceed: boolean;
 }

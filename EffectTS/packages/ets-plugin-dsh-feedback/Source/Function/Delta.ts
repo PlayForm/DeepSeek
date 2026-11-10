@@ -1,16 +1,17 @@
+import type FeedbackBlock from "../Interface/Block.js";
+import type State from "../Interface/State.js";
+import JournalFn from "./Journal.js";
+
 /**
  * @module Delta
  *
  * The parent's append: the delta is appended to the block's delta list and journaled.
  *
  * @remarks
+ *
  * Plan section 1: "the parent sessions append their DELTAS - their own observations". The policy:
  * the parents APPEND, never edit - the honest content survives the chain.
  */
-import type FeedbackBlock from "../Interface/Block.js";
-import type State from "../Interface/State.js";
-import JournalFn from "./Journal.js";
-
 export default (
 	State: State,
 	Session: string,

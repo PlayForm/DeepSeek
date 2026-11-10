@@ -1,9 +1,15 @@
+import type { GatedFile } from "@Function/Gate.js";
+import type Operation from "@Interface/Operation.js";
+import type Reply from "@Interface/Reply.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module CommitOne
  *
  * One per-file commit through the factory's WRITE EXECUTOR.
  *
  * @remarks
+ *
  * The explicit replaceIfVersion intent (the waterfall skipped), the P4
  * sandbox fence, the root-context fs/observed emit - the factory's own
  * guarded path. After the write the file is read back and compared to the
@@ -13,11 +19,6 @@
  * failure -> conflict (with expected/observed); anything else ->
  * outcome-unknown, never a guess.
  */
-import type { GatedFile } from "@Function/Gate.js";
-import type Operation from "@Interface/Operation.js";
-import type Reply from "@Interface/Reply.js";
-import type State from "@Interface/State.js";
-
 export default async (State: State, Op: Operation, File: GatedFile): Promise<Reply> => {
 	try {
 		const Outcome = (await State.Factory.Write(State, File.target, Op.content, {

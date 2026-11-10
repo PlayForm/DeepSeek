@@ -1,13 +1,3 @@
-// Index - the indexFile body: resolve through ctx.fs.resolve (the backend's
-// own cwd, the session working directory), stat, gate (enabled, exclude,
-// include, file type, language, size), read, parse, ASK THE SEMANTICS SERVICE
-// for the file's references (Function/References - the `references` edge's
-// consumer wiring; no service means no references edges), cap the node count,
-// store the record (mirror + KV, awaiting the pending open first), bump the
-// indexRevision, persist the meta record, and ledger the byte-exact
-// `indexed <path> version <version> (<nodes> nodes, <edges> edges)` line.
-// Every gate skip and failure carries the byte-exact `skipped`/`failed`
-// line and the same reason in the outcome.
 import type Outcome from "@Interface/Outcome.js";
 import type State from "@Interface/State.js";
 
@@ -21,6 +11,26 @@ import ParseFile from "./ParseFile.js";
 import ReferenceEdges from "./References.js";
 import Store from "./Store.js";
 
+/**
+ * @module Index
+ *
+ * The indexFile body: resolve, stat, gate, read, parse, ask for references,
+ * store and ledger one byte-exact line.
+ *
+ * @remarks
+ *
+ * The resolve goes through ctx.fs.resolve (the backend's own cwd, the session
+ * working directory). The gates are enabled, exclude, include, file type,
+ * language and size. After the read and the parse the body ASKS THE SEMANTICS
+ * SERVICE for the file's references (Function/References - the `references`
+ * edge's consumer wiring; no service means no references edges), caps the
+ * node count, stores the record (mirror + KV, awaiting the pending open
+ * first), bumps the indexRevision, persists the meta record, and ledgers the
+ * byte-exact
+ * `indexed <path> version <version> (<nodes> nodes, <edges> edges)` line.
+ * Every gate skip and failure carries the byte-exact `skipped`/`failed` line
+ * and the same reason in the outcome.
+ */
 export default async (StateRef: State, Path: string): Promise<Outcome> => {
 	const Fs = (StateRef.Context as unknown as { fs: any }).fs;
 	const Target = await Fs.resolve(Path);

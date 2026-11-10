@@ -1,11 +1,17 @@
-// Source/Test/Validate-And-Invalidate/Test.ts - the validation objects and
-// the Acar seam: the exact record shape, the fail-loud validation errors,
-// the supersede path, the counter monotonicity, the invalidate pass with its
-// byte-exact ledger lines, the store cap eviction, and the read surface.
 import assert from "node:assert/strict";
 import { Check, Finish, LinesWith, Make, MakeCounter, Validate, rm } from "../Harness.js";
 
-/** An enabled service with an empty ledger. */
+/**
+ * @module Test
+ *
+ * The validation objects and the Acar seam: the exact record shape, the
+ * fail-loud validation errors, the supersede path, the counter monotonicity,
+ * the invalidate pass with its byte-exact ledger lines, the store cap
+ * eviction, and the read surface.
+ */
+/**
+ * An enabled service with an empty ledger.
+ */
 const Setup = (Raw: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: "/nonexistent/evidence.log", enabled: true, ...Raw }));

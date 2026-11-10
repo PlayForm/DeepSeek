@@ -1,23 +1,3 @@
-// Source/Test/Harness.ts - the shared test harness for the WORKSPACE-APPROVE
-// tests: the fake ctx (root listener capture with a DISTINCT root object, the
-// ctx listener capture, reflect.provide capture, the effect runner, logger
-// capture + the fs/storage seams) + the REAL @playform/ets-plugin-dsh-factory
-// instance from its built Target + the REAL workspace-approve apply from its
-// built Target - the family fake-ctx + real-factory harness pattern, written
-// ONCE per package and imported by every test folder. Each folder process
-// gets a fresh set, so every folder is standalone-green and the aggregate
-// replays the same seams per folder.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// NO FAKE CLOCK: the plugin has no clock dependency at all - the binding
-// sequence is the plugin's own monotonic counter (the no-wall-clock rule),
-// so the harness needs no time seam; every timing assertion is on the
-// counter.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -25,6 +5,33 @@ import * as Path from "node:path";
 import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the WORKSPACE-APPROVE tests.
+ *
+ * @remarks
+ *
+ * The harness wires the fake ctx (root listener capture with a DISTINCT
+ * root object, the ctx listener capture, reflect.provide capture, the
+ * effect runner, logger capture plus the fs/storage seams) plus the REAL
+ * @playform/ets-plugin-dsh-factory instance from its built Target plus the
+ * REAL workspace-approve apply from its built Target - the family fake-ctx +
+ * real-factory harness pattern, written ONCE per package and imported by
+ * every test folder. Each folder process gets a fresh set, so every folder
+ * is standalone-green and the aggregate replays the same seams per folder.
+ *
+ * The standalone selfcheck `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass plus one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * wires the plugin (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * There is NO FAKE CLOCK: the plugin has no clock dependency at all - the
+ * binding sequence is the plugin's own monotonic counter (the no-wall-clock
+ * rule), so the harness needs no time seam; every timing assertion is on
+ * the counter.
+ */
 export { Plugin };
 
 /**
@@ -208,7 +215,9 @@ export const FakeStorage = (Options: { failOpen?: boolean } = {}): any => {
 		},
 	};
 
-	/** Seed one record (the restart scenario: the store outlives the process). */
+	/**
+	 * Seed one record (the restart scenario: the store outlives the process).
+	 */
 	Store.seed = (Name: string, Key: string, Value: unknown): void => {
 		if (!Store.tables.has(Name)) {
 			Store.tables.set(Name, new Map());

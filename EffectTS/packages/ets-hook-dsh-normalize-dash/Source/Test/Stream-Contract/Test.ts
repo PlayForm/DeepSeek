@@ -1,16 +1,26 @@
-// Source/Test/Stream-Contract/Test.ts - one singular test: the llm/stream
-// waterfall contract - next() called once synchronously before any upstream
-// iteration, the deep-frozen options untouched, chunk order/count preserved,
-// the passthrough identities, the rewrite groups with their exact ledger
-// strings, the reasoning-off passthrough, and the count-0 identity.
-// Runs standalone (`node Target/Test/Stream-Contract/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the REAL
-// factory + the REAL dash apply, from the Harness.
 import { existsSync, readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Validate, Ledger } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the llm/stream waterfall contract.
+ *
+ * @remarks
+ *
+ * The test covers next() called once synchronously before any upstream
+ * iteration, the deep-frozen options untouched, chunk order/count
+ * preserved, the passthrough identities, the rewrite groups with their
+ * exact ledger strings, the reasoning-off passthrough, and the count-0
+ * identity.
+ *
+ * Runs standalone (`node Target/Test/Stream-Contract/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the
+ * REAL factory + the REAL dash apply, from the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

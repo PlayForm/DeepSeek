@@ -1,27 +1,3 @@
-// Source/Test/Harness.ts - the shared test harness for the LIVE CONTAINERS
-// tests: the fake ctx (on capture, get serving the REAL
-// @playform/ets-plugin-dsh-factory instance from its built Target, logger
-// capture + the root seam) + the REAL live-containers apply from its built
-// Target - the family fake-ctx + real-factory harness pattern, written ONCE
-// per package and imported by every test folder. The suite-level fixtures
-// (the tmp ledger, the FAKE CLOCK, the assemble/pre-step/post-execute
-// waterfall helpers, the volatile-cell flip seam, the block-spec builders)
-// live here too: each folder process gets a fresh set (the module state is
-// per-process), so every folder is standalone-green and the aggregate
-// replays the same seams per folder.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// THE FAKE CLOCK: the plugin reads time ONLY through Function/Clock, which
-// consults State.Now (the clock seam on the built State) before falling
-// back to Date.now(). The harness exposes a mutable ClockBox; every folder
-// sets `Run.State.Now = FakeClock` through the
-// `ctx.__hookDshLiveContainersState` probe attachment and advances the
-// clock - never a sleep, never a real clock dependence.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -31,6 +7,38 @@ import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 import { DEFAULT_BLOCKS } from "../../Target/Variable/DefaultBlocks.js";
 import { Frame } from "../../Target/Function/Render.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the LIVE CONTAINERS tests: the fake ctx plus
+ * the REAL live-containers apply, both from the built Target.
+ *
+ * @remarks
+ *
+ * The fake ctx carries on capture, get serving the REAL
+ * @playform/ets-plugin-dsh-factory instance from its built Target, logger
+ * capture + the root seam. The REAL live-containers apply comes from its
+ * built Target - the family fake-ctx + real-factory harness pattern,
+ * written ONCE per package and imported by every test folder. The
+ * suite-level fixtures (the tmp ledger, the FAKE CLOCK, the
+ * assemble/pre-step/post-execute waterfall helpers, the volatile-cell flip
+ * seam, the block-spec builders) live here too: each folder process gets a
+ * fresh set (the module state is per-process), so every folder is
+ * standalone-green and the aggregate replays the same seams per folder.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * wires the plugin (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * THE FAKE CLOCK: the plugin reads time ONLY through Function/Clock, which
+ * consults State.Now (the clock seam on the built State) before falling
+ * back to Date.now(). The harness exposes a mutable ClockBox; every folder
+ * sets `Run.State.Now = FakeClock` through the
+ * `ctx.__hookDshLiveContainersState` probe attachment and advances the
+ * clock - never a sleep, never a real clock dependence.
+ */
 export { Containers, DEFAULT_BLOCKS, Frame };
 
 /**
@@ -443,11 +451,15 @@ export const FakeProcess = (): any => {
 			stdout: { text: Read(State.stdout).text, truncated: false },
 			stderr: { text: Read(State.stderr).text, truncated: false },
 		}),
-		/** Feed one channel with output (the smoke's pump stand-in). */
+		/**
+		 * Feed one channel with output (the smoke's pump stand-in).
+		 */
 		feed: (Channel: "stdout" | "stderr", Text: string) => {
 			State[Channel].chunks += Text;
 		},
-		/** Settle the process (exit or kill). */
+		/**
+		 * Settle the process (exit or kill).
+		 */
 		settle: (ExitCode: number | null, Signal: string | null = null) => {
 			State.exitCode = ExitCode;
 			State.signal = Signal;
@@ -577,7 +589,9 @@ export const FakeSubagent = () => {
 		},
 	};
 
-	/** Resolve the Nth spawn's result with the given output blocks. */
+	/**
+	 * Resolve the Nth spawn's result with the given output blocks.
+	 */
 	Sub.answer = (Index: number, Output: any): void => {
 		Sub.resolvers[Index]?.({ output: Output, stopReason: "end_turn" });
 	};
@@ -701,7 +715,9 @@ export const FakeStorage = (Options: { failOpen?: boolean } = {}): any => {
 		},
 	};
 
-	/** Seed one record (the restart scenario: the store outlives the process). */
+	/**
+	 * Seed one record (the restart scenario: the store outlives the process).
+	 */
 	Store.seed = (Key: string, Record: any): void => {
 		Store.records.set(Key, Record);
 	};

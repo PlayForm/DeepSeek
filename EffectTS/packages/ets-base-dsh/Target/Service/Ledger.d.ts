@@ -1,3 +1,12 @@
+import type State from "../Interface/State.js";
+import { Context, Effect, Layer } from "effect";
+declare const Ledger_base: Context.ServiceClass<Ledger, "dsh.factory.Ledger", {
+    /**
+     * The ledger: logger + the durable appendFileSync file, never throws.
+     * The effect itself is exit-contained (it can never fail).
+     */
+    append(State: State, Message: string): Effect.Effect<void>;
+}>;
 /**
  * @module Ledger
  *
@@ -5,6 +14,7 @@
  * `Append` method.
  *
  * @remarks
+ *
  * The machinery itself is unchanged - Function/Append stays the
  * byte-identical plain-fs implementation (logger first, then the durable
  * ledger file via plain `appendFileSync`, the documented exemption, never
@@ -25,15 +35,6 @@
  * it never alters the ledger bytes, the logger prefix, or the ordering
  * (logger first, then the file - both inside the span).
  */
-import type State from "../Interface/State.js";
-import { Context, Effect, Layer } from "effect";
-declare const Ledger_base: Context.ServiceClass<Ledger, "dsh.factory.Ledger", {
-    /**
-     * The ledger: logger + the durable appendFileSync file, never throws.
-     * The effect itself is exit-contained (it can never fail).
-     */
-    append(State: State, Message: string): Effect.Effect<void>;
-}>;
 export declare class Ledger extends Ledger_base {
 }
 export declare const layer: () => Layer.Layer<Ledger>;

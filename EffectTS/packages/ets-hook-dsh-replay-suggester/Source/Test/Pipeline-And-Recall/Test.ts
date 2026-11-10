@@ -1,10 +1,3 @@
-// Source/Test/Pipeline-And-Recall/Test.ts - the pipeline against the seeded
-// history store: the Repeat intent fires ONLY through the recalled record
-// (the synthesized family crosses the gate), the anchor drop and the recalled
-// candidates, the verification caveat, the longest-probe rule, the candidate
-// cap, the exclusion, the gate (cooldown, cap + the pre-step reset), the
-// `no-history` abstention without a record, the block decision, the volatile
-// flip, and the fs purity.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -25,7 +18,23 @@ import {
 	rmStore,
 } from "../Harness.js";
 
-/** One valid history record. */
+/**
+ * @module Test
+ *
+ * The singular test of the pipeline against the seeded history store.
+ *
+ * @remarks
+ *
+ * The test covers the Repeat intent firing ONLY through the recalled record
+ * (the synthesized family crosses the gate), the anchor drop and the
+ * recalled candidates, the verification caveat, the longest-probe rule, the
+ * candidate cap, the exclusion, the gate (cooldown, cap plus the pre-step
+ * reset), the `no-history` abstention without a record, the block decision,
+ * the volatile flip, and the fs purity.
+ */
+/**
+ * One valid history record.
+ */
 const Rec = (Probe: string, Files: string[], Verify = "pnpm test"): unknown => ({
 	intent: "Repeat",
 	probe: Probe,
@@ -34,7 +43,9 @@ const Rec = (Probe: string, Files: string[], Verify = "pnpm test"): unknown => (
 	at: 1700000000,
 });
 
-/** The full-evidence Repeat probe: search + literal + context shapes. */
+/**
+ * The full-evidence Repeat probe: search + literal + context shapes.
+ */
 const REPEAT_ARGS = { file_path: "src/Core.ts", pattern: "export function", glob: "**/*.ts" };
 const REPEAT_PROBE_SUB = "src/Core.ts";
 
@@ -62,10 +73,14 @@ for (const Name of [
 FileSystem.mkdirSync(Path.join(Work, "node_modules"), { recursive: true });
 FileSystem.writeFileSync(Path.join(Work, "node_modules", "pkg.ts"), "x", "utf8");
 
-/** The optional harness service the probe reads (the real shape: get(session)). */
+/**
+ * The optional harness service the probe reads (the real shape: get(session)).
+ */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** A mount whose session cwd is the REAL workspace (the record paths resolve there). */
+/**
+ * A mount whose session cwd is the REAL workspace (the record paths resolve there).
+ */
 const Mount = (Config: Record<string, unknown> = {}): any => {
 	const Run = Setup(Config);
 	Run.Context.workingDirectory = Service(Work);

@@ -6,6 +6,7 @@
  * the observed edits.
  *
  * @remarks
+ *
  * The proposal engine is a later lane; the pack carries the settings so one
  * file describes one repo.
  */

@@ -1,3 +1,8 @@
+import { basename as Base } from "node:path";
+
+import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import { Effect } from "effect";
+
 /**
  * @module Govern
  *
@@ -5,6 +10,7 @@
  * in registered order with every step contained.
  *
  * @remarks
+ *
  * The factory's raw-write companion. The steps are filtered by the caller's
  * selection and each step is contained (`Effect.exit` per step - the family's
  * silence invariant: never throws, never affects the caller, so a failing step
@@ -58,11 +64,6 @@
  * - `false`, `null` or absent - no governance at all (the escape hatch; the
  *   raw-write tool omits the Govern call entirely for these).
  */
-import { basename as Base } from "node:path";
-
-import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
-import { Effect } from "effect";
-
 /**
  * One registered step: the module's name plus its run closure.
  *

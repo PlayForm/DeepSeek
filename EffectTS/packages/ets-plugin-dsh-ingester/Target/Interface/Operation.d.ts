@@ -4,6 +4,7 @@
  * One deterministic transform of a proposal.
  *
  * @remarks
+ *
  * The same shape the pass-on declares.
  */
 export default interface Operation {

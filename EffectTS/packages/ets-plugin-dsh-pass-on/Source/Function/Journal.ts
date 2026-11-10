@@ -1,3 +1,10 @@
+import { appendFileSync as Append, mkdirSync as Make } from "node:fs";
+import { dirname as Parent } from "node:path";
+
+import { Expand } from "@playform/ets-base-dsh";
+
+import type State from "../Interface/State.js";
+
 /**
  * @module Journal
  *
@@ -5,6 +12,7 @@
  * the ledger file.
  *
  * @remarks
+ *
  * One log per module, the family convention. Best-effort: a ledger failure
  * never breaks the service. The plan section 3: "a ledger line for the
  * proposal; nothing written" (to the targets - the pass-on's own log is not a
@@ -16,13 +24,6 @@
  * on" from the ledger alone. The field order is the contract: at, event,
  * proposal, digest, targets, note.
  */
-import { appendFileSync as Append, mkdirSync as Make } from "node:fs";
-import { dirname as Parent } from "node:path";
-
-import { Expand } from "@playform/ets-base-dsh";
-
-import type State from "../Interface/State.js";
-
 /**
  * The fields the journal line reads (satisfied by both proposal shapes).
  */

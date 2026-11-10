@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The plugin's Schemastery Config schema.
  *
  * @remarks
+ *
  * A Variable: one constant built once at load. Cordis validates the exported schema while the
  * plugin loads and fills every default, so invalid configuration fails LOUD at
  * load, and `apply` receives a validated plain config object. The shape this
@@ -31,9 +35,6 @@
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance -
  * the loader consumes it through the Standard Schema `~standard` interface).
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
-
 /**
  * The default DENY-LIST (the plan's list, section 3): every git mutation
  * pattern. The MUTATIONS ONLY - the read-only checks are never listed.

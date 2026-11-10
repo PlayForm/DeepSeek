@@ -1,9 +1,12 @@
+import type {} from "@deepseek-ai/dsh-agent";
+
 /**
  * @module Agent
  *
  * Publishes @deepseek-ai/dsh-agent's `Events` augmentation through a type-only import.
  *
  * @remarks
+ *
  * The type-only publication of @deepseek-ai/dsh-agent's `Events` augmentation.
  *
  * WHY A MODULE WITH NO EXPORTS: the harness declares its lifecycle events (`agent/created`,
@@ -17,4 +20,3 @@
  * The event this hook uses is `agent/status` (mode `emit`): `idle <-> running`, the only
  * edge on which a review may claim the maintenance phase.
  */
-import type {} from "@deepseek-ai/dsh-agent";

@@ -1,3 +1,10 @@
+import type Envelope from "@Interface/Envelope.js";
+import type { Call, Tool, Touch } from "@Interface/State.js";
+import Names from "@Variable/Names.js";
+
+import Resolve from "./Resolve.js";
+import Usage from "./Usage.js";
+
 /**
  * @module Emits
  *
@@ -6,6 +13,7 @@
  * conversation spine's section 3.1).
  *
  * @remarks
+ *
  * One envelope per state-changing event: the turn start, the step start,
  * the assistant message, the tool call, each resolved touch, and the
  * session end (`session/disposed` or `turn/end`). It reads exactly the
@@ -15,13 +23,6 @@
  * modules Function/Fold imports - so the rule lives in one module and all
  * three use it. The emission is pure: no I/O, no clock, no global state.
  */
-import type Envelope from "@Interface/Envelope.js";
-import type { Call, Tool, Touch } from "@Interface/State.js";
-import Names from "@Variable/Names.js";
-
-import Resolve from "./Resolve.js";
-import Usage from "./Usage.js";
-
 // The field guards: a missing or alien field folds to its zero value, never
 // thrown on (the same guards the fold keeps).
 const TextOf = (Value: unknown): string => (typeof Value === "string" ? Value : "");

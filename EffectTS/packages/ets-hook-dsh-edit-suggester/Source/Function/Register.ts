@@ -1,3 +1,8 @@
+import type { Context } from "@deepseek-ai/cordis";
+
+import type { InjectingContext } from "../Interface/Projection.js";
+import Unit from "./Unit.js";
+
 /**
  * @module Register
  *
@@ -5,6 +10,7 @@
  * available.
  *
  * @remarks
+ *
  * The OPTIONAL registration of the hook's projection unit on `ctx.sessionProjections`,
  * the seam that receives every committed session event once for every agent.
  *
@@ -27,11 +33,6 @@
  * stays empty and only an explicit pack may speak) - the same posture as the
  * `workingDirectory` probe in Function/Apply.
  */
-import type { Context } from "@deepseek-ai/cordis";
-
-import type { InjectingContext } from "../Interface/Projection.js";
-import Unit from "./Unit.js";
-
 export default (Context: Context): void => {
 	try {
 		const Inject = (Context as unknown as InjectingContext).inject;

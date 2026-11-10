@@ -1,3 +1,5 @@
+import { Invisible, Replace } from "@playform/ets-lib-dsh-core";
+
 /**
  * @module Replace
  *
@@ -5,6 +7,7 @@
  * class->string replacer, pinned to its table.
  *
  * @remarks
+ *
  * The pattern (and the whole Replace mechanism: the function replacer, the
  * per-call regex construction, the `{ text, count }` contract) lives in
  * @playform/ets-lib-dsh-core's Normalize/Replace + Normalize/Invisible; this
@@ -16,7 +19,5 @@
  * installed as a directory link there); the behavior is the CLASS flavor of
  * the family's dispatch - the invisible smoke is the arbiter.
  */
-import { Invisible, Replace } from "@playform/ets-lib-dsh-core";
-
 export default (Text: string, Replacement: string): { text: string; count: number } =>
 	Replace(Text, Invisible, Replacement);

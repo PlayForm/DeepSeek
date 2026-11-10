@@ -1,3 +1,6 @@
+import type { Note } from "../Interface/Benchmark.js";
+import { Match } from "./Measure.js";
+
 /**
  * @module Benchmark
  *
@@ -7,6 +10,7 @@
  * sets and reports the suggestion precision and recall.
  *
  * @remarks
+ *
  * The metrics (deterministic, no clock, no I/O):
  *
  *   precision = the suggested candidates that hit an expected target, over
@@ -22,9 +26,6 @@
  * expected path. The notes are grouped by intent, so two notes of the same
  * intent contribute one union of candidates.
  */
-import type { Note } from "../Interface/Benchmark.js";
-import { Match } from "./Measure.js";
-
 export default (
 	/**
 	 * The emitted notes of the replay (one per `suggest`).

@@ -1,3 +1,7 @@
+import type { Context } from "@deepseek-ai/cordis";
+import Secret from "@Function/Secret.js";
+import Lines from "@Variable/Lines.js";
+
 /**
  * @module Bridge
  *
@@ -5,6 +9,7 @@
  * `ctx.configEditor.edit()` (PHASE-7).
  *
  * @remarks
+ *
  * The patch is the namespace's whole resolved config, so the editor validates
  * it, persists the profile patch, and reconciles the Loader exactly as a hand
  * edit would; the audit line comes from the editor's own path, never from
@@ -25,10 +30,6 @@
  * The `enabled` gate lives in Function/Apply (a disabled package refuses
  * every method, the tail/stats rule).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import Secret from "@Function/Secret.js";
-import Lines from "@Variable/Lines.js";
-
 type Entry = {
 	options?: { id?: unknown };
 	fiber?: { runtime?: { Config?: unknown } };

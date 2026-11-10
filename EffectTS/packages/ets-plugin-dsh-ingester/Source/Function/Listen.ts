@@ -1,9 +1,14 @@
+import type State from "../Interface/State.js";
+import Consume from "./Consume.js";
+import Record from "./Record.js";
+
 /**
  * @module Listen
  *
  * The bus registration: the ingester's trace adapter, registered from the service constructor.
  *
  * @remarks
+ *
  * The class-form plugin's wiring point.
  *
  * - `batch/proposed` - the proposal is recorded (Function/Record);
@@ -15,10 +20,6 @@
  * this package does not import (the self-contained rule). Both listeners are
  * fail-open: a dead consumer can never break the emit dispatch.
  */
-import type State from "../Interface/State.js";
-import Consume from "./Consume.js";
-import Record from "./Record.js";
-
 /**
  * The listener signature the loose cast exposes.
  */

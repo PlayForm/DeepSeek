@@ -4,6 +4,7 @@
  * The bridge's secret-namespace guard.
  *
  * @remarks
+ *
  * A namespace declaring a `role("secret")` field must never accept a
  * whole-config patch: the panel only ever holds the redacted value of such a
  * field (the settings service strips it), so writing the patch back would

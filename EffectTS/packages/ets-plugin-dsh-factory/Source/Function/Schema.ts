@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import Default from "@Variable/Default.js";
+
 /**
  * @module Schema
  *
  * The Schemastery schema factory: builds the module's exported `Config`.
  *
  * @remarks
+ *
  * The build takes the SHARED volatile fields plus `exclude` plus `policyFile` plus the module's
  * OWN schema fields.
  *
@@ -42,9 +46,6 @@
  * `~standard` interface; the import resolves from the running dsh's own copy,
  * docs/user/develop/basic/publish.md:103).
  */
-import Schema from "@deepseek-ai/schemastery";
-import Default from "@Variable/Default.js";
-
 export default (
 	Shared:
 		| {

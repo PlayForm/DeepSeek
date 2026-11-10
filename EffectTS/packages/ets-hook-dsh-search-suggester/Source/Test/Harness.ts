@@ -1,34 +1,3 @@
-// Source/Test/Harness.ts - the shared test harness for the SEARCH-SUGGESTER
-// tests: the fake ctx (ctx listener capture, a DISTINCT root object, the
-// effect runner, logger capture, a recording fs the plugin must never touch,
-// reflect.provide capture, the optional `inject` seam) + the fake
-// `sessionProjections` registry (register + stateOf + the eager drive the
-// tests commit `tool/call` events through) + the REAL
-// @playform/ets-plugin-dsh-factory instance from its built Target + the REAL
-// search-suggester apply from its built Target - the family fake-ctx +
-// real-factory harness pattern, written ONCE per package and imported by every
-// test folder. Each folder process gets a fresh set, so every folder is
-// standalone-green and the aggregate replays the same seams per folder.
-//
-// THE PROJECTION FAKE IS THE POINT: the history is no longer seeded into a
-// `State` WeakMap (there is none), so every history assertion must travel the
-// seam the plugin actually uses - `register(definition)` installs the unit,
-// `Commit` folds one committed `tool/call` event through `apply` for the
-// session it belongs to, and `stateOf(session, key)` serves the folded state
-// to the detection. A test that bypassed the drive would prove nothing. A
-// folder that tests the EXPLICIT pack writes a real `.dsh/pack.yml` into a
-// temp tree; a folder that tests neither asserts the
-// `abstained no-history  0.00` line.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves the
-// fake ctx actually wires the plugin (the vacuously-green backstop for every
-// folder's fixture) and exits nonzero when it does not.
-//
-// NO FAKE CLOCK: the ring, the cooldown and the learning window are counters
-// driven by judged calls (the no-wall-clock rule); the only timestamps are
-// the durable ledger's ISO stamps, asserted with an anchored regex. The
-// learner's knowledge file is a real temp file (the plugin's own
-// node:fs channel, not ctx.fs).
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -36,12 +5,54 @@ import * as Path from "node:path";
 import Plugin, * as Exports from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the SEARCH-SUGGESTER tests.
+ *
+ * @remarks
+ *
+ * The harness wires the fake ctx (ctx listener capture, a DISTINCT root
+ * object, the effect runner, logger capture, a recording fs the plugin must
+ * never touch, reflect.provide capture, the optional `inject` seam) plus the
+ * fake `sessionProjections` registry (register + stateOf + the eager drive
+ * the tests commit `tool/call` events through) plus the REAL
+ * @playform/ets-plugin-dsh-factory instance from its built Target plus the
+ * REAL search-suggester apply from its built Target - the family fake-ctx +
+ * real-factory harness pattern, written ONCE per package and imported by
+ * every test folder. Each folder process gets a fresh set, so every folder
+ * is standalone-green and the aggregate replays the same seams per folder.
+ *
+ * THE PROJECTION FAKE IS THE POINT: the history is no longer seeded into a
+ * `State` WeakMap (there is none), so every history assertion must travel
+ * the seam the plugin actually uses - `register(definition)` installs the
+ * unit, `Commit` folds one committed `tool/call` event through `apply` for
+ * the session it belongs to, and `stateOf(session, key)` serves the folded
+ * state to the detection. A test that bypassed the drive would prove
+ * nothing. A folder that tests the EXPLICIT pack writes a real
+ * `.dsh/pack.yml` into a temp tree; a folder that tests neither asserts the
+ * `abstained no-history  0.00` line.
+ *
+ * The standalone selfcheck `node Target/Test/Harness.js --selfcheck` proves
+ * the fake ctx actually wires the plugin (the vacuously-green backstop for
+ * every folder's fixture) and exits nonzero when it does not.
+ *
+ * There is NO FAKE CLOCK: the ring, the cooldown and the learning window are
+ * counters driven by judged calls (the no-wall-clock rule); the only
+ * timestamps are the durable ledger's ISO stamps, asserted with an anchored
+ * regex. The learner's knowledge file is a real temp file (the plugin's own
+ * `node:fs` channel, not ctx.fs).
+ */
 export { Plugin, Exports };
 
-/** The per-folder counter: N passing checks, F failing checks. */
+/**
+ * The per-folder counter: N passing checks, F failing checks.
+ */
 export type Counter = { N: number; F: number };
 
-/** A fresh counter for one test folder. */
+/**
+ * A fresh counter for one test folder.
+ */
 export const MakeCounter = (): Counter => ({ N: 0, F: 0 });
 
 /**
@@ -61,7 +72,9 @@ export const Check = (Count: Counter, Label: string, Assertions: () => void): vo
 	}
 };
 
-/** The async variant of Check; the caller must await it to keep order. */
+/**
+ * The async variant of Check; the caller must await it to keep order.
+ */
 export const CheckAsync = async (
 	Count: Counter,
 	Label: string,
@@ -78,7 +91,9 @@ export const CheckAsync = async (
 	}
 };
 
-/** End-of-folder guard: any failed assertion is a folder failure. */
+/**
+ * End-of-folder guard: any failed assertion is a folder failure.
+ */
 export const Finish = (Count: Counter, Name: string): number => {
 	if (Count.F !== 0) {
 		throw new Error(`${Name}: ${Count.F} failed check(s)`);
@@ -101,7 +116,9 @@ export const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "search-sugges
 export const Ledger = Path.join(Root, "search-suggester.log");
 export const Knowledge = Path.join(Root, "knowledge.json");
 
-/** Remove the durable ledger and the knowledge file: a fresh scenario. */
+/**
+ * Remove the durable ledger and the knowledge file: a fresh scenario.
+ */
 export const rm = (): void => {
 	try {
 		FileSystem.rmSync(Ledger);
@@ -111,7 +128,9 @@ export const rm = (): void => {
 	} catch {}
 };
 
-/** The durable ledger file's lines (the `[ISO] message` forms). */
+/**
+ * The durable ledger file's lines (the `[ISO] message` forms).
+ */
 export const LedgerLines = (): string[] =>
 	(() => {
 		try {
@@ -121,17 +140,23 @@ export const LedgerLines = (): string[] =>
 		}
 	})();
 
-/** The ledger file lines that carry the needle (after the `[ISO] ` stamp). */
+/**
+ * The ledger file lines that carry the needle (after the `[ISO] ` stamp).
+ */
 export const LedgerWith = (Needle: string): string[] =>
 	LedgerLines().filter((Line) => Line.includes(Needle));
 
-/** The anchored `[ISO] message` regex for one durable ledger message. */
+/**
+ * The anchored `[ISO] message` regex for one durable ledger message.
+ */
 export const Durable = (Message: string): RegExp =>
 	new RegExp(
 		`^\\[\\d{4}-\\d{2}-\\d{2}T[\\d:.]+Z\\] ${Message.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`,
 	);
 
-/** The single durable ledger line carrying the needle; throws when absent. */
+/**
+ * The single durable ledger line carrying the needle; throws when absent.
+ */
 export const DurableLine = (Needle: string): string => {
 	const Line = LedgerWith(Needle)[0];
 	if (Line === undefined) {
@@ -140,7 +165,9 @@ export const DurableLine = (Needle: string): string => {
 	return Line;
 };
 
-/** The first durable ledger line; throws when the ledger is empty. */
+/**
+ * The first durable ledger line; throws when the ledger is empty.
+ */
 export const FirstLine = (): string => {
 	const Line = LedgerLines()[0];
 	if (Line === undefined) {
@@ -149,7 +176,9 @@ export const FirstLine = (): string => {
 	return Line;
 };
 
-/** The REAL factory instance, constructed the way the factory's smoke does. */
+/**
+ * The REAL factory instance, constructed the way the factory's smoke does.
+ */
 export const Furnace: any = new FactoryClass({
 	reflect: { provide: () => undefined },
 } as any);
@@ -196,7 +225,9 @@ const MakeProjections = () => {
 		stateOf: StateOf,
 	};
 
-	/** Fold ONE committed event through every registered unit (the eager drive). */
+	/**
+	 * Fold ONE committed event through every registered unit (the eager drive).
+	 */
 	const Commit = (Session: any, Event: any): void => {
 		for (const [Key, Unit] of Units) {
 			const Next = Unit.apply(StateOf(Session, Key), Event);
@@ -358,7 +389,9 @@ export const Validate = (Raw: Record<string, unknown>): any =>
 		...Raw,
 	});
 
-/** A standard enabled mount against the folder's ledger file. */
+/**
+ * A standard enabled mount against the folder's ledger file.
+ */
 export const Setup = (): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true }));
@@ -382,18 +415,26 @@ export const Workspace = (Files: readonly string[]): { Root: string; At: (Relati
 	return { Root: Space, At: (Relative: string) => Path.join(Space, Relative) };
 };
 
-/** The optional harness service the probe reads (the real shape: get(session)). */
+/**
+ * The optional harness service the probe reads (the real shape: get(session)).
+ */
 export const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** One judged tools/post-execute call: the agent is the caller's object. */
+/**
+ * One judged tools/post-execute call: the agent is the caller's object.
+ */
 export const Post = (Run: any, Exec: any, Decision: any = { kind: "allow", additionalContexts: [] }): Promise<any> =>
 	Run.CtxListeners["tools/post-execute"](Exec, {}, () => Promise.resolve(Decision));
 
-/** One agent/pre-step call. */
+/**
+ * One agent/pre-step call.
+ */
 export const Pre = (Run: any, Payload: any): Promise<any> =>
 	Run.CtxListeners["agent/pre-step"](Payload, () => Promise.resolve("down"));
 
-/** One system-prompt/assemble call (the second surface). */
+/**
+ * One system-prompt/assemble call (the second surface).
+ */
 export const Assemble = (Run: any, Agent: unknown): Promise<any> =>
 	Run.CtxListeners["system-prompt/assemble"](
 		{},

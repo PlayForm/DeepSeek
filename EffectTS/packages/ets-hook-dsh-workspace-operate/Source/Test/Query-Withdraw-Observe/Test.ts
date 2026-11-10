@@ -1,9 +1,3 @@
-// Source/Test/Query-Withdraw-Observe/Test.ts - the observe side and the
-// management surface: the silent fs/observed fence tracker (no ledger noise,
-// never throws, own-actor ignored), the staleness rule's use of the
-// observed version as the fence when the caller gives none, the withdrawal
-// path with its byte-exact line, the filtered query with its limits, the
-// honest statistics, and the full-table refusal.
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -21,13 +15,30 @@ import {
 	SymbolNode,
 } from "../Harness.js";
 
-/** A standard enabled mount with overrides and an optional fake graph. */
+/**
+ * @module Test
+ *
+ * The observe side and the management surface of the operate hook.
+ *
+ * @remarks
+ *
+ * The folder proves the silent fs/observed fence tracker (no ledger noise,
+ * never throws, own-actor ignored), the staleness rule's use of the observed
+ * version as the fence when the caller gives none, the withdrawal path with
+ * its byte-exact line, the filtered query with its limits, the honest
+ * statistics, and the full-table refusal.
+ */
+/**
+ * A standard enabled mount with overrides and an optional fake graph.
+ */
 const Setup = (Config: Record<string, unknown> = {}, Graph?: any): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }), Graph);
 };
 
-/** The default fake graph: symbol Alpha in a.ts, file nodes for a.ts and b.ts. */
+/**
+ * The default fake graph: symbol Alpha in a.ts, file nodes for a.ts and b.ts.
+ */
 const DefaultGraph = (Edges: { kind: string; from: string; to: string }[] = []) =>
 	FakeGraph(
 		[
@@ -38,7 +49,9 @@ const DefaultGraph = (Edges: { kind: string; from: string; to: string }[] = []) 
 		Edges,
 	);
 
-/** Drive one folder's checks. */
+/**
+ * Drive one folder's checks.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

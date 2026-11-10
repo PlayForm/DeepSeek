@@ -2,6 +2,20 @@ import type Entry from "./Entry.js";
 import type Gate from "./Gate.js";
 import type Member from "./Member.js";
 /**
+ * @module File
+ *
+ * The persisted state shape (Interface/File): what one durable store holds
+ * - the members, the idle queue, the spliced proposals and the arbiter
+ * gates.
+ *
+ * @remarks
+ *
+ * ONE shape, TWO sources: the JSON fallback's file (Function/Recover reads
+ * it) and the KV domain's four tables (Function/Storage projects them onto
+ * it), so the recovery (Function/Restore) is written once and both stores
+ * feed it.
+ */
+/**
  * The persisted state shape both stores project onto.
  */
 export default interface File {

@@ -1,3 +1,5 @@
+import type { DatabaseSync } from "node:sqlite";
+
 /**
  * @module Rollup
  *
@@ -8,11 +10,10 @@
  * Client.
  *
  * @remarks
+ *
  * The rebuild is a pure upsert over a GROUP BY, so a recompute lands
  * byte-identical totals. Returns the row count written.
  */
-import type { DatabaseSync } from "node:sqlite";
-
 /**
  * The UTC day keys one refresh covers: the explicit day, the days of a
  * batch's own timestamps (the live path - a flush refreshes exactly the

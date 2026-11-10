@@ -1,16 +1,24 @@
-// Source/Test/Store-And-Snapshot/Test.ts - the presentation store, THE
-// STABLE-UNTIL-EVENT CONTRACT: getSnapshot() returns the same object
-// reference until ingest() or refresh() emits a new one, with NO timer and
-// NO polling (asserted by a real quiet wait and on the built code); the
-// ingest fold (bounded event tail, representation upsert, sequence
-// monotonicity), the refresh replacement (kind mapping, label preference),
-// and the emit discipline (one notification per emit, new snapshot object
-// per emit).
 import assert from "node:assert/strict";
 import StoreFactory from "../../../Target/Function/Store.js";
 import { BuiltSource, Check, CheckAsync, Finish, MakeCounter } from "../Harness.js";
 
-/** An event with the required identifiers. */
+/**
+ * @module Test
+ *
+ * The presentation store, THE STABLE-UNTIL-EVENT CONTRACT.
+ *
+ * @remarks
+ *
+ * getSnapshot() returns the same object reference until ingest() or
+ * refresh() emits a new one, with NO timer and NO polling (asserted by a
+ * real quiet wait and on the built code); the test also covers the ingest
+ * fold (bounded event tail, representation upsert, sequence monotonicity),
+ * the refresh replacement (kind mapping, label preference), and the emit
+ * discipline (one notification per emit, new snapshot object per emit).
+ */
+/**
+ * An event with the required identifiers.
+ */
 const Event = (Sequence: number, Path?: string): any => ({
 	operationId: `op-${Sequence}`,
 	parentId: "op-0",

@@ -5,6 +5,7 @@
  * spine's section 3.1): `{ SessionId, Seq, Turn, Step, At, Kind, Data }`.
  *
  * @remarks
+ *
  *   * `SessionId` is the session id the folded records belong to (the
  *     session header record's own id; empty when the log carried none);
  *   * `Seq` and `At` are the sequence number and the time copied from the

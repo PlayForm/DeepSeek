@@ -5,6 +5,7 @@
  * batch contract of PASS-ON-AND-INGESTER.md section 2).
  *
  * @remarks
+ *
  * Declared structurally (the self-contained rule - the decision hook is not
  * imported). The board only needs the outcome; the by/at fields are
  * carried so the ledger line can name the decider.

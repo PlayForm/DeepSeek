@@ -1,3 +1,6 @@
+import type Dispatcher from "@Function/Dispatcher.js";
+import type Factory from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module Queue
  *
@@ -5,6 +8,7 @@
  * Context.
  *
  * @remarks
+ *
  * Plugin-development skill, item 12. The service registers as `dshQueue`
  * (Function/Dispatcher), so the orchestration layer (the batch-state
  * compiler's queue view, the honest-feedback journal) can consume the queue
@@ -20,9 +24,6 @@
  * package (erased at build), so `ctx.pluginFactory` is fully typed at every
  * consumption site.
  */
-import type Dispatcher from "@Function/Dispatcher.js";
-import type Factory from "@playform/ets-plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

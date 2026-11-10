@@ -1,3 +1,5 @@
+import type Configuration from "@Interface/Config.js";
+
 /**
  * @module Knobs
  *
@@ -6,6 +8,7 @@
  * unwrapped and the numeric/name knobs fail-loud checked at load.
  *
  * @remarks
+ *
  * The class-form plugin receives the loader's validated config as the SECOND constructor
  * argument (the graph service's precedent). A bad knob must throw AT LOAD, never at the first
  * review: an interval of NaN silently disables the nudge, and a reversed
@@ -19,8 +22,6 @@
  * loader always passes it), which is the documented idle-forever posture
  * (disabled, the bundle patch row).
  */
-import type Configuration from "@Interface/Config.js";
-
 /**
  * The usage-domain name rule (the library's UNIT_NAME_RE).
  */

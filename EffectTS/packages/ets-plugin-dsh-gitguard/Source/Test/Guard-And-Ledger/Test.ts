@@ -1,8 +1,3 @@
-// Source/Test/Guard-And-Ledger/Test.ts - the listener behavior: the refusal
-// replaces the dispatch (next() deliberately not called), the allow path
-// passes through, the payload-shape extraction, the exclusion match, the
-// fail-open contract, the byte-exact refusal and ledger lines in both the
-// logger and durable forms, and the zero file-content guarantee.
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -19,7 +14,22 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * The listener behavior of the gitguard hook.
+ *
+ * @remarks
+ *
+ * The folder proves the refusal replaces the dispatch (next() deliberately
+ * not called), the allow path passes through, the payload-shape extraction,
+ * the exclusion match, the fail-open contract, the byte-exact refusal and
+ * ledger lines in both the logger and durable forms, and the zero
+ * file-content guarantee.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));

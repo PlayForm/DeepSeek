@@ -1,3 +1,5 @@
+import type State from "../Interface/State.js";
+import { Context, Effect, Layer } from "effect";
 /**
  * @module Journal
  *
@@ -5,6 +7,7 @@
  * `Journal` method.
  *
  * @remarks
+ *
  * Two halves:
  *
  * 1. `record` - the P5 storage writer. The three-stage routing (the v2
@@ -51,8 +54,6 @@
  * The human ledger stays the complete record; the storage journal is the
  * structured, disposable one.
  */
-import type State from "../Interface/State.js";
-import { Context, Effect, Layer } from "effect";
 /**
  * The P5 events enum - byte-identical order, asserted by the smoke.
  */

@@ -4,6 +4,7 @@
  * The list filter for the proposal table (Interface/Filter).
  *
  * @remarks
+ *
  * Every field optional; the limit defaults to config limitDefault and is
  * capped at config limitMaximum (the graph's own rule, kept identical).
  */

@@ -1,21 +1,31 @@
-// Deepened - the semantics-driven rename (Function/Deepened): ask the
-// workspace-semantics service for the scope-resolved plan of the identifier,
-// keep the edits that fall inside the operation's line scope, and rewrite the
-// text with them. The service's plan is a character-offset list, so the block's
-// line scope is converted to a character range first.
-//
-// THE FALLBACK IS THE CALLER'S: `undefined` means the textual whole-word engine
-// must run - the service is absent, refused, found no occurrence at or after the
-// scope's start, or its plan has no edit inside the scope. The engine then
-// produces its own (byte-exact) outcome, so the refusal strings never change.
-//
-// The rewritten text is returned, not published: the caller owns the version
-// fence (Function/Publish) and the module's own ledger line.
 import type Plan from "@Interface/Plan.js";
 import type SemanticsHandle from "@Interface/Semantics.js";
 import type State from "@Interface/State.js";
 
-/** The character offset of the first character of one 1-based line. */
+/**
+ * @module Deepened
+ *
+ * The semantics-driven rename: ask the workspace-semantics service for the
+ * scope-resolved plan of the identifier and rewrite the text with it.
+ *
+ * @remarks
+ *
+ * The module keeps the edits that fall inside the operation's line scope. The
+ * service's plan is a character-offset list, so the block's line scope is
+ * converted to a character range first.
+ *
+ * THE FALLBACK IS THE CALLER'S: `undefined` means the textual whole-word
+ * engine must run - the service is absent, refused, found no occurrence at or
+ * after the scope's start, or its plan has no edit inside the scope. The
+ * engine then produces its own (byte-exact) outcome, so the refusal strings
+ * never change.
+ *
+ * The rewritten text is returned, not published: the caller owns the version
+ * fence (Function/Publish) and the module's own ledger line.
+ */
+/**
+ * The character offset of the first character of one 1-based line.
+ */
 const OffsetOfLine = (Lines: string[], Line: number): number => {
 	let Found = 0;
 	for (let Index = 0; Index < Line - 1; Index += 1) {

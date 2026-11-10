@@ -1,11 +1,3 @@
-// Source/Test/Listen-And-Nudge/Test.ts - THE NUDGE: the idle edge, the four
-// gates, and the fail-open posture.
-//
-// The hook is small and every branch is a way to not review. This folder pins
-// each one: the wrong edge, the early turn, the missing service (once), the cap,
-// and the agent that cannot run maintenance - plus the one path that DOES review,
-// asserting that the review ran inside `runMaintenance` with the service's own
-// snapshot.
 import assert from "node:assert/strict";
 
 import {
@@ -20,6 +12,19 @@ import {
 	Status,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE NUDGE: the idle edge, the four gates, and the fail-open posture.
+ *
+ * @remarks
+ *
+ * The hook is small and every branch is a way to not review. This folder
+ * pins each one: the wrong edge, the early turn, the missing service
+ * (once), the cap, and the agent that cannot run maintenance - plus the one
+ * path that DOES review, asserting that the review ran inside
+ * `runMaintenance` with the service's own snapshot.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

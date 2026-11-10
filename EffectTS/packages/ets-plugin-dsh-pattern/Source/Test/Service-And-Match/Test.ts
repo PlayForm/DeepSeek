@@ -1,8 +1,3 @@
-// Source/Test/Service-And-Match/Test.ts - the service surface and the
-// ranked match: the loader contract (the class form with the Config static
-// and the empty inject), the Service registration, the cold-start catalog,
-// the idempotent registry, the byte-exact activation line, and the matcher's
-// scoring arithmetic with both abstention paths (threshold, ambiguity).
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -13,7 +8,18 @@ import {
 	PatternService,
 } from "../Harness.js";
 
-/** A custom pattern for the matcher's arithmetic tests. */
+/**
+ * @module Test
+ *
+ * The service surface and the ranked match: the loader contract (the class
+ * form with the Config static and the empty inject), the Service
+ * registration, the cold-start catalog, the idempotent registry, the
+ * byte-exact activation line, and the matcher's scoring arithmetic with both
+ * abstention paths (threshold, ambiguity).
+ */
+/**
+ * A custom pattern for the matcher's arithmetic tests.
+ */
 const Pattern = (Id: string, Keywords: string[], Extra: Record<string, unknown> = {}): any => ({
 	id: Id,
 	intent: Id,

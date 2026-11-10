@@ -1,3 +1,6 @@
+import type Decision from "../Interface/Decision.js";
+import Table from "./Table.js";
+
 /**
  * @module Decided
  *
@@ -6,6 +9,7 @@
  * the ledger alone (D8: every decision logged).
  *
  * @remarks
+ *
  * The line is
  * `decided <Family> <kappa> <n> companions <head path> <values> weights
  * <weights> store=<pattern|memory>`.
@@ -18,11 +22,10 @@
  * tell the durable learning from the memory fallback without reading the
  * state.
  */
-import type Decision from "../Interface/Decision.js";
-import Table from "./Table.js";
-
 export default (
-	/** The decision record to print. */
+	/**
+	 * The decision record to print.
+	 */
 	Record: Decision,
 ): string => {
 	const Head = Record.companions[0];

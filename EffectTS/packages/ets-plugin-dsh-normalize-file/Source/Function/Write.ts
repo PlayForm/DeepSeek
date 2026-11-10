@@ -1,3 +1,9 @@
+import type { Context } from "@deepseek-ai/cordis";
+import { defineTool } from "@deepseek-ai/dsh-tools";
+import type State from "@Interface/State.js";
+
+import Normalize from "./Normalize.js";
+
 /**
  * @module Write
  *
@@ -5,6 +11,7 @@
  * files ALREADY on disk, built with `defineTool` from @deepseek-ai/dsh-tools.
  *
  * @remarks
+ *
  * The stream normalizers (normalize-dash plus the five flavors) rewrite model
  * output by name-exempting `edit`, `raw-write` and THIS tool's calls (the
  * core's Stream/Chunk + Stream/Block): the arguments carry a FILE PATH, and a
@@ -36,12 +43,6 @@
  * definition object is never mutated - this file only BUILDS it; the
  * registration call itself lives in Function/Apply.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import { defineTool } from "@deepseek-ai/dsh-tools";
-import type State from "@Interface/State.js";
-
-import Normalize from "./Normalize.js";
-
 export default (Context: Context, State: State) =>
 	defineTool({
 		name: "normalize-file",

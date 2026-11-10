@@ -1,9 +1,15 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { Jobs as JobsRegistry, State } from "@playform/ets-base-dsh";
+
+import Open from "./Open.js";
+
 /**
  * @module Attach
  *
  * The lifecycle effects every module needs.
  *
  * @remarks
+ *
  * Registered once per load from the ROOT context, inside `ctx.effect` so they unwind on unload
  * (fiber/HMR/config hot-reload).
  *
@@ -30,11 +36,6 @@
  * (the module name - "hook-dsh-governor-package" - reproduces the trio's effect labels
  * byte-identically).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { Jobs as JobsRegistry, State } from "@playform/ets-base-dsh";
-
-import Open from "./Open.js";
-
 export default (Context: Context, Module: { state: State; name: string }): void => {
 	// P1 — the jobs controller (see header).
 	Context.effect?.(() => {

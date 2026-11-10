@@ -1,3 +1,21 @@
+import { homedir as Home } from "node:os";
+
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
+
+import BatchFn from "./Function/Batch.js";
+import DeliverFn from "./Function/Deliver.js";
+import JournalFn from "./Function/Journal.js";
+import OriginFn from "./Function/Origin.js";
+import PrepareFn from "./Function/Prepare.js";
+import type Batch from "./Interface/Batch.js";
+import type Config from "./Interface/Config.js";
+import type Intent from "./Interface/Intent.js";
+import type Proposal from "./Interface/Proposal.js";
+import type State from "./Interface/State.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +23,7 @@
  * ctx.passOn): the prepare direction of the batch flow.
  *
  * @remarks
+ *
  * Documentation/Plans/PASS-ON-AND-INGESTER.md. Class form (the factory's
  * precedent): `export default class PassOn extends Service` with
  * `super(Context, "passOn")`, registered immediately on construction and
@@ -29,24 +48,6 @@
  * decision decides; the ingester applies. The only disk writes are the
  * plugin's own ledger lines (one log per module, the family convention).
  */
-import { homedir as Home } from "node:os";
-
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
-
-import BatchFn from "./Function/Batch.js";
-import DeliverFn from "./Function/Deliver.js";
-import JournalFn from "./Function/Journal.js";
-import OriginFn from "./Function/Origin.js";
-import PrepareFn from "./Function/Prepare.js";
-import type Batch from "./Interface/Batch.js";
-import type Config from "./Interface/Config.js";
-import type Intent from "./Interface/Intent.js";
-import type Proposal from "./Interface/Proposal.js";
-import type State from "./Interface/State.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export default class PassOn extends Service {
 	static inject: string[] = [];
 

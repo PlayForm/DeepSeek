@@ -1,3 +1,8 @@
+import type Stamp from "@Interface/Stamp.js";
+import type State from "@Interface/State.js";
+
+import Adapter from "../Trace/Adapter.js";
+
 /**
  * @module Record
  *
@@ -5,6 +10,7 @@
  * and the bounded ring, then persists both into the domain fire-and-forget.
  *
  * @remarks
+ *
  * The caller is the SYNCHRONOUS listener - no awaits anywhere.
  *
  * - `State.Latest` is keyed by the path: the newest stamp per path
@@ -19,11 +25,6 @@
  *   `void .catch(() => {})` - a storage failure can never reach the
  *   listener's synchronous path.
  */
-import type Stamp from "@Interface/Stamp.js";
-import type State from "@Interface/State.js";
-
-import Adapter from "../Trace/Adapter.js";
-
 export default (State: State, Stamp: Stamp): void => {
 	State.Latest.set(Stamp.path, Stamp);
 	State.Ring.push(Stamp);

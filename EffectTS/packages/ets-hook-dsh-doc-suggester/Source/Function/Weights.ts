@@ -1,3 +1,7 @@
+import type { HeuristicValues } from "../Interface/Decision.js";
+import Names from "../Variable/Heuristics.js";
+import Defaults from "../Variable/Weights.js";
+
 /**
  * @module Weights
  *
@@ -6,6 +10,7 @@
  * use (completion spec D8: "every heuristic and every decision pickable").
  *
  * @remarks
+ *
  * - A name NOT in the enabled list is dropped: its effective weight is 0.
  * - A name in the list takes the config's weight, else the default table's.
  * - A config name outside the six known heuristics is ignored (the schema
@@ -15,18 +20,20 @@
  * hot edit to `heuristics` or `weights` lands on the next call without a
  * remount.
  */
-import type { HeuristicValues } from "../Interface/Decision.js";
-import Names from "../Variable/Heuristics.js";
-import Defaults from "../Variable/Weights.js";
-
 export default (
-	/** The enabled heuristic names (config `heuristics`, volatile). */
+	/**
+	 * The enabled heuristic names (config `heuristics`, volatile).
+	 */
 	Enabled: string[],
 
-	/** The configured weight table (config `weights`, volatile). */
+	/**
+	 * The configured weight table (config `weights`, volatile).
+	 */
 	Configured: Record<string, number>,
 ): { enabled: string[]; weights: HeuristicValues } => {
-	/** The effective weight of one heuristic name. */
+	/**
+	 * The effective weight of one heuristic name.
+	 */
 	const Pick = (Name: string): number => {
 		const Weight = Configured?.[Name] ?? Defaults[Name] ?? 0;
 		return Enabled.includes(Name) ? Weight : 0;

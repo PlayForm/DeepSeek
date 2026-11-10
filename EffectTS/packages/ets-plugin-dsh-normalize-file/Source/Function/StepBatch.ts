@@ -1,9 +1,16 @@
+import type { PreStepDecision } from "@deepseek-ai/dsh-agent";
+import type State from "@Interface/State.js";
+import { StepBatch } from "@playform/ets-base-dsh";
+
+import { Rewrite } from "./Normalize.js";
+
 /**
  * @module StepBatch
  *
  * The plugin's THIN DELEGATE over the ETS base's step-batch arm factory.
  *
  * @remarks
+ *
  * The generic machinery lives in the base
  * (@playform/ets-base-dsh/Overpass/StepBatch); this file supplies only what
  * makes it THE NORMALIZE-FILE:
@@ -19,12 +26,6 @@
  * The default export is the listener itself (the factory's return), so
  * Function/Apply's registration and the import path stay untouched.
  */
-import type { PreStepDecision } from "@deepseek-ai/dsh-agent";
-import type State from "@Interface/State.js";
-import { StepBatch } from "@playform/ets-base-dsh";
-
-import { Rewrite } from "./Normalize.js";
-
 export default StepBatch<State, { turn?: unknown; step?: unknown }, PreStepDecision>(
 	// The FLAVOR: the six-fold chain pinned to the configured replacement,
 	// read per call from the (volatile-refreshed) State.

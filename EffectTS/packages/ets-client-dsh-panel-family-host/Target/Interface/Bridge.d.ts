@@ -5,6 +5,7 @@
  * (Documentation/Plans/UI-Family/PHASE-7-PLAIN-FIELD-BRIDGE.md).
  *
  * @remarks
+ *
  * The one trusted full-config write surface. The panel resolves a service
  * under the name `panelFamilyBridge` first
  * (Classic/packages/client-dsh-panel-family/Source/Function/Bridge.ts) and

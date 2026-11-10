@@ -1,3 +1,7 @@
+import type BatchRecord from "@Interface/Batch.js";
+import type EntryRecord from "@Interface/Entry.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Open
  *
@@ -5,6 +9,7 @@
  * land.
  *
  * @remarks
+ *
  * The caller (the merge step) passes the batch identity plus the per-file
  * pre-images it captured before writing; the entries are the REVERT DATA
  * and land in the domain's `entries` table first, the batch record (state
@@ -17,10 +22,6 @@
  * persistence is fire-and-forget (`void .catch(...)`), but the FIRST write
  * of the batch record is awaited so a total storage failure is observable.
  */
-import type BatchRecord from "@Interface/Batch.js";
-import type EntryRecord from "@Interface/Entry.js";
-import type State from "@Interface/State.js";
-
 export default async (State: State, Batch: BatchRecord, Entries: EntryRecord[]): Promise<void> => {
 	State.Batches.set(Batch.batchId, Batch);
 	for (const Entry of Entries) {

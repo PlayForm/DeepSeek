@@ -4,6 +4,7 @@
  * One batch member's LIVE record (Interface/Member).
  *
  * @remarks
+ *
  * The record is the CURRENT ACTIVITY, not the initial spec: the task field
  * is what the agent is doing right now, updated by setTask at every phase
  * change.

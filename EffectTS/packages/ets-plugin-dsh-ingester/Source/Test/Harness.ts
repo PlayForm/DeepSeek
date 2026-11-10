@@ -1,20 +1,3 @@
-// Source/Test/Harness.ts - the shared test harness for the INGESTER tests:
-// the fake ctx (the capturing fs service over a content map, the logger
-// capture, the reflect.provide capture, the root seam) + the REAL ingester
-// class from its built Target, constructed exactly as the loader constructs
-// a class-form plugin (the schema-validated config, the Service base) - the
-// family fake-ctx + real-built-library harness pattern, written ONCE per
-// package and imported by every test folder. Each folder process gets a
-// fresh set, so every folder is standalone-green.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// constructs the service (the vacuously-green backstop for every folder's
-// fixture); prepublishOnly.sh gates the build on it.
-//
-// NO FAKE CLOCK: the journal's `at` field is asserted as a number only - the
-// wall clock is the journal's own, never an assertion target.
 import { createHash as Hash } from "node:crypto";
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
@@ -22,6 +5,29 @@ import * as OS from "node:os";
 import * as Path from "node:path";
 import Ingester from "../../Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the INGESTER tests: the fake ctx (the capturing
+ * fs service over a content map, the logger capture, the reflect.provide
+ * capture, the root seam) + the REAL ingester class from its built Target,
+ * constructed exactly as the loader constructs a class-form plugin (the
+ * schema-validated config, the Service base) - the family fake-ctx +
+ * real-built-library harness pattern, written ONCE per package and imported
+ * by every test folder. Each folder process gets a fresh set, so every folder
+ * is standalone-green.
+ *
+ * @remarks
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * constructs the service (the vacuously-green backstop for every folder's
+ * fixture); prepublishOnly.sh gates the build on it.
+ *
+ * NO FAKE CLOCK: the journal's `at` field is asserted as a number only - the
+ * wall clock is the journal's own, never an assertion target.
+ */
 export { Ingester };
 
 /**

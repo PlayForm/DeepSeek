@@ -1,3 +1,8 @@
+import type { ContentBlock } from "@deepseek-ai/dsh-llm";
+import { Block as CoreBlock } from "@playform/ets-base-dsh";
+
+import Replace from "./Replace.js";
+
 /**
  * @module Block
  *
@@ -5,6 +10,7 @@
  * the CORE's generic block-end normalizer with the transform INJECTED.
  *
  * @remarks
+ *
  * The dispatch structure (TextBlock.text, ReasoningBlock.text + the runtime
  * `thinking` defense, ToolCallBlock.arguments gated by the tool-args flag -
  * three-way since the edit exemption and the per-call raw marker: a block
@@ -20,11 +26,6 @@
  * template shape, with the Invisible class substituted for Dashes) - the
  * invisible smoke is the arbiter.
  */
-import type { ContentBlock } from "@deepseek-ai/dsh-llm";
-import { Block as CoreBlock } from "@playform/ets-base-dsh";
-
-import Replace from "./Replace.js";
-
 export default (
 	Input: ContentBlock,
 	Replacement: string,

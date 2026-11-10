@@ -4,6 +4,7 @@
  * The service's structured return shapes.
  *
  * @remarks
+ *
  * RevertReport - what one `revert` did, file by file. `action` is the
  * replay outcome per file:
  *   * "restored"  - the pre-image was written back through the factory's

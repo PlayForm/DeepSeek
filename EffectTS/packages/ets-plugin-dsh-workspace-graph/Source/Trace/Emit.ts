@@ -1,12 +1,20 @@
-// Emit - the graph's trace emission: resolve the family's bus through the
-// context probe (`ctx.get("trace")`, the factory's optional-service posture -
-// the graph does not inject the factory) and publish one draft. The bus is
-// OPTIONAL: an absent service, an unmounted factory or a throwing probe is a
-// silent skip - the graph's own work (the store, the ledger) is already done
-// and a trace failure can never reach it.
 import type State from "@Interface/State.js";
 import { Names, type Adapter, type Draft } from "@playform/ets-lib-dsh-trace";
 
+/**
+ * @module Emit
+ *
+ * The graph's trace emission: resolve the family's bus through the context
+ * probe and publish one draft.
+ *
+ * @remarks
+ *
+ * The probe is `ctx.get("trace")`, the factory's optional-service posture -
+ * the graph does not inject the factory. The bus is OPTIONAL: an absent
+ * service, an unmounted factory or a throwing probe is a silent skip - the
+ * graph's own work (the store, the ledger) is already done and a trace
+ * failure can never reach it.
+ */
 export default (StateRef: State, Draft: Draft): void => {
 	try {
 		const Trace = (StateRef.Context as unknown as { get?: (Name: string) => unknown }).get?.(

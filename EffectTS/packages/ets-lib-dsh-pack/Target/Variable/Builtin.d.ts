@@ -1,3 +1,4 @@
+import type Pack from "../Interface/Pack.js";
 /**
  * @module Builtin
  *
@@ -6,6 +7,7 @@
  * source of truth.
  *
  * @remarks
+ *
  * The families are keyed by the domain-qualified id (`doc/Plan`,
  * `edit/Version`, `search/Version`, ...), so the six domains share the map
  * without colliding on the ids they reuse; a family's `id` stays unqualified
@@ -26,6 +28,5 @@
  * project their own domain with `Families(Builtin, domain)`, so the default
  * behaviour is byte-identical to the embedded era.
  */
-import type Pack from "../Interface/Pack.js";
 declare const Builtin: Pack;
 export default Builtin;

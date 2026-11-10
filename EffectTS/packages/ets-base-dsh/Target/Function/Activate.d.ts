@@ -6,6 +6,7 @@ export default _default;
  * every plugin's Apply stage emits to the ledger.
  *
  * @remarks
+ *
  * The exact template is `activated (k1=v1, k2=v2, ...)`. Nine Apply.ts sites
  * hand-compose this template (the six stream normalizers and the governance
  * trio - governor, pinner, cargo): the same `activated (` prefix, the `k=v`

@@ -1,9 +1,11 @@
+import { Envelope } from "./Dispatch.js";
 /**
  * @module Settle
  *
  * The post-completion stage of the update continuation, as a typed effect.
  *
  * @remarks
+ *
  * Replaces the old child's `exit` callback: updates the per-dir circuit
  * breaker, reports the failure line, then runs U2 - stat the mutated manifest
  * (metadata, never content - subsystems/filesystem.md) and hand the stat's
@@ -29,6 +31,5 @@
  * contained dispatch chain, and the module never invokes it standalone, so no
  * runPromise boundary is added here.
  */
-import { Envelope } from "./Dispatch.js";
 declare const Settle: typeof Envelope.Settle;
 export default Settle;

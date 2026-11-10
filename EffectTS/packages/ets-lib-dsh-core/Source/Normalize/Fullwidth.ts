@@ -5,6 +5,7 @@
  * U+FF01-U+FF5E mapped to its ASCII counterparts U+0021-U+007E.
  *
  * @remarks
+ *
  * This is the standard fullwidth-to-halfwidth mapping
  * (String.fromCharCode(0xFF01 + i) -> String.fromCharCode(0x21 + i) for i
  * in 0..93, expanded to a LITERAL object below: no runtime computation, the

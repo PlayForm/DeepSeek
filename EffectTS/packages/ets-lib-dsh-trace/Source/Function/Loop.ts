@@ -1,3 +1,5 @@
+import type Queue from "@Interface/Queue.js";
+
 /**
  * @module Loop
  *
@@ -6,6 +8,7 @@
  * fail-open, and a Flush promise for deterministic smokes.
  *
  * @remarks
+ *
  * `Schedule(key)` starts `Run(key)` when no task for that key is in flight and
  * DROPS the schedule otherwise - a coalesced pair produces ONE run; `Run`'s
  * rejection is swallowed (fail-open): the loop never rejects and never throws
@@ -19,8 +22,6 @@
  * No `setTimeout`, no interval, no wall clock: the loop is a microtask chain
  * the caller can await.
  */
-import type Queue from "@Interface/Queue.js";
-
 export default (Run: (Key: string) => Promise<void> | void): Queue => {
 	const Inflight = new Map<string, Promise<void>>();
 	let Disposed = false;

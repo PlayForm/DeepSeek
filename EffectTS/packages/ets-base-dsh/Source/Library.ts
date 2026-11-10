@@ -5,6 +5,7 @@
  * the shared Effect-TS plumbing of the ets-* group.
  *
  * @remarks
+ *
  * The export surface and the loader contract: the runtime wiring
  * (Source/Service - the Context services, the layer graph and the
  * materialize() runtime assembled for the factory shell), the fiber/stream

@@ -1,26 +1,32 @@
-// Schema - the ledger's DDL (Documentation/Plans/COST-TRACK-PLUGIN.md
-// sections 3, 14 and 17.6): one exported string constant per table plus the
-// cost views, in creation order inside the exported Ddl array - a fresh file
-// creates the v6 schema directly, with the price book's tier, mode and
-// region columns inline, the Modifier, Factor and CallFactor tables of
-// the factor layer, the Edit table of the edit grain, the telemetry
-// columns of the Call and Touch rows and the valuation model's Catalog,
-// Revision, RateRow, Valuation, ValuationCost and ValuationAllocation
-// tables. The additive rungs are also exported one constant each and rolled
-// up into the Migration array (v1 to v2), the MigrationFactor array (v2 to
-// v3), the MigrationTelemetry array (v3 to v4), the MigrationPricing array
-// (v4 to v5) and the MigrationVersioning array (v5 to v6), which
-// Function/Open runs inside one transaction each when the ledger's
-// user_version sits below 6. The fresh path creates the
-// pricing tables EMPTY - a new file has no recorded book to seed - while the
-// v5 rung seeds the bootstrap catalog, its one published revision, the rate
-// rows copied out of Price and the as-recorded valuation, all inside the
-// transaction that stamps the version. Every table is STRICT; money
-// is REAL in one currency per row with rates stored per million tokens; the
-// price book is append-only and effective-dated so a historical invoice
-// stays reproducible, and one effective-dated rate card is now a family of
-// tier rows - one per TierFrom - which is why the fresh Price unique key
-// carries TierFrom.
+/**
+ * @module Schema
+ *
+ * The ledger's DDL: one exported string constant per table plus the cost
+ * views, in creation order inside the exported Ddl array, and the additive
+ * migration rungs one constant each.
+ *
+ * @remarks
+ * The schema follows `Documentation/Plans/COST-TRACK-PLUGIN.md` sections 3, 14
+ * and 17.6. A fresh file creates the v6 schema directly, with the price book's
+ * tier, mode and region columns inline, the Modifier, Factor and CallFactor
+ * tables of the factor layer, the Edit table of the edit grain, the telemetry
+ * columns of the Call and Touch rows and the valuation model's Catalog,
+ * Revision, RateRow, Valuation, ValuationCost and ValuationAllocation tables.
+ * The additive rungs are also exported one constant each and rolled up into the
+ * Migration array (v1 to v2), the MigrationFactor array (v2 to v3), the
+ * MigrationTelemetry array (v3 to v4), the MigrationPricing array (v4 to v5)
+ * and the MigrationVersioning array (v5 to v6), which `Function/Open` runs
+ * inside one transaction each when the ledger's user_version sits below 6. The
+ * fresh path creates the pricing tables EMPTY - a new file has no recorded book
+ * to seed - while the v5 rung seeds the bootstrap catalog, its one published
+ * revision, the rate rows copied out of Price and the as-recorded valuation,
+ * all inside the transaction that stamps the version. Every table is STRICT;
+ * money is REAL in one currency per row with rates stored per million tokens;
+ * the price book is append-only and effective-dated so a historical invoice
+ * stays reproducible, and one effective-dated rate card is now a family of tier
+ * rows - one per TierFrom - which is why the fresh Price unique key carries
+ * TierFrom.
+ */
 export const Price = `CREATE TABLE Price (
     PriceId INTEGER PRIMARY KEY,
     Provider TEXT NOT NULL, Model TEXT NOT NULL, Currency TEXT NOT NULL DEFAULT 'USD',

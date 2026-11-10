@@ -1,24 +1,33 @@
-// Source/Test/Harness.ts - the shared test harness for the FACTORY tests: the
-// fake ctx of the source suite (the capture seams on/emit/effect/get/reflect/
-// fs/logger + the ROOT seam, since the Wire and the State builder register on
-// the root scope) + the REAL factory class from the built Target - the seams
-// from the source suite, written ONCE per package and imported by every test
-// folder. Every folder constructs its own factory instance from the class
-// (the Service base registers through ctx.reflect.provide) and drives the
-// State builder, the write executor and the registry against it.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually wires
-// the Service constructor (the vacuously-green backstop for every folder's
-// fixture); prepublishOnly.sh gates the build on it. Imported as a library,
-// this module only exports.
 import assert from "node:assert/strict";
 import { mkdtempSync } from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
 import FactoryClass from "../../Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the FACTORY tests: the fake ctx plus the REAL
+ * factory class from the built Target.
+ *
+ * @remarks
+ *
+ * The fake ctx is the source suite's (the capture seams on/emit/effect/get/
+ * reflect/fs/logger + the ROOT seam, since the Wire and the State builder
+ * register on the root scope) and the REAL factory class comes from the
+ * built Target - the seams from the source suite, written ONCE per package
+ * and imported by every test folder. Every folder constructs its own
+ * factory instance from the class (the Service base registers through
+ * ctx.reflect.provide) and drives the State builder, the write executor and
+ * the registry against it.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * wires the Service constructor (the vacuously-green backstop for every
+ * folder's fixture); prepublishOnly.sh gates the build on it. Imported as a
+ * library, this module only exports.
+ */
 export { FactoryClass };
 
 /**

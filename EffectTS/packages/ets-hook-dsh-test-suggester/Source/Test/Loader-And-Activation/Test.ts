@@ -1,8 +1,3 @@
-// Source/Test/Loader-And-Activation/Test.ts - the loader contract, the cold
-// disabled mount, the enabled activation proof (byte-exact, the `history`
-// segment), the apply-time wiring, the projection unit's fold, the
-// pass-through discipline, the retired boot projection, the schema fail-loud,
-// and the mount purity.
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -19,6 +14,18 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The singular test of the loader contract and the activation wiring.
+ *
+ * @remarks
+ *
+ * The test covers the loader contract, the cold disabled mount, the enabled
+ * activation proof (byte-exact, the `history` segment), the apply-time
+ * wiring, the projection unit's fold, the pass-through discipline, the
+ * retired boot projection, the schema fail-loud, and the mount purity.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

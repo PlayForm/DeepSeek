@@ -1,9 +1,12 @@
+import Schema from "@deepseek-ai/schemastery";
+export default _default;
 /**
  * @module Policy
  *
  * The SHARED policy-block builder (D6), the second module-level helper beside `Schema`.
  *
  * @remarks
+ *
  * `Policy()` returns the Schemastery block a consumer spreads into its own schema -
  * `Compose(false, { ..., policy: Policy() })`. The block carries ONE key per action class (read,
  * index, record, suggest, write, commit, spawn, message), each an enum of "auto" | "approve"
@@ -21,8 +24,6 @@
  * schema. The pack's `policy` section overrides these defaults per action when a pack is resolved
  * (the wiring is the next refinement; the type already exists in @playform/ets-lib-dsh-pack).
  */
-import Schema from "@deepseek-ai/schemastery";
-export default _default;
 declare function _default(): Schema<NoInfer<Schemastery.ObjectS<NoInfer<{
     read: Schema<"approve" | "auto", "approve" | "auto", "defined">;
     index: Schema<"approve" | "auto", "approve" | "auto", "defined">;

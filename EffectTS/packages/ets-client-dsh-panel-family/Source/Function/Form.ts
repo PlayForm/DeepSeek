@@ -1,3 +1,11 @@
+import type {
+	PanelFormField,
+	PanelFormInput,
+	PanelFormView,
+	PanelNamespaceView,
+} from "@Interface/Form.js";
+import type { PanelSection } from "@Interface/Panel.js";
+
 /**
  * @module Form
  *
@@ -5,6 +13,7 @@
  * schema (the settings.describe envelope).
  *
  * @remarks
+ *
  * The walk resolves the schema's `refs` table, flattens object fields to
  * dotted paths, and marks each field with the two write routes: `volatile`
  * fields apply live through the revision-fenced settings mutate, plain fields
@@ -15,14 +24,6 @@
  * is `unavailable`; a missing namespace view is `loading` (the documented
  * states).
  */
-import type {
-	PanelFormField,
-	PanelFormInput,
-	PanelFormView,
-	PanelNamespaceView,
-} from "@Interface/Form.js";
-import type { PanelSection } from "@Interface/Panel.js";
-
 /**
  * One resolved schema node (the serialized Schemastery envelope's shape).
  */

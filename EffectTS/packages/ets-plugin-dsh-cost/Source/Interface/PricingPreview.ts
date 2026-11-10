@@ -8,6 +8,7 @@
  * one currency.
  *
  * @remarks
+ *
  * A call the revision cannot price - no rate row, or a row in another
  * currency - counts as unpriced and is excluded from BOTH totals, because a
  * missing rate is unpriced and never a zero, and adding it would fabricate

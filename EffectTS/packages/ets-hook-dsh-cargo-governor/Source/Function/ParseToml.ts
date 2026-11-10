@@ -1,9 +1,12 @@
+import { parse as Smol } from "smol-toml";
+
 /**
  * @module ParseToml
  *
  * Parse a TOML string with smol-toml, null on any failure.
  *
  * @remarks
+ *
  * smol-toml is the ONE runtime dependency of this bundle, carried by its own
  * node_modules - small, zero deps. Error-contained - an unreadable or
  * non-TOML Cargo.toml maps to null instead of a throw (the caller logs the
@@ -16,8 +19,6 @@
  * destroy them. This is an internal calculation, one of the standing
  * exemptions.
  */
-import { parse as Smol } from "smol-toml";
-
 export default (Text: unknown): Record<string, unknown> | null => {
 	switch (true) {
 		case typeof Text !== "string":

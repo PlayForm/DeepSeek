@@ -1,3 +1,9 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { Touch } from "@playform/ets-lib-dsh-pack";
+
+import type { ProbingContext, ProjectionRegistry } from "../Interface/Projection.js";
+import { ProjectionKey } from "../Variable/Projection.js";
+
 /**
  * @module History
  *
@@ -5,6 +11,7 @@
  * registry.
  *
  * @remarks
+ *
  * The DETECTION-TIME read of one session's folded touch history: the projection unit's
  * live host state through the registry's own face, `stateOf(session, key)` ("reads one
  * unit's live read-only host state without computing unrelated views").
@@ -24,12 +31,6 @@
  * returned array is the registry's live state: it is read only, never mutated (the
  * subsystem guide: "callers must not mutate the borrowed reference").
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { Touch } from "@playform/ets-lib-dsh-pack";
-
-import type { ProbingContext, ProjectionRegistry } from "../Interface/Projection.js";
-import { ProjectionKey } from "../Variable/Projection.js";
-
 export default (Context: Context, Session: unknown): readonly Touch[] => {
 	try {
 		if (Session === undefined || Session === null) {

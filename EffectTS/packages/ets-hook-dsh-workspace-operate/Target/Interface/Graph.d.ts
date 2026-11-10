@@ -6,6 +6,7 @@
  * (WAVE-1-BRIEF.md section 4.3).
  *
  * @remarks
+ *
  * It covers the node, edge and query shapes the resolution rules consume.
  * The operate hook never imports the graph package; this declaration keeps
  * the consumer honest and compiles without the sibling.

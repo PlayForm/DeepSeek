@@ -1,3 +1,8 @@
+import { defineTool } from "@deepseek-ai/dsh-tools";
+
+import type State from "../Interface/State.js";
+import { Dismiss, Save } from "./Persist.js";
+
 /**
  * @module Dismiss
  *
@@ -6,6 +11,7 @@
  * suggester's completion spec).
  *
  * @remarks
+ *
  * Contract:
  *
  *   - input: the suggestion FAMILY (the family id a note named - `History` for
@@ -34,11 +40,6 @@
  * Function/Apply (the batch-decision/ccr idiom: the definition is readonly
  * after registration).
  */
-import { defineTool } from "@deepseek-ai/dsh-tools";
-
-import type State from "../Interface/State.js";
-import { Dismiss, Save } from "./Persist.js";
-
 /**
  * The synthetic family the session history builds (Function/Apply).
  */

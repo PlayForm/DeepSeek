@@ -1,3 +1,4 @@
+import type { DatabaseSync } from "node:sqlite";
 /**
  * @module Forecast
  *
@@ -5,6 +6,7 @@
  * (Documentation/Plans/COST-TRACK-PLUGIN.md section 17.5).
  *
  * @remarks
+ *
  * Over the Rollup's daily rate per (Scope, Key) across the last window of
  * days - anchored at each key's own latest day, so an old ledger still
  * projects - the mean, the median, the mean of the last seven days, and the
@@ -14,7 +16,6 @@
  * maximum both at the projection). The forecast never writes a row; the
  * caller labels it an estimate in every export.
  */
-import type { DatabaseSync } from "node:sqlite";
 /**
  * One (scope, key) projection row.
  */

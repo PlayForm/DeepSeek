@@ -5,6 +5,7 @@
  * rule: no import from sibling packages).
  *
  * @remarks
+ *
  * The store is the seed of the search-suggester's journal
  * (SEARCH-SUGGESTER-PLUGIN.md §9.3: "the search consumer's journal is the seed
  * for it: the intent, the candidates, the outcome") plus the offline learner's
@@ -17,26 +18,40 @@
  * said.
  */
 export interface ReplayRecord {
-	/** The intent label the record was mined under (e.g. "Version", "Test"). */
+	/**
+	 * The intent label the record was mined under (e.g. "Version", "Test").
+	 */
 	intent: string;
 
-	/** The probe literal that matched (a grep pattern, a path fragment, a command fragment). */
+	/**
+	 * The probe literal that matched (a grep pattern, a path fragment, a command fragment).
+	 */
 	probe: string;
 
-	/** The files touched, repo-relative, in touch order. */
+	/**
+	 * The files touched, repo-relative, in touch order.
+	 */
 	files: string[];
 
-	/** The verification command used last time (e.g. "pnpm run build:classic"). */
+	/**
+	 * The verification command used last time (e.g. "pnpm run build:classic").
+	 */
 	verify: string;
 
-	/** When the record was captured (epoch seconds). */
+	/**
+	 * When the record was captured (epoch seconds).
+	 */
 	at: number;
 }
 
 export default interface HistoryStore {
-	/** The store schema version. */
+	/**
+	 * The store schema version.
+	 */
 	schema: number;
 
-	/** The records, most recent first. */
+	/**
+	 * The records, most recent first.
+	 */
 	records: ReplayRecord[];
 }

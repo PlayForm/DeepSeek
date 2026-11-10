@@ -1,19 +1,3 @@
-// Rename - the reflective rename op (Function/Rename): ONE call bundling the
-// whole transformation - the AST-aware rename across the affected references.
-//
-// THE SEMANTICS SERVICE FIRST: when `ctx.workspaceSemantics` is present (probed,
-// never injected - Function/Semantics), the rename asks it for the
-// scope-resolved plan and applies the plan's edits inside the operation's scope
-// (Function/Deepened). The service may itself deepen the answer through the
-// harness LSP seam, so a scope-resolved reference set is what lands.
-//
-// THE TEXTUAL FALLBACK: with no service (or a refusal, or no edit inside the
-// scope) the v0 engine runs - whole-word matches only (a regex with word
-// boundaries, never a substring replace), applied to the block's span (scope
-// "block", the default from config `propagate`) or to the whole file (scope
-// "file"). Zero occurrences is a rejected reply - never an applied write of an
-// unchanged file. The publish goes through Function/Publish (the version fence;
-// a file that moved under the op yields a conflict).
 import Carry from "@Function/Carry.js";
 import Deepened from "@Function/Deepened.js";
 import Observe from "@Function/Observe.js";
@@ -25,6 +9,28 @@ import type Reply from "@Interface/Reply.js";
 import type State from "@Interface/State.js";
 import { Decide } from "@playform/ets-plugin-dsh-factory";
 
+/**
+ * @module Rename
+ *
+ * The reflective rename op: ONE call bundling the whole transformation - the
+ * AST-aware rename across the affected references.
+ *
+ * @remarks
+ *
+ * THE SEMANTICS SERVICE FIRST: when `ctx.workspaceSemantics` is present
+ * (probed, never injected - Function/Semantics), the rename asks it for the
+ * scope-resolved plan and applies the plan's edits inside the operation's
+ * scope (Function/Deepened). The service may itself deepen the answer through
+ * the harness LSP seam, so a scope-resolved reference set is what lands.
+ *
+ * THE TEXTUAL FALLBACK: with no service (or a refusal, or no edit inside the
+ * scope) the v0 engine runs - whole-word matches only (a regex with word
+ * boundaries, never a substring replace), applied to the block's span (scope
+ * "block", the default from config `propagate`) or to the whole file (scope
+ * "file"). Zero occurrences is a rejected reply - never an applied write of
+ * an unchanged file. The publish goes through Function/Publish (the version
+ * fence; a file that moved under the op yields a conflict).
+ */
 const Refuse = (State: State, Path: string, Reason: string): Reply => {
 	State.Factory.Append(State, `rejected ${Path} (${Reason})`);
 	return { status: "rejected", detail: Reason, version: undefined };

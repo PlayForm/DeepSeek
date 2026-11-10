@@ -1,14 +1,3 @@
-// Source/Test/Persistence/Test.ts - the plan's suite 6: the knowledge file.
-// The atomic write (temp + rename, mode 0600, no temp left behind), the
-// documented JSON schema (schema 1, the learned rows, the journal, the
-// dismissals, the stats), the reload, and the corruption fallback - a corrupt
-// or foreign-schema file degrades to the cold start, never to a crash, and
-// the plugin still emits from the session history.
-//
-// THE SEED MARKER: the offline seed's source is an EXPLICIT pack, so this
-// workspace (the package itself, no `.dsh/pack.yml`) seeds nothing and the
-// file carries `seed: false` without a `seededAt` stamp - the documented
-// optional field appears only after a pack seed (Function/Seed).
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -29,16 +18,42 @@ import {
 	Workspace,
 } from "../Harness.js";
 
-/** The judged call's anchor path (relative to the temp workspace). */
+/**
+ * @module Test
+ *
+ * The plan's suite 6: the knowledge file test.
+ *
+ * @remarks
+ *
+ * The suite covers the atomic write (temp + rename, mode 0600, no temp left
+ * behind), the documented JSON schema (schema 1, the learned rows, the
+ * journal, the dismissals, the stats), the reload, and the corruption
+ * fallback - a corrupt or foreign-schema file degrades to the cold start,
+ * never to a crash, and the plugin still emits from the session history.
+ *
+ * THE SEED MARKER: the offline seed's source is an EXPLICIT pack, so this
+ * workspace (the package itself, no `.dsh/pack.yml`) seeds nothing and the
+ * file carries `seed: false` without a `seededAt` stamp - the documented
+ * optional field appears only after a pack seed (Function/Seed).
+ */
+/**
+ * The judged call's anchor path (relative to the temp workspace).
+ */
 const Anchor = "README.md";
 
-/** The two companions touched right after the anchor. */
+/**
+ * The two companions touched right after the anchor.
+ */
 const Companions = ["CHANGELOG.md", "SCHEME.md"];
 
-/** The temp workspace the scenarios judge. */
+/**
+ * The temp workspace the scenarios judge.
+ */
 const Space = Workspace([Anchor, ...Companions]);
 
-/** One judged read of the anchor. */
+/**
+ * One judged read of the anchor.
+ */
 const Read = (Id: string): any => ({
 	name: "read",
 	arguments: { file_path: Space.At(Anchor) },

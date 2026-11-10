@@ -1,3 +1,5 @@
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -8,6 +10,7 @@
  * no loader contract, publishable on its own).
  *
  * @remarks
+ *
  * The SERVICE lives in `@playform/ets-plugin-dsh-factory` (`ctx.trace`); every
  * adapting plugin carries its own adapter in its own `Source/Trace/` folder
  * and imports this vocabulary, so no plugin imports another and the indexer is
@@ -29,8 +32,6 @@
  * (`Draft`), the bus contract (`Adapter`), the observe/stamp payload
  * (`Stamp`) and the detached loop's contract (`Queue`).
  */
-import Version from "./Variable/Version.js";
-
 /**
  * The compiled package version (`Source/Variable/Version`, built in by the
  * ESBuild define). This package has NO loader contract and NO Config - the

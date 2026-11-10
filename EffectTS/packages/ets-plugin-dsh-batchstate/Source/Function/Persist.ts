@@ -1,3 +1,10 @@
+import { mkdirSync as Make, writeFileSync as Write } from "node:fs";
+import { dirname as Parent } from "node:path";
+
+import type Handle from "@Interface/Handle.js";
+import type State from "@Interface/State.js";
+import { Expand } from "@playform/ets-base-dsh";
+
 /**
  * @module Persist
  *
@@ -5,6 +12,7 @@
  * completion spec's wave 3 storage migration.
  *
  * @remarks
+ *
  * THE PRIMARY: the storage-domain KV domain (Function/Storage, the config
  * `domain`). Every state change writes the FULL state into the four tables -
  * the members keyed by id, the queue under `__queue`, the proposals keyed by
@@ -32,13 +40,6 @@
  * volume, a closed domain) is swallowed - the ledger and the live state
  * stay the truth, and a state change must never fail on its store.
  */
-import { mkdirSync as Make, writeFileSync as Write } from "node:fs";
-import { dirname as Parent } from "node:path";
-
-import type Handle from "@Interface/Handle.js";
-import type State from "@Interface/State.js";
-import { Expand } from "@playform/ets-base-dsh";
-
 /**
  * The meta key of the idle-queue record in the `queue` table.
  */

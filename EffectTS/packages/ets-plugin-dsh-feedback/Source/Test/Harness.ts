@@ -1,27 +1,34 @@
-// Source/Test/Harness.ts - the shared test harness for the FEEDBACK tests:
-// the fake ctx (the ctx listener capture for session/event, the
-// reflect.provide capture, the logger capture) + the REAL feedback class
-// from its built Target, constructed the way the registry does
-// (new Feedback(ctx, config)). The journal writes to a REAL temp-dir file
-// (the durable JSON lines are part of the contract), so every scenario
-// starts from an empty ledger.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// NO FAKE CLOCK for the service logic: the blocks carry an epoch `at` stamp
-// supplied by the caller (and by Parse), which the tests never assert on;
-// the journal lines are parsed as JSON and compared on their event/session/
-// agentId/block fields only.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
 import Plugin from "../../Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the FEEDBACK tests: the fake ctx plus the
+ * REAL feedback class from its built Target.
+ *
+ * @remarks
+ *
+ * The fake ctx covers the ctx listener capture for session/event, the
+ * reflect.provide capture, and the logger capture. The REAL feedback class
+ * is constructed the way the registry does (new Feedback(ctx, config)). The
+ * journal writes to a REAL temp-dir file (the durable JSON lines are part
+ * of the contract), so every scenario starts from an empty ledger.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * wires the plugin (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * NO FAKE CLOCK for the service logic: the blocks carry an epoch `at` stamp
+ * supplied by the caller (and by Parse), which the tests never assert on;
+ * the journal lines are parsed as JSON and compared on their event/session/
+ * agentId/block fields only.
+ */
 export { Plugin };
 
 /**

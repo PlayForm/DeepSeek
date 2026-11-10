@@ -1,56 +1,64 @@
-// Drain - the queue -> SQLite transaction (Documentation/Plans/
-// COST-TRACK-PLUGIN.md sections 1, 14 and 16.1): the session/flush listener's
-// engine. One flush folds one session's queued events into the ledger inside
-// ONE transaction: the session and project dimensions adopted from the session
-// header, the Call row per assistant/message that carries usage (priced at the
-// price row in force at the call's own time, with the cache split's
-// CacheSaving), the Touch rows per tool/call (written the moment their Call
-// row exists, pending until then, each with its Stage and ReadBeforeEdit
-// derived from the file's own prior touches in the session and its BytesDelta
-// summed from the touch's own Edit rows, so the allocator's byte weighting
-// engages instead of falling back to equal shares - section 5.1; a search's
-// argument names a scope, so its pending set stays empty until the tool/result
-// arrives and its discovered paths become one read touch each), the ContextMass
-// rows from the surface replay (which now splits the cached prefix from the
-// uncached remainder), the Allocation rows from the attribution model
-// (allocated when the step ends, or at the end of the batch as the safety
-// net), the Verdict row per (session, file) when the session ends, and the
-// session Cursor advanced to the highest sequence folded. The call's own
-// pricing dimensions (section 17.1) - Mode, Region, the resolved tier and the
-// time-of-day window its timestamp falls in (section 6) - are written on the
-// Call row, and the cache split's CacheSaving is measured against the
-// modifier-adjusted rates (section 17.2). The v4 grain rides the same fold:
-// the Edit rows per touch (section 17.3), read from the tool call's own
-// arguments, and the telemetry columns on the Call row (section 17.4), read
-// from the batch's records up to each message. The file versions ride it too
-// (E7, the research's section 4): a read result's rendered text becomes the
-// FileVersion row its read touch binds to, a write's own content becomes the
-// after version row while its touch binds to the version the file held before
-// it, and every touch without confirmable content - a patch, a batch
-// operation, a several-file write, a failed or unreadable result - keeps a
-// NULL VersionId instead of a guess. The hash is the SHA-256 of the exact
-// content, and a row already recorded for the same bytes is reused, so an
-// unchanged file never accumulates versions and a replay never duplicates
-// one. That version evidence is also the revert signal (B6b, the research's
-// section 5): a mutating touch whose written content resolves to a version
-// row recorded earlier than the touch - and not to the version the file held
-// just now - is staged as a revert, because the file went back to an earlier
-// content hash, and its file's verdict records "reverted" rather than
-// "changed"; a touch with no before version or no confirmable after content
-// keeps the signal false instead of guessing. Every insert is INSERT OR
-// IGNORE against the DDL's unique keys (the Verdict is REPLACE), so draining
-// the same events twice writes the same rows and no duplicates. The drain
-// never throws into the parallel dispatch: one failed batch rolls back whole,
-// restores its session's in-memory replay state, logs one line and reports
-// false - the flush handler owns the acknowledgement and decides the retry,
-// so a batch that never committed stays queued. The fold also runs in a
-// replay-only mode (E2, A2 section 1.4): it walks the events exactly as the
-// booking fold does - the surface buffer, the pending touch sets, the
-// awaiting calls, the per-file histories, the per-file versions, the
-// per-file restoration flags, the read targets and the folded set all
-// advance - but it writes no row, advances no cursor and never touches the
-// capture queue, so a partially processed session can rebuild the state a
-// continuous run would hold before it books the events past its cursor.
+/**
+ * @module Drain
+ *
+ * The queue to SQLite transaction: the session/flush listener's engine, one
+ * flush folding one session's queued events into the ledger inside ONE
+ * transaction.
+ *
+ * @remarks
+ * The fold follows `Documentation/Plans/COST-TRACK-PLUGIN.md` sections 1, 14
+ * and 16.1. It writes the session and project dimensions adopted from the
+ * session header, the Call row per assistant/message that carries usage (priced
+ * at the price row in force at the call's own time, with the cache split's
+ * CacheSaving), the Touch rows per tool/call (written the moment their Call row
+ * exists, pending until then, each with its Stage and ReadBeforeEdit derived
+ * from the file's own prior touches in the session and its BytesDelta summed
+ * from the touch's own Edit rows, so the allocator's byte weighting engages
+ * instead of falling back to equal shares - section 5.1; a search's argument
+ * names a scope, so its pending set stays empty until the tool/result arrives
+ * and its discovered paths become one read touch each), the ContextMass rows
+ * from the surface replay (which now splits the cached prefix from the uncached
+ * remainder), the Allocation rows from the attribution model (allocated when
+ * the step ends, or at the end of the batch as the safety net), the Verdict row
+ * per (session, file) when the session ends, and the session Cursor advanced to
+ * the highest sequence folded. The call's own pricing dimensions (section 17.1)
+ * - Mode, Region, the resolved tier and the time-of-day window its timestamp
+ * falls in (section 6) - are written on the Call row, and the cache split's
+ * CacheSaving is measured against the modifier-adjusted rates (section 17.2).
+ *
+ * The v4 grain rides the same fold: the Edit rows per touch (section 17.3),
+ * read from the tool call's own arguments, and the telemetry columns on the
+ * Call row (section 17.4), read from the batch's records up to each message.
+ * The file versions ride it too (E7, the research's section 4): a read result's
+ * rendered text becomes the FileVersion row its read touch binds to, a write's
+ * own content becomes the after version row while its touch binds to the
+ * version the file held before it, and every touch without confirmable content
+ * - a patch, a batch operation, a several-file write, a failed or unreadable
+ * result - keeps a NULL VersionId instead of a guess. The hash is the SHA-256
+ * of the exact content, and a row already recorded for the same bytes is
+ * reused, so an unchanged file never accumulates versions and a replay never
+ * duplicates one. That version evidence is also the revert signal (B6b, the
+ * research's section 5): a mutating touch whose written content resolves to a
+ * version row recorded earlier than the touch - and not to the version the file
+ * held just now - is staged as a revert, because the file went back to an
+ * earlier content hash, and its file's verdict records "reverted" rather than
+ * "changed"; a touch with no before version or no confirmable after content
+ * keeps the signal false instead of guessing. Every insert is INSERT OR IGNORE
+ * against the DDL's unique keys (the Verdict is REPLACE), so draining the same
+ * events twice writes the same rows and no duplicates.
+ *
+ * The drain never throws into the parallel dispatch: one failed batch rolls
+ * back whole, restores its session's in-memory replay state, logs one line and
+ * reports false - the flush handler owns the acknowledgement and decides the
+ * retry, so a batch that never committed stays queued. The fold also runs in a
+ * replay-only mode (E2, A2 section 1.4): it walks the events exactly as the
+ * booking fold does - the surface buffer, the pending touch sets, the awaiting
+ * calls, the per-file histories, the per-file versions, the per-file
+ * restoration flags, the read targets and the folded set all advance - but it
+ * writes no row, advances no cursor and never touches the capture queue, so a
+ * partially processed session can rebuild the state a continuous run would hold
+ * before it books the events past its cursor.
+ */
 import { createHash } from "node:crypto";
 import { basename } from "node:path";
 import type { DatabaseSync } from "node:sqlite";

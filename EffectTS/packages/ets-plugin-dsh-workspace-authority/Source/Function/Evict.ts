@@ -1,9 +1,14 @@
+import type State from "@Interface/State.js";
+
+import Policy from "./Policy.js";
+
 /**
  * @module Evict
  *
  * The disposition pass: the eviction rule of the authority service.
  *
  * @remarks
+ *
  * For every residency record (or the named subset), in WEIGHT-DESCENDING
  * order (the weight only RANKS the candidates - it never decides anything),
  * the policy table decides the disposition:
@@ -23,10 +28,6 @@
  * revocation grace - the policy's revocation timing). Every disposition is
  * ledgered: `evicted <resource> (<disposition>)`.
  */
-import type State from "@Interface/State.js";
-
-import Policy from "./Policy.js";
-
 const SHIELD = "keep";
 
 export default (

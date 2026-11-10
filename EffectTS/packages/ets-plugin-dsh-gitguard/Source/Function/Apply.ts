@@ -1,9 +1,18 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
+import Guard from "@Function/Guard.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
+
 /**
  * @module Apply
  *
  * The plugin entry function.
  *
  * @remarks
+ *
  * Fail-loud validation, the State build (the factory's cell unwrap + the P10 volatile refresh),
  * the activation proof, and the tools/pre-execute registration (Function/Guard - the intercept).
  * The contract is ORCHESTRATION-PLUGINS.md section 3.
@@ -14,14 +23,6 @@
  * The function returns NOTHING (the loader contract: a returned value silently kills event
  * delivery). The test probe is the `ctx.__pluginDshGitguardState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
-import Guard from "@Function/Guard.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
  */

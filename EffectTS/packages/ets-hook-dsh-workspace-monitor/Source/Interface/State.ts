@@ -1,3 +1,8 @@
+import type CheckSet from "@Interface/CheckSet.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type WatchEntry from "@Interface/WatchEntry.js";
+import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
+
 /**
  * @module State
  *
@@ -5,6 +10,7 @@
  * fields.
  *
  * @remarks
+ *
  * The shared part is Context, Module, Enabled/Ledger/List, the machinery
  * maps, and the P10 volatile refresh the factory's State builder registers.
  *
@@ -14,11 +20,6 @@
  * `name` export (hook-dsh-workspace-monitor); the ledger prefix is the
  * module's OWN contract string.
  */
-import type CheckSet from "@Interface/CheckSet.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type WatchEntry from "@Interface/WatchEntry.js";
-import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
-
 interface Extra {
 	/**
 	 * Config `enabled` - the master switch (volatile; the State builder's

@@ -1,3 +1,6 @@
+import { homedir } from "node:os";
+import { join } from "node:path";
+
 /**
  * @module Expand
  *
@@ -5,6 +8,7 @@
  * user's home directory.
  *
  * @remarks
+ *
  * "~" becomes the home itself and "~/x" becomes home + "x"; every other path
  * (absolute, relative, empty) passes through unchanged. `os.homedir()` honors
  * $HOME on POSIX, so tests can redirect it to a temporary root. Every writer
@@ -18,9 +22,6 @@
  * lib-dsh-core -> ets-base-dsh substitution, so the pure helper lives here
  * with the same byte-identical behaviour.
  */
-import { homedir } from "node:os";
-import { join } from "node:path";
-
 export default (Path: string): string => {
 	switch (true) {
 		case Path === "~":

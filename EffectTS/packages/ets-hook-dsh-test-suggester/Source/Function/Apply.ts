@@ -1,3 +1,25 @@
+import { isAbsolute, resolve } from "node:path";
+
+import type { Context } from "@deepseek-ai/cordis";
+import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
+import type Config from "@Interface/Config.js";
+import type { Candidate, Intent } from "@Interface/Pack.js";
+import type { AgentMemory } from "@Interface/State.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
+import { Adjacent, Families, Home, Resolve, Root as RootOf } from "@playform/ets-lib-dsh-pack";
+import Version from "@Variable/Version.js";
+
+import Detect, { Compile } from "./Detect.js";
+import Exists from "./Exists.js";
+import History from "./History.js";
+import Nodes from "./Nodes.js";
+import BuildNote, { BoundSummary, Prepend } from "./Note.js";
+import Package from "./Package.js";
+import Reconcile from "./Reconcile.js";
+import Reconciled from "./Reconciled.js";
+import Register from "./Register.js";
+
 /**
  * @module Apply
  *
@@ -9,6 +31,7 @@
  * register the hook's OWN listeners.
  *
  * @remarks
+ *
  * The listeners:
  *
  *   1. tools/post-execute (waterfall, plain ctx.on - AFTER the CCR
@@ -79,28 +102,6 @@
  * registers on through `ctx.inject` and reads through `ctx.get`, so a mount
  * without it still loads (Function/Register, Function/History).
  */
-import { isAbsolute, resolve } from "node:path";
-
-import type { Context } from "@deepseek-ai/cordis";
-import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
-import type Config from "@Interface/Config.js";
-import type { Candidate, Intent } from "@Interface/Pack.js";
-import type { AgentMemory } from "@Interface/State.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
-import { Adjacent, Families, Home, Resolve, Root as RootOf } from "@playform/ets-lib-dsh-pack";
-import Version from "@Variable/Version.js";
-
-import Detect, { Compile } from "./Detect.js";
-import Exists from "./Exists.js";
-import History from "./History.js";
-import Nodes from "./Nodes.js";
-import BuildNote, { BoundSummary, Prepend } from "./Note.js";
-import Package from "./Package.js";
-import Reconcile from "./Reconcile.js";
-import Reconciled from "./Reconciled.js";
-import Register from "./Register.js";
-
 /**
  * Fresh per-agent memory.
  */

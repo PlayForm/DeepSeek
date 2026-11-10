@@ -1,13 +1,22 @@
-// Source/Test/Suppress/Test.ts - one singular test: the byte-identical
-// suppression-line composer - the three shapes (continuation error, listener
-// error with a string cause, empty-message error still composes the line).
-// Runs standalone (`node Target/Test/Suppress/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/ets-lib-dsh-core: the REAL built entry only.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter } from "../Harness.js";
 import { Suppress } from "../../../Target/Library.js";
 
+/**
+ * @module Test
+ *
+ * The byte-identical suppression-line composer.
+ *
+ * @remarks
+ *
+ * The singular test proves the three shapes: the continuation error, the
+ * listener error with a string cause, and the empty-message error that
+ * still composes the line.
+ *
+ * Runs standalone (`node Target/Test/Suppress/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * @playform/ets-lib-dsh-core: the REAL built entry only.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

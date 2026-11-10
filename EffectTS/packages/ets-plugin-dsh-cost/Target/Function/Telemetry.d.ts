@@ -6,6 +6,7 @@
  * records walked in order.
  *
  * @remarks
+ *
  * The walk answers the retry count (the assistant/attempt events between a
  * step/start and the assistant/message, one when none), the step-to-message
  * latency, the first stream record's time0 (the perceived first-token

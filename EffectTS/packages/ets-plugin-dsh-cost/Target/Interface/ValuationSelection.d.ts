@@ -6,6 +6,7 @@
  * non-recorded basis evaluates against.
  *
  * @remarks
+ *
  * `as-recorded` answers what the ledger booked when the call was priced,
  * `corrected` the latest accepted correction effective at event time,
  * `current` the rates in force at the selected revision, and `scenario` a

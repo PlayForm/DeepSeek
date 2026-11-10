@@ -5,6 +5,7 @@
  * optional `storageDomain` seam, P5).
  *
  * @remarks
+ *
  * One record is appended per lifecycle event: `activated` (the plugin came
  * up), `excluded` (a write was skipped by the exclusion list), `governed` (the
  * chain pass rewrote the manifest), `dispatched` (the update stage started),

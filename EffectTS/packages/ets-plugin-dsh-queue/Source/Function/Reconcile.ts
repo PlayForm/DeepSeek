@@ -1,3 +1,9 @@
+import { MAIN, Release } from "@Function/Capacity.js";
+import Restore from "@Function/Restore.js";
+import type { AgentsService } from "@Interface/Agent.js";
+import type State from "@Interface/State.js";
+import type Task from "@Interface/Task.js";
+
 /**
  * @module Reconcile
  *
@@ -5,6 +11,7 @@
  * settle every orphan honestly.
  *
  * @remarks
+ *
  * SUBAGENT-QUEUE-PLUGIN.md section 3.5: "the queue's store survives; the
  * in-flight dispatches resume after the restart - the task-states
  * reconciled".
@@ -32,12 +39,6 @@
  * The reconcile does not dispatch: the caller's next dispatch (or the pull
  * after the settle) resumes the requeued work.
  */
-import { MAIN, Release } from "@Function/Capacity.js";
-import Restore from "@Function/Restore.js";
-import type { AgentsService } from "@Interface/Agent.js";
-import type State from "@Interface/State.js";
-import type Task from "@Interface/Task.js";
-
 /**
  * The reconcile report (the caller's audit of what moved).
  */
