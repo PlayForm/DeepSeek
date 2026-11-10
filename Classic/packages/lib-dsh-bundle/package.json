@@ -30,7 +30,7 @@
 	},
 	"dependencies": {
 		"esbuild": "0.28.2",
-		"sass-embedded": "1.106.1"
+		"sass-embedded": "1.108.1"
 	},
 	"devDependencies": {
 		"@playform/build": "0.3.5",
