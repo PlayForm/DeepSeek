@@ -1,1 +1,216 @@
-import e from"node:assert/strict";import{Check as s,CheckAsync as i,Finish as g,Fire as n,Launch as c,LinesWith as u,MakeCounter as m,Make as p,Validate as f}from"../Harness.js";const d=async()=>p(f({enabled:!0})),v=async()=>{const t=m();{const a=await d(),o=r=>a.Service.Resolve(r);s(t,"P1: the omission resolves the default role silently",()=>{e.deepEqual(o({}),{provider:"cloudflare-workers-ai",model:"@cf/zai-org/glm-5.3-flash",reasoningEffort:"low",taskType:"explorer",source:"resolved"})}),s(t,"P1: a declared task type selects the role row",()=>{const r=o({taskType:"coder"});e.equal(r.taskType,"coder"),e.equal(r.reasoningEffort,"high"),e.equal(r.source,"resolved")}),s(t,"P1: a keyword hit infers the task type",()=>{const r=o({spec:"fix the bug"});e.equal(r.taskType,"coder")}),s(t,"P1: the planner keywords win over later ones (documented order)",()=>{e.equal(o({spec:"design the fix for the module"}).taskType,"planner"),e.equal(o({spec:"hello world"}).taskType,"explorer")}),s(t,"P1: a complete, policy-legal explicit route is kept untouched",()=>{const r={provider:"cloudflare-workers-ai",model:"@cf/zai-org/glm-5.3-flash",reasoningEffort:"high"},l=o({taskType:"coder",route:r});e.equal(l.source,"kept"),e.deepEqual(l.passed,r),e.equal(l.model,r.model),e.equal(l.reasoningEffort,"high")}),s(t,"P1: a complete but illegal route is silently corrected, with the audit trail",()=>{const r=o({taskType:"coder",route:{provider:"other",model:"@cf/other/m",reasoningEffort:"low"}});e.equal(r.source,"corrected"),e.equal(r.provider,"cloudflare-workers-ai"),e.equal(r.model,"@cf/zai-org/glm-5.3-flash"),e.equal(r.reasoningEffort,"high"),e.deepEqual(r.passed,{provider:"other",model:"@cf/other/m",reasoningEffort:"low"})}),s(t,"P1: a partial explicit route is resolved silently (never kept)",()=>{const r=o({taskType:"coder",route:{model:"@cf/zai-org/glm-5.3-flash"}});e.equal(r.source,"resolved"),e.equal(r.reasoningEffort,"high")}),s(t,"P1: the escalation flag selects the planner rung",()=>{const r=o({escalate:!0,taskType:"explorer"});e.deepEqual([r.taskType,r.source,r.model,r.reasoningEffort],["planner","escalated","@cf/deepseek-ai/deepseek-v4.1-flash-1017","max"])})}{const a=await d();s(t,"P2: Classify maps the documented keywords",()=>{e.equal(a.Service.Classify("survey the docs"),"explorer"),e.equal(a.Service.Classify("refactor this module"),"coder"),e.equal(a.Service.Classify("plan the architecture"),"planner"),e.equal(a.Service.Classify("greet the user"),void 0)}),s(t,"P2: Escalate follows the attempts ladder (at most one rung)",()=>{const o=a.Service.Escalate(0);e.equal(o.source,"escalated"),e.equal(o.taskType,"planner"),e.equal(a.Service.Escalate(1),void 0)})}{const a=p(f({enabled:!0,policy:{escalation:{enabled:!1,max:1}}}));s(t,"P3: with escalation disabled the flag falls through and the ladder is closed",()=>{const o=a.Service.Resolve({escalate:!0});e.equal(o.taskType,"explorer"),e.equal(o.source,"resolved"),e.equal(a.Service.Escalate(0),void 0)})}{const a=await d();await i(t,"P4: an omission-free launch gets the resolved route injected silently",async()=>{const o=c({description:"fix the bug",agentOptions:{}}),{Out:r,Decision:l,Called:h}=await n(a,o);e.equal(h,1),e.equal(r,l),e.deepEqual(o.args.agentOptions,{provider:"cloudflare-workers-ai",model:"@cf/zai-org/glm-5.3-flash",reasoningEffort:"high"}),e.deepEqual(u(a,"route "),["plugin-dsh-route: route coder resolved cloudflare-workers-ai @cf/zai-org/glm-5.3-flash high"]),e.deepEqual(a.Warns,[])}),await i(t,"P4: a wrong explicit route is corrected in place, never surfaced",async()=>{const o=c({description:"fix the bug",agentOptions:{provider:"other",model:"@cf/other/m",reasoningEffort:"low"}});await n(a,o),e.deepEqual(o.args.agentOptions,{provider:"cloudflare-workers-ai",model:"@cf/zai-org/glm-5.3-flash",reasoningEffort:"high"}),e.deepEqual(u(a,"route coder corrected"),["plugin-dsh-route: route coder corrected cloudflare-workers-ai @cf/zai-org/glm-5.3-flash high"]),e.deepEqual(a.Warns,[])}),await i(t,"P4: a policy-legal route is kept as passed",async()=>{const o=c({description:"fix the bug",agentOptions:{provider:"cloudflare-workers-ai",model:"@cf/zai-org/glm-5.3-flash",reasoningEffort:"high"}});await n(a,o),e.equal(o.args.agentOptions.reasoningEffort,"high"),e.deepEqual(u(a,"route coder kept"),["plugin-dsh-route: route coder kept cloudflare-workers-ai @cf/zai-org/glm-5.3-flash high"])}),await i(t,"P4: the top-level spelling is injected too (the second spelling)",async()=>{const o=c({prompt:"survey the docs"});await n(a,o),e.deepEqual([o.args.provider,o.args.model,o.args.reasoningEffort],["cloudflare-workers-ai","@cf/zai-org/glm-5.3-flash","low"]),e.deepEqual(u(a,"route explorer resolved"),["plugin-dsh-route: route explorer resolved cloudflare-workers-ai @cf/zai-org/glm-5.3-flash low"])}),await i(t,"P4: a non-subagent tool passes through untouched and unlogged",async()=>{const o=c();o.name="read";const{Decision:r}=await n(a,o);e.equal(o.args.agentOptions,void 0),e.equal(u(a,"route ").length,4),e.equal(r.marker,"downstream")})}{const a=await d(),o={...a.Service.Policy,coder:{provider:"cloudflare-workers-ai",model:"@cf/deepseek-ai/deepseek-v4.1-flash-1017",reasoningEffort:"max"}};a.Raw.policy[Symbol.for("cosmokit.volatile.write")](o),a.CtxListeners["loader/volatile-update"](["policy"]),s(t,"P5: a policy hot-edit lands on the next launch without a remount",()=>{e.equal(a.Service.Policy.coder.model,"@cf/deepseek-ai/deepseek-v4.1-flash-1017")})}{const a=await d(),o={spec:"fix the bug",route:void 0};s(t,"P6: the same request and policy always produce the same route",()=>{const r=a.Service.Resolve(o),l=a.Service.Resolve(o);e.deepEqual(r,l)})}return g(t,"Resolve-And-Inject")},y=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(y){const t=await v();console.log(`${t} PASS - Resolve-And-Inject`)}export{v as runTest};
+import assert from "node:assert/strict";
+import {
+  Check,
+  CheckAsync,
+  Finish,
+  Fire,
+  Launch,
+  LinesWith,
+  MakeCounter,
+  Make,
+  Validate
+} from "../Harness.js";
+const Setup = async () => {
+  const Run = Make(Validate({ enabled: true }));
+  return Run;
+};
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Run = await Setup();
+    const Resolve = (Request) => Run.Service.Resolve(Request);
+    Check(Count, "P1: the omission resolves the default role silently", () => {
+      assert.deepEqual(Resolve({}), {
+        provider: "cloudflare-workers-ai",
+        model: "@cf/zai-org/glm-5.3-flash",
+        reasoningEffort: "low",
+        taskType: "explorer",
+        source: "resolved"
+      });
+    });
+    Check(Count, "P1: a declared task type selects the role row", () => {
+      const Route = Resolve({ taskType: "coder" });
+      assert.equal(Route.taskType, "coder");
+      assert.equal(Route.reasoningEffort, "high");
+      assert.equal(Route.source, "resolved");
+    });
+    Check(Count, "P1: a keyword hit infers the task type", () => {
+      const Route = Resolve({ spec: "fix the bug" });
+      assert.equal(Route.taskType, "coder");
+    });
+    Check(Count, "P1: the planner keywords win over later ones (documented order)", () => {
+      assert.equal(Resolve({ spec: "design the fix for the module" }).taskType, "planner");
+      assert.equal(Resolve({ spec: "hello world" }).taskType, "explorer");
+    });
+    Check(Count, "P1: a complete, policy-legal explicit route is kept untouched", () => {
+      const Passed = {
+        provider: "cloudflare-workers-ai",
+        model: "@cf/zai-org/glm-5.3-flash",
+        reasoningEffort: "high"
+      };
+      const Route = Resolve({ taskType: "coder", route: Passed });
+      assert.equal(Route.source, "kept");
+      assert.deepEqual(Route.passed, Passed);
+      assert.equal(Route.model, Passed.model);
+      assert.equal(Route.reasoningEffort, "high");
+    });
+    Check(Count, "P1: a complete but illegal route is silently corrected, with the audit trail", () => {
+      const Route = Resolve({
+        taskType: "coder",
+        route: { provider: "other", model: "@cf/other/m", reasoningEffort: "low" }
+      });
+      assert.equal(Route.source, "corrected");
+      assert.equal(Route.provider, "cloudflare-workers-ai");
+      assert.equal(Route.model, "@cf/zai-org/glm-5.3-flash");
+      assert.equal(Route.reasoningEffort, "high");
+      assert.deepEqual(Route.passed, {
+        provider: "other",
+        model: "@cf/other/m",
+        reasoningEffort: "low"
+      });
+    });
+    Check(Count, "P1: a partial explicit route is resolved silently (never kept)", () => {
+      const Route = Resolve({ taskType: "coder", route: { model: "@cf/zai-org/glm-5.3-flash" } });
+      assert.equal(Route.source, "resolved");
+      assert.equal(Route.reasoningEffort, "high");
+    });
+    Check(Count, "P1: the escalation flag selects the planner rung", () => {
+      const Route = Resolve({ escalate: true, taskType: "explorer" });
+      assert.deepEqual(
+        [Route.taskType, Route.source, Route.model, Route.reasoningEffort],
+        ["planner", "escalated", "@cf/deepseek-ai/deepseek-v4.1-flash-1017", "max"]
+      );
+    });
+  }
+  {
+    const Run = await Setup();
+    Check(Count, "P2: Classify maps the documented keywords", () => {
+      assert.equal(Run.Service.Classify("survey the docs"), "explorer");
+      assert.equal(Run.Service.Classify("refactor this module"), "coder");
+      assert.equal(Run.Service.Classify("plan the architecture"), "planner");
+      assert.equal(Run.Service.Classify("greet the user"), void 0);
+    });
+    Check(Count, "P2: Escalate follows the attempts ladder (at most one rung)", () => {
+      const Rung = Run.Service.Escalate(0);
+      assert.equal(Rung.source, "escalated");
+      assert.equal(Rung.taskType, "planner");
+      assert.equal(Run.Service.Escalate(1), void 0);
+    });
+  }
+  {
+    const Run = Make(
+      Validate({ enabled: true, policy: { escalation: { enabled: false, max: 1 } } })
+    );
+    Check(Count, "P3: with escalation disabled the flag falls through and the ladder is closed", () => {
+      const Route = Run.Service.Resolve({ escalate: true });
+      assert.equal(Route.taskType, "explorer");
+      assert.equal(Route.source, "resolved");
+      assert.equal(Run.Service.Escalate(0), void 0);
+    });
+  }
+  {
+    const Run = await Setup();
+    await CheckAsync(Count, "P4: an omission-free launch gets the resolved route injected silently", async () => {
+      const Exec = Launch({ description: "fix the bug", agentOptions: {} });
+      const { Out, Decision, Called } = await Fire(Run, Exec);
+      assert.equal(Called, 1);
+      assert.equal(Out, Decision);
+      assert.deepEqual(Exec.args.agentOptions, {
+        provider: "cloudflare-workers-ai",
+        model: "@cf/zai-org/glm-5.3-flash",
+        reasoningEffort: "high"
+      });
+      assert.deepEqual(LinesWith(Run, "route "), [
+        "plugin-dsh-route: route coder resolved cloudflare-workers-ai @cf/zai-org/glm-5.3-flash high"
+      ]);
+      assert.deepEqual(Run.Warns, []);
+    });
+    await CheckAsync(Count, "P4: a wrong explicit route is corrected in place, never surfaced", async () => {
+      const Exec = Launch({
+        description: "fix the bug",
+        agentOptions: { provider: "other", model: "@cf/other/m", reasoningEffort: "low" }
+      });
+      await Fire(Run, Exec);
+      assert.deepEqual(Exec.args.agentOptions, {
+        provider: "cloudflare-workers-ai",
+        model: "@cf/zai-org/glm-5.3-flash",
+        reasoningEffort: "high"
+      });
+      assert.deepEqual(LinesWith(Run, "route coder corrected"), [
+        "plugin-dsh-route: route coder corrected cloudflare-workers-ai @cf/zai-org/glm-5.3-flash high"
+      ]);
+      assert.deepEqual(Run.Warns, []);
+    });
+    await CheckAsync(Count, "P4: a policy-legal route is kept as passed", async () => {
+      const Exec = Launch({
+        description: "fix the bug",
+        agentOptions: {
+          provider: "cloudflare-workers-ai",
+          model: "@cf/zai-org/glm-5.3-flash",
+          reasoningEffort: "high"
+        }
+      });
+      await Fire(Run, Exec);
+      assert.equal(Exec.args.agentOptions.reasoningEffort, "high");
+      assert.deepEqual(LinesWith(Run, "route coder kept"), [
+        "plugin-dsh-route: route coder kept cloudflare-workers-ai @cf/zai-org/glm-5.3-flash high"
+      ]);
+    });
+    await CheckAsync(Count, "P4: the top-level spelling is injected too (the second spelling)", async () => {
+      const Exec = Launch({ prompt: "survey the docs" });
+      await Fire(Run, Exec);
+      assert.deepEqual(
+        [Exec.args.provider, Exec.args.model, Exec.args.reasoningEffort],
+        ["cloudflare-workers-ai", "@cf/zai-org/glm-5.3-flash", "low"]
+      );
+      assert.deepEqual(LinesWith(Run, "route explorer resolved"), [
+        "plugin-dsh-route: route explorer resolved cloudflare-workers-ai @cf/zai-org/glm-5.3-flash low"
+      ]);
+    });
+    await CheckAsync(Count, "P4: a non-subagent tool passes through untouched and unlogged", async () => {
+      const Exec = Launch();
+      Exec.name = "read";
+      const { Decision } = await Fire(Run, Exec);
+      assert.equal(Exec.args.agentOptions, void 0);
+      assert.equal(LinesWith(Run, "route ").length, 4);
+      assert.equal(Decision.marker, "downstream");
+    });
+  }
+  {
+    const Run = await Setup();
+    const Flipped = {
+      ...Run.Service.Policy,
+      coder: {
+        provider: "cloudflare-workers-ai",
+        model: "@cf/deepseek-ai/deepseek-v4.1-flash-1017",
+        reasoningEffort: "max"
+      }
+    };
+    const Cell = Run.Raw.policy;
+    const Write = /* @__PURE__ */ Symbol.for("cosmokit.volatile.write");
+    Cell[Write](Flipped);
+    Run.CtxListeners["loader/volatile-update"](["policy"]);
+    Check(Count, "P5: a policy hot-edit lands on the next launch without a remount", () => {
+      assert.equal(Run.Service.Policy.coder.model, "@cf/deepseek-ai/deepseek-v4.1-flash-1017");
+    });
+  }
+  {
+    const Run = await Setup();
+    const Request = { spec: "fix the bug", route: void 0 };
+    Check(Count, "P6: the same request and policy always produce the same route", () => {
+      const First = Run.Service.Resolve(Request);
+      const Second = Run.Service.Resolve(Request);
+      assert.deepEqual(First, Second);
+    });
+  }
+  return Finish(Count, "Resolve-And-Inject");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Resolve-And-Inject`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

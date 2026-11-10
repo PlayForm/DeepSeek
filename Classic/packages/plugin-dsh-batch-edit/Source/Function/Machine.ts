@@ -1,21 +1,25 @@
-// Machine - the state machine and the process cells (SCHEMA.md section 2.2,
-// STATE-MACHINE.md section 3): the registry of open machines, the insert /
-// remove / open / close verbs, the fs/observed stale-halt observer, and the
-// grammar parsers for the agent-prepared schema (searches + ops, validated
-// fail-loud at open - the live containers' Apply.ts Validate precedent).
-//
-// THE EVENT-LOOP LAW: the fs/observed observer (OnObserved) is a SYNCHRONOUS
-// cell-flipper only - no awaits, no throws, no I/O; all async work (reads,
-// previews, writes) runs inside the tool's execute through Ops.ts. The
-// observer flips a held cell to halted("stale") when the version token
-// MOVED underneath (the file went stale BEFORE committing) and logs the
-// contract line only on an actual flip - an idle machine never logs (the
-// silence invariant).
-//
-// THE GOVERN MARKER: the observer SKIPS every event whose actor carries the
-// `govern` field (the batch's own writes through the factory's Gate.ts route
-// 2) and every event the machine's own Stash idempotence gate catches - the
-// machine never halts on its own reconciliations.
+/**
+ * @module Machine
+ *
+ * The state machine and the process cells (SCHEMA.md section 2.2,
+ * STATE-MACHINE.md section 3): the registry of open machines, the insert /
+ * remove / open / close verbs, the fs/observed stale-halt observer, and the
+ * grammar parsers for the agent-prepared schema (searches + ops, validated
+ * fail-loud at open - the live containers' Apply.ts Validate precedent).
+ *
+ * @remarks
+ * THE EVENT-LOOP LAW: the fs/observed observer (OnObserved) is a SYNCHRONOUS
+ * cell-flipper only - no awaits, no throws, no I/O; all async work (reads,
+ * previews, writes) runs inside the tool's execute through Ops.ts. The observer
+ * flips a held cell to halted("stale") when the version token MOVED underneath
+ * (the file went stale BEFORE committing) and logs the contract line only on an
+ * actual flip - an idle machine never logs (the silence invariant).
+ *
+ * THE GOVERN MARKER: the observer SKIPS every event whose actor carries the
+ * `govern` field (the batch's own writes through the factory's Gate.ts route 2)
+ * and every event the machine's own Stash idempotence gate catches - the
+ * machine never halts on its own reconciliations.
+ */
 import { readdirSync } from "node:fs";
 import { dirname as Dir, isAbsolute, resolve as ResolvePath } from "node:path";
 

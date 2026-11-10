@@ -1,4 +1,7 @@
 import type State from "../Interface/State.js";
 import type Factory from "@playform/plugin-dsh-factory";
 export default _default;
+/**
+ * The factory transform contract (the factory's Interface/Transform).
+ */
 declare function _default(Furnace: Factory, State: State, Path: string): Parameters<Factory["Continue"]>[6];

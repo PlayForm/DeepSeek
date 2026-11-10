@@ -1,3 +1,20 @@
+/**
+ * @module Service
+ *
+ * The `workspaceAudit` service: extends the cordis Service base and is
+ * REGISTERED FROM APPLY, so `ctx.workspaceAudit` resolves.
+ *
+ * @remarks
+ * Declaration merging below gives the typed accessor. The methods are thin
+ * delegates (one Function module each):
+ *
+ * - line(input) - record any traceability-graph node's line;
+ * - assessment(operation, verdict) - close the loop: the IntentAssessment
+ *   line against the IntentSpecification's satisfaction contract;
+ * - chain(operation) - one operation's lines, in order;
+ * - lines(limit?) - the ring, newest first;
+ * - statistics() - { operations, lines, sequence }.
+ */
 import { Service, type Context } from "@deepseek-ai/cordis";
 import type Line from "../Interface/Line.js";
 import type State from "../Interface/State.js";
@@ -18,8 +35,10 @@ export default class WorkspaceAudit extends Service {
         outcome?: Line["outcome"];
         assessment?: string;
     }): Line;
-    /** Close the loop: the IntentAssessment line for one operation, recording
-     *  whether its IntentSpecification was satisfied. */
+    /**
+     * Close the loop: the IntentAssessment line for one operation, recording
+     * whether its IntentSpecification was satisfied.
+     */
     assessment(Operation: string, Satisfied: boolean, Detail?: string): Line;
     /**
      * One operation's audit chain, in recording order.
@@ -38,6 +57,9 @@ export default class WorkspaceAudit extends Service {
         sequence: number;
     };
 }
+/**
+ * Declaration merging: the typed accessor on the cordis Context.
+ */
 declare module "@deepseek-ai/cordis" {
     interface Context {
         /**

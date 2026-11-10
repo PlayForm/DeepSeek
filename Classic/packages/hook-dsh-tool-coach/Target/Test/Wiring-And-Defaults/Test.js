@@ -1,1 +1,219 @@
-import t from"node:assert/strict";import*as c from"node:fs";import{Check as o,Coach as u,DEFAULT_EXEMPTS as f,DEFAULT_PATTERNS as d,Finish as h,Furnace as g,Make as i,MakeCounter as p,NOTE_DENIED as T,NOTE_DENIED_TOOL as v,NOTE_FIRST as y,NOTE_PERSISTENT as m,Validate as s,Ledger as r,rm as S,CAT_ROW as b}from"../Harness.js";const q=async()=>{const e=p();S();const l=s({logFile:r});o(e,"volatile cell: log arrives as { get }",()=>{t.equal(typeof l.log.get,"function")}),o(e,"volatile cell: enabled arrives as { get }",()=>{t.equal(typeof l.enabled.get,"function")}),o(e,"volatile cell: fetchLive arrives as { get }",()=>{t.equal(typeof l.fetchLive.get,"function")}),o(e,"volatile cell: notes arrives as { get } (object cell)",()=>{t.equal(typeof l.notes.get,"function")}),o(e,"config default threshold=3",()=>{t.equal(l.threshold.get(),3)}),o(e,"config default window=8",()=>{t.equal(l.window.get(),8)}),o(e,"config default cooldown=10",()=>{t.equal(l.cooldown.get(),10)}),o(e,"config default escalateThreshold=6",()=>{t.equal(l.escalateThreshold.get(),6)}),o(e,"config default cleanWindow=12",()=>{t.equal(l.cleanWindow.get(),12)}),o(e,"config default enforce=off",()=>{t.equal(l.enforce.get(),"off")}),o(e,"config default enforceThreshold=4",()=>{t.equal(l.enforceThreshold.get(),4)}),o(e,"config default maxSectionTools=5",()=>{t.equal(l.maxSectionTools.get(),5)}),o(e,"config default sectionTtl=20",()=>{t.equal(l.sectionTtl.get(),20)}),o(e,"config default fetchLive=true",()=>{t.equal(l.fetchLive.get(),!0)}),o(e,"config default judgeTools=[bash,pwsh]",()=>{t.equal(JSON.stringify(l.judgeTools.get()),JSON.stringify(["bash","pwsh"]))}),o(e,"config default notes: the four verbatim templates",()=>{t.equal(JSON.stringify(l.notes.get()),JSON.stringify({first:y,persistent:m,denied:T,deniedTool:v}))}),o(e,"config default patternTable = the built-in adversarial table",()=>{t.equal(JSON.stringify(l.patternTable.get()),JSON.stringify(d))}),o(e,"config default exemptPatterns = the built-in legitimate-bash boundary",()=>{t.equal(JSON.stringify(l.exemptPatterns.get()),JSON.stringify(f))});{const a=i(l);o(e,"apply returns NOTHING (the loader contract)",()=>{t.equal(a.Returned,void 0)}),o(e,"all FIVE coaching listeners are registered",()=>{t.ok(["tools/post-execute","tools/pre-execute","agent/pre-step","system-prompt/assemble","tools/change"].every(n=>typeof a.Listeners[n]=="function"))}),o(e,"plus the State builder's P10 loader/volatile-update refresh",()=>{t.ok(a.Listeners["loader/volatile-update"]!==void 0)}),o(e,"exactly six registrations (5 coaching + 1 volatile refresh)",()=>{t.equal(Object.keys(a.Listeners).length,6)}),o(e,"tools/post-execute is a PLAIN registration (runs AFTER CCR's {prepend:true})",()=>{t.equal(a.ListenerOptions["tools/post-execute"],void 0)}),o(e,"pre-execute and assemble are plain registrations too",()=>{t.ok(a.ListenerOptions["tools/pre-execute"]===void 0&&a.ListenerOptions["system-prompt/assemble"]===void 0)}),o(e,"the module identity is hook-dsh-tool-coach",()=>{t.equal(u.name,"hook-dsh-tool-coach")}),o(e,"inject = [pluginFactory, tools]",()=>{t.equal(JSON.stringify(u.inject),JSON.stringify(["pluginFactory","tools"]))}),o(e,"state module = hook-dsh-tool-coach (the ledger prefix)",()=>{t.equal(a.State.Module,"hook-dsh-tool-coach")}),o(e,"state carries the REAL factory instance",()=>{t.ok(a.State.Factory===g)}),o(e,"volatile unwrap: enabled cell -> State.On=true",()=>{t.equal(a.State.On,!0)}),o(e,"volatile unwrap: threshold cell -> State.Threshold=3",()=>{t.equal(a.State.Threshold,3)}),o(e,"volatile unwrap: fetchLive cell -> State.FetchLive=true",()=>{t.equal(a.State.FetchLive,!0)}),o(e,"activation ledger line byte-exact",()=>{t.ok(a.Lines.includes("hook-dsh-tool-coach: activated (bundle 0.2.1, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)"))}),o(e,"the durable ledger file carries the [ISO] activation line",()=>{t.ok(c.existsSync(r)&&c.readFileSync(r,"utf8").includes("] activated (bundle 0.2.1, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)"))})}return o(e,"fail-loud validation: an invalid config throws at load with a clear error",()=>{let a=null;try{i(s({threshold:0}))}catch(n){a=n}t.ok(a!==null&&a.message==="hook-dsh-tool-coach: threshold must be >= 1")}),o(e,"fail-loud validation: a user row duplicating a built-in pattern is rejected",()=>{let a=null;try{i(s({patternTable:[...d,{pattern:b,class:"read",tool:"read"}]}))}catch(n){a=n}t.ok(a!==null&&a.message.includes("duplicates a built-in pattern"))}),o(e,"fail-loud validation: maxSectionTools outside 1-24 is rejected",()=>{let a=null;try{i(s({maxSectionTools:0}))}catch(n){a=n}t.ok(a!==null&&a.message==="hook-dsh-tool-coach: maxSectionTools must be between 1 and 24")}),h(e,"Wiring-And-Defaults")},w=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(w){const e=await q();console.log(`${e} PASS - Wiring-And-Defaults`)}export{q as runTest};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import {
+  Check,
+  Coach,
+  DEFAULT_EXEMPTS,
+  DEFAULT_PATTERNS,
+  Finish,
+  Furnace,
+  Make,
+  MakeCounter,
+  NOTE_DENIED,
+  NOTE_DENIED_TOOL,
+  NOTE_FIRST,
+  NOTE_PERSISTENT,
+  Validate,
+  Ledger,
+  rm,
+  CAT_ROW
+} from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  rm();
+  const Raw1 = Validate({ logFile: Ledger });
+  {
+    Check(Count, "volatile cell: log arrives as { get }", () => {
+      assert.equal(typeof Raw1.log.get, "function");
+    });
+    Check(Count, "volatile cell: enabled arrives as { get }", () => {
+      assert.equal(typeof Raw1.enabled.get, "function");
+    });
+    Check(Count, "volatile cell: fetchLive arrives as { get }", () => {
+      assert.equal(typeof Raw1.fetchLive.get, "function");
+    });
+    Check(Count, "volatile cell: notes arrives as { get } (object cell)", () => {
+      assert.equal(typeof Raw1.notes.get, "function");
+    });
+  }
+  {
+    Check(Count, "config default threshold=3", () => {
+      assert.equal(Raw1.threshold.get(), 3);
+    });
+    Check(Count, "config default window=8", () => {
+      assert.equal(Raw1.window.get(), 8);
+    });
+    Check(Count, "config default cooldown=10", () => {
+      assert.equal(Raw1.cooldown.get(), 10);
+    });
+    Check(Count, "config default escalateThreshold=6", () => {
+      assert.equal(Raw1.escalateThreshold.get(), 6);
+    });
+    Check(Count, "config default cleanWindow=12", () => {
+      assert.equal(Raw1.cleanWindow.get(), 12);
+    });
+    Check(Count, "config default enforce=off", () => {
+      assert.equal(Raw1.enforce.get(), "off");
+    });
+    Check(Count, "config default enforceThreshold=4", () => {
+      assert.equal(Raw1.enforceThreshold.get(), 4);
+    });
+    Check(Count, "config default maxSectionTools=5", () => {
+      assert.equal(Raw1.maxSectionTools.get(), 5);
+    });
+    Check(Count, "config default sectionTtl=20", () => {
+      assert.equal(Raw1.sectionTtl.get(), 20);
+    });
+    Check(Count, "config default fetchLive=true", () => {
+      assert.equal(Raw1.fetchLive.get(), true);
+    });
+    Check(Count, "config default judgeTools=[bash,pwsh]", () => {
+      assert.equal(
+        JSON.stringify(Raw1.judgeTools.get()),
+        JSON.stringify(["bash", "pwsh"])
+      );
+    });
+    Check(Count, "config default notes: the four verbatim templates", () => {
+      assert.equal(
+        JSON.stringify(Raw1.notes.get()),
+        JSON.stringify({
+          first: NOTE_FIRST,
+          persistent: NOTE_PERSISTENT,
+          denied: NOTE_DENIED,
+          deniedTool: NOTE_DENIED_TOOL
+        })
+      );
+    });
+    Check(Count, "config default patternTable = the built-in adversarial table", () => {
+      assert.equal(
+        JSON.stringify(Raw1.patternTable.get()),
+        JSON.stringify(DEFAULT_PATTERNS)
+      );
+    });
+    Check(Count, "config default exemptPatterns = the built-in legitimate-bash boundary", () => {
+      assert.equal(
+        JSON.stringify(Raw1.exemptPatterns.get()),
+        JSON.stringify(DEFAULT_EXEMPTS)
+      );
+    });
+  }
+  {
+    const Run1 = Make(Raw1);
+    Check(Count, "apply returns NOTHING (the loader contract)", () => {
+      assert.equal(Run1.Returned, void 0);
+    });
+    Check(Count, "all FIVE coaching listeners are registered", () => {
+      assert.ok(
+        [
+          "tools/post-execute",
+          "tools/pre-execute",
+          "agent/pre-step",
+          "system-prompt/assemble",
+          "tools/change"
+        ].every((Name) => typeof Run1.Listeners[Name] === "function")
+      );
+    });
+    Check(Count, "plus the State builder's P10 loader/volatile-update refresh", () => {
+      assert.ok(Run1.Listeners["loader/volatile-update"] !== void 0);
+    });
+    Check(Count, "exactly six registrations (5 coaching + 1 volatile refresh)", () => {
+      assert.equal(Object.keys(Run1.Listeners).length, 6);
+    });
+    Check(
+      Count,
+      "tools/post-execute is a PLAIN registration (runs AFTER CCR's {prepend:true})",
+      () => {
+        assert.equal(Run1.ListenerOptions["tools/post-execute"], void 0);
+      }
+    );
+    Check(Count, "pre-execute and assemble are plain registrations too", () => {
+      assert.ok(
+        Run1.ListenerOptions["tools/pre-execute"] === void 0 && Run1.ListenerOptions["system-prompt/assemble"] === void 0
+      );
+    });
+    Check(Count, "the module identity is hook-dsh-tool-coach", () => {
+      assert.equal(Coach.name, "hook-dsh-tool-coach");
+    });
+    Check(Count, "inject = [pluginFactory, tools]", () => {
+      assert.equal(JSON.stringify(Coach.inject), JSON.stringify(["pluginFactory", "tools"]));
+    });
+    Check(Count, "state module = hook-dsh-tool-coach (the ledger prefix)", () => {
+      assert.equal(Run1.State.Module, "hook-dsh-tool-coach");
+    });
+    Check(Count, "state carries the REAL factory instance", () => {
+      assert.ok(Run1.State.Factory === Furnace);
+    });
+    Check(Count, "volatile unwrap: enabled cell -> State.On=true", () => {
+      assert.equal(Run1.State.On, true);
+    });
+    Check(Count, "volatile unwrap: threshold cell -> State.Threshold=3", () => {
+      assert.equal(Run1.State.Threshold, 3);
+    });
+    Check(Count, "volatile unwrap: fetchLive cell -> State.FetchLive=true", () => {
+      assert.equal(Run1.State.FetchLive, true);
+    });
+    Check(Count, "activation ledger line byte-exact", () => {
+      assert.ok(
+        Run1.Lines.includes(
+          `hook-dsh-tool-coach: activated (bundle ${"0.2.1"}, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)`
+        )
+      );
+    });
+    Check(Count, "the durable ledger file carries the [ISO] activation line", () => {
+      assert.ok(
+        FileSystem.existsSync(Ledger) && FileSystem.readFileSync(Ledger, "utf8").includes(
+          `] activated (bundle ${"0.2.1"}, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)`
+        )
+      );
+    });
+  }
+  {
+    Check(Count, "fail-loud validation: an invalid config throws at load with a clear error", () => {
+      let Threw = null;
+      try {
+        Make(Validate({ threshold: 0 }));
+      } catch (Error) {
+        Threw = Error;
+      }
+      assert.ok(Threw !== null && Threw.message === "hook-dsh-tool-coach: threshold must be >= 1");
+    });
+    Check(
+      Count,
+      "fail-loud validation: a user row duplicating a built-in pattern is rejected",
+      () => {
+        let Threw = null;
+        try {
+          Make(
+            Validate({
+              patternTable: [...DEFAULT_PATTERNS, { pattern: CAT_ROW, class: "read", tool: "read" }]
+            })
+          );
+        } catch (Error) {
+          Threw = Error;
+        }
+        assert.ok(Threw !== null && Threw.message.includes("duplicates a built-in pattern"));
+      }
+    );
+    Check(Count, "fail-loud validation: maxSectionTools outside 1-24 is rejected", () => {
+      let Threw = null;
+      try {
+        Make(Validate({ maxSectionTools: 0 }));
+      } catch (Error) {
+        Threw = Error;
+      }
+      assert.ok(
+        Threw !== null && Threw.message === "hook-dsh-tool-coach: maxSectionTools must be between 1 and 24"
+      );
+    });
+  }
+  return Finish(Count, "Wiring-And-Defaults");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Wiring-And-Defaults`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

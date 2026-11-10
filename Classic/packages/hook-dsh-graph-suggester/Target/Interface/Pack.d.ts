@@ -1,41 +1,87 @@
+/**
+ * @module Pack
+ *
+ * The intent types the classifier and the note builder consume
+ * (SEARCH-SUGGESTER-PLUGIN.md §8.2, the pack-as-data contract; the graph consumer's projection
+ * per §9.2).
+ *
+ * @remarks
+ * THE INTENTS ARE SYNTHESIZED PER CALL: Function/Apply builds the `Neighborhood` and `Sibling`
+ * intents from the workspace graph query's own answer and prepends them as data. The private
+ * literal pack (Variable/Defaults.ts) is RETIRED from the hot path and nothing imports it; its
+ * `Pack` shape below survives only as the retired reference table's type.
+ */
 export interface Signal {
-    /** The rule name, for the ledger and the smokes. */
+    /**
+     * The rule name, for the ledger and the smokes.
+     */
     rule: string;
-    /** The regex source, tested against the call probe (tool name + arguments JSON). */
+    /**
+     * The regex source, tested against the call probe (tool name + arguments JSON).
+     */
     pattern: string;
-    /** The weight added to the intent's score when the signal matches. */
+    /**
+     * The weight added to the intent's score when the signal matches.
+     */
     weight: number;
-    /** Optional tool-name restriction: empty/undefined = any tool. */
+    /**
+     * Optional tool-name restriction: empty/undefined = any tool.
+     */
     tools?: string[];
 }
 export interface Candidate {
-    /** The target path, as the graph answered it (repo-relative or its display path; never invented). */
+    /**
+     * The target path, as the graph answered it (repo-relative or its display path; never
+     * invented).
+     */
     path: string;
-    /** The one phrase the model reads; a candidate without a reason is not emitted. */
+    /**
+     * The one phrase the model reads; a candidate without a reason is not emitted.
+     */
     reason: string;
-    /** The static prior in [0,1]: 1.0 canonical (a graph entry), 0.6 family, 0.3 illustrative. */
+    /**
+     * The static prior in [0,1]: 1.0 canonical (a graph entry), 0.6 family, 0.3 illustrative.
+     */
     prior: number;
 }
 export interface Intent {
-    /** The intent id (e.g. "Neighborhood"). */
+    /**
+     * The intent id (e.g. "Neighborhood").
+     */
     id: string;
-    /** Priority: the lower number wins when two intents fire on one call. */
+    /**
+     * Priority: the lower number wins when two intents fire on one call.
+     */
     priority: number;
-    /** The confidence gate for this intent. */
+    /**
+     * The confidence gate for this intent.
+     */
     threshold: number;
-    /** The signals that open the intent. */
+    /**
+     * The signals that open the intent.
+     */
     signals: Signal[];
-    /** The ordered target set. */
+    /**
+     * The ordered target set.
+     */
     targets: Candidate[];
-    /** The one-phrase caveat appended to the note. */
+    /**
+     * The one-phrase caveat appended to the note.
+     */
     note: string;
 }
 export default interface Pack {
-    /** The pack name (this consumer's domain). */
+    /**
+     * The pack name (this consumer's domain).
+     */
     pack: string;
-    /** The pack schema version. */
+    /**
+     * The pack schema version.
+     */
     version: number;
-    /** The intents, priority-ordered (the retired reference table's shape). */
+    /**
+     * The intents, priority-ordered (the retired reference table's shape).
+     */
     intents: Intent[];
 }
 export interface CompiledSignal {

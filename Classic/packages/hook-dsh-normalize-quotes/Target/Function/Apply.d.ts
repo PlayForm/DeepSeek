@@ -1,4 +1,47 @@
+/**
+ * @module Apply
+ *
+ * The plugin entry function: a THIN MODULE WIRE-UP in the factory family's
+ * shape, building the State, emitting the durable activation proof and
+ * registering the quotes hook's OWN llm/stream listener.
+ *
+ * @remarks
+ * The State is built through `Factory.State` (the cell unwrap, the shared
+ * mappings Ledger<-logFile / Enabled<-log and the module's own fields via the
+ * setup `fields` map - factory SCHEME.md section 2.10); the durable activation
+ * proof is the module's own string, appended via Factory.Append (the factory
+ * never owns ledger strings).
+ *
+ * NOT factory machinery, deliberately:
+ *
+ * - Factory.Wire is fs/observed-hardwired (the family's SILENCE) - the quotes
+ *   hook's normalization must be VISIBLE (it IS the feature), so the
+ *   registration here is the plain `ctx.on("llm/stream", ...)` pattern,
+ *   fiber-owned, removed on unload, no manual bookkeeping.
+ * - Factory.Attach (P1 jobs controller, P2 inflight disposal, P5 storage
+ *   domain) has no consumer here: the quotes hook runs no jobs and holds no
+ *   inflight continuations; its only journal traffic is the stream count
+ *   record - the `normalized` event of the shared governance domain, journaled
+ *   best-effort when the storage facility is present (Function/Normalize; the
+ *   human ledger stays the complete record).
+ * - Factory.Schema is not used for Config: it hardcodes the family's shared
+ *   block (updateCooldownMs/mutationTools/policyFile/exclude - fs/observed
+ *   machinery the quotes hook has none of). The MODULE owns its Config:
+ *   Variable/Config.ts defines the quotes hook's own schema.
+ *
+ * The function returns NOTHING - never a value: the loader treats apply return
+ * values specially, and a returned State object silently killed event delivery
+ * (live-verified, plugin-development skill pitfall 16). Test probes read the
+ * state through the `ctx.__hookDshQuotesState` attachment instead.
+ *
+ * `inject: ["pluginFactory"]` (Library.ts) - the factory is a REQUIRED
+ * service; the loader's PENDING state handles the ordering (the plugin loads
+ * only when the factory service exists), so bundle-layer order never matters.
+ * Nothing else is injected: the ledger append is the factory's own plain-fs
+ * exemption, and the chunk vocabulary arrives through the waterfall, not
+ * through an import.
+ */
 import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
+import type Config from "@Interface/Config.js";
 export default _default;
 declare function _default(Context: Context, Options: Config): void;

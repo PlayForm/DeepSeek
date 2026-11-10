@@ -1,23 +1,30 @@
-// Tools - the `batch_edit` defineTool (the flat schema, SCHEMA.md section
-// 2.1; the tool name is the research's suggestion, pending the user's
-// confirmation - RESIDUALS item 1). Flat parameters, grouped by prefix; the
-// canonical output value is ONE JSON object; output.render turns it into the
-// model-facing prose (Function/Present); presentationMeta carries the diffs
-// for the UI's diff card (the cookbook path - no client half in v1).
-//
-// THE ACTIONS (the machine):
-//   open    - declare the scope, insert files, return the state presentation
-//   insert  - add files to an open machine (the dynamic insertion)
-//   remove  - drop files from an open machine
-//   commit  - run the transition table in one go (Ops.Commit) - behind the
-//             D6 policy gate: `write: approve` (the shipped default) refuses
-//             the apply BEFORE any plan or write with the byte-exact
-//             `apply refused <id> (policy write=approve)` line, and the
-//             machine stays open with its cells observed (the approval path
-//             is the existing approve binding)
-//   state   - re-present the current state of every held file
-//   close   - close the machine (halted processes settle to done-able; the
-//             settle-first rule runs in Machine.Close)
+/**
+ * @module Tools
+ *
+ * The `batch_edit` defineTool (the flat schema, SCHEMA.md section 2.1; the
+ * tool name is the research's suggestion, pending the user's confirmation -
+ * RESIDUALS item 1).
+ *
+ * @remarks
+ * Flat parameters, grouped by prefix; the canonical output value is ONE JSON
+ * object; output.render turns it into the model-facing prose (Function/Present);
+ * presentationMeta carries the diffs for the UI's diff card (the cookbook path -
+ * no client half in v1).
+ *
+ * THE ACTIONS (the machine):
+ * - open - declare the scope, insert files, return the state presentation
+ * - insert - add files to an open machine (the dynamic insertion)
+ * - remove - drop files from an open machine
+ * - commit - run the transition table in one go (Ops.Commit) - behind the D6
+ *   policy gate: `write: approve` (the shipped default) refuses the apply
+ *   BEFORE any plan or write with the byte-exact
+ *   `apply refused <id> (policy write=approve)` line, and the machine stays
+ *   open with its cells observed (the approval path is the existing approve
+ *   binding)
+ * - state - re-present the current state of every held file
+ * - close - close the machine (halted processes settle to done-able; the
+ *   settle-first rule runs in Machine.Close)
+ */
 import { defineTool, type ToolRunContext } from "@deepseek-ai/dsh-tools";
 import type { JobsHub } from "@Interface/Events.js";
 import type Output from "@Interface/Output.js";
@@ -30,9 +37,11 @@ import * as Machine from "./Machine.js";
 import * as Ops from "./Ops.js";
 import { Cells, Prose } from "./Present.js";
 
-/** Find a machine by id: the calling agent's scope first, then every scope
- *  (the multi-agent sharing residual - the session/event fold is later
- *  work; the id lookup stays honest). */
+/**
+ * Find a machine by id: the calling agent's scope first, then every scope
+ * (the multi-agent sharing residual - the session/event fold is later work;
+ * the id lookup stays honest).
+ */
 const Find = (State: State, ID: string): { machine: MachineRecord; agent: string } | undefined => {
 	for (const [Agent, Scope] of State.Machines) {
 		const Found = Scope.get(ID);
@@ -43,7 +52,9 @@ const Find = (State: State, ID: string): { machine: MachineRecord; agent: string
 	return undefined;
 };
 
-/** The machine lookup that fails loud with the contract phrasing. */
+/**
+ * The machine lookup that fails loud with the contract phrasing.
+ */
 const Require = (State: State, ID: string | undefined): MachineRecord => {
 	if (typeof ID !== "string" || ID.length === 0) {
 		throw new Error("plugin-dsh-batch-edit: machine=<id> is required for this action");
@@ -55,12 +66,16 @@ const Require = (State: State, ID: string | undefined): MachineRecord => {
 	return Found.machine;
 };
 
-/** The optional jobs hub, probed at use time (the Seam pattern). */
+/**
+ * The optional jobs hub, probed at use time (the Seam pattern).
+ */
 const JobsOf = (State: State): JobsHub | undefined =>
 	(State.Context.get?.("jobs") as JobsHub | undefined) ?? undefined;
 
-/** The state-action output: a re-presentation, with the counts derived from
- *  the cells themselves (honest numbers, not zeroes). */
+/**
+ * The state-action output: a re-presentation, with the counts derived from
+ * the cells themselves (honest numbers, not zeroes).
+ */
 const StateOutput = (Found: MachineRecord): Output => {
 	const CellsList = Cells(Found);
 	return {
@@ -294,8 +309,10 @@ export default (State: State, Append: (Message: string) => void) =>
 		},
 	});
 
-/** The opfile ingest (the [live-report] precedent): read the prepared file
- *  through the fs backend and split the lines into op lines. */
+/**
+ * The opfile ingest (the [live-report] precedent): read the prepared file
+ * through the fs backend and split the lines into op lines.
+ */
 const Ingest = async (State: State, Path: string, exec: ToolRunContext): Promise<string[]> => {
 	const FS = State.Context.fs as unknown as {
 		resolve: (

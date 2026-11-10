@@ -1,20 +1,46 @@
+/**
+ * @module Config
+ *
+ * The validated plugin-config shape the loader hands to `apply`.
+ *
+ * @remarks
+ * Cordis validates the exported Schemastery schema while the plugin loads and
+ * fills every default, so `apply` receives a plain object of exactly this
+ * shape. The schema that produces it lives in Variable/Config.ts.
+ *
+ * EVERY field is volatile (hot-editable without remounting).
+ */
 import type { Allowlist } from "@playform/plugin-dsh-factory";
 export default interface Config {
-    /** Ledger enabled - write the durable log file (the shared `log` cell). */
+    /**
+     * Ledger enabled - write the durable log file (the shared `log` cell).
+     */
     log: boolean;
-    /** Ledger file - the plugin's own ledger, separate from the family's logs. */
+    /**
+     * Ledger file - the plugin's own ledger, separate from the family's logs.
+     */
     logFile: string;
-    /** Master switch - every listener no-ops to a passthrough when false. */
+    /**
+     * Master switch - every listener no-ops to a passthrough when false.
+     */
     enabled: boolean;
-    /** The KV domain name - the plugin's own domain (workspace_audit). */
+    /**
+     * The KV domain name - the plugin's own domain (workspace_audit).
+     */
     domain: string;
-    /** The maximum number of audit lines kept in the bounded ring. */
+    /**
+     * The maximum number of audit lines kept in the bounded ring.
+     */
     maxLines: number;
-    /** The excluded path patterns (the factory's segment match). */
+    /**
+     * The excluded path patterns (the factory's segment match).
+     */
     exclude: string[];
-    /** The per-action allowlist (D6) - the shared factory block. This
-     *  package's actions are record (automatic); it has NO gated action, so
-     *  the block documents the posture without refusing anything. A resolved
-     *  pack's `policy` section overrides it per action. */
+    /**
+     * The per-action allowlist (D6) - the shared factory block. This package's
+     * actions are record (automatic); it has NO gated action, so the block
+     * documents the posture without refusing anything. A resolved pack's
+     * `policy` section overrides it per action.
+     */
     policy: Allowlist;
 }

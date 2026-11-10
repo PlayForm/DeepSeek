@@ -31,7 +31,7 @@
  *      tools/pre-execute listener (before the call runs) when the offense's
  *      class has reached enforceThreshold strikes since the last note.
  */
-import type { AgentState, Decision, Match } from "@Interface/Execution.js";
+import type { AgentState, Decision, Match } from "../Interface/Execution.js";
 /**
  * The per-call knobs Count reads (the live State values, already unwrapped).
  */

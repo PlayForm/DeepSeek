@@ -1,18 +1,27 @@
-// Match - the exclusion/inclusion check for the hook's own path lists
-// (config `exclude` and `include`). The factory's Match is the segment match
-// (any path segment equal to a listed name); the hook's frozen default list
-// is the GLOB triple `node_modules/**, **/Target/**, **/.git/**`, so the
-// module owns its leaf and provides the glob-aware matcher:
-//
-//   * a pattern containing `*` compiles to an anchored regex (`**` → `.*`,
-//     `*` → `[^/]*`) and is tested against the full path AND against every
-//     path SUFFIX starting at a segment boundary (so `**/Target/**` matches
-//     `/repo/Target/x.ts` and `node_modules/**` matches
-//     `/repo/node_modules/x.ts`);
-//   * a plain pattern (no `*`) is the segment match (the factory's
-//     semantics) - any path segment equal to the pattern excludes the path.
-//
-// Pure internal calculation. No List (or empty) matches nothing.
+/**
+ * @module Match
+ *
+ * The exclusion/inclusion check for the hook's own path lists (config
+ * `exclude` and `include`).
+ *
+ * @remarks
+ * The factory's Match is the segment match (any path segment equal to a
+ * listed name); the hook's frozen default list is the GLOB triple - a
+ * `node_modules` prefix glob, a double star then a slash then `Target` then a
+ * slash then a double star, and a double star then a slash then `.git` then a
+ * slash then a double star - so the module owns its leaf and provides the
+ * glob-aware matcher:
+ *
+ * - a pattern containing `*` compiles to an anchored regex (a double star
+ *   becomes `.*`, a single star becomes `[^/]*`) and is tested against the
+ *   full path AND against every path SUFFIX starting at a segment boundary
+ *   (so the `Target` pattern matches `/repo/Target/x.ts` and the
+ *   `node_modules` prefix pattern matches `/repo/node_modules/x.ts`);
+ * - a plain pattern (no `*`) is the segment match (the factory's semantics)
+ *   - any path segment equal to the pattern excludes the path.
+ *
+ * Pure internal calculation. No List (or empty) matches nothing.
+ */
 const Compile = (Glob: string): RegExp => {
 	const Escaped = Glob.replace(/[.+^${}()|[\]\\]/g, "\\$&");
 	const Source = Escaped.split("**")

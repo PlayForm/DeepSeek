@@ -1,16 +1,20 @@
-// Service - the `workspaceAudit` service (Function/Service): extends the
-// cordis Service base and is REGISTERED FROM APPLY (so `ctx.workspaceAudit`
-// resolves). Declaration merging below gives the typed accessor.
-//
-// The methods are thin delegates (one Function module each):
-//
-//   line(input)          - record any traceability-graph node's line;
-//   assessment(operation, verdict) - close the loop: the IntentAssessment
-//                          line against the IntentSpecification's
-//                          satisfaction contract;
-//   chain(operation)     - one operation's lines, in order;
-//   lines(limit?)        - the ring, newest first;
-//   statistics()         - { operations, lines, sequence }.
+/**
+ * @module Service
+ *
+ * The `workspaceAudit` service: extends the cordis Service base and is
+ * REGISTERED FROM APPLY, so `ctx.workspaceAudit` resolves.
+ *
+ * @remarks
+ * Declaration merging below gives the typed accessor. The methods are thin
+ * delegates (one Function module each):
+ *
+ * - line(input) - record any traceability-graph node's line;
+ * - assessment(operation, verdict) - close the loop: the IntentAssessment
+ *   line against the IntentSpecification's satisfaction contract;
+ * - chain(operation) - one operation's lines, in order;
+ * - lines(limit?) - the ring, newest first;
+ * - statistics() - { operations, lines, sequence }.
+ */
 import { Service, type Context } from "@deepseek-ai/cordis";
 import * as Query from "@Function/Query.js";
 import Write from "@Function/Write.js";
@@ -49,8 +53,10 @@ export default class WorkspaceAudit extends Service {
 		});
 	}
 
-	/** Close the loop: the IntentAssessment line for one operation, recording
-	 *  whether its IntentSpecification was satisfied. */
+	/**
+	 * Close the loop: the IntentAssessment line for one operation, recording
+	 * whether its IntentSpecification was satisfied.
+	 */
 	assessment(Operation: string, Satisfied: boolean, Detail = ""): Line {
 		return Write(this.State, {
 			operation: Operation,
@@ -86,7 +92,9 @@ export default class WorkspaceAudit extends Service {
 	}
 }
 
-// Declaration merging: the typed accessor on the cordis Context.
+/**
+ * Declaration merging: the typed accessor on the cordis Context.
+ */
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

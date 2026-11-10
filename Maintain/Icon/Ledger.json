@@ -1676,15 +1676,15 @@
 			"version": "0.2.1",
 			"seed": "4a9d6af4e13585768ffe526018ac454fa4fdfb72e122e848662eb9dc116e0797",
 			"grammar": "spike-star",
-			"order": 12,
+			"order": 8,
 			"arms": 8,
 			"rings": 2,
 			"orbit": 8,
 			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "5932f37367fdc1de4acb8ed1affc2fd2007dbd937a361d45cfe78c7402de037c",
-				"colour": "d87f0c60fe177e2898ce5ce5fd7076ae20c48c6cee39d74e1a11150c1b082649"
+				"mono": "037f157b30f619a11f36ae6516178984bce10bc3fa6b23cb95e4a20e358518f4",
+				"colour": "a975d2eb72c2dcffa5a82a26280ef51522931636b732af5d8d701901c8ebd877"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-graph-suggester.svg",

@@ -1,3 +1,11 @@
+/**
+ * @module Query
+ *
+ * The read paths: one operation's chain, the ring, and the statistics triple.
+ *
+ * @remarks
+ * Pure reads over the in-memory structures.
+ */
 import type Line from "../Interface/Line.js";
 import type State from "../Interface/State.js";
 /**
