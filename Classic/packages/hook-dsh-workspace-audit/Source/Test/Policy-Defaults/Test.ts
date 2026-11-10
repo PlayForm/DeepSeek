@@ -1,15 +1,3 @@
-/**
- * @module Test
- *
- * The policy block (D6) of the workspace-audit hook, covered in one singular
- * test.
- *
- * @remarks
- * The test covers the shared block's defaults in the schema and on the built
- * State, the override landing on `Allow`, and the proof that the package has
- * no gated action - a record action (the line) proceeds under the shipped
- * defaults, writes no file and refuses nothing.
- */
 import assert from "node:assert/strict";
 
 import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";
@@ -25,7 +13,22 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * @module Test
+ *
+ * The policy block (D6) of the workspace-audit hook, covered in one singular
+ * test.
+ *
+ * @remarks
+ *
+ * The test covers the shared block's defaults in the schema and on the built
+ * State, the override landing on `Allow`, and the proof that the package has
+ * no gated action - a record action (the line) proceeds under the shipped
+ * defaults, writes no file and refuses nothing.
+ */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",
@@ -37,7 +40,9 @@ const Defaults = {
 	message: "auto",
 };
 
-/** An enabled mount with the given config overrides. */
+/**
+ * An enabled mount with the given config overrides.
+ */
 const Mount = (Config: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));

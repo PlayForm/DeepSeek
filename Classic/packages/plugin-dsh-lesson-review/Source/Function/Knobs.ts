@@ -1,9 +1,12 @@
+import type Configuration from "@Interface/Config.js";
+
 /**
  * @module Knobs
  *
  * The service's validated configuration.
  *
  * @remarks
+ *
  * The constructor's defaults, overridden by the loader's validated config
  * (the class-form plugin receives it as the SECOND constructor argument -
  * the graph service's precedent), with every volatile cell unwrapped and
@@ -20,8 +23,6 @@
  * config (the loader always passes it), which is the documented
  * idle-forever posture (disabled, the bundle patch row).
  */
-import type Configuration from "@Interface/Config.js";
-
 /**
  * The usage-domain name rule (the library's UNIT_NAME_RE).
  */

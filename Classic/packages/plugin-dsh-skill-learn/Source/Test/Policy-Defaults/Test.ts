@@ -1,3 +1,9 @@
+import assert from "node:assert/strict";
+import FileSystem from "node:fs";
+
+import Configuration from "../../../Target/Variable/Configuration.js";
+import { Check, Finish, Knobs, MakeCounter } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +11,7 @@
  * the identity places.
  *
  * @remarks
+ *
  * The schema is the truth (`Source/Variable/Configuration.ts:5-7`), and the knob
  * reader exists because a bare construction never passes through Schemastery.
  * Two readers of one table is a duplicate by construction, so this folder
@@ -17,26 +24,26 @@
  * acceptance. `commit` and `spawn` stay `approve` because the plugin never
  * commits and never spawns an agent.
  */
-import assert from "node:assert/strict";
-import FileSystem from "node:fs";
-
-import Configuration from "../../../Target/Variable/Configuration.js";
-import { Check, Finish, Knobs, MakeCounter } from "../Harness.js";
-
-/** One member of a value read from JSON or from a resolved schema cell. */
+/**
+ * One member of a value read from JSON or from a resolved schema cell.
+ */
 const Member = (Value: unknown, Key: string): unknown => {
 	if (typeof Value !== "object" || Value === null) return undefined;
 	return Reflect.get(Value, Key);
 };
 
-/** Unwrap one resolved schema cell: a volatile cell carries its value behind `get`. */
+/**
+ * Unwrap one resolved schema cell: a volatile cell carries its value behind `get`.
+ */
 const Cell = (Value: unknown): unknown => {
 	if (typeof Value !== "object" || Value === null || !("get" in Value)) return Value;
 	const Reader = Value.get;
 	return typeof Reader === "function" ? Reader.call(Value) : Value;
 };
 
-/** The resolved schema as a plain map, because Schemastery types a module's own fields as unknown. */
+/**
+ * The resolved schema as a plain map, because Schemastery types a module's own fields as unknown.
+ */
 const Values = (Given: unknown): Map<string, unknown> => {
 	const Map_ = new Map<string, unknown>();
 	if (typeof Given !== "object" || Given === null) return Map_;
@@ -44,7 +51,9 @@ const Values = (Given: unknown): Map<string, unknown> => {
 	return Map_;
 };
 
-/** The 29 scalar defaults of plan section 9, written out: the contract, not a mirror. */
+/**
+ * The 29 scalar defaults of plan section 9, written out: the contract, not a mirror.
+ */
 const Scalars = {
 	enabled: false,
 	logFile: "~/.dsh/playform/plugin-dsh-skill-learn.log",
@@ -77,7 +86,9 @@ const Scalars = {
 	model: "",
 };
 
-/** The eight policy verdicts: the D6 block, with this package's `write: auto`. */
+/**
+ * The eight policy verdicts: the D6 block, with this package's `write: auto`.
+ */
 const Policy = {
 	read: "auto",
 	index: "auto",
@@ -89,7 +100,9 @@ const Policy = {
 	message: "auto",
 };
 
-/** The ten path knobs of section 9. */
+/**
+ * The ten path knobs of section 9.
+ */
 const Paths: readonly (keyof typeof Scalars)[] = [
 	"logFile",
 	"storagePath",
@@ -103,7 +116,9 @@ const Paths: readonly (keyof typeof Scalars)[] = [
 	"agreementPath",
 ];
 
-/** The fourteen numeric knobs of section 9. */
+/**
+ * The fourteen numeric knobs of section 9.
+ */
 const Numbers: readonly (keyof typeof Scalars)[] = [
 	"snapshotKeep",
 	"intervalIterations",
@@ -121,11 +136,15 @@ const Numbers: readonly (keyof typeof Scalars)[] = [
 	"curateIntervalHours",
 ];
 
-/** The two booleans and the three strings of section 9. */
+/**
+ * The two booleans and the three strings of section 9.
+ */
 const Flags: readonly (keyof typeof Scalars)[] = ["enabled", "consolidate"];
 const Texts: readonly (keyof typeof Scalars)[] = ["domain", "provider", "model"];
 
-/** The schema's resolved cells, and the knob reader's values. */
+/**
+ * The schema's resolved cells, and the knob reader's values.
+ */
 const Resolved = Values(Configuration({}));
 const Default = (Key: string): unknown => Cell(Resolved.get(Key));
 const Reader = Knobs({});

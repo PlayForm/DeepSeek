@@ -1,3 +1,6 @@
+import type FactoryHandle from "@Interface/Factory.js";
+import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
+
 /**
  * @module State
  *
@@ -7,14 +10,12 @@
  * fields.
  *
  * @remarks
+ *
  * Module is "gitguard" - the module-owned ledger lines are `gitguard: ...` and
  * the factory's Append prefixes with `<State.Module>: `. The npm identity
  * lives in the package name and the `name` export (plugin-dsh-gitguard); the
  * ledger prefix is the module's OWN contract string.
  */
-import type FactoryHandle from "@Interface/Factory.js";
-import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
-
 interface Extra {
 	/**
 	 * Master switch (config `enabled`, volatile) - false = full passthrough.

@@ -1,5 +1,42 @@
 import type State from "../Interface/State.js";
 /**
+ * @module Launch
+ *
+ * The `agent/pre-step` listener that puts the routing hint into the child's
+ * prompt.
+ *
+ * @remarks
+ *
+ * The LAUNCH SEAM's second half: `tools/pre-execute` covers the
+ * model-facing `subagent` tool (Function/Inject), but a child started
+ * straight through the harness service (`ctx.subagents.startActivation` -
+ * the queue's spawn, any host integration) never passes through a tool. The
+ * harness dispatches `agent/pre-step` for EVERY agent (payload:
+ * `{ agent, messages, turn, step, signal }`, decision:
+ * `{ kind: "enter", messages }`), and an untagged listener receives every
+ * agent's event, so this listener sees the spawned child at its first step
+ * and hands it the hint.
+ *
+ * THE CHILD TEST: `agent.options.subagentDepth` /
+ * `session.header.delegationDepth` (the harness's own depth accounting) -
+ * depth 0 is the main conversation, which the plugin never touches; a child
+ * is depth >= 1.
+ *
+ * THE ROUTE THE HINT REPORTS: the child's OWN effective triple
+ * (`agent.options.provider/model/reasoningEffort`, which the launch already
+ * resolved) with the task type classified from the prompt text - the hint
+ * states the lane the child actually runs on, never a route it is not using.
+ *
+ * IDEMPOTENCE: each delegated child receives its hint ONCE (the State's
+ * `Hinted` set is keyed by the exact live agent), and a prompt that already
+ * carries a hint (the tool path annotated it at launch) is left alone - so
+ * a routed prompt carries exactly one hint, at the child's first offered
+ * prompt.
+ *
+ * FAIL-OPEN: any error logs the byte-stable warning and returns the decision
+ * UNCHANGED - a hint can never block or alter a step.
+ */
+/**
  * One model-facing content block (the fields the hint reads).
  */
 interface Block {

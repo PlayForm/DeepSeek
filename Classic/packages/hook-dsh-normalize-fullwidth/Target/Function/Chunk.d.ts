@@ -1,3 +1,5 @@
+import type { StreamChunk } from "@deepseek-ai/dsh-llm";
+export default _default;
 /**
  * @module Chunk
  *
@@ -5,6 +7,7 @@
  * per-chunk dispatch with the transform INJECTED.
  *
  * @remarks
+ *
  * The dispatch structure (which chunk types, which fields, the identity passthroughs, the
  * reasoning gate, the tool-args gate - three-way since the edit exemption and the per-call raw
  * marker: a delta whose `name` is "edit" passes through BY IDENTITY, and a call whose arguments
@@ -18,8 +21,6 @@
  * The behavior is byte-identical to a hand-rolled in-file implementation - the fullwidth smoke
  * is the arbiter.
  */
-import type { StreamChunk } from "@deepseek-ai/dsh-llm";
-export default _default;
 declare function _default(Input: StreamChunk, Reasoning: boolean, ToolArgs: boolean, Raw: boolean, Conversation?: boolean): {
     chunk: StreamChunk;
     count: number;

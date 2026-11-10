@@ -1,28 +1,3 @@
-/**
- * @module Test
- *
- * THE STORE'S PRODUCER (the completion spec's wave 2c re-spec): the recall reader finally has
- * data.
- *
- * @remarks
- * Every judged call in a workspace is appended to the call history - the per-agent ring plus the
- * durable tier (the `replay_history` KV domain, or the JSON fallback when the harness provides no
- * storage) - and a later call recalls the paths that accompanied a similar prior call.
- *
- * The scenarios:
- * - a sequence of judged calls fills the store (the mirror, the ring, the byte-exact `recorded`
- *   lines);
- * - a later call recalls and the note names the historical companions (byte-exact note and
- *   suggest line);
- * - an empty store abstains honestly (no note, no claim);
- * - the KV path survives a reopen (the domain spec, the recovered line, a recall from the
- *   restored mirror);
- * - the JSON fallback survives a reopen without any storage facility;
- * - the ring is bounded by `historyDepth`;
- * - a non-judged call and a foreign-workspace call are never recorded;
- * - the SEEDED store still wins (the fixtures' precedence);
- * - a failed domain open is loud and degrades to the file.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -42,23 +17,57 @@ import {
 	rmStore,
 } from "../Harness.js";
 
-/** A Repeat-shaped call: search + literal + context evidence, one path. */
+/**
+ * @module Test
+ *
+ * THE STORE'S PRODUCER (the completion spec's wave 2c re-spec): the recall reader finally has
+ * data.
+ *
+ * @remarks
+ *
+ * Every judged call in a workspace is appended to the call history - the per-agent ring plus the
+ * durable tier (the `replay_history` KV domain, or the JSON fallback when the harness provides no
+ * storage) - and a later call recalls the paths that accompanied a similar prior call.
+ *
+ * The scenarios:
+ * - a sequence of judged calls fills the store (the mirror, the ring, the byte-exact `recorded`
+ *   lines);
+ * - a later call recalls and the note names the historical companions (byte-exact note and
+ *   suggest line);
+ * - an empty store abstains honestly (no note, no claim);
+ * - the KV path survives a reopen (the domain spec, the recovered line, a recall from the
+ *   restored mirror);
+ * - the JSON fallback survives a reopen without any storage facility;
+ * - the ring is bounded by `historyDepth`;
+ * - a non-judged call and a foreign-workspace call are never recorded;
+ * - the SEEDED store still wins (the fixtures' precedence);
+ * - a failed domain open is loud and degrades to the file.
+ */
+/**
+ * A Repeat-shaped call: search + literal + context evidence, one path.
+ */
 const Probe = (Path_: string): Record<string, unknown> => ({
 	file_path: Path_,
 	pattern: "export function",
 });
 
-/** A mount with the ring wide enough to exercise the episode and no cooldown. */
+/**
+ * A mount with the ring wide enough to exercise the episode and no cooldown.
+ */
 const Knobs = { cooldownCalls: 0, maxNotesPerTurn: 5 };
 
-/** Fire the four-call episode (A, B, C, D) on one mount. */
+/**
+ * Fire the four-call episode (A, B, C, D) on one mount.
+ */
 const Episode = async (Run: any, Agent: unknown): Promise<void> => {
 	for (const Name of ["src/A.ts", "src/B.ts", "src/C.ts", "src/D.ts"]) {
 		await Call(Run, "read", Probe(Name), Agent);
 	}
 };
 
-/** The optional harness service the probe reads (the real shape: get(session)). */
+/**
+ * The optional harness service the probe reads (the real shape: get(session)).
+ */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
 /**
@@ -73,7 +82,9 @@ for (const Name of ["A.ts", "B.ts", "C.ts", "D.ts", "E.ts", "Seed.ts"]) {
 	FileSystem.writeFileSync(Path.join(Work, "src", Name), "x", "utf8");
 }
 
-/** Attach the real workspace as the session cwd (the recall resolves there). */
+/**
+ * Attach the real workspace as the session cwd (the recall resolves there).
+ */
 const At = (Run: any): any => {
 	Run.Context.workingDirectory = Service(Work);
 	return Run;

@@ -1,3 +1,7 @@
+import type PolicyShape from "@Interface/Policy.js";
+import type State from "@Interface/State.js";
+import { Policy } from "@playform/lib-dsh-core";
+
 /**
  * @module Policy
  *
@@ -5,6 +9,7 @@
  * default.
  *
  * @remarks
+ *
  * Data, not code: the policy file (path resolved host-side by Function/Resolve) when given
  * and readable, else the BUILT-IN DEFAULT (reject the learned tailwindcss exception, all dep
  * groups, concurrency 8, target latest, NO verifyCommand - never install implicitly). The
@@ -22,10 +27,6 @@
  * Policy loader - byte-identical lines, module-prefixed by the factory's Append); this module
  * supplies the built-in default.
  */
-import type PolicyShape from "@Interface/Policy.js";
-import type State from "@Interface/State.js";
-import { Policy } from "@playform/lib-dsh-core";
-
 export default (State: State, File: string): PolicyShape =>
 	Policy((Message) => State.Factory.Append(State, Message), File, {
 		reject: ["tailwindcss"], // learned exception

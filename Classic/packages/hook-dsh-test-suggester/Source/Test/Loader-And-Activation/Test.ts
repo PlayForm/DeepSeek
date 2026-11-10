@@ -1,13 +1,3 @@
-/**
- * @module Test
- *
- * The loader contract, the cold disabled mount, the enabled activation proof, the apply-time
- * wiring, the projection unit's fold, the pass-through discipline, the retired boot projection,
- * the schema fail-loud, and the mount purity.
- *
- * @remarks
- * The enabled activation proof is byte-exact, with the `history` segment.
- */
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -24,6 +14,17 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The loader contract, the cold disabled mount, the enabled activation proof, the apply-time
+ * wiring, the projection unit's fold, the pass-through discipline, the retired boot projection,
+ * the schema fail-loud, and the mount purity.
+ *
+ * @remarks
+ *
+ * The enabled activation proof is byte-exact, with the `history` segment.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

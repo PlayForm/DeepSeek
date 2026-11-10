@@ -1,3 +1,5 @@
+import type Stamp from "../Interface/Stamp.js";
+import type State from "../Interface/State.js";
 /**
  * @module Query
  *
@@ -5,10 +7,9 @@
  * newest-first, and the statistics triple.
  *
  * @remarks
+ *
  * Pure in-memory reads over State; never touches storage or the filesystem.
  */
-import type Stamp from "../Interface/Stamp.js";
-import type State from "../Interface/State.js";
 /**
  * The latest stamp for one path, or undefined.
  */

@@ -1,3 +1,5 @@
+import { Fullwidth, ReplaceMap } from "@playform/lib-dsh-core";
+
 /**
  * @module Replace
  *
@@ -5,6 +7,7 @@
  * replacer, pinned to its table.
  *
  * @remarks
+ *
  * The mechanism (the per-call regex built from the mapping's keys as code-point escapes, the
  * function replacer, the `{ text, count }` contract) lives in @playform/lib-dsh-core's
  * Normalize/ReplaceMap; this file supplies only the one argument that makes it THE FULLWIDTH
@@ -14,6 +17,4 @@
  * The core resolves through the profile's node_modules link (the package is installed as a
  * directory link there); the flavor is a table plus a closure, not a fork of the dispatch.
  */
-import { Fullwidth, ReplaceMap } from "@playform/lib-dsh-core";
-
 export default (Text: string): { text: string; count: number } => ReplaceMap(Text, Fullwidth);

@@ -1,3 +1,6 @@
+import type IndexSummary from "../Interface/IndexSummary.js";
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Workspace
  *
@@ -5,6 +8,7 @@
  * walk the tree deterministically (`Function/Walk`), and index every candidate.
  *
  * @remarks
+ *
  * The root is resolved through `ctx.fs.resolve` (the caller's path, else "." - the backend's
  * own cwd, the session working directory). Every candidate is indexed by simply calling the
  * EXISTING per-file entry (`Function/Index`) - the gates are never duplicated here: enabled,
@@ -19,9 +23,6 @@
  * A root that cannot be listed propagates the fs error to the caller (the tool reports it); a
  * failure BELOW the root is not fatal (`Function/Walk`).
  */
-import type IndexSummary from "../Interface/IndexSummary.js";
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(StateRef: State, Root?: string, Options?: {
     maxFiles?: number;
 }): Promise<IndexSummary>;

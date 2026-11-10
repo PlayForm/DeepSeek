@@ -9,9 +9,9 @@ import Placement from "../Variable/Placement.js";
  * `.json`.
  *
  * @remarks
+ *
  * The repo layer overrides the user layer.
  */
-
 export default (Root: string): string[] =>
 	Placement.Extensions.map((Extension) =>
 		join(Root, Placement.RepoDirectory, `${Placement.RepoFile}${Extension}`),

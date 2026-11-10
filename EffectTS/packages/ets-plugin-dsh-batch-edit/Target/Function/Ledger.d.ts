@@ -1,3 +1,4 @@
+import type { MachineRecord } from "../Interface/Process.js";
 /**
  * @module Ledger
  *
@@ -5,13 +6,13 @@
  * the contract): byte-stable, one log per module.
  *
  * @remarks
+ *
  * The factory never owns these strings - every family module composes its own
  * lines and logs them through `Factory.Append` (the ledger-string law). Each
  * export is a pure composer: it takes the runtime values and returns the
  * EXACT line the contract records, so the smokes can assert them
  * byte-identically and a rename changes mechanics, never strings.
  */
-import type { MachineRecord } from "../Interface/Process.js";
 /**
  * `machine opened <id> (<n> files, scope=<glob>)`
  */

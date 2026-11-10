@@ -1,13 +1,3 @@
-/**
- * @module Test
- *
- * The tool surface tests: `live_monitor` and `live_monitor_check`.
- *
- * @remarks
- * `live_monitor` covers the enroll with the effective classification, the per-glob opt-out, the
- * list and the parent-into-child target agent. `live_monitor_check` covers the deep path, the
- * output text with the job id and the admission-full pending form.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -29,7 +19,20 @@ import {
 	WaveAssemble,
 } from "../Harness.js";
 
-/** A standard tools mount. */
+/**
+ * @module Test
+ *
+ * The tool surface tests: `live_monitor` and `live_monitor_check`.
+ *
+ * @remarks
+ *
+ * `live_monitor` covers the enroll with the effective classification, the per-glob opt-out, the
+ * list and the parent-into-child target agent. `live_monitor_check` covers the deep path, the
+ * output text with the job id and the admission-full pending form.
+ */
+/**
+ * A standard tools mount.
+ */
 const Setup = (Config: any = {}): { Jobs: any; Shell: any; Run: any } => {
 	const Jobs = FakeJobsHub();
 	const Shell = FakeShell();
@@ -45,7 +48,9 @@ const Setup = (Config: any = {}): { Jobs: any; Shell: any; Run: any } => {
 	return { Jobs, Shell, Run };
 };
 
-/** The rendered text of a tool result. */
+/**
+ * The rendered text of a tool result.
+ */
 const Rendered = (Run: any, Name: string, Value: any): string =>
 	(Run.tools[Name].output.render as (args: unknown, value: unknown) => { text: string }[])(null, Value)[0]!.text;
 

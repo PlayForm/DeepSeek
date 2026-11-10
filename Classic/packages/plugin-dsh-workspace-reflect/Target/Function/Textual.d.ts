@@ -6,6 +6,7 @@ export default _default;
  * shipped before the AST targeting.
  *
  * @remarks
+ *
  * The engine is a word-boundary regex (never a substring replace), applied to
  * the block's line range. It runs when the semantics service is absent,
  * refused, or its plan has no edit inside the scope.

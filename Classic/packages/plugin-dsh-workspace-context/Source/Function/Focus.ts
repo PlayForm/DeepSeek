@@ -1,3 +1,5 @@
+import type State from "@Interface/State.js";
+
 /**
  * @module Focus
  *
@@ -7,12 +9,11 @@
  * saw.
  *
  * @remarks
+ *
  * The map is per-apply state, bounded by the same maxWatch-style discipline:
  * the oldest caller entry is dropped when the map exceeds 256 callers (a
  * fixed implementation bound, recorded here, not a config knob).
  */
-import type State from "@Interface/State.js";
-
 const CALLER_LIMIT = 256;
 
 export default (State: State, Caller: string, Id: string, Version: string): void => {

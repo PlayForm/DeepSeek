@@ -5,6 +5,7 @@
  * callback (Function/Dispatch).
  *
  * @remarks
+ *
  * The DSH jobs service is not part of the published @deepseek-ai/cordis
  * typings, so the root-level shape the plugin consumes is mirrored here
  * structurally: `append` is the job's live log, and the cargo CLI output

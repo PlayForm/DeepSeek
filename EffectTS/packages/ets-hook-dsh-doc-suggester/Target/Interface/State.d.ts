@@ -1,3 +1,9 @@
+import type Factory from "@playform/ets-plugin-dsh-factory";
+import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
+import type Ring from "../Function/Ring.js";
+import type Decision from "./Decision.js";
+import type { Family } from "./Execution.js";
+import type Learning from "./Learning.js";
 /**
  * @module State
  *
@@ -6,6 +12,7 @@
  * extended with the doc suggester's own fields.
  *
  * @remarks
+ *
  * The shared half comes from the factory's NAMED type export (`State`): the
  * built Target/Library.d.ts ships RELATIVE specifiers, so a consumer's
  * tsconfig paths never hijack the declaration imports. The shared machinery
@@ -51,12 +58,6 @@
  * `ctx.__hookDshDocSuggesterState` attachment (never a return value from
  * `apply` - the loader treats apply returns specially).
  */
-import type Factory from "@playform/ets-plugin-dsh-factory";
-import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
-import type Ring from "../Function/Ring.js";
-import type Decision from "./Decision.js";
-import type { Family } from "./Execution.js";
-import type Learning from "./Learning.js";
 export default interface State extends Shared {
     /**
      * The master switch (config `enabled`, volatile).

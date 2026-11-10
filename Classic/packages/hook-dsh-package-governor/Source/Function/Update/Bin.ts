@@ -1,9 +1,16 @@
+import type Invocation from "@Interface/Invocation.js";
+import type State from "@Interface/State.js";
+
+import Child from "./Bin/Child.js";
+import Seam from "./Bin/Seam.js";
+
 /**
  * @module Bin
  *
  * Bin mode: the ncu binary with policy-derived CLI args (the original path).
  *
  * @remarks
+ *
  * ncu's -x/--reject and -a/--allow take ONE comma-or-space-delimited argument; separate argv
  * entries become positional FILTERS (ncu scans only those packages) - verified ncu 23.0.0,
  * 2026-10-02.
@@ -27,12 +34,6 @@
  * stream reader) - the same role names the cargo governor's Upgrade split uses (the naming
  * unification, P4).
  */
-import type Invocation from "@Interface/Invocation.js";
-import type State from "@Interface/State.js";
-
-import Child from "./Bin/Child.js";
-import Seam from "./Bin/Seam.js";
-
 export default async (
 	State: State,
 	Invocation: Invocation,

@@ -1,3 +1,8 @@
+import type { EngineRuntime } from "../Function/Engine.js";
+import type Store from "../Function/Store.js";
+import type Config from "./Config.js";
+import type Factory from "@playform/plugin-dsh-factory";
+import type { State as Shared } from "@playform/plugin-dsh-factory";
 /**
  * @module State
  *
@@ -5,6 +10,7 @@
  * CCR hook's own fields.
  *
  * @remarks
+ *
  * Built by `Factory.State(ctx, config, { ... })` - factory SCHEME.md §2.10.
  *
  * The shared half comes from the factory's NAMED type export (`State`): the
@@ -44,11 +50,6 @@
  * return value from `apply` - the loader treats apply returns specially, a
  * live-verified lesson recorded in the plugin-development skill).
  */
-import type { EngineRuntime } from "../Function/Engine.js";
-import type Store from "../Function/Store.js";
-import type Config from "./Config.js";
-import type Factory from "@playform/plugin-dsh-factory";
-import type { State as Shared } from "@playform/plugin-dsh-factory";
 export default interface State extends Shared {
     /**
      * The allow-list of compressible tool names (config `targets`).

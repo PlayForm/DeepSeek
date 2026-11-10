@@ -7,6 +7,7 @@ export default _default;
  * extension through the strict YAML-subset parser.
  *
  * @remarks
+ *
  * The root must be a mapping. A malformed file throws, and the suggester's
  * fail-open listener turns that into a warning and silence.
  */

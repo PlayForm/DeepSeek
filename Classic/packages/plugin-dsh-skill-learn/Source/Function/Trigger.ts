@@ -1,3 +1,8 @@
+import type Agent from "@Interface/Agent.js";
+import type Configuration from "@Interface/Configuration.js";
+import type { ReviewResult } from "@Interface/Review.js";
+import type { Trigger } from "@Interface/Trigger.js";
+
 /**
  * @module Trigger
  *
@@ -5,6 +10,7 @@
  * successes, and the maintenance claim.
  *
  * @remarks
+ *
  * THE FILE IS NAMED AFTER THE VERDICT, the class after the job. `Trigger` is the
  * twelve-class answer (Interface/Trigger.ts), so the gate that produces it is `Gate`.
  *
@@ -32,23 +38,28 @@
  * successful write would make a corpus with nothing to learn re-run on every idle edge
  * and flood the ledger with the same refusal.
  */
-import type Agent from "@Interface/Agent.js";
-import type Configuration from "@Interface/Configuration.js";
-import type { ReviewResult } from "@Interface/Review.js";
-import type { Trigger } from "@Interface/Trigger.js";
-
-/** What the review body may spend and re-read while it runs. */
+/**
+ * What the review body may spend and re-read while it runs.
+ */
 export interface Session {
-	/** The session's spent write count, re-read before every operation (SKILL-LEARN-PLUGIN.md:492). */
+	/**
+	 * The session's spent write count, re-read before every operation (SKILL-LEARN-PLUGIN.md:492).
+	 */
 	readonly writes: number;
 
-	/** Count one write that landed; returns the new session total. */
+	/**
+	 * Count one write that landed; returns the new session total.
+	 */
 	spend(): number;
 }
 
-/** One trip through the gate: the agent, the transcript's count, and the review body. */
+/**
+ * One trip through the gate: the agent, the transcript's count, and the review body.
+ */
 export interface Attempt {
-	/** The agent the idle edge reported; the cap is keyed on this object (SKILL-LEARN-PLUGIN.md:838). */
+	/**
+	 * The agent the idle edge reported; the cap is keyed on this object (SKILL-LEARN-PLUGIN.md:838).
+	 */
 	readonly agent: Agent;
 
 	/**
@@ -65,15 +76,21 @@ export interface Attempt {
 	readonly review: (signal: AbortSignal, session: Session) => Promise<ReviewResult>;
 }
 
-/** The claim's outcome: a running review, or the fact that another owner held the agent. */
+/**
+ * The claim's outcome: a running review, or the fact that another owner held the agent.
+ */
 type Held =
 	{ readonly held: true } | { readonly held: false; readonly running: Promise<ReviewResult> };
 
 export default class Gate {
-	/** The tool-call count at each agent's last claimed run, which is the counter's origin. */
+	/**
+	 * The tool-call count at each agent's last claimed run, which is the counter's origin.
+	 */
 	private Reviewed: WeakMap<object, number> = new WeakMap();
 
-	/** The successful writes each agent has spent; the session cap's whole state. */
+	/**
+	 * The successful writes each agent has spent; the session cap's whole state.
+	 */
 	private Spent: WeakMap<object, number> = new WeakMap();
 
 	/**
@@ -133,7 +150,9 @@ export default class Gate {
 		}
 	}
 
-	/** Start the review in the true idle phase, or report that another owner held the agent. */
+	/**
+	 * Start the review in the true idle phase, or report that another owner held the agent.
+	 */
 	private Claim(Agent_: Agent, Attempt_: Attempt, Session_: Session): Held {
 		try {
 			return {

@@ -1,15 +1,3 @@
-/**
- * @module Test
- *
- * The loader contract and the mount: the default object's four exports, the IDLE-forever cold
- * mount, the enabled mount, the fail-loud validation and the durable ledger forms.
- *
- * @remarks
- * The default object carries name/apply/Config/inject, the ONLY named exports - apply alone never
- * catches a missing inject. The cold mount is IDLE-forever with the byte-exact disabled line and
- * no tool. The enabled mount registers the service and the tool with the byte-exact activation
- * line. The fail-loud validation throws at load, and the durable ledger carries the `[ISO]` forms.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -25,7 +13,22 @@ import {
 	rm,
 } from "../Harness.js";
 
-/** A fresh run with an empty ledger. */
+/**
+ * @module Test
+ *
+ * The loader contract and the mount: the default object's four exports, the IDLE-forever cold
+ * mount, the enabled mount, the fail-loud validation and the durable ledger forms.
+ *
+ * @remarks
+ *
+ * The default object carries name/apply/Config/inject, the ONLY named exports - apply alone never
+ * catches a missing inject. The cold mount is IDLE-forever with the byte-exact disabled line and
+ * no tool. The enabled mount registers the service and the tool with the byte-exact activation
+ * line. The fail-loud validation throws at load, and the durable ledger carries the `[ISO]` forms.
+ */
+/**
+ * A fresh run with an empty ledger.
+ */
 const Setup = (Raw: Record<string, unknown> = {}, Attach?: (Context: any) => void): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, ...Raw }), Attach);

@@ -1,9 +1,40 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import Append from "@Function/Append.js";
+import ExpandFn from "@Function/Expand.js";
+import FindFn from "@Function/Find.js";
+import GetNodeFn from "@Function/GetNode.js";
+import IndexFileFn from "@Function/Index.js";
+import NeighborhoodFn from "@Function/Neighborhood.js";
+import OpenStorage from "@Function/Open.js";
+import RemoveFileFn from "@Function/Remove.js";
+import SnapshotFn from "@Function/Snapshot.js";
+import StatisticsFn from "@Function/Statistics.js";
+import Unwrap from "@Function/Unwrap.js";
+import ValidateFn from "@Function/Validate.js";
+import WorkspaceFn from "@Function/Workspace.js";
+import type { EdgeKind } from "@Interface/Edge.js";
+import type Expansion from "@Interface/Expansion.js";
+import type IndexSummary from "@Interface/IndexSummary.js";
+import type Neighborhood from "@Interface/Neighborhood.js";
+import type Node from "@Interface/Node.js";
+import type Outcome from "@Interface/Outcome.js";
+import type Query from "@Interface/Query.js";
+import type Snapshot from "@Interface/Snapshot.js";
+import type State from "@Interface/State.js";
+import type Statistics from "@Interface/Statistics.js";
+import type { Allowlist } from "@playform/plugin-dsh-factory";
+import Definition from "@Variable/Config.js";
+import Version from "@Variable/Version.js";
+
+import Adapter from "./Trace/Adapter.js";
+
 /**
  * @module Library
  *
  * The entry module of the WORKSPACE GRAPH (`@playform/plugin-dsh-workspace-graph`).
  *
  * @remarks
+ *
  * Loader contract, CLASS form (the brief's section 3): `export default class WorkspaceGraph
  * extends Service` with `super(Context, "workspaceGraph")` (the service registers immediately
  * on construction and is removed with its owning fiber) and `static inject = ["fs",
@@ -48,36 +79,6 @@
  * byte-exact `skipped <path> (disabled)` line, and NO listener is wired (a disabled graph
  * hears nothing).
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import Append from "@Function/Append.js";
-import ExpandFn from "@Function/Expand.js";
-import FindFn from "@Function/Find.js";
-import GetNodeFn from "@Function/GetNode.js";
-import IndexFileFn from "@Function/Index.js";
-import NeighborhoodFn from "@Function/Neighborhood.js";
-import OpenStorage from "@Function/Open.js";
-import RemoveFileFn from "@Function/Remove.js";
-import SnapshotFn from "@Function/Snapshot.js";
-import StatisticsFn from "@Function/Statistics.js";
-import Unwrap from "@Function/Unwrap.js";
-import ValidateFn from "@Function/Validate.js";
-import WorkspaceFn from "@Function/Workspace.js";
-import type { EdgeKind } from "@Interface/Edge.js";
-import type Expansion from "@Interface/Expansion.js";
-import type IndexSummary from "@Interface/IndexSummary.js";
-import type Neighborhood from "@Interface/Neighborhood.js";
-import type Node from "@Interface/Node.js";
-import type Outcome from "@Interface/Outcome.js";
-import type Query from "@Interface/Query.js";
-import type Snapshot from "@Interface/Snapshot.js";
-import type State from "@Interface/State.js";
-import type Statistics from "@Interface/Statistics.js";
-import type { Allowlist } from "@playform/plugin-dsh-factory";
-import Definition from "@Variable/Config.js";
-import Version from "@Variable/Version.js";
-
-import Adapter from "./Trace/Adapter.js";
-
 // The named TYPE exports (the consumer contract): the brief's section 4.3
 // schema, re-exported from the entry so consumers can import them instead of
 // mirroring the shapes locally.
@@ -102,7 +103,9 @@ export default class WorkspaceGraph extends Service {
 
 	static Config = Definition;
 
-	/** The internal runtime state (the __workspaceGraphState probe seam). */
+	/**
+	 * The internal runtime state (the __workspaceGraphState probe seam).
+	 */
 	State: State;
 
 	constructor(Context: Context, Raw?: unknown) {
@@ -141,47 +144,65 @@ export default class WorkspaceGraph extends Service {
 		}
 	}
 
-	/** Resolve, stat, gate, read, parse, store the record, bump, ledger. */
+	/**
+	 * Resolve, stat, gate, read, parse, store the record, bump, ledger.
+	 */
 	async indexFile(Path: string): Promise<Outcome> {
 		return IndexFileFn(this.State, Path);
 	}
 
-	/** Walk the root (default: the session cwd) and index every candidate. */
+	/**
+	 * Walk the root (default: the session cwd) and index every candidate.
+	 */
 	async indexWorkspace(Root?: string, Options?: { maxFiles?: number }): Promise<IndexSummary> {
 		return WorkspaceFn(this.State, Root, Options);
 	}
 
-	/** Delete the record, bump the revision, ledger the removed line. */
+	/**
+	 * Delete the record, bump the revision, ledger the removed line.
+	 */
 	async removeFile(Path: string): Promise<boolean> {
 		return RemoveFileFn(this.State, Path);
 	}
 
-	/** The node by stable id, or undefined. */
+	/**
+	 * The node by stable id, or undefined.
+	 */
 	getNode(Id: string): Node | undefined {
 		return GetNodeFn(this.State, Id);
 	}
 
-	/** The filtered node list, the limit clamped to [0, limitMaximum]. */
+	/**
+	 * The filtered node list, the limit clamped to [0, limitMaximum].
+	 */
 	find(Query?: Query): Node[] {
 		return FindFn(this.State, Query);
 	}
 
-	/** The outgoing breadth-first expansion, depth default 1 capped at 3. */
+	/**
+	 * The outgoing breadth-first expansion, depth default 1 capped at 3.
+	 */
 	expand(Id: string, Options?: { kinds?: EdgeKind[]; depth?: number }): Expansion {
 		return ExpandFn(this.State, Id, Options);
 	}
 
-	/** The connected component around an anchor file (the suggester's read). */
+	/**
+	 * The connected component around an anchor file (the suggester's read).
+	 */
 	neighborhood(Path: string, Limit?: number): Neighborhood[] {
 		return NeighborhoodFn(this.State, Path, Limit);
 	}
 
-	/** The loadAll read; a record that fails validation is skipped and counted. */
+	/**
+	 * The loadAll read; a record that fails validation is skipped and counted.
+	 */
 	snapshot(): Snapshot {
 		return SnapshotFn(this.State);
 	}
 
-	/** The counts: files, nodes, edges, indexRevision. */
+	/**
+	 * The counts: files, nodes, edges, indexRevision.
+	 */
 	statistics(): Statistics {
 		return StatisticsFn(this.State);
 	}

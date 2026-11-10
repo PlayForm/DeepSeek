@@ -7,6 +7,7 @@
  * code.
  *
  * @remarks
+ *
  * The walk follows `Documentation/Plans/COST-TRACK-PLUGIN.md` section 17.4. The
  * retry count counts the assistant/attempt events between a step/start and the
  * assistant/message (one when none); the first stream record's time0 is the

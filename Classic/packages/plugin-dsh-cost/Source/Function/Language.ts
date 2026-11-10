@@ -5,6 +5,7 @@
  * the file's own comment language.
  *
  * @remarks
+ *
  * The map follows `Documentation/Plans/COST-TRACK-PLUGIN.md` section 7. It
  * answers a line prefix of `//` for the C family, `#` for the script and data
  * languages, `--` for the dash family, and a `<!--` open with a `-->` close for

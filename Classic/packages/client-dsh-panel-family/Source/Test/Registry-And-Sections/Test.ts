@@ -1,3 +1,6 @@
+import assert from "node:assert/strict";
+import { Check, Finish, MakeCounter, Make } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,14 +8,12 @@
  * client apply actually provided.
  *
  * @remarks
+ *
  * register adds and replaces by id, entries snapshots ordered by (order, id),
  * subscribe/getVersion track every mutation, open() delegates to the attached
  * implementation (and only records before one is attached), the register
  * disposer unregisters, and unregister of an unknown id is a no-op.
  */
-import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make } from "../Harness.js";
-
 /** A minimal section (the adapters' contribution: id, bundle, namespace,
  *  title, order, mount, render). */
 const Section = (Id: string, Order: number, Mount: any = "family-tab"): any => ({

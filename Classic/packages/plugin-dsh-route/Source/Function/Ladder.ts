@@ -1,3 +1,5 @@
+import type { PolicyShape, RoleSpec } from "@Interface/Policy.js";
+
 /**
  * @module Ladder
  *
@@ -7,6 +9,7 @@
  * actually advertises it.
  *
  * @remarks
+ *
  * The catalog is the one `list_subagent_models` reads
  * (`ctx.llm.listProviders` / `listModels`), so a model that left the catalog
  * can never be silently routed to.
@@ -23,8 +26,6 @@
  * The plugin never invents a model: every candidate comes from the user's
  * allowed set, and the escalation's effort stays the planner row's `max`.
  */
-import type { PolicyShape, RoleSpec } from "@Interface/Policy.js";
-
 export default (Policy: PolicyShape, Advertised?: readonly string[]): RoleSpec => {
 	const Rung = Policy.planner;
 	if (Advertised === undefined || Advertised.includes(Rung.model)) {

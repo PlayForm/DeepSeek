@@ -5,6 +5,7 @@
  * else the event name.
  *
  * @remarks
+ *
  * Every workspace trace carries a path. The detached loop (`Function/Loop`) and
  * the graph's per-path debounce key on exactly this value, so a coalesced pair
  * of stamps for one path produces ONE re-index.

@@ -1,3 +1,8 @@
+import type { Context } from "@deepseek-ai/cordis";
+
+import type Projection from "../Interface/Projection.js";
+import type { Fact } from "../Interface/Projection.js";
+
 /**
  * @module Projection
  *
@@ -5,6 +10,7 @@
  * ctx.workspaceGraph.
  *
  * @remarks
+ *
  * This is the re-spec: the graph supersedes the hand-generated index (Completion-Spec
  * 00-OVERVIEW section 6 and 03-SUGGESTERS section 3). The service is OPTIONAL and is PROBED
  * through `ctx.get`, never injected: a repo without the graph plugin must still emit (the
@@ -23,18 +29,17 @@
  * yield `undefined`: the caller then scores every candidate with the documented neutral
  * literal 0.5 and renders the static pack list (the PoC behavior, byte-identical).
  */
-import type { Context } from "@deepseek-ai/cordis";
-
-import type Projection from "../Interface/Projection.js";
-import type { Fact } from "../Interface/Projection.js";
-
-/** Normalize a path to the graph's forward-slash form. */
+/**
+ * Normalize a path to the graph's forward-slash form.
+ */
 const Normalize = (Path: string): string =>
 	Path.split("\\")
 		.join("/")
 		.replace(/\/{2,}/g, "/");
 
-/** The path's segments. */
+/**
+ * The path's segments.
+ */
 const Segments = (Path: string): string[] => Normalize(Path).split("/");
 
 /**
@@ -58,7 +63,9 @@ const Root = (Paths: string[]): number => {
 	return Common;
 };
 
-/** A locale-free version-token comparison (numeric tokens compare numerically). */
+/**
+ * A locale-free version-token comparison (numeric tokens compare numerically).
+ */
 const Compare = (Left: string, Right: string): number => {
 	const LeftNumber = Number(Left);
 	const RightNumber = Number(Right);
@@ -73,7 +80,9 @@ const Compare = (Left: string, Right: string): number => {
 	return Left < Right ? -1 : Left > Right ? 1 : 0;
 };
 
-/** The version-token rank map: the snapshot's own recency order, no clock. */
+/**
+ * The version-token rank map: the snapshot's own recency order, no clock.
+ */
 const Versions = (Tokens: string[]): Map<string, number> => {
 	const Unique = [...new Set(Tokens)].sort(Compare);
 	const Ranks = new Map<string, number>();
@@ -83,7 +92,9 @@ const Versions = (Tokens: string[]): Map<string, number> => {
 	return Ranks;
 };
 
-/** One node reduced to what the projection reads (a malformed node is skipped). */
+/**
+ * One node reduced to what the projection reads (a malformed node is skipped).
+ */
 const Read = (Entry: unknown): { path: string; kind: string; version: string } | undefined => {
 	const Node = Entry as { path?: unknown; kind?: unknown; version?: unknown } | undefined;
 	if (typeof Node?.path !== "string" || Node.path.length === 0) {
@@ -96,7 +107,9 @@ const Read = (Entry: unknown): { path: string; kind: string; version: string } |
 };
 
 export default (
-	/** The plugin context (the optional-service probe). */
+	/**
+	 * The plugin context (the optional-service probe).
+	 */
 	Context: Context,
 ): Projection | undefined => {
 	try {

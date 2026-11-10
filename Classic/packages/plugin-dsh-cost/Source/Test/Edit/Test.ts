@@ -1,15 +1,21 @@
-// Source/Test/Edit/Test.ts - THE EDIT GRAIN (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 17.3): one tool call's arguments become the
-// hunks it produces - a single edit one row with the line and byte counts
-// read from the old and new strings, a multi_edit one row per entry with
-// ascending ordinals, a write one row from the content's own lines and
-// bytes - and malformed or alien arguments yield an empty array without a
-// throw.
 import assert from "node:assert/strict";
 
 import Edit from "../../../Target/Function/Edit.js";
 import { Check, Finish, MakeCounter } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE EDIT GRAIN (Documentation/Plans/COST-TRACK-PLUGIN.md section 17.3), proved
+ * over the hunks one tool call's arguments produce.
+ *
+ * @remarks
+ *
+ * A single edit yields one row with the line and byte counts read from the old and
+ * new strings, a multi_edit yields one row per entry with ascending ordinals, a
+ * write yields one row from the content's own lines and bytes - and malformed or
+ * alien arguments yield an empty array without a throw.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Check(Count, "E3: a single edit yields one row with the right line and byte counts", () => {

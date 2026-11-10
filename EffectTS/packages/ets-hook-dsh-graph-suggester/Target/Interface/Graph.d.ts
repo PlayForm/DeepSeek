@@ -4,6 +4,7 @@
  * Declares the shape of the sibling workspace graph service the hook consumes.
  *
  * @remarks
+ *
  * The DECLARED SHAPE of the sibling workspace graph service
  * (hook-dsh-workspace-observe / plugin-dsh-workspace-graph, the W1 foundation per
  * Documentation/Plans/Workspace-Family/WAVE-1-BRIEF.md and SEARCH-SUGGESTER-PLUGIN.md

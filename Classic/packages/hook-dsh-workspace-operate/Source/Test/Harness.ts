@@ -1,9 +1,17 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
  * The shared test harness for the WORKSPACE-OPERATE tests.
  *
  * @remarks
+ *
  * Combines the fake ctx (root listener capture with a DISTINCT root object, the ctx listener
  * capture, reflect.provide capture, the effect runner, logger capture, the FUNCTIONAL fs backing
  * the staleness checks, and the fake workspaceGraph seam) with the REAL
@@ -20,13 +28,6 @@
  * NO CLOCK: the operate hook has no time dependency - proposals and ids are sequenced by the
  * plugin's own monotonic counter (the no-wall-clock rule), so the harness needs no time seam.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 export { Plugin };
 
 /**

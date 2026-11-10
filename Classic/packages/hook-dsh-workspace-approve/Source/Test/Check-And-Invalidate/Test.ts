@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * Exercises the exactness check and the invalidation listener.
- *
- * @remarks
- * Covers the check guard chain (unbound, pending, denied, revoked, stale, approved) with the
- * byte-exact checked lines, and the fs/observed listener (the same-version no-op, the version-changed
- * invalidation, the own-actor identity check, the malformed containment, the absent-kind no-op)
- * plus the invalidated-then-checked loop.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -23,13 +12,29 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount with overrides. */
+/**
+ * @module Test
+ *
+ * Exercises the exactness check and the invalidation listener.
+ *
+ * @remarks
+ *
+ * Covers the check guard chain (unbound, pending, denied, revoked, stale, approved) with the
+ * byte-exact checked lines, and the fs/observed listener (the same-version no-op, the version-changed
+ * invalidation, the own-actor identity check, the malformed containment, the absent-kind no-op)
+ * plus the invalidated-then-checked loop.
+ */
+/**
+ * A standard enabled mount with overrides.
+ */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));
 };
 
-/** A candidate and a matching request for one path. */
+/**
+ * A candidate and a matching request for one path.
+ */
 const Candidate = {
 	path: "/repo/a.ts",
 	fingerprint: "fp-1",

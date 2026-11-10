@@ -6,6 +6,7 @@
  * calls them").
  *
  * @remarks
+ *
  * Self-contained PoC posture: the shapes are declared here and resolved via `Context.get` at use
  * time (the tool-jobs precedent - never injected, never imported from sibling workspace
  * packages). An absent sibling is a silent skip plus one ledger line, never an error thrown into
@@ -22,6 +23,7 @@
  * The pass-on service (plugin-dsh-pass-on): proposal preparation.
  *
  * @remarks
+ *
  * The hook does not call it on any of its own paths (the pass-on publishes the proposal itself) -
  * the seam is declared so a host wiring can resolve it.
  */
@@ -38,6 +40,7 @@ export interface PassOnService {
  * The ingester service (plugin-dsh-ingester): the only writer.
  *
  * @remarks
+ *
  * `Apply` is the live service's method (the proposal + the decision); `apply` is the declared
  * one-argument seam a host may implement (the service resolves its own proposal). Either one
  * satisfies the handoff.
@@ -64,6 +67,7 @@ export interface ApprovalService {
  * The `Context.get` keys the siblings resolve under.
  *
  * @remarks
+ *
  * The SCHEME documents these; the names follow the family's service-naming convention.
  */
 export const SEAM_KEYS = {

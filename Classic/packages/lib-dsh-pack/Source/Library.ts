@@ -8,6 +8,7 @@ import Version from "./Variable/Version.js";
  * family, as named exports.
  *
  * @remarks
+ *
  * The harness convention applies, but the packs are NOT a plugin bundle: no
  * cordis patch, no loader contract, publishable on its own.
  *
@@ -24,7 +25,6 @@ import Version from "./Variable/Version.js";
  *   `Indexer`, `Policy`, `Learning`), the locator's answer and the resolution
  *   seam.
  */
-
 export { default as Builtin } from "./Variable/Builtin.js";
 export { default as Signature } from "./Variable/Signature.js";
 export { default as Placement } from "./Variable/Placement.js";
@@ -64,6 +64,7 @@ export type { default as Touch } from "./Interface/Touch.js";
  * ESBuild define).
  *
  * @remarks
+ *
  * This is a LIBRARY, not a plugin bundle: no cordis patch, no loader contract
  * and no `Config` export. `Version` sits beside the other named exports rather
  * than after a `Config` export, and the loader contract's four names are

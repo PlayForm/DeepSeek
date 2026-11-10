@@ -1,14 +1,15 @@
+import type { Allowlist } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The shape Variable/Config.ts's Schemastery schema produces.
  *
  * @remarks
+ *
  * Every field is a volatile cell (hot-editable without remounting, the
  * factory's P10 refresh re-reads the mapped State fields in place).
  */
-import type { Allowlist } from "@playform/plugin-dsh-factory";
-
 export default interface Config {
 	/**
 	 * The IDLE-forever posture: the plugin ships disabled and enables only by

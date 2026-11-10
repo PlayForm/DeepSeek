@@ -1,2 +1,251 @@
-import a from"node:assert/strict";import*as y from"node:fs";import*as S from"node:os";import*as d from"node:path";import*as h from"../../Target/Library.js";import C from"../../../ets-plugin-dsh-factory/Target/Library.js";const P=()=>({N:0,F:0}),u=(e,o,n)=>{e.N++;try{n(),console.log(`PASS - ${o}`)}catch(t){e.F++,console.log(`FAIL - ${o}`),console.log(t instanceof Error?t.message:String(t))}},z=async(e,o,n)=>{e.N++;try{await n(),console.log(`PASS - ${o}`)}catch(t){e.F++,console.log(`FAIL - ${o}`),console.log(t instanceof Error?t.message:String(t))}},V=(e,o)=>{if(e.F!==0)throw new Error(`${o}: ${e.F} failed check(s)`);return e.N},X="ncu",Q=["node_modules",".git",".dsh",".pnpm",".store","DeepSeek Harness.app"],Y=["write","edit","str_replace_editor","raw-write"],E=y.mkdtempSync(d.join(S.tmpdir(),"governor-smoke-")),x=d.join(E,"governor.log"),R={},g=[],b=[],f=[],N=[],m={info:[],error:[]},k=[],D=[],_=[],$=[],I=[],L=[],O=[],A=[],T={Closed:!1},p={Exits:[],Out:""},j={DuringRead:-1};let q=0;const B={info:e=>m.info.push(e),error:e=>m.error.push(e)},M=(e={})=>{const o={logger:B,on:(n,t)=>(g.push([n,t]),()=>!0),emit:(n,...t)=>{b.push([n,...t]);for(const[r,i]of[...g])r===n&&i(...t)},effect:(n,t)=>{const r=n();return f.push([t,r]),()=>f.splice(f.findIndex(i=>i[0]===t),1)},get:n=>(N.push(n),l[n]??o[n]),fs:{sandboxMode:void 0,readText:async(n,t)=>{k.push([n.displayPath,!!t]),e.onRead?.(n);const r=e.files?.[n.displayPath];if(r===void 0)throw new Error("vanished");return r},writeText:async(n,t,r,i,F)=>(D.push({path:n.displayPath,content:t,intent:r,signal:i??null,fence:F??null}),e.files[n.displayPath]=t,{version:`fresh-${++q}`}),stat:async()=>({version:"stat-v9"})},reflect:{provide:(n,t)=>R[n]=t},get root(){return o}};return o},w={},l={},s=M({files:w});s.__spy={onRead:()=>{}},s.fs.readText=async(e,o)=>{k.push([e.displayPath,!!o]),typeof c<"u"&&c&&(j.DuringRead=c.Inflight.size);const n=w[e.displayPath];if(n===void 0)throw new Error("vanished");return n},l.subprocess={resolveExecutable:async e=>`resolved:${e}`,spawn:e=>{_.push(e);const o=p.Exits.length?p.Exits.shift():0;return{done:Promise.resolve({exitCode:o}),collected:{stdout:{readFrom:()=>p.Out?{text:p.Out}:void 0},stderr:{readFrom:()=>{}}}}}},l.jobs={attachController:e=>(O.push(e),()=>A.push(e)),start:e=>{$.push(e);const o=[];return I.push(o),e.run({append:t=>o.push(t)}).done.catch(()=>{}),"governor-update-1"}},l.storageDomain={open:async()=>({close:async()=>{T.Closed=!0},table:()=>({put:async(e,o)=>L.push([e,o])})})};const G=()=>y.readFileSync(x,"utf8").split(`
-`).filter(Boolean),Z=e=>G().filter(o=>o.includes(e)),ee=async(e=8)=>{for(let o=0;o<e;o++)await new Promise(n=>setImmediate(n))},ne=(e,o)=>({targetKey:o,displayPath:d.join(e,"package.json")}),oe={name:"edit"},H=e=>h.Config({...e}),v=new C(s);s.pluginFactory=v;let c=null;const K=()=>{const e=H({logFile:x});return h.apply(s,e),c=s.__hookDshGovernorPackageState,c},U=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(U){const e=P();u(e,"selfcheck: a passing assertion counts as PASS",()=>{a.equal(1,1)}),u(e,"selfcheck: a failing assertion counts as FAIL (expected)",()=>{a.equal(1,2)});const o=K();u(e,"selfcheck: the fake ctx registers the governor's apply-time wiring",()=>{a.ok(g.some(([n])=>n==="fs/observed")),a.equal(o.Factory,v),a.equal(o.Module,"hook-dsh-governor-package")}),e.N===3&&e.F===1?console.log("Harness selfcheck OK"):(console.log(`Harness selfcheck BROKEN (N=${e.N}, F=${e.F})`),process.exitCode=1)}export{K as Boot,u as Check,z as CheckAsync,s as Context,O as Controllers,A as Detached,T as Domain,Q as EXCLUDE,f as Effects,b as Emitted,g as Events,w as Files,V as Finish,v as Furnace,j as Inflight,I as JobRings,$ as JobStarts,x as Ledger,m as LoggerLines,M as MakeContext,P as MakeCounter,X as NCU_BIN,c as Probe,R as Provided,k as Reads,E as Root,N as ServiceGets,l as Services,p as Spawn,_ as SpawnSpecs,L as StorageRecords,Y as TOOLS,H as Validate,D as Writes,oe as actor,Z as find,G as ledgerLines,ne as mkTarget,ee as settle};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import * as Governor from "../../Target/Library.js";
+import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const CheckAsync = async (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    await Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) {
+    throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const NCU_BIN = "ncu";
+const EXCLUDE = ["node_modules", ".git", ".dsh", ".pnpm", ".store", "DeepSeek Harness.app"];
+const TOOLS = ["write", "edit", "str_replace_editor", "raw-write"];
+const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "governor-smoke-"));
+const Ledger = Path.join(Root, "governor.log");
+const Provided = {};
+const Events = [];
+const Emitted = [];
+const Effects = [];
+const ServiceGets = [];
+const LoggerLines = { info: [], error: [] };
+const Reads = [];
+const Writes = [];
+const SpawnSpecs = [];
+const JobStarts = [];
+const JobRings = [];
+const StorageRecords = [];
+const Controllers = [];
+const Detached = [];
+const Domain = { Closed: false };
+const Spawn = { Exits: [], Out: "" };
+const Inflight = { DuringRead: -1 };
+let WriteSeq = 0;
+const fakeLogger = {
+  info: (m) => LoggerLines.info.push(m),
+  error: (m) => LoggerLines.error.push(m)
+};
+const MakeContext = (over = {}) => {
+  const Context2 = {
+    logger: fakeLogger,
+    on: (name, fn) => {
+      Events.push([name, fn]);
+      return () => true;
+    },
+    emit: (name, ...args) => {
+      Emitted.push([name, ...args]);
+      for (const [n, fn] of [...Events]) if (n === name) fn(...args);
+    },
+    effect: (fn, label) => {
+      const dispose = fn();
+      Effects.push([label, dispose]);
+      return () => Effects.splice(
+        Effects.findIndex((e) => e[0] === label),
+        1
+      );
+    },
+    get: (name) => {
+      ServiceGets.push(name);
+      return Services[name] ?? Context2[name];
+    },
+    fs: {
+      sandboxMode: void 0,
+      readText: async (target, signal) => {
+        Reads.push([target.displayPath, !!signal]);
+        over.onRead?.(target);
+        const file = over.files?.[target.displayPath];
+        if (file === void 0) throw new Error("vanished");
+        return file;
+      },
+      writeText: async (target, content, intent, signal, fence) => {
+        Writes.push({
+          path: target.displayPath,
+          content,
+          intent,
+          signal: signal ?? null,
+          fence: fence ?? null
+        });
+        over.files[target.displayPath] = content;
+        return { version: `fresh-${++WriteSeq}` };
+      },
+      stat: async () => ({ version: "stat-v9" })
+    },
+    reflect: { provide: (name, value) => Provided[name] = value },
+    // cordis plugin contexts inherit `root` (the shared event bus scope); the
+    // fake ctx is its own root.
+    get root() {
+      return Context2;
+    }
+  };
+  return Context2;
+};
+const Files = {};
+const Services = {};
+const Context = MakeContext({ files: Files });
+Context.__spy = {
+  onRead: () => {
+  }
+};
+Context.fs.readText = async (target, signal) => {
+  Reads.push([target.displayPath, !!signal]);
+  if (typeof Probe !== "undefined" && Probe) Inflight.DuringRead = Probe.Inflight.size;
+  const file = Files[target.displayPath];
+  if (file === void 0) throw new Error("vanished");
+  return file;
+};
+Services["subprocess"] = {
+  resolveExecutable: async (bin) => `resolved:${bin}`,
+  spawn: (spec) => {
+    SpawnSpecs.push(spec);
+    const exit = Spawn.Exits.length ? Spawn.Exits.shift() : 0;
+    return {
+      done: Promise.resolve({ exitCode: exit }),
+      collected: {
+        stdout: { readFrom: () => Spawn.Out ? { text: Spawn.Out } : void 0 },
+        stderr: { readFrom: () => void 0 }
+      }
+    };
+  }
+};
+Services["jobs"] = {
+  attachController: (name) => {
+    Controllers.push(name);
+    return () => Detached.push(name);
+  },
+  start: (spec) => {
+    JobStarts.push(spec);
+    const ring = [];
+    JobRings.push(ring);
+    const hooks = spec.run({ append: (t) => ring.push(t) });
+    hooks.done.catch(() => {
+    });
+    return "governor-update-1";
+  }
+};
+Services["storageDomain"] = {
+  open: async () => ({
+    close: async () => {
+      Domain.Closed = true;
+    },
+    table: () => ({ put: async (k, v) => StorageRecords.push([k, v]) })
+  })
+};
+const ledgerLines = () => FileSystem.readFileSync(Ledger, "utf8").split("\n").filter(Boolean);
+const find = (needle) => ledgerLines().filter((l) => l.includes(needle));
+const settle = async (turns = 8) => {
+  for (let i = 0; i < turns; i++) await new Promise((r) => setImmediate(r));
+};
+const mkTarget = (dir, key) => ({
+  targetKey: key,
+  displayPath: Path.join(dir, "package.json")
+});
+const actor = { name: "edit" };
+const Validate = (Raw) => Governor.Config({ ...Raw });
+const Furnace = new FactoryClass(Context);
+Context.pluginFactory = Furnace;
+let Probe = null;
+const Boot = () => {
+  const Raw = Validate({ logFile: Ledger });
+  Governor.apply(Context, Raw);
+  Probe = Context.__hookDshGovernorPackageState;
+  return Probe;
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Count = MakeCounter();
+  Check(Count, "selfcheck: a passing assertion counts as PASS", () => {
+    assert.equal(1, 1);
+  });
+  Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
+    assert.equal(1, 2);
+  });
+  const State = Boot();
+  Check(Count, "selfcheck: the fake ctx registers the governor's apply-time wiring", () => {
+    assert.ok(Events.some(([n]) => n === "fs/observed"));
+    assert.equal(State.Factory, Furnace);
+    assert.equal(State.Module, "hook-dsh-governor-package");
+  });
+  if (Count.N === 3 && Count.F === 1) {
+    console.log("Harness selfcheck OK");
+  } else {
+    console.log(`Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+    process.exitCode = 1;
+  }
+}
+export {
+  Boot,
+  Check,
+  CheckAsync,
+  Context,
+  Controllers,
+  Detached,
+  Domain,
+  EXCLUDE,
+  Effects,
+  Emitted,
+  Events,
+  Files,
+  Finish,
+  Furnace,
+  Inflight,
+  JobRings,
+  JobStarts,
+  Ledger,
+  LoggerLines,
+  MakeContext,
+  MakeCounter,
+  NCU_BIN,
+  Probe,
+  Provided,
+  Reads,
+  Root,
+  ServiceGets,
+  Services,
+  Spawn,
+  SpawnSpecs,
+  StorageRecords,
+  TOOLS,
+  Validate,
+  Writes,
+  actor,
+  find,
+  ledgerLines,
+  mkTarget,
+  settle
+};
+//# sourceMappingURL=Harness.js.map

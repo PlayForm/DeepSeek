@@ -1,9 +1,11 @@
+import type Factory from "@playform/ets-plugin-dsh-factory";
 /**
  * @module Factory
  *
  * Publishes the typed view of the injected plugin-factory service on the cordis Context.
  *
  * @remarks
+ *
  * The STRUCTURAL VIEW of the injected @playform/ets-plugin-dsh-factory service (the
  * family's class/service plugin, factory SCHEME.md §0-§2). The graph-suggester hook is
  * the factory's NON-MANIFEST consumer: it uses the State builder (cell unwrap + shared
@@ -21,7 +23,6 @@
  * workspace graph service's shape is declared in THIS package's own Interface/Graph.ts
  * (the self-contained PoC rule).
  */
-import type Factory from "@playform/ets-plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {
         /**

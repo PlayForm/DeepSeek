@@ -1,9 +1,14 @@
+import type FeedbackBlock from "../Interface/Block.js";
+import type State from "../Interface/State.js";
+import Record from "./Record.js";
+
 /**
  * @module Push
  *
  * The transfer service's mechanical hop (plan section 2.2).
  *
  * @remarks
+ *
  * The child's block is pushed to its parent's session log: the same honest
  * content, the parent's session recorded as the next hop, the delta chain
  * untouched. The transfer is a mechanical FIFO through the lineage (the
@@ -11,10 +16,6 @@
  * session boundary) - the caller supplies the destination session id, because
  * the queue integration knows the parentage.
  */
-import type FeedbackBlock from "../Interface/Block.js";
-import type State from "../Interface/State.js";
-import Record from "./Record.js";
-
 export default (State: State, Block: FeedbackBlock, ParentSession: string): void => {
 	switch (true) {
 		case !State.Config.enabled:

@@ -6,6 +6,7 @@
  * change.
  *
  * @remarks
+ *
  * The shape follows `Temporary/Cost-Research/Plan.md` lane B4b and the
  * valuation model of `Temporary/Cost-Research/Backlog.md` section 5, restating
  * the research's sections 3 and 6. A catalog names a workspace book, a

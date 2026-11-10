@@ -1,16 +1,3 @@
-/**
- * @module Test
- *
- * One singular test of the git-guard's wiring and classifier.
- *
- * @remarks
- * The test covers the loader contract (the default object carries
- * name/apply/Config/inject, apply returns nothing), the IDLE-forever cold
- * mount, the activation proof, the tools/pre-execute registration on the
- * plugin context (never the root), the classification table (allow, deny,
- * strict, the allow-list win, compounds, env prefixes, flags, bare git), and
- * the fail-loud validation.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -23,7 +10,23 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * One singular test of the git-guard's wiring and classifier.
+ *
+ * @remarks
+ *
+ * The test covers the loader contract (the default object carries
+ * name/apply/Config/inject, apply returns nothing), the IDLE-forever cold
+ * mount, the activation proof, the tools/pre-execute registration on the
+ * plugin context (never the root), the classification table (allow, deny,
+ * strict, the allow-list win, compounds, env prefixes, flags, bare git), and
+ * the fail-loud validation.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));

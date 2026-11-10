@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "../Interface/Config.js";
+export default _default;
 /**
  * @module Apply
  *
@@ -6,6 +9,7 @@
  * registrations, and the unload effect.
  *
  * @remarks
+ *
  * The State build is the factory's cell unwrap plus the P10 volatile refresh.
  * The unload effect cancels in-flight spawned children. The function returns
  * NOTHING (the loader treats apply returns specially - a returned value
@@ -24,7 +28,4 @@
  * posture is visible on the per-task lines (`spawned` / `spawn skipped` /
  * `spawn failed`), not on the activation proof.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
-export default _default;
 declare function _default(Context: Context, Options: Config): void;

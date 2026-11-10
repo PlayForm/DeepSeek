@@ -1,3 +1,6 @@
+import assert from "node:assert/strict";
+import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +8,7 @@
  * one singular smoke.
  *
  * @remarks
+ *
  * The test covers the config cells and the minimal schema, the listener-less
  * posture (three listeners, no stream listener), the tool registration and
  * its input schema, the state unwraps, the activation line, the
@@ -17,9 +21,6 @@
  * The unit smoke of @playform/plugin-dsh-normalize-file runs the fake ctx +
  * the real factory + the real normalize-file apply, from the Harness.
  */
-import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

@@ -1,4 +1,23 @@
 /**
+ * @module Report
+ *
+ * The per-run record: `run.json` (full fidelity) + `REPORT.md` (the human summary), one timestamped directory per run.
+ *
+ * @remarks
+ *
+ * WHY A FILE AND NOT JUST THE LEDGER: the ledger is a line-per-event
+ * contract that every plugin in the family shares, so it must stay terse
+ * and byte-stable. A review needs more than a line - the digest size, the
+ * model that answered, the note the reviewer wrote, and every rejection
+ * WITH its rule - and that detail is what turns "the review did nothing"
+ * into "the review was refused for `negative-claim` eight times, fix the
+ * prompt".
+ *
+ * A report write is BEST-EFFORT: a failure returns "" and the run's result
+ * is unchanged. The review already happened; losing its paperwork must not
+ * turn a successful pass into an error.
+ */
+/**
  * One run's record.
  */
 export interface RunReport {

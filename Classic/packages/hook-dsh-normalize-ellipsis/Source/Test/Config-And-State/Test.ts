@@ -1,9 +1,14 @@
+import assert from "node:assert/strict";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm, Validate } from "../Harness.js";
+
 /**
  * @module Test
  *
  * The Config-And-State unit smoke: the Run-1 defaults of the ellipsis hook.
  *
  * @remarks
+ *
  * The one singular test covers the volatile Config cells, the schema defaults,
  * the listener registration posture, the State wiring, and the byte-exact
  * activation line.
@@ -13,10 +18,6 @@
  * (`node Target/Test/Config-And-State/Test.js`) and under the aggregate
  * (`Maintain/Run/Smokes/Index.mjs` spawns it).
  */
-import assert from "node:assert/strict";
-
-import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm, Validate } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

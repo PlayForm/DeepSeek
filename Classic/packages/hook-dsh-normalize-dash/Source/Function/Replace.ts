@@ -7,6 +7,7 @@ import { Dashes, Replace } from "@playform/lib-dsh-core";
  * generic class-to-string replacer, pinned to its table.
  *
  * @remarks
+ *
  * The pattern (and the whole Replace mechanism: the function replacer, the
  * per-call regex construction, the `{ text, count }` contract) lives in
  * `@playform/lib-dsh-core`'s `Normalize/Replace` + `Normalize/Dashes`; this
@@ -19,6 +20,5 @@ import { Dashes, Replace } from "@playform/lib-dsh-core";
  * previous in-file implementation - the hook-dsh-normalize-dash smoke is the
  * arbiter.
  */
-
 export default (Text: string, Replacement: string): { text: string; count: number } =>
 	Replace(Text, Dashes, Replacement);

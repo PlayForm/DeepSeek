@@ -4,6 +4,7 @@
  * Declares the D8 decision record and its companion and heuristic rows.
  *
  * @remarks
+ *
  * What the suggester decided, on which pickable heuristic values, with which weights, and
  * what became of it (completion spec 00-OVERVIEW D8 + 03-SUGGESTERS section 2).
  *

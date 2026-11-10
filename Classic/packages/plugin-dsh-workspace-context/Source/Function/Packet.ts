@@ -1,3 +1,14 @@
+import Budget from "@Function/Budget.js";
+import Focus from "@Function/Focus.js";
+import LensFn from "@Function/LensFn.js";
+import Rank from "@Function/Rank.js";
+import type { GraphEdge, GraphNode } from "@Interface/Graph.js";
+import type Packet from "@Interface/Packet.js";
+import type Query from "@Interface/Query.js";
+import type State from "@Interface/State.js";
+import DefaultLens from "@Variable/DefaultLens.js";
+import EdgeWeight from "@Variable/EdgeWeight.js";
+
 /**
  * @module Packet
  *
@@ -5,6 +16,7 @@
  * section 3.5's "orient -> drill -> act" loop.
  *
  * @remarks
+ *
  * Consumes the sibling workspace-graph's snapshot through the structural
  * handle (Interface/Graph), filters through the resolved lens
  * (Function/LensFn), ranks the neighbors by edge strength (Function/Rank),
@@ -18,17 +30,6 @@
  * ("workspace graph unavailable") - the attention projection degrades, it
  * never lies.
  */
-import Budget from "@Function/Budget.js";
-import Focus from "@Function/Focus.js";
-import LensFn from "@Function/LensFn.js";
-import Rank from "@Function/Rank.js";
-import type { GraphEdge, GraphNode } from "@Interface/Graph.js";
-import type Packet from "@Interface/Packet.js";
-import type Query from "@Interface/Query.js";
-import type State from "@Interface/State.js";
-import DefaultLens from "@Variable/DefaultLens.js";
-import EdgeWeight from "@Variable/EdgeWeight.js";
-
 /**
  * One MAP line: "<dir> (<count> files)".
  */

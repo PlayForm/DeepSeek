@@ -6,6 +6,7 @@
  * contract.
  *
  * @remarks
+ *
  * WAVE-1-BRIEF.md section 4.3. Declared here because the PoC is
  * self-contained: the sibling package is not imported - the end-phase wires the
  * real import (POC-BRIEF section 2, rule 5). The types are the contract VERBATIM

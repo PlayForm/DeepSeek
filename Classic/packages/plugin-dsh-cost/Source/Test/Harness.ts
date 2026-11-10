@@ -1,22 +1,34 @@
-// Source/Test/Harness.ts - the shared test harness for the cost tracker's
-// smokes: the counter with Check/CheckAsync/Finish and the FAKE ctx with a
-// FAKE pluginFactory (the spec's): State builds the minimal shared shape,
-// Append records into Lines (no real ledger file), and Write runs the guarded
-// write over the ctx's own fs seam, so a fake fs owns the replaceIfVersion
-// semantics exactly like the local backend does.
 import assert from "node:assert/strict";
 
 import Plugin from "../../Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the cost tracker's smokes: the counter with
+ * Check/CheckAsync/Finish and the FAKE ctx with a FAKE pluginFactory (the spec's).
+ *
+ * @remarks
+ *
+ * State builds the minimal shared shape, Append records into Lines (no real ledger
+ * file), and Write runs the guarded write over the ctx's own fs seam, so a fake fs
+ * owns the replaceIfVersion semantics exactly like the local backend does.
+ */
 export { Plugin };
 
-/** The per-folder counter: `N` = passing checks, `F` = failing checks. */
+/**
+ * The per-folder counter: `N` = passing checks, `F` = failing checks.
+ */
 export type Counter = { N: number; F: number };
 
-/** A fresh counter for one test folder. */
+/**
+ * A fresh counter for one test folder.
+ */
 export const MakeCounter = (): Counter => ({ N: 0, F: 0 });
 
-/** One check = one assert group; a throw counts the group failed. */
+/**
+ * One check = one assert group; a throw counts the group failed.
+ */
 export const Check = (Count: Counter, Label: string, Assertions: () => void): void => {
 	Count.N++;
 	try {
@@ -29,7 +41,9 @@ export const Check = (Count: Counter, Label: string, Assertions: () => void): vo
 	}
 };
 
-/** The async variant of Check. */
+/**
+ * The async variant of Check.
+ */
 export const CheckAsync = async (Count: Counter, Label: string, Assertions: () => Promise<void>): Promise<void> => {
 	Count.N++;
 	try {
@@ -42,7 +56,9 @@ export const CheckAsync = async (Count: Counter, Label: string, Assertions: () =
 	}
 };
 
-/** End-of-folder guard: any failed assertion is a folder failure. */
+/**
+ * End-of-folder guard: any failed assertion is a folder failure.
+ */
 export const Finish = (Count: Counter, Name: string): number => {
 	if (Count.F !== 0) throw new Error(`${Name}: ${Count.F} failed check(s)`);
 	return Count.N;
@@ -94,7 +110,9 @@ export const Make = (Raw: Record<string, unknown>, Fs?: unknown): any => {
 	return { Context, Factory, Commands, Listeners, Lines, Warns, Effects, Raw };
 };
 
-/** The validated config shape the loader hands to apply (the schema call). */
+/**
+ * The validated config shape the loader hands to apply (the schema call).
+ */
 export const Validate = (Raw: Record<string, unknown>): any => (Plugin.Config as unknown as (Raw: Record<string, unknown>) => any)({ ...Raw });
 
 // Standalone entry: `node Target/Test/Harness.js --selfcheck`.

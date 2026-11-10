@@ -1,9 +1,17 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
  * The shared test harness for the WORKSPACE-MONITOR tests.
  *
  * @remarks
+ *
  * The harness pairs the fake ctx (root listener capture with a DISTINCT root
  * object, the ctx listener capture, `reflect.provide` capture, the effect
  * runner, logger capture + the fs/storage seams) with the REAL
@@ -24,13 +32,6 @@
  * `ctx.__hookDshWorkspaceMonitorState` probe; the harness itself has no time
  * seam and the harness never sleeps.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 export { Plugin };
 
 /**

@@ -1,17 +1,3 @@
-/**
- * @module Test
- *
- * One singular test of the workspace-monitor's loader contract, wiring, and
- * guard chain.
- *
- * @remarks
- * The test covers the default object (name/apply/Config/inject), the
- * root-identity of the fs/observed registration, the cold-mount idle-forever
- * posture with its byte-exact line, the activation proof line, the fail-loud
- * validation, the exclusion / own-actor / include guards with their
- * byte-exact lines, the malformed-event containment, and the purity
- * invariants (zero writeText/readText calls, apply returns nothing).
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -29,7 +15,24 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount with overrides. */
+/**
+ * @module Test
+ *
+ * One singular test of the workspace-monitor's loader contract, wiring, and
+ * guard chain.
+ *
+ * @remarks
+ *
+ * The test covers the default object (name/apply/Config/inject), the
+ * root-identity of the fs/observed registration, the cold-mount idle-forever
+ * posture with its byte-exact line, the activation proof line, the fail-loud
+ * validation, the exclusion / own-actor / include guards with their
+ * byte-exact lines, the malformed-event containment, and the purity
+ * invariants (zero writeText/readText calls, apply returns nothing).
+ */
+/**
+ * A standard enabled mount with overrides.
+ */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));

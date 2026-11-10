@@ -5,6 +5,7 @@
  * defaults, TTLs, and the revocation timing.
  *
  * @remarks
+ *
  * The kind matches the residency record's kind exactly or "*"; the first match
  * wins; no match falls back to the default disposition ("keep" - the license
  * decides conservatively when unconfigured).

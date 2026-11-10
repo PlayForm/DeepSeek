@@ -1,3 +1,9 @@
+import type Decision from "@Interface/Decision.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type PolicyRule from "@Interface/Policy.js";
+import type RecoveryRule from "@Interface/Recovery.js";
+import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
+
 /**
  * @module State
  *
@@ -6,18 +12,13 @@
  * factory's State builder registers) plus the hook's own fields.
  *
  * @remarks
+ *
  * Module is "govern" - the frozen ledger lines are `govern: ...` (the
  * module-owned byte-stable contract), and the factory's Append prefixes with
  * `<State.Module>: `. The npm identity lives in the package name and the
  * `name` export (hook-dsh-workspace-govern); the ledger prefix is the module's
  * OWN contract string.
  */
-import type Decision from "@Interface/Decision.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type PolicyRule from "@Interface/Policy.js";
-import type RecoveryRule from "@Interface/Recovery.js";
-import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
-
 interface Extra {
 	/**
 	 * Config `enabled` - the master switch (volatile; the State builder's

@@ -4,6 +4,7 @@
  * The journal event names (Function/Journal, Function/Outcome).
  *
  * @remarks
+ *
  * `batch` is the batch outcome's line (the caller-side orchestration
  * integration); the rest are the block events.
  */

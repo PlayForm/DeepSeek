@@ -1,3 +1,16 @@
+import type { Context } from "@deepseek-ai/cordis";
+import ToolContext from "@Function/ToolContext.js";
+import ToolExpand from "@Function/ToolExpand.js";
+import ToolFind from "@Function/ToolFind.js";
+import ToolIndex from "@Function/ToolIndex.js";
+import ToolMap from "@Function/ToolMap.js";
+import type Config from "@Interface/Config.js";
+import type { NodeKind } from "@Interface/Graph.js";
+import type State from "@Interface/State.js";
+import type { Log } from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+import Version from "@Variable/Version.js";
+
 /**
  * @module Apply
  *
@@ -5,6 +18,7 @@
  * durable activation proof, and the FIVE tools.
  *
  * @remarks
+ *
  * The State build is the factory's cell unwrap plus the P10 volatile refresh.
  * The five tools are the only conversational surface - WORKSPACE-AGENT.md
  * section 2: the four navigation tools plus the `workspace_index` indexing
@@ -21,19 +35,6 @@
  * graph provides the data, the factory the State builder + the ledger, and
  * tools the registration surface.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import ToolContext from "@Function/ToolContext.js";
-import ToolExpand from "@Function/ToolExpand.js";
-import ToolFind from "@Function/ToolFind.js";
-import ToolIndex from "@Function/ToolIndex.js";
-import ToolMap from "@Function/ToolMap.js";
-import type Config from "@Interface/Config.js";
-import type { NodeKind } from "@Interface/Graph.js";
-import type State from "@Interface/State.js";
-import type { Log } from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-import Version from "@Variable/Version.js";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value):
  * the loader hands volatile fields as cells, so every validation read goes

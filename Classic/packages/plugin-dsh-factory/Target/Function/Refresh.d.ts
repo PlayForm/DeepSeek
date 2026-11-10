@@ -1,3 +1,6 @@
+import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Refresh
  *
@@ -9,13 +12,11 @@
  * failure is swallowed here.
  *
  * @remarks
+ *
  * The version is supplied by the caller: the fresh token from
  * `Function/Write`'s outcome, or - for the update-engine variant (the trio's
  * stat-based `Function/Refresh` after ncu/cargo mutated the file) - the
  * caller stats first (`ctx.fs.stat(Target)`) and passes the stat's version.
  * The token is never computed or parsed locally.
  */
-import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(State: State, Target: FsTarget, Actor: object | undefined, Version: FsVersion): void;

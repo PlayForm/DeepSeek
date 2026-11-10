@@ -2,6 +2,45 @@ import type { Log } from "./Render.js";
 import type { DetachRecord, JobEvent, SessionEvent } from "../Interface/Events.js";
 import type State from "../Interface/State.js";
 /**
+ * @module Completion
+ *
+ * Carries detached-job completions into the model history through a registered dynamic
+ * context.
+ *
+ * @remarks
+ *
+ * The completion-append carrier (I3 APPEND-SEAM + I4 COMPLETION-ERGONOMICS;
+ * IMPLEMENTATION-DESIGN.md section 3.3 as amended).
+ *
+ * THE CARRIER (I3, verified): the completion block is a REGISTERED DYNAMIC CONTEXT
+ * (`ctx.systemPrompt.context`) whose text the plugin flips from the completed frame to
+ * the delivered text exactly once per delivery; the loop turns a present, changed
+ * non-empty context into ONE sourced user-role snapshot appended to model history
+ * (dsh-agent-loop RuntimeContextProjection: "only when present" and "only when the
+ * retained value differs" - verified first-hand 2026-10-20), and an absent context
+ * produces NO event. The withdrawal is absence - the delivered snapshot stays in
+ * history, which is the durable completion record.
+ *
+ * THE EMIT-AT-MOST-ONCE DISCIPLINE (I3 2.3): the provider returns the pending text while
+ * frames are undelivered; the plugin clears the slot on the LOGGED SNAPSHOT (the session
+ * event whose user message carries the context snapshot with source {kind:
+ * "runtime-context", form: "snapshot"}), never on provider read - an aborted attempt
+ * re-delivers on the next attempt. After delivery the provider returns the delivered text
+ * as its stable tail (NOT empty): the loop never emits the harness's "Current runtime
+ * context: none." cleared snapshot for our carrier, and the next settle opens a fresh
+ * batch.
+ *
+ * THE BATCHED FORM (I4): everything that settles between two deliveries merges into ONE
+ * pending text (one wrapper line + N frames + ONE hint line); the aggregation window is
+ * per turn (admission-to-admission); failures sort first; the total is capped at config
+ * completionCapBytes (default 4096) with oldest-first truncation that never removes a
+ * header/status and protects failure tails to >= 512 bytes.
+ *
+ * THE WRAPPER LINE (I3 2.5, byte-exact): a bare user-role snapshot reads as a user
+ * instruction, so the pending text is wrapped with one line above the frames:
+ * `[live] completion report (harness-appended; not a user request):`
+ */
+/**
  * The context registration name (the SCHEME's seam evidence).
  */
 export declare const CONTEXT_NAME = "live-containers-completion";

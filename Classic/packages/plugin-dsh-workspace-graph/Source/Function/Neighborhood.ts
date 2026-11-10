@@ -1,3 +1,9 @@
+import type Neighborhood from "@Interface/Neighborhood.js";
+import type Node from "@Interface/Node.js";
+import type State from "@Interface/State.js";
+
+import Expand from "./Expand.js";
+
 /**
  * @module Neighborhood
  *
@@ -5,6 +11,7 @@
  * declared contract consumes (`ctx.workspaceGraph.neighborhood(path, limit)`).
  *
  * @remarks
+ *
  * The component is synchronous and derived ONLY from the W1 graph: the anchor (definition),
  * the files with an `imports` edge into it (importers, split into tests by the test-path
  * pattern), the files the anchor imports (dependencies), and the DocSections in the anchor's
@@ -19,12 +26,6 @@
  * NOT FAKED: callers and references need the deferred `calls`/`references` edges; W1 serves
  * importers only, and says so in SCHEME.md.
  */
-import type Neighborhood from "@Interface/Neighborhood.js";
-import type Node from "@Interface/Node.js";
-import type State from "@Interface/State.js";
-
-import Expand from "./Expand.js";
-
 const TestPath = /(^|\/)([^/]+\.test\.(ts|tsx|js)|Test\.tsx?)$/;
 
 const Rank = new Map<string, number>([

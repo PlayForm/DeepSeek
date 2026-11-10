@@ -1,16 +1,23 @@
-// Source/Test/Cache/Test.ts - THE CACHE SPLIT (Documentation/Plans/
-// COST-TRACK-PLUGIN.md sections 2.2 and 2.3): prompt caching is prefix-based,
-// so the surface is walked in order and the first CacheBudget tokens are the
-// cached ones - a file's mass then splits into a cached and an uncached half,
-// the amortized input splits per bucket instead of by one blended ratio, and
-// the conservation law (section 2.3, asserted by the allocator itself) still
-// holds to the cent.
 import assert from "node:assert/strict";
 
 import Allocate from "../../../Target/Function/Allocate.js";
 import Mass from "../../../Target/Function/Mass.js";
 import { Check, Finish, MakeCounter, Validate } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE CACHE SPLIT (Documentation/Plans/COST-TRACK-PLUGIN.md sections 2.2 and
+ * 2.3), proved over the prefix-cached surface walk.
+ *
+ * @remarks
+ *
+ * Prompt caching is prefix-based, so the surface is walked in order and the first
+ * CacheBudget tokens are the cached ones - a file's mass then splits into a cached
+ * and an uncached half, the amortized input splits per bucket instead of by one
+ * blended ratio, and the conservation law (section 2.3, asserted by the allocator
+ * itself) still holds to the cent.
+ */
 // The estimator of the shared harness: every message prices at ten tokens,
 // so the first node exactly fills a budget of ten.
 const Estimate = (): number => 10;

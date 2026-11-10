@@ -1,3 +1,10 @@
+import type { Context } from "@deepseek-ai/cordis";
+import Watch from "@Function/Watch.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+
 /**
  * @module Apply
  *
@@ -5,6 +12,7 @@
  * activation proof, and the fs/observed listener on the ROOT context.
  *
  * @remarks
+ *
  * The State build uses the factory's cell unwrap + the P10 volatile refresh;
  * the listener is the factory's Wire on the ROOT context. The contract is
  * Documentation/Plans/Workspace-Family/MONITOR.md.
@@ -17,13 +25,6 @@
  * kills event delivery). The test probe is the
  * `ctx.__hookDshWorkspaceMonitorState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import Watch from "@Function/Watch.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
  */

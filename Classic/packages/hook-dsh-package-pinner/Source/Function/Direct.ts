@@ -1,3 +1,12 @@
+import { dirname as Parent } from "node:path";
+
+import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import type State from "@Interface/State.js";
+import { Suppress } from "@playform/lib-dsh-core";
+import type Factory from "@playform/plugin-dsh-factory";
+
+import Transform from "./Transform.js";
+
 /**
  * @module Direct
  *
@@ -6,6 +15,7 @@
  * chain pass.
  *
  * @remarks
+ *
  * The direct-govern entry (the factory's GovernSteps registry, SCHEME.md
  * sections 2.16-2.17) reuses the event-path pieces - the factory's Continue
  * and the module's Transform - do NOT re-implement machinery, and every ledger
@@ -28,15 +38,6 @@
  * completion (its guarded write + its ledger line) before any other registered
  * step reads the file - the version-guarded writes can never race.
  */
-import { dirname as Parent } from "node:path";
-
-import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
-import type State from "@Interface/State.js";
-import { Suppress } from "@playform/lib-dsh-core";
-import type Factory from "@playform/plugin-dsh-factory";
-
-import Transform from "./Transform.js";
-
 export const Pin = (
 	Furnace: Factory,
 	State: State,

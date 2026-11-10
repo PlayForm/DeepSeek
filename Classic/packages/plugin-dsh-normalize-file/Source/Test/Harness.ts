@@ -1,3 +1,8 @@
+import assert from "node:assert/strict";
+import { rmSync } from "node:fs";
+import NormalizeFile from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -5,6 +10,7 @@
  * factory instance and the real normalize-file apply.
  *
  * @remarks
+ *
  * The fake ctx carries on capture, get returning the real
  * @playform/plugin-dsh-factory instance from its built Target, and logger
  * capture; the real normalize-file apply comes from the built Target. These
@@ -23,11 +29,6 @@
  * prepublishOnly.sh gates the build on it. Imported as a library, this
  * module only exports.
  */
-import assert from "node:assert/strict";
-import { rmSync } from "node:fs";
-import NormalizeFile from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks. Passed
  * by reference so Check can bump it from inside its callback.

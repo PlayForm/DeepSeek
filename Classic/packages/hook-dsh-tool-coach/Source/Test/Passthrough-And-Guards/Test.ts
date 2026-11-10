@@ -1,17 +1,3 @@
-/**
- * @module Test
- *
- * Runs one singular test: the zero-noise paths.
- *
- * @remarks
- * Legitimate bash passes through with NO additionalContexts and no ledger noise (R1), the fail-open
- * envelope turns a malformed payload into a prefixed warning instead of a throw, and the dedicated
- * tools are never judged. Runs standalone (`node Target/Test/Passthrough-And-Guards/Test.js`) AND
- * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
- *
- * Unit smoke of @playform/hook-dsh-tool-coach. The assertions are moved verbatim from
- * Classic/smokes/tool-coach-smoke.mjs (R1 + the fail-open envelope checks + the non-judged check).
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -27,6 +13,21 @@ import {
 	Agent,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * Runs one singular test: the zero-noise paths.
+ *
+ * @remarks
+ *
+ * Legitimate bash passes through with NO additionalContexts and no ledger noise (R1), the fail-open
+ * envelope turns a malformed payload into a prefixed warning instead of a throw, and the dedicated
+ * tools are never judged. Runs standalone (`node Target/Test/Passthrough-And-Guards/Test.js`) AND
+ * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/hook-dsh-tool-coach. The assertions are moved verbatim from
+ * Classic/smokes/tool-coach-smoke.mjs (R1 + the fail-open envelope checks + the non-judged check).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

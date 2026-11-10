@@ -5,6 +5,7 @@
  * contract).
  *
  * @remarks
+ *
  * This hook is a suggester-family CONSUMER: the types here are the contract
  * both the classifier (Function/Detect) and the note builder consume. The rows
  * are no longer a built-in projection (Variable/Defaults is RETIRED from the

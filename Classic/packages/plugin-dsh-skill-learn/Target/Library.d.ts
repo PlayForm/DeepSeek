@@ -9,33 +9,126 @@ import type Message from "./Interface/Message.js";
 import type { ReviewInput, ReviewResult } from "./Interface/Review.js";
 import type { Trigger } from "./Interface/Trigger.js";
 import Version from "./Variable/Version.js";
-/** The corpus-wide counts (plan section 2, row 8). */
+/**
+ * @module Library
+ *
+ * The entry module of the SKILL-LEARN service (@playform/plugin-dsh-skill-learn), the
+ * Hermes learning loop as one fenced package: the post-turn review that turns a finished
+ * session into skill edits, and the curator that ages the corpus.
+ *
+ * @remarks
+ *
+ * Loader contract: the CLASS form the family uses - `export default class
+ * SkillLearnService extends Service` with `super(Context, "skillLearn")`, `static
+ * inject`, `static Config = Definition` and the named `Config` schema export beside it
+ * (`Classic/packages/plugin-dsh-lesson-review/Source/Library.ts:112-116`). Every service
+ * method is a thin delegate; the only behaviour this file owns is the sequencing of the
+ * leaves and the ledger lines, because the leaves have no logger (plan section 6.7).
+ *
+ * THE SERVICE SURFACE (ctx.skillLearn), thirteen methods (plan section 2):
+ *
+ * - Configure(options) - apply validated config knobs (volatile cells)
+ * - Trigger(agent) - the idle-edge gate: the counter, the caps, the claim, the review,
+ *   one ledger line
+ * - Review({agent, signal}) - ONE review: transcript -> digest -> llm -> route ->
+ *   catalog -> phase 1 -> parse -> views -> phase 2 -> parse -> judge -> write -> ledger
+ *   -> report
+ * - Curate(now?) - the deterministic R1-R10 lifecycle pass
+ * - Consolidate({dryRun?}) - the opt-in survey pass (ships off)
+ * - Record(name, agent?) - one observed load through the `skill` tool
+ * - Revert(identifier) - one audit row back to files, fail-closed
+ * - Status() - counts (total/active/stale/archived/pinned/tracked/lastRunAt)
+ * - Pin(name, pinned) - the lifecycle exemption
+ * - Restore(name) - put a neutralized skill back into the catalog
+ * - Digest(messages) - the bounded digest (Function/Digest)
+ * - Prompt(phase) - the byte-stable phase prompt (Function/Prompt)
+ * - Save() - the store flush (the smoke seam)
+ *
+ * THE TWO LISTENERS ARE REGISTERED HERE, because a listener is wiring and the family
+ * keeps wiring in the entry (`code-authoring` rule 13). A class plugin has no `apply`:
+ * construction IS the load, and the fiber is already active (`Service`'s own constructor
+ * provides the service through `ctx.reflect`), so both registrations below are
+ * apply-time effects.
+ *
+ * 1. `agent/status` (EMIT, idle only). An emit listener is a SYNCHRONOUS recorder: the
+ *    review is detached with a `.catch` that ledgers and never throws into the emitter,
+ *    the pattern at
+ *    `Classic/packages/hook-dsh-lesson-nudge/Source/Function/Apply.ts:187-192`. The idle
+ *    edge is the only moment a review may run, because `agent.runMaintenance` is what
+ *    claims that phase (`dsh-agent/lib/types/runtime-types.d.ts:164-174`), and the claim
+ *    lives in `Function/Trigger`, not here.
+ * 2. `tools/post-execute` (WATERFALL). It calls `next()` exactly once, and records one
+ *    use when `exec.name === "skill"`. A waterfall observer that omits `next()` silently
+ *    swallows the downstream default, so the omission would break every `skill` call
+ *    rather than merely skipping a record (plan section 8.2 item 4).
+ *
+ * WHY THE HARNESS TYPES ARE IMPORTED FOR THEIR DECLARATIONS ALONE: the `agent/status`
+ * and `tools/post-execute` events are declared inside `declare module
+ * "@deepseek-ai/cordis"` blocks in the harness's own type files, and those augmentations
+ * are visible only in a compilation unit that has LOADED them. `import type {}` loads
+ * them and emits nothing - the pattern at
+ * `Classic/packages/hook-dsh-lesson-nudge/Source/Interface/Agent.ts:1-15` and
+ * `Classic/packages/hook-dsh-ccr/Source/Interface/Factory.ts:14-19`.
+ *
+ * EVERY DEGRADATION IS LOUD AND NON-FATAL: no `llm` service, no model route, an empty
+ * transcript, an unparseable reply, a failed model call - each is one of the twelve
+ * outcome classes (plan section 3.2), and each ends in exactly one byte-stable ledger
+ * line (plan section 6.7). Nothing here throws into the emitter, and nothing here throws
+ * into the maintenance task.
+ */
+/**
+ * The corpus-wide counts (plan section 2, row 8).
+ */
 export interface Status {
-    /** Every record the usage store holds. */
+    /**
+     * Every record the usage store holds.
+     */
     readonly total: number;
-    /** Records in the `active` state. */
+    /**
+     * Records in the `active` state.
+     */
     readonly active: number;
-    /** Records in the `stale` state. */
+    /**
+     * Records in the `stale` state.
+     */
     readonly stale: number;
-    /** Records in the `archived` state; only `Restore` leaves it. */
+    /**
+     * Records in the `archived` state; only `Restore` leaves it.
+     */
     readonly archived: number;
-    /** Records exempt from every transition. */
+    /**
+     * Records exempt from every transition.
+     */
     readonly pinned: number;
-    /** Records in the curator's jurisdiction, which is what `Curate` walks. */
+    /**
+     * Records in the curator's jurisdiction, which is what `Curate` walks.
+     */
     readonly tracked: number;
-    /** When the curator last ran, or null before its first pass. */
+    /**
+     * When the curator last ran, or null before its first pass.
+     */
     readonly lastRunAt: string | null;
 }
-/** The lifecycle answer (`Pin`, `Restore`): the verdict, its class, and one clause. */
+/**
+ * The lifecycle answer (`Pin`, `Restore`): the verdict, its class, and one clause.
+ */
 export interface Lifecycle {
-    /** Whether the lifecycle move landed. */
+    /**
+     * Whether the lifecycle move landed.
+     */
     readonly ok: boolean;
-    /** The class the move ended in; the first five are successes. */
+    /**
+     * The class the move ended in; the first five are successes.
+     */
     readonly outcome: "pinned" | "unpinned" | "restored" | "not-tracked" | "not-archived" | "destination-exists" | "foreign-root" | "failed";
-    /** One clause naming why a move was refused, or the path it wrote. */
+    /**
+     * One clause naming why a move was refused, or the path it wrote.
+     */
     readonly detail: string;
 }
-/** One review request: the leaf's input plus the claimed run's write budget. */
+/**
+ * One review request: the leaf's input plus the claimed run's write budget.
+ */
 export interface ReviewRequest extends ReviewInput {
     /**
      * The session the write cap counts on. Present only when the run came from
@@ -47,7 +140,9 @@ export interface ReviewRequest extends ReviewInput {
 }
 export default class SkillLearnService extends Service {
     static inject: string[];
-    /** The loader-contract Config (validated at load; knobs via Configure). */
+    /**
+     * The loader-contract Config (validated at load; knobs via Configure).
+     */
     static Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
         log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
         logFile: import("@deepseek-ai/schemastery").default<string, string, "volatile-defined">;
@@ -69,9 +164,13 @@ export default class SkillLearnService extends Service {
         policyFile: import("@deepseek-ai/schemastery").default<string, string, "defined">;
         exclude: import("@deepseek-ai/schemastery").default<string[], string[], "defined">;
     }>>, "plain">;
-    /** The knobs: constructor defaults plus the loader's validated config. */
+    /**
+     * The knobs: constructor defaults plus the loader's validated config.
+     */
     private Knobs;
-    /** The usage store (Function/Usage), bound to the expanded `storagePath` at construction. */
+    /**
+     * The usage store (Function/Usage), bound to the expanded `storagePath` at construction.
+     */
     private Usage;
     /**
      * The idle-edge gate (Function/Trigger). Its two WeakMaps ARE the per-agent
@@ -80,12 +179,18 @@ export default class SkillLearnService extends Service {
      * starts a fresh budget (plan section 14, question 2).
      */
     private Gate;
-    /** The ledger sink (best-effort, never throws). */
+    /**
+     * The ledger sink (best-effort, never throws).
+     */
     private Ledger;
-    /** The harness context (the optional `llm`, `skills` and `workingDirectory` probes). */
+    /**
+     * The harness context (the optional `llm`, `skills` and `workingDirectory` probes).
+     */
     private Context;
     constructor(Context_: Context, Raw?: unknown);
-    /** Apply the validated config knobs (called by the host on load/volatile). */
+    /**
+     * Apply the validated config knobs (called by the host on load/volatile).
+     */
     Configure(Options: Partial<Configuration>): void;
     /**
      * One idle edge: the review, then the curator when its interval is due. The
@@ -93,9 +198,13 @@ export default class SkillLearnService extends Service {
      * (`Function/Trigger.ts:76-117`); this method only sequences the two halves.
      */
     Trigger(Agent_: unknown): Promise<Trigger>;
-    /** One review. Never throws; every degradation is one of the twelve classes. */
+    /**
+     * One review. Never throws; every degradation is one of the twelve classes.
+     */
     Review(Input: ReviewRequest): Promise<ReviewResult>;
-    /** The deterministic lifecycle pass, and the consolidation pass when it is enabled. */
+    /**
+     * The deterministic lifecycle pass, and the consolidation pass when it is enabled.
+     */
     Curate(Now?: Date): Promise<Curation>;
     /**
      * The opt-in survey pass. `consolidate: false` is the shipped posture, so the
@@ -106,21 +215,37 @@ export default class SkillLearnService extends Service {
         readonly signal?: AbortSignal;
         readonly dryRun?: boolean;
     }): Promise<ConsolidationResult>;
-    /** One observed load through the `skill` tool. A store failure ledgers and returns. */
+    /**
+     * One observed load through the `skill` tool. A store failure ledgers and returns.
+     */
     Record(Name: string, _Agent?: unknown): Promise<void>;
-    /** One audit row back to files, fail-closed (`Function/Revert.ts:1-24`). */
+    /**
+     * One audit row back to files, fail-closed (`Function/Revert.ts:1-24`).
+     */
     Revert(Identifier: string): Promise<Reverted>;
-    /** The corpus-wide counts. Always answers; the store is quarantined before the read. */
+    /**
+     * The corpus-wide counts. Always answers; the store is quarantined before the read.
+     */
     Status(): Status;
-    /** Exempt one skill from every transition, or lift the exemption. */
+    /**
+     * Exempt one skill from every transition, or lift the exemption.
+     */
     Pin(Name: string, Pinned: boolean): Promise<Lifecycle>;
-    /** Put one archived skill back into the catalog and reactivate its record. */
+    /**
+     * Put one archived skill back into the catalog and reactivate its record.
+     */
     Restore(Name: string): Promise<Lifecycle>;
-    /** The bounded digest of one derived transcript. */
+    /**
+     * The bounded digest of one derived transcript.
+     */
     Digest(Messages: readonly Message[]): DigestResult;
-    /** The byte-stable phase prompt; there is no assembly here by design. */
+    /**
+     * The byte-stable phase prompt; there is no assembly here by design.
+     */
     Prompt(Phase: 1 | 2): string;
-    /** Persist the usage store (the smoke seam). Swallows and ledgers. */
+    /**
+     * Persist the usage store (the smoke seam). Swallows and ledgers.
+     */
     Save(): Promise<void>;
     /**
      * The pipeline of plan section 3.1, steps 8 to 23. It runs INSIDE the claimed
@@ -129,7 +254,9 @@ export default class SkillLearnService extends Service {
      * report and exactly one ledger line.
      */
     private Pipeline;
-    /** Write the run report and its one ledger line, and answer the result. */
+    /**
+     * Write the run report and its one ledger line, and answer the result.
+     */
     private Finish;
     /**
      * Whether the curator's interval has elapsed since its last persisted pass.
@@ -137,7 +264,9 @@ export default class SkillLearnService extends Service {
      * so a restart does not reset it.
      */
     private Due;
-    /** One idle edge: the review, then the curator when its interval is due. */
+    /**
+     * One idle edge: the review, then the curator when its interval is due.
+     */
     private Edge;
     /**
      * The filesystem seam (`ctx.fs`). `Context.get` answers `undefined` when the
@@ -155,21 +284,37 @@ export default class SkillLearnService extends Service {
      * that shape, and a method may drop its optional trailing arguments.
      */
     private Seam;
-    /** The catalog (`ctx.skills`); a missing provider surfaces as a caught throw. */
+    /**
+     * The catalog (`ctx.skills`); a missing provider surfaces as a caught throw.
+     */
     private Skills;
-    /** The model service, or undefined when it is absent, which is the `no-llm` class. */
+    /**
+     * The model service, or undefined when it is absent, which is the `no-llm` class.
+     */
     private Llm;
-    /** Where the catalog is listed from: the agent's working directory, else the corpus root. */
+    /**
+     * Where the catalog is listed from: the agent's working directory, else the corpus root.
+     */
     private Where;
-    /** The catalog index; a provider that rejects is an empty index, never a failed run. */
+    /**
+     * The catalog index; a provider that rejects is an empty index, never a failed run.
+     */
     private Index;
-    /** One catalog lookup; a provider that rejects is a name the catalog does not resolve. */
+    /**
+     * One catalog lookup; a provider that rejects is a name the catalog does not resolve.
+     */
     private Lookup;
-    /** One path's text; an absent or unreadable file is null, which is the `absent` case. */
+    /**
+     * One path's text; an absent or unreadable file is null, which is the `absent` case.
+     */
     private Body;
-    /** Drop the catalog cache after a mutation, so the next read sees the new bytes. */
+    /**
+     * Drop the catalog cache after a mutation, so the next read sees the new bytes.
+     */
     private Refresh;
-    /** The judge's read-only corpus view, over the evidence one run gathered. */
+    /**
+     * The judge's read-only corpus view, over the evidence one run gathered.
+     */
     private CorpusView;
 }
 /**

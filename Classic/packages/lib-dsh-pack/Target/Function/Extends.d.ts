@@ -7,6 +7,7 @@ export default _default;
  * name, an array is the list.
  *
  * @remarks
+ *
  * `Normalize` also normalizes it, but the chain reads layers that may not have
  * gone through `Normalize`.
  */

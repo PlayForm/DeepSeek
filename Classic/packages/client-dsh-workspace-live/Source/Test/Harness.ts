@@ -1,9 +1,13 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+
 /**
  * @module Harness
  *
  * The shared test harness for the WORKSPACE-LIVE client-half smokes.
  *
  * @remarks
+ *
  * The alias hooks load the REAL built Target (the `./client` export, the loader row and the
  * Store), and the fake CLIENT ctx captures exactly the seams the client body uses -
  * `locale.register`, `slots.inject`, `slots.register`, `effect`, `provide`.
@@ -17,9 +21,6 @@
  * actually wires the real client apply (the vacuously-green backstop for every folder's
  * fixture).
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-
 // The alias hooks MUST be registered before any Target import resolves.
 await import("./Alias-Hooks.js");
 
@@ -60,7 +61,9 @@ export const CheckAsync = async (
 	}
 };
 
-/** End-of-folder guard: any failed assertion is a folder failure. */
+/**
+ * End-of-folder guard: any failed assertion is a folder failure.
+ */
 export const Finish = (Count: Counter, Name: string): number => {
 	if (Count.F !== 0) {
 		throw new Error(`${Name}: ${Count.F} failed check(s)`);
@@ -73,12 +76,18 @@ export const Finish = (Count: Counter, Name: string): number => {
 export const Library = await import("../../Target/Library.js");
 export const Client = await import("../../Target/Client.js");
 
-/** The loader row (the default export of the plugin entry). */
+/**
+ * The loader row (the default export of the plugin entry).
+ */
 export const Plugin = Library.default;
-/** The client half (the ./client export: { inject, apply }). */
+/**
+ * The client half (the ./client export: { inject, apply }).
+ */
 export const ClientPlugin = Client.default;
 
-/** The validated config the loader produces (defaults filled). */
+/**
+ * The validated config the loader produces (defaults filled).
+ */
 export const Validate = (Raw: Record<string, unknown>): any =>
 	(Plugin.Config as unknown as (Raw: Record<string, unknown>) => any)({ ...Raw });
 
@@ -154,7 +163,9 @@ export const Make = (Options: { registry?: unknown; trace?: unknown } = {}): any
 	return Run;
 };
 
-/** A fake D5 trace port: `on` + `ring`, plus an `emit` the tests drive. */
+/**
+ * A fake D5 trace port: `on` + `ring`, plus an `emit` the tests drive.
+ */
 export const MakeTrace = (): any => {
 	const Listeners = new Map<string, Set<(Envelope: any) => void>>();
 	const Ring: any[] = [];
@@ -187,7 +198,9 @@ export const MakeTrace = (): any => {
 	};
 };
 
-/** A fake panel-family registry: presence is the composition signal. */
+/**
+ * A fake panel-family registry: presence is the composition signal.
+ */
 export const MakeRegistry = (): any => {
 	const Registered: any[] = [];
 	return {
@@ -210,7 +223,9 @@ export const MakeRegistry = (): any => {
 export const BuiltSource = (Relative: string): string =>
 	FileSystem.readFileSync(new URL(Relative, import.meta.url), "utf8");
 
-/** The built client bundle's source (the closure-factory envelope). */
+/**
+ * The built client bundle's source (the closure-factory envelope).
+ */
 export const BundleSource = (): string =>
 	FileSystem.readFileSync(new URL("../Client.bundle.js", import.meta.url), "utf8");
 

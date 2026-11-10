@@ -6,6 +6,7 @@ import type State from "@Interface/State.js";
  * The authorization check: does the holder hold a covering capability?
  *
  * @remarks
+ *
  * Does the holder hold a NON-REVOKED, NON-EXPIRED capability covering
  * (resource, operation)? The check is pure: it reads the capability records
  * only - never the weights, never the residency. Authority is NOT knowledge:

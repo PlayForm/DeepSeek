@@ -1,9 +1,17 @@
+import assert from "node:assert/strict";
+import FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+
+import LessonService from "../../Target/Library.js";
+
 /**
  * @module Harness
  *
  * The shared test harness for the LESSON-REVIEW service.
  *
  * @remarks
+ *
  * Combines the fake ctx (reflect.provide capture for the Service base, the logger capture, the
  * effect runner, the probe-once `get`) with the REAL LessonService class from its built Target -
  * the family fake-ctx + real-built-library harness pattern, written ONCE per package and
@@ -28,20 +36,17 @@
  * NO FAKE CLOCK: Curate takes an explicit `Now`, and every entry carries explicit timestamps, so
  * every timing assertion is on a passed value.
  */
-import assert from "node:assert/strict";
-import FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-
-import LessonService from "../../Target/Library.js";
-
 export { LessonService };
 
-/** The fresh temp home: the service's `~/.dsh` paths resolve inside it. */
+/**
+ * The fresh temp home: the service's `~/.dsh` paths resolve inside it.
+ */
 export const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "lesson-smoke-home-"));
 process.env["HOME"] = Home;
 
-/** The per-folder counter. */
+/**
+ * The per-folder counter.
+ */
 export type Counter = { N: number; F: number };
 
 export const MakeCounter = (): Counter => ({ N: 0, F: 0 });
@@ -62,7 +67,9 @@ export const Check = (Count: Counter, Label: string, Assertions: () => void): vo
 	}
 };
 
-/** The async variant of Check, for folders whose assertions await. */
+/**
+ * The async variant of Check, for folders whose assertions await.
+ */
 export const CheckAsync = async (
 	Count: Counter,
 	Label: string,
@@ -90,7 +97,9 @@ export const Finish = (Count: Counter, Name: string): number => {
 	return Count.N;
 };
 
-/** Flush the detached constructor chain (the usage-store load). */
+/**
+ * Flush the detached constructor chain (the usage-store load).
+ */
 export const Settle = async (): Promise<void> => {
 	for (let Index = 0; Index < 4; Index++) {
 		await new Promise<void>((Resolve) => setImmediate(Resolve));
@@ -147,7 +156,9 @@ export const Make = (
 	return Run;
 };
 
-/** One request the fake llm was handed. */
+/**
+ * One request the fake llm was handed.
+ */
 export interface LlmRequest {
 	provider?: string;
 	model?: string;
@@ -187,7 +198,9 @@ export const FakeLlm = (
 	};
 };
 
-/** A corpus fixture: one skill directory with a SKILL.md under the temp HOME. */
+/**
+ * A corpus fixture: one skill directory with a SKILL.md under the temp HOME.
+ */
 export const Seed = (Name: string, Body = `---\nname: ${Name}\ndescription: x\n---\n\n# ${Name}\n`): string => {
 	const Directory = Path.join(Home, ".dsh", "skills", Name);
 	FileSystem.mkdirSync(Directory, { recursive: true });
@@ -195,15 +208,21 @@ export const Seed = (Name: string, Body = `---\nname: ${Name}\ndescription: x\n-
 	return Directory;
 };
 
-/** Whether a corpus path exists (the write assertions). */
+/**
+ * Whether a corpus path exists (the write assertions).
+ */
 export const Exists = (Relative: string): boolean =>
 	FileSystem.existsSync(Path.join(Home, ".dsh", Relative));
 
-/** Read a corpus file (the body assertions). */
+/**
+ * Read a corpus file (the body assertions).
+ */
 export const Read = (Relative: string): string =>
 	FileSystem.readFileSync(Path.join(Home, ".dsh", Relative), "utf8");
 
-/** The service's ledger lines without the neutral ` (logFile ...)` suffix. */
+/**
+ * The service's ledger lines without the neutral ` (logFile ...)` suffix.
+ */
 export const Messages = (Run: any): string[] =>
 	Run.Lines.map((Line: string) => Line.replace(/ \(logFile .*\)$/, ""));
 

@@ -1,9 +1,12 @@
+import type { WatchlistEntry } from "../Interface/Events.js";
+import type State from "../Interface/State.js";
 /**
  * @module Watchlist
  *
  * The classification module (the FILE-MONITOR design section 3.2).
  *
  * @remarks
+ *
  * Config and data, never code: the file -> check-set resolution is the
  * watchlist override, else the effective check-set catalog's globs. Pure
  * functions over the plugin's own state - no I/O, no eval.
@@ -21,15 +24,15 @@
  * `checks: none` form and nothing ever runs (honest: with no checks, no
  * verification is claimed).
  */
-import type { WatchlistEntry } from "../Interface/Events.js";
-import type State from "../Interface/State.js";
 /** Convert one glob to a RegExp (the small self-contained converter; the
  * Policy.ts self-contained precedent): a single star within a segment, a
  * double star across segments (the double-star-slash leading form makes any
  * leading directories optional), a question mark a single char. A malformed
  * glob matches nothing (fail-open). */
 export declare const GlobToRegExp: (Glob: string) => RegExp | null;
-/** Whether one glob matches one path (malformed globs match nothing - fail-open). */
+/**
+ * Whether one glob matches one path (malformed globs match nothing - fail-open).
+ */
 export declare const Matches: (Glob: string, Path: string) => boolean;
 /** The watchlist entry whose glob matches the path - the MOST-SPECIFIC glob
  * wins (the longest pattern); ties -> the later entry. */

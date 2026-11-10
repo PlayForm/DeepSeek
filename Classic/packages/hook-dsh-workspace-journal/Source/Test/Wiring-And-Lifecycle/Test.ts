@@ -1,15 +1,3 @@
-/**
- * @module Test
- *
- * The wiring and the lifecycle spine.
- *
- * @remarks
- * Covers the loader contract (apply returns nothing, the default object carries
- * name/apply/Config/inject), the IDLE-forever cold mount, the root-context registration with the
- * distinct root identity, the service registered from apply, the activation proof, the storage
- * effect, the monotonic progress counter (no wall clock on the event path), and the fail-loud
- * validation.
- */
 import assert from "node:assert/strict";
 import {
 	Boot,
@@ -25,7 +13,22 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * The wiring and the lifecycle spine.
+ *
+ * @remarks
+ *
+ * Covers the loader contract (apply returns nothing, the default object carries
+ * name/apply/Config/inject), the IDLE-forever cold mount, the root-context registration with the
+ * distinct root identity, the service registered from apply, the activation proof, the storage
+ * effect, the monotonic progress counter (no wall clock on the event path), and the fail-loud
+ * validation.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = async (Config: Record<string, unknown> = {}): Promise<any> => {
 	rm();
 	const Run = Make(Validate({ logFile: Ledger, enabled: true, ...Config }));

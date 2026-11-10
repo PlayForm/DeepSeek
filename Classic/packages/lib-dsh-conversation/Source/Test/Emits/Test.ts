@@ -10,6 +10,7 @@ import { Check, Finish, MakeCounter } from "../Harness.js";
  * The emission's smokes over hand-written event arrays.
  *
  * @remarks
+ *
  * The shapes follow the conversation spine's section 3.1. The envelopes carry
  * the source event's seq and time; a tool call with two file arguments emits
  * two touches; the session end emits exactly one end envelope; an unknown
@@ -17,7 +18,6 @@ import { Check, Finish, MakeCounter } from "../Harness.js";
  *
  * No ctx, no factory, no fs - the emission is pure.
  */
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
@@ -123,7 +123,9 @@ export const runTest = async (): Promise<number> => {
 	return Finish(Count, "Emits");
 };
 
-/** Standalone entry: `node Target/Test/Emits/Test.js`. */
+/**
+ * Standalone entry: `node Target/Test/Emits/Test.js`.
+ */
 const InvokedDirectly =
 	process.argv[1] !== undefined &&
 	import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

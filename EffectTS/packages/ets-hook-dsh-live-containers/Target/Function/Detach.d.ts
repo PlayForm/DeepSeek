@@ -1,3 +1,6 @@
+import type { PreToolDecision, ToolDispatchExecution, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
+import type { Log } from "./Render.js";
+import type State from "../Interface/State.js";
 /**
  * @module Detach
  *
@@ -5,6 +8,7 @@
  * result.
  *
  * @remarks
+ *
  * The two-arm transform (G1, IMPLEMENTATION-DESIGN.md section 3.2; Requirements/01
  * section 12). The pre-execute arm decides + starts the job + tags the exec object; the
  * execute arm, seeing the tag, returns the fabricated canonical-value result WITHOUT
@@ -21,9 +25,6 @@
  * `transform failed <tool> -> inline`, and the call runs inline exactly as if the plugin
  * were not mounted. The listener NEVER denies.
  */
-import type { PreToolDecision, ToolDispatchExecution, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
-import type { Log } from "./Render.js";
-import type State from "../Interface/State.js";
 /**
  * The inline marker (design section 4.1, byte-exact): `[live] <job-id> running:
  * <cmd-head> - output pending; proceed reasoning.`

@@ -1,3 +1,8 @@
+import assert from "node:assert/strict";
+
+import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";
+import { Check, Finish, LinesWith, Make, MakeCounter, Validate, rm } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +10,7 @@
  * on the built State (`Allow`), the per-action override, and the service's read-only posture.
  *
  * @remarks
+ *
  * Its own action classes (read and index) are automatic, so it has NO gated action and no verdict
  * can refuse a call.
  *
@@ -12,12 +18,9 @@
  * I/O, no building, no throwing. They are the cheapest real calls in the service's surface, which
  * prove the automatic posture lets a read proceed and that it touches no file content.
  */
-import assert from "node:assert/strict";
-
-import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";
-import { Check, Finish, LinesWith, Make, MakeCounter, Validate, rm } from "../Harness.js";
-
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",
@@ -29,7 +32,9 @@ const Defaults = {
 	message: "auto",
 };
 
-/** An enabled service with an empty ledger (the ledger path never writes). */
+/**
+ * An enabled service with an empty ledger (the ledger path never writes).
+ */
 const Setup = (Raw: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: "/nonexistent/semantics.log", enabled: true, ...Raw }));

@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * Exercises THE POLICY BLOCK (D6) on the batch-decision hook.
- *
- * @remarks
- * Covers the shared block's defaults in the schema and on the built State, the `approve` verdict
- * HOLDING the policy auto-approval with the documented line, the `auto` verdict proceeding to the
- * decision, and the precedence (policy approve > autoApprove, while a knob that is off still
- * requires the user and writes no held line).
- */
 import assert from "node:assert/strict";
 
 import {
@@ -21,7 +10,21 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * @module Test
+ *
+ * Exercises THE POLICY BLOCK (D6) on the batch-decision hook.
+ *
+ * @remarks
+ *
+ * Covers the shared block's defaults in the schema and on the built State, the `approve` verdict
+ * HOLDING the policy auto-approval with the documented line, the `auto` verdict proceeding to the
+ * decision, and the precedence (policy approve > autoApprove, while a knob that is off still
+ * requires the user and writes no held line).
+ */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",

@@ -1,3 +1,10 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+
+import * as Library from "../../Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -8,25 +15,25 @@
  * parser parses.
  *
  * @remarks
+ *
  * The library is PURE: there is no fake ctx and no factory here - the fixtures are real
  * temporary directories and the real built Target.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-
-import * as Library from "../../Target/Library.js";
-
 export { Library };
 
-/** The per-folder counter: N passing checks, F failing checks. */
+/**
+ * The per-folder counter: N passing checks, F failing checks.
+ */
 export type Counter = { N: number; F: number };
 
-/** A fresh counter for one test folder. */
+/**
+ * A fresh counter for one test folder.
+ */
 export const MakeCounter = (): Counter => ({ N: 0, F: 0 });
 
-/** One check; a throw inside counts the whole group failed. */
+/**
+ * One check; a throw inside counts the whole group failed.
+ */
 export const Check = (Count: Counter, Label: string, Assertions: () => void): void => {
 	Count.N++;
 	try {
@@ -39,7 +46,9 @@ export const Check = (Count: Counter, Label: string, Assertions: () => void): vo
 	}
 };
 
-/** The async variant of Check; the caller must await it to keep order. */
+/**
+ * The async variant of Check; the caller must await it to keep order.
+ */
 export const CheckAsync = async (
 	Count: Counter,
 	Label: string,
@@ -56,7 +65,9 @@ export const CheckAsync = async (
 	}
 };
 
-/** End-of-folder guard: any failed assertion is a folder failure. */
+/**
+ * End-of-folder guard: any failed assertion is a folder failure.
+ */
 export const Finish = (Count: Counter, Name: string): number => {
 	if (Count.F !== 0) {
 		throw new Error(`${Name}: ${Count.F} failed check(s)`);
@@ -64,11 +75,15 @@ export const Finish = (Count: Counter, Name: string): number => {
 	return Count.N;
 };
 
-/** A fresh temporary directory under the OS temp dir. */
+/**
+ * A fresh temporary directory under the OS temp dir.
+ */
 export const Tree = (Prefix: string): string =>
 	FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
 
-/** Write one file under a root (parents created); returns the full path. */
+/**
+ * Write one file under a root (parents created); returns the full path.
+ */
 export const Put = (Root: string, Relative: string, Body = "x"): string => {
 	const Full = Path.join(Root, Relative);
 	FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
@@ -76,7 +91,9 @@ export const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
-/** Remove one file or directory (a cleanup between scenarios). */
+/**
+ * Remove one file or directory (a cleanup between scenarios).
+ */
 export const Drop = (Full: string): void => {
 	FileSystem.rmSync(Full, { recursive: true, force: true });
 };

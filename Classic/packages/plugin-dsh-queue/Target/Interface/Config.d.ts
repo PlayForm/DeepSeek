@@ -1,3 +1,4 @@
+import type { Allowlist } from "@playform/plugin-dsh-factory";
 /**
  * @module Config
  *
@@ -6,7 +7,6 @@
  * a hot edit commits without remounting and the factory's P10 refresh
  * updates the State fields in place.
  */
-import type { Allowlist } from "@playform/plugin-dsh-factory";
 export default interface Config {
     /**
      * Master switch. Shipped false (the IDLE-forever posture).

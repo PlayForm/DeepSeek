@@ -6,6 +6,7 @@ export default _default;
  * it.
  *
  * @remarks
+ *
  * The parse mirrors the aggregate runner (Maintain/Run/Smokes/Index.mjs)
  * exactly: the first `(<n> PASS)` occurrence after the `## Expected count`
  * heading. The parse is the runner's own rule on purpose - a count the

@@ -1,19 +1,3 @@
-/**
- * @module Test
- *
- * THE REVIEW END TO END, and the write fence.
- *
- * @remarks
- * This is the folder that proves the package's central promise: by default a review PROPOSES,
- * nothing lands in the corpus, and the proposal waits in a queue until it is accepted. The
- * `write: auto` opt-in is the same pipeline with the queue replaced by the guarded write, and the
- * four degradation paths (no llm service, no route, a provider failure, an unparseable reply)
- * each end in an outcome class instead of a throw.
- *
- * EVERY CHECK STARTS FROM AN EMPTY `~/.dsh` (the `Case` wrapper): the store and the queue are the
- * package's own state, so a scenario that inherited them from its predecessor would assert a
- * count it never created.
- */
 import assert from "node:assert/strict";
 import FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -32,41 +16,72 @@ import {
 	Seed,
 } from "../Harness.js";
 
-/** The corpus knobs Apply reads (the service's own knobs are private). */
+/**
+ * @module Test
+ *
+ * THE REVIEW END TO END, and the write fence.
+ *
+ * @remarks
+ *
+ * This is the folder that proves the package's central promise: by default a review PROPOSES,
+ * nothing lands in the corpus, and the proposal waits in a queue until it is accepted. The
+ * `write: auto` opt-in is the same pipeline with the queue replaced by the guarded write, and the
+ * four degradation paths (no llm service, no route, a provider failure, an unparseable reply)
+ * each end in an outcome class instead of a throw.
+ *
+ * EVERY CHECK STARTS FROM AN EMPTY `~/.dsh` (the `Case` wrapper): the store and the queue are the
+ * package's own state, so a scenario that inherited them from its predecessor would assert a
+ * count it never created.
+ */
+/**
+ * The corpus knobs Apply reads (the service's own knobs are private).
+ */
 const Roots = { skillsRoot: "~/.dsh/skills", archiveRoot: "~/.dsh/skills/.archive" } as any;
 
-/** Empty the service's own state (the store, the queue, the corpus). */
+/**
+ * Empty the service's own state (the store, the queue, the corpus).
+ */
 const Clean = (): void => {
 	for (const Directory of ["lesson", "skills"]) {
 		FileSystem.rmSync(Path.join(Home, ".dsh", Directory), { recursive: true, force: true });
 	}
 };
 
-/** A SKILL.md body with matching frontmatter. */
+/**
+ * A SKILL.md body with matching frontmatter.
+ */
 const Skill = (Name: string, Extra = ""): string =>
 	`---\nname: ${Name}\ndescription: what it does\n---\n\n# ${Name}\n\n${Extra}`;
 
-/** The reviewer's reply carrying ONE create operation. */
+/**
+ * The reviewer's reply carrying ONE create operation.
+ */
 const Reply = (Name: string, Extra = ""): string =>
 	JSON.stringify({
 		note: "one lesson",
 		ops: [{ op: "create", name: Name, body: Skill(Name, Extra), reason: "the run needed it" }],
 	});
 
-/** The conversation snapshot every review in this folder uses. */
+/**
+ * The conversation snapshot every review in this folder uses.
+ */
 const Snapshot = [
 	{ role: "user", text: "add the flag to the loader" },
 	{ role: "assistant", text: "done - the loader takes --flag now" },
 	{ role: "user", text: "good, remember that the loader reads it before config" },
 ];
 
-/** An agent stub carrying the route the service reads. */
+/**
+ * An agent stub carrying the route the service reads.
+ */
 const Agent = { options: { provider: "fake-provider", model: "fake-model" } };
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
-	/** One isolated scenario: a clean `~/.dsh`, then the assertions. */
+	/**
+	 * One isolated scenario: a clean `~/.dsh`, then the assertions.
+	 */
 	const Case = async (Label: string, Assertions: () => Promise<void>): Promise<void> => {
 		Clean();
 		await CheckAsync(Count, Label, Assertions);

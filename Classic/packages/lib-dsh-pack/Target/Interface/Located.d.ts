@@ -6,12 +6,17 @@ import type Pack from "./Pack.js";
  * resolved pack itself (the caller selects its domain's families from it).
  *
  * @remarks
+ *
  * `undefined` from the locator is the honest silence: no pack, no signature, no
  * note.
  */
 export default interface Located {
-    /** The workspace root (the first ancestor whose pack signature matched). */
+    /**
+     * The workspace root (the first ancestor whose pack signature matched).
+     */
     root: string;
-    /** The resolved pack for that root (the built-in pack when no file exists). */
+    /**
+     * The resolved pack for that root (the built-in pack when no file exists).
+     */
     pack: Pack;
 }

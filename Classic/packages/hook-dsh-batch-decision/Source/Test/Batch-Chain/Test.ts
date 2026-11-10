@@ -1,19 +1,3 @@
-/**
- * @module Test
- *
- * Proves THE END-TO-END BATCH CHAIN, the wave-1 acceptance proof.
- *
- * @remarks
- * The chain runs pass-on.Prepare -> batch/proposed (the bus) + the harness inbox (the delivery) ->
- * batchstate's splice (the board) -> batch_decision (the user) -> the inbox (the board's status) +
- * batch/decision (the bus) -> the ingester's apply through the content fence -> the feedback
- * outcome.
- *
- * It uses ONE process, ONE shared fake context, and the REAL built libraries of all five packages.
- * The fake agent registry mirrors the harness's own inbox commit (`agent.inject` -> the durable
- * `agent/inbox/spliced` + the live `agent/inbox/inserted`), so the chain exercises exactly the
- * channel the harness provides. No sleeps: the ingester's `WhenIdle` drains the apply.
- */
 import assert from "node:assert/strict";
 import { createHash as Hash } from "node:crypto";
 import * as FileSystem from "node:fs";
@@ -26,13 +10,36 @@ import Ingester from "../../../../plugin-dsh-ingester/Target/Library.js";
 import PassOn from "../../../../plugin-dsh-pass-on/Target/Library.js";
 import Plugin from "../../../Target/Library.js";
 
-/** The sha256 of a content string (the version fence's own algorithm). */
+/**
+ * @module Test
+ *
+ * Proves THE END-TO-END BATCH CHAIN, the wave-1 acceptance proof.
+ *
+ * @remarks
+ *
+ * The chain runs pass-on.Prepare -> batch/proposed (the bus) + the harness inbox (the delivery) ->
+ * batchstate's splice (the board) -> batch_decision (the user) -> the inbox (the board's status) +
+ * batch/decision (the bus) -> the ingester's apply through the content fence -> the feedback
+ * outcome.
+ *
+ * It uses ONE process, ONE shared fake context, and the REAL built libraries of all five packages.
+ * The fake agent registry mirrors the harness's own inbox commit (`agent.inject` -> the durable
+ * `agent/inbox/spliced` + the live `agent/inbox/inserted`), so the chain exercises exactly the
+ * channel the harness provides. No sleeps: the ingester's `WhenIdle` drains the apply.
+ */
+/**
+ * The sha256 of a content string (the version fence's own algorithm).
+ */
 const Sha = (Content: string): string => Hash("sha256").update(Content).digest("hex");
 
-/** The temp root of this folder's fixtures. */
+/**
+ * The temp root of this folder's fixtures.
+ */
 const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "batch-chain-"));
 
-/** The five ledgers (one log per module, the family convention). */
+/**
+ * The five ledgers (one log per module, the family convention).
+ */
 const Files = {
 	board: Path.join(Root, "batchstate.log"),
 	hook: Path.join(Root, "batch-decision.log"),
@@ -43,7 +50,9 @@ const Files = {
 	target: Path.join(Root, "repo", "pkg.json"),
 };
 
-/** The lines of one JSON-lines ledger. */
+/**
+ * The lines of one JSON-lines ledger.
+ */
 const Lines = (File: string): any[] => {
 	try {
 		return FileSystem
@@ -56,7 +65,9 @@ const Lines = (File: string): any[] => {
 	}
 };
 
-/** The capturing governed fs (the ingester's only write path). */
+/**
+ * The capturing governed fs (the ingester's only write path).
+ */
 const FakeFs = (Content: string): any => {
 	const Files_ = { [Files.target]: Content };
 	const Fs: any = {

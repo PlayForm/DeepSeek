@@ -1,3 +1,5 @@
+import type Factory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Factory
  *
@@ -5,6 +7,7 @@
  * (Interface/Factory).
  *
  * @remarks
+ *
  * The service holds the injected `pluginFactory` instance and uses: the State
  * builder (cell unwrap + shared fields + the P10 volatile refresh), the ledger
  * (logger + appendFileSync, never throws), the exclusion match, and the Wire
@@ -15,8 +18,6 @@
  * `ctx.pluginFactory` is typed at every consumption site (the typed view
  * arrives TYPE-ONLY from the factory package - erased at build).
  */
-import type Factory from "@playform/plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

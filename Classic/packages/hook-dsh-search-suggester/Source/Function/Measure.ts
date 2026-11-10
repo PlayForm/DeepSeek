@@ -1,3 +1,8 @@
+import type { Intent, Target } from "../Interface/Execution.js";
+import type Measurement from "../Interface/Measurement.js";
+import type Projection from "../Interface/Projection.js";
+import Kinds from "../Variable/Kinds.js";
+
 /**
  * @module Measure
  *
@@ -5,6 +10,7 @@
  * neutral 0.5 literal of Function/Score.
  *
  * @remarks
+ *
  * literal(c) =
  *
  *   - 0.5 when the graph is absent or empty (the documented neutral fallback - the caller
@@ -31,21 +37,25 @@
  *   - any other glob is translated to a segment-anchored regex (a double star then a slash = any depth, `*` = one
  *     segment).
  */
-import type { Intent, Target } from "../Interface/Execution.js";
-import type Measurement from "../Interface/Measurement.js";
-import type Projection from "../Interface/Projection.js";
-import Kinds from "../Variable/Kinds.js";
-
-/** The literal score of a candidate the graph has nodes for but cannot prove. */
+/**
+ * The literal score of a candidate the graph has nodes for but cannot prove.
+ */
 const Unproven = 0.3;
 
-/** The scope score of a glob candidate the graph proves. */
+/**
+ * The scope score of a glob candidate the graph proves.
+ */
 const GlobScope = 0.7;
 
-/** Escape one literal glob segment for a RegExp. */
+/**
+ * Escape one literal glob segment for a RegExp.
+ */
 const Escape = (Text: string): string => Text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-/** A glob translated to a segment-anchored RegExp: a single star is one segment, a double star with a slash is any depth. */
+/**
+ * A glob translated to a segment-anchored RegExp: a single star is one segment, a double star with
+ * a slash is any depth.
+ */
 const Pattern = (Glob: string): RegExp => {
 	const Body = Glob.split("**/")
 		.map((Part) => Part.split("*").map(Escape).join("[^/]*"))
@@ -53,7 +63,9 @@ const Pattern = (Glob: string): RegExp => {
 	return new RegExp(`(^|/)${Body}$`);
 };
 
-/** Whether a node path satisfies a candidate path or glob. */
+/**
+ * Whether a node path satisfies a candidate path or glob.
+ */
 export const Match = (Candidate: string, NodePath: string): boolean => {
 	switch (true) {
 		case !Candidate.includes("*"):
@@ -65,21 +77,31 @@ export const Match = (Candidate: string, NodePath: string): boolean => {
 	}
 };
 
-/** The depth tier: the canonical top (depth <= 2) keeps 1.0, deeper paths lose up to 0.3. */
+/**
+ * The depth tier: the canonical top (depth <= 2) keeps 1.0, deeper paths lose up to 0.3.
+ */
 const Shallow = (Depth: number): number => 1 - Math.min(0.3, 0.05 * Math.max(0, Depth - 2));
 
-/** The path below the snapshot's common root (the repo-relative form). */
+/**
+ * The path below the snapshot's common root (the repo-relative form).
+ */
 const Relative = (Projection: Projection, Path: string): string =>
 	Path.split("/").slice(Projection.root).join("/");
 
 export default (
-	/** The built projection (Function/Projection). */
+	/**
+	 * The built projection (Function/Projection).
+	 */
 	Projection: Projection,
 
-	/** The intent the candidate belongs to (its expected kinds). */
+	/**
+	 * The intent the candidate belongs to (its expected kinds).
+	 */
 	Intent: Intent,
 
-	/** The pack candidate. */
+	/**
+	 * The pack candidate.
+	 */
 	Target: Target,
 ): Measurement => {
 	const Glob = Target.path.includes("*");

@@ -1,9 +1,14 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
  * The entry module (mirrors Source/Library.rs).
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` + `export const Config` +
  * `export const inject` + `export default { name, apply, Config, inject }` - the ONLY named
  * exports in the tree (cordis requires them); every other module is a nameless default export
@@ -37,10 +42,6 @@
  * rule). The per-agent state is keyed on the Agent object (the tool-coach precedent); the
  * durable record is the ledger file (one log per module).
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "graph-suggester";
 
 /**
@@ -60,6 +61,7 @@ export { Version };
  * Required services (skill: declare, never rely on load order).
  *
  * @remarks
+ *
  * The factory (@playform/plugin-dsh-factory) provides the State builder (cell unwrap + shared
  * fields + the P10 volatile refresh) and the ledger. The workspace graph service (the W1
  * foundation) serves the Neighborhood query; the loader's PENDING state orders it first. The

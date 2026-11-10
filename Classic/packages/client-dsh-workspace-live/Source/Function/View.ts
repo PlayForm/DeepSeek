@@ -1,9 +1,25 @@
+import {
+	DetailDocument,
+	detailDocumentState,
+	StateDot,
+	Tag,
+	type DetailDocumentLabels,
+	type DetailDocumentRead,
+	type StateDotState,
+	type TagTone,
+} from "@deepseek-ai/dsh-client-ui-primitives";
+import type { LiveView, Representation } from "@Interface/Presentation.js";
+import type { TraceEnvelope } from "@Interface/Trace.js";
+import EN_DICTIONARY from "@Variable/Locale-en.json";
+import { createElement, type ReactNode } from "react";
+
 /**
  * @module View
  *
  * The live view's pure element builder.
  *
  * @remarks
+ *
  * The presented representations (the Entity/Presentation/Interaction model's
  * latest observed state, never a running OS process), the documented empty
  * note, the D5 trace tail (newest first, bounded by the store; one line per
@@ -20,21 +36,6 @@
  * from detailDocumentState. Every className, the remaining strings and every
  * node stay: the primitive replaces the exact span it stands for.
  */
-import {
-	DetailDocument,
-	detailDocumentState,
-	StateDot,
-	Tag,
-	type DetailDocumentLabels,
-	type DetailDocumentRead,
-	type StateDotState,
-	type TagTone,
-} from "@deepseek-ai/dsh-client-ui-primitives";
-import type { LiveView, Representation } from "@Interface/Presentation.js";
-import type { TraceEnvelope } from "@Interface/Trace.js";
-import EN_DICTIONARY from "@Variable/Locale-en.json";
-import { createElement, type ReactNode } from "react";
-
 /**
  * The envelope's display key: its payload path, else its trace id.
  */

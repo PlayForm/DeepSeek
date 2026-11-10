@@ -1,3 +1,5 @@
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Board
  *
@@ -5,6 +7,7 @@
  * orchestration layer's context block.
  *
  * @remarks
+ *
  * Section 2.4, the batch-state integration. Byte-stable template:
  *
  * QUEUE: <n> pending - next: <id|none> - running: <m>/<limit>
@@ -13,6 +16,4 @@
  * orchestrator's view carries the full line; an agent's own view is its own
  * task only, which the compiler derives from the snapshot, not from here.
  */
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(State: State): string;

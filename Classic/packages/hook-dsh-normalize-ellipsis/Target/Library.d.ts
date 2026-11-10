@@ -6,6 +6,7 @@ import Version from "./Variable/Version.js";
  * ellipsis normalizer's registration.
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` +
  * `export const Config` + `export const inject` + `export default { name,
  * apply, Config, inject }` - the ONLY named exports in the tree (cordis

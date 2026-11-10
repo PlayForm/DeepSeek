@@ -1,9 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "../Interface/Config.js";
+export default _default;
 /**
  * @module Apply
  *
  * The plugin entry function, a THIN MODULE WIRE-UP in the factory family's shape.
  *
  * @remarks
+ *
  * It builds the State through `Factory.State` (the cell unwrap, the shared mappings
  * Ledger<-logFile / Enabled<-log and the module's own fields via the setup `fields` map -
  * factory SCHEME.md §2.10), emits the durable activation proof (the module's own string, via
@@ -36,7 +40,4 @@
  * own plain-fs exemption, and the chunk vocabulary arrives through the waterfall, not through an
  * import.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
-export default _default;
 declare function _default(Context: Context, Options: Config): void;

@@ -1,3 +1,5 @@
+import type { Role, RoleSpec, RouteHint } from "./Policy.js";
+
 /**
  * @module Route
  *
@@ -5,12 +7,10 @@
  * triple plus the audit facts.
  *
  * @remarks
+ *
  * The resolution is DETERMINISTIC and pure: the same request and the same
  * policy always produce the same route, with the same source classification.
  */
-
-import type { Role, RoleSpec, RouteHint } from "./Policy.js";
-
 /**
  * How the route was produced (the ledger's explicit-or-resolved /
  * corrected-or-kept flags):

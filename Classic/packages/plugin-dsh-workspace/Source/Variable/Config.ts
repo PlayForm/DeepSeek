@@ -1,3 +1,6 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
@@ -5,6 +8,7 @@
  * at load.
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every
  * default, so invalid configuration fails LOUD at load instead of silently
  * falling back per-field, and `apply` receives a validated plain config object.
@@ -27,9 +31,6 @@
  * disabled, never appears in the profile's bundles, and enables only by an
  * explicit ACTIVATE.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
-
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace.log";
 const DefaultEnabled = false;
 const DefaultMapDepth = 2;

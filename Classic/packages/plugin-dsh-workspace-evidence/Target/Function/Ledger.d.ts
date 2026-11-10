@@ -1,3 +1,5 @@
+import type State from "../Interface/State.js";
+import type Validation from "../Interface/Validation.js";
 /**
  * @module Ledger
  *
@@ -5,12 +7,11 @@
  * statistics.
  *
  * @remarks
+ *
  * Pure reads over the State map; no writes, no ledger lines (the append-side
  * lines live in Declare and Invalidate). The "Ledger" name is the store ledger
  * in the accounting sense - the recorded evidence, not the log file.
  */
-import type State from "../Interface/State.js";
-import type Validation from "../Interface/Validation.js";
 /**
  * The current status of one validation object, or undefined.
  */

@@ -5,6 +5,7 @@
  * traceability graph, recorded as an event line.
  *
  * @remarks
+ *
  * THE INTENT-MODEL SEMANTICS (the critique round 5, binding): the audit lines
  * are the OutcomeEvidence on the traceability graph (Announcement ->
  * Interpretation -> IntentRevision -> Commitment -> PlanRevision ->

@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "../Interface/Config.js";
+export default _default;
 /**
  * @module Apply
  *
@@ -6,6 +9,7 @@
  * tools, and the own storage effect.
  *
  * @remarks
+ *
  * The State build uses the factory's cell unwrap + the P10 volatile refresh.
  * The service registration is Function/Service (`workspaceOperate`,
  * constructed here so `ctx.workspaceOperate` resolves). The fence tracker is
@@ -26,7 +30,4 @@
  * silently kills event delivery). The test probe is the
  * `ctx.__hookDshWorkspaceOperateState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
-export default _default;
 declare function _default(Context: Context, Options: Config): void;

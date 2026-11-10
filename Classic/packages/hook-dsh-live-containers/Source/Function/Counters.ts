@@ -1,3 +1,6 @@
+import type { AgentState, Variables } from "@Interface/Execution.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Counters
  *
@@ -6,6 +9,7 @@
  * {{turnCount}} {{sinceLastTool}} {{sessionId}} {{cwd}}`).
  *
  * @remarks
+ *
  * The per-scope state lives in a WeakMap keyed on the scope/agent object (the
  * tool-coach precedent; the assemble context exposes only an opaque scope key
  * - docs/cordis-api, dsh-scope ScopeKey - so a dispatch without a key shares
@@ -17,13 +21,14 @@
  * All time reads go through the Clock module (the smoke's fake clock). No
  * I/O, no eval - pure functions over the state.
  */
-import type { AgentState, Variables } from "@Interface/Execution.js";
-import type State from "@Interface/State.js";
-
-/** The module's default scope key (a dispatch without a scope shares it). */
+/**
+ * The module's default scope key (a dispatch without a scope shares it).
+ */
 export const DefaultKey: object = {};
 
-/** A fresh per-scope state (Apply's Agent() seeds WeakMap entries from it). */
+/**
+ * A fresh per-scope state (Apply's Agent() seeds WeakMap entries from it).
+ */
 export default (): AgentState => ({
 	messages: 0,
 	turns: 0,
@@ -66,13 +71,17 @@ export const RecordTurn = (Agent: AgentState, Messages: number): void => {
 	Agent.attempts = {};
 };
 
-/** Record one finished tool call (the L4 observer). */
+/**
+ * Record one finished tool call (the L4 observer).
+ */
 export const RecordTool = (Agent: AgentState, Name: string, At: number): void => {
 	Agent.lastToolAt = At;
 	Agent.attempts[Name] = (Agent.attempts[Name] ?? 0) + 1;
 };
 
-/** Elapsed seconds since the last tool call, as the gauge formats them. */
+/**
+ * Elapsed seconds since the last tool call, as the gauge formats them.
+ */
 export const SinceLastTool = (Agent: AgentState, At: number): string => {
 	switch (true) {
 		case Agent.lastToolAt === undefined:
@@ -84,7 +93,9 @@ export const SinceLastTool = (Agent: AgentState, At: number): string => {
 	}
 };
 
-/** The IANA zone of the host ({{tz}}); failure degrades to UTC. */
+/**
+ * The IANA zone of the host ({{tz}}); failure degrades to UTC.
+ */
 export const Zone = (): string => {
 	try {
 		return new Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";

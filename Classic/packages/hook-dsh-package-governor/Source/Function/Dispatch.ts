@@ -1,3 +1,11 @@
+import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import type JobsRegistry from "@Interface/Jobs.js";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+import { Update } from "@playform/lib-dsh-core";
+
+import Execute from "./Execute.js";
+
 /**
  * @module Dispatch
  *
@@ -5,6 +13,7 @@
  * this context, otherwise as the historical detached, contained async continuation.
  *
  * @remarks
+ *
  * The detached continuation is the fallback for sdk-minimal deployments.
  *
  * The control flow is the CORE's shared update-stage envelope (@playform/lib-dsh-core,
@@ -37,14 +46,6 @@
  * the running update's controller; the collision lesson is factory-side now) and removed on
  * settlement.
  */
-import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
-import type JobsRegistry from "@Interface/Jobs.js";
-import type Registry from "@Interface/Registry.js";
-import type State from "@Interface/State.js";
-import { Update } from "@playform/lib-dsh-core";
-
-import Execute from "./Execute.js";
-
 // The envelope, built once: every dependency is a closure over the State it is handed per
 // dispatch - no module-level State, so HMR reloads rebind it cleanly (the governor-family
 // pattern). Shared with Function/Settle, the settlement half of the same pair.

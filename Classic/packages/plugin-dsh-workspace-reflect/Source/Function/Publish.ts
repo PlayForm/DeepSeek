@@ -1,3 +1,7 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Reply from "@Interface/Reply.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Publish
  *
@@ -5,6 +9,7 @@
  * filesystem.
  *
  * @remarks
+ *
  * Given a path, the version observed just before the transformation, and the
  * new content:
  *
@@ -26,10 +31,6 @@
  * Every publish is logged by the CALLER (each op composes its own ledger line
  * from the reply), so this module logs nothing.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Reply from "@Interface/Reply.js";
-import type State from "@Interface/State.js";
-
 export default async (
 	State: State,
 	Path: string,

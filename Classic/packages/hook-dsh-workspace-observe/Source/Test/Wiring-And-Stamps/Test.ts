@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * Exercises the wiring and the recorder.
- *
- * @remarks
- * Covers the loader contract (apply returns nothing), the IDLE-forever cold mount, the root-context
- * registration with the distinct root identity, the service registered from apply, the activation
- * proof, the stamp recording (the monotonic sequence, the event version, the origin), the absent
- * observation, and the fail-loud validation.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -23,7 +12,21 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * Exercises the wiring and the recorder.
+ *
+ * @remarks
+ *
+ * Covers the loader contract (apply returns nothing), the IDLE-forever cold mount, the root-context
+ * registration with the distinct root identity, the service registered from apply, the activation
+ * proof, the stamp recording (the monotonic sequence, the event version, the origin), the absent
+ * observation, and the fail-loud validation.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = (): any => {
 	rm();
 	const Run = Make(Validate({ logFile: Ledger, enabled: true }));

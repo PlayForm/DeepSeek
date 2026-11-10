@@ -8,6 +8,7 @@ import RewriteBlocks from "./Blocks.js";
  * registered in the flavor's `Function/Apply`.
  *
  * @remarks
+ *
  * The arm sees only the INCOMING batch of user-role messages for the step (user-authored
  * text plus user-role injected content) - never the assistant/tool history (append-only) -
  * and it is the last chance boundary before the model reads them.
@@ -48,8 +49,9 @@ import RewriteBlocks from "./Blocks.js";
  * Pure per call: no module-level state - the one-shot flag lives on the per-apply State
  * object, so an HMR reload resets it cleanly.
  */
-
-/** The schema-default scope gates (the fallback for a hand-built config). */
+/**
+ * The schema-default scope gates (the fallback for a hand-built config).
+ */
 const DefaultScopes = {
 	conversation: true,
 	reasoning: true,
@@ -70,19 +72,27 @@ type Scopes = {
 	batch?: boolean | undefined;
 };
 
-/** The per-apply state cells the step-batch arm reads. */
+/**
+ * The per-apply state cells the step-batch arm reads.
+ */
 type State = {
 	Scopes?: Scopes | undefined;
 	Overpass?: boolean | undefined;
 };
 
-/** The structural pre-step payload: only the fields the arm reads. */
+/**
+ * The structural pre-step payload: only the fields the arm reads.
+ */
 type Payload = { turn?: unknown; step?: unknown };
 
-/** The structural pre-step decision: the arm only reads `kind`/`messages`. */
+/**
+ * The structural pre-step decision: the arm only reads `kind`/`messages`.
+ */
 type Decision = { kind?: unknown; messages?: readonly unknown[] };
 
-/** The injected ledger sink: the factory's Append/Journal, module-typed. */
+/**
+ * The injected ledger sink: the factory's Append/Journal, module-typed.
+ */
 type Ledger<S> = {
 	Append: (State: S, Line: string) => void;
 	Journal: (State: S, Event: string, Path: string, Value: string) => void;

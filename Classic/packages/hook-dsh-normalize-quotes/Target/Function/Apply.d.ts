@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "../Interface/Config.js";
+export default _default;
 /**
  * @module Apply
  *
@@ -6,6 +9,7 @@
  * registering the quotes hook's OWN llm/stream listener.
  *
  * @remarks
+ *
  * The State is built through `Factory.State` (the cell unwrap, the shared
  * mappings Ledger<-logFile / Enabled<-log and the module's own fields via the
  * setup `fields` map - factory SCHEME.md section 2.10); the durable activation
@@ -41,7 +45,4 @@
  * exemption, and the chunk vocabulary arrives through the waterfall, not
  * through an import.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
-export default _default;
 declare function _default(Context: Context, Options: Config): void;

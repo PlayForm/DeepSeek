@@ -1,3 +1,7 @@
+import assert from "node:assert/strict";
+import { Names } from "@playform/lib-dsh-trace";
+import { Check, CheckAsync, Finish, MakeCounter, Make, FactoryClass } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +9,7 @@
  * newest-first ring, the disposer, the fail-open containment, `flush` and the unload path.
  *
  * @remarks
+ *
  * The service is provided ONCE from the factory constructor, the family's shared-machinery owner.
  * The round-trip carries the bus-completed envelope and the emitter-supplied trace/at
  * preservation. The fail-open containment keeps one throwing listener from silencing the rest and
@@ -15,10 +20,6 @@
  * Unit smoke of `@playform/plugin-dsh-factory`: the fake ctx plus the REAL factory class, from
  * the Harness.
  */
-import assert from "node:assert/strict";
-import { Names } from "@playform/lib-dsh-trace";
-import { Check, CheckAsync, Finish, MakeCounter, Make, FactoryClass } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	const Fake = Make(null, {});

@@ -1,3 +1,5 @@
+import type CheckSet from "@Interface/CheckSet.js";
+
 /**
  * @module DefaultCheckSets
  *
@@ -5,6 +7,7 @@
  * live-containers DefaultCheckSets precedent, monitor role).
  *
  * @remarks
+ *
  * The same shape the `checksets` config cell holds: dict name -> spec. The
  * catalog is the default value of the `checksets` dict, so classification
  * works out of the box:
@@ -23,8 +26,6 @@
  * stays with the live-containers monitor (its G2 wrapper is the one
  * execution path, "one wrapper, two callers" would be violated otherwise).
  */
-import type CheckSet from "@Interface/CheckSet.js";
-
 const DEFAULT_CHECK_SETS: Record<string, CheckSet> = {
 	tsc: { glob: "**/*.ts", command: "tsc --noEmit {{path}}", fast: true },
 	format: {

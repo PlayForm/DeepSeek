@@ -1,3 +1,11 @@
+import type Decision from "../Interface/Decision.js";
+import type Proposal from "../Interface/Proposal.js";
+import type Result from "../Interface/Result.js";
+import type State from "../Interface/State.js";
+import ApplyFn from "./Apply.js";
+import JournalFn from "./Journal.js";
+import OutcomeFn from "./Outcome.js";
+
 /**
  * @module Claim
  *
@@ -8,6 +16,7 @@
  * the same honest result.
  *
  * @remarks
+ *
  * The claim key is the decision's identity - the proposal, the outcome and the
  * decision's own timestamp - so a REPEATED delivery collapses while a genuinely
  * NEW decision on the same proposal (the user denying after an approval, a
@@ -17,14 +26,6 @@
  * later callers await the same promise. `WhenIdle` drains it for the smokes (no
  * sleeps, no timers).
  */
-import type Decision from "../Interface/Decision.js";
-import type Proposal from "../Interface/Proposal.js";
-import type Result from "../Interface/Result.js";
-import type State from "../Interface/State.js";
-import ApplyFn from "./Apply.js";
-import JournalFn from "./Journal.js";
-import OutcomeFn from "./Outcome.js";
-
 /**
  * The decision's identity: one apply per (proposal, outcome, at).
  */

@@ -1,9 +1,12 @@
+import type Manifest from "../Interface/Manifest.js";
+export default _default;
 /**
  * @module Decode
  *
  * Parse a Cargo.toml string and IDENTIFY the dependency tables.
  *
  * @remarks
+ *
  * Parsing-only: the rewrite is Function/Pin's surgical line manipulation on
  * the raw text. Null on any failure or on a non-table root - an unreadable
  * or non-TOML manifest maps to null instead of a throw (the caller logs the
@@ -28,6 +31,4 @@
  *
  * Pure internal calculation - one of the standing exemptions.
  */
-import type Manifest from "../Interface/Manifest.js";
-export default _default;
 declare function _default(Text: unknown): Manifest | null;

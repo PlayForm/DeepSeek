@@ -1,3 +1,5 @@
+import type Binding from "../Interface/Binding.js";
+import type State from "../Interface/State.js";
 /**
  * @module Query
  *
@@ -5,10 +7,9 @@
  * the ring newest-first, and the statistics triple.
  *
  * @remarks
+ *
  * Pure in-memory reads over State; never touches storage or the filesystem.
  */
-import type Binding from "../Interface/Binding.js";
-import type State from "../Interface/State.js";
 /**
  * One binding by id, or undefined.
  */

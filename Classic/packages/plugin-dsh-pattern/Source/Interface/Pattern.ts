@@ -5,6 +5,7 @@
  * parameterized behavior subgraph.
  *
  * @remarks
+ *
  * PATTERN-GRAPH-PLUGIN.md section 2, the behavior graph. A pattern is a
  * parameterized subgraph of the five node kinds bound to one intent label; this
  * interface keeps the v1 serializable projection: plain strings, globs and

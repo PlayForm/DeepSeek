@@ -122,13 +122,21 @@ var import_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primit
 
 // Source/Variable/Lines.ts
 var Lines_default = {
-  /** The slot-aware registry's refusal line. */
+  /**
+   * The slot-aware registry's refusal line.
+   */
   duplicate: (bundle, slot) => `client-dsh-panel-family: duplicate adapter refused for ${bundle} in ${slot}`,
-  /** The audit line for one accepted plain-field bridge write. */
+  /**
+   * The audit line for one accepted plain-field bridge write.
+   */
   plainWrite: (namespace, path) => `client-dsh-panel-family: plain-field write ${namespace} ${path}`,
-  /** The note for a plain-field edit with no bridge exposed. */
+  /**
+   * The note for a plain-field edit with no bridge exposed.
+   */
   bridgeMissing: (namespace) => `client-dsh-panel-family: plain-field bridge unavailable for ${namespace}`,
-  /** The refusal for a plain-field write into a namespace with secrets. */
+  /**
+   * The refusal for a plain-field write into a namespace with secrets.
+   */
   plainSecret: (namespace) => `client-dsh-panel-family: plain-field secret refused for ${namespace}`
 };
 
@@ -677,13 +685,21 @@ function Section(props) {
 
 // Source/Variable/Slots.ts
 var Slots_default = {
-  /** The family tab's section list (conversation.view > playform-family). */
+  /**
+   * The family tab's section list (conversation.view > playform-family).
+   */
   section: "playform.panel.section",
-  /** The overlay panel's section list (shell.overlay > playform-family-overlay). */
+  /**
+   * The overlay panel's section list (shell.overlay > playform-family-overlay).
+   */
   overlay: "playform.panel.overlay",
-  /** The host slot the family tab mounts into. */
+  /**
+   * The host slot the family tab mounts into.
+   */
   tab: "conversation.view",
-  /** The host slot the overlay panel mounts into. */
+  /**
+   * The host slot the overlay panel mounts into.
+   */
   shell: "shell.overlay"
 };
 
@@ -720,15 +736,25 @@ var Observe = "observe/stamp";
 var Indexed = "graph/indexed";
 var Invalidated = "graph/invalidated";
 var Trace_default = {
-  /** The service name the factory provides on the host (`ctx.trace`). */
+  /**
+   * The service name the factory provides on the host (`ctx.trace`).
+   */
   service: "trace",
-  /** The observe hook's recorded stamp (the indexer's first source). */
+  /**
+   * The observe hook's recorded stamp (the indexer's first source).
+   */
   observe: Observe,
-  /** The graph stored (or replaced) a file record. */
+  /**
+   * The graph stored (or replaced) a file record.
+   */
   indexed: Indexed,
-  /** The graph's record for a path is no longer valid. */
+  /**
+   * The graph's record for a path is no longer valid.
+   */
   invalidated: Invalidated,
-  /** The three names an adapter follows when its manifest declares none. */
+  /**
+   * The three names an adapter follows when its manifest declares none.
+   */
   kinds: [Observe, Indexed, Invalidated]
 };
 

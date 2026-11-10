@@ -1,13 +1,3 @@
-/**
- * @module Test
- *
- * Exercises the guard chain and the bounded ring.
- *
- * @remarks
- * Covers the excluded path, the own-actor identity check, the include allowlist, the
- * latest-overwrite rule, the ring cap with the byte-exact capped line, the malformed event
- * containment, and the volatile flip of the ring bound (the factory's P10 refresh).
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -24,7 +14,20 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount with overrides. */
+/**
+ * @module Test
+ *
+ * Exercises the guard chain and the bounded ring.
+ *
+ * @remarks
+ *
+ * Covers the excluded path, the own-actor identity check, the include allowlist, the
+ * latest-overwrite rule, the ring cap with the byte-exact capped line, the malformed event
+ * containment, and the volatile flip of the ring bound (the factory's P10 refresh).
+ */
+/**
+ * A standard enabled mount with overrides.
+ */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));
@@ -193,7 +196,9 @@ export const runTest = async (): Promise<number> => {
 	return Finish(Count, "Guards-And-Ring");
 };
 
-/** The volatile cell of the raw config for one key (the flip target). */
+/**
+ * The volatile cell of the raw config for one key (the flip target).
+ */
 const runVolatile = (Run: any, Key: string): unknown => Run.Raw[Key];
 
 // Standalone entry: `node Target/Test/Guards-And-Ring/Test.js`.

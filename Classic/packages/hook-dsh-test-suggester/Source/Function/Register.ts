@@ -1,3 +1,8 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { InjectingContext } from "@Interface/Projection.js";
+
+import Unit from "./Unit.js";
+
 /**
  * @module Register
  *
@@ -5,6 +10,7 @@
  * `ctx.sessionProjections`.
  *
  * @remarks
+ *
  * The seam receives every committed session event once for every agent.
  *
  * WHY `ctx.inject` AND NOT THE `inject` ARRAY: the registry is a service a
@@ -28,11 +34,6 @@
  * degradation (the history stays empty and only an explicit pack may speak) -
  * the same posture as the `workingDirectory` probe in `Function/Apply`.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { InjectingContext } from "@Interface/Projection.js";
-
-import Unit from "./Unit.js";
-
 export default (Context: Context): void => {
 	try {
 		const Inject = (Context as unknown as InjectingContext).inject;

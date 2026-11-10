@@ -1,3 +1,6 @@
+import type FeedbackBlock from "./Block.js";
+import type Outcome from "./Outcome.js";
+
 /**
  * @module Summary
  *
@@ -5,12 +8,10 @@
  * `feedback/summary`).
  *
  * @remarks
+ *
  * It exists for the recipient's deliberate review; nothing here force-reads a
  * block (the read-status is only touched by Function/Read).
  */
-import type FeedbackBlock from "./Block.js";
-import type Outcome from "./Outcome.js";
-
 export default interface Summary {
 	session: string;
 

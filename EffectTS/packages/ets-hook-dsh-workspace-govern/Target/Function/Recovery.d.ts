@@ -1,9 +1,11 @@
+import type RecoveryRule from "../Interface/Recovery.js";
 /**
  * @module Recovery
  *
  * The FAIL-OPEN RECOVERY TABLE: one row per obligation.
  *
  * @remarks
+ *
  * The honest recovery, v4.1 section 3.9: per-obligation failure behavior.
  * The behavior decides what happens when the obligation CANNOT be evaluated
  * (not when it evaluates to a denial - an honest denial is a denial):
@@ -27,7 +29,6 @@
  * A config override (config `recovery`) replaces one row; an unknown
  * obligation or behavior in an override is ignored, never guessed.
  */
-import type RecoveryRule from "../Interface/Recovery.js";
 /**
  * The per-obligation failure behavior.
  */

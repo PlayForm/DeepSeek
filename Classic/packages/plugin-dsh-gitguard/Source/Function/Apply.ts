@@ -1,3 +1,11 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
+import Guard from "@Function/Guard.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+
 /**
  * @module Apply
  *
@@ -6,6 +14,7 @@
  * the tools/pre-execute registration (Function/Guard - the intercept).
  *
  * @remarks
+ *
  * The contract is ORCHESTRATION-PLUGINS.md section 3.
  *
  * THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default and
@@ -16,14 +25,6 @@
  * kills event delivery). The test probe is the `ctx.__pluginDshGitguardState`
  * attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
-import Guard from "@Function/Guard.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
  */

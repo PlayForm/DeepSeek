@@ -1,9 +1,18 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+import GraphClass from "../../../plugin-dsh-workspace-graph/Target/Library.js";
+
 /**
  * @module Harness
  *
  * The shared test harness for the GRAPH-SUGGESTER tests.
  *
  * @remarks
+ *
  * The harness pairs the fake ctx (ctx listener capture, `reflect.provide`
  * capture, the effect runner, the logger capture, the fs capture that must
  * stay untouched, the distinct root seam) with the REAL
@@ -21,14 +30,6 @@
  *
  * NO FAKE CLOCK: the plugin has no clock dependency at all.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-import GraphClass from "../../../plugin-dsh-workspace-graph/Target/Library.js";
-
 export { Plugin };
 
 /**
@@ -322,7 +323,9 @@ export const Make = (Raw: any, Attach?: (Context: any, Run: any) => void): any =
 export const Validate = (Raw: Record<string, unknown>): any =>
 	(Plugin.Config as unknown as (Raw: Record<string, unknown>) => any)({ ...Raw });
 
-/** The standard enabled mount with a tuned gate (the pack floor governs). */
+/**
+ * The standard enabled mount with a tuned gate (the pack floor governs).
+ */
 export const Setup = (
 	Config: Record<string, unknown> = {},
 	Attach?: (Context: any, Run: any) => void,
@@ -332,7 +335,9 @@ export const Setup = (
 	return Make(Validate({ logFile: Ledger, threshold: 0.5, ...Config }), Attach);
 };
 
-/** A standard tool execution record (the fake agent is a plain object). */
+/**
+ * A standard tool execution record (the fake agent is a plain object).
+ */
 export type ExecArgs = Record<string, unknown>;
 
 /**

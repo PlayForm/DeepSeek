@@ -1,21 +1,3 @@
-/**
- * @module Test
- *
- * The Run-2 through Run-7 matrix of @playform/hook-dsh-normalize-fullwidth,
- * covered in one singular smoke.
- *
- * @remarks
- * Runs 2-7 cover reasoning off, the MAP's special half-width values in one
- * segment, the upstream throw, the identity stream, the fresh-state probe
- * and the tool-args normalization, including their cumulative pre-bind
- * journal counts.
- *
- * The file runs standalone (`node Target/Test/Runs/Test.js`) and under the
- * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
- *
- * The smoke runs the fake ctx + the real factory + the real fullwidth apply
- * (the seams live in ../Harness.js).
- */
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import {
@@ -29,6 +11,25 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The Run-2 through Run-7 matrix of @playform/hook-dsh-normalize-fullwidth,
+ * covered in one singular smoke.
+ *
+ * @remarks
+ *
+ * Runs 2-7 cover reasoning off, the MAP's special half-width values in one
+ * segment, the upstream throw, the identity stream, the fresh-state probe
+ * and the tool-args normalization, including their cumulative pre-bind
+ * journal counts.
+ *
+ * The file runs standalone (`node Target/Test/Runs/Test.js`) and under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * The smoke runs the fake ctx + the real factory + the real fullwidth apply
+ * (the seams live in ../Harness.js).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

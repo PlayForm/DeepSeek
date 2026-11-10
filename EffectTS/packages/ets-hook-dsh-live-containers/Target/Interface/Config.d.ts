@@ -1,9 +1,11 @@
+import type { BlockSpecification } from "./Execution.js";
 /**
  * @module Config
  *
  * Declares the validated plugin-config shape the loader hands to `apply`.
  *
  * @remarks
+ *
  * Cordis validates the exported Schemastery schema while the plugin loads and fills every
  * default (docs/user/develop/basic/config.md:45), so `apply` receives a plain object of
  * exactly this shape. The schema that produces it lives in Variable/Config.ts
@@ -17,7 +19,6 @@
  * `enabled` cell is the master switch (the IDLE-forever posture: false is the shipped
  * default).
  */
-import type { BlockSpecification } from "./Execution.js";
 /**
  * The detach policy knobs (design section 2.3, volatile).
  */

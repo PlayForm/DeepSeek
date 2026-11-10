@@ -1,3 +1,9 @@
+import * as ChildProcess from "node:child_process";
+
+import type SubprocessService from "@deepseek-ai/dsh-subprocess";
+import type State from "@Interface/State.js";
+import type PluginFactory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Verify
  *
@@ -5,6 +11,7 @@
  * `cargo check`).
  *
  * @remarks
+ *
  * Exit 127 is non-fatal: the command was not found because the child's PATH is
  * not the user's shell PATH (cargo etc. may be absent) — the bumps already
  * landed and the lockfile/target catch-up can be run manually.
@@ -22,12 +29,6 @@
  * The ledger lines go through the FACTORY's Append (State.Module supplies
  * the "hook-dsh-governor-cargo" prefix — the strings stay the module's).
  */
-import * as ChildProcess from "node:child_process";
-
-import type SubprocessService from "@deepseek-ai/dsh-subprocess";
-import type State from "@Interface/State.js";
-import type PluginFactory from "@playform/plugin-dsh-factory";
-
 export default async (
 	Factory: PluginFactory,
 	State: State,

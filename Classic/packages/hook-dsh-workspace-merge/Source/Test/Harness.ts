@@ -1,9 +1,17 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
  * The shared test harness for the WORKSPACE-MERGE tests.
  *
  * @remarks
+ *
  * Combines the fake ctx (root listener + emit capture, the ctx listener capture, reflect.provide
  * capture, the effect runner, logger capture, the FUNCTIONAL fs backing the gates and the write
  * executor) with the REAL `@playform-plugin-dsh-factory` instance from its built Target and the
@@ -20,13 +28,6 @@
  * NO CLOCK: the merge has no time dependency at all - the identity and sequencing come from the
  * plugin's own monotonic counter (the no-wall-clock rule), so the harness needs no time seam.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 export { Plugin };
 
 /**

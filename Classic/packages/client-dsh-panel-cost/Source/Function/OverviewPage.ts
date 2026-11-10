@@ -1,9 +1,19 @@
+import Count from "@Function/Count";
+import CountShort from "@Function/CountShort";
+import Price from "@Function/Price";
+import Rate from "@Function/Rate";
+import type { Valuation as CostValuation } from "@Interface/Response";
+import type CostSummary from "@Interface/Summary";
+import type { Translate } from "@Interface/Translate";
+import { createElement, Fragment } from "react";
+
 /**
  * @module OverviewPage
  *
  * The Cost tab's Overview page: the session at a glance, before any table.
  *
  * @remarks
+ *
  * The research source is `Temporary/Cost-Research/Plan.md` lane B5c, with the research's section 2
  * navigation and section 8's dynamic list.
  *
@@ -26,15 +36,6 @@
  * never reach the page, because the view answers them with its full-panel lines before a page is
  * chosen.
  */
-import Count from "@Function/Count";
-import CountShort from "@Function/CountShort";
-import Price from "@Function/Price";
-import Rate from "@Function/Rate";
-import type { Valuation as CostValuation } from "@Interface/Response";
-import type CostSummary from "@Interface/Summary";
-import type { Translate } from "@Interface/Translate";
-import { createElement, Fragment } from "react";
-
 const TopFileLimit = 5;
 
 type OverviewPageProps = {

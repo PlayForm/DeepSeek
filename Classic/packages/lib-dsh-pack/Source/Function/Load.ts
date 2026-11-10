@@ -11,11 +11,11 @@ import Resolve from "./Resolve.js";
  * shared by every call.
  *
  * @remarks
+ *
  * The suggester family resolves per workspace root on the hot path, so the memo
  * is what keeps a pack read off it. A pack edit lands on the next process by
  * contract (a boot-time memo, not a watcher).
  */
-
 const Cache = new Map<string, Pack>();
 
 export default (Root: string, Options?: Options): Pack => {

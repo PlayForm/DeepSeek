@@ -1,3 +1,7 @@
+import assert from "node:assert/strict";
+
+import { Check, Finish, Ledger, Make, MakeCounter, StateFile, Validate } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,14 +9,13 @@
  * on the built State, the override, and the recorder posture.
  *
  * @remarks
+ *
  * On the built State the defaults land as `Allow`: the factory's shared `Policy` is the global
  * policy file path.
  */
-import assert from "node:assert/strict";
-
-import { Check, Finish, Ledger, Make, MakeCounter, StateFile, Validate } from "../Harness.js";
-
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",

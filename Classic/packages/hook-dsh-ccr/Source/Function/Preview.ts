@@ -1,3 +1,7 @@
+import type { ContentBlock } from "@deepseek-ai/dsh-llm";
+
+import { Text as Joined } from "./Classify.js";
+
 /**
  * @module Preview
  *
@@ -5,6 +9,7 @@
  * content shows above the marker.
  *
  * @remarks
+ *
  * Plan §4.2, seeded from Aphrodite's preview formats: `[build:1E 1W 142L | ...]`
  * becomes `[terminal:exit 0 | 142 lines | first error line]`. The composed
  * line is what the replacement content shows above the marker:
@@ -19,10 +24,6 @@
  * ellipsis, so a smoke can assert the cut bytes. `error` previews are just
  * the first significant line (the failure message is the preview).
  */
-import type { ContentBlock } from "@deepseek-ai/dsh-llm";
-
-import { Text as Joined } from "./Classify.js";
-
 export default (Type: string, Content: ContentBlock[], Maximum: number): string => {
 	const Full = Body(Type, Joined(Content), Content);
 	switch (true) {

@@ -4,6 +4,7 @@
  * One parsed Cargo.toml AS THE CARGO MODULE SEES IT.
  *
  * @remarks
+ *
  * Not the raw smol-toml value (the rewrite is surgical line-level string
  * manipulation on the raw text - a TOML stringify would destroy comments and
  * formatting), but the IDENTIFICATION the parse is used for

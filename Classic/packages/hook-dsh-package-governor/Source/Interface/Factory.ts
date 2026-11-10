@@ -1,9 +1,12 @@
+import type PluginFactory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Factory
  *
  * The type-side link to the @playform/plugin-dsh-factory service.
  *
  * @remarks
+ *
  * The factory is the family's FIRST service provider (the class/service plugin form) and a
  * REQUIRED dependency of this module: `inject` lists "pluginFactory", so the plugin stays
  * PENDING until the service exists and the accessor `ctx.pluginFactory` is the consumption
@@ -22,8 +25,6 @@
  *
  * One definition per file; a type-only module (its compiled output is empty).
  */
-import type PluginFactory from "@playform/plugin-dsh-factory";
-
 // The type-only default export: the factory's instance shape (the empty interface is the
 // verbatimModuleSyntax-legal form - an `export default` of an interface is elided, a type
 // alias would need a named export).
@@ -31,7 +32,9 @@ export default interface Factory extends PluginFactory {}
 
 declare module "@deepseek-ai/cordis" {
 	interface Context {
-		/** The plugin-factory service (@playform/plugin-dsh-factory). */
+		/**
+		 * The plugin-factory service (@playform/plugin-dsh-factory).
+		 */
 		pluginFactory: PluginFactory;
 	}
 }

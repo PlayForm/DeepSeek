@@ -1,9 +1,14 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
  * Declares the entry module and the loader contract of the doc suggester.
  *
  * @remarks
+ *
  * Mirrors `Source/Library.rs`. Loader contract: `export const name` + `export const apply`
  * + `export const Config` + `export const inject` + `export default { name, apply, Config,
  * inject }` - the ONLY named exports in the tree (cordis requires them); every other module
@@ -34,10 +39,6 @@
  * shared machinery is consumed for what applies (State builder + ledger + cell unwrap); the
  * fs/observed Wire and the storage Journal do not (a NON-MANIFEST module).
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "hook-dsh-doc-suggester";
 
 // Loader contract (cordis): the exported schema is validated and defaulted

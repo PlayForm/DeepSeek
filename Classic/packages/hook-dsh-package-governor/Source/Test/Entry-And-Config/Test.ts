@@ -1,3 +1,9 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as Path from "node:path";
+import { Check, EXCLUDE, Finish, Ledger, MakeCounter, NCU_BIN, TOOLS } from "../Harness.js";
+import * as Governor from "../../../Target/Library.js";
+
 /**
  * @module Test
  *
@@ -5,6 +11,7 @@
  * consumption, and the Config schema.
  *
  * @remarks
+ *
  * The entry contract (name/apply/Config/inject), the built Target's
  * factory-consumption posture (the ONLY factory import is the Config module's
  * standalone Schema), and the Config schema's volatile cells + defaults.
@@ -13,12 +20,6 @@
  * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
  * `@playform/hook-dsh-package-governor`.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as Path from "node:path";
-import { Check, EXCLUDE, Finish, Ledger, MakeCounter, NCU_BIN, TOOLS } from "../Harness.js";
-import * as Governor from "../../../Target/Library.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

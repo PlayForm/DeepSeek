@@ -1,3 +1,8 @@
+import { Release } from "@Function/Capacity.js";
+import type State from "@Interface/State.js";
+import type Task from "@Interface/Task.js";
+import type { TaskState } from "@Interface/Task.js";
+
 /**
  * @module Settle
  *
@@ -6,15 +11,11 @@
  * result hash on completion, write the journal record + the ledger line.
  *
  * @remarks
+ *
  * This is the slot-frees event that the
  * auto-dispatch regime reacts to (the settled IDLE children release their
  * active slots; the dispatcher fills them).
  */
-import { Release } from "@Function/Capacity.js";
-import type State from "@Interface/State.js";
-import type Task from "@Interface/Task.js";
-import type { TaskState } from "@Interface/Task.js";
-
 export default (
 	State: State,
 	Id: string,

@@ -7,6 +7,7 @@ export default _default;
  * The layered resolution (D2), the heart of the library.
  *
  * @remarks
+ *
  * 1. Read the repo layer (`<root>/.dsh/pack.yml`) to discover a declared
  *    `slug` (the user layer is keyed by it).
  * 2. Read the user layer (`<home>/.dsh/playform/workspaces/<slug>.yml`).

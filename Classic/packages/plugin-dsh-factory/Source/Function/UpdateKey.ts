@@ -1,9 +1,12 @@
+import type { FsTarget } from "@deepseek-ai/dsh-fs";
+
 /**
  * @module UpdateKey
  *
  * The NAMESPACED `State.Inflight` key for UPDATE-STAGE controllers.
  *
  * @remarks
+ *
  * The factory's chain pass (`Function/Continue`) registers its own controller
  * under the PLAIN `String(targetKey)`; the two passes share the one map (the
  * factory's Attach disposal aborts every entry on unload), so a collision
@@ -13,6 +16,4 @@
  * the cargo fixed it flavor-side with `update:` before the factory existed;
  * now the helper is factory-side and the update stages adopt it).
  */
-import type { FsTarget } from "@deepseek-ai/dsh-fs";
-
 export default (Target: FsTarget): string => `update:${String(Target.targetKey)}`;

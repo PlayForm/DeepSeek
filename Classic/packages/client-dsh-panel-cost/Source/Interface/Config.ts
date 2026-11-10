@@ -1,16 +1,31 @@
-// Config - the validated shape of the Schemastery schema in Variable/Config:
-// what the loader hands apply after boot-time validation. The volatile flags
-// are dropped there; this interface carries the plain values.
+/**
+ * @module Config
+ *
+ * The validated shape of the Schemastery schema in `Variable/Config`.
+ *
+ * @remarks
+ *
+ * What the loader hands apply after boot-time validation. The volatile flags are dropped there;
+ * this interface carries the plain values.
+ */
 export interface Config {
-	/** Whether the Cost tab mounts at all. */
+	/**
+	 * Whether the Cost tab mounts at all.
+	 */
 	enabled: boolean;
 
-	/** The tab's order within the conversation.view slot. */
+	/**
+	 * The tab's order within the conversation.view slot.
+	 */
 	tabOrder: number;
 
-	/** The ledger row budget the host route reads per request. */
+	/**
+	 * The ledger row budget the host route reads per request.
+	 */
 	rows: number;
 
-	/** The dictionary the tab renders through. */
+	/**
+	 * The dictionary the tab renders through.
+	 */
 	locale: "en" | "zh";
 }

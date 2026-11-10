@@ -1,9 +1,15 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type LiveTrace from "@Interface/Trace.js";
+import type { TraceEnvelope } from "@Interface/Trace.js";
+import Names from "@Variable/Trace.js";
+
 /**
  * @module Trace
  *
  * The live view's source over the D5 bus.
  *
  * @remarks
+ *
  * The bus is the factory's `ctx.trace` service; the client half resolves it
  * structurally (only `on` is required, `ring` is used when present), seeds
  * the tail from the recent ring when the bus exposes one (the panel attaches
@@ -22,11 +28,6 @@
  * long after every plugin applied, so the first `tail()` / `live` read is the
  * earliest moment the bus is guaranteed to be observable.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type LiveTrace from "@Interface/Trace.js";
-import type { TraceEnvelope } from "@Interface/Trace.js";
-import Names from "@Variable/Trace.js";
-
 type Bus = {
 	on(kind: string, listener: (envelope: TraceEnvelope) => void): () => void;
 	ring?(limit?: number): TraceEnvelope[];

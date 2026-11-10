@@ -5,6 +5,7 @@
  * and the rendered parts.
  *
  * @remarks
+ *
  * The structural types of the live-containers runtime data: the block spec, the per-scope
  * counter state, and the rendered parts. Pure data - no behavior (the family's Rust-style
  * composition separates Interface from Function).

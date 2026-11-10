@@ -1,3 +1,7 @@
+import type DomainHandle from "./Domain.js";
+import type FactoryHandle from "./Factory.js";
+import type Record from "./Record.js";
+import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 /**
  * @module State
  *
@@ -5,6 +9,7 @@
  * hook's own fields.
  *
  * @remarks
+ *
  * The SHARED factory shape (Context, Module, Enabled/Ledger/List, the P10
  * volatile refresh) plus the hook's own fields.
  *
@@ -14,10 +19,6 @@
  * (hook-dsh-workspace-merge); the ledger prefix is the module's OWN
  * contract string.
  */
-import type DomainHandle from "./Domain.js";
-import type FactoryHandle from "./Factory.js";
-import type Record from "./Record.js";
-import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /**
      * Config `enabled` - the master switch (volatile; the State builder's

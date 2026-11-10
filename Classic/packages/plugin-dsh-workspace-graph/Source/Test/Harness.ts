@@ -1,3 +1,12 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import { Names as TraceNames } from "@playform/lib-dsh-trace";
+import CreateTrace from "../../../plugin-dsh-factory/Target/Function/Trace.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+import GraphClass from "../../Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -5,6 +14,7 @@
  * package and imported by every test folder.
  *
  * @remarks
+ *
  * The harness carries the fake ctx (fs resolve/stat/readText over a files map
  * with a captured writeText, the reflect.provide capture, the logger capture, the
  * root seam) and the REAL workspace graph class from its built Target - the
@@ -22,15 +32,6 @@
  * service code does. The A7 purity guard (zero writeText calls) reads the summed
  * captures of every fake ctx created in the folder.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import { Names as TraceNames } from "@playform/lib-dsh-trace";
-import CreateTrace from "../../../plugin-dsh-factory/Target/Function/Trace.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-import GraphClass from "../../Target/Library.js";
-
 export { GraphClass };
 
 /**
@@ -150,10 +151,14 @@ export const Make = (Raw: any = {}): any => {
 		};
 	};
 
-	/** The absolute display path of a fixture path (the disk mode's root join). */
+	/**
+	 * The absolute display path of a fixture path (the disk mode's root join).
+	 */
 	const Display = (P: string): string => (disk === undefined ? P : Path.resolve(disk, P));
 
-	/** The canonical identity: a realpath on disk, the path itself in map mode. */
+	/**
+	 * The canonical identity: a realpath on disk, the path itself in map mode.
+	 */
 	const Identity = (P: string): string => {
 		const Absolute = Display(P);
 		if (disk === undefined) {
@@ -349,11 +354,15 @@ export const Emit = (
 	});
 };
 
-/** How many root handlers are registered for one event name. */
+/**
+ * How many root handlers are registered for one event name.
+ */
 export const Handlers = (Run: any, Name: string): number =>
 	(Run.Context.__handlers?.[Name] ?? []).length;
 
-/** How many live trace subscriptions exist for one event name. */
+/**
+ * How many live trace subscriptions exist for one event name.
+ */
 export const Subscribers = (Run: any, Name: string): number =>
 	Run.subscriptions?.get(Name) ?? 0;
 

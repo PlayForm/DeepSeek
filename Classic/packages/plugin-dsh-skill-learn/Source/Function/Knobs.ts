@@ -1,9 +1,12 @@
+import type Configuration from "@Interface/Configuration.js";
+
 /**
  * @module Knobs
  *
  * The resolved-knob reader: one raw config in, the effective values out.
  *
  * @remarks
+ *
  * WHY THIS FILE EXISTS AT ALL when the loader already validates the schema: the
  * service is also constructed bare by the smokes (`new SkillLearnService(ctx)`), and a
  * bare construction never passes through Schemastery. Without this reader a fixture
@@ -29,9 +32,9 @@
  * section 7.1 gives: a cutoff at or past now would transition the whole corpus on one
  * bad config.
  */
-import type Configuration from "@Interface/Configuration.js";
-
-/** Unwrap one possibly-volatile config cell (`{ get }` reference or plain value). */
+/**
+ * Unwrap one possibly-volatile config cell (`{ get }` reference or plain value).
+ */
 const Cell = (Value: unknown): unknown => {
 	const Candidate = Value as { get?: unknown } | null | undefined;
 	return typeof Candidate?.get === "function"
@@ -39,15 +42,21 @@ const Cell = (Value: unknown): unknown => {
 		: Value;
 };
 
-/** A string knob, or its default; an empty string is a real value here (no route override). */
+/**
+ * A string knob, or its default; an empty string is a real value here (no route override).
+ */
 const Text = (Value: unknown, Fallback: string): string =>
 	typeof Value === "string" ? Value : Fallback;
 
-/** A boolean knob, or its default. */
+/**
+ * A boolean knob, or its default.
+ */
 const Flag = (Value: unknown, Fallback: boolean): boolean =>
 	typeof Value === "boolean" ? Value : Fallback;
 
-/** A numeric knob inside its schema bounds, or its default when it is not a finite number. */
+/**
+ * A numeric knob inside its schema bounds, or its default when it is not a finite number.
+ */
 const Count = (Value: unknown, Fallback: number, Low: number, High: number): number => {
 	const Numeric = typeof Value === "number" ? Value : globalThis.Number(Value);
 	switch (true) {

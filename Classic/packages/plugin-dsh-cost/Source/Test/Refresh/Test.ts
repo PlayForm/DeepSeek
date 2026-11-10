@@ -1,10 +1,3 @@
-// Source/Test/Refresh/Test.ts - THE LIVE AGGREGATE REFRESH (Documentation/
-// Plans/COST-TRACK-PLUGIN.md section 17.5): the flush path refreshes the
-// Rollup for exactly the UTC days its own events landed in, so a range report
-// or a forecast reads a current aggregate without waiting for a full rebuild.
-// The refresh takes the batch's timestamps, not the wall clock, because a
-// backfilled session must land on the day it happened rather than the day it
-// was replayed.
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -16,6 +9,20 @@ import Rollup from "../../../Target/Function/Rollup.js";
 import Plugin from "../../../Target/Library.js";
 import { Check, Finish, Make, MakeCounter, Validate } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE LIVE AGGREGATE REFRESH (Documentation/Plans/COST-TRACK-PLUGIN.md section
+ * 17.5), proved over the flush path's own event days.
+ *
+ * @remarks
+ *
+ * The flush path refreshes the Rollup for exactly the UTC days its own events
+ * landed in, so a range report or a forecast reads a current aggregate without
+ * waiting for a full rebuild. The refresh takes the batch's timestamps, not the
+ * wall clock, because a backfilled session must land on the day it happened rather
+ * than the day it was replayed.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	const Home = await mkdtemp(join(tmpdir(), "dsh-cost-refresh-"));

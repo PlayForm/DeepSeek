@@ -1,3 +1,11 @@
+import { fileURLToPath } from "node:url";
+
+import type Deepening from "@Interface/Deepening.js";
+import type ReferenceNode from "@Interface/ReferenceNode.js";
+import type RenamePlan from "@Interface/RenamePlan.js";
+import type Span from "@Interface/Span.js";
+import type SymbolNode from "@Interface/SymbolNode.js";
+
 /**
  * @module Lsp
  *
@@ -5,6 +13,7 @@
  * scope-resolved `findReferences` query the lexical scanner only approximates.
  *
  * @remarks
+ *
  * The seam (`ctx.lsp`, @deepseek-ai/dsh-lsp) has FOUR READ OPERATIONS ONLY -
  * `goToDefinition`, `findReferences`, `goToImplementation`, `hover` - no symbol
  * enumeration and no rename/WorkspaceEdit, so this deepener supplies the
@@ -30,27 +39,25 @@
  * PROBED (`ctx.get("lsp")`), never injected: the loader contract's `inject`
  * stays ["pluginFactory", "fs"].
  */
-import { fileURLToPath } from "node:url";
-
-import type Deepening from "@Interface/Deepening.js";
-import type ReferenceNode from "@Interface/ReferenceNode.js";
-import type RenamePlan from "@Interface/RenamePlan.js";
-import type Span from "@Interface/Span.js";
-import type SymbolNode from "@Interface/SymbolNode.js";
-
-/** A zero-based UTF-16 cursor coordinate (the seam's wire convention). */
+/**
+ * A zero-based UTF-16 cursor coordinate (the seam's wire convention).
+ */
 interface Cursor {
 	line: number;
 	character: number;
 }
 
-/** The structural slice of one resolved location the deepener reads. */
+/**
+ * The structural slice of one resolved location the deepener reads.
+ */
 interface Location {
 	uri: string;
 	range: { start: Cursor; end: Cursor };
 }
 
-/** The structural slice of `ctx.lsp` the deepener consumes. */
+/**
+ * The structural slice of `ctx.lsp` the deepener consumes.
+ */
 interface Seam {
 	query(request: {
 		operation: "findReferences";
@@ -60,7 +67,9 @@ interface Seam {
 	}): Promise<unknown>;
 }
 
-/** Probe the optional seam through ctx.get (never an inject accessor). */
+/**
+ * Probe the optional seam through ctx.get (never an inject accessor).
+ */
 const Probe = (Context: unknown): Seam | undefined => {
 	const Service = (Context as { get?: (Name: string) => unknown } | null)?.get?.("lsp");
 	switch (true) {
@@ -71,7 +80,9 @@ const Probe = (Context: unknown): Seam | undefined => {
 	}
 };
 
-/** The zero-based cursor of one character offset. */
+/**
+ * The zero-based cursor of one character offset.
+ */
 const CursorOf = (Text: string, Offset: number): Cursor => {
 	let Line = 0;
 	let Start = 0;
@@ -87,7 +98,9 @@ const CursorOf = (Text: string, Offset: number): Cursor => {
 	return { line: Line, character: Offset - Start };
 };
 
-/** The character offset of one zero-based cursor. */
+/**
+ * The character offset of one zero-based cursor.
+ */
 const OffsetOf = (Text: string, At: Cursor): number => {
 	let Line = 0;
 	let Index = 0;
@@ -103,7 +116,9 @@ const OffsetOf = (Text: string, At: Cursor): number => {
 	return Math.min(Text.length, Index + Math.max(0, At.character));
 };
 
-/** The file path of a location URI; a non-file URI answers "". */
+/**
+ * The file path of a location URI; a non-file URI answers "".
+ */
 const PathOf = (Uri: string): string => {
 	try {
 		return fileURLToPath(Uri);
@@ -112,7 +127,9 @@ const PathOf = (Uri: string): string => {
 	}
 };
 
-/** Whether a location belongs to the queried path (the same-file filter). */
+/**
+ * Whether a location belongs to the queried path (the same-file filter).
+ */
 const Same = (Uri: string, Path: string): boolean => {
 	const File = PathOf(Uri);
 	switch (true) {
@@ -125,14 +142,18 @@ const Same = (Uri: string, Path: string): boolean => {
 	}
 };
 
-/** The identifier's offset inside the symbol's declaration span. */
+/**
+ * The identifier's offset inside the symbol's declaration span.
+ */
 const Locate = (Text: string, Symbol: SymbolNode): number => {
 	const Name = Symbol.qualifiedName.split(".").at(-1) ?? "";
 	const At = Text.indexOf(Name, Symbol.span.start);
 	return At >= 0 && At + Name.length <= Symbol.span.end ? At : Symbol.span.start;
 };
 
-/** One findReferences query; undefined when the seam cannot answer. */
+/**
+ * One findReferences query; undefined when the seam cannot answer.
+ */
 const Ask = async (
 	Seam: Seam,
 	Root: string,

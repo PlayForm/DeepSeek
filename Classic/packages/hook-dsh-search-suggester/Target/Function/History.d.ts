@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { Touch } from "@playform/lib-dsh-pack";
+export default _default;
 /**
  * @module History
  *
@@ -5,6 +8,7 @@
  * host state through the registry's own face, `stateOf(session, key)`.
  *
  * @remarks
+ *
  * The face contract is "reads one unit's live read-only host state without computing
  * unrelated views".
  *
@@ -28,7 +32,4 @@
  * a call that carries no session reads the empty history instead of a shared one - it falls
  * back to the explicit pack, or abstains `abstained no-history  0.00`.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { Touch } from "@playform/lib-dsh-pack";
-export default _default;
 declare function _default(Context: Context, Session: unknown): readonly Touch[];

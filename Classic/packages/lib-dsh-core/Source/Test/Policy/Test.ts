@@ -1,17 +1,3 @@
-/**
- * @module Test
- *
- * One singular test of the update-policy loader's read -> fallback ->
- * diagnostics mechanics.
- *
- * @remarks
- * The test covers the absent file, the readable file, the unreadable file,
- * and the Quiet form that skips every diagnostic.
- *
- * The file runs standalone (`node Target/Test/Policy/Test.js`) AND under the
- * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit smoke
- * of `@playform/lib-dsh-core`: the REAL built entry only.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -19,6 +5,21 @@ import * as Path from "node:path";
 import { Policy } from "../../../Target/Library.js";
 import { Check, Finish, MakeCounter, TempRoot } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test of the update-policy loader's read -> fallback ->
+ * diagnostics mechanics.
+ *
+ * @remarks
+ *
+ * The test covers the absent file, the readable file, the unreadable file,
+ * and the Quiet form that skips every diagnostic.
+ *
+ * The file runs standalone (`node Target/Test/Policy/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit smoke
+ * of `@playform/lib-dsh-core`: the REAL built entry only.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

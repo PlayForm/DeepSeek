@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+
 /**
  * @module Fingerprint
  *
@@ -5,6 +7,7 @@
  * rewrites a span.
  *
  * @remarks
+ *
  * The formula is the workspace graph's frozen one (its SCHEME section 4):
  *
  * ```
@@ -18,8 +21,6 @@
  * no longer matches and the write is refused - the stale-target fence, the
  * span-level twin of the version fence.
  */
-import { createHash } from "node:crypto";
-
 /**
  * CRLF/CR -> LF, trailing whitespace stripped per line (the graph's Normalize).
  */

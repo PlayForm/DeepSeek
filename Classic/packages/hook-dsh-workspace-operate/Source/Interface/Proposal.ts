@@ -5,6 +5,7 @@
  * the operate layer.
  *
  * @remarks
+ *
  * The kinds are rename, connect and replace - OPERATE.md's typed proposals.
  * A proposal is created ONLY when the resolution rules pass; it always
  * carries the version fence it was made against and its monotonic sequence

@@ -4,6 +4,7 @@
  * The shape of one ProposedChange the gate evaluates.
  *
  * @remarks
+ *
  * The SELF-CONTAINED declaration of the operate family's contract: the end
  * phase wires the real import; this hook never imports from sibling
  * workspace packages. The recursion-prevention fields are mandatory on

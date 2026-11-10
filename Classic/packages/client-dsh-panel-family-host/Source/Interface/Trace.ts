@@ -4,6 +4,7 @@
  * The host-side D5 trace face the package forwards to the browser.
  *
  * @remarks
+ *
  * The bus itself is the factory's `ctx.trace` service
  * (Classic/packages/plugin-dsh-factory/Source/Interface/Trace.ts); the host context already owns
  * that name, so this package exposes the forwarding face under `panelFamilyTrace` and the client

@@ -1,22 +1,3 @@
-/**
- * @module Test
- *
- * The second surface and the ring lifecycle against the fake ctx.
- *
- * @remarks
- * The sticky section off by default (the assemble waterfall passes through
- * untouched), the sticky section built after an emit (the byte-exact section
- * name and text, the `section rebuilt (ttl N)` ledger line in both forms), the
- * TTL rebuild, the tools/change invalidation for the default ring, and the
- * assemble fail-open pass-through.
- *
- * THE SECTION'S SOURCE: the last family the ring noted. For the synthetic
- * History row the section renders the paths the note named, so the scenarios
- * seed the session history through the projection drive. The DEFAULT
- * (agent-less) ring cannot be reached through the projection - an agent-less call
- * carries no session, so its history is empty - so the tools/change scenario
- * arms that ring through the plugin's own `Ring.Mark` API.
- */
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -37,23 +18,53 @@ import {
 	Workspace,
 } from "../Harness.js";
 
-/** The judged call's anchor path (relative to the temp workspace). */
+/**
+ * @module Test
+ *
+ * The second surface and the ring lifecycle against the fake ctx.
+ *
+ * @remarks
+ *
+ * The sticky section off by default (the assemble waterfall passes through
+ * untouched), the sticky section built after an emit (the byte-exact section
+ * name and text, the `section rebuilt (ttl N)` ledger line in both forms), the
+ * TTL rebuild, the tools/change invalidation for the default ring, and the
+ * assemble fail-open pass-through.
+ *
+ * THE SECTION'S SOURCE: the last family the ring noted. For the synthetic
+ * History row the section renders the paths the note named, so the scenarios
+ * seed the session history through the projection drive. The DEFAULT
+ * (agent-less) ring cannot be reached through the projection - an agent-less call
+ * carries no session, so its history is empty - so the tools/change scenario
+ * arms that ring through the plugin's own `Ring.Mark` API.
+ */
+/**
+ * The judged call's anchor path (relative to the temp workspace).
+ */
 const Anchor = "README.md";
 
-/** The two companions touched right after the anchor. */
+/**
+ * The two companions touched right after the anchor.
+ */
 const Companions = ["CHANGELOG.md", "SCHEME.md"];
 
-/** The temp workspace the scenarios judge. */
+/**
+ * The temp workspace the scenarios judge.
+ */
 const Space = Workspace([Anchor, ...Companions]);
 
-/** One judged read of the anchor. */
+/**
+ * One judged read of the anchor.
+ */
 const Read = (Id: string): any => ({
 	name: "read",
 	arguments: { file_path: Space.At(Anchor) },
 	agent: AgentOf(Id),
 });
 
-/** The byte-exact sticky section text (the note's paths, the generic reason). */
+/**
+ * The byte-exact sticky section text (the note's paths, the generic reason).
+ */
 const Section =
 	"[search-suggester] intent=History confidence=1.00\ntargets (2):\n- CHANGELOG.md - touched after a similar call\n- SCHEME.md - touched after a similar call\nnote: open these before more searches; Target/ is generated, never edit it.";
 

@@ -1,9 +1,12 @@
+import type { Context } from "@deepseek-ai/cordis";
+export default _default;
 /**
  * @module Register
  *
  * Registers the hook's projection unit on the optional `ctx.sessionProjections` seam.
  *
  * @remarks
+ *
  * The OPTIONAL registration of the hook's projection unit on `ctx.sessionProjections`, the
  * seam that receives every committed session event once for every agent.
  *
@@ -26,6 +29,4 @@
  * stays empty and only an explicit pack may speak) - the same posture as the
  * `workingDirectory` probe in `Function/Apply`.
  */
-import type { Context } from "@deepseek-ai/cordis";
-export default _default;
 declare function _default(Context: Context): void;

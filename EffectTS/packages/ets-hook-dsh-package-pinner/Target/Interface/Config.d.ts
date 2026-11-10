@@ -4,6 +4,7 @@
  * The validated plugin-config shape the loader hands to `apply`.
  *
  * @remarks
+ *
  * Cordis validates the exported Schemastery schema while the plugin loads and
  * fills every default (docs/user/develop/basic/config.md:45), so `apply`
  * receives a plain object of this shape (volatile fields arrive as cells and
@@ -20,9 +21,13 @@
  * deployment can pin a custom section name without a code edit.
  */
 export default interface Config {
-    /** Factory shared field: ledger enabled — write the durable log file. */
+    /**
+     * Factory shared field: ledger enabled — write the durable log file.
+     */
     log: boolean;
-    /** Factory shared field: ledger file (SEPARATE from the governor's). */
+    /**
+     * Factory shared field: ledger file (SEPARATE from the governor's).
+     */
     logFile: string;
     /**
      * Factory shared field: cooldown between update-stage dispatches - the
@@ -39,7 +44,9 @@ export default interface Config {
      * built-in default.
      */
     policyFile: string;
-    /** Dependency sections the pinner may rewrite (each must hold an object). */
+    /**
+     * Dependency sections the pinner may rewrite (each must hold an object).
+     */
     sections: string[];
     /**
      * Factory shared field: excluded path segments (anywhere mode,

@@ -1,9 +1,12 @@
+import type PluginFactory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Factory
  *
  * The type-side link to the `@playform/plugin-dsh-factory` service.
  *
  * @remarks
+ *
  * The family's FIRST service provider — the class/service plugin form. The
  * factory is a REQUIRED dependency of this module: `inject` lists
  * "pluginFactory", so the plugin stays PENDING until the service exists and
@@ -19,8 +22,6 @@
  *
  * One definition per file; a type-only module (its compiled output is empty).
  */
-import type PluginFactory from "@playform/plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/** The plugin-factory service — the shared governance machinery

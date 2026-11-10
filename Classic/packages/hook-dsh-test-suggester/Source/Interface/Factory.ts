@@ -1,9 +1,12 @@
+import type Factory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Factory
  *
  * The STRUCTURAL VIEW of the injected @playform/plugin-dsh-factory service.
  *
  * @remarks
+ *
  * The family's class/service plugin, factory SCHEME.md §0-§2. The
  * test-suggester hook is the factory's NON-MANIFEST consumer: it uses the
  * State builder (cell unwrap + shared fields, §2.10) and the ledger (Append,
@@ -21,8 +24,6 @@
  * NOT re-declared here: @deepseek-ai/dsh-tools already augments `Events` with
  * `'tools/post-execute'` - re-declaring it would be a conflicting duplicate.
  */
-import type Factory from "@playform/plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

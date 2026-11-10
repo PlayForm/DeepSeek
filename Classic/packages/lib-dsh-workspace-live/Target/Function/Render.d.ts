@@ -6,6 +6,7 @@ export default _default;
  * The section framer: one Section in, one framed text block out.
  *
  * @remarks
+ *
  * The frame is FIXED so the consumer cannot mistake the section body for
  * harness state (the live-containers frame precedent):
  *

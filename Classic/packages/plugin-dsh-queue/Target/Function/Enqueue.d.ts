@@ -1,3 +1,6 @@
+import type State from "../Interface/State.js";
+import type Task from "../Interface/Task.js";
+import type { TaskState } from "../Interface/Task.js";
 /**
  * @module Enqueue
  *
@@ -5,15 +8,13 @@
  * agent context consumed.
  *
  * @remarks
+ *
  * The spec is stored verbatim (the queue
  * NEVER alters the self-contained prompts - the dispatcher only schedules).
  * The id and the enqueue sequence are assigned here (monotonic, the FIFO
  * tiebreaker), the initial state is `queued`, and one journal record +
  * one ledger line are written (the family's conventions).
  */
-import type State from "../Interface/State.js";
-import type Task from "../Interface/Task.js";
-import type { TaskState } from "../Interface/Task.js";
 /**
  * The enqueue input: everything except the id/seq/state bookkeeping. Each
  * optional field may also be explicitly undefined (the tool's parsed

@@ -5,6 +5,7 @@
  * type exports.
  *
  * @remarks
+ *
  * The v0.1.1 declaration fix made the structural mirror unnecessary. The gate itself logs
  * NOTHING: the caller (the module's fs/observed listener) composes its own ledger lines for
  * the outcomes it cares about - the `excluded` one (`skipped (excluded) <path>`). The reasons

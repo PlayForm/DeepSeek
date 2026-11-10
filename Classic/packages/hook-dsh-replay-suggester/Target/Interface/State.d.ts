@@ -1,3 +1,9 @@
+import type Entry from "./Entry.js";
+import type Handle from "./Handle.js";
+import type { ReplayRecord } from "./History.js";
+import type { CompiledIntent } from "./Pack.js";
+import type Factory from "@playform/plugin-dsh-factory";
+import type { State as Shared } from "@playform/plugin-dsh-factory";
 /**
  * @module State
  *
@@ -5,6 +11,7 @@
  * replay-suggester hook's own fields.
  *
  * @remarks
+ *
  * The shared half is built by `Factory.State(ctx, config, { ... })` (factory
  * SCHEME.md §2.10). The shared type comes from the factory's NAMED type
  * export (`State`): the built Target/Library.d.ts ships RELATIVE specifiers,
@@ -57,12 +64,6 @@
  *   - Factory - the injected factory service itself, consumed for the
  *     ledger (Factory.Append) - assigned once in Function/Apply.
  */
-import type Entry from "./Entry.js";
-import type Handle from "./Handle.js";
-import type { ReplayRecord } from "./History.js";
-import type { CompiledIntent } from "./Pack.js";
-import type Factory from "@playform/plugin-dsh-factory";
-import type { State as Shared } from "@playform/plugin-dsh-factory";
 export default interface State extends Shared {
     /**
      * The master switch (config `enabled`, volatile).

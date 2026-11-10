@@ -1,3 +1,7 @@
+import type { AgentState, CoachNotes, CoachRow } from "@Interface/Execution.js";
+import type Factory from "@playform/plugin-dsh-factory";
+import type { State as Shared } from "@playform/plugin-dsh-factory";
+
 /**
  * @module State
  *
@@ -5,6 +9,7 @@
  * coach's own fields.
  *
  * @remarks
+ *
  * Built by `Factory.State(ctx, config, { ... })` - factory SCHEME.md §2.10.
  *
  * The shared half comes from the factory's NAMED type export (`State`). The
@@ -25,10 +30,6 @@
  * returns specially, a live-verified lesson recorded in the plugin-
  * development skill).
  */
-import type { AgentState, CoachNotes, CoachRow } from "@Interface/Execution.js";
-import type Factory from "@playform/plugin-dsh-factory";
-import type { State as Shared } from "@playform/plugin-dsh-factory";
-
 export default interface State extends Shared {
 	/**
 	 * Master switch (config `enabled`, volatile) - false = full passthrough.

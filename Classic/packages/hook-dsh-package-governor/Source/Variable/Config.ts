@@ -1,9 +1,15 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose } from "@playform/plugin-dsh-factory";
+
+import Default from "./Default.js";
+
 /**
  * @module Config
  *
  * The plugin's Schemastery Config schema (a Variable: one constant built once at load).
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every default
  * (docs/user/develop/basic/config.md:45), so invalid configuration fails LOUD at load instead
  * of silently falling back per-field, and `apply` receives a validated plain config object.
@@ -34,11 +40,6 @@
  * schema must be a real schemastery instance - the loader consumes it through the Standard
  * Schema `~standard` interface).
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
-
-import Default from "./Default.js";
-
 const DefaultLog = false;
 const DefaultStrict = false;
 const DefaultMaxUpdateFailures = 3;

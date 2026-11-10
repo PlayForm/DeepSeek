@@ -1,3 +1,5 @@
+import type Hunk from "../Interface/Edit.js";
+
 /**
  * @module Edit
  *
@@ -5,6 +7,7 @@
  * hunks the call produces.
  *
  * @remarks
+ *
  * The parser follows `Documentation/Plans/COST-TRACK-PLUGIN.md` section 17.3.
  * It yields one row per edit entry of an "edit" or "multi_edit" call (a single
  * entry object or an "edits" array), one row from the written content of a
@@ -23,8 +26,6 @@
  * that deletes a file and a batch operation that replaces or removes a match
  * carry the same marker for the same reason.
  */
-import type Hunk from "../Interface/Edit.js";
-
 // The line count of one side of a hunk, counted with a split: a non-empty
 // string is its newline count plus one, so a one-line replacement reads as
 // +1/-1 rather than +0/-0; a non-string field counts as no lines and no

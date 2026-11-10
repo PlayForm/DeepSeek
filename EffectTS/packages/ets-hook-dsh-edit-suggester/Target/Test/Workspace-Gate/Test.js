@@ -1,2 +1,133 @@
-import s from"node:assert/strict";import*as u from"node:fs";import*as b from"node:os";import*as h from"node:path";import{AgentOf as f,CheckAsync as i,Commit as m,Durable as w,DurableLine as p,Finish as E,MakeCounter as S,Post as d,Setup as y}from"../Harness.js";const k=e=>u.mkdtempSync(h.join(b.tmpdir(),e)),r=(e,o,t="x")=>{const n=h.join(e,o);return u.mkdirSync(h.dirname(n),{recursive:!0}),u.writeFileSync(n,t,"utf8"),n},x=k("edit-suggester-foreign-"),C=r(x,"Source/Variable/Config.ts"),c=k("edit-suggester-rooted-");r(c,"package.json","{}");const a=r(c,"Source/Variable/Config.ts");r(c,"README.md"),r(c,"SCHEME.md");const q=e=>({get:()=>e}),g=(e,o)=>({name:"edit",arguments:{file_path:e},agent:f(o)}),D=["[edit-suggester] family=History confidence=0.87","companions (2):","- README.md - touched 1 time(s) after this file","- SCHEME.md - touched 1 time(s) after this file","note: this file rarely stands alone; check whether these need the same change."].join(`
-`),H=(e,o,t)=>{m(e,o,t),m(e,o,"README.md"),m(e,o,"SCHEME.md")},R=async()=>{const e=S();{const o=y();delete o.Context.workingDirectory,await i(e,"G1: a call with no root abstains foreign-workspace",async()=>{const t={kind:"allow",additionalContexts:[{id:"downstream"}]},n=await d(o,g(C,"a"),t);s.equal(n,t),s.deepEqual(n.additionalContexts,[{id:"downstream"}]),s.ok(o.Lines.includes("hook-dsh-edit-suggester: abstained foreign-workspace  0.00")),s.match(p("abstained foreign-workspace"),w("abstained foreign-workspace  0.00")),s.equal(o.Lines.filter(l=>l.includes(": suggest ")).length,0)}),await i(e,"G1: the foreign call does not touch the ring",async()=>{const t=o.State.Rings.State(f("a"));s.equal(t.calls,0),s.equal(t.touched.size,0),s.equal(t.notes,0)}),await i(e,"G1: the cwd probe never throws (a throwing getter still abstains)",async()=>{const t=y();t.Context.workingDirectory={get:()=>{throw new Error("the service getter throws")}};const n={kind:"allow",additionalContexts:[]},l=await d(t,g(C,"a"),n);s.equal(l,n),s.ok(t.Lines.includes("hook-dsh-edit-suggester: abstained foreign-workspace  0.00")),s.deepEqual(t.Warns,[])})}{const o=y();o.Context.workingDirectory=q(c),await i(e,"G2: the History note names the companions of the temp root",async()=>{await o.Ready,H(o,"b",a);const t=await d(o,g(a,"b"));s.equal(t.additionalContexts.length,1),s.deepEqual(t.additionalContexts[0].source,{kind:"edit-suggester",form:"notice",summary:"History 0.87"}),s.equal(t.additionalContexts[0].content[0].text,D)}),await i(e,"G2: the suggest line counts the two companions",async()=>{s.ok(o.Lines.includes(`hook-dsh-edit-suggester: suggest History 0.87 2 companions ${a}`)),s.match(p(`suggest History 0.87 2 companions ${a}`),w(`suggest History 0.87 2 companions ${a}`))}),await i(e,"G2: the rooted workspace with no history abstains no-history",async()=>{const t={kind:"allow",additionalContexts:[]},n=await d(o,g(a,"c"),t);s.equal(n,t),s.deepEqual(n.additionalContexts,[]),s.ok(o.Lines.includes("hook-dsh-edit-suggester: abstained no-history  0.00")),s.match(p("abstained no-history"),w("abstained no-history  0.00"))})}return E(e,"Workspace-Gate")},v=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(v){const e=await R();console.log(`${e} PASS - Workspace-Gate`)}export{R as runTest};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import {
+  AgentOf,
+  CheckAsync,
+  Commit,
+  Durable,
+  DurableLine,
+  Finish,
+  MakeCounter,
+  Post,
+  Setup
+} from "../Harness.js";
+const Tree = (Prefix) => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
+const Put = (Root, Relative, Body = "x") => {
+  const Full = Path.join(Root, Relative);
+  FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
+  FileSystem.writeFileSync(Full, Body, "utf8");
+  return Full;
+};
+const Foreign = Tree("edit-suggester-foreign-");
+const ForeignConfig = Put(Foreign, "Source/Variable/Config.ts");
+const Rooted = Tree("edit-suggester-rooted-");
+Put(Rooted, "package.json", "{}");
+const RootedConfig = Put(Rooted, "Source/Variable/Config.ts");
+Put(Rooted, "README.md");
+Put(Rooted, "SCHEME.md");
+const Service = (Cwd) => ({ get: () => Cwd });
+const Edit = (Path_, Id) => ({
+  name: "edit",
+  arguments: { file_path: Path_ },
+  agent: AgentOf(Id)
+});
+const HistoryText = [
+  "[edit-suggester] family=History confidence=0.87",
+  "companions (2):",
+  "- README.md - touched 1 time(s) after this file",
+  "- SCHEME.md - touched 1 time(s) after this file",
+  "note: this file rarely stands alone; check whether these need the same change."
+].join("\n");
+const Seed = (Run, Id, Anchor) => {
+  Commit(Run, Id, Anchor);
+  Commit(Run, Id, "README.md");
+  Commit(Run, Id, "SCHEME.md");
+};
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Run = Setup();
+    delete Run.Context.workingDirectory;
+    await CheckAsync(Count, "G1: a call with no root abstains foreign-workspace", async () => {
+      const Decision = { kind: "allow", additionalContexts: [{ id: "downstream" }] };
+      const Out = await Post(Run, Edit(ForeignConfig, "a"), Decision);
+      assert.equal(Out, Decision);
+      assert.deepEqual(Out.additionalContexts, [{ id: "downstream" }]);
+      assert.ok(Run.Lines.includes("hook-dsh-edit-suggester: abstained foreign-workspace  0.00"));
+      assert.match(
+        DurableLine("abstained foreign-workspace"),
+        Durable("abstained foreign-workspace  0.00")
+      );
+      assert.equal(Run.Lines.filter((Line) => Line.includes(": suggest ")).length, 0);
+    });
+    await CheckAsync(Count, "G1: the foreign call does not touch the ring", async () => {
+      const Rings = Run.State.Rings.State(AgentOf("a"));
+      assert.equal(Rings.calls, 0);
+      assert.equal(Rings.touched.size, 0);
+      assert.equal(Rings.notes, 0);
+    });
+    await CheckAsync(Count, "G1: the cwd probe never throws (a throwing getter still abstains)", async () => {
+      const Throwing = Setup();
+      Throwing.Context.workingDirectory = {
+        get: () => {
+          throw new Error("the service getter throws");
+        }
+      };
+      const Decision = { kind: "allow", additionalContexts: [] };
+      const Out = await Post(Throwing, Edit(ForeignConfig, "a"), Decision);
+      assert.equal(Out, Decision);
+      assert.ok(Throwing.Lines.includes("hook-dsh-edit-suggester: abstained foreign-workspace  0.00"));
+      assert.deepEqual(Throwing.Warns, []);
+    });
+  }
+  {
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Rooted);
+    await CheckAsync(Count, "G2: the History note names the companions of the temp root", async () => {
+      await Run.Ready;
+      Seed(Run, "b", RootedConfig);
+      const Out = await Post(Run, Edit(RootedConfig, "b"));
+      assert.equal(Out.additionalContexts.length, 1);
+      assert.deepEqual(Out.additionalContexts[0].source, {
+        kind: "edit-suggester",
+        form: "notice",
+        summary: "History 0.87"
+      });
+      assert.equal(Out.additionalContexts[0].content[0].text, HistoryText);
+    });
+    await CheckAsync(Count, "G2: the suggest line counts the two companions", async () => {
+      assert.ok(
+        Run.Lines.includes(
+          `hook-dsh-edit-suggester: suggest History 0.87 2 companions ${RootedConfig}`
+        )
+      );
+      assert.match(
+        DurableLine(`suggest History 0.87 2 companions ${RootedConfig}`),
+        Durable(`suggest History 0.87 2 companions ${RootedConfig}`)
+      );
+    });
+    await CheckAsync(Count, "G2: the rooted workspace with no history abstains no-history", async () => {
+      const Decision = { kind: "allow", additionalContexts: [] };
+      const Out = await Post(Run, Edit(RootedConfig, "c"), Decision);
+      assert.equal(Out, Decision);
+      assert.deepEqual(Out.additionalContexts, []);
+      assert.ok(Run.Lines.includes("hook-dsh-edit-suggester: abstained no-history  0.00"));
+      assert.match(
+        DurableLine("abstained no-history"),
+        Durable("abstained no-history  0.00")
+      );
+    });
+  }
+  return Finish(Count, "Workspace-Gate");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Workspace-Gate`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

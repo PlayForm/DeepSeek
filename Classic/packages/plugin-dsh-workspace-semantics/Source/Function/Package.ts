@@ -1,3 +1,8 @@
+import type Adapter from "@Interface/Adapter.js";
+import type ReferenceNode from "@Interface/ReferenceNode.js";
+import type Span from "@Interface/Span.js";
+import type SymbolNode from "@Interface/SymbolNode.js";
+
 /**
  * @module Package
  *
@@ -5,6 +10,7 @@
  * model's `dependencies` list is the names themselves.
  *
  * @remarks
+ *
  * One symbol of kind `dependency` sits per name, whichever of the four
  * dependency sections declares it first; a later occurrence of the same name is
  * a reference to it (the same dependency listed in `dependencies` and
@@ -16,19 +22,20 @@
  * registration key, checked before the `.json` extension adapter, so a
  * package.json never falls through to the plain JSON key model.
  */
-import type Adapter from "@Interface/Adapter.js";
-import type ReferenceNode from "@Interface/ReferenceNode.js";
-import type Span from "@Interface/Span.js";
-import type SymbolNode from "@Interface/SymbolNode.js";
-
-/** One dependency section and its block body (the four dependency kinds). */
+/**
+ * One dependency section and its block body (the four dependency kinds).
+ */
 const Section =
 	/"(dependencies|devDependencies|peerDependencies|optionalDependencies)"\s*:\s*\{([^}]*)\}/g;
 
-/** One `"name": ...` entry inside a section block. */
+/**
+ * One `"name": ...` entry inside a section block.
+ */
 const Entry = /"([^"]+)"\s*:/g;
 
-/** Every dependency-name occurrence with its exact range, in file order. */
+/**
+ * Every dependency-name occurrence with its exact range, in file order.
+ */
 const Names = (Text: string): { text: string; span: Span }[] => {
 	const Found: { text: string; span: Span }[] = [];
 	for (const Match of Text.matchAll(Section)) {

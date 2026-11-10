@@ -1,3 +1,4 @@
+import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 /**
  * @module Engine
  *
@@ -7,6 +8,7 @@
  * context engine, R:173-179, protectFirst/protectLast included).
  *
  * @remarks
+ *
  * THE DECISION MATH (pure, exported for the smoke - no I/O, no clock, no
  * state):
  * - ThresholdBytes(Budget, Pct) - the fill limit in bytes: Pct% of the
@@ -79,7 +81,6 @@
  *   (stored results keep just their hash) - memory growth is bounded by what
  *   was never stored.
  */
-import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 /**
  * One observed tool result in the engine's log. `content` is present only
  * for a result that passed through WITHOUT being stored (the archivable

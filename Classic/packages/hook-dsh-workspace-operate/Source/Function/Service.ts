@@ -1,3 +1,13 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import Propose from "@Function/Propose.js";
+import * as Query from "@Function/Query.js";
+import Withdraw from "@Function/Withdraw.js";
+import type Filter from "@Interface/Filter.js";
+import type Outcome from "@Interface/Outcome.js";
+import type Proposal from "@Interface/Proposal.js";
+import type State from "@Interface/State.js";
+import type Statistics from "@Interface/Statistics.js";
+
 /**
  * @module Service
  *
@@ -5,6 +15,7 @@
  * the proposal table ride on.
  *
  * @remarks
+ *
  * It extends the cordis Service base and is REGISTERED FROM APPLY (the
  * loader contract for the object-form plugin: apply constructs the service;
  * the Service base constructor calls ctx.reflect.provide
@@ -20,16 +31,6 @@
  *   - withdraw(id) - mark one proposal withdrawn;
  *   - statistics() - the honest counts.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import Propose from "@Function/Propose.js";
-import * as Query from "@Function/Query.js";
-import Withdraw from "@Function/Withdraw.js";
-import type Filter from "@Interface/Filter.js";
-import type Outcome from "@Interface/Outcome.js";
-import type Proposal from "@Interface/Proposal.js";
-import type State from "@Interface/State.js";
-import type Statistics from "@Interface/Statistics.js";
-
 export default class WorkspaceOperate extends Service {
 	/**
 	 * The apply-built state the methods read and write.

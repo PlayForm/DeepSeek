@@ -8,6 +8,7 @@ import type State from "@Interface/State.js";
  * resource.
  *
  * @remarks
+ *
  * The weight is stored in its own field - representation only: it ranks the
  * eviction candidates, it never decides a disposition (the logged
  * license/weight conflation pitfall).

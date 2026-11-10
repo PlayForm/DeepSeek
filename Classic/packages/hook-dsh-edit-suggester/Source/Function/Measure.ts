@@ -1,3 +1,6 @@
+import type { CompanionDecision, HeuristicValues } from "../Interface/Decision.js";
+import type { Target } from "../Interface/Execution.js";
+
 /**
  * @module Measure
  *
@@ -5,6 +8,7 @@
  * heuristic values and the weighted score.
  *
  * @remarks
+ *
  * Completion spec 03-SUGGESTERS section 2; D8.
  *
  *   score(c) = sum over the enabled heuristics of weight(h) * value(h)
@@ -31,9 +35,6 @@
  * family's would-be companions through this same leaf, so the recorded values
  * and the emitted ones can never disagree.
  */
-import type { CompanionDecision, HeuristicValues } from "../Interface/Decision.js";
-import type { Target } from "../Interface/Execution.js";
-
 /**
  * The neutral graph-distance placeholder (no graph service in this consumer).
  */

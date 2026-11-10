@@ -7,6 +7,7 @@ export default _default;
  * temporary home), then `HOME`, then `os.homedir()`.
  *
  * @remarks
+ *
  * The library never writes; it only reads
  * `<home>/.dsh/playform/workspaces/<slug>.yml`.
  */

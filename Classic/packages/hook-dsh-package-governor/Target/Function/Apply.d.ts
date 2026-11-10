@@ -1,9 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "../Interface/Config.js";
+export default _default;
 /**
  * @module Apply
  *
  * The plugin entry function, now a thin module wire-up: the factory owns the scaffolding.
  *
  * @remarks
+ *
  * The module builds the State through `Factory.State` (the cell unwrap, the shared mappings
  * Tool<-mutationTools, Policy<-policyFile, Ledger<-logFile, Enabled<-log, List<-exclude, and the
  * machinery structures - SCHEME.md §2.10), adds the module's own fields via the setup `fields`
@@ -35,7 +39,4 @@
  * export default Apply;
  * ```
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
-export default _default;
 declare function _default(Context: Context, Options: Config): void;

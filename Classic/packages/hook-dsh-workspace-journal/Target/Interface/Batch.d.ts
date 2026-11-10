@@ -5,6 +5,7 @@
  * the edit-lifecycle state, and the recovery trace properties.
  *
  * @remarks
+ *
  * The batch lifecycle follows the edit lifecycle of
  * WORKSPACE-FAMILY-V4-1.md section 3.7, narrowed to the batch transaction:
  *

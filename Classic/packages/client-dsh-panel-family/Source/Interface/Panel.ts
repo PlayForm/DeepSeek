@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 /**
  * @module Panel
  *
@@ -5,13 +7,12 @@
  * `Documentation/Plans/Completion-Spec/04-CLIENT.md` section 2).
  *
  * @remarks
+ *
  * The 13 per-bundle adapters import these types with `import type` only: no runtime import may
  * exist between the central package and any adapter (PHASE-2 A2.4, verified by grep in the
  * end-phase). The runtime slot names live in `Variable/Slots.ts`; this file is types only, so it
  * emits nothing.
  */
-import type { ReactNode } from "react";
-
 /**
  * A `PanelSlot` is one declared child slot: the only keys an adapter may register into. The panel
  * owns both render sites; an adapter's client half injects the slot its manifest declares and

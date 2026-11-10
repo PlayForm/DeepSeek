@@ -1,3 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import Enforcer from "@Function/Enforcer.js";
+import Inject from "@Function/Inject.js";
+import Launch from "@Function/Launch.js";
+import Validate from "@Function/Validate.js";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+import Version from "@Variable/Version.js";
+
 /**
  * @module Apply
  *
@@ -6,6 +16,7 @@
  * proof, the `dshRoute` service instantiation, and the launch-path listeners.
  *
  * @remarks
+ *
  * The function returns NOTHING - the loader treats apply returns specially,
  * and a returned value silently kills event delivery.
  *
@@ -18,16 +29,6 @@
  * the `dshRoute` service surface consumed by the sibling orchestration plugins
  * (the queue's routed dispatch) and by the user's audit.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import Enforcer from "@Function/Enforcer.js";
-import Inject from "@Function/Inject.js";
-import Launch from "@Function/Launch.js";
-import Validate from "@Function/Validate.js";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-import Version from "@Variable/Version.js";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
  */

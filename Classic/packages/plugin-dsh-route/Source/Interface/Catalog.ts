@@ -5,6 +5,7 @@
  * `ctx.llm` service behind the `list_subagent_models` tool).
  *
  * @remarks
+ *
  * The PoC rule: declare the sibling service's shape in your own Interface/,
  * never import the package that may not be wired.
  *

@@ -1,3 +1,4 @@
+import Schema from "@deepseek-ai/schemastery";
 /**
  * @module Config
  *
@@ -5,6 +6,7 @@
  * at load).
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every
  * default, so invalid configuration fails LOUD at load instead of silently
  * falling back per-field, and `apply` receives a validated plain config object.
@@ -23,7 +25,6 @@
  * resolves the ledger and the log beside the harness's own storages, not under
  * a fixed tilde path (Temporary/Harness-Wave/Plan.md section 1.1).
  */
-import Schema from "@deepseek-ai/schemastery";
 /**
  * Named defaults (the shipped convention): every .default literal is hoisted
  * to a constant above the schema (Temporary/Harness-Wave/Plan.md section 6,

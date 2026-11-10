@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -6,6 +10,7 @@
  * and the default object.
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` +
  * `export const Config` + `export const inject` +
  * `export default { name, apply, Config, inject }` - the ONLY named exports in
@@ -31,10 +36,6 @@
  * `workspaceAudit` service is a Service subclass in its own module
  * (Function/Service) and is registered from apply.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "hook-dsh-workspace-audit";
 
 /**

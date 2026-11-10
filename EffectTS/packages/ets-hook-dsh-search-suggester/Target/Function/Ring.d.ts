@@ -1,3 +1,4 @@
+import type { CallView } from "../Interface/Execution.js";
 /**
  * @module Ring
  *
@@ -7,7 +8,6 @@
  * per-turn note count. Reset on `agent/pre-step` when a user message enters
  * the step (the per-turn boundary of plan section 4.2).
  */
-import type { CallView } from "../Interface/Execution.js";
 /**
  * One ring entry: the call view plus the intent id the classifier produced.
  */

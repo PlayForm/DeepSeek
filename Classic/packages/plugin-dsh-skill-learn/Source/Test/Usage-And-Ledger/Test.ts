@@ -1,9 +1,19 @@
+import assert from "node:assert/strict";
+import FileSystem from "node:fs";
+import * as Path from "node:path";
+
+import Append, { Blob, Capture, Rows } from "../../../Target/Function/Ledger.js";
+import Snapshot, { Rotate } from "../../../Target/Function/Snapshot.js";
+import Usage from "../../../Target/Function/Usage.js";
+import { CheckAsync, FakeFs, Finish, Knobs, MakeCounter, Seed, State } from "../Harness.js";
+
 /**
  * @module Test
  *
  * The store and the audit ledger.
  *
  * @remarks
+ *
  * The usage store is the curator's whole input, so its thirteen fields, the
  * writers that own each one, and the reuse watermark are the contract. Two
  * postures matter more than the fields:
@@ -21,19 +31,14 @@
  * a rotation keeps `snapshotKeep` manifests while never pruning a protected one -
  * because a revert's safety snapshot must survive its own pass.
  */
-import assert from "node:assert/strict";
-import FileSystem from "node:fs";
-import * as Path from "node:path";
-
-import Append, { Blob, Capture, Rows } from "../../../Target/Function/Ledger.js";
-import Snapshot, { Rotate } from "../../../Target/Function/Snapshot.js";
-import Usage from "../../../Target/Function/Usage.js";
-import { CheckAsync, FakeFs, Finish, Knobs, MakeCounter, Seed, State } from "../Harness.js";
-
-/** A SKILL.md body with matching frontmatter. */
+/**
+ * A SKILL.md body with matching frontmatter.
+ */
 const Body = (Name: string): string => `---\nname: ${Name}\ndescription: what it does\n---\n\n# ${Name}\n\nA step.\n`;
 
-/** A fixed instant, so no assertion depends on wall time. */
+/**
+ * A fixed instant, so no assertion depends on wall time.
+ */
 const Now = new Date("2026-11-02T12:00:00.000Z");
 const Later = new Date("2026-11-02T13:00:00.000Z");
 

@@ -1,30 +1,3 @@
-/**
- * @module Test
- *
- * The D8 learning loop against the fake ctx, REAL temp workspaces and the REAL pattern service,
- * with the candidates coming from the SESSION HISTORY and never from a built-in pack literal.
- *
- * @remarks
- * - L1: a note -> touching a named companion records the ACCEPT for that companion and its
- *   family -> the next call's rank and score rise.
- * - L2: a note -> the window closes untouched -> the soft REJECT -> the companions' rate and the
- *   next note's score fall.
- * - L3: the PICKABLE heuristics: disabling one drops it from the enabled list, the weights and
- *   the score; a raised weight raises the score, and the `decided` ledger line carries the table
- *   byte-exactly.
- * - L4: no store -> the bounded memory fallback answers the neutral 1/3, so the default score is
- *   the PoC's.
- * - L5: the pattern service stores the decision record (weights, enabled list, pending outcome)
- *   and the learned rates; the accept fills the outcome, and a reopen through the KV store reads
- *   the rate back and reproduces the same weights.
- *
- * The candidates come from the synthetic `History` family. The two companions carry the SAME
- * prior (0.6, the History family's prior) and the SAME reason, so the learned history is the only
- * thing that can order them (the rank proof).
- *
- * NO SLEEPS: the window is counted in judged calls, and the pattern service's Flush/Save are
- * awaited (its documented seams) before the reopen.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -46,19 +19,57 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The neutral rate (the Laplace prior with zero observations). */
+/**
+ * @module Test
+ *
+ * The D8 learning loop against the fake ctx, REAL temp workspaces and the REAL pattern service,
+ * with the candidates coming from the SESSION HISTORY and never from a built-in pack literal.
+ *
+ * @remarks
+ *
+ * - L1: a note -> touching a named companion records the ACCEPT for that companion and its
+ *   family -> the next call's rank and score rise.
+ * - L2: a note -> the window closes untouched -> the soft REJECT -> the companions' rate and the
+ *   next note's score fall.
+ * - L3: the PICKABLE heuristics: disabling one drops it from the enabled list, the weights and
+ *   the score; a raised weight raises the score, and the `decided` ledger line carries the table
+ *   byte-exactly.
+ * - L4: no store -> the bounded memory fallback answers the neutral 1/3, so the default score is
+ *   the PoC's.
+ * - L5: the pattern service stores the decision record (weights, enabled list, pending outcome)
+ *   and the learned rates; the accept fills the outcome, and a reopen through the KV store reads
+ *   the rate back and reproduces the same weights.
+ *
+ * The candidates come from the synthetic `History` family. The two companions carry the SAME
+ * prior (0.6, the History family's prior) and the SAME reason, so the learned history is the only
+ * thing that can order them (the rank proof).
+ *
+ * NO SLEEPS: the window is counted in judged calls, and the pattern service's Flush/Save are
+ * awaited (its documented seams) before the reopen.
+ */
+/**
+ * The neutral rate (the Laplace prior with zero observations).
+ */
 const Neutral = 1 / 3;
 
-/** The pattern service's documented accept move. */
+/**
+ * The pattern service's documented accept move.
+ */
 const AcceptBonus = 0.1;
 
-/** The pattern service's documented reject penalty. */
+/**
+ * The pattern service's documented reject penalty.
+ */
 const RejectPenalty = 0.2;
 
-/** A temp tree under the OS temp dir (fresh per folder process). */
+/**
+ * A temp tree under the OS temp dir (fresh per folder process).
+ */
 const Tree = (Prefix: string): string => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
 
-/** Write one file under the tree (parents created). */
+/**
+ * Write one file under the tree (parents created).
+ */
 const Put = (Root: string, Relative: string, Body = "x"): string => {
 	const Full = Path.join(Root, Relative);
 	FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
@@ -77,10 +88,14 @@ Put(Workspace, "docs/STYLE.md");
 const Reference = Put(Workspace, "docs/REFERENCE.md");
 const Index = Put(Workspace, "Documentation/INDEX.md");
 
-/** The optional harness service the probe reads (the real shape: get(session)). */
+/**
+ * The optional harness service the probe reads (the real shape: get(session)).
+ */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** The note text of the two equal-prior companions, in history order. */
+/**
+ * The note text of the two equal-prior companions, in history order.
+ */
 const NoteOrder = (Head: string): string =>
 	`[doc-suggester] family=History confidence=0.87\ncompanions (2):\n- ${Head} - touched 1 time(s) after this file\n- ${Head === "docs/STYLE.md" ? "docs/REFERENCE.md" : "docs/STYLE.md"} - touched 1 time(s) after this file\nnote: a documentation task rarely touches one file; keep the doc graph coherent.`;
 
@@ -98,14 +113,18 @@ const Seed = (Run: any, Id: string): void => {
 	Commit(Run, Id, "docs/REFERENCE.md");
 };
 
-/** The judged index read (the note trigger). */
+/**
+ * The judged index read (the note trigger).
+ */
 const Emit = (Id: string): any => ({
 	name: "read",
 	arguments: { file_path: Index },
 	agent: AgentOf(Id),
 });
 
-/** The judged companion read (the follow signal). */
+/**
+ * The judged companion read (the follow signal).
+ */
 const Touch = (Id: string): any => ({
 	name: "read",
 	arguments: { file_path: Reference },

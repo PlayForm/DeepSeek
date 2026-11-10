@@ -1,17 +1,3 @@
-/**
- * @module Test
- *
- * The AST-aware targeting: a reflective Replace resolves its span from the GRAPH's node, verifies
- * the span's fingerprint against the CURRENT text before writing, and rewrites only that span - a
- * mismatch refuses and writes nothing.
- *
- * @remarks
- * The Symbol/Block nodes carry spans and content-derived fingerprints. The folder also pins the
- * textual fallback (no graph: the explicit span is used and still verified), the documented
- * targeting refusals, and the rename's semantics consumer wiring (the real built semantics
- * service mounted on the same fake context: the plan's edits are filtered to the operation's
- * scope).
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -29,6 +15,21 @@ import {
 import Semantics from "../../../../plugin-dsh-workspace-semantics/Target/Library.js";
 import GraphFingerprint from "../../../../plugin-dsh-workspace-graph/Target/Function/Fingerprint.js";
 
+/**
+ * @module Test
+ *
+ * The AST-aware targeting: a reflective Replace resolves its span from the GRAPH's node, verifies
+ * the span's fingerprint against the CURRENT text before writing, and rewrites only that span - a
+ * mismatch refuses and writes nothing.
+ *
+ * @remarks
+ *
+ * The Symbol/Block nodes carry spans and content-derived fingerprints. The folder also pins the
+ * textual fallback (no graph: the explicit span is used and still verified), the documented
+ * targeting refusals, and the rename's semantics consumer wiring (the real built semantics
+ * service mounted on the same fake context: the plan's edits are filtered to the operation's
+ * scope).
+ */
 const CONTENT = [
 	"const alpha = 1;",
 	"function beta() {",
@@ -38,13 +39,19 @@ const CONTENT = [
 
 const PATH = "/repo/a.ts";
 
-/** The Block node the graph would have indexed: lines 3-4 of the fixture. */
+/**
+ * The Block node the graph would have indexed: lines 3-4 of the fixture.
+ */
 const BLOCK = `Block:${PATH}:3:body`;
 
-/** The graph's own fingerprint of that span (the algorithm must agree). */
+/**
+ * The graph's own fingerprint of that span (the algorithm must agree).
+ */
 const FINGERPRINT = GraphFingerprint(CONTENT.split("\n").slice(2, 4).join("\n"), "Block");
 
-/** The node the fake graph serves. */
+/**
+ * The node the fake graph serves.
+ */
 const NODES = {
 	[BLOCK]: {
 		id: BLOCK,
@@ -55,7 +62,9 @@ const NODES = {
 	},
 };
 
-/** The validated config shape a sibling loader hands to its apply. */
+/**
+ * The validated config shape a sibling loader hands to its apply.
+ */
 const Definition = (Raw: Record<string, unknown>): any =>
 	(Semantics.Config as unknown as (Raw: Record<string, unknown>) => any)({ ...Raw });
 

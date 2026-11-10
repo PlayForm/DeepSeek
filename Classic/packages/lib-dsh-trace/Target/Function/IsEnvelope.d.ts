@@ -7,6 +7,7 @@ export default _default;
  * object payload.
  *
  * @remarks
+ *
  * The bus validates what it dispatches, so an adapter that receives a foreign
  * value ignores it instead of crashing.
  */

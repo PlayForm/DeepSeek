@@ -1,9 +1,16 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+
 /**
  * @module Harness
  *
  * The shared test harness for the PASS-ON tests.
  *
  * @remarks
+ *
  * Combines the fake ctx (the reflect.provide capture, the logger capture) with the REAL
  * `@playform/plugin-dsh-pass-on` class from its built Target - the family fake-ctx +
  * real-built-library harness pattern, written ONCE per package and imported by every test
@@ -24,12 +31,6 @@
  * NO FAKE CLOCK: the proposal timestamps are the plugin's own Date.now reads; the expiry test
  * mutates the stored proposal's expiresAt instead of waiting.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-
 export { Plugin };
 
 /**

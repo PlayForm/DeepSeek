@@ -1,9 +1,9 @@
 import { Service, type Context } from "@deepseek-ai/cordis";
-import type Filter from "@Interface/Filter.js";
-import type Outcome from "@Interface/Outcome.js";
-import type Proposal from "@Interface/Proposal.js";
-import type State from "@Interface/State.js";
-import type Statistics from "@Interface/Statistics.js";
+import type Filter from "../Interface/Filter.js";
+import type Outcome from "../Interface/Outcome.js";
+import type Proposal from "../Interface/Proposal.js";
+import type State from "../Interface/State.js";
+import type Statistics from "../Interface/Statistics.js";
 /**
  * @module Service
  *

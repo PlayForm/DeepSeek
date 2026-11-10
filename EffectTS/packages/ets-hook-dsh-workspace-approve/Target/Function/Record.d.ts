@@ -1,3 +1,6 @@
+import type Binding from "../Interface/Binding.js";
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Record
  *
@@ -6,6 +9,7 @@
  * domain fire-and-forget.
  *
  * @remarks
+ *
  *   - `State.ById` is keyed by the binding id: the newest version of a
  *     binding (a decision update) replaces the previous one in place.
  *   - `State.Ring` keeps every binding up to `State.MaxBindings`; the oldest
@@ -18,7 +22,4 @@
  *     `void .catch(() => {})` - a storage failure can never reach the
  *     caller's synchronous path.
  */
-import type Binding from "../Interface/Binding.js";
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(State: State, Binding: Binding): void;

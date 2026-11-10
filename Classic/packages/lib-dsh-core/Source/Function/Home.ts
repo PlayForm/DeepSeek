@@ -5,6 +5,7 @@
  * at the caller, then `$DSH_HOME`, then `~/.dsh`.
  *
  * @remarks
+ *
  * The order matches `resolveDshHome` (`packages/util/home-paths/src/index.ts:12, 127-137`).
  * Pure string mechanics: no fs, no directory creation, no ledger string, and no environment
  * read at module scope - the caller passes the environment.

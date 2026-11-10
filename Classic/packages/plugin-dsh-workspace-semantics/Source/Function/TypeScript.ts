@@ -1,3 +1,8 @@
+import type Adapter from "@Interface/Adapter.js";
+import type ReferenceNode from "@Interface/ReferenceNode.js";
+import type Span from "@Interface/Span.js";
+import type SymbolNode from "@Interface/SymbolNode.js";
+
 /**
  * @module TypeScript
  *
@@ -5,6 +10,7 @@
  * lexical scan, deliberately.
  *
  * @remarks
+ *
  * No language-service dependency in the PoC (ctx.lsp's four read operations
  * carry no rename/WorkspaceEdit; the language adapters deepen in the
  * end-phase). The adapter extracts the v0 symbol kinds from declarations, the
@@ -12,18 +18,19 @@
  * and the dependencies from import specifiers. The certainty is "true": the
  * scan is deterministic for ordinary content.
  */
-import type Adapter from "@Interface/Adapter.js";
-import type ReferenceNode from "@Interface/ReferenceNode.js";
-import type Span from "@Interface/Span.js";
-import type SymbolNode from "@Interface/SymbolNode.js";
-
-/** The v0 declaration pattern: kind keyword then the name. */
+/**
+ * The v0 declaration pattern: kind keyword then the name.
+ */
 const Declaration = /\b(function|class|interface|type|const)\s+([A-Za-z_$][\w$]*)/g;
 
-/** A qualified-name-shaped word used outside a declaration. */
+/**
+ * A qualified-name-shaped word used outside a declaration.
+ */
 const Word = /[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)+/g;
 
-/** A quoted import specifier. */
+/**
+ * A quoted import specifier.
+ */
 const Import = /(?:from|import)\s*["']([^"']+)["']/g;
 
 const Name: Record<string, SymbolNode["kind"]> = {

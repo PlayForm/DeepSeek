@@ -1,9 +1,13 @@
+import Definition from "@Variable/Config.js";
+import Version from "@Variable/Version.js";
+
 /**
  * @module Library
  *
  * The entry module of @playform/client-dsh-workspace-live (the workspace family's live client).
  *
  * @remarks
+ *
  * Loader contract (cordis): `export const name` + `export const apply` +
  * `export const Config` + `export const inject` + `export default { name,
  * apply, Config, inject }`.
@@ -20,9 +24,6 @@
  * at the END of the invisible flow; it never re-renders continuously and
  * never conflates a running OS process with a managed entity.
  */
-import Definition from "@Variable/Config.js";
-import Version from "@Variable/Version.js";
-
 export const name = "client-dsh-workspace-live";
 
 export const Config = Definition;

@@ -1,13 +1,13 @@
+import type Record from "@Interface/Record.js";
+import type State from "@Interface/State.js";
+import type Statistics from "@Interface/Statistics.js";
+
 /**
  * @module Query
  *
  * The read side of the merge hook: one batch record, all batch records
  * (newest last), and the honest statistics.
  */
-import type Record from "@Interface/Record.js";
-import type State from "@Interface/State.js";
-import type Statistics from "@Interface/Statistics.js";
-
 export const One = (State: State, Id: string): Record | undefined => State.Batches.get(Id);
 
 export const All = (State: State): Record[] => [...State.Batches.values()];

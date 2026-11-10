@@ -1,3 +1,6 @@
+import type GraphHandle from "@Interface/Graph.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Locate
  *
@@ -6,6 +9,7 @@
  * needs.
  *
  * @remarks
+ *
  * THE GRAPH IS THE AST SOURCE: `workspaceGraph.getNode(id)` carries the node's
  * 1-based inclusive span and its content-derived fingerprint. The graph is
  * PROBED (`ctx.get`), never injected - an absent graph is the textual
@@ -15,9 +19,6 @@
  * path, and a node kind the reflective ops do not target are all REFUSALS with
  * their documented reason, never a guessed span.
  */
-import type GraphHandle from "@Interface/Graph.js";
-import type State from "@Interface/State.js";
-
 /**
  * The resolved target of a node-targeted operation.
  */

@@ -1,3 +1,5 @@
+import type { KeywordTable, Role } from "@Interface/Policy.js";
+
 /**
  * @module Classify
  *
@@ -6,6 +8,7 @@
  * shape using the keyword table.
  *
  * @remarks
+ *
  * Pure and deterministic: the same spec text and the same table always produce
  * the same role.
  *
@@ -17,8 +20,6 @@
  * their stems. No match and no declared type: the caller falls back to the
  * policy's default role.
  */
-import type { KeywordTable, Role } from "@Interface/Policy.js";
-
 export default (Spec: string, Keywords: KeywordTable): Role | undefined => {
 	const Text = Spec.toLowerCase();
 

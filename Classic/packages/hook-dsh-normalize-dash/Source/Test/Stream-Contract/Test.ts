@@ -1,9 +1,15 @@
+import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+
+import { Check, Finish, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
+
 /**
  * @module Test
  *
  * The Stream-Contract unit smoke: the `llm/stream` waterfall contract.
  *
  * @remarks
+ *
  * The one singular test covers `next()` called once synchronously before any
  * upstream iteration, the deep-frozen options untouched, chunk order and count
  * preserved, the passthrough identities, the rewrite groups with their exact
@@ -14,11 +20,6 @@
  * (`node Target/Test/Stream-Contract/Test.js`) and under the aggregate
  * (`Maintain/Run/Smokes/Index.mjs` spawns it).
  */
-import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
-
-import { Check, Finish, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

@@ -12,6 +12,7 @@ import Usage from "./Usage.js";
  * conversation envelopes the factory's service emits on the bus.
  *
  * @remarks
+ *
  * The shapes follow the conversation spine's section 3.1. The emission is one
  * envelope per state-changing event: the turn start, the step start, the
  * assistant message, the tool call, each resolved touch, and the session end
@@ -25,7 +26,6 @@ import Usage from "./Usage.js";
  *
  * The emission is pure: no I/O, no clock, no global state.
  */
-
 /**
  * The field guards: a missing or alien field folds to its zero value, never
  * thrown on (the same guards the fold keeps).

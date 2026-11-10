@@ -12,6 +12,7 @@ export type { default as State } from "./Interface/State.js";
  * (`Documentation/Plans/RFC-CONVERSATION-SPINE.md` section 3.1).
  *
  * @remarks
+ *
  * Named exports (the harness convention - the library is NOT a plugin bundle:
  * no cordis patch, no loader contract, no Config, no inject, publishable on
  * its own). The SERVICE lives in `@playform/plugin-dsh-factory`

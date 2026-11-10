@@ -5,6 +5,7 @@
  * the recovery trace properties.
  *
  * @remarks
+ *
  * The journal's storage domain. The batch lifecycle follows the edit
  * lifecycle of WORKSPACE-FAMILY-V4-1.md section 3.7, narrowed to the batch
  * transaction:

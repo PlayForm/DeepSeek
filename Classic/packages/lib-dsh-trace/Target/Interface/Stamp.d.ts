@@ -5,15 +5,22 @@
  * (the path, the observed version, the origin).
  *
  * @remarks
+ *
  * The graph's adapter consumes exactly this shape. The hook's own KV record
  * adds its monotonic sequence, which the trace does not carry: the sequence
  * stays the hook's private ledger.
  */
 export default interface Stamp {
-    /** The path as the fs/observed event carried it (`displayPath`). */
+    /**
+     * The path as the fs/observed event carried it (`displayPath`).
+     */
     path: string;
-    /** The observed version token, verbatim; "absent" for an absent observation. */
+    /**
+     * The observed version token, verbatim; "absent" for an absent observation.
+     */
     version: string;
-    /** How the stamp was recorded ("fs/observed" or "manual"). */
+    /**
+     * How the stamp was recorded ("fs/observed" or "manual").
+     */
     origin: string;
 }

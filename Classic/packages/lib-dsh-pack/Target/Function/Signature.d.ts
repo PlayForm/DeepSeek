@@ -7,6 +7,7 @@ export default _default;
  * marker paths exists under it.
  *
  * @remarks
+ *
  * The match is an OR, not an AND: a repo may carry more than one marker and any
  * one identifies it. A pack without a signature falls back to the default
  * marker, so the pre-pack gate's behaviour is preserved.

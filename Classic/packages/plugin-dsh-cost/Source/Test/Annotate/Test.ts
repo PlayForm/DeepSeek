@@ -1,10 +1,3 @@
-// Source/Test/Annotate/Test.ts - THE ANNOTATION WRITER (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 7): the block is appended once after one blank
-// line at end of file, a second run with the same numbers changes nothing,
-// and a changed total replaces the block in place - a trailing unrelated
-// comment survives every run, and an unknown extension is skipped, never
-// guessed. The write goes through the factory's write executor over a fake fs
-// whose replaceIfVersion guard mirrors the local backend.
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -14,6 +7,20 @@ import Annotate from "../../../Target/Function/Annotate.js";
 import Open from "../../../Target/Function/Open.js";
 import { CheckAsync, Finish, Make, MakeCounter, Validate } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE ANNOTATION WRITER (Documentation/Plans/COST-TRACK-PLUGIN.md section 7),
+ * proved over repeated and changed annotation runs.
+ *
+ * @remarks
+ *
+ * The block is appended once after one blank line at end of file, a second run
+ * with the same numbers changes nothing, and a changed total replaces the block in
+ * place - a trailing unrelated comment survives every run, and an unknown
+ * extension is skipped, never guessed. The write goes through the factory's write
+ * executor over a fake fs whose replaceIfVersion guard mirrors the local backend.
+ */
 // The fake fs: an in-memory store whose writeText enforces the
 // replaceIfVersion guard exactly like the local backend does (stale version,
 // missing file), and whose stat exposes the file's own fresh version.

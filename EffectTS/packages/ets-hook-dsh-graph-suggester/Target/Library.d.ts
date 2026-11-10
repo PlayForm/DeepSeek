@@ -1,4 +1,46 @@
 import Version from "./Variable/Version.js";
+/**
+ * @module Library
+ *
+ * The entry module: the loader contract's four names, the Config schema, and the plugin
+ * account.
+ *
+ * @remarks
+ *
+ * The entry module (mirrors Source/Library.rs). Loader contract: `export const name` +
+ * `export const apply` + `export const Config` + `export const inject` + `export default
+ * { name, apply, Config, inject }` - the ONLY named exports in the tree (cordis requires
+ * them); every other module is a nameless default export composed Rust-style.
+ *
+ * THE DEFAULT OBJECT CARRIES ALL OF THEM: `export default { name, apply }` SHADOWS the
+ * named exports - inject and Config MUST also sit on the default object, or service
+ * accessors throw `cannot get property ... without inject` (live-verified 2026-10-03; a
+ * smoke that calls apply directly never catches this).
+ *
+ * @playform/hook-dsh-graph-suggester - the graph-suggester hook. It upgrades the
+ * suggester family's candidate list from paths and globs to the CONNECTED COMPONENT
+ * around the symbol (SEARCH-SUGGESTER-PLUGIN.md §9.2): when the model reads or greps a
+ * source file, the hook asks the workspace v4.1 graph service for the code-block
+ * neighborhood (the definition, the callers, the tests, the doc block) and prepends ONE
+ * labeled additionalContexts notice naming it. The intents are synthesized from that
+ * query and from nothing else - the `Neighborhood` component and the `Sibling`
+ * same-directory projection of the same component; the private literal pack is retired
+ * and there is NO static fallback. When the graph service is absent or fails, the intent
+ * abstains with a `graph unavailable` ledger line; when the component is empty, it
+ * abstains `no-companions` instead of naming a literal path - the graph intent never
+ * guesses. Deterministic classifier (no LLM in the hot path), high threshold, a cooldown,
+ * a per-turn cap, and an abstention path.
+ *
+ * READ-ONLY by design: the hook never edits, never rewrites arguments, and never denies
+ * - its only surface is the additionalContexts notice.
+ *
+ * FULLY CONTRACT-AWARE: every listener awaits next() FIRST and is fail-open (never
+ * throws into a waterfall). The hook is a NON-MANIFEST module (no fs/observed machinery)
+ * that consumes the factory for the State builder (with the P10 volatile refresh) and the
+ * ledger. The graph service shape is declared in this package's own Interface/Graph.ts
+ * (the self-contained PoC rule). The per-agent state is keyed on the Agent object (the
+ * tool-coach precedent); the durable record is the ledger file (one log per module).
+ */
 export declare const name = "graph-suggester";
 /**
  * Loader contract (cordis): the exported schema is validated and defaulted while the

@@ -1,3 +1,7 @@
+import type Binding from "./Binding.js";
+import type DomainHandle from "./Domain.js";
+import type FactoryHandle from "./Factory.js";
+import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 /**
  * @module State
  *
@@ -6,16 +10,13 @@
  * factory's State builder registers) plus the hook's own fields.
  *
  * @remarks
+ *
  * Module is "approve" - the frozen ledger lines are `approve: ...` (the
  * module's OWN contract string), and the factory's Append prefixes with
  * `<State.Module>: `. The npm identity lives in the package name and the
  * `name` export (hook-dsh-workspace-approve); the ledger prefix is the
  * module's OWN contract string.
  */
-import type Binding from "./Binding.js";
-import type DomainHandle from "./Domain.js";
-import type FactoryHandle from "./Factory.js";
-import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /**
      * The master switch (mapped from config `enabled` by the State build's

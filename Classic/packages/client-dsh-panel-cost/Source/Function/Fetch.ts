@@ -1,3 +1,15 @@
+import type CostContributionRow from "@Interface/ContributionRow.js";
+import type CostResponse from "@Interface/Response.js";
+import type {
+	Catalog,
+	CostFileCallRow,
+	CostVersionRow,
+	RateRow,
+	Revision,
+	ValuationSelection,
+} from "@playform/plugin-dsh-cost/service";
+import Route, { CatalogPath, PublishPath, RatePath } from "@Variable/Path.js";
+
 /**
  * @module Fetch
  *
@@ -5,6 +17,7 @@
  * deeper per-conversation call GET, the lineage GET, the two pricing GETs and the one pricing POST.
  *
  * @remarks
+ *
  * The session GET is the route path with the encoded session id and the row budget, answered as a
  * `CostResponse`. The file-scoped GET answers the conversations that contributed to one file's
  * cost; the deeper file-scoped GET answers one conversation's calls that allocated money to that
@@ -26,18 +39,6 @@
  * browser validates nothing here: the route owns the four-basis union and answers one actionable
  * line for anything else.
  */
-import type CostContributionRow from "@Interface/ContributionRow.js";
-import type CostResponse from "@Interface/Response.js";
-import type {
-	Catalog,
-	CostFileCallRow,
-	CostVersionRow,
-	RateRow,
-	Revision,
-	ValuationSelection,
-} from "@playform/plugin-dsh-cost/service";
-import Route, { CatalogPath, PublishPath, RatePath } from "@Variable/Path.js";
-
 /**
  * The minimal browser fetch surface this module needs (the build targets ESNext with node types
  * only, so the browser globals are declared here instead of pulling in the full DOM library - the

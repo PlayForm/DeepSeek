@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * Exercises the waterfall discipline and the guards.
- *
- * @remarks
- * Covers next() first with the downstream decision returned unchanged on pass, the deny and ask
- * envelopes, the synthesized proposal from a plain tool call, the excluded-target silence, the
- * own-actor exemption, the recursion guard with its byte-exact loop line, the outcome observer with
- * its byte-exact observed lines, and the fail-open containment.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -26,13 +15,29 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount with overrides. */
+/**
+ * @module Test
+ *
+ * Exercises the waterfall discipline and the guards.
+ *
+ * @remarks
+ *
+ * Covers next() first with the downstream decision returned unchanged on pass, the deny and ask
+ * envelopes, the synthesized proposal from a plain tool call, the excluded-target silence, the
+ * own-actor exemption, the recursion guard with its byte-exact loop line, the outcome observer with
+ * its byte-exact observed lines, and the fail-open containment.
+ */
+/**
+ * A standard enabled mount with overrides.
+ */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));
 };
 
-/** Drive one folder's checks. */
+/**
+ * Drive one folder's checks.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

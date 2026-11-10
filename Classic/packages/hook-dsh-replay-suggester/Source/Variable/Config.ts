@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The plugin's Schemastery Config schema: one constant built once at load.
  *
  * @remarks
+ *
  * A Variable. Cordis validates the exported schema while the plugin loads and
  * fills every default, so invalid configuration fails LOUD at load instead of
  * silently falling back per-field, and `apply` receives a validated plain
@@ -26,9 +30,6 @@
  * `~standard` interface; the import resolves from the running dsh's own
  * copy, docs/user/develop/basic/publish.md:103).
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
-
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-replay-suggester.log";
 const DefaultEnabled = true;
 const DefaultThreshold = 0.75;

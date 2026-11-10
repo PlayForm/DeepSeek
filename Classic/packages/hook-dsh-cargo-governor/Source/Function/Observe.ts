@@ -1,3 +1,16 @@
+import { dirname as Parent } from "node:path";
+
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import type Passage from "@Interface/Passage.js";
+import type RegistryView from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+import { Suppress } from "@playform/lib-dsh-core";
+import type PluginFactory from "@playform/plugin-dsh-factory";
+
+import Dispatch from "./Dispatch.js";
+import Filter from "./Filter.js";
+import Transform from "./Transform.js";
+
 /**
  * @module Observe
  *
@@ -5,6 +18,7 @@
  * thin composition of the `@playform/plugin-dsh-factory` service.
  *
  * @remarks
+ *
  * The critical path stays AWAIT-FREE and THROW-FREE (a throw inside an
  * fs/observed listener fails the tool call AFTER the mutation already
  * succeeded): the g1 gate set runs as ONE factory call (Factory.Gate — it logs
@@ -29,19 +43,6 @@
  *   (`governed …` before `update stage dispatched …`), skipped entirely when
  *   Filter finds nothing public for cargo to do.
  */
-import { dirname as Parent } from "node:path";
-
-import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
-import type Passage from "@Interface/Passage.js";
-import type RegistryView from "@Interface/Registry.js";
-import type State from "@Interface/State.js";
-import { Suppress } from "@playform/lib-dsh-core";
-import type PluginFactory from "@playform/plugin-dsh-factory";
-
-import Dispatch from "./Dispatch.js";
-import Filter from "./Filter.js";
-import Transform from "./Transform.js";
-
 export default (
 	Factory: PluginFactory,
 	State: State,

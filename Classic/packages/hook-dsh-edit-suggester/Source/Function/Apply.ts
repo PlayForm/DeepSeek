@@ -1,3 +1,27 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { UserMessage } from "@deepseek-ai/dsh-llm";
+import type { PostToolDecision, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
+import { Activate } from "@playform/lib-dsh-core";
+import { Adjacent, Families, Home, Resolve, Root as RootOf } from "@playform/lib-dsh-pack";
+
+import type Config from "../Interface/Config.js";
+import type { EditView, Family, Verdict } from "../Interface/Execution.js";
+import type State from "../Interface/State.js";
+import Version from "../Variable/Version.js";
+import Decide from "./Decide.js";
+import Decided from "./Decided.js";
+import Detect from "./Detect.js";
+import Filter from "./Filter.js";
+import History from "./History.js";
+import type { MeasureInput } from "./Measure.js";
+import BuildNote, { Prepend, Text } from "./Note.js";
+import Register from "./Register.js";
+import Ring, { type RingState } from "./Ring.js";
+import Score, { NoteKey } from "./Score.js";
+import Store from "./Store.js";
+import Weights from "./Weights.js";
+import Would from "./Would.js";
+
 /**
  * @module Apply
  *
@@ -5,6 +29,7 @@
  * the learned layer, and the TWO listeners of the edit suggester's surfaces.
  *
  * @remarks
+ *
  * Listener 1, `tools/post-execute` (waterfall, plain registration): `next()`
  * first, then the pack-independent workspace root (a foreign workspace
  * abstains), the learning FOLLOW-THROUGH (an open note's companion named by
@@ -78,30 +103,6 @@
  * strings. The function returns NOTHING; test probes (the end-phase) read
  * the state through the `ctx.__hookDshEditSuggesterState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { UserMessage } from "@deepseek-ai/dsh-llm";
-import type { PostToolDecision, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
-import { Activate } from "@playform/lib-dsh-core";
-import { Adjacent, Families, Home, Resolve, Root as RootOf } from "@playform/lib-dsh-pack";
-
-import type Config from "../Interface/Config.js";
-import type { EditView, Family, Verdict } from "../Interface/Execution.js";
-import type State from "../Interface/State.js";
-import Version from "../Variable/Version.js";
-import Decide from "./Decide.js";
-import Decided from "./Decided.js";
-import Detect from "./Detect.js";
-import Filter from "./Filter.js";
-import History from "./History.js";
-import type { MeasureInput } from "./Measure.js";
-import BuildNote, { Prepend, Text } from "./Note.js";
-import Register from "./Register.js";
-import Ring, { type RingState } from "./Ring.js";
-import Score, { NoteKey } from "./Score.js";
-import Store from "./Store.js";
-import Weights from "./Weights.js";
-import Would from "./Would.js";
-
 /**
  * The edited call's view: the path alone (plan section 3.3).
  */

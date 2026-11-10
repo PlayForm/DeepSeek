@@ -8,6 +8,7 @@ import type { PacketView } from "@Interface/Section.js";
  * as the fixed eight-line grammar.
  *
  * @remarks
+ *
  * The grammar:
  *
  * ```text
@@ -29,8 +30,9 @@ import type { PacketView } from "@Interface/Section.js";
  * The renderer is pure: `PacketView` in, text out; the token budget is the
  * CALLER's concern (it owns the counter seam).
  */
-
-/** One band of the grammar: tag + entries + the empty placeholder. */
+/**
+ * One band of the grammar: tag + entries + the empty placeholder.
+ */
 const Band = (Tag: string, Entries: string[]): string[] =>
 	Entries.length === 0 ? [`${Tag} (none)`] : Entries.map((Entry) => `${Tag} ${Entry}`);
 

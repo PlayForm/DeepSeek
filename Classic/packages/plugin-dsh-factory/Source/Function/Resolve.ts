@@ -1,3 +1,11 @@
+import * as FileSystem from "node:fs";
+import { join as Join, dirname as Parent } from "node:path";
+
+import type State from "@Interface/State.js";
+
+import Append from "./Append.js";
+import Parse from "./Parse.js";
+
 /**
  * @module Resolve
  *
@@ -5,6 +13,7 @@
  * service API).
  *
  * @remarks
+ *
  * Order (the pinner's priority, parameterized by the policy sidecar file
  * name): the configured global policy file (State.Policy via
  * `policyFileField`) -> the governed file's own directory -> co-located with
@@ -32,14 +41,6 @@
  * calculation, same exemption as `Function/Discover`. The governed manifest
  * is never touched here.
  */
-import * as FileSystem from "node:fs";
-import { join as Join, dirname as Parent } from "node:path";
-
-import type State from "@Interface/State.js";
-
-import Append from "./Append.js";
-import Parse from "./Parse.js";
-
 export default (
 	State: State,
 	Dir: string,

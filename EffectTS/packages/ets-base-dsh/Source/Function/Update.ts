@@ -82,6 +82,7 @@ import { Effect, Exit, Scope } from "effect";
  * `run` callback (structural: the only member the envelope consumes).
  *
  * @remarks
+ *
  * The module's child stage pipes its raw output into it in addition to the
  * ledger; the ledger record stays byte-identical.
  */
@@ -97,6 +98,7 @@ export interface Job {
  * machinery).
  *
  * @remarks
+ *
  * `S` is the module's State, `T` its fs target, `V` the version token it
  * exchanges with the factory, `R` its registry view - all opaque to the core,
  * which only passes them back through the injections.

@@ -109,6 +109,7 @@ export interface Outcome {
  * the ledger line's N and the no-op condition.
  *
  * @remarks
+ *
  * Exported (additive, the overpass arms' reuse): the tool-results and
  * step-batch arms (Function/Overpass, Function/StepBatch) run this same chain
  * over tool result text and incoming batch text - the file flavor's overpass

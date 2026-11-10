@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * The dispatcher.
- *
- * @remarks
- * Covers the deterministic order (dependencies, then priority descending, then FIFO), the seat
- * bookkeeping (the main pool and the child cap), the state machine with the settle releases, the
- * byte-exact board line, the routed dispatch (present, absent, fail-open, disabled), the
- * volatile hot-edit flips, and the tools.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -22,7 +11,21 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * The dispatcher.
+ *
+ * @remarks
+ *
+ * Covers the deterministic order (dependencies, then priority descending, then FIFO), the seat
+ * bookkeeping (the main pool and the child cap), the state machine with the settle releases, the
+ * byte-exact board line, the routed dispatch (present, absent, fail-open, disabled), the
+ * volatile hot-edit flips, and the tools.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = (Config: Record<string, unknown> = {}, Attach?: (C: any, R: any) => void): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }), Attach);

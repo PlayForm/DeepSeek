@@ -1,3 +1,6 @@
+import assert from "node:assert/strict";
+import { Check, Finish, MakeCounter, Make, Rm, Ledger } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +8,7 @@
  * covered in one singular smoke.
  *
  * @remarks
+ *
  * The test covers the registration facts (the two arms with their ordering
  * contract, the normalize-overpass command as the files sweep owner), the
  * tool-results arm (default off, the volatile flip with the SIX-FOLD rewrite
@@ -19,9 +23,6 @@
  * The unit smoke runs the fake ctx + the real factory + the real
  * normalize-file apply, from the Harness.
  */
-import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Ledger } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

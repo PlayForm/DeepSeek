@@ -5,6 +5,7 @@
  * ASCII U+0020 and NOT a control, i.e. exactly Unicode's Zs category minus the ASCII space.
  *
  * @remarks
+ *
  *   U+00A0  no-break space
  *   U+1680  ogham space mark
  *   U+2000-U+200A  en quad, em quad, en space, three-per-em space,

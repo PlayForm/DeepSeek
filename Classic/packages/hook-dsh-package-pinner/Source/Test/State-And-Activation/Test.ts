@@ -1,20 +1,3 @@
-/**
- * @module Test
- *
- * The apply-time wiring of @playform/hook-dsh-package-pinner, covered in one
- * singular test.
- *
- * @remarks
- * The test covers the pinner's apply-time wiring - the real factory service
- * instantiated against the fake ctx, apply returning nothing, the Wire's
- * fs/observed hook, the factory-built state (the Section field and
- * PolicyName included), the byte-identical `activated (pinner, ...)` ledger
- * line + logger prefix, the Attach P1/P2/P5 effects with the in-flight
- * disposal, and the storage-less journal sink.
- *
- * The file runs standalone (`node Target/Test/State-And-Activation/Test.js`)
- * and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
- */
 import assert from "node:assert/strict";
 import {
 	Boot,
@@ -26,6 +9,24 @@ import {
 	MakeCounter,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The apply-time wiring of @playform/hook-dsh-package-pinner, covered in one
+ * singular test.
+ *
+ * @remarks
+ *
+ * The test covers the pinner's apply-time wiring - the real factory service
+ * instantiated against the fake ctx, apply returning nothing, the Wire's
+ * fs/observed hook, the factory-built state (the Section field and
+ * PolicyName included), the byte-identical `activated (pinner, ...)` ledger
+ * line + logger prefix, the Attach P1/P2/P5 effects with the in-flight
+ * disposal, and the storage-less journal sink.
+ *
+ * The file runs standalone (`node Target/Test/State-And-Activation/Test.js`)
+ * and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	const World = Boot();

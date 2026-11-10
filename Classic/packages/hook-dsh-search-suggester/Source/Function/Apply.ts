@@ -1,3 +1,31 @@
+import { dirname } from "node:path";
+
+import type { Context } from "@deepseek-ai/cordis";
+import type { UserMessage } from "@deepseek-ai/dsh-llm";
+import type { AssembleContext, PromptAssembly } from "@deepseek-ai/dsh-system-prompt";
+import type { PostToolDecision, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
+import { Activate } from "@playform/lib-dsh-core";
+import { Adjacent, Families, Home, Resolve, Root as RootOf } from "@playform/lib-dsh-pack";
+
+import type Config from "../Interface/Config.js";
+import type { CallView, Intent, Verdict } from "../Interface/Execution.js";
+import type Projection from "../Interface/Projection.js";
+import type State from "../Interface/State.js";
+import Version from "../Variable/Version.js";
+import Detect from "./Detect.js";
+import DismissTool from "./Dismiss.js";
+import Filter from "./Filter.js";
+import ReadHistory from "./History.js";
+import { Match } from "./Measure.js";
+import BuildNote, { Prepend, Text } from "./Note.js";
+import Load, { Dismissed, Emitted, Followed, Ignored, Row, Save } from "./Persist.js";
+import Projected from "./Projected.js";
+import BuildProjection from "./Projection.js";
+import Register from "./Register.js";
+import Ring, { type RingState } from "./Ring.js";
+import Score, { NoteKey } from "./Score.js";
+import Seed from "./Seed.js";
+
 /**
  * @module Apply
  *
@@ -5,6 +33,7 @@
  * load and the four listeners of the suggester's surfaces.
  *
  * @remarks
+ *
  * The State build is the factory's cell unwrap + the volatile refresh (plan section 4.2). The
  * four listeners:
  *
@@ -88,35 +117,9 @@
  * export default Apply;
  * ```
  */
-import { dirname } from "node:path";
-
-import type { Context } from "@deepseek-ai/cordis";
-import type { UserMessage } from "@deepseek-ai/dsh-llm";
-import type { AssembleContext, PromptAssembly } from "@deepseek-ai/dsh-system-prompt";
-import type { PostToolDecision, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
-import { Activate } from "@playform/lib-dsh-core";
-import { Adjacent, Families, Home, Resolve, Root as RootOf } from "@playform/lib-dsh-pack";
-
-import type Config from "../Interface/Config.js";
-import type { CallView, Intent, Verdict } from "../Interface/Execution.js";
-import type Projection from "../Interface/Projection.js";
-import type State from "../Interface/State.js";
-import Version from "../Variable/Version.js";
-import Detect from "./Detect.js";
-import DismissTool from "./Dismiss.js";
-import Filter from "./Filter.js";
-import ReadHistory from "./History.js";
-import { Match } from "./Measure.js";
-import BuildNote, { Prepend, Text } from "./Note.js";
-import Load, { Dismissed, Emitted, Followed, Ignored, Row, Save } from "./Persist.js";
-import Projected from "./Projected.js";
-import BuildProjection from "./Projection.js";
-import Register from "./Register.js";
-import Ring, { type RingState } from "./Ring.js";
-import Score, { NoteKey } from "./Score.js";
-import Seed from "./Seed.js";
-
-/** The learning-only tools: observed for the follow/ignore rules, never noted. */
+/**
+ * The learning-only tools: observed for the follow/ignore rules, never noted.
+ */
 const Learning = ["write", "edit", "raw-write"];
 
 /** The synthetic family's id (the history source's ledger name). The
@@ -124,7 +127,9 @@ const Learning = ["write", "edit", "raw-write"];
  *  the family id under the plain name. */
 const History = "History";
 
-/** The call view of one judged call (plan section 3.3): the classified text. */
+/**
+ * The call view of one judged call (plan section 3.3): the classified text.
+ */
 const View = (Exec: ToolExecution): CallView => {
 	const Args = (Exec.arguments ?? {}) as Record<string, unknown>;
 	switch (true) {
@@ -208,7 +213,9 @@ const Session = (Context: Context, Exec: ToolExecution): string | undefined => {
 	}
 };
 
-/** The user text of the step: the last user message's text content, lowercased. */
+/**
+ * The user text of the step: the last user message's text content, lowercased.
+ */
 const UserText = (Payload: unknown): string => {
 	const Step = Payload as { messages?: { role?: string; content?: unknown }[] } | undefined;
 	const Message = Array.isArray(Step?.messages)
@@ -230,11 +237,15 @@ const UserText = (Payload: unknown): string => {
 	return "";
 };
 
-/** The enabled pack, filtered to the config's intent kinds (order kept). */
+/**
+ * The enabled pack, filtered to the config's intent kinds (order kept).
+ */
 const Enabled = (State: State, List: Intent[]) =>
 	List.filter((Intent) => State.Intents.includes(Intent.id));
 
-/** The learning verdict for an open note whose window has closed untouched (plan 6.2). */
+/**
+ * The learning verdict for an open note whose window has closed untouched (plan 6.2).
+ */
 const LearnTail = (Context: Context, State: State, Rings: RingState): void => {
 	if (!State.Learn || Rings.pending === undefined) {
 		return;
@@ -248,7 +259,9 @@ const LearnTail = (Context: Context, State: State, Rings: RingState): void => {
 	}
 };
 
-/** The ledger append helper (the factory's Append, with the state bound). */
+/**
+ * The ledger append helper (the factory's Append, with the state bound).
+ */
 const FactoryAppend = (Context: Context, State: State, Message: string): void => {
 	try {
 		State.Factory.Append(State, Message);
@@ -263,7 +276,9 @@ const FactoryAppend = (Context: Context, State: State, Message: string): void =>
 	}
 };
 
-/** Prepend the note to the downstream decision's additionalContexts. */
+/**
+ * Prepend the note to the downstream decision's additionalContexts.
+ */
 const Attach = (Downstream: PostToolDecision, Note: UserMessage): PostToolDecision => {
 	if (Downstream.kind === "block") {
 		return {

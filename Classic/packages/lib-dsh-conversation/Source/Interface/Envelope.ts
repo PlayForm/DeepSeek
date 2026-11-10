@@ -5,6 +5,7 @@
  * Step, At, Kind, Data }`.
  *
  * @remarks
+ *
  * The conversation spine's section 3.1 defines the fields:
  *
  * - `SessionId` is the session id the folded records belong to (the session
@@ -18,24 +19,38 @@
  * - `Data` is the event's own payload.
  */
 export default interface Envelope {
-	/** The session id the folded records belong to (empty when the log carried none). */
+	/**
+	 * The session id the folded records belong to (empty when the log carried none).
+	 */
 	SessionId: string;
 
-	/** The sequence number of the source session-log record. */
+	/**
+	 * The sequence number of the source session-log record.
+	 */
 	Seq: number;
 
-	/** The turn the emission belongs to. */
+	/**
+	 * The turn the emission belongs to.
+	 */
 	Turn: number;
 
-	/** The step the emission belongs to. */
+	/**
+	 * The step the emission belongs to.
+	 */
 	Step: number;
 
-	/** The source record's time in epoch milliseconds (0 when it carried none). */
+	/**
+	 * The source record's time in epoch milliseconds (0 when it carried none).
+	 */
 	At: number;
 
-	/** The event name. */
+	/**
+	 * The event name.
+	 */
 	Kind: string;
 
-	/** The event's own payload. */
+	/**
+	 * The event's own payload.
+	 */
 	Data: unknown;
 }

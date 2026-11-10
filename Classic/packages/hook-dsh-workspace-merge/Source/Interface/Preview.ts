@@ -4,6 +4,7 @@
  * The result of one preview call: the gate evaluation without any write.
  *
  * @remarks
+ *
  * The digest is the SHA-256 of the joined
  * intended contents - the digest a later step can verify against what the
  * batch actually wrote (W4.1 section 6, check 4).

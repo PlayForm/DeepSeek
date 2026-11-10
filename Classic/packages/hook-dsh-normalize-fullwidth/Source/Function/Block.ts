@@ -1,3 +1,8 @@
+import type { ContentBlock } from "@deepseek-ai/dsh-llm";
+import { Block as CoreBlock } from "@playform/lib-dsh-core";
+
+import Replace from "./Replace.js";
+
 /**
  * @module Block
  *
@@ -5,6 +10,7 @@
  * generic block-end normalizer with the transform INJECTED.
  *
  * @remarks
+ *
  * The dispatch structure (TextBlock.text, ReasoningBlock.text + the runtime `thinking` defense,
  * ToolCallBlock.arguments gated by the tool-args flag - three-way since the edit exemption and
  * the per-call raw marker: a block whose `name` is "edit" passes through BY IDENTITY, and a
@@ -17,11 +23,6 @@
  * The behavior is byte-identical to a hand-rolled in-file implementation - the fullwidth smoke
  * is the arbiter.
  */
-import type { ContentBlock } from "@deepseek-ai/dsh-llm";
-import { Block as CoreBlock } from "@playform/lib-dsh-core";
-
-import Replace from "./Replace.js";
-
 export default (
 	Input: ContentBlock,
 	ToolArgs: boolean,

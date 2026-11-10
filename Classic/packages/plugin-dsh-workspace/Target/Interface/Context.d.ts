@@ -1,3 +1,5 @@
+import type { WorkspaceGraph } from "./Graph.js";
+import type Factory from "@playform/plugin-dsh-factory";
 /**
  * @module Context
  *
@@ -5,6 +7,7 @@
  * Context.
  *
  * @remarks
+ *
  * The plugin-development skill, item 12; the live-containers
  * Interface/Factory.ts precedent:
  *
@@ -17,8 +20,6 @@
  * family's distribution law keeps the consumers decoupled through the tools and
  * the events, not through a second service handle.
  */
-import type { WorkspaceGraph } from "./Graph.js";
-import type Factory from "@playform/plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {
         /**

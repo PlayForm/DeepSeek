@@ -1,5 +1,5 @@
 import type { SubprocessHandle } from "@deepseek-ai/dsh-subprocess";
-import type State from "@Interface/State.js";
+import type State from "../../../Interface/State.js";
 export default _default;
 /**
  * @module Collect

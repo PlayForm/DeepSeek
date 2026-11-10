@@ -5,6 +5,7 @@
  * harness's filesystem subsystem carries (subsystems/filesystem.md).
  *
  * @remarks
+ *
  * The PoC rule binds: this package declares its dependencies' shapes in its
  * own Interface/ from the family contract and does NOT import sibling
  * workspace packages; the end-phase wires the real imports of

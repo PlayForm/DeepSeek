@@ -1,3 +1,10 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -8,6 +15,7 @@
  * pattern, written ONCE per package and imported by every test folder.
  *
  * @remarks
+ *
  * Each folder process gets a fresh set, so every folder is standalone-green and the aggregate
  * replays the same seams per folder.
  *
@@ -19,13 +27,6 @@
  * NO CLOCK: the govern gate has no time dependency - decisions are sequenced by the plugin's own
  * monotonic counter (the no-wall-clock rule), so the harness needs no time seam.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 export { Plugin };
 
 /**

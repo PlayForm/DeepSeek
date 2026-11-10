@@ -1,3 +1,31 @@
+import FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+
+import Knobs_ from "../../Target/Function/Knobs.js";
+import { Expand } from "../../Target/Function/Write.js";
+import type Agent from "../../Target/Interface/Agent.js";
+import type Configuration from "../../Target/Interface/Configuration.js";
+import type { Corpus } from "../../Target/Interface/Corpus.js";
+import type Message from "../../Target/Interface/Message.js";
+import type { ContentBlock } from "../../Target/Interface/Message.js";
+import type UsageRecord from "../../Target/Interface/Record.js";
+import type {
+	FsEditOutcome,
+	FsEditRequest,
+	FsInfo,
+	FsSlice,
+	FsTarget,
+	FsWriteIntent,
+	FsWriteOutcome,
+	LlmSlice,
+	LoggerSlice,
+	SkillsSlice,
+	StreamFrame,
+	StreamRequest,
+} from "../../Target/Interface/Services.js";
+import type { LoadedSkill, SkillRow } from "../../Target/Interface/Skill.js";
+
 /**
  * @module Harness
  *
@@ -5,6 +33,7 @@
  * llm, logger, workingDirectory) and the counter every folder imports.
  *
  * @remarks
+ *
  * WHY THERE IS NO SERVICE HERE: `Source/Library.ts` is written by a parallel
  * lane, and every folder in this suite asserts a LEAF, so the harness stops at
  * the seams that service will be handed. The sibling package's harness
@@ -36,39 +65,15 @@
  * the plugin's own files and are written with `node:fs`, so their folders assert
  * against the temp home the way the live plugin would.
  */
-import FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-
-import Knobs_ from "../../Target/Function/Knobs.js";
-import { Expand } from "../../Target/Function/Write.js";
-import type Agent from "../../Target/Interface/Agent.js";
-import type Configuration from "../../Target/Interface/Configuration.js";
-import type { Corpus } from "../../Target/Interface/Corpus.js";
-import type Message from "../../Target/Interface/Message.js";
-import type { ContentBlock } from "../../Target/Interface/Message.js";
-import type UsageRecord from "../../Target/Interface/Record.js";
-import type {
-	FsEditOutcome,
-	FsEditRequest,
-	FsInfo,
-	FsSlice,
-	FsTarget,
-	FsWriteIntent,
-	FsWriteOutcome,
-	LlmSlice,
-	LoggerSlice,
-	SkillsSlice,
-	StreamFrame,
-	StreamRequest,
-} from "../../Target/Interface/Services.js";
-import type { LoadedSkill, SkillRow } from "../../Target/Interface/Skill.js";
-
-/** The fresh temp home: every `~/.dsh/...` path resolves inside it. */
+/**
+ * The fresh temp home: every `~/.dsh/...` path resolves inside it.
+ */
 export const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "skill-learn-smoke-"));
 process.env["HOME"] = Home;
 
-/** The per-folder counter. */
+/**
+ * The per-folder counter.
+ */
 export type Counter = { N: number; F: number };
 
 export const MakeCounter = (): Counter => ({ N: 0, F: 0 });
@@ -89,7 +94,9 @@ export const Check = (Count: Counter, Label: string, Assertions: () => void): vo
 	}
 };
 
-/** The async variant of Check, for folders whose assertions await. */
+/**
+ * The async variant of Check, for folders whose assertions await.
+ */
 export const CheckAsync = async (
 	Count: Counter,
 	Label: string,
@@ -128,20 +135,28 @@ export const Finish = (Count: Counter, Name: string): number => {
 	return Count.N;
 };
 
-/** Flush a detached promise chain (the usage-store load and the write chain). */
+/**
+ * Flush a detached promise chain (the usage-store load and the write chain).
+ */
 export const Settle = async (): Promise<void> => {
 	for (let Index = 0; Index < 4; Index++) {
 		await new Promise<void>((Resolve) => setImmediate(Resolve));
 	}
 };
 
-/** The absolute spelling of a path: a relative one is taken from `<Home>/.dsh`. */
+/**
+ * The absolute spelling of a path: a relative one is taken from `<Home>/.dsh`.
+ */
 const Absolute = (Given: string): string => (Path.isAbsolute(Given) ? Given : Path.join(Home, ".dsh", Given));
 
-/** Whether a real file exists under the temp home (the bookkeeping assertions). */
+/**
+ * Whether a real file exists under the temp home (the bookkeeping assertions).
+ */
 export const Exists = (Given: string): boolean => FileSystem.existsSync(Absolute(Given));
 
-/** Read a real file under the temp home (the bookkeeping assertions). */
+/**
+ * Read a real file under the temp home (the bookkeeping assertions).
+ */
 export const Read = (Given: string): string => FileSystem.readFileSync(Absolute(Given), "utf8");
 
 /**
@@ -152,7 +167,9 @@ export const Read = (Given: string): string => FileSystem.readFileSync(Absolute(
  */
 export const Knobs = (Overrides: Record<string, unknown> = {}): Configuration => Knobs_(Overrides);
 
-/** The six state paths of one scenario, so no two checks share a ledger or a store. */
+/**
+ * The six state paths of one scenario, so no two checks share a ledger or a store.
+ */
 export interface StatePaths {
 	readonly storagePath: string;
 	readonly statePath: string;
@@ -162,7 +179,9 @@ export interface StatePaths {
 	readonly reportsRoot: string;
 }
 
-/** A fresh state root under the temp home, named by the scenario's tag. */
+/**
+ * A fresh state root under the temp home, named by the scenario's tag.
+ */
 export const State = (Tag: string): StatePaths => {
 	const Root = Path.join(Home, ".dsh", "skill-learn", Tag);
 	return {
@@ -175,64 +194,102 @@ export const State = (Tag: string): StatePaths => {
 	};
 };
 
-/** One recorded filesystem call: the method, the path, and every intent it carried. */
+/**
+ * One recorded filesystem call: the method, the path, and every intent it carried.
+ */
 export interface FsCall {
 	readonly method: "resolve" | "stat" | "readText" | "listDir" | "writeText" | "editText" | "contains";
 	readonly path: string;
 
-	/** The intent kind a write carried, `edit` for an edit, and `""` for a read. */
+	/**
+	 * The intent kind a write carried, `edit` for an edit, and `""` for a read.
+	 */
 	readonly intent: string;
 
-	/** The version a guarded write or an edit carried, or null. */
+	/**
+	 * The version a guarded write or an edit carried, or null.
+	 */
 	readonly version: string | null;
 
-	/** The edit's `replaceAll`, or null for every other call. */
+	/**
+	 * The edit's `replaceAll`, or null for every other call.
+	 */
 	readonly replaceAll: boolean | null;
 
-	/** The edit's anchor, or null for every other call. */
+	/**
+	 * The edit's anchor, or null for every other call.
+	 */
 	readonly oldString: string | null;
 }
 
-/** The programmable parts of the fake filesystem. */
+/**
+ * The programmable parts of the fake filesystem.
+ */
 export interface FakeFsOptions {
-	/** The files the tree starts with, keyed by absolute path. */
+	/**
+	 * The files the tree starts with, keyed by absolute path.
+	 */
 	readonly files?: Record<string, string>;
 
-	/** Bump every file's version right after a `stat` returns: the concurrent-writer shape. */
+	/**
+	 * Bump every file's version right after a `stat` returns: the concurrent-writer shape.
+	 */
 	readonly bumpAfterStat?: boolean;
 
-	/** The code the NEXT `writeText` throws, for the failed-write arm. */
+	/**
+	 * The code the NEXT `writeText` throws, for the failed-write arm.
+	 */
 	readonly failWrite?: string;
 
-	/** The code the NEXT `editText` throws, for the failed-edit arm. */
+	/**
+	 * The code the NEXT `editText` throws, for the failed-edit arm.
+	 */
 	readonly failEdit?: string;
 }
 
-/** The fake filesystem: the harness seam, its recorded calls, and the setup probes. */
+/**
+ * The fake filesystem: the harness seam, its recorded calls, and the setup probes.
+ */
 export interface FakeFs extends FsSlice {
-	/** Every call recorded so far, in order. */
+	/**
+	 * Every call recorded so far, in order.
+	 */
 	readonly Calls: FsCall[];
 
-	/** Put a file in the tree WITHOUT recording a call: scenario setup is not behaviour. */
+	/**
+	 * Put a file in the tree WITHOUT recording a call: scenario setup is not behaviour.
+	 */
 	Put(Path_: string, Text_: string): void;
 
-	/** A file's text, or null when it is absent. */
+	/**
+	 * A file's text, or null when it is absent.
+	 */
 	Text(Path_: string): string | null;
 
-	/** A file's version, or null when it is absent. */
+	/**
+	 * A file's version, or null when it is absent.
+	 */
 	Version(Path_: string): string | null;
 
-	/** The recorded calls of one method. */
+	/**
+	 * The recorded calls of one method.
+	 */
 	Of(Method: FsCall["method"]): readonly FsCall[];
 
-	/** Forget the recorded calls, so a probe after the setup sees only the behaviour. */
+	/**
+	 * Forget the recorded calls, so a probe after the setup sees only the behaviour.
+	 */
 	Clear(): void;
 }
 
-/** A harness failure carrying the typed code the fence reports. */
+/**
+ * A harness failure carrying the typed code the fence reports.
+ */
 const Fail = (Code: string): Error => Object.assign(new Error(Code), { code: Code });
 
-/** One direct child of a listed directory, as the fake reports it. */
+/**
+ * One direct child of a listed directory, as the fake reports it.
+ */
 interface FakeEntry {
 	readonly name: string;
 	readonly type: "file" | "directory" | "other";
@@ -411,21 +468,33 @@ export const FakeFs = (Options: FakeFsOptions = {}): FakeFs => {
 	return Fs_;
 };
 
-/** The programmable parts of the fake catalog. */
+/**
+ * The programmable parts of the fake catalog.
+ */
 export interface FakeSkillsOptions {
-	/** The rows `list` returns, verbatim. */
+	/**
+	 * The rows `list` returns, verbatim.
+	 */
 	readonly rows?: readonly SkillRow[];
 
-	/** The skills `get` resolves, keyed by name; the body is the loaded content. */
+	/**
+	 * The skills `get` resolves, keyed by name; the body is the loaded content.
+	 */
 	readonly skills?: Record<string, string>;
 }
 
-/** The fake catalog: the rows, the loaded bodies, and a call log. */
+/**
+ * The fake catalog: the rows, the loaded bodies, and a call log.
+ */
 export interface FakeSkills extends SkillsSlice {
-	/** One entry per call: `list`, `get:<name>`, or `invalidateCache`. */
+	/**
+	 * One entry per call: `list`, `get:<name>`, or `invalidateCache`.
+	 */
 	readonly Calls: string[];
 
-	/** Put a loaded skill in the catalog without recording a call. */
+	/**
+	 * Put a loaded skill in the catalog without recording a call.
+	 */
 	Put(Name: string, Content: string): void;
 }
 
@@ -463,22 +532,34 @@ export const FakeSkills = (Options: FakeSkillsOptions = {}): FakeSkills => {
 	return Skills_;
 };
 
-/** The programmable parts of the fake model. */
+/**
+ * The programmable parts of the fake model.
+ */
 export interface FakeLlmOptions {
-	/** Throw synchronously out of `stream`: the provider-exploded arm. */
+	/**
+	 * Throw synchronously out of `stream`: the provider-exploded arm.
+	 */
 	readonly fail?: boolean;
 
-	/** Yield no frame at all: the empty-reply arm. */
+	/**
+	 * Yield no frame at all: the empty-reply arm.
+	 */
 	readonly silent?: boolean;
 
-	/** Yield exactly these frames, so a folder can prove which arms are read. */
+	/**
+	 * Yield exactly these frames, so a folder can prove which arms are read.
+	 */
 	readonly frames?: readonly StreamFrame[];
 
-	/** One reply per call, in order; the shipped reply answers any call past the list. */
+	/**
+	 * One reply per call, in order; the shipped reply answers any call past the list.
+	 */
 	readonly replies?: readonly string[];
 }
 
-/** The fake model: the reply split across two `text-delta` frames, and every request recorded. */
+/**
+ * The fake model: the reply split across two `text-delta` frames, and every request recorded.
+ */
 export interface FakeLlm extends LlmSlice {
 	readonly Calls: StreamRequest[];
 }
@@ -508,7 +589,9 @@ export const FakeLlm = (Reply: string, Options: FakeLlmOptions = {}): FakeLlm =>
 	};
 };
 
-/** The fake logger: the service's ledger lines, once `Library.ts` is wired. */
+/**
+ * The fake logger: the service's ledger lines, once `Library.ts` is wired.
+ */
 export interface FakeLogger extends LoggerSlice {
 	readonly Lines: string[];
 	readonly Warns: string[];
@@ -541,29 +624,43 @@ export const FakeLogger = (): FakeLogger => {
 	};
 };
 
-/** The recorded ledger lines without the neutral ` (logFile ...)` suffix. */
+/**
+ * The recorded ledger lines without the neutral ` (logFile ...)` suffix.
+ */
 export const Messages = (Logger_: FakeLogger): string[] =>
 	Logger_.Lines.map((Line) => Line.replace(/ \(logFile .*\)$/, ""));
 
-/** The programmable parts of the fake agent. */
+/**
+ * The programmable parts of the fake agent.
+ */
 export interface FakeAgentOptions {
 	readonly id?: string;
 
-	/** The route's provider; omitted together with `model` for the no-route agent. */
+	/**
+	 * The route's provider; omitted together with `model` for the no-route agent.
+	 */
 	readonly provider?: string;
 	readonly model?: string;
 	readonly messages?: readonly Message[];
 
-	/** Throw synchronously out of `runMaintenance`: the busy agent. */
+	/**
+	 * Throw synchronously out of `runMaintenance`: the busy agent.
+	 */
 	readonly busy?: boolean;
 
-	/** Throw out of `deriveMessages`: the disposed session. */
+	/**
+	 * Throw out of `deriveMessages`: the disposed session.
+	 */
 	readonly deriveThrows?: boolean;
 }
 
-/** The fake agent: the derived history, the route, and the maintenance claim. */
+/**
+ * The fake agent: the derived history, the route, and the maintenance claim.
+ */
 export interface FakeAgent extends Agent {
-	/** One entry per claimed maintenance run, so a folder can prove the claim happened. */
+	/**
+	 * One entry per claimed maintenance run, so a folder can prove the claim happened.
+	 */
 	readonly Claims: string[];
 }
 
@@ -602,19 +699,25 @@ export const FakeAgent = (Options: FakeAgentOptions = {}): FakeAgent => {
 	};
 };
 
-/** One message carrying one text block. */
+/**
+ * One message carrying one text block.
+ */
 export const Say = (Role: Message["role"], Text_: string): Message => ({
 	role: Role,
 	content: [{ type: "text", text: Text_ }],
 });
 
-/** One assistant message carrying tool-call blocks, with `null` for a nameless call. */
+/**
+ * One assistant message carrying tool-call blocks, with `null` for a nameless call.
+ */
 export const Call = (Names: readonly (string | null)[]): Message => ({
 	role: "assistant",
 	content: Names.map((Name): ContentBlock => (Name === null ? { type: "tool-call" } : { type: "tool-call", name: Name })),
 });
 
-/** One assistant message carrying a text block AND tool-call blocks. */
+/**
+ * One assistant message carrying a text block AND tool-call blocks.
+ */
 export const Turn = (Text_: string, Names: readonly (string | null)[]): Message => ({
 	role: "assistant",
 	content: [
@@ -623,29 +726,45 @@ export const Turn = (Text_: string, Names: readonly (string | null)[]): Message 
 	],
 });
 
-/** A message built from data, for a block the plugin's own type does not declare. */
+/**
+ * A message built from data, for a block the plugin's own type does not declare.
+ */
 export const Foreign = (Role: string, Blocks: readonly Record<string, unknown>[]): Message =>
 	JSON.parse(JSON.stringify({ role: Role, content: Blocks }));
 
-/** The corpus a judge or a write reads: a literal map, as Interface/Corpus.ts documents. */
+/**
+ * The corpus a judge or a write reads: a literal map, as Interface/Corpus.ts documents.
+ */
 export interface CorpusSeed {
-	/** The current body of each skill, keyed by name. */
+	/**
+	 * The current body of each skill, keyed by name.
+	 */
 	readonly bodies?: Record<string, string>;
 
-	/** The body the confirm prompt carried, keyed by name. */
+	/**
+	 * The body the confirm prompt carried, keyed by name.
+	 */
 	readonly carried?: Record<string, string>;
 
-	/** The support files, keyed by `<name>/<filePath>`. */
+	/**
+	 * The support files, keyed by `<name>/<filePath>`.
+	 */
 	readonly support?: Record<string, string>;
 
-	/** The path the catalog resolves, keyed by name, when it is not the corpus default. */
+	/**
+	 * The path the catalog resolves, keyed by name, when it is not the corpus default.
+	 */
 	readonly resolved?: Record<string, string>;
 
-	/** The usage records, keyed by name. */
+	/**
+	 * The usage records, keyed by name.
+	 */
 	readonly records?: Record<string, UsageRecord>;
 }
 
-/** The judge's read-only view of a corpus held as literal maps. */
+/**
+ * The judge's read-only view of a corpus held as literal maps.
+ */
 export const CorpusView = (Configuration_: Configuration, Seed: CorpusSeed = {}): Corpus => {
 	const Bodies = Seed.bodies ?? {};
 	const Carried = Seed.carried ?? {};
@@ -671,14 +790,18 @@ export const CorpusView = (Configuration_: Configuration, Seed: CorpusSeed = {})
 	};
 };
 
-/** A corpus fixture: one skill directory with a `SKILL.md` in the fake tree. */
+/**
+ * A corpus fixture: one skill directory with a `SKILL.md` in the fake tree.
+ */
 export const Seed = (Fs_: FakeFs, Name: string, Body: string): string => {
 	const Directory = Path.join(Home, ".dsh", "skills", Name);
 	Fs_.Put(Path.join(Directory, "SKILL.md"), Body);
 	return Directory;
 };
 
-/** The parts a fake context assembles. */
+/**
+ * The parts a fake context assembles.
+ */
 export interface MakeOptions {
 	readonly fs?: FakeFsOptions;
 	readonly skills?: FakeSkillsOptions;
@@ -686,7 +809,9 @@ export interface MakeOptions {
 	readonly llm?: FakeLlmOptions;
 }
 
-/** The fake context: the seams a leaf is handed, plus the `get` probe. */
+/**
+ * The fake context: the seams a leaf is handed, plus the `get` probe.
+ */
 export interface FakeContext {
 	readonly fs: FakeFs;
 	readonly skills: FakeSkills;

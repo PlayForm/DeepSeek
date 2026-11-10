@@ -1,23 +1,3 @@
-/**
- * @module Test
- *
- * Tests the host half's two new surfaces against the real built apply and the fake seams.
- *
- * @remarks
- * The plain-field bridge (`panelFamilyBridge.editFull`) applies a plain patch through the config
- * editor's `edit(entry, change)` with the namespace's WHOLE config; a namespace declaring a
- * `role("secret")` field (top-level OR nested) is refused with the byte-exact line and the editor
- * is never called; an unknown namespace, a missing editor, a non-object patch, a disabled package,
- * and an editor rejection each get their documented line.
- *
- * The trace forwarder (`panelFamilyTrace`): `on` forwards a bus event to its listener, `ring` reads
- * the bus newest first, and a composition with no bus exposes no forwarder (the panel's documented
- * static fallback).
- *
- * The browser half: the `./client` entry's `inject`, its forwarding of the Remote namespace's
- * `editFull`/`trace` faces under the panel's names, its inert posture without the namespace, and
- * the built closure-factory bundle executed through a fake `window.__ModuleLoader__`.
- */
 import assert from "node:assert/strict";
 import {
 	BundleSource,
@@ -35,6 +15,27 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * Tests the host half's two new surfaces against the real built apply and the fake seams.
+ *
+ * @remarks
+ *
+ * The plain-field bridge (`panelFamilyBridge.editFull`) applies a plain patch through the config
+ * editor's `edit(entry, change)` with the namespace's WHOLE config; a namespace declaring a
+ * `role("secret")` field (top-level OR nested) is refused with the byte-exact line and the editor
+ * is never called; an unknown namespace, a missing editor, a non-object patch, a disabled package,
+ * and an editor rejection each get their documented line.
+ *
+ * The trace forwarder (`panelFamilyTrace`): `on` forwards a bus event to its listener, `ring` reads
+ * the bus newest first, and a composition with no bus exposes no forwarder (the panel's documented
+ * static fallback).
+ *
+ * The browser half: the `./client` entry's `inject`, its forwarding of the Remote namespace's
+ * `editFull`/`trace` faces under the panel's names, its inert posture without the namespace, and
+ * the built closure-factory bundle executed through a fake `window.__ModuleLoader__`.
+ */
 const NORMALIZE = "hook-dsh-normalize-dash";
 const SECRET = "hook-dsh-secret-test";
 
@@ -84,7 +85,9 @@ const PATCH = {
 	normalizeReasoning: true,
 };
 
-/** A remote namespace face whose every call is captured. */
+/**
+ * A remote namespace face whose every call is captured.
+ */
 const MakeRemote = (): any => {
 	const Calls: any[] = [];
 	const Listeners = new Map<string, Set<(Envelope: any) => void>>();

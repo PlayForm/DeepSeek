@@ -1,3 +1,5 @@
+import type { CompiledIntent, Intent, Match } from "@Interface/Pack.js";
+
 /**
  * @module Detect
  *
@@ -5,6 +7,7 @@
  * + a map lookup).
  *
  * @remarks
+ *
  * Given the compiled rules and a call probe (the tool name + the JSON of its arguments), it
  * returns the winning Match or null - the algebra's identity element is silence.
  *
@@ -18,8 +21,6 @@
  * The regexes arrive precompiled: Function/Apply compiles the synthetic rule set once per judged
  * call (one literal `.` pattern per intent), so the hot path never builds a regex per signal.
  */
-import type { CompiledIntent, Intent, Match } from "@Interface/Pack.js";
-
 /**
  * The plan's bias constant (§3.5): keeps a single weak signal below the gate.
  */

@@ -1,3 +1,5 @@
+import type State from "@Interface/State.js";
+
 /**
  * @module Duplicate
  *
@@ -5,6 +7,7 @@
  * already-processed file state.
  *
  * @remarks
+ *
  * A repeat event for the same path that carries the SAME version within the
  * window on the module's clock announces a file state that was already
  * processed (the version token identifies the file state), so it is dropped
@@ -21,8 +24,6 @@
  * only: the service's manual lines are explicit records and are never
  * coalesced.
  */
-import type State from "@Interface/State.js";
-
 /**
  * The coalescing window in milliseconds: a repeat inside the window that
  * carries the same version is dropped.

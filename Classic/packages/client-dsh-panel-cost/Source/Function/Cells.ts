@@ -1,13 +1,3 @@
-/**
- * @module Cells
- *
- * The six cell renderers the table rows compose, exported as one default object in the
- * `Slots.ts` pattern: Scope, Model, Files, Money, Bar and Alloc.
- *
- * @remarks
- * Every renderer emits exactly the classes and locale keys of the design's sections 2 to 6, reads
- * every field defensively, and never throws on a malformed envelope.
- */
 import { Tooltip } from "@deepseek-ai/dsh-client-ui-primitives";
 import Clock from "@Function/Clock";
 import CountShort from "@Function/CountShort";
@@ -19,6 +9,17 @@ import type { Translate } from "@Interface/Translate";
 import Dash from "@Variable/Dash";
 import { createElement } from "react";
 
+/**
+ * @module Cells
+ *
+ * The six cell renderers the table rows compose, exported as one default object in the
+ * `Slots.ts` pattern: Scope, Model, Files, Money, Bar and Alloc.
+ *
+ * @remarks
+ *
+ * Every renderer emits exactly the classes and locale keys of the design's sections 2 to 6, reads
+ * every field defensively, and never throws on a malformed envelope.
+ */
 const FilePillLimit = 3;
 
 type Marker = {

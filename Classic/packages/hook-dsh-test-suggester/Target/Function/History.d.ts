@@ -1,9 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { Touch } from "@playform/lib-dsh-pack";
+export default _default;
 /**
  * @module History
  *
  * The detection-time read of one session's folded touch history.
  *
  * @remarks
+ *
  * The projection unit's live host state comes through the registry's own
  * face, `stateOf(session, key)` ("reads one unit's live read-only host state
  * without computing unrelated views").
@@ -26,7 +30,4 @@
  * state: it is read only, never mutated (the subsystem guide: "callers must
  * not mutate the borrowed reference").
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { Touch } from "@playform/lib-dsh-pack";
-export default _default;
 declare function _default(Context: Context, Session: unknown): readonly Touch[];

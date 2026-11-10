@@ -8,6 +8,7 @@ import type State from "../Interface/State.js";
  * history.
  *
  * @remarks
+ *
  * Two tiers are written in one step:
  * - the in-memory RING, per agent (`AgentMemory.History`) and the durable
  *   tier's mirror (`State.History`), both newest-first and both bounded by
@@ -38,9 +39,15 @@ export interface Draft {
 }
 export default _default;
 declare function _default(
-/** The plugin state (the mirror, the sequence, the store chain). */
+/**
+ * The plugin state (the mirror, the sequence, the store chain).
+ */
 State: State, 
-/** The agent's memory (its own ring). */
+/**
+ * The agent's memory (its own ring).
+ */
 Memory: AgentMemory, 
-/** The call's draft fields. */
+/**
+ * The call's draft fields.
+ */
 Draft: Draft): Entry;

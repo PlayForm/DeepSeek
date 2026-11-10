@@ -5,16 +5,25 @@
  * PASS-ON-AND-INGESTER.md section 2).
  *
  * @remarks
+ *
  * Declared structurally (the self-contained rule - the decision hook is not imported). The board
  * only needs the outcome; the by/at fields are carried so the ledger line can name the decider.
  */
 export default interface Decision {
-    /** The proposal id the decision names. */
+    /**
+     * The proposal id the decision names.
+     */
     proposal: string;
-    /** The recorded outcome. */
+    /**
+     * The recorded outcome.
+     */
     outcome: "approved" | "denied" | "expired";
-    /** Who decided. */
+    /**
+     * Who decided.
+     */
     by: "user" | "policy";
-    /** When (epoch ms). */
+    /**
+     * When (epoch ms).
+     */
     at: number;
 }

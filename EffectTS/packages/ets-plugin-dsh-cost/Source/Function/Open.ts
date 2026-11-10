@@ -47,6 +47,7 @@ import Ddl, {
  * rung.
  *
  * @remarks
+ *
  * A fresh file is stamped with it inside the transaction that creates its
  * tables, and a file stamped above it belongs to a newer build.
  */

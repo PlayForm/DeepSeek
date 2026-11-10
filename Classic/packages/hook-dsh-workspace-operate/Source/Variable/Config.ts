@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The hook's Schemastery Config schema: one constant built once at load.
  *
  * @remarks
+ *
  * A Variable. Cordis validates the exported schema while the plugin loads
  * and fills every default, so invalid configuration fails LOUD at load, and
  * `apply` receives a validated plain config object. The shape this schema
@@ -24,9 +28,6 @@
  * This is one of the modules in the tree with a runtime import of
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance).
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
-
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-workspace-operate.log";
 const DefaultEnabled = false;
 const DefaultDomain = "workspace_operate";

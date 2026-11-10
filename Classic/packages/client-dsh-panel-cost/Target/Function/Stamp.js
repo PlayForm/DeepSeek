@@ -1,0 +1,1 @@
+import n from"../Variable/Dash.js";const r=t=>String(t).padStart(2,"0");function i(t){if(typeof t!="number"||!Number.isFinite(t))return n;const e=new Date(t);return!0===Number.isNaN(e.getTime())?n:`${r(e.getMonth()+1)}-${r(e.getDate())} ${r(e.getHours())}:${r(e.getMinutes())}`}export{i as default};

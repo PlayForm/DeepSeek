@@ -1,4 +1,4 @@
-import type CheckSet from "@Interface/CheckSet.js";
+import type CheckSet from "./CheckSet.js";
 import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 /**
  * @module Config

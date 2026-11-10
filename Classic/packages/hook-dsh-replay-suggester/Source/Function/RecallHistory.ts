@@ -1,3 +1,8 @@
+import { dirname } from "node:path";
+
+import type Entry from "@Interface/Entry.js";
+import type { ReplayRecord } from "@Interface/History.js";
+
 /**
  * @module RecallHistory
  *
@@ -5,6 +10,7 @@
  * from an agent's ring or the durable mirror.
  *
  * @remarks
+ *
  * This is the reader the completion spec's wave 2c re-spec finally feeds -
  * before the producer (Function/Record) the recall always missed.
  *
@@ -28,11 +34,6 @@
  * `verify`, so the note path, the caveat fallback and the delivery surface
  * are the same for both sources.
  */
-import { dirname } from "node:path";
-
-import type Entry from "@Interface/Entry.js";
-import type { ReplayRecord } from "@Interface/History.js";
-
 /**
  * Whether a prior entry is similar to this call.
  */

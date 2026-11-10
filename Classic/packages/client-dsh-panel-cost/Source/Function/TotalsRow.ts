@@ -1,8 +1,3 @@
-// TotalsRow - the tfoot row: the session label spanning the identity
-// columns with the call count, the files-column spacer, and one cell per
-// remaining resolved column, each built by that column's render. The row
-// reads the same resolved definition as the header and the body, so its
-// cell count cannot drift from theirs.
 import type { TurnsCells } from "@Function/Columns";
 import type CostBuckets from "@Interface/Buckets";
 import type CostSummary from "@Interface/Summary";
@@ -11,6 +6,18 @@ import type CostTokens from "@Interface/Tokens";
 import type { Translate } from "@Interface/Translate";
 import { createElement, type ReactNode } from "react";
 
+/**
+ * @module TotalsRow
+ *
+ * The tfoot row: the session label spanning the identity columns with the call count, the
+ * files-column spacer, and one cell per remaining resolved column, each built by that column's
+ * render.
+ *
+ * @remarks
+ *
+ * The row reads the same resolved definition as the header and the body, so its cell count cannot
+ * drift from theirs.
+ */
 type TotalsRowProps = {
 	Summary: CostSummary;
 	Resolved: ResolvedTable<TurnsCells>;

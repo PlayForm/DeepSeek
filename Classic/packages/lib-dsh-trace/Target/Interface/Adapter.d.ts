@@ -7,13 +7,18 @@ import type Envelope from "./Envelope.js";
  * named event (the returned disposer stops delivery).
  *
  * @remarks
+ *
  * The service (`ctx.trace`, provided by `@playform/plugin-dsh-factory`)
  * implements it; every plugin's `Source/Trace/` adapter consumes it
  * structurally, so no plugin imports another plugin.
  */
 export default interface Adapter {
-    /** Publish one draft; the bus completes the envelope and dispatches it. */
+    /**
+     * Publish one draft; the bus completes the envelope and dispatches it.
+     */
     emit(Draft: Draft): void;
-    /** Subscribe to one event name; the returned disposer unsubscribes. */
+    /**
+     * Subscribe to one event name; the returned disposer unsubscribes.
+     */
     on(Name: string, Listener: (Envelope: Envelope) => void): () => void;
 }

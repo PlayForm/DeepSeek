@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * Exercises the loader contract and the gate decisions through the real service.
- *
- * @remarks
- * Covers the service registration, the cold-mount idle-forever posture, the activation proof, the
- * fail-loud validation, the four independent means-checks, the policy override (and "allow" as
- * never a bypass), the fail-open recovery table with its byte-exact recovery line, the decision
- * ring, and the byte-exact decision lines.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -24,13 +13,29 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount with overrides. */
+/**
+ * @module Test
+ *
+ * Exercises the loader contract and the gate decisions through the real service.
+ *
+ * @remarks
+ *
+ * Covers the service registration, the cold-mount idle-forever posture, the activation proof, the
+ * fail-loud validation, the four independent means-checks, the policy override (and "allow" as
+ * never a bypass), the fail-open recovery table with its byte-exact recovery line, the decision
+ * ring, and the byte-exact decision lines.
+ */
+/**
+ * A standard enabled mount with overrides.
+ */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));
 };
 
-/** Drive one folder's checks. */
+/**
+ * Drive one folder's checks.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

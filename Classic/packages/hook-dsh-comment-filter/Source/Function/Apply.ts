@@ -1,9 +1,18 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+
+import Intent from "./Intent.js";
+import Overpass from "./Overpass.js";
+
 /**
  * @module Apply
  *
  * The plugin entry function, a THIN MODULE WIRE-UP in the factory family's shape.
  *
  * @remarks
+ *
  * It builds the State through `Factory.State` (the cell unwrap, the shared mappings
  * Ledger<-logFile / Enabled<-log and the module's own fields via the setup `fields` map -
  * factory SCHEME.md section 2.10), emits the durable activation proof (the module's own string,
@@ -49,14 +58,6 @@
  * vocabulary arrives through the merged Events declaration, and the agent-step payload through
  * the harness's own event augmentation.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-
-import Intent from "./Intent.js";
-import Overpass from "./Overpass.js";
-
 /**
  * The core arm factory's scope-gate adapter (see the module remarks).
  */

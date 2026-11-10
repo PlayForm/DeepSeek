@@ -1,16 +1,3 @@
-/**
- * @module FileTable
- *
- * The Files view table: one row per file the conversation touched, the ten columns of the
- * research's section 5, the share bar that puts this conversation over the file's lifetime, and
- * the totals row.
- *
- * @remarks
- * A file row expands into the conversations that contributed to that file's cost: the toggle in
- * the File cell fetches the engine's contribution read the first time the row opens and caches the
- * answer per path, so a reopen renders the same rows without a second request. The expansion is
- * the table's own state - the view above it never learns which row is open.
- */
 import { Tooltip } from "@deepseek-ai/dsh-client-ui-primitives";
 import Count from "@Function/Count";
 import { Contributions } from "@Function/Fetch";
@@ -25,6 +12,20 @@ import Dash from "@Variable/Dash";
 import EN_DICTIONARY from "@Variable/Locale-en.json";
 import { createElement, Fragment, useState } from "react";
 
+/**
+ * @module FileTable
+ *
+ * The Files view table: one row per file the conversation touched, the ten columns of the
+ * research's section 5, the share bar that puts this conversation over the file's lifetime, and
+ * the totals row.
+ *
+ * @remarks
+ *
+ * A file row expands into the conversations that contributed to that file's cost: the toggle in
+ * the File cell fetches the engine's contribution read the first time the row opens and caches the
+ * answer per path, so a reopen renders the same rows without a second request. The expansion is
+ * the table's own state - the view above it never learns which row is open.
+ */
 /**
  * The one column definition: the names are the shipped locale keys under `files.column`, in the
  * shipped order, and the width record beside it carries the shipped column widths. A new column is

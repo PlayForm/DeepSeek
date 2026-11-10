@@ -1,3 +1,8 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose } from "@playform/plugin-dsh-factory";
+import { DEFAULT_BLOCKS } from "@Variable/DefaultBlocks.js";
+import { DEFAULT_CHECK_SETS } from "@Variable/DefaultCheckSets.js";
+
 /**
  * @module Config
  *
@@ -5,6 +10,7 @@
  * at load).
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every
  * default, so invalid configuration fails LOUD at load instead of silently
  * falling back per-field, and `apply` receives a validated plain config
@@ -42,11 +48,6 @@
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance -
  * the loader consumes it through the Standard Schema `~standard` interface).
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
-import { DEFAULT_BLOCKS } from "@Variable/DefaultBlocks.js";
-import { DEFAULT_CHECK_SETS } from "@Variable/DefaultCheckSets.js";
-
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-live-containers.log";
 const DefaultEnabled = false;
 const DefaultSectionName = "live-containers";
@@ -124,7 +125,9 @@ const DefaultMonitorCheckTimeoutMs = 120000;
 const DefaultMonitorLinkageAlertVersions = 3;
 const DefaultMonitorDedupWindowMs = 30000;
 
-/** The plugin's Config schema: `shared: false`, every knob volatile. */
+/**
+ * The plugin's Config schema: `shared: false`, every knob volatile.
+ */
 export default Compose(false, {
 	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),

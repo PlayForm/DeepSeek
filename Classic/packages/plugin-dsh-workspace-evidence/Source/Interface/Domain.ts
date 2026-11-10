@@ -5,6 +5,7 @@
  * (Interface/Domain).
  *
  * @remarks
+ *
  * One domain (named config `domain`, default workspace_evidence), TWO tables:
  * `validations` (one record per claim id - the latest validation object) and
  * `meta` (ONE record `__sequence` - the persisted sequence). Puts are

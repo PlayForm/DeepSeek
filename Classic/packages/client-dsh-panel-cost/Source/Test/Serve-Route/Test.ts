@@ -1,12 +1,19 @@
-// Source/Test/Serve-Route/Test.ts - the host half's route registration,
-// exercised through the route the real built plugin apply actually
-// registered on the fake webServer port: the one /api/playform-cost/session
-// path, the handler's 200 JSON answer for a query without a session id (the
-// "session" code, which never opens the ledger), the port-only registration
-// channel, and the silent posture when no webServer is present.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Plugin } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The host half's route registration, exercised through the route the real built
+ * plugin apply actually registered on the fake webServer port.
+ *
+ * @remarks
+ *
+ * The suite proves the one /api/playform-cost/session path, the handler's 200
+ * JSON answer for a query without a session id (the "session" code, which never
+ * opens the ledger), the port-only registration channel, and the silent posture
+ * when no webServer is present.
+ */
 export const runTest = (): number => {
 	const Count = MakeCounter();
 

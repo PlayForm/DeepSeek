@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +9,7 @@
  * (@playform/plugin-dsh-workspace-evidence), EVIDENCE.md.
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` +
  * `export const Config` + `export const inject` +
  * `export default { name, apply, Config, inject }` - the ONLY named exports in
@@ -30,10 +35,6 @@
  * `workspaceEvidence` service is a Service subclass in its own module
  * (Function/Service) and is registered from apply.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "plugin-dsh-workspace-evidence";
 
 // Loader contract (cordis): the exported schema is validated and defaulted

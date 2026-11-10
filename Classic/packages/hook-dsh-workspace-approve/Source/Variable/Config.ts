@@ -1,3 +1,6 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
@@ -5,6 +8,7 @@
  * load).
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every
  * default, so invalid configuration fails LOUD at load, and `apply` receives a
  * validated plain config object. The shape this schema produces is
@@ -32,9 +36,6 @@
  * `@deepseek-ai/schemastery` (the schema must be a real schemastery instance -
  * the loader consumes it through the Standard Schema `~standard` interface).
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
-
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-workspace-approve.log";
 const DefaultEnabled = false;
 const DefaultDomain = "workspace_approve";

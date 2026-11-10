@@ -1,17 +1,3 @@
-/**
- * @module Test
- *
- * The observers and the waterfalls of the batch-edit plugin, covered in one
- * singular test.
- *
- * @remarks
- * The test covers the fs/observed stale-halt observer (synchronous cell
- * flipper with the govern marker skip and the silence invariant), the
- * advisory bash intercept and the pre-step pass-through waterfalls (next()
- * first, the downstream decision returned unchanged), the deadline overflow
- * with the jobs hub and its typed jobId handle (and the halted degradation
- * without one), and the presentation purity.
- */
 import assert from "node:assert/strict";
 import * as Present from "../../../Target/Function/Present.js";
 import {
@@ -26,6 +12,21 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The observers and the waterfalls of the batch-edit plugin, covered in one
+ * singular test.
+ *
+ * @remarks
+ *
+ * The test covers the fs/observed stale-halt observer (synchronous cell
+ * flipper with the govern marker skip and the silence invariant), the
+ * advisory bash intercept and the pre-step pass-through waterfalls (next()
+ * first, the downstream decision returned unchanged), the deadline overflow
+ * with the jobs hub and its typed jobId handle (and the halted degradation
+ * without one), and the presentation purity.
+ */
 /** A standard enabled mount over the given file fixture. The D6 policy gate
  *  is opened explicitly (`policy.write: "auto"`): these scenarios exercise
  *  the commit/deadline paths, while the gate's shipped `approve` refusal is
@@ -43,7 +44,9 @@ const Setup = (
 	);
 };
 
-/** Open a machine holding the given files with one replace op. */
+/**
+ * Open a machine holding the given files with one replace op.
+ */
 const Open = async (Run: any, With: string, Search = "one"): Promise<any> =>
 	Run.Tool.execute(
 		{

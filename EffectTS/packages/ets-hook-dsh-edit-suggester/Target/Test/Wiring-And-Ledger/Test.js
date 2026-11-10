@@ -1,1 +1,128 @@
-import e from"node:assert/strict";import{AgentOf as l,Check as o,CheckAsync as y,Commit as i,Durable as g,Exports as r,Finish as E,FirstLine as p,Ledger as f,LedgerLines as d,LedgerWith as C,Make as m,MakeCounter as S,Plugin as n,Post as u,rm as q,Setup as h,Validate as s}from"../Harness.js";const x=async()=>{const a=S();{o(a,"W1: the default object carries name/apply/Config/inject",()=>{e.equal(n.name,"hook-dsh-edit-suggester"),e.equal(n.apply,r.apply),e.equal(n.Config,r.Config),e.deepEqual(n.inject,["pluginFactory"]),e.equal(r.name,"hook-dsh-edit-suggester"),e.equal(typeof n.apply,"function"),e.equal(typeof n.Config,"function")}),q();const t=m(s({logFile:f,enabled:!0}));o(a,"W1: apply returns NOTHING (a returned value kills delivery)",()=>{e.equal(t.Returned,void 0)})}{const t=h();o(a,"W2: the two listeners and the projection injection register on the plugin context only",()=>{e.deepEqual(Object.keys(t.CtxListeners),["loader/volatile-update","tools/post-execute","agent/pre-step"]),e.deepEqual(t.Injected,[["sessionProjections"]]),e.equal(t.Projections.Units.has("editHistory"),!0),e.deepEqual(t.RootNames,[]),e.notEqual(t.Root,t.Context),e.equal(Object.getPrototypeOf(t.Root),Object.prototype)}),o(a,"W2: the activation line is byte-exact in the logger form",()=>{e.deepEqual(t.Lines,["hook-dsh-edit-suggester: activated (bundle 0.2.1, history, threshold 0.75)"]),e.deepEqual(t.Effects,[])}),o(a,"W2: the activation line is byte-exact in the durable form",()=>{e.equal(d().length,1),e.match(p(),g("activated (bundle 0.2.1, history, threshold 0.75)")),e.deepEqual(C("activated (bundle 0.2.1, history, threshold 0.75)").length,1)})}{q();const t=m(s({logFile:f,enabled:!1}));o(a,"W3: the disabled line is byte-exact in both forms",()=>{e.deepEqual(t.Lines,["hook-dsh-edit-suggester: disabled (enabled=false)"]),e.equal(d().length,1),e.match(p(),g("disabled (enabled=false)"))}),await y(a,"W3: a disabled mount passes every call through with zero new lines",async()=>{const c={kind:"allow",additionalContexts:[]},b=await u(t,{name:"edit",arguments:{file_path:"package.json"},agent:l("a")},c);e.equal(b,c),e.deepEqual(t.Lines,["hook-dsh-edit-suggester: disabled (enabled=false)"]),e.equal(d().length,1)})}{o(a,"W4: a string threshold fails loud at load",()=>{e.throws(()=>s({threshold:"high"}),/expected number but got high/)}),o(a,"W4: a string maxNoteChars fails loud at load",()=>{e.throws(()=>s({maxNoteChars:"long"}),/expected number but got long/)});const t=h();o(a,"W4: the schema defaults land on the built State",()=>{e.equal(t.State.On,!0),e.equal(t.State.Threshold,.75),e.deepEqual(t.State.Tools,["write","edit","raw-write"]),e.equal(t.State.MaxCompanions,7),e.equal(t.State.MaxNoteChars,1200),e.equal(t.State.CooldownCalls,6),e.equal(t.State.MaxNotesPerTurn,3),e.deepEqual(t.State.Exclude,["node_modules","Target",".git","dist"]),e.equal(t.State.Pack.length,0),e.equal(t.State.History,void 0),e.equal(t.State.Factory,t.Context.pluginFactory)})}{const t=h();await t.Ready,i(t,"a","Source/Variable/Config.ts"),i(t,"a","README.md"),i(t,"a","SCHEME.md"),await u(t,{name:"edit",arguments:{file_path:"Source/Variable/Config.ts"},agent:l("a")}),await u(t,{name:"edit",arguments:{file_path:"/repo/src/a.ts"},agent:l("a")}),o(a,"W5: zero ctx.fs calls across emit and abstain",()=>{e.equal(t.Fs.reads,0),e.equal(t.Fs.writes,0)}),o(a,"W5: no logger warnings (the fail-open path never fired)",()=>{e.deepEqual(t.Warns,[])})}return E(a,"Wiring-And-Ledger")},w=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(w){const a=await x();console.log(`${a} PASS - Wiring-And-Ledger`)}export{x as runTest};
+import assert from "node:assert/strict";
+import {
+  AgentOf,
+  Check,
+  CheckAsync,
+  Commit,
+  Durable,
+  Exports,
+  Finish,
+  FirstLine,
+  Ledger,
+  LedgerLines,
+  LedgerWith,
+  Make,
+  MakeCounter,
+  Plugin,
+  Post,
+  rm,
+  Setup,
+  Validate
+} from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    Check(Count, "W1: the default object carries name/apply/Config/inject", () => {
+      assert.equal(Plugin.name, "hook-dsh-edit-suggester");
+      assert.equal(Plugin.apply, Exports.apply);
+      assert.equal(Plugin.Config, Exports.Config);
+      assert.deepEqual(Plugin.inject, ["pluginFactory"]);
+      assert.equal(Exports.name, "hook-dsh-edit-suggester");
+      assert.equal(typeof Plugin.apply, "function");
+      assert.equal(typeof Plugin.Config, "function");
+    });
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: true }));
+    Check(Count, "W1: apply returns NOTHING (a returned value kills delivery)", () => {
+      assert.equal(Run.Returned, void 0);
+    });
+  }
+  {
+    const Run = Setup();
+    Check(Count, "W2: the two listeners and the projection injection register on the plugin context only", () => {
+      assert.deepEqual(Object.keys(Run.CtxListeners), [
+        "loader/volatile-update",
+        "tools/post-execute",
+        "agent/pre-step"
+      ]);
+      assert.deepEqual(Run.Injected, [["sessionProjections"]]);
+      assert.equal(Run.Projections.Units.has("editHistory"), true);
+      assert.deepEqual(Run.RootNames, []);
+      assert.notEqual(Run.Root, Run.Context);
+      assert.equal(Object.getPrototypeOf(Run.Root), Object.prototype);
+    });
+    Check(Count, "W2: the activation line is byte-exact in the logger form", () => {
+      assert.deepEqual(Run.Lines, [`hook-dsh-edit-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75)`]);
+      assert.deepEqual(Run.Effects, []);
+    });
+    Check(Count, "W2: the activation line is byte-exact in the durable form", () => {
+      assert.equal(LedgerLines().length, 1);
+      assert.match(FirstLine(), Durable(`activated (bundle ${"0.2.1"}, history, threshold 0.75)`));
+      assert.deepEqual(LedgerWith(`activated (bundle ${"0.2.1"}, history, threshold 0.75)`).length, 1);
+    });
+  }
+  {
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }));
+    Check(Count, "W3: the disabled line is byte-exact in both forms", () => {
+      assert.deepEqual(Run.Lines, ["hook-dsh-edit-suggester: disabled (enabled=false)"]);
+      assert.equal(LedgerLines().length, 1);
+      assert.match(FirstLine(), Durable("disabled (enabled=false)"));
+    });
+    await CheckAsync(Count, "W3: a disabled mount passes every call through with zero new lines", async () => {
+      const Decision = { kind: "allow", additionalContexts: [] };
+      const Out = await Post(Run, { name: "edit", arguments: { file_path: "package.json" }, agent: AgentOf("a") }, Decision);
+      assert.equal(Out, Decision);
+      assert.deepEqual(Run.Lines, ["hook-dsh-edit-suggester: disabled (enabled=false)"]);
+      assert.equal(LedgerLines().length, 1);
+    });
+  }
+  {
+    Check(Count, "W4: a string threshold fails loud at load", () => {
+      assert.throws(() => Validate({ threshold: "high" }), /expected number but got high/);
+    });
+    Check(Count, "W4: a string maxNoteChars fails loud at load", () => {
+      assert.throws(() => Validate({ maxNoteChars: "long" }), /expected number but got long/);
+    });
+    const Run = Setup();
+    Check(Count, "W4: the schema defaults land on the built State", () => {
+      assert.equal(Run.State.On, true);
+      assert.equal(Run.State.Threshold, 0.75);
+      assert.deepEqual(Run.State.Tools, ["write", "edit", "raw-write"]);
+      assert.equal(Run.State.MaxCompanions, 7);
+      assert.equal(Run.State.MaxNoteChars, 1200);
+      assert.equal(Run.State.CooldownCalls, 6);
+      assert.equal(Run.State.MaxNotesPerTurn, 3);
+      assert.deepEqual(Run.State.Exclude, ["node_modules", "Target", ".git", "dist"]);
+      assert.equal(Run.State.Pack.length, 0);
+      assert.equal(Run.State.History, void 0);
+      assert.equal(Run.State.Factory, Run.Context.pluginFactory);
+    });
+  }
+  {
+    const Run = Setup();
+    await Run.Ready;
+    Commit(Run, "a", "Source/Variable/Config.ts");
+    Commit(Run, "a", "README.md");
+    Commit(Run, "a", "SCHEME.md");
+    await Post(Run, { name: "edit", arguments: { file_path: "Source/Variable/Config.ts" }, agent: AgentOf("a") });
+    await Post(Run, { name: "edit", arguments: { file_path: "/repo/src/a.ts" }, agent: AgentOf("a") });
+    Check(Count, "W5: zero ctx.fs calls across emit and abstain", () => {
+      assert.equal(Run.Fs.reads, 0);
+      assert.equal(Run.Fs.writes, 0);
+    });
+    Check(Count, "W5: no logger warnings (the fail-open path never fired)", () => {
+      assert.deepEqual(Run.Warns, []);
+    });
+  }
+  return Finish(Count, "Wiring-And-Ledger");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Wiring-And-Ledger`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

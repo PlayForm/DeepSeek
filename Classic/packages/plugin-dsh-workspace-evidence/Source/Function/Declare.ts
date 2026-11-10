@@ -1,9 +1,14 @@
+import type State from "@Interface/State.js";
+import type { TruthKind } from "@Interface/TruthKind.js";
+import type Validation from "@Interface/Validation.js";
+
 /**
  * @module Declare
  *
  * The validation recorder: the service's validate(), one claim to one object.
  *
  * @remarks
+ *
  * One claim becomes one validation object with its truth kind, its honest
  * verdict (the service records what the caller asserted - it never invents a
  * verdict), its declared dependencies, and a fresh status. A revalidation of
@@ -14,10 +19,6 @@
  * sequence drop first (the observe ring's cap pattern). The sequence is the
  * service's own monotonic counter - never a wall clock.
  */
-import type State from "@Interface/State.js";
-import type { TruthKind } from "@Interface/TruthKind.js";
-import type Validation from "@Interface/Validation.js";
-
 /**
  * The four kinds of truth (the Representation-First taxonomy).
  */

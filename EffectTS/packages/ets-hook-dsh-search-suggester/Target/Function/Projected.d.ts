@@ -1,3 +1,5 @@
+import type { Intent } from "../Interface/Execution.js";
+import type Projection from "../Interface/Projection.js";
 /**
  * @module Projected
  *
@@ -6,6 +8,7 @@
  * re-spec: the section carries the projection, not the hand list).
  *
  * @remarks
+ *
  * The rows are the intent's candidates measured against the graph
  * (Function/Measure): a candidate the graph cannot prove is not in the
  * index, a literal target contributes the concrete node path(s) it resolves
@@ -19,8 +22,6 @@
  * behavior). The count is rendered only when a row aggregates several
  * matched paths (the family-row convention of Function/Note).
  */
-import type { Intent } from "../Interface/Execution.js";
-import type Projection from "../Interface/Projection.js";
 /**
  * One projected index row.
  */

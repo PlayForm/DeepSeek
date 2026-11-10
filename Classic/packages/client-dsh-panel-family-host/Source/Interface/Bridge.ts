@@ -6,6 +6,7 @@
  * write surface.
  *
  * @remarks
+ *
  * The panel resolves a service under the name `panelFamilyBridge` first
  * (Classic/packages/client-dsh-panel-family/Source/Function/Bridge.ts) and calls
  * `editFull(namespace, patch)` with the namespace's WHOLE resolved config; the host applies it

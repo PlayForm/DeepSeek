@@ -1,3 +1,7 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type HostTrace from "@Interface/Trace.js";
+import type { PanelEnvelope } from "@Interface/Trace.js";
+
 /**
  * @module Trace
  *
@@ -5,6 +9,7 @@
  * as the package's own `HostTrace` surface.
  *
  * @remarks
+ *
  * The function resolves `ctx.get("trace")` and validates it with `IsBus`: a candidate is a bus when
  * it is a non-null object with an `on` function. Anything else yields `undefined`, so the panel
  * host degrades to no trace rather than throwing.
@@ -14,10 +19,6 @@
  * a function and returns an empty `PanelEnvelope[]` otherwise, so a bus without a ring buffer is
  * not a failure.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type HostTrace from "@Interface/Trace.js";
-import type { PanelEnvelope } from "@Interface/Trace.js";
-
 type Bus = {
 	on(kind: string, listener: (envelope: PanelEnvelope) => void): () => void;
 	ring?(limit?: number): PanelEnvelope[];

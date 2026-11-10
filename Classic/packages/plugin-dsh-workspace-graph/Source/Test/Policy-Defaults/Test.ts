@@ -1,19 +1,3 @@
-/**
- * @module Test
- *
- * The policy block (D6) on the workspace graph.
- *
- * @remarks
- * The shared block's defaults in the schema and on the built State, the per-key
- * override landing on `State.Allow`, the proof that the package has NO gated
- * action (every action class it uses decides "auto" and the mount writes no
- * policy/held line), and a representative index action still proceeding under the
- * shipped defaults while writing no file.
- *
- * The graph is a reader/indexer: no gate, no Decide call in the plugin itself.
- * The block is the shared posture, and this folder proves it is real config, not
- * dead text.
- */
 import assert from "node:assert/strict";
 
 import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";
@@ -27,7 +11,26 @@ import {
 	MakeGraph,
 } from "../Harness.js";
 
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * @module Test
+ *
+ * The policy block (D6) on the workspace graph.
+ *
+ * @remarks
+ *
+ * The shared block's defaults in the schema and on the built State, the per-key
+ * override landing on `State.Allow`, the proof that the package has NO gated
+ * action (every action class it uses decides "auto" and the mount writes no
+ * policy/held line), and a representative index action still proceeding under the
+ * shipped defaults while writing no file.
+ *
+ * The graph is a reader/indexer: no gate, no Decide call in the plugin itself.
+ * The block is the shared posture, and this folder proves it is real config, not
+ * dead text.
+ */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",

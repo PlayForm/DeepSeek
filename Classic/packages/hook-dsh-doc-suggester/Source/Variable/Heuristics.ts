@@ -4,6 +4,7 @@
  * Lists the six PICKABLE heuristic names of the D8 decision model in canonical order.
  *
  * @remarks
+ *
  * The six PICKABLE heuristic names of the D8 decision model (completion spec 03-SUGGESTERS
  * section 2), in the canonical order the ledger line and the decision record print them:
  *

@@ -1,3 +1,10 @@
+import { defineTool } from "@deepseek-ai/dsh-tools";
+import * as Board from "@Function/Board.js";
+import type { Log } from "@Function/Render.js";
+import * as Suggester from "@Function/Suggester.js";
+import type State from "@Interface/State.js";
+import { Entry } from "@Variable/Catalog.js";
+
 /**
  * @module Set
  *
@@ -5,6 +12,7 @@
  * Requirements/03 section 2 + the wave-2 verbs).
  *
  * @remarks
+ *
  * Mutates per-agent state ONLY - never the config file. The wave-2 verbs
  * (I6 section 5):
  *
@@ -19,13 +27,6 @@
  * Unknown targets log and no-op. Any other action while a suggestion is open
  * also dismisses it (the model moved on - I6 5.2).
  */
-import { defineTool } from "@deepseek-ai/dsh-tools";
-import * as Board from "@Function/Board.js";
-import type { Log } from "@Function/Render.js";
-import * as Suggester from "@Function/Suggester.js";
-import type State from "@Interface/State.js";
-import { Entry } from "@Variable/Catalog.js";
-
 /** Build the tool definition (the CCR Retrieve.ts idiom: this file only
  * BUILDS it; the registration call lives in Apply). */
 export default (Agent: State, Append: Log) => {

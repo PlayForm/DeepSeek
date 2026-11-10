@@ -1,3 +1,5 @@
+import type Operation from "../Interface/Operation.js";
+
 /**
  * @module Operate
  *
@@ -5,12 +7,11 @@
  * target, per kind.
  *
  * @remarks
+ *
  * Declarative: the pass-on computes find/replace but never executes them.
  * Returns null when the kind makes no change for this target (the target is
  * then skipped, with the reason).
  */
-import type Operation from "../Interface/Operation.js";
-
 export default (
 	Kind: string,
 	_Path: string,

@@ -5,6 +5,7 @@
  * as a dependency-free factory leaf.
  *
  * @remarks
+ *
  * The module's `Function/Command` is a thin delegate that re-exports this handler and its
  * service types, while the module keeps its identity through `State.Module` (every composed
  * line is prefixed with it - the core never hardcodes a module name) and its settings/editor
@@ -33,7 +34,9 @@
  * and exemption list are the family defaults, identical in every stream flavor; the
  * per-apply cells win when present.
  */
-/** The schema-default scopes (the fallback for a hand-built config). */
+/**
+ * The schema-default scopes (the fallback for a hand-built config).
+ */
 const DefaultScopes = {
 	conversation: true,
 	reasoning: true,
@@ -43,7 +46,9 @@ const DefaultScopes = {
 	batch: false,
 };
 
-/** The schema-default exemption list (the fallback for a hand-built config). */
+/**
+ * The schema-default exemption list (the fallback for a hand-built config).
+ */
 const DefaultExempt = [
 	"read",
 	"edit",
@@ -65,7 +70,9 @@ type Scopes = {
 	batch?: boolean | undefined;
 };
 
-/** The per-apply state cells the handler reads. */
+/**
+ * The per-apply state cells the handler reads.
+ */
 type State = {
 	Module: string;
 	Scopes?: Scopes | undefined;
@@ -73,10 +80,14 @@ type State = {
 	Overpass?: boolean | undefined;
 };
 
-/** The structural CommandInvocation: only the fields the handler reads. */
+/**
+ * The structural CommandInvocation: only the fields the handler reads.
+ */
 type Invocation = { rawInput?: unknown; signal?: unknown };
 
-/** The structural `commands` service surface the Apply registration uses. */
+/**
+ * The structural `commands` service surface the Apply registration uses.
+ */
 export type CommandsService = {
 	register: (Definition: {
 		name: string;
@@ -85,10 +96,14 @@ export type CommandsService = {
 	}) => unknown;
 };
 
-/** The structural CommandResult (success/error with text). */
+/**
+ * The structural CommandResult (success/error with text).
+ */
 export type CommandResult = { kind: "success"; text?: string } | { kind: "error"; text: string };
 
-/** Structural views of the optional config-writing services. */
+/**
+ * Structural views of the optional config-writing services.
+ */
 export type SettingsService = {
 	describe?: () => unknown;
 	update?: (ns: string, patch: object) => Promise<void> | void;
@@ -98,7 +113,9 @@ export type ConfigEditorService = {
 	edit?: (Entry: unknown, Change: (Current: object) => object) => Promise<void> | void;
 };
 
-/** The usage line (shared by every malformed invocation). */
+/**
+ * The usage line (shared by every malformed invocation).
+ */
 const Usage = (Module: string): string =>
 	`${Module} normalize-overpass usage: "files <path...>" | "batch" | "results on|off" | "scopes"`;
 

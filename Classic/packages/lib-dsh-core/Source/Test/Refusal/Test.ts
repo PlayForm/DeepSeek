@@ -1,9 +1,15 @@
+import assert from "node:assert/strict";
+
+import { Refusal, Section } from "../../../Target/Library.js";
+import { Check, Finish, MakeCounter } from "../Harness.js";
+
 /**
  * @module Test
  *
  * One singular test of the shared refusal guard.
  *
  * @remarks
+ *
  * The test covers the sections-only rule: only the declared dependency
  * sections may differ; a non-dependency section change is refused with the
  * byte-identical refusal line.
@@ -12,11 +18,6 @@
  * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit smoke
  * of `@playform/lib-dsh-core`: the REAL built entry only.
  */
-import assert from "node:assert/strict";
-
-import { Refusal, Section } from "../../../Target/Library.js";
-import { Check, Finish, MakeCounter } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

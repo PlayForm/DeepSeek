@@ -1,3 +1,5 @@
+import type { Role } from "@Interface/Policy.js";
+
 /**
  * @module Hint
  *
@@ -6,6 +8,7 @@
  * the hint silently").
  *
  * @remarks
+ *
  * Byte-stable template:
  *
  * `[route: <taskType> <provider> <model> <effort>]`
@@ -18,8 +21,6 @@
  * The hint is model-facing context, not a ledger line: the audit line stays
  * `route <taskType> <source> <provider> <model> <effort>` (Function/Inject).
  */
-import type { Role } from "@Interface/Policy.js";
-
 /**
  * The hint's opening token (the idempotence marker).
  */

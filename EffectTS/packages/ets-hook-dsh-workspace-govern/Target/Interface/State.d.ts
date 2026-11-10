@@ -1,3 +1,8 @@
+import type Decision from "./Decision.js";
+import type FactoryHandle from "./Factory.js";
+import type PolicyRule from "./Policy.js";
+import type RecoveryRule from "./Recovery.js";
+import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 /**
  * @module State
  *
@@ -5,6 +10,7 @@
  * fields.
  *
  * @remarks
+ *
  * The SHARED factory shape (Context, Module, Enabled/Ledger/List, the
  * machinery maps, the P10 volatile refresh the factory's State builder
  * registers) plus the hook's own fields.
@@ -15,11 +21,6 @@
  * `name` export (hook-dsh-workspace-govern); the ledger prefix is the
  * module's OWN contract string.
  */
-import type Decision from "./Decision.js";
-import type FactoryHandle from "./Factory.js";
-import type PolicyRule from "./Policy.js";
-import type RecoveryRule from "./Recovery.js";
-import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /**
      * Config `enabled` - the master switch (volatile; the State builder's

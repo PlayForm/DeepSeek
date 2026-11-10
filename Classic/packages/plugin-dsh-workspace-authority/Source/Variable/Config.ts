@@ -1,3 +1,6 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
@@ -5,6 +8,7 @@
  * at load.
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every
  * default, so invalid configuration fails LOUD at load, and `apply` receives a
  * validated plain config object. The shape this schema produces is
@@ -24,9 +28,6 @@
  * `enabled` defaults to FALSE - the IDLE-forever posture: the service registers
  * and reads honestly, but grants and leases nothing until enabled.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
-
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-authority.log";
 const DefaultEnabled = false;
 // The default lease TTL (ms).

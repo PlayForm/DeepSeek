@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +9,7 @@
  * (@playform/plugin-dsh-queue).
  *
  * @remarks
+ *
  * Loader contract: `export const name` +
  * `export const apply` + `export const Config` + `export const inject` +
  * `export default { name, apply, Config, inject }` - the ONLY named exports
@@ -64,10 +69,6 @@
  * PoC rule: the routing enforcer's service shape is declared in the queue's
  * own Interface/Route.ts, never imported from the sibling package.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "plugin-dsh-queue";
 
 /**

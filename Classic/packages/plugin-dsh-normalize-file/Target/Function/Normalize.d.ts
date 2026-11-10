@@ -1,3 +1,4 @@
+import type State from "../Interface/State.js";
 /**
  * @module Normalize
  *
@@ -5,6 +6,7 @@
  * execution path (the tool's exec calls exactly this).
  *
  * @remarks
+ *
  * The pipeline reads the target's content, applies the family's SIX transforms
  * with a per-character count, and writes ONLY when something changed. The
  * inversion of the file-hook trigger is the design: everything happens inside
@@ -56,7 +58,6 @@
  * Pure module: no module-level state (two concurrent calls share nothing -
  * every value is a local), so HMR reloads and parallel calls cannot interfere.
  */
-import type State from "../Interface/State.js";
 /**
  * The target type is the shared write executor's own second parameter.
  */

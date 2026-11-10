@@ -1,3 +1,21 @@
+import { homedir } from "node:os";
+import { DatabaseSync } from "node:sqlite";
+
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "@Interface/Config.js";
+import type CostContributionRow from "@Interface/ContributionRow.js";
+import type CostFileCallRow from "@Interface/FileCallRow.js";
+import type PricingService from "@Interface/PricingService.js";
+import type CostResponse from "@Interface/Response.js";
+import type CostService from "@Interface/Service.js";
+import type ValuationSelection from "@Interface/ValuationSelection.js";
+import type CostVersionRow from "@Interface/VersionRow.js";
+import { Home } from "@playform/lib-dsh-core";
+
+import Contributions, { FileCalls, History } from "./Contributions.js";
+import Pricing from "./Pricing.js";
+import Reader from "./Reader.js";
+
 /**
  * @module Provide
  *
@@ -10,6 +28,7 @@
  * the versioned catalog surface over the v5 tables.
  *
  * @remarks
+ *
  * `cost.fileCalls` is the deeper level of the same file-scoped read and
  * `cost.history` is the lineage level - the file's own content versions with
  * the touches bound to each. `costPricing` follows
@@ -46,24 +65,6 @@
  * Both services are returned as one disposer, so they are removed with the
  * fiber: the pricing service first, then the read service.
  */
-import { homedir } from "node:os";
-import { DatabaseSync } from "node:sqlite";
-
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "@Interface/Config.js";
-import type CostContributionRow from "@Interface/ContributionRow.js";
-import type CostFileCallRow from "@Interface/FileCallRow.js";
-import type PricingService from "@Interface/PricingService.js";
-import type CostResponse from "@Interface/Response.js";
-import type CostService from "@Interface/Service.js";
-import type ValuationSelection from "@Interface/ValuationSelection.js";
-import type CostVersionRow from "@Interface/VersionRow.js";
-import { Home } from "@playform/lib-dsh-core";
-
-import Contributions, { FileCalls, History } from "./Contributions.js";
-import Pricing from "./Pricing.js";
-import Reader from "./Reader.js";
-
 // The read-only open: a leading "~/" is expanded to the home-anchored
 // absolute path exactly once at the open site, the file is opened with
 // `{ readOnly: true }`, and a failure throws one actionable line that starts

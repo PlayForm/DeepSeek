@@ -1,3 +1,4 @@
+import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 /**
  * @module Entry
  *
@@ -5,6 +6,7 @@
  * keyed by its hash.
  *
  * @remarks
+ *
  * The shape the LRU keeps, the JSONL journal serializes (payload base64) and
  * the retrieval tool restores.
  *
@@ -27,7 +29,6 @@
  * - payload is the base64 of the content's JSON serialization; createdAt /
  * lastAccessed are memory-only (a reload restarts the LRU clock).
  */
-import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 export default interface Entry {
     /**
      * The sha256-24 key of the full serialized content bytes.

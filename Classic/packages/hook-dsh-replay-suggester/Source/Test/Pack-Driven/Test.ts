@@ -1,16 +1,3 @@
-/**
- * @module Test
- *
- * The EXPLICIT pack override: a temporary repo with its own `.dsh/pack.yml` drives the intent
- * and the caveat while the candidates still come from the recall.
- *
- * @remarks
- * The pack's own `replay/Rerun` family outranks the synthesized one, so the pack never supplies a
- * file. The same workspace WITHOUT the pack emits the synthesized Repeat note (the recall is the
- * only default source); the pack with NO record matches and abstains `no-memory`; and a workspace
- * with neither a pack nor a record abstains `no-history` instead of naming a literal built-in
- * pack.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -25,10 +12,28 @@ import {
 	rmStore,
 } from "../Harness.js";
 
-/** A temp tree under the OS temp dir (fresh per folder process). */
+/**
+ * @module Test
+ *
+ * The EXPLICIT pack override: a temporary repo with its own `.dsh/pack.yml` drives the intent
+ * and the caveat while the candidates still come from the recall.
+ *
+ * @remarks
+ *
+ * The pack's own `replay/Rerun` family outranks the synthesized one, so the pack never supplies a
+ * file. The same workspace WITHOUT the pack emits the synthesized Repeat note (the recall is the
+ * only default source); the pack with NO record matches and abstains `no-memory`; and a workspace
+ * with neither a pack nor a record abstains `no-history` instead of naming a literal built-in
+ * pack.
+ */
+/**
+ * A temp tree under the OS temp dir (fresh per folder process).
+ */
 const Tree = (Prefix: string): string => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
 
-/** Write one file under the tree (parents created). */
+/**
+ * Write one file under the tree (parents created).
+ */
 const Put = (Root: string, Relative: string, Body = "x"): string => {
 	const Full = Path.join(Root, Relative);
 	FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
@@ -36,12 +41,16 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
-/** Mark the tree as a workspace root (the pack-independent `package.json` marker). */
+/**
+ * Mark the tree as a workspace root (the pack-independent `package.json` marker).
+ */
 const Manifest = (Root: string): void => {
 	FileSystem.writeFileSync(Path.join(Root, "package.json"), "{}", "utf8");
 };
 
-/** The temp pack: a declared signature and one replay/Rerun family. */
+/**
+ * The temp pack: a declared signature and one replay/Rerun family.
+ */
 const Pack = `signature:
   - docs/STYLE.md
 families:
@@ -57,7 +66,9 @@ families:
     targets: []
 `;
 
-/** The one history record: the probe the judged grep produces. */
+/**
+ * The one history record: the probe the judged grep produces.
+ */
 const Record = {
 	intent: "Repeat",
 	probe: 'grep {"pattern":"version"}',
@@ -65,16 +76,22 @@ const Record = {
 	verify: "",
 };
 
-/** The optional harness service the probe reads (the real shape: get(session)). */
+/**
+ * The optional harness service the probe reads (the real shape: get(session)).
+ */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** The PACKED workspace: the root marker, the pack, and the recalled path. */
+/**
+ * The PACKED workspace: the root marker, the pack, and the recalled path.
+ */
 const Packed = Tree("replay-suggester-packed-");
 Manifest(Packed);
 Put(Packed, ".dsh/pack.yml", Pack);
 Put(Packed, "Source/Version.ts");
 
-/** The SAME workspace without the pack (the recalled file still exists). */
+/**
+ * The SAME workspace without the pack (the recalled file still exists).
+ */
 const Bare = Tree("replay-suggester-bare-");
 Manifest(Bare);
 Put(Bare, "Source/Version.ts");

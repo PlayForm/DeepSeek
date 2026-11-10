@@ -7,6 +7,7 @@
  * Function).
  *
  * @remarks
+ *
  * The kind registry: phase 1 renders the six v1 kinds (LIVE-CONTAINERS-
  * RESEARCH.md section 3: time, counter, manifest, gauge, note, template);
  * the wave-2 catalog kinds (IMPLEMENTATION-DESIGN.md section 2.7, from
@@ -15,36 +16,66 @@
  * "unknown kind" - until the wave-2 render engine lands. One registry, two
  * consumers: the fail-loud config validation and the render dispatch.
  */
-/** Every block kind accepted in config (the fail-loud registry). */
+/**
+ * Every block kind accepted in config (the fail-loud registry).
+ */
 export declare const KINDS: readonly ["time", "counter", "manifest", "gauge", "note", "template", "todo-list", "agent-progress-board", "task-failsafe-guard", "command-runner", "countdown-expiry", "session-stats", "diff-summary", "constraint-reminder", "scoreboard", "live-manifest", "memory-block", "validator", "environment-drift", "delegation-inbox"];
-/** The block kinds accepted in config (see KINDS above). */
+/**
+ * The block kinds accepted in config (see KINDS above).
+ */
 export type BlockKind = (typeof KINDS)[number];
-/** The kinds the phase-1 render engine renders (everything else skips). */
+/**
+ * The kinds the phase-1 render engine renders (everything else skips).
+ */
 export declare const RENDERED_KINDS: readonly ["time", "counter", "manifest", "gauge", "note", "template"];
-/** When a block recomputes (config `trigger`). */
+/**
+ * When a block recomputes (config `trigger`).
+ */
 export type BlockTrigger = "request" | "event" | "ttl" | "manual";
-/** When a block participates at all (config `scope`). */
+/**
+ * When a block participates at all (config `scope`).
+ */
 export type BlockScope = "always" | "when-agents-active" | "when-tasks-live" | "never";
-/** One block spec (config `blocks` entries). */
+/**
+ * One block spec (config `blocks` entries).
+ */
 export interface BlockSpecification {
-    /** Stable label; the block's key (unique across the table - fail-loud). */
+    /**
+     * Stable label; the block's key (unique across the table - fail-loud).
+     */
     id: string;
-    /** The block kind (see KINDS). */
+    /**
+     * The block kind (see KINDS).
+     */
     kind: BlockKind;
-    /** The rendered body; {{token}} variables resolved per request. */
+    /**
+     * The rendered body; {{token}} variables resolved per request.
+     */
     template: string;
-    /** Per-block flip (default true). */
+    /**
+     * Per-block flip (default true).
+     */
     enabled: boolean;
-    /** Per-block token values (user variables, plain strings). */
+    /**
+     * Per-block token values (user variables, plain strings).
+     */
     vars: Record<string, string>;
-    /** When the block recomputes (default "request"). */
+    /**
+     * When the block recomputes (default "request").
+     */
     trigger: BlockTrigger;
-    /** Assemblies between recomputes when trigger = "ttl" (default 8). */
+    /**
+     * Assemblies between recomputes when trigger = "ttl" (default 8).
+     */
     ttlCalls: number;
-    /** When the block participates (default "always"). */
+    /**
+     * When the block participates (default "always").
+     */
     scope: BlockScope;
 }
-/** The substitution variables one render pass can resolve. */
+/**
+ * The substitution variables one render pass can resolve.
+ */
 export type Variables = Record<string, string>;
 /**
  * The per-scope counter state (a WeakMap keyed on the scope/agent object,
@@ -53,36 +84,60 @@ export type Variables = Record<string, string>;
  * exact token counts are NOT available to plugins (research residual 3).
  */
 export interface AgentState {
-    /** User messages observed at agent/pre-step (the {{messageCount}} source). */
+    /**
+     * User messages observed at agent/pre-step (the {{messageCount}} source).
+     */
     messages: number;
-    /** User-message turns observed (the {{turnCount}} source). */
+    /**
+     * User-message turns observed (the {{turnCount}} source).
+     */
     turns: number;
-    /** Per-turn tool attempts by tool name (reset on a user message). */
+    /**
+     * Per-turn tool attempts by tool name (reset on a user message).
+     */
     attempts: Record<string, number>;
-    /** The last tools/post-execute observation, in clock ms ({{sinceLastTool}}). */
+    /**
+     * The last tools/post-execute observation, in clock ms ({{sinceLastTool}}).
+     */
     lastToolAt: number | undefined;
-    /** Assemblies observed for this scope (the TTL clock). */
+    /**
+     * Assemblies observed for this scope (the TTL clock).
+     */
     calls: number;
-    /** The per-block render cache: block id -> text + the assembly at build. */
+    /**
+     * The per-block render cache: block id -> text + the assembly at build.
+     */
     blocks: Map<string, {
         built: number;
         text: string;
         dirty: boolean;
     }>;
-    /** The last skip reason per block id (a reason change logs once). */
+    /**
+     * The last skip reason per block id (a reason change logs once).
+     */
     skips: Map<string, string>;
-    /** The whole-section cache (refresh "ttl"): text + the assembly at build. */
+    /**
+     * The whole-section cache (refresh "ttl"): text + the assembly at build.
+     */
     sectionCache?: {
         built: number;
         text: string;
     } | undefined;
 }
-/** One rendered frame before the budget pass. */
+/**
+ * One rendered frame before the budget pass.
+ */
 export interface Frame {
-    /** The block id. */
+    /**
+     * The block id.
+     */
     id: string;
-    /** The rendered frame text (already inside the LIVE CONTAINER markers). */
+    /**
+     * The rendered frame text (already inside the LIVE CONTAINER markers).
+     */
     text: string;
-    /** The rendered body length in bytes (the ledger's (<len> bytes) value). */
+    /**
+     * The rendered body length in bytes (the ledger's (<len> bytes) value).
+     */
     length: number;
 }

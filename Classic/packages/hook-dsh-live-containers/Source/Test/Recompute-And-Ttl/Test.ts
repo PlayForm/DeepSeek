@@ -1,18 +1,3 @@
-/**
- * @module Test
- *
- * The recompute/changing-value and refresh-policy tests.
- *
- * @remarks
- * A request-trigger block's rendered value CHANGES between two assemblies whose FAKE CLOCK
- * advances (no sleep, no real clock dependence), and the counters recompute from the
- * pre-step/post-execute observers.
- *
- * Refresh "ttl" (ttlCalls=2) renders once and REUSES the global cache until the TTL expires, then
- * writes `section rebuilt (ttl 2)`. Refresh "request" re-renders every assembly. The per-block
- * triggers (ttl/event) drive their own staleness, and the tools/change notification clears the
- * section cache (`section rebuilt (tools/change)`).
- */
 import assert from "node:assert/strict";
 import {
 	Advance,
@@ -33,6 +18,22 @@ import {
 	LiveSection,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The recompute/changing-value and refresh-policy tests.
+ *
+ * @remarks
+ *
+ * A request-trigger block's rendered value CHANGES between two assemblies whose FAKE CLOCK
+ * advances (no sleep, no real clock dependence), and the counters recompute from the
+ * pre-step/post-execute observers.
+ *
+ * Refresh "ttl" (ttlCalls=2) renders once and REUSES the global cache until the TTL expires, then
+ * writes `section rebuilt (ttl 2)`. Refresh "request" re-renders every assembly. The per-block
+ * triggers (ttl/event) drive their own staleness, and the tools/change notification clears the
+ * section cache (`section rebuilt (tools/change)`).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

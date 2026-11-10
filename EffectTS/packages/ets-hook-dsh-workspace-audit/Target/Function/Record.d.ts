@@ -1,3 +1,6 @@
+import type Line from "../Interface/Line.js";
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Record
  *
@@ -5,6 +8,7 @@
  * bounded ring, then persists both into the domain.
  *
  * @remarks
+ *
  * One recorded line updates the in-memory chain map and the bounded ring,
  * then persists both into the domain fire-and-forget (the listener is a
  * synchronous recorder; the service's async path awaits the first put via
@@ -20,7 +24,4 @@
  *     `__ring` in the `ring` table. Every put is `void .catch(() => {})` -
  *     a storage failure can never reach the listener's synchronous path.
  */
-import type Line from "../Interface/Line.js";
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(State: State, Entry: Line): void;

@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "../Interface/Config.js";
+export default _default;
 /**
  * @module Apply
  *
@@ -7,6 +10,7 @@
  * registers the `ccr_retrieve` tool.
  *
  * @remarks
+ *
  * The State is built through `Factory.State` (the cell unwrap, the shared
  * mappings Ledger←logFile / Enabled←log and the module's own fields via the
  * setup `fields` map - factory SCHEME.md §2.10); the durable activation proof
@@ -74,7 +78,4 @@
  * the ledger append is the factory's own plain-fs exemption, and the store's
  * optional journal is the store's own plain-fs exemption (Function/Store).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
-export default _default;
 declare function _default(Context: Context, Options: Config): void;

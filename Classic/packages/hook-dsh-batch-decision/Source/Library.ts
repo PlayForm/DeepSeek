@@ -1,9 +1,14 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
  * The entry module of the BATCH-DECISION hook (@playform/hook-dsh-batch-decision).
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` + `export const Config` +
  * `export const inject` + `export default { name, apply, Config, inject }` - the ONLY named
  * exports in the tree (cordis requires them); every other module is a nameless default export
@@ -28,10 +33,6 @@
  * appears in the profile's bundles, and enables only by an explicit ACTIVATE; a cold mount logs
  * `disabled (enabled=false)` and every listener no-ops to a passthrough.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "hook-dsh-batch-decision";
 
 /**
@@ -51,6 +52,7 @@ export { Version };
  * Required services.
  *
  * @remarks
+ *
  * The factory (@playform/plugin-dsh-factory) provides the State builder (cell unwrap + the P10
  * volatile refresh) and the ledger. `tools` serves the batch_decision registration. The sibling
  * services (pass-on, ingester, approval) are deliberately NOT injected: they are optional, they

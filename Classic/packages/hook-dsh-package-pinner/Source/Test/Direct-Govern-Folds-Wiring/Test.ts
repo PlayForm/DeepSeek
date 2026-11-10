@@ -1,23 +1,3 @@
-/**
- * @module Test
- *
- * The direct-govern path, the fold wiring and the journal storage of
- * @playform/hook-dsh-package-pinner, covered in one singular test.
- *
- * @remarks
- * The test covers the direct-govern path (Factory.Govern to the registered
- * pin step, guarded write at the fresh-stat version, unknown names ignored),
- * the two-chain-writer fold in both registration orders (the enforced FS
- * guard proving the fresh-stat basis), the factory wiring (the transform
- * contract driven directly, the throw containment composing the pinner's
- * Module), the P5 storage journal (the activated record drains; the disposer
- * closes the domain), and the silence invariant (the broken ledger never
- * throws; the hostile payload is suppressed logger-only).
- *
- * The file runs standalone (`node Target/Test/Direct-Govern-Folds-Wiring/
- * Test.js`) and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns
- * it).
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -42,6 +22,27 @@ import * as Pinner from "../../../Target/Library.js";
 import FactoryClass from "../../../../plugin-dsh-factory/Target/Library.js";
 import LeafDefault from "../../../Target/Function/Transform.js";
 
+/**
+ * @module Test
+ *
+ * The direct-govern path, the fold wiring and the journal storage of
+ * @playform/hook-dsh-package-pinner, covered in one singular test.
+ *
+ * @remarks
+ *
+ * The test covers the direct-govern path (Factory.Govern to the registered
+ * pin step, guarded write at the fresh-stat version, unknown names ignored),
+ * the two-chain-writer fold in both registration orders (the enforced FS
+ * guard proving the fresh-stat basis), the factory wiring (the transform
+ * contract driven directly, the throw containment composing the pinner's
+ * Module), the P5 storage journal (the activated record drains; the disposer
+ * closes the domain), and the silence invariant (the broken ledger never
+ * throws; the hostile payload is suppressed logger-only).
+ *
+ * The file runs standalone (`node Target/Test/Direct-Govern-Folds-Wiring/
+ * Test.js`) and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns
+ * it).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	const World = Boot();

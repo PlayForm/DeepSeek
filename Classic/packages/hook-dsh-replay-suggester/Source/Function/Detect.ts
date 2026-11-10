@@ -1,3 +1,5 @@
+import type { CompiledIntent, Intent, Match } from "@Interface/Pack.js";
+
 /**
  * @module Detect
  *
@@ -5,6 +7,7 @@
  * against compiled rules and returns the winning Match or null.
  *
  * @remarks
+ *
  * The plan §4.3 shapes it: pure function, no LLM, no I/O, O(intents x rules)
  * + a map lookup. Given the compiled rules (the synthesized `Repeat` family
  * first, then an explicit pack's families) and a call probe (the tool name +
@@ -21,8 +24,6 @@
  * once per root and the synthesized family once per call) - this leaf never
  * compiles a regex itself.
  */
-import type { CompiledIntent, Intent, Match } from "@Interface/Pack.js";
-
 /**
  * The plan's bias constant (§3.5): keeps a single weak signal below the gate.
  */

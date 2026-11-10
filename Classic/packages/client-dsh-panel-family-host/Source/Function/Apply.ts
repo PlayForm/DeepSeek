@@ -1,3 +1,12 @@
+import type { Context } from "@deepseek-ai/cordis";
+import BridgeFn from "@Function/Bridge.js";
+import StatsFn from "@Function/Stats.js";
+import StreamFn from "@Function/Stream.js";
+import TailFn from "@Function/Tail.js";
+import TraceFn from "@Function/Trace.js";
+import type Config from "@Interface/Config.js";
+import Lines from "@Variable/Lines.js";
+
 /**
  * @module Apply
  *
@@ -5,6 +14,7 @@
  * activation.
  *
  * @remarks
+ *
  * Every service is provided with `ctx.provide`, so it is removed with the
  * plugin. When the Config enabled is false the READ endpoints still register
  * but every method returns a `rejected` failure, and the plain-field bridge
@@ -22,15 +32,6 @@
  * bus), so the forwarder is named `panelFamilyTrace` here; the browser half
  * re-publishes it as `trace` (`Source/Function/Client.ts`).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import BridgeFn from "@Function/Bridge.js";
-import StatsFn from "@Function/Stats.js";
-import StreamFn from "@Function/Stream.js";
-import TailFn from "@Function/Tail.js";
-import TraceFn from "@Function/Trace.js";
-import type Config from "@Interface/Config.js";
-import Lines from "@Variable/Lines.js";
-
 export default function Apply(ctx: Context, config: Config): void {
 	// Unwrap one possibly-volatile config cell (`{ get }` reference or value):
 	// the loader delivers every volatile knob as a cell object, and both the

@@ -8,6 +8,7 @@
  * Symbol intent with its `Symbol` node.
  *
  * @remarks
+ *
  * THE HISTORY FAMILY expects a plain file (the touched paths are the agent's
  * own reads and edits), so a node of any other kind scores the lower tier.
  *

@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "../Interface/Config.js";
+export default _default;
 /**
  * @module Apply
  *
@@ -6,6 +9,7 @@
  * fs/observed Wire, the direct-govern registration and the lifecycle effects.
  *
  * @remarks
+ *
  * The factory service arrives injected (ctx.pluginFactory - the loader holds
  * this bundle pending until the factory service exists). Everything here is
  * factory machinery; the module owns only its identity, its ledger strings and
@@ -34,7 +38,4 @@
  * single-slot waterfalls belong to the observation policy; registering there
  * would veto it). Never tools/* (result amendment is louder).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
-export default _default;
 declare function _default(Context: Context, Options: Config): void;

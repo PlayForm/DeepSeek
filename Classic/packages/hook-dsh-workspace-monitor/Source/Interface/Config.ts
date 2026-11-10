@@ -1,3 +1,6 @@
+import type CheckSet from "@Interface/CheckSet.js";
+import type { Allowlist } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
@@ -5,14 +8,12 @@
  * validation and defaulting.
  *
  * @remarks
+ *
  * `apply` receives this plain object, with volatile cells holding `{ get }`
  * references until the factory's State builder unwraps them. The contract is
  * Documentation/Plans/Workspace-Family/MONITOR.md (the distribution law: the
  * hook's own Config) and the live-containers monitor precedent.
  */
-import type CheckSet from "@Interface/CheckSet.js";
-import type { Allowlist } from "@playform/plugin-dsh-factory";
-
 export default interface Config {
 	/**
 	 * The hook's own ledger file (one log per module).

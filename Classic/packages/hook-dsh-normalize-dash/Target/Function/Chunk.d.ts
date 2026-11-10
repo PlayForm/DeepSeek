@@ -8,6 +8,7 @@ export default _default;
  * INJECTED.
  *
  * @remarks
+ *
  * The dispatch structure (which chunk types, which fields, the identity
  * passthroughs, the reasoning gate, the tool-args gate - three-way since the
  * edit exemption and the per-call raw marker: a delta whose `name` is "edit"

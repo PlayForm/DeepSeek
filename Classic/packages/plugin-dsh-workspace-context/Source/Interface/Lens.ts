@@ -5,6 +5,7 @@
  * when the packet is built through the lens.
  *
  * @remarks
+ *
  * The catalog is Variable/DefaultLens.ts; config `lenses` selects which are
  * available.
  */

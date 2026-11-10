@@ -6,6 +6,7 @@
  * Documentation/Plans/Workspace-Family/WAVE-1-BRIEF.md and SEARCH-SUGGESTER-PLUGIN.md §9.2).
  *
  * @remarks
+ *
  * SELF-CONTAINED POC: this package declares the sibling service's shape in its own Interface and
  * does NOT import from sibling workspace packages that may not exist yet. The end-phase wires
  * the real import (or, if the real service's surface differs, adapts this declaration to it -

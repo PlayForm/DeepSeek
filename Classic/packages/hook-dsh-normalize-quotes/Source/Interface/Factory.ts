@@ -1,3 +1,5 @@
+import type Factory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Factory
  *
@@ -5,6 +7,7 @@
  * (the family's class/service plugin).
  *
  * @remarks
+ *
  * The quotes hook is a NON-MANIFEST factory consumer: it consumes the State
  * builder (cell unwrap + shared fields, factory SCHEME.md section 2.10), the
  * ledger (Append, section 2.1) and the probe-once Seam accessor (section 2.15)
@@ -23,8 +26,6 @@
  * `'llm/stream'` (options: GenerateOptions, next) => AsyncIterable<StreamChunk>
  * - re-declaring it would be a conflicting duplicate.
  */
-import type Factory from "@playform/plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

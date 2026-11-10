@@ -1,3 +1,5 @@
+import type Configuration from "@Interface/Config.js";
+
 /**
  * @module Knobs
  *
@@ -5,6 +7,7 @@
  * over the loader's validated config, with volatile cells unwrapped.
  *
  * @remarks
+ *
  * The class-form plugin receives the config as the SECOND constructor argument
  * - the graph service's precedent. Every volatile cell is unwrapped, and the
  * `domain` knob is fail-loud checked at load: a bad domain name must throw at
@@ -18,8 +21,6 @@
  * validated config (the loader always passes it), which is the documented
  * idle-forever posture (disabled, the bundle patch row).
  */
-import type Configuration from "@Interface/Config.js";
-
 /**
  * The storage-domain name rule (the library's UNIT_NAME_RE).
  */

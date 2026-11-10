@@ -4,6 +4,7 @@
  * The slice of the opened storage domain the hook uses.
  *
  * @remarks
+ *
  * One domain (named config `domain`, default workspace_journal), THREE
  * tables: `batches` (one record per batchId - the per-batch records),
  * `entries` (one record per batchId:path - the revert data, keyed

@@ -6,6 +6,7 @@ export default _default;
  * Markdown.
  *
  * @remarks
+ *
  * Any other extension returns `undefined`, and the index call then skips the file with the
  * byte-exact `unsupported language` line - no fake parsing of other formats in W1.
  */

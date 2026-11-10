@@ -1,31 +1,3 @@
-/**
- * @module Fetch
- *
- * The browser half of the data path: the session GET, the file-scoped contribution GET, the
- * deeper per-conversation call GET, the lineage GET, the two pricing GETs and the one pricing POST.
- *
- * @remarks
- * The session GET is the route path with the encoded session id and the row budget, answered as a
- * `CostResponse`. The file-scoped GET answers the conversations that contributed to one file's
- * cost; the deeper file-scoped GET answers one conversation's calls that allocated money to that
- * same file; the lineage GET answers one file's content versions with the touches bound to each;
- * the two pricing GETs a settings surface lists (lane B4d) answer the catalogs with their
- * revisions and one revision's rate rows; and the one pricing POST (lane B4f) publishes a
- * revision.
- *
- * None of the functions throws: a runtime without fetch, a failed request, a non-JSON answer or a
- * malformed body resolve to the unavailable envelope, to an empty contribution list, to an empty
- * call list, to an empty version list, to the empty catalog answer, to an empty rate list or to a
- * refused publish answer, so the panel can always render a state. The envelope's `path` names the
- * route, because the browser knows no ledger path; the route's own message names the file.
- *
- * THE VALUATION SELECTION (lane B4d; the research's section 8): the session fetch accepts the
- * basis and the revision the panel selected and sends them as query parameters. Without a
- * selection the URL is the recorded one - `?session=<id>&rows=<n>` - and the engine answers the
- * recorded envelope; a selection adds `basis`, and a pinned revision adds `revision` too. The
- * browser validates nothing here: the route owns the four-basis union and answers one actionable
- * line for anything else.
- */
 import type CostContributionRow from "../Interface/ContributionRow.js";
 import type CostResponse from "../Interface/Response.js";
 import type { Catalog, CostFileCallRow, CostVersionRow, RateRow, Revision, ValuationSelection } from "@playform/plugin-dsh-cost/service";

@@ -1,3 +1,12 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import ClassifyFn from "@Function/Classify.js";
+import EscalateFn from "@Function/Escalate.js";
+import ResolveFn from "@Function/Resolve.js";
+import type { KeywordTable, PolicyShape, Role } from "@Interface/Policy.js";
+import type Request from "@Interface/Request.js";
+import type Route from "@Interface/Route.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Enforcer
  *
@@ -6,6 +15,7 @@
  * immediately on construction and removed with its owning fiber.
  *
  * @remarks
+ *
  * It holds the State (the volatile policy view) and exposes the deterministic
  * surface the sibling orchestration plugins consume (the queue's routed
  * dispatch, SUBAGENT-QUEUE-PLUGIN.md section 2.4):
@@ -19,15 +29,6 @@
  * remount. The service logs NOTHING here - the launch path's listener
  * (Function/Inject) owns the ledger lines.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import ClassifyFn from "@Function/Classify.js";
-import EscalateFn from "@Function/Escalate.js";
-import ResolveFn from "@Function/Resolve.js";
-import type { KeywordTable, PolicyShape, Role } from "@Interface/Policy.js";
-import type Request from "@Interface/Request.js";
-import type Route from "@Interface/Route.js";
-import type State from "@Interface/State.js";
-
 export default class Enforcer extends Service {
 	private State: State;
 

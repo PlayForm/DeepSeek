@@ -5,9 +5,12 @@
  * `process.env.VERSION_PACKAGE`.
  *
  * @remarks
+ *
  * The fallback only ever runs when the module is loaded outside the build (a test importing
  * Target directly).
  */
-/** The compiled package version. */
+/**
+ * The compiled package version.
+ */
 declare const Version: string;
 export default Version;

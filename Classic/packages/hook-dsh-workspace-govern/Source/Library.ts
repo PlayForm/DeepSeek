@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +9,7 @@
  * (@playform/hook-dsh-workspace-govern).
  *
  * @remarks
+ *
  * Loader contract: `export const name` plus `export const apply` plus
  * `export const Config` plus `export const inject` plus
  * `export default { name, apply, Config, inject }` - the ONLY named exports in
@@ -46,10 +51,6 @@
  * (`Function/Service`) and is registered from apply - the same posture the
  * workspace-observe hook uses.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "hook-dsh-workspace-govern";
 
 /**

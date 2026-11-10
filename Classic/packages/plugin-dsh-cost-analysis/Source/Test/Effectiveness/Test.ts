@@ -1,16 +1,3 @@
-/**
- * @module Test
- *
- * One singular test of THE COST PER SURVIVING LINE
- * (Documentation/Plans/COST-TRACK-PLUGIN.md section 16.4, with the verdict
- * of section 14).
- *
- * @remarks
- * A file whose Verdict.State is 'changed' in the window pays its allocated
- * cost over the lines its edit hunks added, while a file whose verdict is
- * only 'read' yields no row - the read-before-edit effectiveness question,
- * answered per file.
- */
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -23,6 +10,20 @@ import Analysis from "../../../Target/Function/Analysis.js";
 import Reader from "../../../Target/Function/Open.js";
 import { Check, Finish, Make, MakeCounter, Validate } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test of THE COST PER SURVIVING LINE
+ * (Documentation/Plans/COST-TRACK-PLUGIN.md section 16.4, with the verdict
+ * of section 14).
+ *
+ * @remarks
+ *
+ * A file whose Verdict.State is 'changed' in the window pays its allocated
+ * cost over the lines its edit hunks added, while a file whose verdict is
+ * only 'read' yields no row - the read-before-edit effectiveness question,
+ * answered per file.
+ */
 // The ledger half's validated config (the ledger package's own schema): the
 // fixture price row - input 1, output 2 per million - under one client, at
 // the temporary database.

@@ -1,3 +1,6 @@
+import type Entry from "./Entry.js";
+import type Gate from "./Gate.js";
+import type Member from "./Member.js";
 /**
  * @module File
  *
@@ -5,20 +8,26 @@
  * spliced proposals and the arbiter gates.
  *
  * @remarks
+ *
  * ONE shape, TWO sources: the JSON fallback's file (Function/Recover reads it) and the KV domain's
  * four tables (Function/Storage projects them onto it), so the recovery (Function/Restore) is
  * written once and both stores feed it.
  */
-import type Entry from "./Entry.js";
-import type Gate from "./Gate.js";
-import type Member from "./Member.js";
 export default interface File {
-    /** The members, keyed by agent id once restored. */
+    /**
+     * The members, keyed by agent id once restored.
+     */
     members: Member[];
-    /** The idle queue (member ids, in order). */
+    /**
+     * The idle queue (member ids, in order).
+     */
     queue: string[];
-    /** The spliced batch proposals (the board's memory). */
+    /**
+     * The spliced batch proposals (the board's memory).
+     */
     proposals: Entry[];
-    /** The arbiter gates (the Gates block's truth). */
+    /**
+     * The arbiter gates (the Gates block's truth).
+     */
     gates: Gate[];
 }

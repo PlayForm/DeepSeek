@@ -7,10 +7,10 @@ import type Pack from "../Interface/Pack.js";
  * name, an array is the list.
  *
  * @remarks
+ *
  * `Normalize` also normalizes it, but the chain reads layers that may not have
  * gone through `Normalize`.
  */
-
 export default (Pack: Pack): string[] => {
 	const Value = Pack.extends;
 	switch (true) {

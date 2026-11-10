@@ -1,3 +1,7 @@
+import assert from "node:assert/strict";
+import { Check, Finish, GraphClass, LinesWith, MakeCounter, MakeDisk, Tree } from "../Harness.js";
+import Semantics from "../../../../plugin-dsh-workspace-semantics/Target/Library.js";
+
 /**
  * @module Test
  *
@@ -5,6 +9,7 @@
  * built semantics service.
  *
  * @remarks
+ *
  * The graph probes the service (never injects it), asks it for the file's
  * reference list after the parse, and emits one honest edge per resolved
  * reference - from the node that USES the symbol to the Symbol node it uses. The
@@ -13,10 +18,6 @@
  * not declare produces NO dangling edge, and the plan's short service alias
  * `semantics` is honored.
  */
-import assert from "node:assert/strict";
-import { Check, Finish, GraphClass, LinesWith, MakeCounter, MakeDisk, Tree } from "../Harness.js";
-import Semantics from "../../../../plugin-dsh-workspace-semantics/Target/Library.js";
-
 /** The fixture file: a top-level symbol used inside a function and again at the
  *  top level (two owners: the enclosing Symbol, then the File). */
 const CORE = [
@@ -30,10 +31,14 @@ const CORE = [
 	"",
 ].join("\n");
 
-/** A second file so the walk indexes more than one record. */
+/**
+ * A second file so the walk indexes more than one record.
+ */
 const LIB = "export const helper = 1;\n";
 
-/** A Markdown file whose link target is a reference the graph cannot resolve. */
+/**
+ * A Markdown file whose link target is a reference the graph cannot resolve.
+ */
 const DOC = "# The workspace\n\nSee [the helper](./helper.md).\n";
 
 /** The validated config shape the semantics loader hands to its apply (the
@@ -42,7 +47,9 @@ const DOC = "# The workspace\n\nSee [the helper](./helper.md).\n";
 const Definition = (Raw: Record<string, unknown>): any =>
 	(Semantics.Config as unknown as (Raw: Record<string, unknown>) => any)({ ...Raw });
 
-/** Mount the REAL semantics plugin on the graph's fake context. */
+/**
+ * Mount the REAL semantics plugin on the graph's fake context.
+ */
 const Mount = (Run: any, Config: Record<string, unknown> = {}): void => {
 	Semantics.apply(
 		Run.Context,

@@ -1,3 +1,9 @@
+import Reindex from "@Function/Reindex.js";
+import type State from "@Interface/State.js";
+import { Loop, Names, type Adapter, type Envelope } from "@playform/lib-dsh-trace";
+
+import Consume from "./Consume.js";
+
 /**
  * @module Adapter
  *
@@ -8,6 +14,7 @@
  * disposer on the fiber effect so an unload drops the subscription and the loop.
  *
  * @remarks
+ *
  * Wired ONCE from the service constructor and ONLY when the graph is enabled at construction: a
  * disabled graph wires nothing at all (the IDLE-forever posture).
  *
@@ -21,12 +28,6 @@
  * wires the graph instead of leaving it deaf. Without a bus at all, the graph wires nothing
  * rather than guessing.
  */
-import Reindex from "@Function/Reindex.js";
-import type State from "@Interface/State.js";
-import { Loop, Names, type Adapter, type Envelope } from "@playform/lib-dsh-trace";
-
-import Consume from "./Consume.js";
-
 /**
  * The structural view of the two seams the adapter uses (the fake ctx provides them optionally;
  * the real context always does).

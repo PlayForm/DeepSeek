@@ -1,3 +1,14 @@
+import assert from "node:assert/strict";
+import * as Path from "node:path";
+
+import Judge from "../../../Target/Function/Judge.js";
+import Parse from "../../../Target/Function/Parse.js";
+import type Configuration from "../../../Target/Interface/Configuration.js";
+import type { Operation } from "../../../Target/Interface/Operation.js";
+import type { ConfirmReply, ParseResult, PlanReply } from "../../../Target/Interface/Reply.js";
+import type { CorpusSeed } from "../Harness.js";
+import { Check, CorpusView, Finish, Home, Knobs, MakeCounter } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +16,7 @@
  * reply and the corpus.
  *
  * @remarks
+ *
  * The parse decides whether a reply IS an operation list; the judge decides
  * whether one operation may land. Both are pure, both are asserted per rule, and
  * every refusal string is asserted BYTE FOR BYTE because it is what the ledger
@@ -22,41 +34,40 @@
  * as `refused` rather than `unparsable` - the model's evidence is blamed, not
  * its syntax.
  */
-import assert from "node:assert/strict";
-import * as Path from "node:path";
-
-import Judge from "../../../Target/Function/Judge.js";
-import Parse from "../../../Target/Function/Parse.js";
-import type Configuration from "../../../Target/Interface/Configuration.js";
-import type { Operation } from "../../../Target/Interface/Operation.js";
-import type { ConfirmReply, ParseResult, PlanReply } from "../../../Target/Interface/Reply.js";
-import type { CorpusSeed } from "../Harness.js";
-import { Check, CorpusView, Finish, Home, Knobs, MakeCounter } from "../Harness.js";
-
-/** A SKILL.md body with matching frontmatter. */
+/**
+ * A SKILL.md body with matching frontmatter.
+ */
 const Body = (Name: string, Extra = ""): string =>
 	`---\nname: ${Name}\ndescription: what it does\n---\n\n# ${Name}\n\n${Extra}`;
 
-/** One parse result's id and detail, or `ok`. */
+/**
+ * One parse result's id and detail, or `ok`.
+ */
 const Failure = (Result: ParseResult<PlanReply | ConfirmReply>): { readonly id: string; readonly detail: string } => {
 	if (!Result.ok) return { id: Result.id, detail: Result.detail };
 	return { id: "ok", detail: "" };
 };
 
-/** The first operation a parse produced, or undefined when the parse refused. */
+/**
+ * The first operation a parse produced, or undefined when the parse refused.
+ */
 const First = (Result: ParseResult<PlanReply | ConfirmReply>): Operation | undefined => {
 	if (!Result.ok) return undefined;
 	return Result.reply.operations[0];
 };
 
-/** The views a phase-1 reply carries, or none for the phase-2 shape. */
+/**
+ * The views a phase-1 reply carries, or none for the phase-2 shape.
+ */
 const Views = (Result: ParseResult<PlanReply | ConfirmReply>): readonly string[] => {
 	if (!Result.ok) return [];
 	if (!("views" in Result.reply)) return [];
 	return Result.reply.views;
 };
 
-/** One judge verdict's rule and detail, or `accepted`. */
+/**
+ * One judge verdict's rule and detail, or `accepted`.
+ */
 const Verdict = (
 	Operation_: Operation,
 	Configuration_: Configuration,
@@ -67,7 +78,9 @@ const Verdict = (
 	return { rule: "accepted", detail: "" };
 };
 
-/** An operation built from data: the one rule that exists for a caller that skipped the parse. */
+/**
+ * An operation built from data: the one rule that exists for a caller that skipped the parse.
+ */
 const Data = (Json: string): Operation => JSON.parse(Json);
 
 export const runTest = async (): Promise<number> => {

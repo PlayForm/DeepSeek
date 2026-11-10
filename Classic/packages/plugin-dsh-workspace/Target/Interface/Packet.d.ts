@@ -5,6 +5,7 @@
  * self-contained.
  *
  * @remarks
+ *
  * WORKSPACE-FAMILY-V4-1.md section 3.5. The shared client library's own
  * PacketView is structurally identical, but the end-phase wires the real import
  * (POC-BRIEF section 2, rule 5). The packet is the orient step of the orient ->

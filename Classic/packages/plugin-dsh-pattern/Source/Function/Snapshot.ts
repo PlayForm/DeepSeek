@@ -1,3 +1,9 @@
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import os from "node:os";
+import { dirname, join, resolve } from "node:path";
+
+import type Snapshot from "@Interface/Snapshot.js";
+
 /**
  * @module Snapshot
  *
@@ -5,6 +11,7 @@
  * FALLBACK store.
  *
  * @remarks
+ *
  * The PRIMARY store is the storage-domain KV domain (Function/Open, the config
  * `domain`); this file is written and read ONLY when the harness provides no
  * storage facility (or its open fails) - the documented fallback, never the
@@ -13,12 +20,6 @@
  * unreadable file is a silent miss (the registry keeps the cold-start catalog)
  * - persistence failure must never reach any caller path.
  */
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import os from "node:os";
-import { dirname, join, resolve } from "node:path";
-
-import type Snapshot from "@Interface/Snapshot.js";
-
 /**
  * Expand a leading ~ to the user's home directory. The remainder after the
  * tilde is joined (not resolved) so it stays RELATIVE to the home - the

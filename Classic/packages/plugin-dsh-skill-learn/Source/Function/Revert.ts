@@ -1,9 +1,17 @@
+import Archive from "@Function/Archive.js";
+import Append, { Blob, Rows, type Touched } from "@Function/Ledger.js";
+import Snapshot from "@Function/Snapshot.js";
+import { Text, type Seam } from "@Function/Write.js";
+import type Configuration from "@Interface/Configuration.js";
+import type { LedgerRow } from "@Interface/Ledger.js";
+
 /**
  * @module Revert
  *
  * One ledger row back to files, fail-closed.
  *
  * @remarks
+ *
  * THE ROW NAMES THE BLOBS AND THE BLOBS ARE THE CONTENT, so a revert never has to guess
  * what a file looked like before (SKILL-LEARN-PLUGIN.md:470-484). It is the same
  * mechanism as the backup, which is why the ledger is the only durable record this
@@ -26,33 +34,40 @@
  * in the archive where the user can still reach them. A single support file has no
  * archive form, so it is left in place and reported as retained.
  */
-import Archive from "@Function/Archive.js";
-import Append, { Blob, Rows, type Touched } from "@Function/Ledger.js";
-import Snapshot from "@Function/Snapshot.js";
-import { Text, type Seam } from "@Function/Write.js";
-import type Configuration from "@Interface/Configuration.js";
-import type { LedgerRow } from "@Interface/Ledger.js";
-
-/** What one revert produced. */
+/**
+ * What one revert produced.
+ */
 export interface Reverted {
-	/** Whether every file the row named was put back. */
+	/**
+	 * Whether every file the row named was put back.
+	 */
 	readonly ok: boolean;
 
-	/** `reverted` is the only success; the rest name why nothing was put back. */
+	/**
+	 * `reverted` is the only success; the rest name why nothing was put back.
+	 */
 	readonly outcome:
 		"reverted" | "missing" | "blob-missing" | "stale" | "staging-retained" | "failed";
 
-	/** How many files were written from their blob. */
+	/**
+	 * How many files were written from their blob.
+	 */
 	readonly restored: number;
 
-	/** How many files were deliberately left in place. */
+	/**
+	 * How many files were deliberately left in place.
+	 */
 	readonly retained: number;
 
-	/** One clause of detail: the missing blob, the stale path, the safety failure. */
+	/**
+	 * One clause of detail: the missing blob, the stale path, the safety failure.
+	 */
 	readonly detail?: string;
 }
 
-/** The typed code of a harness failure, or the message when it carries none. */
+/**
+ * The typed code of a harness failure, or the message when it carries none.
+ */
 const Failure = (Cause: unknown): string => {
 	const Code = (Cause as { readonly code?: unknown } | undefined)?.code;
 	switch (true) {
@@ -65,7 +80,9 @@ const Failure = (Cause: unknown): string => {
 	}
 };
 
-/** The row whose id is the identifier; the newest match wins, because ids are unique. */
+/**
+ * The row whose id is the identifier; the newest match wins, because ids are unique.
+ */
 const Find = (Rows_: readonly LedgerRow[], Identifier: string): LedgerRow | undefined => {
 	let Found: LedgerRow | undefined;
 	for (const Row of Rows_) {

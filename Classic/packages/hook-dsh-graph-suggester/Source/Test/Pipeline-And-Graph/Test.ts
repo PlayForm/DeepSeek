@@ -1,20 +1,3 @@
-/**
- * @module Test
- *
- * One singular test of the graph-suggester pipeline against the fake graph
- * service.
- *
- * @remarks
- * The test covers the Neighborhood resolution through the graph (the anchor,
- * the limit, the empty-reason fallback), the graph-only candidate source (an
- * empty component abstains `no-companions`, never a literal target set), the
- * graph-unavailable/abstain paths (absent, throwing, graph:false), the
- * Sibling same-directory projection, the gate (cooldown, per-turn cap + the
- * pre-step reset), the block-decision preservation, the exclusion, the
- * volatile flip, the note truncation, the anchor exclusion (a component that
- * holds only the anchor abstains, and no note ever names the anchor), and the
- * fs purity across a full scenario.
- */
 import assert from "node:assert/strict";
 import {
 	Call,
@@ -31,7 +14,27 @@ import {
 	Volatile,
 } from "../Harness.js";
 
-/** The full-evidence Neighborhood probe: the anchor the graph is asked about. */
+/**
+ * @module Test
+ *
+ * One singular test of the graph-suggester pipeline against the fake graph
+ * service.
+ *
+ * @remarks
+ *
+ * The test covers the Neighborhood resolution through the graph (the anchor,
+ * the limit, the empty-reason fallback), the graph-only candidate source (an
+ * empty component abstains `no-companions`, never a literal target set), the
+ * graph-unavailable/abstain paths (absent, throwing, graph:false), the
+ * Sibling same-directory projection, the gate (cooldown, per-turn cap + the
+ * pre-step reset), the block-decision preservation, the exclusion, the
+ * volatile flip, the note truncation, the anchor exclusion (a component that
+ * holds only the anchor abstains, and no note ever names the anchor), and the
+ * fs purity across a full scenario.
+ */
+/**
+ * The full-evidence Neighborhood probe: the anchor the graph is asked about.
+ */
 const NEIGHBORHOOD_ARGS = {
 	file_path: "src/Source/Core.ts",
 	pattern: "export function",

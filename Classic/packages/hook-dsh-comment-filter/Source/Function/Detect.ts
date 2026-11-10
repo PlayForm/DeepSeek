@@ -1,3 +1,5 @@
+import type Syntax from "@Interface/Syntax.js";
+
 /**
  * @module Detect
  *
@@ -5,6 +7,7 @@
  * default export, one table, one rule.
  *
  * @remarks
+ *
  * The strip transform asks Detect for the file's comment/string vocabulary; an UNKNOWN extension
  * returns `undefined`, and Function/Strip then keeps the text block BY IDENTITY - never strip
  * what cannot be parsed. `md`, `mdx`, `json` and `txt` are deliberately ABSENT: prose and data
@@ -38,8 +41,6 @@
  * The shared objects are reused across keys (a table, not 60 copies): the scanner treats them
  * as read-only, and one family object is one auditable vocabulary.
  */
-import type Syntax from "@Interface/Syntax.js";
-
 /**
  * The C family's plain dialect: the slash line token plus the slash-star pair.
  */

@@ -1,22 +1,3 @@
-/**
- * @module Test
- *
- * The plan's suite 1: the classification rule table of an EXPLICIT pack, the
- * History family's precedence, and the two silences.
- *
- * @remarks
- * The rule table (one case per family, the priority tie-break, and the evidence
- * total beating the priority), the History family's precedence over the pack,
- * and the two silences (no-signal inside a packed workspace, no-history in a
- * workspace with neither a pack nor a history).
- *
- * The classifier's verdict is read from the ledger line (a note or the
- * low-confidence abstention names the winning family), so the suite asserts the
- * RULE TABLE, not the delivery.
- *
- * THE BUILT-IN PACK IS RETIRED: every rule below belongs to the temporary
- * `.dsh/pack.yml`, never to a literal built-in family.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -35,10 +16,34 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A temp tree under the OS temp dir (fresh per folder process). */
+/**
+ * @module Test
+ *
+ * The plan's suite 1: the classification rule table of an EXPLICIT pack, the
+ * History family's precedence, and the two silences.
+ *
+ * @remarks
+ *
+ * The rule table (one case per family, the priority tie-break, and the evidence
+ * total beating the priority), the History family's precedence over the pack,
+ * and the two silences (no-signal inside a packed workspace, no-history in a
+ * workspace with neither a pack nor a history).
+ *
+ * The classifier's verdict is read from the ledger line (a note or the
+ * low-confidence abstention names the winning family), so the suite asserts the
+ * RULE TABLE, not the delivery.
+ *
+ * THE BUILT-IN PACK IS RETIRED: every rule below belongs to the temporary
+ * `.dsh/pack.yml`, never to a literal built-in family.
+ */
+/**
+ * A temp tree under the OS temp dir (fresh per folder process).
+ */
 const Tree = (Prefix: string): string => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
 
-/** Write one file under the tree (parents created). */
+/**
+ * Write one file under the tree (parents created).
+ */
 const Put = (Root: string, Relative: string, Body = "x"): string => {
 	const Full = Path.join(Root, Relative);
 	FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
@@ -99,19 +104,25 @@ const Pack = `families:
         reason: the temp entry
 `;
 
-/** The PACKED workspace: the manifest, the pack, and the three companions. */
+/**
+ * The PACKED workspace: the manifest, the pack, and the three companions.
+ */
 const Packed = Tree("search-suggester-classification-");
 Put(Packed, "package.json", "{}");
 Put(Packed, ".dsh/pack.yml", Pack);
 const PackedRead = Put(Packed, "README.md");
 const PackedSource = Put(Packed, "Source/Library.ts");
 
-/** The BARE workspace: a manifest and nothing else. */
+/**
+ * The BARE workspace: a manifest and nothing else.
+ */
 const Bare = Tree("search-suggester-classification-bare-");
 Put(Bare, "package.json", "{}");
 const BareRead = Put(Bare, "README.md");
 
-/** One judged grep whose text is the pattern and whose path is the anchor. */
+/**
+ * One judged grep whose text is the pattern and whose path is the anchor.
+ */
 const Grep = (Run: any, Id: string, Pattern: string, Path_: string): Promise<any> =>
 	Post(Run, { name: "grep", arguments: { pattern: Pattern, path: Path_ }, agent: AgentOf(Id) });
 

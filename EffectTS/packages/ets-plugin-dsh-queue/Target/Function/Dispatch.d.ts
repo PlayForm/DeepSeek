@@ -1,3 +1,7 @@
+import { MAIN } from "./Capacity.js";
+import { type Settle } from "./Spawn.js";
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Dispatch
  *
@@ -5,6 +9,7 @@
  * seat, flip the state to `dispatched`, and ledger the assignment.
  *
  * @remarks
+ *
  * Section 2.2. The step resolves the route per the user's policy when the
  * routing enforcer is present (the routed dispatch, silently - the queue
  * NEVER alters the spec, only schedules), writes the journal record and the
@@ -35,10 +40,6 @@
  * load block. The probe is once per dispatch, cheap, and typed through the
  * queue's own Interface/Route.ts (the self-contained sibling shape).
  */
-import { MAIN } from "./Capacity.js";
-import { type Settle } from "./Spawn.js";
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(State: State, Agent: string, Append: (Message: string) => void, Settle?: Settle): import("../Interface/Task.js").default | undefined;
 /**
  * The main pool's key is re-exported for the callers that dispatch from the

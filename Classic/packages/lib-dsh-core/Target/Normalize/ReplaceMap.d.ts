@@ -7,6 +7,7 @@ export default _default;
  * characters.
  *
  * @remarks
+ *
  * Each character of the text that is a KEY of the mapping is replaced by its mapped value;
  * the mapping value may be a MULTI-CHARACTER string (one character in, any string out), while
  * the keys are single characters.

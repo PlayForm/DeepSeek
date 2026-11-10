@@ -1,3 +1,10 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import ClientPluginModule from "../../Target/Client.js";
+
 /**
  * @module Harness
  *
@@ -7,6 +14,7 @@
  * pattern, written ONCE per package and imported by every test folder.
  *
  * @remarks
+ *
  * The host injects NO services and reads the REAL filesystem (its own logs, read-only), so the
  * harness works against a disposable temp directory that stands in for the log root.
  *
@@ -18,16 +26,11 @@
  * NO FAKE CLOCK: the host has no clock dependency at all - every assertion is on the endpoint
  * results, the file bytes, and the activation lines.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-import ClientPluginModule from "../../Target/Client.js";
-
 export { Plugin };
 
-/** The browser half (`./client`: { inject, apply, default }). */
+/**
+ * The browser half (`./client`: { inject, apply, default }).
+ */
 export const ClientPlugin = ClientPluginModule;
 
 /**
@@ -203,13 +206,17 @@ export const MakeEditor = (Entries: any[]): any => {
 	return { Editor, Writes };
 };
 
-/** One fake profile entry carrying a serialized Schemastery schema. */
+/**
+ * One fake profile entry carrying a serialized Schemastery schema.
+ */
 export const MakeEntry = (Id: string, Schema: any): any => ({
 	options: { id: Id, name: `@playform/${Id}` },
 	fiber: { runtime: { Config: Schema } },
 });
 
-/** A serialized-schema stand-in: the `{ toJSON }` shape the editor carries. */
+/**
+ * A serialized-schema stand-in: the `{ toJSON }` shape the editor carries.
+ */
 export const MakeSchema = (Serialized: unknown): any => ({
 	toJSON: () => Serialized,
 });
@@ -291,7 +298,9 @@ export const MakeClient = (Options: { remote?: unknown } = {}): any => {
 	return Run;
 };
 
-/** The built client bundle's source (the closure-factory envelope). */
+/**
+ * The built client bundle's source (the closure-factory envelope).
+ */
 export const BundleSource = (): string =>
 	FileSystem.readFileSync(new URL("../Client.bundle.js", import.meta.url), "utf8");
 

@@ -1,13 +1,3 @@
-/**
- * @module Test
- *
- * The per-file commits through the factory's shared write executor and the commit reply union.
- *
- * @remarks
- * Covers the applied happy path with its byte-exact lines, the survivors-mode conflict, the
- * mid-batch interruption with recovery-required states, the sandbox/policy denial, the honest
- * outcome-unknown, and the read-back verification rule.
- */
 import assert from "node:assert/strict";
 import {
 	CheckAsync,
@@ -21,6 +11,17 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The per-file commits through the factory's shared write executor and the commit reply union.
+ *
+ * @remarks
+ *
+ * Covers the applied happy path with its byte-exact lines, the survivors-mode conflict, the
+ * mid-batch interruption with recovery-required states, the sandbox/policy denial, the honest
+ * outcome-unknown, and the read-back verification rule.
+ */
 /** A standard enabled mount with overrides and optional fs faults. The D6
  *  policy gate is OPENED here (`commit: auto`) because this folder exercises
  *  the commit itself; the shipped `commit: approve` is arbitrated by
@@ -36,7 +37,9 @@ const Setup = (
 	);
 };
 
-/** Drive one folder's checks. */
+/**
+ * Drive one folder's checks.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

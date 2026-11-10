@@ -1,14 +1,15 @@
+import type Operation from "./Operation.js";
 /**
  * @module Batch
  *
  * The input of preview/commit: an ORDERED set of per-file operations.
  *
  * @remarks
+ *
  * The order is the commit order (the factory's write executor is awaited
  * one file at a time, so the version-guarded writes never race - the
  * sequential fold).
  */
-import type Operation from "./Operation.js";
 export default interface Batch {
     /**
      * An optional caller-supplied id; a generated one is assigned when

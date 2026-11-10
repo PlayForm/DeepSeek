@@ -1,3 +1,9 @@
+import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
+import type State from "@Interface/State.js";
+import { ToolResults } from "@playform/lib-dsh-core";
+
+import Replace from "./Replace.js";
+
 /**
  * @module Overpass
  *
@@ -5,6 +11,7 @@
  * (@playform/lib-dsh-core/Overpass/ToolResults).
  *
  * @remarks
+ *
  * The generic machinery (next() first, the tool-results scope gate, the
  * exemption list, the accepted/non-value decision rules, the content basis,
  * the text-only block rewrite, the CCR marker guard, the fail-open, the
@@ -28,12 +35,6 @@
  * untouched. The registration is what makes the arm OUTERMOST in the family's
  * bundle order; the core's marker guard makes any load order safe.
  */
-import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
-import type State from "@Interface/State.js";
-import { ToolResults } from "@playform/lib-dsh-core";
-
-import Replace from "./Replace.js";
-
 /**
  * The schema-default scopes (the fallback for a hand-built config).
  */

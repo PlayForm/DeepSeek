@@ -1,9 +1,16 @@
+import Path from "node:path";
+
+import type { Touched } from "@Function/Ledger.js";
+import { Expand, Text, type Seam } from "@Function/Write.js";
+import type Configuration from "@Interface/Configuration.js";
+
 /**
  * @module Archive
  *
  * The neutralize-and-copy archive, and its restore.
  *
  * @remarks
+ *
  * THERE IS NO MOVE AND NO DELETE IN THE SEAM (dsh-fs/lib/types/index.d.ts:61-240),
  * so an archive is a COPY PLUS A NEUTRALIZATION, and together they preserve the
  * bytes and take the skill out of the model's catalog
@@ -36,56 +43,81 @@
  * a hole in it, because an archive that silently drops a file is worse than a skill
  * the curator cannot age.
  */
-import Path from "node:path";
-
-import type { Touched } from "@Function/Ledger.js";
-import { Expand, Text, type Seam } from "@Function/Write.js";
-import type Configuration from "@Interface/Configuration.js";
-
-/** The flag that takes a skill out of the model's catalog (dsh-skill-filesystem/lib/index.js:852-881). */
+/**
+ * The flag that takes a skill out of the model's catalog
+ * (dsh-skill-filesystem/lib/index.js:852-881).
+ */
 const Flag = /^disable-model-invocation\s*:/;
 
-/** How deep the package walk descends below one skill directory. */
+/**
+ * How deep the package walk descends below one skill directory.
+ */
 const Depth = 3;
 
-/** What one archive produced. */
+/**
+ * What one archive produced.
+ */
 export interface Archived {
-	/** Whether the copy landed and the live file was neutralized. */
+	/**
+	 * Whether the copy landed and the live file was neutralized.
+	 */
 	readonly ok: boolean;
 
-	/** `archived` is the only success; the rest name why nothing was archived. */
+	/**
+	 * `archived` is the only success; the rest name why nothing was archived.
+	 */
 	readonly outcome: "archived" | "absent" | "foreign-root" | "failed";
 
-	/** The archive directory the copy landed in, or "" when nothing was copied. */
+	/**
+	 * The archive directory the copy landed in, or "" when nothing was copied.
+	 */
 	readonly path: string;
 
-	/** The live package as it was, for the ledger row's before side. */
+	/**
+	 * The live package as it was, for the ledger row's before side.
+	 */
 	readonly before: readonly Touched[];
 
-	/** The archive copy as it is, for the ledger row's after side. */
+	/**
+	 * The archive copy as it is, for the ledger row's after side.
+	 */
 	readonly after: readonly Touched[];
 
-	/** One clause of detail when the outcome is not `archived`. */
+	/**
+	 * One clause of detail when the outcome is not `archived`.
+	 */
 	readonly detail?: string;
 }
 
-/** What one restore produced. */
+/**
+ * What one restore produced.
+ */
 export interface Restored {
-	/** Whether the live file was written back. */
+	/**
+	 * Whether the live file was written back.
+	 */
 	readonly ok: boolean;
 
-	/** `restored` is the only success; the rest name why nothing was written. */
+	/**
+	 * `restored` is the only success; the rest name why nothing was written.
+	 */
 	readonly outcome:
 		"restored" | "not-archived" | "destination-exists" | "foreign-root" | "failed";
 
-	/** The live path that was written, or "" when nothing was written. */
+	/**
+	 * The live path that was written, or "" when nothing was written.
+	 */
 	readonly path: string;
 
-	/** One clause of detail when the outcome is not `restored`. */
+	/**
+	 * One clause of detail when the outcome is not `restored`.
+	 */
 	readonly detail?: string;
 }
 
-/** The typed code of a harness failure, or the message when it carries none. */
+/**
+ * The typed code of a harness failure, or the message when it carries none.
+ */
 const Failure = (Cause: unknown): string => {
 	const Code = (Cause as { readonly code?: unknown } | undefined)?.code;
 	switch (true) {
@@ -98,7 +130,10 @@ const Failure = (Cause: unknown): string => {
 	}
 };
 
-/** The collision suffix: the directory name plus a 14-digit UTC stamp (tools/skill_usage.py:640-641). */
+/**
+ * The collision suffix: the directory name plus a 14-digit UTC stamp
+ * (tools/skill_usage.py:640-641).
+ */
 const Stamp = (): string => new Date().toISOString().replace(/[-:T]/g, "").slice(0, 14);
 
 /**
@@ -136,16 +171,22 @@ const Neutral = (Given: string): string | null => {
 	return [First, ...Block, ...Lines.slice(End)].join("\n");
 };
 
-/** The text with every `disable-model-invocation` line dropped, which is the restore's whole edit. */
+/**
+ * The text with every `disable-model-invocation` line dropped, which is the restore's whole edit.
+ */
 const Plain = (Given: string): string =>
 	Given.split("\n")
 		.filter((Line) => !Flag.test(Line))
 		.join("\n");
 
-/** Whether the frontmatter already carries the neutralization flag. */
+/**
+ * Whether the frontmatter already carries the neutralization flag.
+ */
 const Flagged = (Given: string): boolean => Given.split("\n").some((Line) => Flag.test(Line));
 
-/** Every support file of one skill package, as paths relative to the skill directory. */
+/**
+ * Every support file of one skill package, as paths relative to the skill directory.
+ */
 const Gather = async (
 	Seam_: Seam,
 	Directory: string,

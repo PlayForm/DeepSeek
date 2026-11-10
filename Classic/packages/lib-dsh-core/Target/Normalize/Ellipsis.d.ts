@@ -5,6 +5,7 @@
  * collapsed into one code point by text processors.
  *
  * @remarks
+ *
  * The class form (a one-member character class) keeps every table in this directory
  * shape-identical: a per-character class handed to the generic Replace, whose consumer
  * chooses the replacement (e.g. the ASCII `...` three-dot sequence - a MULTI-character

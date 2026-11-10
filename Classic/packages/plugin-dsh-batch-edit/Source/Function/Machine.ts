@@ -1,3 +1,12 @@
+import { readdirSync } from "node:fs";
+import { dirname as Dir, isAbsolute, resolve as ResolvePath } from "node:path";
+
+import type { FsObservation, FsTarget, FsVersion } from "@Interface/Fs.js";
+import type { MachineRecord, OpLine, ProcessCell, SearchSpec } from "@Interface/Process.js";
+import type State from "@Interface/State.js";
+
+import * as Ledger from "./Ledger.js";
+
 /**
  * @module Machine
  *
@@ -8,6 +17,7 @@
  * fail-loud at open - the live containers' Apply.ts Validate precedent).
  *
  * @remarks
+ *
  * THE EVENT-LOOP LAW: the fs/observed observer (OnObserved) is a SYNCHRONOUS
  * cell-flipper only - no awaits, no throws, no I/O; all async work (reads,
  * previews, writes) runs inside the tool's execute through Ops.ts. The observer
@@ -20,16 +30,9 @@
  * and every event the machine's own Stash idempotence gate catches - the
  * machine never halts on its own reconciliations.
  */
-import { readdirSync } from "node:fs";
-import { dirname as Dir, isAbsolute, resolve as ResolvePath } from "node:path";
-
-import type { FsObservation, FsTarget, FsVersion } from "@Interface/Fs.js";
-import type { MachineRecord, OpLine, ProcessCell, SearchSpec } from "@Interface/Process.js";
-import type State from "@Interface/State.js";
-
-import * as Ledger from "./Ledger.js";
-
-/** The maximum glob expansion per pattern (the eviction-adjacent cap). */
+/**
+ * The maximum glob expansion per pattern (the eviction-adjacent cap).
+ */
 const GlobCap = 200;
 
 /** The agent id of an exec (the planted-board keying; "(unowned)" is the
@@ -39,7 +42,9 @@ export const AgentOf = (Exec: unknown): string => {
 	return typeof ID === "string" && ID.length > 0 ? ID : "(unowned)";
 };
 
-/** The (possibly created) per-agent machine map. */
+/**
+ * The (possibly created) per-agent machine map.
+ */
 export const ScopeOf = (State: State, Agent: string): Map<string, MachineRecord> => {
 	let Scope = State.Machines.get(Agent);
 	if (Scope === undefined) {
@@ -61,7 +66,9 @@ export const AllMachines = (State: State): MachineRecord[] => {
 	return Out;
 };
 
-/** One process cell in the observed state. */
+/**
+ * One process cell in the observed state.
+ */
 const Cell = (Path: string, Version: FsVersion | undefined): ProcessCell => ({
 	path: Path,
 	status: "observed",
@@ -168,7 +175,9 @@ export const ParseOp = (Line: string): OpLine => {
 	return Op;
 };
 
-/** Parse the whole transition table with the configured cap. */
+/**
+ * Parse the whole transition table with the configured cap.
+ */
 export const ParseOps = (Lines: string[] | undefined, Cap: number): OpLine[] => {
 	const Parsed = (Lines ?? []).map(ParseOp);
 	if (Parsed.length > Cap) {
@@ -314,7 +323,9 @@ export const Open = (
 	return Machine;
 };
 
-/** Insert into an open machine mid-life (the lease stays). */
+/**
+ * Insert into an open machine mid-life (the lease stays).
+ */
 export const Insert = (
 	Machine: MachineRecord,
 	Cells: ProcessCell[],
@@ -333,7 +344,9 @@ export const Insert = (
 	}
 };
 
-/** Drop files from an open machine. */
+/**
+ * Drop files from an open machine.
+ */
 export const Remove = (
 	Machine: MachineRecord,
 	Paths: string[],
@@ -397,7 +410,9 @@ export const OnObserved = (
 	}
 };
 
-/** A new machine id (`mach-<n>`; deterministic counter, never a clock). */
+/**
+ * A new machine id (`mach-<n>`; deterministic counter, never a clock).
+ */
 export const NextID = (State: State): string => {
 	State.Counter += 1;
 	return `mach-${State.Counter}`;

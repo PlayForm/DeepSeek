@@ -1,3 +1,7 @@
+import { MAIN, Seat } from "@Function/Capacity.js";
+import type State from "@Interface/State.js";
+import type Task from "@Interface/Task.js";
+
 /**
  * @module Restore
  *
@@ -7,6 +11,7 @@
  * and the seat bookkeeping.
  *
  * @remarks
+ *
  * The restore is deliberately exact: the persisted state is the truth the
  * reconcile then compares with the live agents. The id sequence is raised to
  * the highest restored `seq`, so a new enqueue can never collide with a
@@ -15,10 +20,6 @@
  * reconcile proves its child gone), under the seat key the task was assigned
  * to.
  */
-import { MAIN, Seat } from "@Function/Capacity.js";
-import type State from "@Interface/State.js";
-import type Task from "@Interface/Task.js";
-
 export default (State: State, Persisted: readonly Task[]): void => {
 	State.Tasks.clear();
 	State.Seats.clear();

@@ -10,6 +10,7 @@ import type Policy from "./Policy.js";
  * the learning settings, and the `extends` chain.
  *
  * @remarks
+ *
  * EVERY section is optional: a pack may declare only its signature, only its
  * families, or only a learning policy. A missing pack means the built-in pack
  * (this monorepo) and, outside its signature, silence.
@@ -25,18 +26,32 @@ import type Policy from "./Policy.js";
  * underneath.
  */
 export default interface Pack {
-    /** The repo slug override (absent = the repo root's basename, lowercased). */
+    /**
+     * The repo slug override (absent = the repo root's basename, lowercased).
+     */
     slug?: string;
-    /** The marker paths that identify the repo (absent = the built-in marker). */
+    /**
+     * The marker paths that identify the repo (absent = the built-in marker).
+     */
     signature?: string[];
-    /** The families, keyed by `<domain>/<family-id>`. */
+    /**
+     * The families, keyed by `<domain>/<family-id>`.
+     */
     families?: Record<string, Family>;
-    /** The indexer scope/excludes/languages/maxFiles. */
+    /**
+     * The indexer scope/excludes/languages/maxFiles.
+     */
     indexer?: Indexer;
-    /** The per-action allowlist. */
+    /**
+     * The per-action allowlist.
+     */
     policy?: Policy;
-    /** The learning settings. */
+    /**
+     * The learning settings.
+     */
     learning?: Learning;
-    /** The base pack name(s) to merge underneath this one (cycle-guarded). */
+    /**
+     * The base pack name(s) to merge underneath this one (cycle-guarded).
+     */
     extends?: string | string[];
 }

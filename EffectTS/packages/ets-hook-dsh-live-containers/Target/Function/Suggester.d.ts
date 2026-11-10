@@ -2,6 +2,33 @@ import type { Log } from "./Render.js";
 import type { BoardState, Suggestion } from "../Interface/Events.js";
 import type State from "../Interface/State.js";
 /**
+ * @module Suggester
+ *
+ * Spawns a one-shot detached subagent that proposes a configured block and stores its
+ * verdict.
+ *
+ * @remarks
+ *
+ * The CAN-5 mini-conversation suggester (I6 SUGGESTER-CONFIGURED;
+ * IMPLEMENTATION-DESIGN.md sections 2.6, 3.8, 4.5 as amended). The suggester does not
+ * suggest a template NAME; it suggests a CONFIGURED block: a one-shot detached subagent
+ * receives the request excerpt + the compressed catalog + the task facts, and returns a
+ * strict JSON suggestion carrying the template id and the opening variables
+ * (expectAgents / steps - the frozen v1 token grammar, I6 R1). The suggestion arrives AS
+ * A PLANTED BLOCK (the "plant" mode) or as the plain note (the "section" tier), and the
+ * main conversation accepts or dismisses it with a ONE-WORD command on
+ * live_container_set.
+ *
+ * PRIVACY (ratified): default "redact" for every route (the first 200 chars of the
+ * request plus its length); "verbatim" only by explicit config, with the SCHEME
+ * disclosure as the consent surface.
+ *
+ * CONTAINMENT: the suggestion runs DETACHED; a spawn/timeout/parse failure produces ONLY
+ * a ledger line, never a conversation artifact, never a retry within the same turn. With
+ * suggester "off" nothing spawns (the zero-subagent guarantee, provable by the smoke
+ * harness's spawn counter).
+ */
+/**
  * The suggestion id grammar (I6 3.3): `sug-<4 hex>`, per-agent-keyed.
  */
 export declare const NewID: () => string;

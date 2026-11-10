@@ -5,6 +5,7 @@
  * `State(ctx, config, options)`.
  *
  * @remarks
+ *
  * - `module` - REQUIRED. The module identity ("hook-dsh-governor-package",
  *   "hook-dsh-pinner-package", "hook-dsh-governor-cargo", ...). It is stored
  *   on State.Module AND doubles as the logger/ledger prefix the factory's
@@ -32,15 +33,23 @@
  *   and underscores).
  */
 export default interface Options {
-	/** The module identity - doubles as the logger/ledger prefix. */
+	/**
+	 * The module identity - doubles as the logger/ledger prefix.
+	 */
 	module: string;
 
-	/** StateKey -> configKey map of module-specific fields to copy. */
+	/**
+	 * StateKey -> configKey map of module-specific fields to copy.
+	 */
 	fields?: Record<string, string> | undefined;
 
-	/** The policy sidecar file name for union discovery (State.PolicyName). */
+	/**
+	 * The policy sidecar file name for union discovery (State.PolicyName).
+	 */
 	policyFileName?: string | undefined;
 
-	/** The storage journal domain name (P5; default "package_governance"). */
+	/**
+	 * The storage journal domain name (P5; default "package_governance").
+	 */
 	journalDomain?: string | undefined;
 }

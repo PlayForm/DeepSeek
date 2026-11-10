@@ -85,6 +85,7 @@ export const DOMAIN = {
  * call time.
  *
  * @remarks
+ *
  * The shell is a cordis Service class - not an Effect concept - so the
  * service captures the instance instead of owning its state.
  */

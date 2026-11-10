@@ -6,6 +6,7 @@
  * IDENTITY when nothing changed.
  *
  * @remarks
+ *
  * The identity rule is the caller's no-op contract: an unchanged content array must be
  * indistinguishable from the input (the dash smoke asserts `content[0] === block` for a
  * non-text block and the arms return the bare decision when the count is zero), so a copy is

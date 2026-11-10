@@ -1,3 +1,5 @@
+import type { DatabaseSync } from "node:sqlite";
+
 /**
  * @module Assess
  *
@@ -6,6 +8,7 @@
  * line and the edit-grain totals.
  *
  * @remarks
+ *
  * The buckets follow `Documentation/Plans/COST-TRACK-PLUGIN.md` section 12 and
  * section 16: delivered (the files whose verdict is "changed"), explored (read
  * or searched, never changed), reverted (changed and then undone), overhead
@@ -17,8 +20,6 @@
  * money is rounded to six decimals, the reading precision of every other report
  * row.
  */
-import type { DatabaseSync } from "node:sqlite";
-
 type Row = {
 	SessionId: string;
 	Delivered: number;

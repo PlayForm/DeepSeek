@@ -1,3 +1,6 @@
+import type Batch from "../Interface/Batch.js";
+import type Proposal from "../Interface/Proposal.js";
+
 /**
  * @module Batch
  *
@@ -6,6 +9,7 @@
  * and the decision hook records.
  *
  * @remarks
+ *
  * The conversion is the "real batch-contract wiring" the plan defers to the
  * caller side:
  *
@@ -19,9 +23,6 @@
  *
  * Pure: the internal proposal is never mutated.
  */
-import type Batch from "../Interface/Batch.js";
-import type Proposal from "../Interface/Proposal.js";
-
 export default (Proposal: Proposal, Origin: string): Batch => ({
 	id: Proposal.id,
 	intent: Proposal.intent.kind,

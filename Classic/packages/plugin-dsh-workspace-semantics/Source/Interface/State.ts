@@ -1,3 +1,10 @@
+import type Adapter from "@Interface/Adapter.js";
+import type Deepening from "@Interface/Deepening.js";
+import type DomainHandle from "@Interface/Domain.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type Model from "@Interface/Model.js";
+import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
+
 /**
  * @module State
  *
@@ -5,6 +12,7 @@
  * own fields.
  *
  * @remarks
+ *
  * The shared factory shape is Context, Module, Enabled/Ledger/List, the
  * machinery maps, and the P10 volatile refresh the factory's State builder
  * registers.
@@ -14,15 +22,10 @@
  * identity lives in the package name and the `name` export
  * (plugin-dsh-workspace-semantics).
  */
-import type Adapter from "@Interface/Adapter.js";
-import type Deepening from "@Interface/Deepening.js";
-import type DomainHandle from "@Interface/Domain.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type Model from "@Interface/Model.js";
-import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
-
 interface Extra {
-	/** The master switch (config `enabled` - the IDLE-forever posture). */
+	/**
+	 * The master switch (config `enabled` - the IDLE-forever posture).
+	 */
 	On: boolean;
 
 	/**
@@ -31,7 +34,9 @@ interface Extra {
 	 */
 	DomainName: string;
 
-	/** Config `maxEntries` - the index bound (volatile). */
+	/**
+	 * Config `maxEntries` - the index bound (volatile).
+	 */
 	MaxEntries: number;
 
 	/**
@@ -60,16 +65,24 @@ interface Extra {
 	 */
 	AdapterNames: string[];
 
-	/** The injected factory instance (the State builder, the ledger, the match, the Wire). */
+	/**
+	 * The injected factory instance (the State builder, the ledger, the match, the Wire).
+	 */
 	Factory: FactoryHandle;
 
-	/** The injected `fs` facility (readText for the lazy model build). */
+	/**
+	 * The injected `fs` facility (readText for the lazy model build).
+	 */
 	Fs: unknown;
 
-	/** The built models, keyed by path (the index). */
+	/**
+	 * The built models, keyed by path (the index).
+	 */
 	Index: Map<string, Model>;
 
-	/** The service's own monotonic index revision (never a wall clock). */
+	/**
+	 * The service's own monotonic index revision (never a wall clock).
+	 */
 	Revision: number;
 
 	/**
@@ -78,7 +91,9 @@ interface Extra {
 	 */
 	Adapters: Map<string, Adapter>;
 
-	/** The deepener registry, keyed by extension (with dot, lowercase). */
+	/**
+	 * The deepener registry, keyed by extension (with dot, lowercase).
+	 */
 	Deepenings: Map<string, Deepening>;
 
 	/**

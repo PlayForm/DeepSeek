@@ -1,20 +1,3 @@
-// Source/Test/Pricing/Test.ts - THE PRICING FIXTURE SET (Temporary/
-// Cost-Research/Plan.md lane B4a; Documentation/Plans/COST-TRACK-PLUGIN.md
-// sections 6 and 17.2; the research's sections 2.2 and 2.3): one fixed set of
-// calls is booked through the drain against a plain card, a card with a
-// cache-read rate, a windowed card, a region-specific card, a tiered card,
-// two conditional cards and an unknown model, and the read answers the exact
-// per-bucket money, the exact total and the unpriced coverage.
-//
-// Three properties carry the lane. The windowed and region-specific checks
-// are the family-binding ones: a card's tier rows are read inside the card's
-// own window and region, an exact match beats a NEWER generic row, and the
-// other window's band never enters the walk. The unpriced check is the
-// accounting one: a call whose rate card the book does not carry stores zero
-// money, keeps its usage, and is counted as unpriced rather than free. The
-// conditional checks are the selection one: a card selected from the
-// request's total prompt size prices the whole request flat and never joins
-// the marginal ladder.
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -28,6 +11,29 @@ import Reader from "../../../Target/Function/Reader.js";
 import Report from "../../../Target/Function/Report.js";
 import { Check, Finish, Make, MakeCounter, Validate } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE PRICING FIXTURE SET (Temporary/Cost-Research/Plan.md lane B4a;
+ * Documentation/Plans/COST-TRACK-PLUGIN.md sections 6 and 17.2; the research's
+ * sections 2.2 and 2.3), proved over one fixed set of booked calls.
+ *
+ * @remarks
+ *
+ * One fixed set of calls is booked through the drain against a plain card, a card
+ * with a cache-read rate, a windowed card, a region-specific card, a tiered card,
+ * two conditional cards and an unknown model, and the read answers the exact
+ * per-bucket money, the exact total and the unpriced coverage.
+ *
+ * Three properties carry the lane. The windowed and region-specific checks are the
+ * family-binding ones: a card's tier rows are read inside the card's own window
+ * and region, an exact match beats a NEWER generic row, and the other window's
+ * band never enters the walk. The unpriced check is the accounting one: a call
+ * whose rate card the book does not carry stores zero money, keeps its usage, and
+ * is counted as unpriced rather than free. The conditional checks are the
+ * selection one: a card selected from the request's total prompt size prices the
+ * whole request flat and never joins the marginal ladder.
+ */
 // The effective dates the hand-inserted cards carry: the generic row is the
 // NEWER one, so an exact window or region match has to win over the greater
 // EffectiveFrom for the specific call - the half of the selection rule a

@@ -1,9 +1,15 @@
+import type { PanelFormField, PanelFormView } from "@Interface/Form.js";
+import type { PanelSection } from "@Interface/Panel.js";
+import type { PanelPorts } from "@Interface/Ports.js";
+import Lines from "@Variable/Lines.js";
+
 /**
  * @module Apply
  *
  * Route one form edit to its write path.
  *
  * @remarks
+ *
  * The two routes are the contract's whole trust model:
  *
  * - A VOLATILE field applies live: the settings client's revision-fenced mutate (one
@@ -16,15 +22,12 @@
  * A SECRET field is never writable from the panel (the host redacts it), and a plain field with no
  * bridge exposed is refused with the documented line.
  */
-import type { PanelFormField, PanelFormView } from "@Interface/Form.js";
-import type { PanelSection } from "@Interface/Panel.js";
-import type { PanelPorts } from "@Interface/Ports.js";
-import Lines from "@Variable/Lines.js";
-
 const IsRecord = (Value: unknown): Value is Record<string, unknown> =>
 	typeof Value === "object" && Value !== null && !Array.isArray(Value);
 
-/** Immutably set one object path (the patch the bridge writes). */
+/**
+ * Immutably set one object path (the patch the bridge writes).
+ */
 const SetPath = (
 	Root: Record<string, unknown>,
 	Path: readonly string[],

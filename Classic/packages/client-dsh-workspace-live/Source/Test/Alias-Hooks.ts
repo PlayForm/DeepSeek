@@ -1,9 +1,13 @@
+import * as FileSystem from "node:fs";
+import * as Module from "node:module";
+
 /**
  * @module Alias-Hooks
  *
  * The module-resolution hooks for the workspace-live client half's smoke suite.
  *
  * @remarks
+ *
  * The built client half (Target/Client.js, Target/Function/Client.js, Target/Library.js) keeps
  * the source aliases `@Function/*` and `@Variable/*` external (bundle: false), so a plain Node
  * run cannot import it without help. This hook maps the aliases back onto the real built Target
@@ -18,10 +22,9 @@
  * is synchronous and applies to the dynamic imports the Harness performs right after loading
  * this module.
  */
-import * as FileSystem from "node:fs";
-import * as Module from "node:module";
-
-/** The package-root URL of the module currently resolving an alias. */
+/**
+ * The package-root URL of the module currently resolving an alias.
+ */
 const Root = (Context: any): string => {
 	const Parent = String(Context.parentURL ?? "");
 	const Marker = Parent.indexOf("/Target/");

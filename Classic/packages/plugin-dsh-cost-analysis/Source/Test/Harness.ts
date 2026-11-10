@@ -1,9 +1,14 @@
+import assert from "node:assert/strict";
+
+import Plugin from "../../Target/Library.js";
+
 /**
  * @module Harness
  *
  * The shared test harness for the cost analysis plugin's smokes.
  *
  * @remarks
+ *
  * The harness carries the counter with Check/CheckAsync/Finish and the FAKE
  * ctx with a FAKE pluginFactory (State/Append), a command registry, a
  * logger, the listener seam, the effect seam and the get accessor - the
@@ -11,17 +16,19 @@
  * the analysis plugin reads a ledger file, it does not load the ledger's
  * code.
  */
-import assert from "node:assert/strict";
-
-import Plugin from "../../Target/Library.js";
-
-/** The per-folder counter: `N` = passing checks, `F` = failing checks. */
+/**
+ * The per-folder counter: `N` = passing checks, `F` = failing checks.
+ */
 export type Counter = { N: number; F: number };
 
-/** A fresh counter for one test folder. */
+/**
+ * A fresh counter for one test folder.
+ */
 export const MakeCounter = (): Counter => ({ N: 0, F: 0 });
 
-/** One check = one assert group; a throw counts the group failed. */
+/**
+ * One check = one assert group; a throw counts the group failed.
+ */
 export const Check = (Count: Counter, Label: string, Assertions: () => void): void => {
 	Count.N++;
 	try {
@@ -34,7 +41,9 @@ export const Check = (Count: Counter, Label: string, Assertions: () => void): vo
 	}
 };
 
-/** The async variant of Check. */
+/**
+ * The async variant of Check.
+ */
 export const CheckAsync = async (
 	Count: Counter,
 	Label: string,
@@ -51,7 +60,9 @@ export const CheckAsync = async (
 	}
 };
 
-/** End-of-folder guard: any failed assertion is a folder failure. */
+/**
+ * End-of-folder guard: any failed assertion is a folder failure.
+ */
 export const Finish = (Count: Counter, Name: string): number => {
 	if (Count.F !== 0) throw new Error(`${Name}: ${Count.F} failed check(s)`);
 	return Count.N;
@@ -98,7 +109,9 @@ export const Make = (Raw: Record<string, unknown>): any => {
 	return { Context, Factory, Commands, Listeners, Lines, Effects, Raw };
 };
 
-/** The validated config shape the loader hands to apply (the schema call). */
+/**
+ * The validated config shape the loader hands to apply (the schema call).
+ */
 export const Validate = (Raw: Record<string, unknown>): any =>
 	(Plugin.Config as unknown as (Raw: Record<string, unknown>) => any)({ ...Raw });
 

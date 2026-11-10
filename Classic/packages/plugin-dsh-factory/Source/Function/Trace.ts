@@ -1,3 +1,6 @@
+import type Trace from "@Interface/Trace.js";
+import { Bound, Complete, IsEnvelope, type Draft, type Envelope } from "@playform/lib-dsh-trace";
+
 /**
  * @module Trace
  *
@@ -8,6 +11,7 @@
  * separate indexer process and no separate indexer plugin).
  *
  * @remarks
+ *
  * The contract:
  *
  * - `emit(draft)` - complete the envelope through the library's Complete
@@ -28,9 +32,6 @@
  *   late emit or subscription is a contained no-op (the service may be
  *   unmounted while an adapter still holds it).
  */
-import type Trace from "@Interface/Trace.js";
-import { Bound, Complete, IsEnvelope, type Draft, type Envelope } from "@playform/lib-dsh-trace";
-
 export default (): Trace => {
 	const Listeners = new Map<string, Set<(Envelope: Envelope) => void>>();
 	const Ring: Envelope[] = [];

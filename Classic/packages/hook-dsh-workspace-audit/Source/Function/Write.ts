@@ -1,3 +1,7 @@
+import Record from "@Function/Record.js";
+import type Line from "@Interface/Line.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Write
  *
@@ -6,6 +10,7 @@
  * Record).
  *
  * @remarks
+ *
  * This is the ONE path every line takes - the listener's and the service's -
  * so the id format and the ledger line format have exactly one definition.
  *
@@ -16,10 +21,6 @@
  *   `audit intent-assessment <operation> (satisfied|unsatisfied)
  *   <assessment>`.
  */
-import Record from "@Function/Record.js";
-import type Line from "@Interface/Line.js";
-import type State from "@Interface/State.js";
-
 export default (
 	State: State,
 	Input: {

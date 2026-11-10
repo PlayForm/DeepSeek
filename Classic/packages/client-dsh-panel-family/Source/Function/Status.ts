@@ -1,19 +1,3 @@
-/**
- * @module Status
- *
- * Resolve one adapter's status from its declared static posture and the panel's live trace tail.
- *
- * @remarks
- * The tail lines are byte-exact `<kind> <key>` strings, where the key is the envelope's payload
- * path when it carries one (the coalescing key of the D5 contract) and its trace id otherwise.
- *
- * The activation state is the adapter's declared posture unless the newest matching envelope
- * carries `payload.activation` of "enabled" or "disabled" - the one live override the panel honours.
- * Without a trace the status is static and the tail is empty (the documented fallback).
- *
- * The activation lamp is a harness `StateDot`: the dot carries the state, the status line beside it
- * carries the words (the dot is aria-hidden).
- */
 import { StateDot, type StateDotState } from "@deepseek-ai/dsh-client-ui-primitives";
 import type {
 	PanelActivation,
@@ -24,7 +8,26 @@ import type {
 import type { PanelLive } from "@Interface/Trace.js";
 import { createElement } from "react";
 
-/** The envelope's display key: its payload path, else its trace id. */
+/**
+ * @module Status
+ *
+ * Resolve one adapter's status from its declared static posture and the panel's live trace tail.
+ *
+ * @remarks
+ *
+ * The tail lines are byte-exact `<kind> <key>` strings, where the key is the envelope's payload
+ * path when it carries one (the coalescing key of the D5 contract) and its trace id otherwise.
+ *
+ * The activation state is the adapter's declared posture unless the newest matching envelope
+ * carries `payload.activation` of "enabled" or "disabled" - the one live override the panel honours.
+ * Without a trace the status is static and the tail is empty (the documented fallback).
+ *
+ * The activation lamp is a harness `StateDot`: the dot carries the state, the status line beside it
+ * carries the words (the dot is aria-hidden).
+ */
+/**
+ * The envelope's display key: its payload path, else its trace id.
+ */
 const Key = (Envelope: PanelEnvelope): string => {
 	const Path = Envelope.payload["path"];
 	switch (true) {
@@ -35,10 +38,14 @@ const Key = (Envelope: PanelEnvelope): string => {
 	}
 };
 
-/** One tail line: the event name and its key. */
+/**
+ * One tail line: the event name and its key.
+ */
 const Line = (Envelope: PanelEnvelope): string => `${Envelope.kind} ${Key(Envelope)}`;
 
-/** The activation override one envelope carries, when it carries one. */
+/**
+ * The activation override one envelope carries, when it carries one.
+ */
 const Activation = (Envelope: PanelEnvelope): PanelActivation | undefined => {
 	const Value = Envelope.payload["activation"];
 	switch (true) {
@@ -68,7 +75,9 @@ const StateOf = (Posture: PanelActivation): StateDotState => {
 	}
 };
 
-/** The activation lamp: the harness state dot for one activation posture. */
+/**
+ * The activation lamp: the harness state dot for one activation posture.
+ */
 export const Lamp = (props: { activation: PanelActivation }): ReturnType<typeof createElement> =>
 	createElement(StateDot, { state: StateOf(props.activation) });
 

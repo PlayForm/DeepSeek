@@ -1,13 +1,3 @@
-// SummaryStrip - the fixed footer bands under the scroll region: the
-// toolbar with the session summary, the control labels, the expand-all
-// button, the top-files band whose five most expensive files are buttons that
-// open the Files view on that file's path, and the valuation comparison line a
-// selected cost basis adds under those bands (lane B4e; the research's
-// sections 4 and 8): the basis the read was valued under, the recorded and
-// revised totals over the same calls, their signed difference, and the count
-// of calls the selected revision could not price, titled with the revision and
-// the attribution policy version. Without a valuation block the strip renders
-// exactly the bands it always rendered.
 import Count from "@Function/Count";
 import CountShort from "@Function/CountShort";
 import Price from "@Function/Price";
@@ -17,6 +7,21 @@ import type CostSummary from "@Interface/Summary";
 import type { Translate } from "@Interface/Translate";
 import { createElement, Fragment } from "react";
 
+/**
+ * @module SummaryStrip
+ *
+ * The fixed footer bands under the scroll region: the toolbar with the session summary and the
+ * control labels, the expand-all button, the top-files band, and the valuation comparison line.
+ *
+ * @remarks
+ *
+ * The top-files band's five most expensive files are buttons that open the Files view on that
+ * file's path. The valuation comparison line a selected cost basis adds under those bands (lane
+ * B4e; the research's sections 4 and 8): the basis the read was valued under, the recorded and
+ * revised totals over the same calls, their signed difference, and the count of calls the selected
+ * revision could not price, titled with the revision and the attribution policy version. Without a
+ * valuation block the strip renders exactly the bands it always rendered.
+ */
 const TopFileLimit = 5;
 
 type SummaryStripProps = {
@@ -49,10 +54,11 @@ const Tone = (Path: string): number => {
 	return Hash % 8;
 };
 
-// UnpricedOf - the revision's own unpriced count: how many calls the selected
-// revision could not price, read from the block and never from the recorded
-// summary. A block without a usable figure answers null and the line shows
-// none, because a zero would claim the revision prices every call.
+/**
+ * UnpricedOf - the revision's own unpriced count: how many calls the selected revision could not
+ * price, read from the block and never from the recorded summary. A block without a usable figure
+ * answers null and the line shows none, because a zero would claim the revision prices every call.
+ */
 const UnpricedOf = (Block: CostValuation | null): number | null => {
 	// The optional read narrows in one step; a switch (true) arm cannot carry
 	// the null check into the next arm.

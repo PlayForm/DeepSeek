@@ -5,6 +5,7 @@
  * the dependency sections is expanded to its most specific form.
  *
  * @remarks
+ *
  * A Cargo-module directive. No shorthand like "1.0" may remain in a governed
  * Cargo.toml:
  *

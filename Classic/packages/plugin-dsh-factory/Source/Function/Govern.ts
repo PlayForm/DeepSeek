@@ -1,3 +1,7 @@
+import { basename as Base } from "node:path";
+
+import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+
 /**
  * @module Govern
  *
@@ -9,6 +13,7 @@
  * successful write into a tool error).
  *
  * @remarks
+ *
  * THE SEQUENTIAL FOLD (v0.2.1): the steps are AWAITED, one at a time -
  * `for (const Step of Listed) { await Step.run(...) }`. Each step's chain
  * completes (its guarded write + its ledger line) BEFORE the next step reads
@@ -38,10 +43,6 @@
  * - `false`, `null` or absent - no governance at all (the escape hatch;
  *   the raw-write tool omits the Govern call entirely for these).
  */
-import { basename as Base } from "node:path";
-
-import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
-
 /** One registered step: the module's name plus its run closure. The closure
  * captures the module's own State (built in that module's apply), so the
  * chain pass, the update stage and every ledger line stay module-owned. The
@@ -49,14 +50,20 @@ import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
  * chain completes before the next step starts) or nothing (a synchronous
  * step). */
 export interface Step {
-	/** The module's step name (the selection key). */
+	/**
+	 * The module's step name (the selection key).
+	 */
 	name: string;
 
-	/** The run closure (the step's own chain pass). */
+	/**
+	 * The run closure (the step's own chain pass).
+	 */
 	run: (Target: FsTarget, Actor: object | undefined, Version: FsVersion) => Promise<void> | void;
 }
 
-/** The registry: basename -> the registered steps in registration order. */
+/**
+ * The registry: basename -> the registered steps in registration order.
+ */
 export type Registry = { [basename: string]: Step[] };
 
 /** The selection: `true`/`"all"` = every registered step; an array (or a

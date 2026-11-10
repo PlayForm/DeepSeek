@@ -5,6 +5,7 @@
  * factory's named type exports.
  *
  * @remarks
+ *
  * The v0.1.1 declaration fix made the structural mirror unnecessary - the factory's
  * Interface/Journal is byte-identical to the governor's pre-flip shape. `detail` carries the
  * natural payload of each event (the activated summary, the fresh version token, the update

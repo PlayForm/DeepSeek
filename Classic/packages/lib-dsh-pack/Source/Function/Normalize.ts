@@ -10,6 +10,7 @@ import type Target from "../Interface/Target.js";
  * families projection can rely on a total structure.
  *
  * @remarks
+ *
  * The defaults are the pack schema's documented ones:
  *
  * - `family.id` - the key's last segment (`doc/Plan` -> `Plan`);
@@ -28,16 +29,21 @@ import type Target from "../Interface/Target.js";
  * suggester's fail-open listener catches it, warns, and passes the call through
  * unnoted.
  */
-
-/** A string field with a fallback. */
+/**
+ * A string field with a fallback.
+ */
 const Text = (Value: unknown, Fallback: string): string =>
 	typeof Value === "string" ? Value : Fallback;
 
-/** A finite number field with a fallback. */
+/**
+ * A finite number field with a fallback.
+ */
 const Count = (Value: unknown, Fallback: number): number =>
 	typeof Value === "number" && Number.isFinite(Value) ? Value : Fallback;
 
-/** One signal row. */
+/**
+ * One signal row.
+ */
 const Row = (Value: unknown): Signal => {
 	if (Value === null || typeof Value !== "object" || Array.isArray(Value)) {
 		throw new Error("a pack signal must be a mapping");
@@ -54,7 +60,9 @@ const Row = (Value: unknown): Signal => {
 	};
 };
 
-/** One target row. */
+/**
+ * One target row.
+ */
 const Companion = (Value: unknown): Target => {
 	if (Value === null || typeof Value !== "object" || Array.isArray(Value)) {
 		throw new Error("a pack target must be a mapping");
@@ -72,7 +80,9 @@ const Companion = (Value: unknown): Target => {
 	};
 };
 
-/** One family row. */
+/**
+ * One family row.
+ */
 const Entry = (Key: string, Value: unknown): Family => {
 	if (Value === null || typeof Value !== "object" || Array.isArray(Value)) {
 		throw new Error(`pack family ${Key}: expected a mapping`);

@@ -7,6 +7,7 @@ export default _default;
  * The capability grant path: validate, enforce the ceiling, stamp, ledger.
  *
  * @remarks
+ *
  * The capability is the WHAT record: the holder, the resource, the permitted
  * operations, the expiration, the delegation rule - never a weight, never a
  * priority (the license/weight conflation is a logged pitfall). A grant when

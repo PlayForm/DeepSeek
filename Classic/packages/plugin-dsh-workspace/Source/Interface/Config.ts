@@ -1,9 +1,13 @@
+import type { NodeKind } from "@Interface/Graph.js";
+import type { Allowlist } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The validated plugin-config shape the loader hands to `apply`.
  *
  * @remarks
+ *
  * Cordis validates the exported Schemastery schema while the plugin loads and
  * fills every default, so `apply` receives a plain object of exactly this
  * shape. The schema that produces it lives in Variable/Config.ts.
@@ -16,9 +20,6 @@
  * WAVE-1-BRIEF.md section 4.5 - the distribution law: each package's Config its
  * own).
  */
-import type { NodeKind } from "@Interface/Graph.js";
-import type { Allowlist } from "@playform/plugin-dsh-factory";
-
 /**
  * The agent's config (the family's surface knobs, all volatile).
  */

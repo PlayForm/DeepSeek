@@ -1,3 +1,7 @@
+import { existsSync, readFileSync } from "node:fs";
+import assert from "node:assert/strict";
+import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +9,7 @@
  * through Factory.Write, covered in one singular smoke.
  *
  * @remarks
+ *
  * The test covers the read -> count -> write pipeline through Factory.Write
  * (the shared executor): the resolve/read single-pass, the six-transform
  * write, the fs/write-intent waterfall, the fs/observed emit with the call's
@@ -18,10 +23,6 @@
  * The unit smoke runs the fake ctx + the real factory + the real
  * normalize-file apply, from the Harness.
  */
-import { existsSync, readFileSync } from "node:fs";
-import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

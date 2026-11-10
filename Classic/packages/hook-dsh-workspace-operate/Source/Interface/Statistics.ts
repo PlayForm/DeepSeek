@@ -5,6 +5,7 @@
  * breakdown, the refusals seen, and the sequence head.
  *
  * @remarks
+ *
  * The sequence head is never a wall clock.
  */
 export default interface Statistics {

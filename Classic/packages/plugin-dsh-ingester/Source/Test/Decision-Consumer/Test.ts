@@ -1,13 +1,3 @@
-/**
- * @module Test
- *
- * Exercises THE TRACE ADAPTER: the ingester consumes `batch/proposed` (recording the proposal) and
- * `batch/decision` (applying it through the existing content fence).
- *
- * @remarks
- * One apply runs per decision however many times the decision is delivered; the suite also covers
- * the honest refusals, the feedback outcome handoff, and the WhenIdle flush seam.
- */
 import assert from "node:assert/strict";
 import {
 	Build,
@@ -20,7 +10,20 @@ import {
 	Sha,
 } from "../Harness.js";
 
-/** A proposal over one fenced file (the version token is the live content). */
+/**
+ * @module Test
+ *
+ * Exercises THE TRACE ADAPTER: the ingester consumes `batch/proposed` (recording the proposal) and
+ * `batch/decision` (applying it through the existing content fence).
+ *
+ * @remarks
+ *
+ * One apply runs per decision however many times the decision is delivered; the suite also covers
+ * the honest refusals, the feedback outcome handoff, and the WhenIdle flush seam.
+ */
+/**
+ * A proposal over one fenced file (the version token is the live content).
+ */
 const Fenced = (Id = "p1", Content = "one"): any =>
 	Proposal(
 		Id,
@@ -28,7 +31,9 @@ const Fenced = (Id = "p1", Content = "one"): any =>
 		[{ path: "/repo/a.txt", find: "one", replace: "two", why: "w" }],
 	);
 
-/** Fire one bus event through the captured listener. */
+/**
+ * Fire one bus event through the captured listener.
+ */
 const Fire = (Run: any, Name: string, Payload: unknown): void => {
 	Run.Listeners[Name](Payload);
 };

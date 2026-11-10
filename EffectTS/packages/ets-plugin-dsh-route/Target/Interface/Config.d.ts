@@ -1,15 +1,16 @@
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
+import type { KeywordTable, PolicyShape, Role } from "./Policy.js";
 /**
  * @module Config
  *
  * The validated, defaulted configuration object apply receives.
  *
  * @remarks
+ *
  * The shape the Variable/Config.ts schema produces. Every field is a
  * volatile cell: a hot edit commits without remounting and the factory's P10
  * refresh updates the State fields in place.
  */
-import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
-import type { KeywordTable, PolicyShape, Role } from "./Policy.js";
 export default interface Config {
     /**
      * Master switch. Shipped false (the IDLE-forever posture).

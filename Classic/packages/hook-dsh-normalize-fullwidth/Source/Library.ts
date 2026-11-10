@@ -1,9 +1,14 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
  * The entry module (mirrors Source/Library.rs).
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` + `export const Config` +
  * `export const inject` + `export default { name, apply, Config, inject }` - the ONLY named
  * exports in the tree (cordis requires them); every other module is a nameless default export
@@ -49,10 +54,6 @@
  * unwrap); the fs/observed Wire and the storage Journal do not (this is a NON-MANIFEST module:
  * no fs/observed, no gate, no Stash traffic, no policy discovery).
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "hook-dsh-normalize-fullwidth";
 
 /**
@@ -72,6 +73,7 @@ export { Version };
  * Required services (skill: declare, never rely on load order).
  *
  * @remarks
+ *
  * The factory (@playform/plugin-dsh-factory) provides the State builder (cell unwrap + shared
  * fields) and the ledger - the stream-normalization flavors are NON-MANIFEST factory consumers.
  * Nothing else: the chunk vocabulary arrives through the llm/stream waterfall, not an import.

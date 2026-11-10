@@ -5,6 +5,7 @@
  * builder, the ledger, the exclusion match, and the SHARED WRITE EXECUTOR.
  *
  * @remarks
+ *
  * The SHARED WRITE EXECUTOR is the factory's Write method - the merge's
  * per-file commits all go through it: the explicit replaceIfVersion intent,
  * the P4 sandbox fence, the root-context fs/observed emit. Structural, so

@@ -1,3 +1,9 @@
+import assert from "node:assert/strict";
+
+import { Check, Finish, MakeCounter } from "../Harness.js";
+import { Decide, Policy, Schema } from "../../../Target/Library.js";
+import type { Allowlist } from "../../../Target/Library.js";
+
 /**
  * @module Test
  *
@@ -5,6 +11,7 @@
  * verdict lookup, the two module-level named exports beside `Schema`.
  *
  * @remarks
+ *
  * What is asserted: the block's eight action classes in the D6 order and with the D6 defaults
  * (read/index/record/suggest/message = auto; write/commit/spawn = approve), the schema's real
  * validation (an explicit override replaces one action and keeps the rest; an unknown verdict
@@ -18,12 +25,6 @@
  * Unit smoke of `@playform/plugin-dsh-factory`: the REAL built Library entry (the helpers are
  * module-level, so no fake ctx is needed).
  */
-import assert from "node:assert/strict";
-
-import { Check, Finish, MakeCounter } from "../Harness.js";
-import { Decide, Policy, Schema } from "../../../Target/Library.js";
-import type { Allowlist } from "../../../Target/Library.js";
-
 /** The D6 defaults, written out in the smoke (the contract, not a mirror of
  *  the implementation): read-only work, indexing, recording, suggesting and
  *  messaging are automatic; writes, commits and spawns wait for approval. */

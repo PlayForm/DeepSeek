@@ -5,6 +5,7 @@
  * stage emits to the ledger.
  *
  * @remarks
+ *
  * Nine Apply.ts sites hand-compose this exact template - the six stream normalizers and the
  * governance trio (governor, pinner, cargo): the same `activated (` prefix, the `k=v` pair
  * join with `, ` and the `)` suffix, six field-list variants of one shape.

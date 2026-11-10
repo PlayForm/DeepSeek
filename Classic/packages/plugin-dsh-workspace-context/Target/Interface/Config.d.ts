@@ -1,3 +1,4 @@
+import type { Allowlist } from "@playform/plugin-dsh-factory";
 /**
  * @module Config
  *
@@ -5,12 +6,12 @@
  * after validation and defaulting; `apply` receives this plain object.
  *
  * @remarks
+ *
  * Volatile cells hold `{ get }` references until the factory's State builder
  * unwraps them. The contract is Documentation/Plans/WORKSPACE-FAMILY-V4-1.md
  * section 3.5 (the packet, the budget) + Documentation/Plans/
  * Workspace-Family/CONTEXT.md.
  */
-import type { Allowlist } from "@playform/plugin-dsh-factory";
 export default interface Config {
     /**
      * The service's own ledger file (one log per module).

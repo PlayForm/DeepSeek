@@ -1,3 +1,18 @@
+import Judge from "@Function/Judge.js";
+import Append from "@Function/Ledger.js";
+import Snapshot, { Rotate } from "@Function/Snapshot.js";
+import type Usage from "@Function/Usage.js";
+import Write, { type Seam } from "@Function/Write.js";
+import type Configuration from "@Interface/Configuration.js";
+import type {
+	ConsolidationCandidate,
+	ConsolidationPlan,
+	ConsolidationResult,
+} from "@Interface/Consolidation.js";
+import type { Corpus } from "@Interface/Corpus.js";
+import type { Operation } from "@Interface/Operation.js";
+import type UsageRecord from "@Interface/Record.js";
+
 /**
  * @module Consolidate
  *
@@ -5,6 +20,7 @@
  * fence every other write goes through.
  *
  * @remarks
+ *
  * IT SHIPS OFF. `consolidate` defaults to false, which is the Hermes code default too
  * (`DEFAULT_CONSOLIDATE = False`, agent/curator.py:35); the live Hermes config on this
  * machine sets it true, and the README states that difference so it is a choice the
@@ -32,34 +48,27 @@
  * (SKILL-LEARN-PLUGIN.md:288-297). A row whose body was not carried is refused by the
  * same J5 rule, not waved through because the pass is the curator's.
  */
-import Judge from "@Function/Judge.js";
-import Append from "@Function/Ledger.js";
-import Snapshot, { Rotate } from "@Function/Snapshot.js";
-import type Usage from "@Function/Usage.js";
-import Write, { type Seam } from "@Function/Write.js";
-import type Configuration from "@Interface/Configuration.js";
-import type {
-	ConsolidationCandidate,
-	ConsolidationPlan,
-	ConsolidationResult,
-} from "@Interface/Consolidation.js";
-import type { Corpus } from "@Interface/Corpus.js";
-import type { Operation } from "@Interface/Operation.js";
-import type UsageRecord from "@Interface/Record.js";
-
-/** One consolidation pass's whole input. */
+/**
+ * One consolidation pass's whole input.
+ */
 export interface Request {
 	readonly store: Usage;
 
-	/** The read-only catalog view; a patch row's body must already be carried here. */
+	/**
+	 * The read-only catalog view; a patch row's body must already be carried here.
+	 */
 	readonly corpus: Corpus;
 	readonly seam: Seam;
 	readonly configuration: Configuration;
 
-	/** Whether the pass computes the plan and applies nothing. */
+	/**
+	 * Whether the pass computes the plan and applies nothing.
+	 */
 	readonly dryRun: boolean;
 
-	/** The report directory, when the caller is writing one; "" otherwise. */
+	/**
+	 * The report directory, when the caller is writing one; "" otherwise.
+	 */
 	readonly report: string;
 
 	/**
@@ -69,10 +78,14 @@ export interface Request {
 	readonly ask: (survey: readonly ConsolidationCandidate[]) => Promise<ConsolidationPlan | null>;
 }
 
-/** Whether the record is in the pass's jurisdiction: the plugin's own create, or a pin. */
+/**
+ * Whether the record is in the pass's jurisdiction: the plugin's own create, or a pin.
+ */
 const Eligible = (Record_: UsageRecord): boolean => Record_.createdBy === "agent" || Record_.pinned;
 
-/** The nine fields the plan is decided from (agent/curator.py:832-861). */
+/**
+ * The nine fields the plan is decided from (agent/curator.py:832-861).
+ */
 const Survey = (store: Usage): readonly ConsolidationCandidate[] => {
 	const Listed: ConsolidationCandidate[] = [];
 	for (const Stored of store.All()) {
@@ -99,13 +112,17 @@ const Survey = (store: Usage): readonly ConsolidationCandidate[] => {
 	return Listed;
 };
 
-/** Whether a row's action and its operation kind agree; a mismatch is a refusal, not a repair. */
+/**
+ * Whether a row's action and its operation kind agree; a mismatch is a refusal, not a repair.
+ */
 const Agrees = (Action: string, Kind: Operation["kind"]): boolean =>
 	(Action === "patch" && Kind === "patch") ||
 	(Action === "create" && Kind === "create") ||
 	(Action === "write_file" && Kind === "support");
 
-/** One consolidation pass: the survey, the plan, and every guard between them and the corpus. */
+/**
+ * One consolidation pass: the survey, the plan, and every guard between them and the corpus.
+ */
 export default async (Request_: Request): Promise<ConsolidationResult> => {
 	const Knobs = Request_.configuration;
 	const Empty: ConsolidationResult = {

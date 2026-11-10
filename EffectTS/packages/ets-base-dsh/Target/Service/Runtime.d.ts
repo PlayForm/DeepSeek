@@ -73,6 +73,7 @@ export type Services = Context.Context<Tags>;
  * layers - the full graph for one factory shell.
  *
  * @remarks
+ *
  * The Journal layer captures the instance: the routing reads its
  * SharedJournal/PendingJournal fields at call time.
  */
@@ -82,6 +83,7 @@ export declare const layers: (Factory: Host) => Layer.Layer<Tags>;
  * factory config).
  *
  * @remarks
+ *
  * `endpoint` is the OTel collector's OTLP/HTTP base URL (the exporter posts
  * the protobuf spans there), `serviceName` the resource's service.name
  * (default: this package's name). Omitting the endpoint falls back to the
@@ -97,6 +99,7 @@ export interface Tracing {
  * default - the no-op Tracer, byte-identical behavior).
  *
  * @remarks
+ *
  * The loader (or a test harness) sets it through `enableTracing` before
  * constructing the factory shells, because the runtime is materialized
  * synchronously in the constructor - a knob set after construction is picked
@@ -110,6 +113,7 @@ export declare const tracing: {
  * configuration and dynamically load the optional OpenTelemetry bundle.
  *
  * @remarks
+ *
  * Resolves `true` when the bundle loaded and the next `materialize` (and
  * every one after it) will merge the `NodeSdk.layer` tracing layer;
  * resolves `false` when the optional packages are absent or unloadable -

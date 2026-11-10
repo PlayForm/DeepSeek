@@ -1,9 +1,16 @@
+import * as ChildProcess from "node:child_process";
+
+// SubprocessService is the module's default export (dsh-subprocess 0.2.0-rc.2).
+import type SubprocessService from "@deepseek-ai/dsh-subprocess";
+import type State from "@Interface/State.js";
+
 /**
  * @module Verify
  *
  * Runs the policy's verifyCommand after the bumps.
  *
  * @remarks
+ *
  * Exit 127 is non-fatal: the command was not found because the child's PATH is not the user's
  * shell PATH (pnpm etc. may be absent) - the bumps already landed and the lockfile/store
  * catch-up can be run manually.
@@ -16,12 +23,6 @@
  * is not exempt - only the ncu binary/library is. Ledger lines go through the FACTORY
  * (State.Factory.Append).
  */
-import * as ChildProcess from "node:child_process";
-
-// SubprocessService is the module's default export (dsh-subprocess 0.2.0-rc.2).
-import type SubprocessService from "@deepseek-ai/dsh-subprocess";
-import type State from "@Interface/State.js";
-
 export default async (
 	State: State,
 	Command: string,

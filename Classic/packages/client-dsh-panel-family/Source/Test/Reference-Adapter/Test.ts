@@ -1,19 +1,3 @@
-/**
- * @module Test
- *
- * One reference adapter end to end, against the real built functions and the
- * real manifest the package ships.
- *
- * @remarks
- * The suite covers the STATUS (the static fallback, the live trace tail, the
- * activation override), the CONFIG FORM generated from the plugin's serialized
- * Schemastery schema (the volatile/plain/secret classification, defaults,
- * provenance, enum options, nested object fields), and the two write routes
- * (the revision-fenced volatile mutate, the plain-field bridge with its audit
- * line, the secret-namespace and missing-bridge refusals).
- *
- * The three shipped manifests and their adapter effects close the roster.
- */
 import assert from "node:assert/strict";
 import Schema from "@deepseek-ai/schemastery";
 import {
@@ -26,6 +10,23 @@ import {
 	MakeTrace,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One reference adapter end to end, against the real built functions and the
+ * real manifest the package ships.
+ *
+ * @remarks
+ *
+ * The suite covers the STATUS (the static fallback, the live trace tail, the
+ * activation override), the CONFIG FORM generated from the plugin's serialized
+ * Schemastery schema (the volatile/plain/secret classification, defaults,
+ * provenance, enum options, nested object fields), and the two write routes
+ * (the revision-fenced volatile mutate, the plain-field bridge with its audit
+ * line, the secret-namespace and missing-bridge refusals).
+ *
+ * The three shipped manifests and their adapter effects close the roster.
+ */
 // The built modules load AFTER the Harness registered the alias hooks (a
 // static import would link before the hooks exist, the same reason the
 // Harness imports the Target dynamically).
@@ -101,7 +102,9 @@ const SecretView = {
 
 const EmptyLive = () => Live(undefined, []);
 
-/** A minimal ports object; every capture is exposed for the assertions. */
+/**
+ * A minimal ports object; every capture is exposed for the assertions.
+ */
 const Ports = (Options: any = {}): any => {
 	const Info: string[] = [];
 	const Warn: string[] = [];

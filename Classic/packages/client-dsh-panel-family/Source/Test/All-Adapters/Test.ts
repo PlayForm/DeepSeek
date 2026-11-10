@@ -1,20 +1,3 @@
-/**
- * @module Test
- *
- * The full fifteen-adapter roster, proven against the real built functions,
- * manifests, and closure-factory bundle.
- *
- * @remarks
- * The suite covers the roster table, the fifteen adapter effects, the
- * section-slot registrations, the activation and trace vocabulary, the
- * schema-derived config forms (a representative volatile and plain field per
- * adapter), the two write routes on the new adapters, and the bundle executed
- * through a fake `window.__ModuleLoader__` (it must export the same id/inject
- * and register the same fifteen).
- *
- * Everything runs against the real built functions, the fifteen real manifests
- * the package ships, and the real built closure-factory bundle.
- */
 import assert from "node:assert/strict";
 import Schema from "@deepseek-ai/schemastery";
 import * as React from "react";
@@ -28,6 +11,24 @@ import {
 	MakeForms,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The full fifteen-adapter roster, proven against the real built functions,
+ * manifests, and closure-factory bundle.
+ *
+ * @remarks
+ *
+ * The suite covers the roster table, the fifteen adapter effects, the
+ * section-slot registrations, the activation and trace vocabulary, the
+ * schema-derived config forms (a representative volatile and plain field per
+ * adapter), the two write routes on the new adapters, and the bundle executed
+ * through a fake `window.__ModuleLoader__` (it must export the same id/inject
+ * and register the same fifteen).
+ *
+ * Everything runs against the real built functions, the fifteen real manifests
+ * the package ships, and the real built closure-factory bundle.
+ */
 // The built modules load AFTER the Harness registered the alias hooks (a
 // static import would link before the hooks exist, the same reason the
 // Harness imports the Target dynamically).
@@ -129,7 +130,9 @@ const FlavorSchema = (Replacement: boolean) =>
 		toolResultsExempt: Exempt(),
 	});
 
-/** The governors' shared block fields (the factory's shared block mirror). */
+/**
+ * The governors' shared block fields (the factory's shared block mirror).
+ */
 const SharedFields = (LogFile: string): Record<string, any> => ({
 	log: Schema.boolean().default(true).volatile(),
 	logFile: Schema.string().default(LogFile).volatile(),
@@ -219,7 +222,9 @@ const CcrSchema = () =>
 		protectLastTurns: Schema.number().default(4),
 	});
 
-/** One namespace view for a mirrored schema (values + revision filled). */
+/**
+ * One namespace view for a mirrored schema (values + revision filled).
+ */
 const View = (Ns: string, Schema: any): any => ({
 	ns: Ns,
 	schema: Schema.toJSON(),
@@ -256,7 +261,9 @@ const Derived = (Section: any, NamespaceView: any): any =>
 const FieldNamed = (FormView: any, Label: string): any =>
 	FormView.fields.find((Entry: any) => Entry.label === Label);
 
-/** A minimal ports object; every capture is exposed for the assertions. */
+/**
+ * A minimal ports object; every capture is exposed for the assertions.
+ */
 const Ports = (Options: any = {}): any => {
 	const Info: string[] = [];
 	const Warn: string[] = [];

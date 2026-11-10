@@ -1,3 +1,7 @@
+import type DomainHandle from "./Domain.js";
+import type FactoryHandle from "./Factory.js";
+import type Record from "./Record.js";
+import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
 /**
  * @module State
  *
@@ -6,16 +10,13 @@
  * the hook's own fields.
  *
  * @remarks
+ *
  * Module is "merge" - the frozen ledger lines are `merge: ...` and the
  * factory's Append prefixes with `<State.Module>: `. The npm identity
  * lives in the package name and the `name` export
  * (hook-dsh-workspace-merge); the ledger prefix is the module's OWN
  * contract string.
  */
-import type DomainHandle from "./Domain.js";
-import type FactoryHandle from "./Factory.js";
-import type Record from "./Record.js";
-import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
 interface Extra {
     /**
      * Config `enabled` - the master switch (volatile; the State builder's

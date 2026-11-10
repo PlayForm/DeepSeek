@@ -9,6 +9,7 @@ import type State from "@Interface/State.js";
  * precedent).
  *
  * @remarks
+ *
  * THE DOMAIN: the hook's OWN domain, named config `domain` (default
  * workspace_observe) - NOT extension records in the shared package_governance
  * domain (the v2 open contract would force a version bump whose blast radius
@@ -41,7 +42,6 @@ import type State from "@Interface/State.js";
  * against version 1 at validation time), so version 1 declares no compatible
  * predecessors.
  */
-
 /**
  * The structural shape of one persisted stamp (the validation filter).
  */

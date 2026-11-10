@@ -1,3 +1,7 @@
+import Record from "@Function/Record.js";
+import type Stamp from "@Interface/Stamp.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Manual
  *
@@ -5,6 +9,7 @@
  * version, record with origin "manual", ledger.
  *
  * @remarks
+ *
  * Unlike the listener this path is async (the fs seam is) - it is a
  * deliberate, awaited call, not the synchronous recorder.
  *
@@ -13,10 +18,6 @@
  * reject; the listener's silence invariant does not apply here) - but the
  * ledger line still lands first, so the durable record stays complete.
  */
-import Record from "@Function/Record.js";
-import type Stamp from "@Interface/Stamp.js";
-import type State from "@Interface/State.js";
-
 export default async (State: State, Path: string): Promise<Stamp> => {
 	const Target = await State.Context.fs.resolve(Path);
 	const Info = (await State.Context.fs.stat(Target)) as { version: string } | undefined;

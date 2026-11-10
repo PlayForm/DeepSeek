@@ -1,3 +1,29 @@
+import type { Context } from "@deepseek-ai/cordis";
+// The type-only imports below publish the EVENT signatures on the cordis
+// Events interface (the packages' own augmentations): dsh-tools declares the
+// tools/* waterfalls + tools/change (and transitively dsh-agent's
+// agent/pre-step), dsh-system-prompt declares system-prompt/assemble.
+import type { ToolSchema } from "@deepseek-ai/dsh-llm";
+import type { AssembleContext, PromptAssembly } from "@deepseek-ai/dsh-system-prompt";
+import type {
+	PostToolDecision,
+	PreToolDecision,
+	ToolExecution,
+	ToolExecutionResult,
+} from "@deepseek-ai/dsh-tools";
+import * as Compose from "@Function/Compose.js";
+import Count, { FreshState } from "@Function/Count.js";
+import Detect from "@Function/Detect.js";
+import Enforce from "@Function/Enforce.js";
+import Fetch, { StaticCatalog } from "@Function/Fetch.js";
+import BuildNote, { Prepend } from "@Function/Note.js";
+import type Config from "@Interface/Config.js";
+import type { AgentState, CoachRow, Decision, Detection } from "@Interface/Execution.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
+import Version from "@Variable/Version.js";
+
 /**
  * @module Apply
  *
@@ -5,6 +31,7 @@
  * durable activation proof, and the FIVE listeners of the coaching ladder.
  *
  * @remarks
+ *
  * The State build uses the factory's cell unwrap + the P10 volatile refresh.
  * Plan Part 3 §3.2 + Part 4 §4.1:
  *
@@ -36,32 +63,6 @@
  * the State builder + the ledger; `tools` provides the live registry fetch
  * (ctx.tools.schemas(), plan Part 3 §3.1).
  */
-import type { Context } from "@deepseek-ai/cordis";
-// The type-only imports below publish the EVENT signatures on the cordis
-// Events interface (the packages' own augmentations): dsh-tools declares the
-// tools/* waterfalls + tools/change (and transitively dsh-agent's
-// agent/pre-step), dsh-system-prompt declares system-prompt/assemble.
-import type { ToolSchema } from "@deepseek-ai/dsh-llm";
-import type { AssembleContext, PromptAssembly } from "@deepseek-ai/dsh-system-prompt";
-import type {
-	PostToolDecision,
-	PreToolDecision,
-	ToolExecution,
-	ToolExecutionResult,
-} from "@deepseek-ai/dsh-tools";
-import * as Compose from "@Function/Compose.js";
-import Count, { FreshState } from "@Function/Count.js";
-import Detect from "@Function/Detect.js";
-import Enforce from "@Function/Enforce.js";
-import Fetch, { StaticCatalog } from "@Function/Fetch.js";
-import BuildNote, { Prepend } from "@Function/Note.js";
-import type Config from "@Interface/Config.js";
-import type { AgentState, CoachRow, Decision, Detection } from "@Interface/Execution.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
-import Version from "@Variable/Version.js";
-
 /**
  * The tools-service surface the coach needs (structural view).
  */

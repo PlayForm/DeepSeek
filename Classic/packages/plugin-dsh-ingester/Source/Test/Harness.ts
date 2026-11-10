@@ -1,3 +1,10 @@
+import { createHash as Hash } from "node:crypto";
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Ingester from "../../Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -8,6 +15,7 @@
  * harness pattern, written ONCE per package and imported by every test folder.
  *
  * @remarks
+ *
  * Each folder process gets a fresh set, so every folder is standalone-green.
  *
  * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the counter through one
@@ -18,13 +26,6 @@
  * NO FAKE CLOCK: the journal's `at` field is asserted as a number only - the wall clock is the
  * journal's own, never an assertion target.
  */
-import { createHash as Hash } from "node:crypto";
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Ingester from "../../Target/Library.js";
-
 export { Ingester };
 
 /**

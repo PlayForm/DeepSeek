@@ -1,3 +1,5 @@
+import type Preview from "../Interface/Preview.js";
+
 /**
  * @module Preview
  *
@@ -5,10 +7,9 @@
  * the full files.
  *
  * @remarks
+ *
  * Each side is capped at maxPreviewBytes per entry.
  */
-import type Preview from "../Interface/Preview.js";
-
 /**
  * Bound one side of the preview.
  */

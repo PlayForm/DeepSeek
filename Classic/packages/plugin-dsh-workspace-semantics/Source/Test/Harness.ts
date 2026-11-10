@@ -1,3 +1,10 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -5,6 +12,7 @@
  * the workspace-observe reference harness.
  *
  * @remarks
+ *
  * The fake ctx carries the root listener capture with a DISTINCT root object, the ctx listener
  * capture, the `reflect.provide` capture, the effect runner, the logger capture and the
  * fs/storage seams. Beside it sit the REAL `@playform/plugin-dsh-factory` instance from its built
@@ -19,22 +27,21 @@
  * NO FAKE CLOCK: the service's only clock-like value is the index revision, the plugin's own
  * monotonic counter (the no-wall-clock rule), so the harness needs no time seam.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 export { Plugin };
 
-/** The per-folder counter: `N` = passing checks, `F` = failing checks. */
+/**
+ * The per-folder counter: `N` = passing checks, `F` = failing checks.
+ */
 export type Counter = { N: number; F: number };
 
-/** A fresh counter for one test folder. */
+/**
+ * A fresh counter for one test folder.
+ */
 export const MakeCounter = (): Counter => ({ N: 0, F: 0 });
 
-/** One check = one assert group; a throw counts the group failed. */
+/**
+ * One check = one assert group; a throw counts the group failed.
+ */
 export const Check = (Count: Counter, Label: string, Assertions: () => void): void => {
 	Count.N++;
 	try {
@@ -47,7 +54,9 @@ export const Check = (Count: Counter, Label: string, Assertions: () => void): vo
 	}
 };
 
-/** The async variant of Check. */
+/**
+ * The async variant of Check.
+ */
 export const CheckAsync = async (
 	Count: Counter,
 	Label: string,
@@ -64,7 +73,9 @@ export const CheckAsync = async (
 	}
 };
 
-/** End-of-folder guard: any failed assertion is a folder failure. */
+/**
+ * End-of-folder guard: any failed assertion is a folder failure.
+ */
 export const Finish = (Count: Counter, Name: string): number => {
 	if (Count.F !== 0) {
 		throw new Error(`${Name}: ${Count.F} failed check(s)`);
@@ -77,14 +88,18 @@ export const Finish = (Count: Counter, Name: string): number => {
 export const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "workspace-semantics-smoke-"));
 export const Ledger = Path.join(Root, "semantics.log");
 
-/** Remove the durable ledger file: every scenario starts empty. */
+/**
+ * Remove the durable ledger file: every scenario starts empty.
+ */
 export const rm = (): void => {
 	try {
 		FileSystem.rmSync(Ledger);
 	} catch {}
 };
 
-/** The durable ledger file's lines (`[ISO] message`). */
+/**
+ * The durable ledger file's lines (`[ISO] message`).
+ */
 export const LedgerLines = (): string[] =>
 	(() => {
 		try {
@@ -94,7 +109,9 @@ export const LedgerLines = (): string[] =>
 		}
 	})();
 
-/** The REAL factory instance (constructed the way the factory's smoke does). */
+/**
+ * The REAL factory instance (constructed the way the factory's smoke does).
+ */
 export const Furnace: any = new FactoryClass({
 	reflect: { provide: () => undefined },
 } as any);
@@ -180,7 +197,9 @@ export const FakeStorage = (Options: { failOpen?: boolean } = {}): any => {
 		},
 	};
 
-	/** Seed one record (the restart scenario: the store outlives the process). */
+	/**
+	 * Seed one record (the restart scenario: the store outlives the process).
+	 */
 	Store.seed = (Name: string, Key: string, Value: unknown): void => {
 		if (!Store.tables.has(Name)) {
 			Store.tables.set(Name, new Map());
@@ -267,7 +286,9 @@ export const Make = (Raw: any, Attach?: (Context: any, Run: any) => void): any =
 	return Run;
 };
 
-/** The validated config shape the loader hands to apply (the schema call). */
+/**
+ * The validated config shape the loader hands to apply (the schema call).
+ */
 export const Validate = (Raw: Record<string, unknown>): any =>
 	(Plugin.Config as unknown as (Raw: Record<string, unknown>) => any)({ ...Raw });
 
@@ -279,7 +300,9 @@ export const Boot = async (): Promise<void> => {
 	await new Promise((Resolve) => setImmediate(Resolve));
 };
 
-/** Fire one fs/observed event through the ROOT listener (a foreign actor). */
+/**
+ * Fire one fs/observed event through the ROOT listener (a foreign actor).
+ */
 export const Fire = (
 	Run: any,
 	Path: string,
@@ -293,7 +316,9 @@ export const Fire = (
 	);
 };
 
-/** Fire an absent observation through the ROOT listener. */
+/**
+ * Fire an absent observation through the ROOT listener.
+ */
 export const FireAbsent = (Run: any, Path: string): void => {
 	Run.Listeners["fs/observed"](
 		{ displayPath: Path, targetKey: Path },
@@ -302,22 +327,30 @@ export const FireAbsent = (Run: any, Path: string): void => {
 	);
 };
 
-/** Fire a malformed event (a null target and a null observation). */
+/**
+ * Fire a malformed event (a null target and a null observation).
+ */
 export const FireMalformed = (Run: any): void => {
 	Run.Listeners["fs/observed"](null, null, undefined);
 };
 
-/** Open the semantics storage domain against a fake facility (module-driven). */
+/**
+ * Open the semantics storage domain against a fake facility (module-driven).
+ */
 export const OpenStorage = async (Run: any, Facility: any): Promise<void> => {
 	const Storage = await import("../../Target/Function/Storage.js");
 	await Storage.default(Run.State, Facility);
 };
 
-/** A captured info line that carries the needle. */
+/**
+ * A captured info line that carries the needle.
+ */
 export const LinesWith = (Run: any, Needle: string): string[] =>
 	Run.Lines.filter((L: string) => L.includes(Needle));
 
-/** The ledger file lines that carry the needle (after the `[ISO] ` stamp). */
+/**
+ * The ledger file lines that carry the needle (after the `[ISO] ` stamp).
+ */
 export const LedgerWith = (Needle: string): string[] =>
 	LedgerLines().filter((L: string) => L.includes(Needle));
 

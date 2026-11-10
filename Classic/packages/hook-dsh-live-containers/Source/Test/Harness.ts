@@ -1,3 +1,12 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Containers from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+import { DEFAULT_BLOCKS } from "../../Target/Variable/DefaultBlocks.js";
+import { Frame } from "../../Target/Function/Render.js";
+
 /**
  * @module Harness
  *
@@ -5,6 +14,7 @@
  * suite-level fixtures and the fake clock.
  *
  * @remarks
+ *
  * The fake ctx carries the `on` capture, a `get` that serves the REAL
  * `@playform/plugin-dsh-factory` instance from its built Target, the logger capture and the root
  * seam. Beside it sits the REAL live-containers apply from its built Target - the family fake-ctx
@@ -25,15 +35,6 @@
  * `ctx.__hookDshLiveContainersState` probe attachment and advances the clock - never a sleep,
  * never a real clock dependence.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Containers from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-import { DEFAULT_BLOCKS } from "../../Target/Variable/DefaultBlocks.js";
-import { Frame } from "../../Target/Function/Render.js";
-
 export { Containers, DEFAULT_BLOCKS, Frame };
 
 /**
@@ -446,11 +447,15 @@ export const FakeProcess = (): any => {
 			stdout: { text: Read(State.stdout).text, truncated: false },
 			stderr: { text: Read(State.stderr).text, truncated: false },
 		}),
-		/** Feed one channel with output (the smoke's pump stand-in). */
+		/**
+		 * Feed one channel with output (the smoke's pump stand-in).
+		 */
 		feed: (Channel: "stdout" | "stderr", Text: string) => {
 			State[Channel].chunks += Text;
 		},
-		/** Settle the process (exit or kill). */
+		/**
+		 * Settle the process (exit or kill).
+		 */
 		settle: (ExitCode: number | null, Signal: string | null = null) => {
 			State.exitCode = ExitCode;
 			State.signal = Signal;
@@ -580,7 +585,9 @@ export const FakeSubagent = () => {
 		},
 	};
 
-	/** Resolve the Nth spawn's result with the given output blocks. */
+	/**
+	 * Resolve the Nth spawn's result with the given output blocks.
+	 */
 	Sub.answer = (Index: number, Output: any): void => {
 		Sub.resolvers[Index]?.({ output: Output, stopReason: "end_turn" });
 	};
@@ -704,7 +711,9 @@ export const FakeStorage = (Options: { failOpen?: boolean } = {}): any => {
 		},
 	};
 
-	/** Seed one record (the restart scenario: the store outlives the process). */
+	/**
+	 * Seed one record (the restart scenario: the store outlives the process).
+	 */
 	Store.seed = (Key: string, Record: any): void => {
 		Store.records.set(Key, Record);
 	};

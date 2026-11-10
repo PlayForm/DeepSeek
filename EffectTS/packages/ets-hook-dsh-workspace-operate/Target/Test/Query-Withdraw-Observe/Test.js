@@ -1,1 +1,207 @@
-import a from"node:assert/strict";import{Check as o,CheckAsync as p,Finish as d,FileNode as u,FakeGraph as h,Fire as l,Ledger as v,LinesWith as c,MakeCounter as m,Make as w,rm as f,Validate as O,SymbolNode as k}from"../Harness.js";const n=(s={},t)=>(f(),w(O({logFile:v,enabled:!0,...s}),t)),i=(s=[])=>h([k("Alpha","/repo/src/a.ts","sym-alpha"),u("/repo/src/a.ts","file-a"),u("/repo/src/b.ts","file-b")],s),q=async()=>{const s=m();{const t=n(),e=t.Lines.length;l(t,"/repo/src/a.ts","v9"),l(t,"/repo/src/b.ts","v1",t.State.Self),o(s,"O1: the fence tracker records foreign events silently",()=>{a.equal(t.State.Observed.get("/repo/src/a.ts"),"v9"),a.equal(t.Lines.length,e)}),o(s,"O1: the hook's own actor is ignored and malformed events never throw",()=>{l(t,"/repo/src/never.ts","v1",t.State.Self),a.equal(t.State.Observed.has("/repo/src/never.ts"),!1),t.Listeners["fs/observed"](null,null,void 0),a.equal(t.State.Observed.has("unknown"),!1)})}{const t=n({},i());l(t,"/repo/src/a.ts","v1"),await p(s,"O2: without a caller fence the observed version is used",async()=>{const e=await t.Context.workspaceOperate.proposeRename({path:"/repo/src/a.ts",name:"Alpha",to:"Beta"});a.equal(e.status,"proposed"),a.equal(e.proposal.version,"v1"),a.equal(e.proposal.id,"rename-1")}),await p(s,"O2: a caller fence that contradicts the observed version is refused",async()=>{const e=await t.Context.workspaceOperate.proposeRename({path:"/repo/src/a.ts",name:"Alpha",to:"Beta",version:"v9"});a.equal(e.status,"refused"),a.deepEqual(e.refusal,{kind:"rename",reason:"stale-version",detail:"the fence v9 contradicts the observed version v1"}),a.deepEqual(c(t,"refused rename stale-version"),["operate: refused rename stale-version"])}),await p(s,"O2: a version is never invented (no fence, no observation)",async()=>{const e=await t.Context.workspaceOperate.proposeRename({path:"/repo/src/unknown.ts",name:"Alpha",to:"Beta"});a.equal(e.status,"refused"),a.equal(e.refusal.reason,"missing-version")})}{const t=n({},i()),e=t.Context.workspaceOperate;await e.proposeRename({path:"/repo/src/a.ts",name:"Alpha",to:"Beta",version:"v1"}),o(s,"O3: a withdrawal marks the proposal and logs the byte-exact line",()=>{a.equal(e.withdraw("rename-1"),!0),a.equal(e.get("rename-1").status,"withdrawn"),a.deepEqual(c(t,"withdrawn"),["operate: withdrawn rename-1"])}),o(s,"O3: an unknown id is a false return, never an error",()=>{a.equal(e.withdraw("nope-9"),!1),a.equal(e.withdraw("rename-1"),!1)})}{const e=n({},i()).Context.workspaceOperate;await e.proposeRename({path:"/repo/src/a.ts",name:"Alpha",to:"Beta",version:"v1"}),await e.proposeConnect({from:{path:"/repo/src/a.ts"},target:{path:"/repo/src/b.ts"},edge:"imports",version:"v1"}),await e.proposeReplace({path:"/repo/src/b.ts",span:{startLine:1,endLine:1},content:"x",version:"v1"}),o(s,"O4: the list filters by kind, path and status",()=>{a.deepEqual(e.list({kind:"rename"}).map(r=>r.id),["rename-1"]),a.deepEqual(e.list({path:"/repo/src/b.ts"}).map(r=>r.id),["replace-3"]),a.deepEqual(e.list({status:"withdrawn"}),[])}),await p(s,"O4: the default limit and the hard cap apply",async()=>{a.equal(e.list({limit:2}).length,2);const r=n({limitMaximum:2},i());await r.Context.workspaceOperate.proposeRename({path:"/repo/src/a.ts",name:"Alpha",to:"Beta",version:"v1"}),await r.Context.workspaceOperate.proposeConnect({from:{path:"/repo/src/a.ts"},target:{path:"/repo/src/b.ts"},edge:"imports",version:"v1"}),await r.Context.workspaceOperate.proposeReplace({path:"/repo/src/b.ts",span:{startLine:1,endLine:1},content:"x",version:"v1"}),a.equal(r.Context.workspaceOperate.list({limit:50}).length,2),a.equal(r.Context.workspaceOperate.list().length,3)}),o(s,"O4: the statistics are honest",()=>{a.deepEqual(e.statistics(),{proposals:3,refused:0,sequence:3,byKind:{rename:1,connect:1,replace:1}})})}{const t=n({maxProposals:1},i()),e=t.Context.workspaceOperate;await e.proposeRename({path:"/repo/src/a.ts",name:"Alpha",to:"Beta",version:"v1"}),await p(s,"O5: a proposal into a full table is refused, never dropped",async()=>{const r=await e.proposeConnect({from:{path:"/repo/src/a.ts"},target:{path:"/repo/src/b.ts"},edge:"imports",version:"v1"});a.deepEqual(r,{status:"refused",refusal:{kind:"connect",reason:"full",detail:"the proposal table is at maxProposals (1)"}}),a.deepEqual(c(t,"refused full"),["operate: refused full (1 live proposals)"]),a.equal(e.statistics().refused,1)})}return d(s,"Query-Withdraw-Observe")},b=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(b){const s=await q();console.log(`${s} PASS - Query-Withdraw-Observe`)}export{q as runTest};
+import assert from "node:assert/strict";
+import {
+  Check,
+  CheckAsync,
+  Finish,
+  FileNode,
+  FakeGraph,
+  Fire,
+  Ledger,
+  LinesWith,
+  MakeCounter,
+  Make,
+  rm,
+  Validate,
+  SymbolNode
+} from "../Harness.js";
+const Setup = (Config = {}, Graph) => {
+  rm();
+  return Make(Validate({ logFile: Ledger, enabled: true, ...Config }), Graph);
+};
+const DefaultGraph = (Edges = []) => FakeGraph(
+  [
+    SymbolNode("Alpha", "/repo/src/a.ts", "sym-alpha"),
+    FileNode("/repo/src/a.ts", "file-a"),
+    FileNode("/repo/src/b.ts", "file-b")
+  ],
+  Edges
+);
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Run = Setup();
+    const Before = Run.Lines.length;
+    Fire(Run, "/repo/src/a.ts", "v9");
+    Fire(Run, "/repo/src/b.ts", "v1", Run.State.Self);
+    Check(Count, "O1: the fence tracker records foreign events silently", () => {
+      assert.equal(Run.State.Observed.get("/repo/src/a.ts"), "v9");
+      assert.equal(Run.Lines.length, Before);
+    });
+    Check(Count, "O1: the hook's own actor is ignored and malformed events never throw", () => {
+      Fire(Run, "/repo/src/never.ts", "v1", Run.State.Self);
+      assert.equal(Run.State.Observed.has("/repo/src/never.ts"), false);
+      Run.Listeners["fs/observed"](null, null, void 0);
+      assert.equal(Run.State.Observed.has("unknown"), false);
+    });
+  }
+  {
+    const Run = Setup({}, DefaultGraph());
+    Fire(Run, "/repo/src/a.ts", "v1");
+    await CheckAsync(Count, "O2: without a caller fence the observed version is used", async () => {
+      const Outcome = await Run.Context.workspaceOperate.proposeRename({
+        path: "/repo/src/a.ts",
+        name: "Alpha",
+        to: "Beta"
+      });
+      assert.equal(Outcome.status, "proposed");
+      assert.equal(Outcome.proposal.version, "v1");
+      assert.equal(Outcome.proposal.id, "rename-1");
+    });
+    await CheckAsync(Count, "O2: a caller fence that contradicts the observed version is refused", async () => {
+      const Outcome = await Run.Context.workspaceOperate.proposeRename({
+        path: "/repo/src/a.ts",
+        name: "Alpha",
+        to: "Beta",
+        version: "v9"
+      });
+      assert.equal(Outcome.status, "refused");
+      assert.deepEqual(Outcome.refusal, {
+        kind: "rename",
+        reason: "stale-version",
+        detail: "the fence v9 contradicts the observed version v1"
+      });
+      assert.deepEqual(LinesWith(Run, "refused rename stale-version"), [
+        "operate: refused rename stale-version"
+      ]);
+    });
+    await CheckAsync(Count, "O2: a version is never invented (no fence, no observation)", async () => {
+      const Outcome = await Run.Context.workspaceOperate.proposeRename({
+        path: "/repo/src/unknown.ts",
+        name: "Alpha",
+        to: "Beta"
+      });
+      assert.equal(Outcome.status, "refused");
+      assert.equal(Outcome.refusal.reason, "missing-version");
+    });
+  }
+  {
+    const Run = Setup({}, DefaultGraph());
+    const Service = Run.Context.workspaceOperate;
+    await Service.proposeRename({
+      path: "/repo/src/a.ts",
+      name: "Alpha",
+      to: "Beta",
+      version: "v1"
+    });
+    Check(Count, "O3: a withdrawal marks the proposal and logs the byte-exact line", () => {
+      assert.equal(Service.withdraw("rename-1"), true);
+      assert.equal(Service.get("rename-1").status, "withdrawn");
+      assert.deepEqual(LinesWith(Run, "withdrawn"), ["operate: withdrawn rename-1"]);
+    });
+    Check(Count, "O3: an unknown id is a false return, never an error", () => {
+      assert.equal(Service.withdraw("nope-9"), false);
+      assert.equal(Service.withdraw("rename-1"), false);
+    });
+  }
+  {
+    const Run = Setup({}, DefaultGraph());
+    const Service = Run.Context.workspaceOperate;
+    await Service.proposeRename({
+      path: "/repo/src/a.ts",
+      name: "Alpha",
+      to: "Beta",
+      version: "v1"
+    });
+    await Service.proposeConnect({
+      from: { path: "/repo/src/a.ts" },
+      target: { path: "/repo/src/b.ts" },
+      edge: "imports",
+      version: "v1"
+    });
+    await Service.proposeReplace({
+      path: "/repo/src/b.ts",
+      span: { startLine: 1, endLine: 1 },
+      content: "x",
+      version: "v1"
+    });
+    Check(Count, "O4: the list filters by kind, path and status", () => {
+      assert.deepEqual(Service.list({ kind: "rename" }).map((P) => P.id), ["rename-1"]);
+      assert.deepEqual(Service.list({ path: "/repo/src/b.ts" }).map((P) => P.id), [
+        "replace-3"
+      ]);
+      assert.deepEqual(Service.list({ status: "withdrawn" }), []);
+    });
+    await CheckAsync(Count, "O4: the default limit and the hard cap apply", async () => {
+      assert.equal(Service.list({ limit: 2 }).length, 2);
+      const Capped = Setup({ limitMaximum: 2 }, DefaultGraph());
+      await Capped.Context.workspaceOperate.proposeRename({
+        path: "/repo/src/a.ts",
+        name: "Alpha",
+        to: "Beta",
+        version: "v1"
+      });
+      await Capped.Context.workspaceOperate.proposeConnect({
+        from: { path: "/repo/src/a.ts" },
+        target: { path: "/repo/src/b.ts" },
+        edge: "imports",
+        version: "v1"
+      });
+      await Capped.Context.workspaceOperate.proposeReplace({
+        path: "/repo/src/b.ts",
+        span: { startLine: 1, endLine: 1 },
+        content: "x",
+        version: "v1"
+      });
+      assert.equal(Capped.Context.workspaceOperate.list({ limit: 50 }).length, 2);
+      assert.equal(Capped.Context.workspaceOperate.list().length, 3);
+    });
+    Check(Count, "O4: the statistics are honest", () => {
+      assert.deepEqual(Service.statistics(), {
+        proposals: 3,
+        refused: 0,
+        sequence: 3,
+        byKind: { rename: 1, connect: 1, replace: 1 }
+      });
+    });
+  }
+  {
+    const Run = Setup({ maxProposals: 1 }, DefaultGraph());
+    const Service = Run.Context.workspaceOperate;
+    await Service.proposeRename({
+      path: "/repo/src/a.ts",
+      name: "Alpha",
+      to: "Beta",
+      version: "v1"
+    });
+    await CheckAsync(Count, "O5: a proposal into a full table is refused, never dropped", async () => {
+      const Outcome = await Service.proposeConnect({
+        from: { path: "/repo/src/a.ts" },
+        target: { path: "/repo/src/b.ts" },
+        edge: "imports",
+        version: "v1"
+      });
+      assert.deepEqual(Outcome, {
+        status: "refused",
+        refusal: {
+          kind: "connect",
+          reason: "full",
+          detail: "the proposal table is at maxProposals (1)"
+        }
+      });
+      assert.deepEqual(LinesWith(Run, "refused full"), [
+        "operate: refused full (1 live proposals)"
+      ]);
+      assert.equal(Service.statistics().refused, 1);
+    });
+  }
+  return Finish(Count, "Query-Withdraw-Observe");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Query-Withdraw-Observe`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

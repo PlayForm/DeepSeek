@@ -1,3 +1,11 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+
+import { Pin } from "./Direct.js";
+import Observe from "./Observe.js";
+
 /**
  * @module Apply
  *
@@ -6,6 +14,7 @@
  * fs/observed Wire, the direct-govern registration and the lifecycle effects.
  *
  * @remarks
+ *
  * The factory service arrives injected (ctx.pluginFactory - the loader holds
  * this bundle pending until the factory service exists). Everything here is
  * factory machinery; the module owns only its identity, its ledger strings and
@@ -34,14 +43,6 @@
  * single-slot waterfalls belong to the observation policy; registering there
  * would veto it). Never tools/* (result amendment is louder).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-
-import { Pin } from "./Direct.js";
-import Observe from "./Observe.js";
-
 export default (Context: Context, Options: Config): void => {
 	// The factory service — declared by `inject`; the accessor never throws
 	// here (the loader guarantees every injected service exists).

@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -6,6 +10,7 @@
  * reflect role of the family map.
  *
  * @remarks
+ *
  * REFLECT.md; the later stage, the service-provider role. Loader contract:
  * `export const name` + `export const apply` + `export const Config` +
  * `export const inject` + `export default { name, apply, Config, inject }` -
@@ -49,10 +54,6 @@
  * factory for the State builder, the ledger and the guarded write. Its own
  * writes go ONLY through that guarded path - never a raw fs write.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "plugin-dsh-workspace-reflect";
 
 /**

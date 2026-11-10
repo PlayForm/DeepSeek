@@ -1,9 +1,14 @@
+import type { Obligations } from "../Interface/Check.js";
+import type Proposal from "../Interface/Proposal.js";
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Check
  *
  * The FOUR INDEPENDENT MEANS-CHECKS, one pure function of the proposal.
  *
  * @remarks
+ *
  * The intent-model semantics: an intent must not authorize its own means - the
  * gate runs the independent checks BEFORE any AuthorizationDecision, and the
  * intent is never the permission:
@@ -22,8 +27,4 @@
  * "recovery" (the row's behavior was applied). The policy lookup lives in
  * `Function/Policy`, the table in `Function/Recovery` - Check stays pure.
  */
-import type { Obligations } from "../Interface/Check.js";
-import type Proposal from "../Interface/Proposal.js";
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(State: State, Proposal_: Proposal): Obligations;

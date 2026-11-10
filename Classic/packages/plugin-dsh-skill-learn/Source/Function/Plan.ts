@@ -1,3 +1,6 @@
+import type { Route } from "@Function/Route.js";
+import type { LlmSlice } from "@Interface/Services.js";
+
 /**
  * @module Plan
  *
@@ -5,6 +8,7 @@
  * skill index, and the `text-delta` read that collects its reply.
  *
  * @remarks
+ *
  * THE REQUEST CARRIES EXACTLY SIX FIELDS (plan section 4.1): `system` is `Prompt(1)`,
  * `messages` is one user message built here, `provider` and `model` are the resolved
  * route, `maxTokens` is the reply budget, and `signal` is the maintenance signal.
@@ -32,29 +36,38 @@
  * error's message, because the ledger line and the report both need the cause and this
  * leaf has nowhere to put it.
  */
-import type { Route } from "@Function/Route.js";
-import type { LlmSlice } from "@Interface/Services.js";
-
-/** One phase-1 call: the route, the system prompt, the user text's parts, and the run's limits. */
+/**
+ * One phase-1 call: the route, the system prompt, the user text's parts, and the run's limits.
+ */
 export interface PlanOptions {
 	readonly route: Route;
 
-	/** `Prompt(1)`, the byte-stable phase-1 text. */
+	/**
+	 * `Prompt(1)`, the byte-stable phase-1 text.
+	 */
 	readonly system: string;
 
-	/** The digest text (`Function/Digest`). */
+	/**
+	 * The digest text (`Function/Digest`).
+	 */
 	readonly digest: string;
 
-	/** The catalog index lines (`Function/Catalog`). */
+	/**
+	 * The catalog index lines (`Function/Catalog`).
+	 */
 	readonly index: readonly string[];
 	readonly maxTokens: number;
 	readonly signal: AbortSignal;
 }
 
-/** The phase marker the user message ends with, so the request states which reply it wants. */
+/**
+ * The phase marker the user message ends with, so the request states which reply it wants.
+ */
 const Marker = "Phase 1 of 2: return the plan. Reply with one JSON object and nothing else.";
 
-/** The index section, with a stated fallback so an empty catalog is not a blank gap. */
+/**
+ * The index section, with a stated fallback so an empty catalog is not a blank gap.
+ */
 const Index = (Lines: ReadonlyArray<string>): string =>
 	Lines.length === 0
 		? "Skill index: (the catalog is empty)"

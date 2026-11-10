@@ -1,3 +1,6 @@
+import type Factory from "@Interface/Factory.js";
+import type { State as Shared } from "@playform/plugin-dsh-factory";
+
 /**
  * @module State
  *
@@ -5,6 +8,7 @@
  * fields.
  *
  * @remarks
+ *
  * The shared half is built by `Factory.State(ctx, config, { ... })` (SCHEME.md §1/§2.10) and
  * comes from the factory's NAMED type export (`State` - the factory v0.1.1 declaration fix:
  * the built Target/Library.d.ts ships RELATIVE specifiers, so a consumer's tsconfig paths
@@ -33,32 +37,45 @@
  * `ctx.__hookDshGovernorPackageState` attachment (never a return value from `apply` - the
  * loader treats apply returns specially, a live-verified lesson).
  */
-import type Factory from "@Interface/Factory.js";
-import type { State as Shared } from "@playform/plugin-dsh-factory";
-
 export default interface State extends Shared {
-	/** Strict chain pass: strip unknown deps in a governed workspace. */
+	/**
+	 * Strict chain pass: strip unknown deps in a governed workspace.
+	 */
 	Strict: boolean;
 
-	/** Cooldown between update-stage dispatches, per directory (epoch ms). */
+	/**
+	 * Cooldown between update-stage dispatches, per directory (epoch ms).
+	 */
 	Wait: number;
 
-	/** Circuit breaker: consecutive update-stage failures per directory. */
+	/**
+	 * Circuit breaker: consecutive update-stage failures per directory.
+	 */
 	Limit: number;
 
-	/** ncu binary for bin mode (binary name or absolute path - resolved via the host PATH). */
+	/**
+	 * ncu binary for bin mode (binary name or absolute path - resolved via the host PATH).
+	 */
 	Binary: string;
 
-	/** Update stage mode: "programmatic" (ncu library in-process) or "bin". */
+	/**
+	 * Update stage mode: "programmatic" (ncu library in-process) or "bin".
+	 */
 	Mode: string;
 
-	/** Directory -> epoch ms of the last update-stage dispatch (cooldown). */
+	/**
+	 * Directory -> epoch ms of the last update-stage dispatch (cooldown).
+	 */
 	Stamp: Map<string, number>;
 
-	/** Directories with an update run in flight. */
+	/**
+	 * Directories with an update run in flight.
+	 */
 	Set: Set<string>;
 
-	/** Directory → consecutive update-stage failures (circuit breaker). */
+	/**
+	 * Directory → consecutive update-stage failures (circuit breaker).
+	 */
 	Count: Map<string, number>;
 
 	/** The injected @playform/plugin-dsh-factory service - every absorbed

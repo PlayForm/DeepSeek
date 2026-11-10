@@ -1,3 +1,10 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -10,6 +17,7 @@
  * so every folder is standalone-green.
  *
  * @remarks
+ *
  * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the counter through one
  * deliberate pass + one deliberate failure and exits 0 only when both are counted exactly, then
  * proves the fake ctx actually wires the plugin (the vacuously-green backstop for every folder's
@@ -18,13 +26,6 @@
  * THE FAKE CLOCK: the State carries the `Now` clock seam - every time read goes through it, so the
  * expiry and TTL tests never touch the wall clock.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 export { Plugin };
 
 /**

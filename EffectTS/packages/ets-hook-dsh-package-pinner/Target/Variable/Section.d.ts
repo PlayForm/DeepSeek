@@ -8,6 +8,7 @@ import { Section } from "@playform/ets-lib-dsh-core";
  * family's single source).
  *
  * @remarks
+ *
  * Function/Pin rewrites version values ONLY inside these sections and the
  * refusal guard allows ONLY these to differ between the author's manifest and
  * the pinned one - the pinner can never restructure a file; a difference in

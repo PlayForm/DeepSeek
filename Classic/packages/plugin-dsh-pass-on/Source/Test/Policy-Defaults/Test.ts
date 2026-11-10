@@ -1,18 +1,21 @@
+import assert from "node:assert/strict";
+
+import { Check, Finish, Make, MakeCounter, Validate } from "../Harness.js";
+
 /**
  * @module Test
  *
  * THE POLICY BLOCK (D6) on the pass-on.
  *
  * @remarks
+ *
  * Covers the shared block's defaults in the schema and on the built State (`State.Config.policy`
  * - the class form has no factory State), the override, and the read-only posture (read/suggest
  * automatic, the write path never taken).
  */
-import assert from "node:assert/strict";
-
-import { Check, Finish, Make, MakeCounter, Validate } from "../Harness.js";
-
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",

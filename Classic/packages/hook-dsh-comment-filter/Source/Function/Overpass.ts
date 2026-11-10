@@ -1,3 +1,10 @@
+import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
+import type State from "@Interface/State.js";
+import { ToolResults } from "@playform/lib-dsh-core";
+
+import Gate from "./Gate.js";
+import Strip from "./Strip.js";
+
 /**
  * @module Overpass
  *
@@ -5,6 +12,7 @@
  * (@playform/lib-dsh-core/Overpass/ToolResults).
  *
  * @remarks
+ *
  * The generic machinery (next() first, the accepted/non-value decision rules, the content basis,
  * the text-only block rewrite, the CCR marker guard, the fail-open, the identity-preserving
  * no-op, the ledger journal) lives in the core; this file supplies only what makes it THE
@@ -37,13 +45,6 @@
  * UNCHANGED. Never throw into the waterfall - a thrown listener would turn a good tool result
  * into a pipeline failure.
  */
-import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
-import type State from "@Interface/State.js";
-import { ToolResults } from "@playform/lib-dsh-core";
-
-import Gate from "./Gate.js";
-import Strip from "./Strip.js";
-
 /**
  * The schema-default exemption list (the fallback for a hand-built config): `read` and
  * `ccr_retrieve` are ABSENT by design.

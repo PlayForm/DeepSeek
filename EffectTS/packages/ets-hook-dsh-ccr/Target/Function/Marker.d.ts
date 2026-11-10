@@ -4,6 +4,7 @@
  * The format/parse pair for the retrieval marker `<<<CCR:<24hex>|<type>|<size>>>`.
  *
  * @remarks
+ *
  * Byte-identical in shape with Aphrodite's `<<<CCR:hash|type|size>>>`
  * (R:116-118) so the research vocabulary carries over, with two deliberate
  * deltas: the hash is 24 hex (not 40) and the type vocabulary is the reduced

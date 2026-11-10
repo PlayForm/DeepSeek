@@ -1,21 +1,3 @@
-/**
- * @module Test
- *
- * THE INBOX SPLICE and the board's new surfaces: a spliced batch proposal is projected onto the
- * board exactly once, and the board survives a restart.
- *
- * @remarks
- * A batch proposal delivered through the harness agent-team inbox (the durable
- * `agent/inbox/spliced` session event AND the live `agent/inbox/inserted` emit) is projected onto
- * the board exactly once. A decision delivered the same way moves the proposal's status. The
- * Gates block and the queue projection render the arbiter truth, and the queue's own seats are
- * read-only. The board survives a restart: the state file carries the proposals and the gates
- * back.
- *
- * The inbox fixture mirrors the harness's own splice payload
- * (`packages/core/agent/src/types.ts:96`) and message shape - a user message with text content -
- * so the listener sees exactly what the agent-loop emits.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {
@@ -30,7 +12,28 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The canonical proposal fixture (the batch contract the pass-on emits). */
+/**
+ * @module Test
+ *
+ * THE INBOX SPLICE and the board's new surfaces: a spliced batch proposal is projected onto the
+ * board exactly once, and the board survives a restart.
+ *
+ * @remarks
+ *
+ * A batch proposal delivered through the harness agent-team inbox (the durable
+ * `agent/inbox/spliced` session event AND the live `agent/inbox/inserted` emit) is projected onto
+ * the board exactly once. A decision delivered the same way moves the proposal's status. The
+ * Gates block and the queue projection render the arbiter truth, and the queue's own seats are
+ * read-only. The board survives a restart: the state file carries the proposals and the gates
+ * back.
+ *
+ * The inbox fixture mirrors the harness's own splice payload
+ * (`packages/core/agent/src/types.ts:96`) and message shape - a user message with text content -
+ * so the listener sees exactly what the agent-loop emits.
+ */
+/**
+ * The canonical proposal fixture (the batch contract the pass-on emits).
+ */
 const Proposal = (Overrides: Record<string, unknown> = {}): any => ({
 	id: "prop-1",
 	intent: "version-bump",
@@ -53,7 +56,9 @@ const Proposal = (Overrides: Record<string, unknown> = {}): any => ({
 	...Overrides,
 });
 
-/** The decision fixture (the batch contract the decision hook emits). */
+/**
+ * The decision fixture (the batch contract the decision hook emits).
+ */
 const Decision = (Overrides: Record<string, unknown> = {}): any => ({
 	proposal: "prop-1",
 	outcome: "approved",
@@ -62,15 +67,21 @@ const Decision = (Overrides: Record<string, unknown> = {}): any => ({
 	...Overrides,
 });
 
-/** The proposal block the pass-on renders (the cross-package wire). */
+/**
+ * The proposal block the pass-on renders (the cross-package wire).
+ */
 const ProposalBlock = (Value: any): string =>
 	`[BATCH PROPOSAL - ${Value.id}]\n${JSON.stringify(Value)}`;
 
-/** The decision block the decision hook renders (the cross-package wire). */
+/**
+ * The decision block the decision hook renders (the cross-package wire).
+ */
 const DecisionBlock = (Value: any): string =>
 	`[BATCH DECISION - ${Value.proposal}]\n${JSON.stringify(Value)}`;
 
-/** One inbox message carrying the text (the harness's UserMessage shape). */
+/**
+ * One inbox message carrying the text (the harness's UserMessage shape).
+ */
 const Message = (Id: string, Text: string): any => ({
 	id: Id,
 	role: "user",
@@ -78,7 +89,9 @@ const Message = (Id: string, Text: string): any => ({
 	source: { kind: "user" },
 });
 
-/** The durable splice the agent-loop appends (the session/event channel). */
+/**
+ * The durable splice the agent-loop appends (the session/event channel).
+ */
 const Splice = (Run: any, Text: string, Id = "msg-1", Session = "agent-a"): void => {
 	Run.CtxListeners["session/event"](
 		{ id: Session },
@@ -89,7 +102,9 @@ const Splice = (Run: any, Text: string, Id = "msg-1", Session = "agent-a"): void
 	);
 };
 
-/** The live per-agent emit that follows the same commit. */
+/**
+ * The live per-agent emit that follows the same commit.
+ */
 const Inserted = (Run: any, Text: string, Id = "msg-1", Agent = "agent-a"): void => {
 	Run.CtxListeners["agent/inbox/inserted"]({
 		agent: { id: Agent },
@@ -97,7 +112,9 @@ const Inserted = (Run: any, Text: string, Id = "msg-1", Agent = "agent-a"): void
 	});
 };
 
-/** A fresh mount over a fresh ledger AND a fresh state file. */
+/**
+ * A fresh mount over a fresh ledger AND a fresh state file.
+ */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
 	try {

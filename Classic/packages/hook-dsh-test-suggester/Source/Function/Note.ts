@@ -1,9 +1,14 @@
+import { randomUUID } from "node:crypto";
+
+import type { MessageSource, UserMessage } from "@deepseek-ai/dsh-llm";
+
 /**
  * @module Note
  *
  * The additionalContexts notice builder (the plan's delivery surface).
  *
  * @remarks
+ *
  * SEARCH-SUGGESTER-PLUGIN.md §4.6 surface 1; the tool-coach precedent. Builds
  * the labeled UserMessage the post-execute listener prepends to the downstream
  * decision's additionalContexts.
@@ -21,10 +26,6 @@
  * the same helper instead of importing it, so the built Target carries no
  * runtime import of the harness's own packages.
  */
-import { randomUUID } from "node:crypto";
-
-import type { MessageSource, UserMessage } from "@deepseek-ai/dsh-llm";
-
 // The suggester's own source kind, declared in its own module (the
 // MessageSourceMap vocabulary is merge-extensible by design).
 declare module "@deepseek-ai/dsh-llm" {

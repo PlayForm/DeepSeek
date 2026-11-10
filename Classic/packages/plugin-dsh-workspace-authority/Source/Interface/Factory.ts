@@ -1,3 +1,5 @@
+import type Factory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Factory
  *
@@ -5,6 +7,7 @@
  * consumes.
  *
  * @remarks
+ *
  * The service uses: the State builder (Function/State - cell unwrap + shared
  * fields + the P10 volatile refresh) and the ledger (Function/Append - logger +
  * appendFileSync, never throws). Structural, so the smoke can serve the REAL
@@ -14,8 +17,6 @@
  * `ctx.pluginFactory` is typed at every consumption site (the typed view
  * arrives TYPE-ONLY from the factory package - erased at build).
  */
-import type Factory from "@playform/plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

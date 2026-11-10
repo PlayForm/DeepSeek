@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * The M-series engine tests: the enrollment, the classification, the debounce coalescing, the
- * admission coalesce, the retirement, the overflow collapse and the per-glob opt-out.
- *
- * @remarks
- * The enrollment is watchlist-gated, and the never-monitored case is the negative. The
- * classification lets the most-specific glob win, with the catalog fallback. Every timing
- * transition is a clock advance plus a checkpoint; every ledger assertion is byte-exact.
- */
 import assert from "node:assert/strict";
 import {
 	AgentA,
@@ -32,6 +21,18 @@ import {
 	live_monitor,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The M-series engine tests: the enrollment, the classification, the debounce coalescing, the
+ * admission coalesce, the retirement, the overflow collapse and the per-glob opt-out.
+ *
+ * @remarks
+ *
+ * The enrollment is watchlist-gated, and the never-monitored case is the negative. The
+ * classification lets the most-specific glob win, with the catalog fallback. Every timing
+ * transition is a clock advance plus a checkpoint; every ledger assertion is byte-exact.
+ */
 /** A standard engine mount: the fake registry, the jobs and shell services,
  * and a wave-3 config on top of the defaults. */
 const Setup = (Config: any = {}): { Jobs: any; Shell: any; Run: any } => {
@@ -44,7 +45,9 @@ const Setup = (Config: any = {}): { Jobs: any; Shell: any; Run: any } => {
 	return { Jobs, Shell, Run };
 };
 
-/** The monitor stanza text of a wave-2 assembly. */
+/**
+ * The monitor stanza text of a wave-2 assembly.
+ */
 const StanzaOf = async (Run: any): Promise<string> => {
 	const Assembly = await WaveAssemble(Run);
 	const Section = Assembly.sections.find((S: any) => S.name === "live-containers");

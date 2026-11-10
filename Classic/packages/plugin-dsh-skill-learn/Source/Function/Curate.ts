@@ -1,3 +1,13 @@
+import Path from "node:path";
+
+import Archive from "@Function/Archive.js";
+import Append from "@Function/Ledger.js";
+import type Usage from "@Function/Usage.js";
+import { Expand, Text, type Seam } from "@Function/Write.js";
+import type Configuration from "@Interface/Configuration.js";
+import type { Curation } from "@Interface/Curation.js";
+import type UsageRecord from "@Interface/Record.js";
+
 /**
  * @module Curate
  *
@@ -6,6 +16,7 @@
  * (`Function/Consolidate.ts`).
  *
  * @remarks
+ *
  * IT RUNS ON THE USAGE STORE ALONE AND COSTS NO TOKENS, which is why it is the default
  * posture: a corpus that only ever grows is a corpus nobody loads, and ageing it needs
  * no model's opinion.
@@ -38,20 +49,14 @@
  * and the predicate is the contract (tools/skill_usage.py:433-445), and the archive
  * re-checks a third time before it copies anything (tools/skill_usage.py:620-632).
  */
-import Path from "node:path";
-
-import Archive from "@Function/Archive.js";
-import Append from "@Function/Ledger.js";
-import type Usage from "@Function/Usage.js";
-import { Expand, Text, type Seam } from "@Function/Write.js";
-import type Configuration from "@Interface/Configuration.js";
-import type { Curation } from "@Interface/Curation.js";
-import type UsageRecord from "@Interface/Record.js";
-
-/** The day in milliseconds, the unit both thresholds are stated in. */
+/**
+ * The day in milliseconds, the unit both thresholds are stated in.
+ */
 const Day = 86_400_000;
 
-/** One stamp as epoch milliseconds, with a naive value forced to UTC (tools/skill_usage.py:115-120). */
+/**
+ * One stamp as epoch milliseconds, with a naive value forced to UTC (tools/skill_usage.py:115-120).
+ */
 const Moment = (Stamp: string | null): number => {
 	switch (true) {
 		case Stamp === null:
@@ -64,10 +69,14 @@ const Moment = (Stamp: string | null): number => {
 	}
 };
 
-/** Whether the record is in the pass's jurisdiction: the plugin's own create, or a pin. */
+/**
+ * Whether the record is in the pass's jurisdiction: the plugin's own create, or a pin.
+ */
 const Eligible = (Record_: UsageRecord): boolean => Record_.createdBy === "agent" || Record_.pinned;
 
-/** Whether the skill still resolves under the writable root, which a ghost record does not. */
+/**
+ * Whether the skill still resolves under the writable root, which a ghost record does not.
+ */
 const Present = async (
 	Name: string,
 	Seam_: Seam,
@@ -75,7 +84,9 @@ const Present = async (
 ): Promise<boolean> =>
 	(await Text(Seam_, Path.join(Expand(Configuration_.skillsRoot), Name, "SKILL.md"))) !== null;
 
-/** One pass over the store: the transitions it applied, or would apply on a dry run. */
+/**
+ * One pass over the store: the transitions it applied, or would apply on a dry run.
+ */
 export default async (
 	Now: Date,
 	Store: Usage,

@@ -1,9 +1,14 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
  * The entry module (mirrors Source/Library.rs).
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` + `export const Config` +
  * `export const inject` + `export default { name, apply, Config, inject }` - the ONLY named
  * exports in the tree (cordis requires them); every other module is a nameless default export
@@ -84,10 +89,6 @@
  * discovery reads (registry.json, update-policy.json), and the ledger append (ctx.fs has no
  * append operation - the factory's Append).
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "hook-dsh-governor-package";
 
 // Loader contract (cordis): the exported schema is validated and defaulted while the plugin

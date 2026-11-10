@@ -4,6 +4,7 @@
  * The in-memory shape of the P2 graph projection (the re-spec).
  *
  * @remarks
+ *
  * The plan's generated repo index is superseded by the workspace graph
  * (Documentation/Plans/Completion-Spec/00-OVERVIEW.md section 6,
  * Documentation/Plans/Completion-Spec/03-SUGGESTERS.md section 3). One projection is built
@@ -22,26 +23,40 @@
  * entry.
  */
 export interface Fact {
-	/** The node kinds recorded at the path, in the graph's own order. */
+	/**
+	 * The node kinds recorded at the path, in the graph's own order.
+	 */
 	kinds: string[];
 
-	/** The path's depth below the snapshot's common root (1 = a root file). */
+	/**
+	 * The path's depth below the snapshot's common root (1 = a root file).
+	 */
 	depth: number;
 
-	/** The version-token rank in [0, 1] (1 = the newest token in the snapshot). */
+	/**
+	 * The version-token rank in [0, 1] (1 = the newest token in the snapshot).
+	 */
 	recency: number;
 }
 
 export default interface Projection {
-	/** The graph's indexRevision the projection was built from. */
+	/**
+	 * The graph's indexRevision the projection was built from.
+	 */
 	revision: string;
 
-	/** The number of nodes read from the snapshot. */
+	/**
+	 * The number of nodes read from the snapshot.
+	 */
 	nodes: number;
 
-	/** The common-root segment count the depth is measured below. */
+	/**
+	 * The common-root segment count the depth is measured below.
+	 */
 	root: number;
 
-	/** The normalized node path to its facts. */
+	/**
+	 * The normalized node path to its facts.
+	 */
 	facts: Map<string, Fact>;
 }

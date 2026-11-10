@@ -1,18 +1,3 @@
-/**
- * @module Test
- *
- * The config surface and the activation posture, in one singular test.
- *
- * @remarks
- * A unit smoke of `@playform/hook-dsh-ccr`: the fake ctx + the REAL factory + the REAL CCR
- * apply, from the Harness. Every volatile cell arrives as `{ get }`, every config default
- * (thresholdBytes through protectLastTurns, the multipliers, the 8-tool targets, the exempt
- * list), the byte-exact activation ledger line (both the logger form and the durable [ISO] file
- * form), and the activation record journaled to the shared storage domain.
- *
- * Runs standalone (`node Target/Test/Config-And-Activation/Test.js`) AND under the aggregate
- * (`Maintain/Run/Smokes/Index.mjs` spawns it).
- */
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import {
@@ -30,6 +15,22 @@ import {
 	TerminalText,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The config surface and the activation posture, in one singular test.
+ *
+ * @remarks
+ *
+ * A unit smoke of `@playform/hook-dsh-ccr`: the fake ctx + the REAL factory + the REAL CCR
+ * apply, from the Harness. Every volatile cell arrives as `{ get }`, every config default
+ * (thresholdBytes through protectLastTurns, the multipliers, the 8-tool targets, the exempt
+ * list), the byte-exact activation ledger line (both the logger form and the durable [ISO] file
+ * form), and the activation record journaled to the shared storage domain.
+ *
+ * Runs standalone (`node Target/Test/Config-And-Activation/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

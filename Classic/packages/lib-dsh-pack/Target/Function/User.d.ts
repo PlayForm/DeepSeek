@@ -6,6 +6,7 @@ export default _default;
  * `.yaml`, then `.json`.
  *
  * @remarks
+ *
  * The JSON form needs no YAML parser.
  */
 declare function _default(Slug: string, Home: string): string[];

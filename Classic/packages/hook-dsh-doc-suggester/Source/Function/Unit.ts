@@ -1,9 +1,20 @@
+import { Fold, type Touch } from "@playform/lib-dsh-pack";
+
+import type {
+	ProjectionUnit,
+	SessionEvent,
+	SessionHistory,
+	StateSchema,
+} from "../Interface/Projection.js";
+import { ProjectionCap, ProjectionKey, ProjectionVersion } from "../Variable/Projection.js";
+
 /**
  * @module Unit
  *
  * Folds one session's committed tool calls into its per-session touch history.
  *
  * @remarks
+ *
  * The session-projection unit itself: the per-session touch history as a PURE fold over
  * the committed `tool/call` events of one session.
  *
@@ -34,16 +45,6 @@
  * `tool/call` with no result `TOOL_OUTCOME_UNKNOWN`), before dispatch, so the anchor's
  * prior touches are present without any post-execute append.
  */
-import { Fold, type Touch } from "@playform/lib-dsh-pack";
-
-import type {
-	ProjectionUnit,
-	SessionEvent,
-	SessionHistory,
-	StateSchema,
-} from "../Interface/Projection.js";
-import { ProjectionCap, ProjectionKey, ProjectionVersion } from "../Variable/Projection.js";
-
 /**
  * A non-negative integer, or the fallback (a corrupt persisted row).
  */

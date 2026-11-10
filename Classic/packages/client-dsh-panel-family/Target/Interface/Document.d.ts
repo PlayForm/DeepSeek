@@ -6,6 +6,7 @@
  * library).
  *
  * @remarks
+ *
  * The input member is an interface merge because `@types/react`'s global shim already declares the
  * empty `HTMLInputElement`; the field row reads its value on change.
  */

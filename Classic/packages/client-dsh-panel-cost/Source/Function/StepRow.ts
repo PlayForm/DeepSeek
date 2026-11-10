@@ -1,9 +1,3 @@
-// StepRow - the step row: the toggle button (only when the step carries
-// evidence: files, allocations, money, usage or an error), the state
-// markers, the step clock beside the model pill, and one cell per resolved
-// column. The row builds the cell source from the step's own ledger fields
-// and lets each column's render build its cell, so a hidden or reordered
-// column moves the header and the body together.
 import type { TurnsCells } from "@Function/Columns";
 import Stamp from "@Function/Stamp";
 import type CostBuckets from "@Interface/Buckets";
@@ -14,6 +8,19 @@ import type CostTokens from "@Interface/Tokens";
 import type { Translate } from "@Interface/Translate";
 import { createElement } from "react";
 
+/**
+ * @module StepRow
+ *
+ * The step row: the toggle button, the state markers, the step clock beside the model pill, and
+ * one cell per resolved column.
+ *
+ * @remarks
+ *
+ * The toggle button appears only when the step carries evidence: files, allocations, money, usage
+ * or an error. The row builds the cell source from the step's own ledger fields and lets each
+ * column's render build its cell, so a hidden or reordered column moves the header and the body
+ * together.
+ */
 const CacheMissThreshold = 0.5;
 
 type Marker = {

@@ -1,3 +1,7 @@
+import Record from "@Function/Record.js";
+import type Binding from "@Interface/Binding.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Invalidate
  *
@@ -5,6 +9,7 @@
  * exact-approval contract honest over time.
  *
  * @remarks
+ *
  * When the file a binding covers is observed at a DIFFERENT version than the
  * one bound in the approval, the candidate changed after the approval - the
  * binding is invalidated (decision `invalidated`).
@@ -19,10 +24,6 @@
  * - The listener NEVER THROWS: the whole body is one try/catch - a malformed
  *   event is caught and ledgered as `failed <path> (<reason>)`.
  */
-import Record from "@Function/Record.js";
-import type Binding from "@Interface/Binding.js";
-import type State from "@Interface/State.js";
-
 export default (
 	State: State,
 	Target: unknown,

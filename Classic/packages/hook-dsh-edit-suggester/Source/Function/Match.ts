@@ -5,6 +5,7 @@
  * only lookup.
  *
  * @remarks
+ *
  * Completion spec 03-SUGGESTERS section 2: "a named companion subsequently
  * touched".
  *

@@ -5,6 +5,7 @@
  * unquotes each segment.
  *
  * @remarks
+ *
  * The result is the same normalized path Function/Decode derives from the
  * parsed document (the surgical rewrite's scanner-state input).
  */

@@ -1,3 +1,8 @@
+import assert from "node:assert/strict";
+
+import { Chunk, Dashes, Quotes, Replace, ReplaceMap } from "../../../Target/Library.js";
+import { Check, Finish as Guard, MakeCounter } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +10,7 @@
  * transform.
  *
  * @remarks
+ *
  * The test covers the text-delta rewrites and identity passthroughs, the
  * tool-call-delta gate ON + OFF, the three exemptions (edit, raw-write,
  * normalize-file), the per-call raw-marker strip, the reasoning gate, the
@@ -18,11 +24,6 @@
  * NOTE: the harness's Finish guard is aliased to `Guard` here so the source
  * suite's `Finish` chunk fixture keeps its name.
  */
-import assert from "node:assert/strict";
-
-import { Chunk, Dashes, Quotes, Replace, ReplaceMap } from "../../../Target/Library.js";
-import { Check, Finish as Guard, MakeCounter } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

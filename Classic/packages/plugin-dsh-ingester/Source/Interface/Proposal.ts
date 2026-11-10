@@ -4,6 +4,7 @@
  * The batch contract the ingester APPLIES (plan section 2).
  *
  * @remarks
+ *
  * The same shape the pass-on produces and the decision hook records; declared
  * structurally (the self-contained rule - no sibling imports).
  *

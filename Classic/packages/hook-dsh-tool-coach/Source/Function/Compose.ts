@@ -1,3 +1,7 @@
+import { Escape } from "@Function/Normalize.js";
+import type { AgentState, Decision, ToolCatalog, ToolEntry } from "@Interface/Execution.js";
+import { STATIC_TOOL_LINES, TRACEABILITY } from "@Variable/Notes.js";
+
 /**
  * @module Compose
  *
@@ -5,6 +9,7 @@
  * the fetched catalog entries.
  *
  * @remarks
+ *
  * Plan Part 3 §3.3/§3.5 step 4.
  *
  * The fill is a SINGLE-PASS scanner over the template: each `${...}` token is
@@ -15,10 +20,6 @@
  * static line (Variable/Notes.STATIC_TOOL_LINES) - composed output never
  * fails on a fetch gap.
  */
-import { Escape } from "@Function/Normalize.js";
-import type { AgentState, Decision, ToolCatalog, ToolEntry } from "@Interface/Execution.js";
-import { STATIC_TOOL_LINES, TRACEABILITY } from "@Variable/Notes.js";
-
 /**
  * The knob values the composers read (the live State values).
  */

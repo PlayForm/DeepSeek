@@ -5,6 +5,7 @@
  * rewrite (Function/Pin).
  *
  * @remarks
+ *
  * The exact entry-level changes, as pure data. The rewrite never re-derives
  * them from parsed values - it applies only these, line-surgically, so
  * nothing outside the planned entries can change.

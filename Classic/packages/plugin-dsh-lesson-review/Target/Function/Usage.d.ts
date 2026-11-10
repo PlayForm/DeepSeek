@@ -1,5 +1,28 @@
 import type Entry from "../Interface/Entry.js";
 /**
+ * @module Usage
+ *
+ * The usage store: one record per corpus entry, loaded once, written through the service's flush chain.
+ *
+ * @remarks
+ *
+ * THE STORE IS A SIDECAR, never the corpus itself: the corpus is directories
+ * of markdown a human reads and edits, so bookkeeping must live beside it
+ * where a bad write cannot corrupt a skill. The path is one JSON file
+ * (`~/.dsh/lesson/usage.json`), and every failure mode of that file is
+ * NON-FATAL, in this order:
+ *
+ * - missing -> an empty store (a fresh install)
+ * - unreadable -> an empty store + the reason returned to the caller
+ * - unparseable -> an empty store + the reason (a truncated write)
+ * - wrong shape -> an empty store + the reason
+ *
+ * A store that failed to load is NOT silently rewritten: the service records
+ * the failure in the ledger, and the next Save replaces the file. Losing
+ * usage history costs a stale pass nothing (a record with no history is
+ * young), while refusing to run costs the review entirely.
+ */
+/**
  * The load result: how many records, or why there are none.
  */
 export interface LoadResult {

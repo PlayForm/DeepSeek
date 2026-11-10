@@ -6,6 +6,7 @@
  * migration rungs one constant each.
  *
  * @remarks
+ *
  * The schema follows `Documentation/Plans/COST-TRACK-PLUGIN.md` sections 3, 14
  * and 17.6. A fresh file creates the v6 schema directly, with the price book's
  * tier, mode and region columns inline, the Modifier, Factor and CallFactor

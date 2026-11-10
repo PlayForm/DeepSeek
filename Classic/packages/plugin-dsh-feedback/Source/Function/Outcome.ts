@@ -1,3 +1,11 @@
+import { appendFileSync as Append, mkdirSync as Make } from "node:fs";
+import { dirname as Parent } from "node:path";
+
+import { Expand } from "@playform/lib-dsh-core";
+
+import type Shape from "../Interface/Outcome.js";
+import type State from "../Interface/State.js";
+
 /**
  * @module Outcome
  *
@@ -5,6 +13,7 @@
  * integration the plan defers.
  *
  * @remarks
+ *
  * The ingester (the outcome's owner) reports the apply's honest result; a
  * decision that never reaches an apply (denied / expired) can be reported by
  * whoever recorded it.
@@ -21,14 +30,6 @@
  * two writers append to the same file, and both are best-effort - a ledger
  * failure never breaks the service.
  */
-import { appendFileSync as Append, mkdirSync as Make } from "node:fs";
-import { dirname as Parent } from "node:path";
-
-import { Expand } from "@playform/lib-dsh-core";
-
-import type Shape from "../Interface/Outcome.js";
-import type State from "../Interface/State.js";
-
 export default (
 	State: State,
 	Session: string,

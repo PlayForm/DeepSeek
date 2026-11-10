@@ -1,3 +1,5 @@
+import type Plan from "./Plan.js";
+import type Span from "./Span.js";
 /**
  * @module Semantics
  *
@@ -5,12 +7,11 @@
  * per-adapter rename plan.
  *
  * @remarks
+ *
  * The reflect does NOT import the semantics package (the PoC stays
  * self-contained); the handle is probed at use time through `ctx.get`, and an
  * absent service leaves the textual whole-word engine in charge.
  */
-import type Plan from "./Plan.js";
-import type Span from "./Span.js";
 export default interface SemanticsHandle {
     /**
      * The per-adapter rename plan for the identifier at `span`; undefined is

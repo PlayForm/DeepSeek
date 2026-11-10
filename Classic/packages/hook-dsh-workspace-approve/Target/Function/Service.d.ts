@@ -1,3 +1,9 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type Binding from "../Interface/Binding.js";
+import type Candidate from "../Interface/Candidate.js";
+import type CheckResult from "../Interface/Check.js";
+import type Request from "../Interface/Request.js";
+import type State from "../Interface/State.js";
 /**
  * @module Service
  *
@@ -5,6 +11,7 @@
  * REGISTERED FROM APPLY.
  *
  * @remarks
+ *
  * The loader contract for the object-form plugin: apply constructs the service;
  * the Service base constructor calls ctx.reflect.provide("workspaceApprove",
  * this), so `ctx.workspaceApprove` resolves. Declaration merging below gives
@@ -18,12 +25,6 @@
  * - `check(request)` - the merge/execute side's exactness check.
  * - `binding(id)` / `bindings(limit?)` / `statistics()` - the read surface.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type Binding from "../Interface/Binding.js";
-import type Candidate from "../Interface/Candidate.js";
-import type CheckResult from "../Interface/Check.js";
-import type Request from "../Interface/Request.js";
-import type State from "../Interface/State.js";
 export default class WorkspaceApprove extends Service {
     /**
      * The apply-built state the methods read and write.

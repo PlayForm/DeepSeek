@@ -9,6 +9,7 @@
  * lane the failed attempt used.
  *
  * @remarks
+ *
  * The detector is deliberately exact: the token is `ESCALATION:` (upper case,
  * with the colon), the same spelling the delegation spec mandates, so ordinary
  * prose about escalation does not trigger a rung. The decision stays

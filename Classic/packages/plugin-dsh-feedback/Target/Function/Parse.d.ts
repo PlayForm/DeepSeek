@@ -1,3 +1,5 @@
+import type FeedbackBlock from "../Interface/Block.js";
+export default _default;
 /**
  * @module Parse
  *
@@ -5,11 +7,10 @@
  * inbox splice body).
  *
  * @remarks
+ *
  * A parse miss is a silent no-op - only a matching block is recorded; nothing
  * is ever invented from partial text.
  */
-import type FeedbackBlock from "../Interface/Block.js";
-export default _default;
 /**
  * Parse the FIRST honest-feedback block in the text, or null.
  */

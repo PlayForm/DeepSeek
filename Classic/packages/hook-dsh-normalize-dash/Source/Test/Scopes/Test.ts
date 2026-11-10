@@ -1,9 +1,14 @@
+import assert from "node:assert/strict";
+
+import { Check, Finish, Ledger, Make, MakeCounter } from "../Harness.js";
+
 /**
  * @module Test
  *
  * The Scopes unit smoke: the granular scope gates.
  *
  * @remarks
+ *
  * The one singular test covers each scope on and off with everything else at
  * defaults (conversation, reasoning, and toolInput with the deprecated-field
  * OR), and the S5 volatile scope flip that changes the NEXT stream's gate
@@ -13,10 +18,6 @@
  * the Harness. The folder runs standalone (`node Target/Test/Scopes/Test.js`)
  * and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
  */
-import assert from "node:assert/strict";
-
-import { Check, Finish, Ledger, Make, MakeCounter } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

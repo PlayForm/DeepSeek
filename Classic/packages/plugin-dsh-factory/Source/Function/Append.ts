@@ -1,3 +1,9 @@
+import * as FileSystem from "node:fs";
+import { dirname as Parent } from "node:path";
+
+import type State from "@Interface/State.js";
+import { Expand } from "@playform/lib-dsh-core";
+
 /**
  * @module Append
  *
@@ -5,6 +11,7 @@
  * ledger file when enabled.
  *
  * @remarks
+ *
  * Both best-effort, never rethrow. BYTE-IDENTICAL with the trio's
  * `Function/Append`: the logger prefix is `<State.Module>: ` (the module
  * identity - "hook-dsh-governor-package" etc. - is the historical prefix, so
@@ -18,12 +25,6 @@
  * through `ctx.fs.writeText` would be both racy and wrong. Every write of a
  * GOVERNED file goes through `ctx.fs` (`Function/Write`).
  */
-import * as FileSystem from "node:fs";
-import { dirname as Parent } from "node:path";
-
-import type State from "@Interface/State.js";
-import { Expand } from "@playform/lib-dsh-core";
-
 export default (State: State, Message: string): void => {
 	try {
 		State.Context.logger.info(`${State.Module}: ${Message}`);

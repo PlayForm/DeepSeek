@@ -5,6 +5,7 @@
  * through the gates).
  *
  * @remarks
+ *
  * One decision per evaluation, with the per-obligation outcomes recorded so the
  * ledger line can show what the means-check actually saw.
  */

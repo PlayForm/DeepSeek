@@ -1,4 +1,42 @@
 import Version from "./Variable/Version.js";
+/**
+ * @module Library
+ *
+ * The entry module of the BATCH-DECISION hook
+ * (@playform/ets-hook-dsh-batch-decision).
+ *
+ * @remarks
+ *
+ * Loader contract: `export const name` + `export const apply` +
+ * `export const Config` + `export const inject` + `export default { name,
+ * apply, Config, inject }` - the ONLY named exports in the tree (cordis
+ * requires them); every other module is a nameless default export composed
+ * Rust-style.
+ *
+ * THE DEFAULT OBJECT CARRIES ALL OF THEM: `export default { name, apply }`
+ * SHADOWS the named exports - inject and Config MUST also sit on the default
+ * object, or service accessors throw `cannot get property ... without
+ * inject` (live-verified 2026-10-03; a smoke that calls apply directly never
+ * catches this).
+ *
+ * @playform/ets-hook-dsh-batch-decision - the thin workflow owner between the
+ * suggester, the pass-on, the ingester and the live view
+ * (Documentation/Plans/PASS-ON-AND-INGESTER.md section 5). It listens for
+ * batch/proposed, runs the decision gate (expiry first, then the
+ * conservative auto-approve policy: the first batch of an intent class
+ * always requires the user), records the BatchDecision, emits
+ * batch/decision for the ingester and the live view, and exposes the
+ * batch_decision tool as the one entry point the user interacts with. It
+ * does NOT implement the pass-on or the ingester and it NEVER writes files:
+ * the sibling service shapes are declared structurally
+ * (Source/Interface/Siblings.ts) and resolved via Context.get at use time -
+ * never injected. The workflow ledger is the module's own log file.
+ *
+ * THE IDLE-FOREVER POSTURE: the plugin ships DISABLED (schema default and
+ * patch entry), never appears in the profile's bundles, and enables only by
+ * an explicit ACTIVATE; a cold mount logs `disabled (enabled=false)` and
+ * every listener no-ops to a passthrough.
+ */
 export declare const name = "hook-dsh-batch-decision";
 /**
  * Loader contract (cordis): the exported schema is validated and defaulted

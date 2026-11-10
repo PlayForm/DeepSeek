@@ -1,3 +1,4 @@
+import Schema from "@deepseek-ai/schemastery";
 /**
  * @module Configuration
  *
@@ -10,6 +11,7 @@
  * truth.
  *
  * @remarks
+ *
  * `enabled` defaults to FALSE - the idle-forever posture: the patch row and the README
  * ship the service disabled, a cold mount logs `disabled (enabled=false)`, and the
  * trigger keeps answering `disabled` while the service stays resolvable, so no listener
@@ -27,7 +29,6 @@
  * THE TWO DAY THRESHOLDS ARE FLOORED AT 1: a cutoff at or past now would transition the
  * whole corpus on one bad config.
  */
-import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     log: Schema<boolean, boolean, "volatile-defined">;
     logFile: Schema<string, string, "volatile-defined">;

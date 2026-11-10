@@ -1,1 +1,228 @@
-import a from"node:assert/strict";import*as g from"node:fs";import*as S from"node:os";import*as d from"node:path";import i from"../../Target/Library.js";import w from"../../Target/Function/Detect.js";import{DEFAULT_EXEMPTS as u,DEFAULT_PATTERNS as y}from"../../Target/Variable/Patterns.js";import{NOTE_DENIED as T,NOTE_FIRST as _,NOTE_PERSISTENT as A,STATIC_TOOL_LINES as L}from"../../Target/Variable/Notes.js";import C from"../../../ets-plugin-dsh-factory/Target/Library.js";const v=()=>({N:0,F:0}),c=(e,t,n)=>{e.N++;try{n(),console.log(`PASS - ${t}`)}catch(r){e.F++,console.log(`FAIL - ${t}`),console.log(r instanceof Error?r.message:String(r))}},B=async(e,t,n)=>{e.N++;try{await n(),console.log(`PASS - ${t}`)}catch(r){e.F++,console.log(`FAIL - ${t}`),console.log(r instanceof Error?r.message:String(r))}},H=(e,t)=>{if(e.F!==0)throw new Error(`${t}: ${e.F} failed check(s)`);return e.N},P=g.mkdtempSync(d.join(S.tmpdir(),"tool-coach-smoke-")),h=d.join(P,"tool-coach.log"),b=()=>{try{g.rmSync(h)}catch{}},f=new C({reflect:{provide:()=>{}}}),R=()=>[{name:"read",description:"Read a UTF-8 text file (live fixture) and return line-numbered content.",parameters:{properties:{file_path:{},offset:{}}}},{name:"write",description:"Create or fully replace a UTF-8 text file.",parameters:{properties:{file_path:{}}}},{name:"edit",description:"Edit an existing UTF-8 text file by replacing literal text.",parameters:{properties:{old_string:{},new_string:{}}}},{name:"grep",description:"Search file contents with a ripgrep regular expression.",parameters:{properties:{pattern:{}}}},{name:"web_search",description:"Search the web for current information.",parameters:{properties:{queries:{}}}},{name:"zzz_fixture",description:"Fixture tool for the top-up ordering.",parameters:{properties:{x:{}}}}],x=e=>y.find(t=>t.pattern.includes(e)),K=x("(cat|less|more").pattern,J=x("\\bsed\\b").pattern,Q=u.find(e=>e.includes("jq")),N=(e,t={})=>{const n={},r={},l=[],m=[],s={pluginFactory:f,tools:t.tools??{schemas:R},on:(o,F,E)=>(n[o]=F,r[o]=E,()=>!0),get:o=>{switch(o){case"pluginFactory":return f;case"tools":return s.tools;default:throw new Error(`unknown service: ${o}`)}},logger:{info:o=>{l.push(o)},warn:o=>{m.push(o)}},get root(){return s}},k=i.apply(s,e);return{Context:s,Listeners:n,ListenerOptions:r,Lines:l,Warns:m,Returned:k,State:s.__hookDshToolCoachState}},O=e=>i.Config({...e}),I={kind:"accept"},$={kind:"allow"},D=e=>({id:e}),p=D("agent-a"),V=async(e,t,n=p,r="bash")=>e.Listeners["tools/post-execute"]({callId:"call_smoke",name:r,arguments:{command:t},agent:n,signal:void 0},{isError:!1,value:"",content:[]},async()=>I),G=async(e,t,n=p,r="bash")=>e.Listeners["tools/pre-execute"]({callId:"call_smoke",name:r,arguments:{command:t},agent:n,signal:void 0},async()=>$),Y=async(e,t=p)=>{const n={sections:[{name:"base",text:"BASE"}],contexts:[{name:"ctx",text:"CTX"}],tools:[{name:"read",description:"d",parameters:{}}],variables:{v:"1"}};return e.Listeners["system-prompt/assemble"](n,{agent:t},async()=>n)},Z=(e,t)=>e.Lines.filter(n=>n.includes(t)),q=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(q){const e=v();c(e,"selfcheck: a passing assertion counts as PASS",()=>{a.equal(1,1)}),c(e,"selfcheck: a failing assertion counts as FAIL (expected)",()=>{a.equal(1,2)}),b();const t=N(O({logFile:h}));c(e,"selfcheck: the fake ctx registers the coach's apply-time wiring",()=>{a.equal(Object.keys(t.Listeners).length,6),a.equal(t.State.Module,"hook-dsh-tool-coach"),a.ok(t.Lines.some(n=>n.startsWith("hook-dsh-tool-coach: activated")))}),e.N===3&&e.F===1?console.log("Harness selfcheck OK"):(console.log(`Harness selfcheck BROKEN (N=${e.N}, F=${e.F})`),process.exitCode=1)}export{I as ACCEPT,$ as ALLOW,D as Agent,p as AgentA,Y as Assemble,K as CAT_ROW,c as Check,B as CheckAsync,i as Coach,u as DEFAULT_EXEMPTS,y as DEFAULT_PATTERNS,w as Detect,H as Finish,f as Furnace,Q as JQ_EXEMPT,h as Ledger,Z as LinesWith,R as LiveSchemas,N as Make,v as MakeCounter,T as NOTE_DENIED,_ as NOTE_FIRST,A as NOTE_PERSISTENT,V as Post,G as Pre,P as Root,x as RowFor,J as SED_ROW,L as STATIC_TOOL_LINES,O as Validate,b as rm};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Coach from "../../Target/Library.js";
+import Detect from "../../Target/Function/Detect.js";
+import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "../../Target/Variable/Patterns.js";
+import {
+  NOTE_DENIED,
+  NOTE_FIRST,
+  NOTE_PERSISTENT,
+  STATIC_TOOL_LINES
+} from "../../Target/Variable/Notes.js";
+import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const CheckAsync = async (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    await Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) {
+    throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "tool-coach-smoke-"));
+const Ledger = Path.join(Root, "tool-coach.log");
+const rm = () => {
+  try {
+    FileSystem.rmSync(Ledger);
+  } catch {
+  }
+};
+const Furnace = new FactoryClass({
+  reflect: { provide: () => void 0 }
+});
+const LiveSchemas = () => [
+  {
+    name: "read",
+    description: "Read a UTF-8 text file (live fixture) and return line-numbered content.",
+    parameters: { properties: { file_path: {}, offset: {} } }
+  },
+  {
+    name: "write",
+    description: "Create or fully replace a UTF-8 text file.",
+    parameters: { properties: { file_path: {} } }
+  },
+  {
+    name: "edit",
+    description: "Edit an existing UTF-8 text file by replacing literal text.",
+    parameters: { properties: { old_string: {}, new_string: {} } }
+  },
+  {
+    name: "grep",
+    description: "Search file contents with a ripgrep regular expression.",
+    parameters: { properties: { pattern: {} } }
+  },
+  {
+    name: "web_search",
+    description: "Search the web for current information.",
+    parameters: { properties: { queries: {} } }
+  },
+  {
+    name: "zzz_fixture",
+    description: "Fixture tool for the top-up ordering.",
+    parameters: { properties: { x: {} } }
+  }
+];
+const RowFor = (Needle) => DEFAULT_PATTERNS.find((Row) => Row.pattern.includes(Needle));
+const CAT_ROW = RowFor("(cat|less|more").pattern;
+const SED_ROW = RowFor("\\bsed\\b").pattern;
+const JQ_EXEMPT = DEFAULT_EXEMPTS.find((Pattern) => Pattern.includes("jq"));
+const Make = (Raw, Options = {}) => {
+  const Listeners = {}, ListenerOptions = {}, Lines = [], Warns = [];
+  const Context = {
+    pluginFactory: Furnace,
+    tools: Options.tools ?? { schemas: LiveSchemas },
+    on: (Name, Listener, Opts) => {
+      Listeners[Name] = Listener;
+      ListenerOptions[Name] = Opts;
+      return () => true;
+    },
+    get: (Name) => {
+      switch (Name) {
+        case "pluginFactory":
+          return Furnace;
+        case "tools":
+          return Context.tools;
+        default:
+          throw new Error(`unknown service: ${Name}`);
+      }
+    },
+    logger: {
+      info: (M) => {
+        Lines.push(M);
+      },
+      warn: (M) => {
+        Warns.push(M);
+      }
+    },
+    get root() {
+      return Context;
+    }
+  };
+  const Returned = Coach.apply(Context, Raw);
+  return {
+    Context,
+    Listeners,
+    ListenerOptions,
+    Lines,
+    Warns,
+    Returned,
+    State: Context.__hookDshToolCoachState
+  };
+};
+const Validate = (Raw) => Coach.Config({ ...Raw });
+const ACCEPT = { kind: "accept" };
+const ALLOW = { kind: "allow" };
+const Agent = (ID) => ({ id: ID });
+const AgentA = Agent("agent-a");
+const Post = async (Run, Command, Who = AgentA, Name = "bash") => Run.Listeners["tools/post-execute"](
+  {
+    callId: "call_smoke",
+    name: Name,
+    arguments: { command: Command },
+    agent: Who,
+    signal: void 0
+  },
+  { isError: false, value: "", content: [] },
+  async () => ACCEPT
+);
+const Pre = async (Run, Command, Who = AgentA, Name = "bash") => Run.Listeners["tools/pre-execute"](
+  {
+    callId: "call_smoke",
+    name: Name,
+    arguments: { command: Command },
+    agent: Who,
+    signal: void 0
+  },
+  async () => ALLOW
+);
+const Assemble = async (Run, Who = AgentA) => {
+  const Assembly = {
+    sections: [{ name: "base", text: "BASE" }],
+    contexts: [{ name: "ctx", text: "CTX" }],
+    tools: [{ name: "read", description: "d", parameters: {} }],
+    variables: { v: "1" }
+  };
+  return Run.Listeners["system-prompt/assemble"](Assembly, { agent: Who }, async () => Assembly);
+};
+const LinesWith = (Run, Needle) => Run.Lines.filter((L) => L.includes(Needle));
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Count = MakeCounter();
+  Check(Count, "selfcheck: a passing assertion counts as PASS", () => {
+    assert.equal(1, 1);
+  });
+  Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
+    assert.equal(1, 2);
+  });
+  rm();
+  const Run = Make(Validate({ logFile: Ledger }));
+  Check(Count, "selfcheck: the fake ctx registers the coach's apply-time wiring", () => {
+    assert.equal(Object.keys(Run.Listeners).length, 6);
+    assert.equal(Run.State.Module, "hook-dsh-tool-coach");
+    assert.ok(
+      Run.Lines.some((L) => L.startsWith("hook-dsh-tool-coach: activated"))
+    );
+  });
+  if (Count.N === 3 && Count.F === 1) {
+    console.log("Harness selfcheck OK");
+  } else {
+    console.log(`Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+    process.exitCode = 1;
+  }
+}
+export {
+  ACCEPT,
+  ALLOW,
+  Agent,
+  AgentA,
+  Assemble,
+  CAT_ROW,
+  Check,
+  CheckAsync,
+  Coach,
+  DEFAULT_EXEMPTS,
+  DEFAULT_PATTERNS,
+  Detect,
+  Finish,
+  Furnace,
+  JQ_EXEMPT,
+  Ledger,
+  LinesWith,
+  LiveSchemas,
+  Make,
+  MakeCounter,
+  NOTE_DENIED,
+  NOTE_FIRST,
+  NOTE_PERSISTENT,
+  Post,
+  Pre,
+  Root,
+  RowFor,
+  SED_ROW,
+  STATIC_TOOL_LINES,
+  Validate,
+  rm
+};
+//# sourceMappingURL=Harness.js.map

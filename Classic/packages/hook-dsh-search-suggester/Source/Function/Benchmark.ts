@@ -1,3 +1,6 @@
+import type { Note } from "../Interface/Benchmark.js";
+import { Match } from "./Measure.js";
+
 /**
  * @module Benchmark
  *
@@ -6,6 +9,7 @@
  * sets.
  *
  * @remarks
+ *
  * The module is the plan's section 10.5; it reports the suggestion precision and recall. The
  * metrics (deterministic, no clock, no I/O):
  *
@@ -21,14 +25,15 @@
  * notes are grouped by intent, so two notes of the same intent contribute one union of
  * candidates.
  */
-import type { Note } from "../Interface/Benchmark.js";
-import { Match } from "./Measure.js";
-
 export default (
-	/** The emitted notes of the replay (one per `suggest`). */
+	/**
+	 * The emitted notes of the replay (one per `suggest`).
+	 */
 	Notes: Note[],
 
-	/** The hand-labelled eventual target set per intent. */
+	/**
+	 * The hand-labelled eventual target set per intent.
+	 */
 	Expected: Record<string, string[]>,
 ): {
 	Notes: number;

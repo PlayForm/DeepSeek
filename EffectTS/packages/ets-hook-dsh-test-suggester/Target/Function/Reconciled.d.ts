@@ -8,6 +8,7 @@ export default _default;
  * shared).
  *
  * @remarks
+ *
  * THE SHAPE (byte-exact, asserted by Source/Test/Reconciliation):
  *
  *   [test-suggester] reconciliation package=<pkg> drifts=<n> expected=<e> actual=<a>

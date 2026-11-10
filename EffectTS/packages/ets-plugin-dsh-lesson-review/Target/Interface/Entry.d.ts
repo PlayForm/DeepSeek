@@ -5,6 +5,7 @@
  * to the fields the lifecycle actually reads.
  *
  * @remarks
+ *
  * `createdBy` is a POLICY FLAG, not a provenance claim (the Hermes
  * `created_by` note): it answers "may autonomous curation archive this?", not
  * "who wrote it". Only the review sets it to `agent`; a foreground lesson is

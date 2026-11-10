@@ -1,5 +1,5 @@
-import type Manifest from "@Interface/Manifest.js";
-import type Registry from "@Interface/Registry.js";
+import type Manifest from "../Interface/Manifest.js";
+import type Registry from "../Interface/Registry.js";
 export default _default;
 /**
  * @module Satisfy

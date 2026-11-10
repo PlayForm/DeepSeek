@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +9,7 @@
  * (@playform/plugin-dsh-workspace-context).
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` + `export
  * const Config` + `export const inject` + `export default { name, apply,
  * Config, inject }` - the ONLY named exports in the tree (cordis requires
@@ -28,10 +33,6 @@
  * the end-phase wires the real import. The plugin ships DISABLED - the
  * IDLE-forever posture.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "plugin-dsh-workspace-context";
 
 /**

@@ -1,18 +1,3 @@
-/**
- * @module Test
- *
- * The explicit pack-override coverage: a temporary repo with its own
- * `.dsh/pack.yml` still speaks without session history.
- *
- * @remarks
- * A temporary repo with its own `.dsh/pack.yml` (its own signature and its
- * own `convention/Layout` intent) still speaks when the session history is
- * empty, so the note names the pack's target and carries the pack's caveat;
- * the same workspace without the pack abstains `no-history` (the built-in
- * pack is never a candidate source); a pack whose signature marker is absent
- * abstains `foreign-workspace`; and a monorepo source write with no history
- * abstains `no-history` instead of naming the built-in pack's targets.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -26,10 +11,30 @@ import {
 	Setup,
 } from "../Harness.js";
 
-/** A temp tree under the OS temp dir (fresh per folder process). */
+/**
+ * @module Test
+ *
+ * The explicit pack-override coverage: a temporary repo with its own
+ * `.dsh/pack.yml` still speaks without session history.
+ *
+ * @remarks
+ *
+ * A temporary repo with its own `.dsh/pack.yml` (its own signature and its
+ * own `convention/Layout` intent) still speaks when the session history is
+ * empty, so the note names the pack's target and carries the pack's caveat;
+ * the same workspace without the pack abstains `no-history` (the built-in
+ * pack is never a candidate source); a pack whose signature marker is absent
+ * abstains `foreign-workspace`; and a monorepo source write with no history
+ * abstains `no-history` instead of naming the built-in pack's targets.
+ */
+/**
+ * A temp tree under the OS temp dir (fresh per folder process).
+ */
 const Tree = (Prefix: string): string => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
 
-/** Write one file under the tree (parents created). */
+/**
+ * Write one file under the tree (parents created).
+ */
 const Put = (Root: string, Relative: string, Body = "x"): string => {
 	const Full = Path.join(Root, Relative);
 	FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
@@ -37,12 +42,16 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
-/** Mark the tree as a workspace root (the pack-independent `.git` marker). */
+/**
+ * Mark the tree as a workspace root (the pack-independent `.git` marker).
+ */
 const Git = (Root: string): void => {
 	FileSystem.mkdirSync(Path.join(Root, ".git"), { recursive: true });
 };
 
-/** The temp pack: a custom signature and one convention/Layout intent. */
+/**
+ * The temp pack: a custom signature and one convention/Layout intent.
+ */
 const Pack = `signature:
   - docs/STYLE.md
 families:
@@ -62,22 +71,30 @@ families:
         reason: the temp guide
 `;
 
-/** The optional harness service the probe reads (the real shape: get(session)). */
+/**
+ * The optional harness service the probe reads (the real shape: get(session)).
+ */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** The PACKED workspace: the pack, its marker and the target. */
+/**
+ * The PACKED workspace: the pack, its marker and the target.
+ */
 const Packed = Tree("convention-suggester-packed-");
 Git(Packed);
 Put(Packed, ".dsh/pack.yml", Pack);
 Put(Packed, "docs/STYLE.md");
 Put(Packed, "GUIDE.md");
 
-/** The SAME workspace without the pack. */
+/**
+ * The SAME workspace without the pack.
+ */
 const Bare = Tree("convention-suggester-bare-");
 Git(Bare);
 Put(Bare, "GUIDE.md");
 
-/** The UNSIGNED workspace: a pack whose signature marker is absent. */
+/**
+ * The UNSIGNED workspace: a pack whose signature marker is absent.
+ */
 const Unsigned = Tree("convention-suggester-unsigned-");
 Git(Unsigned);
 Put(Unsigned, ".dsh/pack.yml", Pack);

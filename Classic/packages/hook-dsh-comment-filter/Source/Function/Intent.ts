@@ -1,9 +1,12 @@
+import type State from "@Interface/State.js";
+
 /**
  * @module Intent
  *
  * The `agent/pre-step` waterfall listener: the PER-TASK INTENT STASH.
  *
  * @remarks
+ *
  * It is a PURE OBSERVER of the step: `next()` is awaited FIRST and the downstream decision is
  * returned UNCHANGED (the decision contract belongs to the agent loop; this listener only
  * records). On every step it extracts the LAST USER MESSAGE's text, lowercases it, and stores
@@ -28,12 +31,11 @@
  * FAIL-OPEN: anything that throws (a malformed payload, a weird content shape) leaves the
  * previous stash untouched and the decision unchanged - never throw into the waterfall.
  */
-import type State from "@Interface/State.js";
-
 /**
  * The user text of the step: the last user message's text content, lowercased.
  *
  * @remarks
+ *
  * Reimplemented in this leaf (the family never imports one package from another) from the
  * search-suggester precedent's UserText
  * (Classic/packages/hook-dsh-search-suggester/Source/Function/Apply.ts:134). Handles both

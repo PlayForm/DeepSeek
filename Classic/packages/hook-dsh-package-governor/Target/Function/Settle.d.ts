@@ -1,2 +1,26 @@
+/**
+ * @module Settle
+ *
+ * The post-completion stage of the update continuation: the breaker update, the failure
+ * report and the U₂ refresh hand-off.
+ *
+ * @remarks
+ *
+ * The stage replaces the old child's `exit` callback: it updates the per-dir circuit breaker,
+ * reports the failure line, then runs U₂ - stat the mutated manifest (metadata, never content
+ * - subsystems/filesystem.md) and hand the stat's version to the FACTORY'S Refresh (SCHEME.md
+ * §2.8: the Stash registration + the same-actor fs/observed re-emit), so the
+ * observation-policy's version record tracks whatever ncu/verifyCommand wrote. It also
+ * removes the in-flight disposal registration (P2) and appends the storage journal's
+ * `update-failed` record (P5). Returns the code it was given so the Dispatch chain can map
+ * it. Never rejects. Ledger/journal lines go through the FACTORY - the strings are the
+ * module's.
+ *
+ * All of that is the CORE's shared update-stage envelope (@playform/lib-dsh-core,
+ * Function/Update) - the family's one flow, shared with the cargo governor. This module is
+ * the delegate: the behavior comes from the envelope built in Function/Dispatch (its injected
+ * Dependencies - the State's maps, the factory delegates and the module's own ledger strings,
+ * byte-identical: the smokes are the arbiter).
+ */
 declare const _default: (State: import("../Interface/State.js").default, Dir: string, Target: import("@deepseek-ai/dsh-fs").FsTarget, Actor: object | undefined, Code: number) => Promise<number>;
 export default _default;

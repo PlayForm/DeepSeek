@@ -232,11 +232,15 @@ const FakeProcess = () => {
       stdout: { text: Read(State.stdout).text, truncated: false },
       stderr: { text: Read(State.stderr).text, truncated: false }
     }),
-    /** Feed one channel with output (the smoke's pump stand-in). */
+    /**
+     * Feed one channel with output (the smoke's pump stand-in).
+     */
     feed: (Channel, Text) => {
       State[Channel].chunks += Text;
     },
-    /** Settle the process (exit or kill). */
+    /**
+     * Settle the process (exit or kill).
+     */
     settle: (ExitCode, Signal = null) => {
       State.exitCode = ExitCode;
       State.signal = Signal;

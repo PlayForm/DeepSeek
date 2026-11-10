@@ -1,13 +1,3 @@
-/**
- * @module Test
- *
- * Exercises the endpoints against real files in a disposable log root.
- *
- * @remarks
- * Covers the tail slicing and the namespace/lines validation, the maxLines cap, the not-found
- * surfaces, the ccr stats summary, and the read-only guarantee (the fixture bytes unchanged, no new
- * files).
- */
 import assert from "node:assert/strict";
 import {
 	Bytes,
@@ -21,10 +11,23 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * Exercises the endpoints against real files in a disposable log root.
+ *
+ * @remarks
+ *
+ * Covers the tail slicing and the namespace/lines validation, the maxLines cap, the not-found
+ * surfaces, the ccr stats summary, and the read-only guarantee (the fixture bytes unchanged, no new
+ * files).
+ */
 const LOG = "hook-dsh-workspace-observe.log";
 const CONTENT = "line-1\nline-2\nline-3\nline-4\n";
 
-/** A standard enabled mount over one fresh root with one log file. */
+/**
+ * A standard enabled mount over one fresh root with one log file.
+ */
 const Setup = (Config: Record<string, unknown> = {}) => {
 	const Root = MakeRoot();
 	const Log = Put(Root, LOG, CONTENT);

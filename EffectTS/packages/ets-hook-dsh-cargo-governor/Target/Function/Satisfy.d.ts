@@ -1,3 +1,7 @@
+import type Manifest from "../Interface/Manifest.js";
+import type Plan from "../Interface/Plan.js";
+import type Registry from "../Interface/Registry.js";
+export default _default;
 /**
  * @module Satisfy
  *
@@ -6,6 +10,7 @@
  * CARGO-FLAVOR DIRECTIVE).
  *
  * @remarks
+ *
  * THE CARGO CHAIN SEMANTICS: the canonical form is the BARE version string -
  * `version = "0.1.0-rc.6"` - because a bare requirement IS Cargo's implicit
  * caret (the Cargo equivalent of npm's ^); with the policy's pinStyle
@@ -51,8 +56,4 @@
  *
  * Pure internal calculation - one of the two standing exemptions.
  */
-import type Manifest from "../Interface/Manifest.js";
-import type Plan from "../Interface/Plan.js";
-import type Registry from "../Interface/Registry.js";
-export default _default;
 declare function _default(Manifest: Manifest, Registry: Registry | null, Strict: boolean, PinStyle: string, Keep: string[]): Plan | null;

@@ -1,15 +1,3 @@
-/**
- * @module Test
- *
- * One singular test of the git-guard's listener behavior.
- *
- * @remarks
- * The test covers the refusal replacing the dispatch (`next()` deliberately
- * not called), the allow path passing through, the payload-shape extraction,
- * the exclusion match, the fail-open contract, the byte-exact refusal and
- * ledger lines in both the logger and durable forms, and the zero
- * file-content guarantee.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -26,7 +14,22 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * One singular test of the git-guard's listener behavior.
+ *
+ * @remarks
+ *
+ * The test covers the refusal replacing the dispatch (`next()` deliberately
+ * not called), the allow path passing through, the payload-shape extraction,
+ * the exclusion match, the fail-open contract, the byte-exact refusal and
+ * ledger lines in both the logger and durable forms, and the zero
+ * file-content guarantee.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));

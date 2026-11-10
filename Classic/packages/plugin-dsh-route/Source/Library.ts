@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +9,7 @@
  * SILENT model-route policy enforcement on every subagent launch.
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` + `export const
  * Config` + `export const inject` + `export default { name, apply, Config,
  * inject }` - the ONLY named exports in the tree (cordis requires them); every
@@ -53,10 +58,6 @@
  * `tools/pre-execute` vocabulary through @deepseek-ai/dsh-tools' own
  * augmentations (never re-declared here).
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "plugin-dsh-route";
 
 /**

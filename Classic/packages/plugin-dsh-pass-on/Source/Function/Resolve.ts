@@ -1,3 +1,9 @@
+import { existsSync as Exists, readdirSync as Read, statSync as Stat } from "node:fs";
+import { join as Join, relative as Relative, resolve as Resolve } from "node:path";
+
+import type Config from "../Interface/Config.js";
+import Match from "./Match.js";
+
 /**
  * @module Resolve
  *
@@ -6,15 +12,10 @@
  * the root.
  *
  * @remarks
+ *
  * The walk is bounded (maxTargets, and a depth cap so a runaway tree cannot
  * hang the prepare).
  */
-import { existsSync as Exists, readdirSync as Read, statSync as Stat } from "node:fs";
-import { join as Join, relative as Relative, resolve as Resolve } from "node:path";
-
-import type Config from "../Interface/Config.js";
-import Match from "./Match.js";
-
 const MAX_DEPTH = 8;
 
 /**

@@ -1,3 +1,6 @@
+import assert from "node:assert/strict";
+import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +8,7 @@
  * singular smoke.
  *
  * @remarks
+ *
  * The test covers the N=0 no-op rule: normalizing an already-normalized file
  * (count 0, changed=false, no write, no waterfall, no emit, no count line,
  * no journal record, the file left byte-identical, no before/after in the
@@ -21,9 +25,6 @@
  * The unit smoke runs the fake ctx + the real factory + the real
  * normalize-file apply, from the Harness.
  */
-import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

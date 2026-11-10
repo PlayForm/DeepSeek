@@ -1,9 +1,12 @@
+import type { WatchlistEntry } from "../Interface/Events.js";
+import type State from "../Interface/State.js";
 /**
  * @module Watchlist
  *
  * Resolves a file's check sets from the config watchlist and the check-set catalog.
  *
  * @remarks
+ *
  * The classification module (the FILE-MONITOR design section 3.2). Config and data, never
  * code: the file -> check-set resolution is the watchlist override, else the effective
  * check-set catalog's globs. Pure functions over the plugin's own state - no I/O, no
@@ -20,8 +23,6 @@
  * No match anywhere: the effective set is [] - the band renders the `checks: none` form
  * and nothing ever runs (honest: with no checks, no verification is claimed).
  */
-import type { WatchlistEntry } from "../Interface/Events.js";
-import type State from "../Interface/State.js";
 /**
  * Convert one glob to a RegExp (the small self-contained converter; the Policy.ts
  * self-contained precedent): a single star within a segment, a double star across

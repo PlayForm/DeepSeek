@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -6,6 +10,7 @@
  * and the default object.
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` +
  * `export const Config` + `export const inject` +
  * `export default { name, apply, Config, inject }` - the ONLY named exports in
@@ -29,10 +34,6 @@
  * plugin ships DISABLED - the IDLE-forever posture: it never appears in the
  * profile's bundles and enables only by an explicit ACTIVATE.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "hook-dsh-workspace-monitor";
 
 /**

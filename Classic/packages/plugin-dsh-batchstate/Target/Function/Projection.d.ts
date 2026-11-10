@@ -6,6 +6,7 @@ export default _default;
  * renders.
  *
  * @remarks
+ *
  * The queue service (plugin-dsh-queue, registered as `dshQueue`) already compiles its own line -
  * `QUEUE: <n> pending - next: <id|none> - running: <m>/<limit> (main seats <n>)` - so the board
  * projects THAT line verbatim instead of re-deriving the seats: one source of truth, no drift.

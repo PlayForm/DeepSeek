@@ -5,6 +5,7 @@
  * consumes (the family's class/service plugin).
  *
  * @remarks
+ *
  * The hook uses: the State builder (`Function/State` - cell unwrap plus shared
  * fields plus the P10 volatile refresh) and the ledger (`Function/Append` -
  * logger plus appendFileSync, never throws). The hook does NOT use the

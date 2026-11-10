@@ -1,3 +1,5 @@
+import type { StreamChunk } from "@deepseek-ai/dsh-llm";
+import type State from "../Interface/State.js";
 /**
  * @module Normalize
  *
@@ -6,6 +8,7 @@
  * NORMAL loop completion, writes the ledger line when anything was replaced.
  *
  * @remarks
+ *
  * This is the quotes hook's OWN Wire: the factory's Wire is fs/observed-hardwired
  * (this family's silence), while the quotes hook's normalization must be
  * VISIBLE - it is the feature - so it registers a plain
@@ -54,6 +57,4 @@
  *   delta/block whose `name` is "edit" on every chunk individually (the edit
  *   tool's `old_string` must match the real file bytes).
  */
-import type { StreamChunk } from "@deepseek-ai/dsh-llm";
-import type State from "../Interface/State.js";
 export default function (Upstream: AsyncIterable<StreamChunk>, State: State): AsyncGenerator<StreamChunk, void, void>;

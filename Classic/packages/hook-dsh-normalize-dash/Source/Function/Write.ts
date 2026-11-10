@@ -11,6 +11,7 @@ import Rewrite from "./Rewrite.js";
  * harness's built-in `write` tool with an EXPLICIT `normalize` parameter.
  *
  * @remarks
+ *
  * The stream normalizers (hook-dsh-normalize-dash + the five flavors) rewrite
  * model output by name-exempting only `edit` and `raw-write` tool calls (the
  * core's `Stream/Chunk` + `Stream/Block`), so a call to THIS tool carries its
@@ -94,7 +95,6 @@ import Rewrite from "./Rewrite.js";
  * normalization they show is recomputed through the same `Function/Rewrite`
  * chain the exec uses - no I/O, no session state, no clock).
  */
-
 /**
  * The union shapes (the harness tools reject unknown keys - the schema must
  * declare the whole selection form for both flags). Declared `as const` so

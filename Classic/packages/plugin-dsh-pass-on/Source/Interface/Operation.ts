@@ -5,6 +5,7 @@
  * never executed by the pass-on.
  *
  * @remarks
+ *
  * The ingester applies it only after the decision.
  */
 export default interface Operation {

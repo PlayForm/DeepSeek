@@ -1,3 +1,7 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Options from "../Interface/Options.js";
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module State
  *
@@ -5,6 +9,7 @@
  * `State(ctx, config, { module, fields, policyFileName? })`.
  *
  * @remarks
+ *
  * Defensive cell unwrap (`Function/Unwrap` - volatile Schemastery cells), the
  * FIXED shared field mappings (Tool<-mutationTools, Policy<-policyFile,
  * Ledger<-logFile, Enabled<-log, List<-exclude), the module's own fields
@@ -39,14 +44,12 @@
  * keeps the previous value (the same defensive rule as the initial unwrap);
  * unknown or non-volatile key paths are ignored.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Options from "../Interface/Options.js";
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default<Extra extends object = Record<string, unknown>>(Context: Context, Config: unknown, Setup: Options): State & Extra;
 declare module "@deepseek-ai/cordis" {
     interface Events {
-        /** Volatile config values committed into the running fiber without a remount. */
+        /**
+         * Volatile config values committed into the running fiber without a remount.
+         */
         "loader/volatile-update"(Paths: unknown): void;
     }
 }

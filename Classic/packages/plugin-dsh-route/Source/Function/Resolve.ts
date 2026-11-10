@@ -1,3 +1,10 @@
+import Classify from "@Function/Classify.js";
+import Ladder from "@Function/Ladder.js";
+import type { Role, RoleSpec } from "@Interface/Policy.js";
+import type Request from "@Interface/Request.js";
+import type Route from "@Interface/Route.js";
+import { DEFAULT_KEYWORDS } from "@Variable/Keywords.js";
+
 /**
  * @module Resolve
  *
@@ -6,6 +13,7 @@
  * reasoningEffort }.
  *
  * @remarks
+ *
  * Pure and deterministic - the same request and the same policy always produce
  * the same route. NO LLM involvement, NO ambiguity.
  *
@@ -25,13 +33,6 @@
  *   when the caller read one (Function/Ladder), so a model that left the
  *   catalog can never be routed to.
  */
-import Classify from "@Function/Classify.js";
-import Ladder from "@Function/Ladder.js";
-import type { Role, RoleSpec } from "@Interface/Policy.js";
-import type Request from "@Interface/Request.js";
-import type Route from "@Interface/Route.js";
-import { DEFAULT_KEYWORDS } from "@Variable/Keywords.js";
-
 export default (
 	Request_: Request,
 	Policy: {

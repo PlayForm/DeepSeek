@@ -1,3 +1,20 @@
+import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
+
+import type CostBuckets from "@Interface/Buckets.js";
+import type CostCall from "@Interface/Call.js";
+import type CostFile from "@Interface/File.js";
+import type CostFileRow from "@Interface/FileRow.js";
+import type CostModelRow from "@Interface/ModelRow.js";
+import type PricingService from "@Interface/PricingService.js";
+import type CostResponse from "@Interface/Response.js";
+import type { Valuation } from "@Interface/Response.js";
+import type CostSession from "@Interface/Session.js";
+import type CostStageRow from "@Interface/StageRow.js";
+import type CostSummary from "@Interface/Summary.js";
+import type CostTokens from "@Interface/Tokens.js";
+import type CostTopFile from "@Interface/TopFile.js";
+import type ValuationSelection from "@Interface/ValuationSelection.js";
+
 /**
  * @module Reader
  *
@@ -7,6 +24,7 @@
  * CostFile per FileId, and the whole-session summary.
  *
  * @remarks
+ *
  * The first touch in Seq order supplies the touch fields, the single
  * allocation row supplies the money, and the unattributed allocation row stays
  * out of `files` but keeps its money in `direct` and `amortized`. Beside
@@ -44,23 +62,6 @@
  * in this lane. A session the ledger does not record answers the failure
  * envelope without a block, because no read happened to compare.
  */
-import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
-
-import type CostBuckets from "@Interface/Buckets.js";
-import type CostCall from "@Interface/Call.js";
-import type CostFile from "@Interface/File.js";
-import type CostFileRow from "@Interface/FileRow.js";
-import type CostModelRow from "@Interface/ModelRow.js";
-import type PricingService from "@Interface/PricingService.js";
-import type CostResponse from "@Interface/Response.js";
-import type { Valuation } from "@Interface/Response.js";
-import type CostSession from "@Interface/Session.js";
-import type CostStageRow from "@Interface/StageRow.js";
-import type CostSummary from "@Interface/Summary.js";
-import type CostTokens from "@Interface/Tokens.js";
-import type CostTopFile from "@Interface/TopFile.js";
-import type ValuationSelection from "@Interface/ValuationSelection.js";
-
 // The eleven read-only statements the engine runs (the panel's Design.md
 // section 9.1): every one is a plain SELECT keyed by the session id, with no
 // pragma that writes, no INSERT, UPDATE or DELETE. Calls selects the newest

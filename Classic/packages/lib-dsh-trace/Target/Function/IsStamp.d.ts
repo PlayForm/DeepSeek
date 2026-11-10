@@ -7,6 +7,7 @@ export default _default;
  * origin, all strings.
  *
  * @remarks
+ *
  * The graph's adapter accepts only a guarded stamp, so a malformed payload is
  * ignored and never guessed into a re-index.
  */

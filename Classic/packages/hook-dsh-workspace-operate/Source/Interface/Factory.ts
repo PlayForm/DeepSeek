@@ -1,9 +1,12 @@
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+
 /**
  * @module Factory
  *
  * The slice of the factory service the operate hook consumes.
  *
  * @remarks
+ *
  * The slice covers the State builder, the ledger, the exclusion match, the
  * shared Write executor (NOT used by the operate hook - it only proposes;
  * declared here so the shape stays complete) and the Wire registration.
@@ -13,8 +16,6 @@
  * cordis Context so `ctx.pluginFactory` is fully typed at every consumption
  * site (the workspace-observe precedent).
  */
-import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

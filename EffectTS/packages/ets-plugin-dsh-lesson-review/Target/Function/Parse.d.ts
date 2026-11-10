@@ -1,9 +1,11 @@
+import type { Operation, Proposal } from "../Interface/Proposal.js";
 /**
  * @module Parse
  *
  * The strict reply parser: one JSON object, a closed operation set, and nothing repaired.
  *
  * @remarks
+ *
  * THE FAILURE MODE THIS PREVENTS: a lenient parser. A reviewer that answers
  * with prose, a fenced block, or an operation kind nobody implemented must be
  * a FAILED review, not a silently empty one - an empty proposal and a broken
@@ -22,7 +24,6 @@
  * EVERYTHING ELSE IS REFUSED: an unknown `op`, a non-string name, a `support`
  * without a `file`, or more operations than the cap.
  */
-import type { Operation, Proposal } from "../Interface/Proposal.js";
 /**
  * The closed operation set (the judge's vocabulary; Parse owns admission).
  */

@@ -1,3 +1,10 @@
+import Projection from "@Function/Projection.js";
+import type Gate from "@Interface/Gate.js";
+import type Member from "@Interface/Member.js";
+import type Scope from "@Interface/Scope.js";
+import type Snapshot from "@Interface/Snapshot.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Compile
  *
@@ -5,6 +12,7 @@
  * the state.
  *
  * @remarks
+ *
  * Every block the agents receive is a COMPILED OUTPUT - the LLM's only role is to READ it and act;
  * the batch state is never described ad-hoc by any agent. The blocks are bounded (the compact TOC +
  * the scope + the pending - never the histories; plan section 3 item 5).
@@ -18,13 +26,6 @@
  * - `Gates(State)` - the arbiter truth (the Gates block);
  * - `Schedule(State)` - the queue projection (the queue's own line).
  */
-import Projection from "@Function/Projection.js";
-import type Gate from "@Interface/Gate.js";
-import type Member from "@Interface/Member.js";
-import type Scope from "@Interface/Scope.js";
-import type Snapshot from "@Interface/Snapshot.js";
-import type State from "@Interface/State.js";
-
 /** The surfaces another lane owns exclusively - the OFF-LIMITS list for one agent. A surface the
  * agent shares with the owner is NOT off-limits (it is a shared overlap, reported by Scope). */
 export const Off = (State: State, Agent: string): string[] => {
@@ -47,7 +48,9 @@ export const Off = (State: State, Agent: string): string[] => {
 	return Taken;
 };
 
-/** The running members, queue order first (a non-queued member sorts by its activation timestamp). */
+/**
+ * The running members, queue order first (a non-queued member sorts by its activation timestamp).
+ */
 export const Running = (State: State): Member[] => {
 	const Members = [...State.Members.values()].filter((One) => One.status === "active");
 	return Members.sort((Left, Right) => {
@@ -57,13 +60,17 @@ export const Running = (State: State): Member[] => {
 	});
 };
 
-/** The idle members, in queue order. */
+/**
+ * The idle members, in queue order.
+ */
 export const Idle = (State: State): Member[] =>
 	State.IdleQueue.map((Id) => State.Members.get(Id)).filter(
 		(One): One is Member => One !== undefined,
 	);
 
-/** The full snapshot (getState). */
+/**
+ * The full snapshot (getState).
+ */
 export const Snapshot = (State: State): Snapshot => ({
 	batch: State.Batch,
 	generatedAt: Date.now(),

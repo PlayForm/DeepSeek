@@ -1,3 +1,7 @@
+import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import type State from "../Interface/State.js";
+import type Transform from "../Interface/Transform.js";
+export default _default;
 /**
  * @module Continue
  *
@@ -5,6 +9,7 @@
  * (`Function/Continue` in the service API).
  *
  * @remarks
+ *
  * Everything the API owns is async, so this stage lives off the listener:
  * the listener (the module's Observe, wired through `Function/Wire`) stays
  * await-free, and every throw is contained - this function's rejections can
@@ -49,8 +54,4 @@
  *    (`<module>: continuation error (suppressed): ...`) - never the ledger,
  *    never a rethrow.
  */
-import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
-import type State from "../Interface/State.js";
-import type Transform from "../Interface/Transform.js";
-export default _default;
 declare function _default(State: State, Target: FsTarget, Actor: object | undefined, Dir: string, Found: string | null, Version: FsVersion, Transform: Transform): Promise<void>;

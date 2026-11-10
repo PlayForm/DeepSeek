@@ -1,3 +1,16 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
+import { type Registry as GovernRegistry, type Selection as GovernSelection } from "./Function/Govern.js";
+import PolicyFn from "./Function/Policy.js";
+import SchemaFn from "./Function/Schema.js";
+import { type Over as WriteOver } from "./Function/Write.js";
+import type Allowlist from "./Interface/Allowlist.js";
+import type Decision from "./Interface/Gate.js";
+import type Setup from "./Interface/Options.js";
+import type Shape from "./Interface/State.js";
+import type Trace from "./Interface/Trace.js";
+import type Transform from "./Interface/Transform.js";
+import Version from "./Variable/Version.js";
 /**
  * @module Library
  *
@@ -6,6 +19,7 @@
  * (docs/user/develop/framework/service.md).
  *
  * @remarks
+ *
  * Loader contract: the class form - `export default class PluginFactory
  * extends Service` with `super(Context, "pluginFactory")`, registered
  * immediately on construction and removed with its owning fiber;
@@ -68,19 +82,6 @@
  * State.Module) and stay byte-identical when the module keeps its historical
  * name.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
-import { type Registry as GovernRegistry, type Selection as GovernSelection } from "./Function/Govern.js";
-import PolicyFn from "./Function/Policy.js";
-import SchemaFn from "./Function/Schema.js";
-import { type Over as WriteOver } from "./Function/Write.js";
-import type Allowlist from "./Interface/Allowlist.js";
-import type Decision from "./Interface/Gate.js";
-import type Setup from "./Interface/Options.js";
-import type Shape from "./Interface/State.js";
-import type Trace from "./Interface/Trace.js";
-import type Transform from "./Interface/Transform.js";
-import Version from "./Variable/Version.js";
 /** The NAMED TYPE exports (P0-1): the four structural contracts + the output
  * shape, re-exported from the entry so consumers can `import type { State,
  * Options, Gate, Transform, Output } from "@playform/plugin-dsh-factory"`
@@ -134,24 +135,38 @@ export declare function Policy(): ReturnType<typeof PolicyFn>;
  * back to that action's D6 default (never a blanket "auto"), and a malformed
  * value is treated as missing - the helper never throws. */
 export declare function Decide(Policy: Allowlist, Action: keyof Allowlist): "auto" | "approve";
-/** The service: class form, injected on fs, registered as `pluginFactory`. */
+/**
+ * The service: class form, injected on fs, registered as `pluginFactory`.
+ */
 export default class PluginFactory extends Service {
     static inject: string[];
     constructor(Context: Context);
-    /** The ledger: logger + appendFileSync, never throws. */
+    /**
+     * The ledger: logger + appendFileSync, never throws.
+     */
     Append(State: Shape, Message: string): void;
-    /** The exclusion-first segment match. */
+    /**
+     * The exclusion-first segment match.
+     */
     Match(Path: string, List: string[] | null | undefined): boolean;
-    /** The auxiliary registry walk-up (plain-fs, the exemption). */
+    /**
+     * The auxiliary registry walk-up (plain-fs, the exemption).
+     */
     Discover(Dir: string): string | null;
-    /** The auxiliary JSON read - null on any failure (the exemption). */
+    /**
+     * The auxiliary JSON read - null on any failure (the exemption).
+     */
     Parse(Path: string): unknown;
-    /** The union keep-list discovery (P3 chain-keys union included). */
+    /**
+     * The union keep-list discovery (P3 chain-keys union included).
+     */
     ResolvePolicy(State: Shape, Dir: string, Found: string | null, Chain: string[], Options?: {
         policyFileField?: string;
         policyFileName?: string;
     }): string[];
-    /** The g1 gate set - returns the pass decision, logs nothing. */
+    /**
+     * The g1 gate set - returns the pass decision, logs nothing.
+     */
     Gate(State: Shape, Target: FsTarget, Observation: FsObservation, Actor: object | undefined, Options: {
         basename: string;
         mutationToolsField?: string;
@@ -170,15 +185,25 @@ export default class PluginFactory extends Service {
      *  fence, the Stash pre-registration; the re-emit stays delegated to
      *  Refresh (observe: false - the same-actor U₂ semantics). */
     GuardedWrite(State: Shape, Target: FsTarget, Content: string, Version: FsVersion, Signal?: AbortSignal): Promise<FsWriteOutcome>;
-    /** The P₃/U₂ refresh: register the version, re-emit with the same actor. */
+    /**
+     * The P₃/U₂ refresh: register the version, re-emit with the same actor.
+     */
     Refresh(State: Shape, Target: FsTarget, Actor: object | undefined, Version: FsVersion): void;
-    /** The detached contained continuation (the module supplies the transform). */
+    /**
+     * The detached contained continuation (the module supplies the transform).
+     */
     Continue(State: Shape, Target: FsTarget, Actor: object | undefined, Dir: string, Found: string | null, Version: FsVersion, Transform: Transform): Promise<void>;
-    /** The State builder: cell unwrap + shared fields + module extras. */
+    /**
+     * The State builder: cell unwrap + shared fields + module extras.
+     */
     State<Extra extends object = Record<string, unknown>>(Context: Context, Config: unknown, Setup: Setup): Shape & Extra;
-    /** The fs/observed registration (the module supplies its observe). */
+    /**
+     * The fs/observed registration (the module supplies its observe).
+     */
     Wire(Context: Context, State: Shape, Observe: (Target: FsTarget, Observation: FsObservation, Actor: object | undefined) => void): void;
-    /** The lifecycle effects: P1 jobs controller, P2 inflight disposal, P5 storage. */
+    /**
+     * The lifecycle effects: P1 jobs controller, P2 inflight disposal, P5 storage.
+     */
     Attach(Context: Context, Module: {
         state: Shape;
         name: string;
@@ -233,7 +258,9 @@ export default class PluginFactory extends Service {
      *  process or a separate plugin. The unload effect disposes it (drop the
      *  listeners, stop dispatch), so a late emit is a contained no-op. */
     Trace: Trace;
-    /** The Schemastery schema factory (shared volatile fields + module fields). */
+    /**
+     * The Schemastery schema factory (shared volatile fields + module fields).
+     */
     Schema(Shared?: {
         log?: boolean;
         logFile?: string;
@@ -269,7 +296,9 @@ export default class PluginFactory extends Service {
      *  key (`update:<targetKey>`), or the chain pass's settlement could
      *  silently delete the running update's controller. */
     UpdateKey(Target: FsTarget): string;
-    /** The probe-once optional-service accessor (never the dead accessor). */
+    /**
+     * The probe-once optional-service accessor (never the dead accessor).
+     */
     Seam(State: Shape, Name: string): unknown;
     /** The direct-govern registry (the SharedJournal pattern, instance-level):
      *  basename → the ordered steps `{ name, run }` the governance modules
@@ -302,7 +331,9 @@ export default class PluginFactory extends Service {
 }
 declare module "@deepseek-ai/cordis" {
     interface Context {
-        /** The trace bus service (provided by the factory as `trace`). */
+        /**
+         * The trace bus service (provided by the factory as `trace`).
+         */
         trace: Trace;
     }
 }

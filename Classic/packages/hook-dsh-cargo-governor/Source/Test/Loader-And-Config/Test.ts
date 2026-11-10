@@ -1,17 +1,3 @@
-/**
- * @module Test
- *
- * One singular test of the loader contract and the config schema.
- *
- * @remarks
- * The loader contract (the named exports + the default object's four keys +
- * apply's undefined return) and the config schema (every default, the volatile
- * cells vs the plain module fields, the overrides validation).
- *
- * Runs standalone (`node Target/Test/Loader-And-Config/Test.js`) AND under the
- * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
- * `@playform/hook-dsh-cargo-governor`.
- */
 import assert from "node:assert/strict";
 import {
 	Boot,
@@ -25,6 +11,21 @@ import {
 } from "../Harness.js";
 import * as Cargo from "../../../Target/Library.js";
 
+/**
+ * @module Test
+ *
+ * One singular test of the loader contract and the config schema.
+ *
+ * @remarks
+ *
+ * The loader contract (the named exports + the default object's four keys +
+ * apply's undefined return) and the config schema (every default, the volatile
+ * cells vs the plain module fields, the overrides validation).
+ *
+ * Runs standalone (`node Target/Test/Loader-And-Config/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * `@playform/hook-dsh-cargo-governor`.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

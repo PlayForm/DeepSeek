@@ -1,9 +1,16 @@
+import assert from "node:assert/strict";
+import { resolve } from "node:path";
+
+import { Fold } from "../../../Target/Library.js";
+import { Check, Finish, MakeCounter } from "../Harness.js";
+
 /**
  * @module Test
  *
  * The Fold unit smoke: the conversation fold over hand-written event arrays.
  *
  * @remarks
+ *
  * The folder exercises the fold's smokes from the conversation spine's section
  * 3.1: a two-step session folds turn, step and both calls with their usage; a
  * tool call with a relative path resolves against the session header's cwd; a
@@ -11,12 +18,6 @@
  * is skipped without throwing. There is no ctx, no factory and no fs - the fold
  * is pure.
  */
-import assert from "node:assert/strict";
-import { resolve } from "node:path";
-
-import { Fold } from "../../../Target/Library.js";
-import { Check, Finish, MakeCounter } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

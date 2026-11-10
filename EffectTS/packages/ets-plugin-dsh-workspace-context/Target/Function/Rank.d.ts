@@ -1,4 +1,4 @@
-import type { GraphEdge } from "@Interface/Graph.js";
+import type { GraphEdge } from "../Interface/Graph.js";
 export default _default;
 /**
  * @module Rank

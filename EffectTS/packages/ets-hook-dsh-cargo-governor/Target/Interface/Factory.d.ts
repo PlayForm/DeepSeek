@@ -1,3 +1,4 @@
+import type PluginFactory from "@playform/ets-plugin-dsh-factory";
 /**
  * @module Factory
  *
@@ -5,6 +6,7 @@
  * family's FIRST service provider - the class/service plugin form).
  *
  * @remarks
+ *
  * The factory is a REQUIRED dependency of this module: `inject` lists
  * "pluginFactory", so the plugin stays PENDING until the service exists and
  * the accessor `ctx.pluginFactory` is the consumption form (SCHEME.md §0 -
@@ -19,7 +21,6 @@
  *
  * One definition per file; a type-only module (its compiled output is empty).
  */
-import type PluginFactory from "@playform/ets-plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {
         /**

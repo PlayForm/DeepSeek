@@ -7,6 +7,7 @@ import type { Scope } from "effect";
  * pinner's own field.
  *
  * @remarks
+ *
  * Since the factory refactor the shared shape is the one Function/State of
  * @playform/ets-plugin-dsh-factory builds, consumed by every factory
  * primitive. The pinner's own field:
@@ -56,7 +57,9 @@ import type { Scope } from "effect";
  * the Classic ones (the P2 Inflight abort, the factory's Attach effect).
  */
 export default interface State extends Shared {
-    /** Dependency sections the pinner may rewrite (config `sections`). */
+    /**
+     * Dependency sections the pinner may rewrite (config `sections`).
+     */
     Section: string[];
     /**
      * THE EFFECT DELTA (R4): the plugin's long-lived Effect `Scope` - the

@@ -1,9 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import Schema from "@deepseek-ai/schemastery";
+
 /**
  * @module Library
  *
  * The DETACHED MOUNT RAIL (@playform/plugin-dsh-boot).
  *
  * @remarks
+ *
  * One job: keep the PlayForm family off the harness's boot rail. This plugin's
  * `apply` does no work beyond scheduling; the plugins named in `mount:` are
  * imported and mounted from a later turn, so `runProfile` (and therefore the
@@ -25,9 +29,6 @@
  * OWN DATA ONLY: this plugin reads nothing and writes nothing. The plugins it
  * mounts keep their own state under ~/.dsh/playform/<name>/.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import Schema from "@deepseek-ai/schemastery";
-
 export const name = "plugin-dsh-boot";
 
 export const Config = Schema.object({

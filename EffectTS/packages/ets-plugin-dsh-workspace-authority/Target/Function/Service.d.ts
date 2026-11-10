@@ -1,9 +1,15 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type Capability from "../Interface/Capability.js";
+import type Lease from "../Interface/Lease.js";
+import type Residency from "../Interface/Residency.js";
+import type State from "../Interface/State.js";
 /**
  * @module Service
  *
  * The `workspaceAuthority` service over the authority Function modules.
  *
  * @remarks
+ *
  * Extends the cordis Service base and is REGISTERED FROM APPLY (the loader
  * contract for the object-form plugin: apply constructs the service; the
  * Service base constructor calls
@@ -23,11 +29,6 @@
  *   (keep/defer/evict/discard/promote);
  * - `statistics()` - the counts.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type Capability from "../Interface/Capability.js";
-import type Lease from "../Interface/Lease.js";
-import type Residency from "../Interface/Residency.js";
-import type State from "../Interface/State.js";
 export default class WorkspaceAuthority extends Service {
     /**
      * The apply-built state the methods read and write.

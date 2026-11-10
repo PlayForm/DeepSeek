@@ -6,6 +6,7 @@ import type Factory from "@playform/ets-plugin-dsh-factory";
  * (@playform/ets-plugin-dsh-factory, `ctx.pluginFactory`).
  *
  * @remarks
+ *
  * The pinner consumes the factory exclusively through the SERVICE (inject:
  * ["fs", "pluginFactory"]): the service is resolved by the loader - never by a
  * module import at the use sites - so this module is the single place the
@@ -26,7 +27,9 @@ import type Factory from "@playform/ets-plugin-dsh-factory";
  */
 declare module "@deepseek-ai/cordis" {
     interface Context {
-        /** The plugin-factory service - the governance family's shared machinery. */
+        /**
+         * The plugin-factory service - the governance family's shared machinery.
+         */
         pluginFactory: Factory;
     }
 }

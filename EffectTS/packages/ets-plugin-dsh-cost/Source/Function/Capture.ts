@@ -24,6 +24,7 @@ import type Config from "../Interface/Config.js";
  * so a batch that never commits costs a bounded amount of memory.
  *
  * @remarks
+ *
  * A live flush keeps the queue far below it, and the bound sits above any
  * plausible single session log the backfill walk pushes in one go. The
  * dropped prefix is not lost accounting - the durable session log remains

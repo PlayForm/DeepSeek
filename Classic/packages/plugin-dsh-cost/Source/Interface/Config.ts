@@ -5,6 +5,7 @@
  * field, the nested blocks as their own interfaces.
  *
  * @remarks
+ *
  * The shape follows `Variable/Config.ts`. The optional price rates stay
  * optional (an absent rate is an unpriced bucket, charged at zero); every
  * defaulted column is always present. The factor layer's arrays (section 17)
@@ -117,9 +118,11 @@ interface Price {
 	readonly currency: string;
 }
 
-// One modifier row of the factor layer (section 17.2): an effective-dated
-// multiplier for one pricing mode, optionally scoped to one model - a
-// model-specific row beats a provider-wide one of the same kind.
+/**
+ * One modifier row of the factor layer (section 17.2): an effective-dated
+ * multiplier for one pricing mode, optionally scoped to one model - a
+ * model-specific row beats a provider-wide one of the same kind.
+ */
 interface Modifier {
 	readonly provider: string;
 	readonly model?: string;
@@ -130,8 +133,10 @@ interface Modifier {
 	readonly effectiveTo?: string;
 }
 
-// One time-of-day window: the label a price row's Window column resolves
-// against and the UTC hours it covers.
+/**
+ * One time-of-day window: the label a price row's Window column resolves
+ * against and the UTC hours it covers.
+ */
 interface PriceWindow {
 	readonly label: string;
 	readonly startUtcHour: number;

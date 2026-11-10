@@ -8,6 +8,7 @@ export default _default;
  * step.
  *
  * @remarks
+ *
  * Shape: `(current, section, keep) => { next, count, message? } | null`. The
  * factory's Continue calls it exactly once per detached pass with the RAW file
  * text (null when the read failed), the module's own `Section` state field and

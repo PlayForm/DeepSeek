@@ -5,6 +5,7 @@
  * the shared artifact).
  *
  * @remarks
+ *
  * Pure data and declarations - no behavior. The batch schema is owned by the
  * batch package (the batch-edit tool's schema where it fits); this hook only
  * CONSUMES it, so the shapes are kept minimal: only the fields the decision
@@ -18,9 +19,13 @@
  * One resolved target of a batch proposal.
  */
 export interface BatchTarget {
-	/** The file path the edit touches, relative to the workspace root. */
+	/**
+	 * The file path the edit touches, relative to the workspace root.
+	 */
 	path: string;
-	/** The expected version of the target, for the digest fence. */
+	/**
+	 * The expected version of the target, for the digest fence.
+	 */
 	version: string;
 
 	/**
@@ -40,17 +45,29 @@ export interface BatchTarget {
  * executes; `kind`/`value` are the contract's declarative vocabulary.
  */
 export interface BatchOperation {
-	/** The operation's declarative vocabulary (the apply path's verb). */
+	/**
+	 * The operation's declarative vocabulary (the apply path's verb).
+	 */
 	kind: string;
-	/** The file path the operation addresses, relative to the workspace root. */
+	/**
+	 * The file path the operation addresses, relative to the workspace root.
+	 */
 	path: string;
-	/** The operation's value, when the kind carries one. */
+	/**
+	 * The operation's value, when the kind carries one.
+	 */
 	value?: string | undefined;
-	/** The literal text to locate, for the `find`/`replace` pair. */
+	/**
+	 * The literal text to locate, for the `find`/`replace` pair.
+	 */
 	find?: string | undefined;
-	/** The literal replacement text, for the `find`/`replace` pair. */
+	/**
+	 * The literal replacement text, for the `find`/`replace` pair.
+	 */
 	replace?: string | undefined;
-	/** Why this operation is in the batch. */
+	/**
+	 * Why this operation is in the batch.
+	 */
 	why?: string | undefined;
 }
 
@@ -58,11 +75,17 @@ export interface BatchOperation {
  * The bounded before/after preview (the diff, not the full files).
  */
 export interface BatchPreview {
-	/** One bounded before/after entry per changed file. */
+	/**
+	 * One bounded before/after entry per changed file.
+	 */
 	entries: { path: string; before: string; after: string }[];
-	/** The number of applied changes the preview describes. */
+	/**
+	 * The number of applied changes the preview describes.
+	 */
 	changes: number;
-	/** The targets skipped, each with its reason. */
+	/**
+	 * The targets skipped, each with its reason.
+	 */
 	skipped: { path: string; why: string }[];
 }
 
@@ -79,11 +102,17 @@ export interface BatchProposal {
 	 * The intent label, e.g. "version-bump".
 	 */
 	intent: string;
-	/** The resolved targets the batch proposes to edit. */
+	/**
+	 * The resolved targets the batch proposes to edit.
+	 */
 	targets: BatchTarget[];
-	/** The declarative operations, one per target. */
+	/**
+	 * The declarative operations, one per target.
+	 */
 	operations: BatchOperation[];
-	/** The bounded before/after preview. */
+	/**
+	 * The bounded before/after preview.
+	 */
 	preview: BatchPreview;
 
 	/**
@@ -117,13 +146,21 @@ export interface BatchProposal {
  * The decision the gate produces.
  */
 export interface BatchDecision {
-	/** The proposal id the decision concerns. */
+	/**
+	 * The proposal id the decision concerns.
+	 */
 	proposal: string;
-	/** The decision's outcome. */
+	/**
+	 * The decision's outcome.
+	 */
 	outcome: "approved" | "denied" | "expired";
-	/** Who produced the decision. */
+	/**
+	 * Who produced the decision.
+	 */
 	by: "user" | "policy";
-	/** Epoch ms of the decision. */
+	/**
+	 * Epoch ms of the decision.
+	 */
 	at: number;
 }
 
@@ -131,22 +168,38 @@ export interface BatchDecision {
  * The result the ingester reports back.
  */
 export interface BatchResult {
-	/** The proposal id the apply concerned. */
+	/**
+	 * The proposal id the apply concerned.
+	 */
 	proposal: string;
-	/** One per-target outcome record. */
+	/**
+	 * One per-target outcome record.
+	 */
 	perTarget: {
-		/** The file path the target addressed. */
+		/**
+		 * The file path the target addressed.
+		 */
 		path: string;
-		/** The target's apply outcome. */
+		/**
+		 * The target's apply outcome.
+		 */
 		outcome: "applied" | "conflict" | "skipped" | "recovery-required";
-		/** The version the target ended at. */
+		/**
+		 * The version the target ended at.
+		 */
 		version: string;
 	}[];
-	/** The number of targets applied. */
+	/**
+	 * The number of targets applied.
+	 */
 	applied: number;
-	/** The number of targets that hit a conflict. */
+	/**
+	 * The number of targets that hit a conflict.
+	 */
 	conflicts: number;
-	/** The number of targets that need recovery. */
+	/**
+	 * The number of targets that need recovery.
+	 */
 	recovery: number;
 }
 

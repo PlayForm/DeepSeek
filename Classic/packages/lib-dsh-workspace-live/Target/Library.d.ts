@@ -10,6 +10,7 @@ import Version from "./Variable/Version.js";
  * `lib-dsh-core` precedent).
  *
  * @remarks
+ *
  * The export surface, the `SHARED-LIBRARY.md` commonality split (the
  * render/collapse half; the consumers keep their own ledger strings, tools and
  * configs - the module leaves are never absorbed):
@@ -35,5 +36,7 @@ export { default as Render } from "./Function/Render.js";
 export { default as Collapse } from "./Function/Collapse.js";
 export type { CollapseEntry } from "./Function/Collapse.js";
 export { default as Packet } from "./Function/Packet.js";
-/** The compiled package version, built in by the ESBuild define. */
+/**
+ * The compiled package version, built in by the ESBuild define.
+ */
 export { Version };

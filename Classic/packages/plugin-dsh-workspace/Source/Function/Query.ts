@@ -1,17 +1,3 @@
-/**
- * @module Query
- *
- * The four navigation operations: the query layer between the tools and the
- * graph service.
- *
- * @remarks
- * V4-1 §3.4. Each operation returns ONE canonical value (the defineTool rule),
- * each answer carries the index revision (stale views are detectable in every
- * answer), and pagination is by CURSOR, never by offset (the cursor is the id
- * of the last returned node - the next call resumes strictly after it, so
- * results can't shuffle between pages). No full file bodies: only ids, paths,
- * spans, kinds.
- */
 import Packet, { Row } from "@Function/Packet.js";
 import RenderPacket from "@Function/Render.js";
 import Role from "@Function/Role.js";
@@ -25,6 +11,21 @@ import type {
 } from "@Interface/Query.js";
 import type State from "@Interface/State.js";
 
+/**
+ * @module Query
+ *
+ * The four navigation operations: the query layer between the tools and the
+ * graph service.
+ *
+ * @remarks
+ *
+ * V4-1 §3.4. Each operation returns ONE canonical value (the defineTool rule),
+ * each answer carries the index revision (stale views are detectable in every
+ * answer), and pagination is by CURSOR, never by offset (the cursor is the id
+ * of the last returned node - the next call resumes strictly after it, so
+ * results can't shuffle between pages). No full file bodies: only ids, paths,
+ * spans, kinds.
+ */
 /**
  * Compact one node into the row shape the tools print (the packet module's
  * Row, aliased locally for the three map/filter call sites).

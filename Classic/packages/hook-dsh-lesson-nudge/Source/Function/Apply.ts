@@ -1,3 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import { Activate } from "@playform/lib-dsh-core";
+
+import type {} from "../Interface/Agent.js";
+import type {} from "../Interface/Factory.js";
+
+import type Config from "../Interface/Config.js";
+import type State from "../Interface/State.js";
+import Version from "../Variable/Version.js";
+
 /**
  * @module Apply
  *
@@ -5,6 +15,7 @@
  * nudge's surface.
  *
  * @remarks
+ *
  * THE SURFACE IS `agent/status` (emit, idle <-> running). The idle edge is the only moment a
  * review may run: the turn is over, the driver is quiescent, and `agent.runMaintenance` exists
  * precisely to claim that phase for non-turn work. Reviewing on any other edge would put a
@@ -28,16 +39,6 @@
  * projection of a live session into messages is the review package's integration seam, and
  * duplicating it here would give the same session two different digests depending on who asked.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import { Activate } from "@playform/lib-dsh-core";
-
-import type {} from "../Interface/Agent.js";
-import type {} from "../Interface/Factory.js";
-
-import type Config from "../Interface/Config.js";
-import type State from "../Interface/State.js";
-import Version from "../Variable/Version.js";
-
 /**
  * The lesson service surface this hook consumes (structural, not imported).
  */
@@ -84,7 +85,9 @@ export default (Context: Context, Options: Config): void => {
 	State.Reviews = new Map();
 	State.Warned = false;
 
-	/** The ledger append (the factory's Append, fail-safe). */
+	/**
+	 * The ledger append (the factory's Append, fail-safe).
+	 */
 	const Append = (Message: string): void => {
 		try {
 			State.Factory.Append(State, Message);
@@ -99,7 +102,9 @@ export default (Context: Context, Options: Config): void => {
 		}
 	};
 
-	/** The one-shot warn (a missing service is a warn per process, not per turn). */
+	/**
+	 * The one-shot warn (a missing service is a warn per process, not per turn).
+	 */
 	const Warn = (Message: string): void => {
 		try {
 			Context.logger?.warn(`hook-dsh-lesson-nudge: ${Message}`);

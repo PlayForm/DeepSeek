@@ -1,3 +1,6 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Policy } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
@@ -5,6 +8,7 @@
  * at load).
  *
  * @remarks
+ *
  * Every tunable is a field; the shape this schema produces is
  * Interface/Config.ts.
  *
@@ -21,9 +25,6 @@
  * bundle patch still ships `enabled: true` explicit so the activation is
  * visible in the patch.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Policy } from "@playform/plugin-dsh-factory";
-
 const DefaultEnabled = true;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-feedback.log";
 const DefaultMaxBlockBytes = 4096;

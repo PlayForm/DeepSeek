@@ -1,22 +1,3 @@
-/**
- * @module Test
- *
- * One singular test: the service entry contract plus the State builder and the P10 volatile
- * refresh.
- *
- * @remarks
- * The service entry contract covers the class extending Service, the static inject and the
- * registration. The State builder covers the volatile-cell unwrap, the shared mappings, the
- * module fields, the P9 probe-once subprocess seam, the probe-once Seam accessor, the bare-config
- * tolerance and the UpdateKey namespace. The P10 volatile refresh is the instance-local
- * loader/volatile-update listener updating the State in place.
- *
- * Runs standalone (`node Target/Test/Entry-And-State/Test.js`) AND under the aggregate
- * (`Maintain/Run/Smokes/Index.mjs` spawns it).
- *
- * Unit smoke of `@playform/plugin-dsh-factory`: the fake ctx plus the REAL factory class, from
- * the Harness.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -29,6 +10,26 @@ import {
 	FactoryClass,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the service entry contract plus the State builder and the P10 volatile
+ * refresh.
+ *
+ * @remarks
+ *
+ * The service entry contract covers the class extending Service, the static inject and the
+ * registration. The State builder covers the volatile-cell unwrap, the shared mappings, the
+ * module fields, the P9 probe-once subprocess seam, the probe-once Seam accessor, the bare-config
+ * tolerance and the UpdateKey namespace. The P10 volatile refresh is the instance-local
+ * loader/volatile-update listener updating the State in place.
+ *
+ * Runs standalone (`node Target/Test/Entry-And-State/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of `@playform/plugin-dsh-factory`: the fake ctx plus the REAL factory class, from
+ * the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

@@ -1,3 +1,4 @@
+import type State from "../Interface/State.js";
 /**
  * @module Store
  *
@@ -6,12 +7,12 @@
  * meta record keyed `__meta` carrying `{ indexRevision }` in the same `records` table.
  *
  * @remarks
+ *
  * The facet is best-effort and honest: when no domain handle is open every writer is a no-op
  * and the readers fall back to the in-memory mirror (which the open loads from the store). The
  * `__meta` key is skipped by the readers so the meta record is never mistaken for a file
  * record.
  */
-import type State from "../Interface/State.js";
 declare const _default: {
     put(StateRef: State, Key: string, Value: unknown): Promise<void>;
     remove(StateRef: State, Key: string): Promise<boolean>;

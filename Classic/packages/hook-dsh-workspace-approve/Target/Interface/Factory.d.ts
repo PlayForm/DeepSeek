@@ -4,6 +4,7 @@
  * The slice of the factory service the hook consumes.
  *
  * @remarks
+ *
  * The hook holds the injected `pluginFactory` instance and uses: the State
  * builder (`Function/State` - cell unwrap plus shared fields plus the P10
  * volatile refresh), the ledger (`Function/Append` - logger plus

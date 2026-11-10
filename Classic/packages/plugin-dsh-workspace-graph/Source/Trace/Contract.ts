@@ -1,3 +1,5 @@
+import { IsEnvelope, IsStamp, type Envelope, type Stamp } from "@playform/lib-dsh-trace";
+
 /**
  * @module Contract
  *
@@ -5,11 +7,10 @@
  * as the library's Stamp payload.
  *
  * @remarks
+ *
  * A foreign envelope or a malformed payload yields `undefined` (the consumer ledgers the
  * existing malformed line and does nothing else - never a guessed re-index).
  */
-import { IsEnvelope, IsStamp, type Envelope, type Stamp } from "@playform/lib-dsh-trace";
-
 export default (Envelope: Envelope): Stamp | undefined => {
 	const Payload = (Envelope as { payload?: unknown } | null | undefined)?.payload;
 	switch (true) {

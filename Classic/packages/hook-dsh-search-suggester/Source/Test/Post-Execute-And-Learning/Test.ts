@@ -1,29 +1,3 @@
-/**
- * @module Test
- *
- * The listener behavior against the fake ctx: the emit path, the pass-through
- * paths, the abstention, the learning loop, the suppress paths, and the
- * projection path.
- *
- * @remarks
- * The emit path (the History note prepended to the downstream decision's
- * additionalContexts, with the byte-exact note text, summary and `suggest`
- * ledger line in both forms), the pass-through paths (a non-judged tool, a bash
- * call with no path, next() called first), the no-history abstention, the
- * learning loop (the `followed` and `ignored` ledger lines, the knowledge file,
- * the pending window), the suppress paths (dedupe under a zero cooldown, cap),
- * the per-agent ring isolation, the agent/pre-step per-turn reset, and the
- * projection path itself (the committed `tool/call` events are the cell, the
- * judged call reads it through `stateOf`, and the call appends nothing).
- *
- * THE CANDIDATES COME FROM THE SESSION HISTORY: every emit scenario mounts a
- * temp workspace, commits the session's `tool/call` events through the fake
- * `sessionProjections` registry (`SeedHistory` -> `Commit`), and judges a call
- * whose path is the workspace's ABSOLUTE anchor - no built-in pack literal is
- * named anywhere. The last group proves the projection path itself: the
- * committed events ARE the cell, the judged call reads it through `stateOf`, and
- * the call appends nothing to it.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {
@@ -48,37 +22,78 @@ import {
 	Workspace,
 } from "../Harness.js";
 
-/** The judged call's anchor path (relative to the temp workspace). */
+/**
+ * @module Test
+ *
+ * The listener behavior against the fake ctx: the emit path, the pass-through
+ * paths, the abstention, the learning loop, the suppress paths, and the
+ * projection path.
+ *
+ * @remarks
+ *
+ * The emit path (the History note prepended to the downstream decision's
+ * additionalContexts, with the byte-exact note text, summary and `suggest`
+ * ledger line in both forms), the pass-through paths (a non-judged tool, a bash
+ * call with no path, next() called first), the no-history abstention, the
+ * learning loop (the `followed` and `ignored` ledger lines, the knowledge file,
+ * the pending window), the suppress paths (dedupe under a zero cooldown, cap),
+ * the per-agent ring isolation, the agent/pre-step per-turn reset, and the
+ * projection path itself (the committed `tool/call` events are the cell, the
+ * judged call reads it through `stateOf`, and the call appends nothing).
+ *
+ * THE CANDIDATES COME FROM THE SESSION HISTORY: every emit scenario mounts a
+ * temp workspace, commits the session's `tool/call` events through the fake
+ * `sessionProjections` registry (`SeedHistory` -> `Commit`), and judges a call
+ * whose path is the workspace's ABSOLUTE anchor - no built-in pack literal is
+ * named anywhere. The last group proves the projection path itself: the
+ * committed events ARE the cell, the judged call reads it through `stateOf`, and
+ * the call appends nothing to it.
+ */
+/**
+ * The judged call's anchor path (relative to the temp workspace).
+ */
 const Anchor = "README.md";
 
-/** The two companions touched right after the anchor (Adjacent's order). */
+/**
+ * The two companions touched right after the anchor (Adjacent's order).
+ */
 const Companions = ["CHANGELOG.md", "SCHEME.md"];
 
-/** The temp workspace the scenarios judge. */
+/**
+ * The temp workspace the scenarios judge.
+ */
 const Space = Workspace([Anchor, ...Companions]);
 
-/** One judged read of the anchor. */
+/**
+ * One judged read of the anchor.
+ */
 const Read = (Id: string): any => ({
 	name: "read",
 	arguments: { file_path: Space.At(Anchor) },
 	agent: AgentOf(Id),
 });
 
-/** One judged call whose anchor has no history (it only ages the window). */
+/**
+ * One judged call whose anchor has no history (it only ages the window).
+ */
 const Elsewhere = (Id: string, N: string): any => ({
 	name: "grep",
 	arguments: { pattern: `unrelated query ${N}`, path: Space.At("package.json") },
 	agent: AgentOf(Id),
 });
 
-/** The learning-only call: an edit of a companion path. */
+/**
+ * The learning-only call: an edit of a companion path.
+ */
 const FollowEdit = (Id: string): any => ({
 	name: "edit",
 	arguments: { file_path: "CHANGELOG.md" },
 	agent: AgentOf(Id),
 });
 
-/** The byte-exact History note text (k = sigmoid(2.5 - 0.6) = 0.87). */
+/**
+ * The byte-exact History note text (k = sigmoid(2.5 - 0.6) = 0.87).
+ */
 const HistoryText = [
 	"[search-suggester] intent=History confidence=0.87",
 	"targets (2):",

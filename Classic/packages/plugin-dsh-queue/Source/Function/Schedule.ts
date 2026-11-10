@@ -1,3 +1,7 @@
+import CapacityFn from "@Function/Capacity.js";
+import type State from "@Interface/State.js";
+import type Task from "@Interface/Task.js";
+
 /**
  * @module Schedule
  *
@@ -14,13 +18,10 @@
  *      makes it explicit).
  *
  * @remarks
+ *
  * Returns undefined when nothing is eligible (an empty queue, a saturated
  * dependency, or no capacity).
  */
-import CapacityFn from "@Function/Capacity.js";
-import type State from "@Interface/State.js";
-import type Task from "@Interface/Task.js";
-
 export default (State: State, Agent: string): Task | undefined => {
 	// The capacity gate first: no free slot, no dispatch.
 	if (CapacityFn(State, Agent) <= 0) {

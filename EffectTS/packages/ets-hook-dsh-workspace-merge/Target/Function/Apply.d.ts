@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "../Interface/Config.js";
+export default _default;
 /**
  * @module Apply
  *
@@ -6,6 +9,7 @@
  * storage effect.
  *
  * @remarks
+ *
  * The State build is the factory's cell unwrap + the P10 volatile refresh.
  * The service is Function/Service as `workspaceMerge`, constructed here so
  * `ctx.workspaceMerge` resolves. The one tool (workspace_merge) registers
@@ -20,7 +24,4 @@
  * The function returns NOTHING (the loader contract). The test probe is
  * the `ctx.__hookDshWorkspaceMergeState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
-export default _default;
 declare function _default(Context: Context, Options: Config): void;

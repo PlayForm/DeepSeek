@@ -1,9 +1,14 @@
+import type State from "@Interface/State.js";
+
+import Append from "./Append.js";
+
 /**
  * @module Open
  *
  * The optional storageDomain seam setup (P5).
  *
  * @remarks
+ *
  * Registered once per load by `Function/Attach` inside a `ctx.effect`: the
  * facility is probed via `ctx.get?.("storageDomain")`; when present, the
  * domain is declared ONCE (`defineDomain` - name/version/UNIT_NAME_RE fail
@@ -76,10 +81,6 @@
  * stage is over; after that, records route straight through the shared
  * sink).
  */
-import type State from "@Interface/State.js";
-
-import Append from "./Append.js";
-
 export default async (
 	State: State,
 	// The probed DomainFacility, structurally - only `open` is consumed; the

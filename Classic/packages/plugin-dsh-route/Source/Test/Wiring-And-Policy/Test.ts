@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * The wiring and the policy.
- *
- * @remarks
- * Covers the loader contract (apply returns nothing), the IDLE-forever cold mount, the durable
- * activation proof, the dshRoute service registered on construction, the single launch-path
- * listener, the fail-loud policy validation, the shipped default policy, and the no-fs /
- * no-timer posture.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -18,7 +7,21 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * The wiring and the policy.
+ *
+ * @remarks
+ *
+ * Covers the loader contract (apply returns nothing), the IDLE-forever cold mount, the durable
+ * activation proof, the dshRoute service registered on construction, the single launch-path
+ * listener, the fail-loud policy validation, the shipped default policy, and the no-fs /
+ * no-timer posture.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = async (): Promise<any> => {
 	const Run = Make(Validate({ enabled: true }));
 	return Run;

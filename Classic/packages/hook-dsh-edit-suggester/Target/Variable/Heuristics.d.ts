@@ -5,6 +5,7 @@
  * order the ledger line and the decision record print them.
  *
  * @remarks
+ *
  * Completion spec 03-SUGGESTERS section 2:
  *
  *   scope   - the call matched the family's path rules;

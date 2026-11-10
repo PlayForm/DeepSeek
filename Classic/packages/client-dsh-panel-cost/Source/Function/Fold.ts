@@ -1,15 +1,3 @@
-/**
- * @module Fold
- *
- * The pure groupBy that turns the route's JSON envelope into the snapshot the table renders.
- *
- * @remarks
- * The ledger stores one row per (session, turn, step), so the fold groups the calls by turn, sorts
- * every group ascending by step, and computes the turn aggregates of the design's section 3 in one
- * pass per turn. It is pure and total: it never mutates the response, every optional or malformed
- * field is read defensively, the session summary is carried verbatim, an empty calls array yields
- * the empty snapshot, and no input can make it throw.
- */
 import type CostBuckets from "@Interface/Buckets";
 import type CostCall from "@Interface/Call";
 import type CostFile from "@Interface/File";
@@ -21,6 +9,19 @@ import type CostTally from "@Interface/Tally";
 import type CostTokens from "@Interface/Tokens";
 import type CostTurn from "@Interface/Turn";
 
+/**
+ * @module Fold
+ *
+ * The pure groupBy that turns the route's JSON envelope into the snapshot the table renders.
+ *
+ * @remarks
+ *
+ * The ledger stores one row per (session, turn, step), so the fold groups the calls by turn, sorts
+ * every group ascending by step, and computes the turn aggregates of the design's section 3 in one
+ * pass per turn. It is pure and total: it never mutates the response, every optional or malformed
+ * field is read defensively, the session summary is carried verbatim, an empty calls array yields
+ * the empty snapshot, and no input can make it throw.
+ */
 type FileTally = {
 	Count: number;
 	Total: number;

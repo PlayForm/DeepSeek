@@ -5,6 +5,7 @@
  * field per config field, the nested metrics block as its own interface.
  *
  * @remarks
+ *
  * Every field is defaulted by the schema, so all of them are always present
  * after validation.
  */

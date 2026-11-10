@@ -1,3 +1,9 @@
+import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
+
+import type CostContributionRow from "@Interface/ContributionRow.js";
+import type CostFileCallRow from "@Interface/FileCallRow.js";
+import type CostVersionRow from "@Interface/VersionRow.js";
+
 /**
  * @module Contributions
  *
@@ -6,6 +12,7 @@
  * file's own content versions with the touches bound to each.
  *
  * @remarks
+ *
  * This is the product question the ledger exists to answer (the file, then its
  * conversations, then their calls and models, then the content chain those
  * calls produced), so each read is one statement and no envelope: the session
@@ -47,12 +54,6 @@
  * is newest first - ObservedAt, then VersionId, both descending - because a
  * content chain reads from the version the ledger saw last.
  */
-import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
-
-import type CostContributionRow from "@Interface/ContributionRow.js";
-import type CostFileCallRow from "@Interface/FileCallRow.js";
-import type CostVersionRow from "@Interface/VersionRow.js";
-
 // The three read-only statements: FileScope pins the path, CallMoney
 // collapses the Allocation rows to one money row per call, Lifetime sums that
 // same money across every session, SessionRow groups it by the call's

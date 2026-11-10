@@ -1,3 +1,8 @@
+import type Adapter from "@Interface/Adapter.js";
+import type ReferenceNode from "@Interface/ReferenceNode.js";
+import type Span from "@Interface/Span.js";
+import type SymbolNode from "@Interface/SymbolNode.js";
+
 /**
  * @module Json
  *
@@ -5,6 +10,7 @@
  * repeats a key's text is a reference to that key.
  *
  * @remarks
+ *
  * A string VALUE that repeats a key's text is a reference to that key (the v0
  * JSON cross-reference convention: JSON has no identifier space beyond the
  * key/string namespace, so a repeated string is the only in-file reference the
@@ -16,15 +22,14 @@
  * the plan rewrites every key and every value token with the same text - the
  * reference list's reach, not a scope analysis.
  */
-import type Adapter from "@Interface/Adapter.js";
-import type ReferenceNode from "@Interface/ReferenceNode.js";
-import type Span from "@Interface/Span.js";
-import type SymbolNode from "@Interface/SymbolNode.js";
-
-/** One quoted JSON token; group 1 is the inner text. */
+/**
+ * One quoted JSON token; group 1 is the inner text.
+ */
 const Token = /"((?:[^"\\]|\\.)*)"/g;
 
-/** The next non-space character after `From` is a colon: the token is a key. */
+/**
+ * The next non-space character after `From` is a colon: the token is a key.
+ */
 const IsKey = (Text: string, From: number): boolean => {
 	let Index = From;
 	while (
@@ -39,7 +44,9 @@ const IsKey = (Text: string, From: number): boolean => {
 	return Text[Index] === ":";
 };
 
-/** One token: the inner range and whether it is a key. */
+/**
+ * One token: the inner range and whether it is a key.
+ */
 const Tokens = (Text: string): { text: string; span: Span; key: boolean }[] => {
 	const Found: { text: string; span: Span; key: boolean }[] = [];
 	for (const Match of Text.matchAll(Token)) {

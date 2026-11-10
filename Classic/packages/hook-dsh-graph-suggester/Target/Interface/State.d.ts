@@ -1,3 +1,6 @@
+import type { CompiledIntent } from "./Pack.js";
+import type Factory from "@playform/plugin-dsh-factory";
+import type { State as Shared } from "@playform/plugin-dsh-factory";
 /**
  * @module State
  *
@@ -6,6 +9,7 @@
  * graph-suggester hook's own fields.
  *
  * @remarks
+ *
  * The shared half comes from the factory's NAMED type export (`State`): the built
  * Target/Library.d.ts ships RELATIVE specifiers, so a consumer's tsconfig paths never hijack the
  * declaration imports. The machinery that stays inert here: the fs/observed domain (this hook is
@@ -32,9 +36,6 @@
  * - `Factory` - the injected factory service itself, consumed for the ledger (Factory.Append) -
  *   assigned once in Function/Apply.
  */
-import type { CompiledIntent } from "./Pack.js";
-import type Factory from "@playform/plugin-dsh-factory";
-import type { State as Shared } from "@playform/plugin-dsh-factory";
 export default interface State extends Shared {
     /**
      * The master switch (config `enabled`, volatile).

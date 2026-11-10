@@ -1,12 +1,3 @@
-/**
- * @module Child
- *
- * The minimal fallback path of the bin-mode runner: used when no subprocess seam exists in
- * this deployment.
- *
- * @remarks
- * Asynchronous (the continuation owns the wait); the abort signal kills the child.
- */
 import * as ChildProcess from "node:child_process";
 
 import type Invocation from "@Interface/Invocation.js";
@@ -14,6 +5,16 @@ import type State from "@Interface/State.js";
 
 import Pipe from "./Pipe.js";
 
+/**
+ * @module Child
+ *
+ * The minimal fallback path of the bin-mode runner: used when no subprocess seam exists in
+ * this deployment.
+ *
+ * @remarks
+ *
+ * Asynchronous (the continuation owns the wait); the abort signal kills the child.
+ */
 export default (
 	State: State,
 	Invocation: Invocation,

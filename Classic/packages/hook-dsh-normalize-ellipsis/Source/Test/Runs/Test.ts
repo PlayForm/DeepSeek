@@ -1,9 +1,15 @@
+import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm, Validate } from "../Harness.js";
+
 /**
  * @module Test
  *
  * The Runs unit smoke: the Run-2 through Run-7 matrix of the ellipsis hook.
  *
  * @remarks
+ *
  * The one singular test covers reasoning off, the custom replacement's
  * `$`-literal safety, the upstream throw, the identity stream, the fresh-state
  * probe, and the tool-args normalization, including their cumulative pre-bind
@@ -14,11 +20,6 @@
  * (`node Target/Test/Runs/Test.js`) and under the aggregate
  * (`Maintain/Run/Smokes/Index.mjs` spawns it).
  */
-import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
-
-import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm, Validate } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

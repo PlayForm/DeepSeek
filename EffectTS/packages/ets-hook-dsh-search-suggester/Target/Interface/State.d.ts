@@ -1,3 +1,7 @@
+import type Factory from "@playform/ets-plugin-dsh-factory";
+import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
+import type Ring from "../Function/Ring.js";
+import type { Intent, Knowledge } from "./Execution.js";
 /**
  * @module State
  *
@@ -6,6 +10,7 @@
  * extended with the search suggester's own fields.
  *
  * @remarks
+ *
  * The shared half comes from the factory's NAMED type export (`State`): the
  * built Target/Library.d.ts ships RELATIVE specifiers, so a consumer's
  * tsconfig paths never hijack the declaration imports. The shared machinery
@@ -53,10 +58,6 @@
  * `apply` - the loader treats apply returns specially, a live-verified lesson
  * recorded in the plugin-development skill).
  */
-import type Factory from "@playform/ets-plugin-dsh-factory";
-import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
-import type Ring from "../Function/Ring.js";
-import type { Intent, Knowledge } from "./Execution.js";
 export default interface State extends Shared {
     /**
      * The master switch (config `enabled`, volatile).

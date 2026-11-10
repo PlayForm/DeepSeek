@@ -1,20 +1,3 @@
-/**
- * @module Test
- *
- * The listener behavior against the fake ctx: the emit path, the REAL projection path, the
- * pass-through, abstention and suppress paths, the block-decision shape, the per-agent ring
- * isolation and the `agent/pre-step` per-turn reset.
- *
- * @remarks
- * The History emit path covers the session history's co-touch candidates, the byte-exact note
- * text, the summary and the `suggest History` ledger line in both forms. The REAL projection path
- * covers the committed `tool/call` events, folded by the registered unit and read back through
- * `stateOf`. The pass-through paths cover a non-judged tool and `next()` called first. The
- * abstention paths cover `no-history` with the empty-family double-space line and `low-confidence`
- * under a raised config threshold. The suppress paths cover cooldown, dedupe and cap. The suite
- * also proves the block-decision shape, the per-agent ring isolation and the `agent/pre-step`
- * per-turn reset.
- */
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -34,13 +17,37 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The judged call's doc path (the history anchor). */
+/**
+ * @module Test
+ *
+ * The listener behavior against the fake ctx: the emit path, the REAL projection path, the
+ * pass-through, abstention and suppress paths, the block-decision shape, the per-agent ring
+ * isolation and the `agent/pre-step` per-turn reset.
+ *
+ * @remarks
+ *
+ * The History emit path covers the session history's co-touch candidates, the byte-exact note
+ * text, the summary and the `suggest History` ledger line in both forms. The REAL projection path
+ * covers the committed `tool/call` events, folded by the registered unit and read back through
+ * `stateOf`. The pass-through paths cover a non-judged tool and `next()` called first. The
+ * abstention paths cover `no-history` with the empty-family double-space line and `low-confidence`
+ * under a raised config threshold. The suppress paths cover cooldown, dedupe and cap. The suite
+ * also proves the block-decision shape, the per-agent ring isolation and the `agent/pre-step`
+ * per-turn reset.
+ */
+/**
+ * The judged call's doc path (the history anchor).
+ */
 const Anchor = "Documentation/Plans/POC-LEDGER.md";
 
-/** The two companions touched right after the anchor. */
+/**
+ * The two companions touched right after the anchor.
+ */
 const Companions = ["README.md", "package.json"];
 
-/** One judged read of the anchor. */
+/**
+ * One judged read of the anchor.
+ */
 const PlanRead = (Id: string): any => ({
 	name: "read",
 	arguments: { file_path: Anchor },
@@ -61,7 +68,9 @@ const Seed = (Run: any, Id: string): void => {
 	}
 };
 
-/** The byte-exact History note text (k = sigmoid(2.5 - 0.6) = 0.87). */
+/**
+ * The byte-exact History note text (k = sigmoid(2.5 - 0.6) = 0.87).
+ */
 const HistoryText = [
 	"[doc-suggester] family=History confidence=0.87",
 	"companions (2):",

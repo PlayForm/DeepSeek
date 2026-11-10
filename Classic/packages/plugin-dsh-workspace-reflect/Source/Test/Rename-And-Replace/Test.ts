@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * The rename and the replace ops: the scope-honest transformation (block vs file), the whole-word
- * matching, the rejections, the applied write through the REAL factory GuardedWrite with the
- * version fence, the conflict and outcome-unknown mappings, the cold-mount denial, and the
- * byte-exact ledger lines for every outcome.
- *
- * @remarks
- * The rejections cover the identity, the no-op, the span, the size and the missing file.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -24,6 +13,18 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The rename and the replace ops: the scope-honest transformation (block vs file), the whole-word
+ * matching, the rejections, the applied write through the REAL factory GuardedWrite with the
+ * version fence, the conflict and outcome-unknown mappings, the cold-mount denial, and the
+ * byte-exact ledger lines for every outcome.
+ *
+ * @remarks
+ *
+ * The rejections cover the identity, the no-op, the span, the size and the missing file.
+ */
 const CONTENT = [
 	"const alpha = 1;",
 	"function alphaBeta() { return alpha; }",

@@ -1,3 +1,7 @@
+import assert from "node:assert/strict";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +9,7 @@
  * command.
  *
  * @remarks
+ *
  * The one singular test covers the registration facts (the two arms with their
  * ordering contract, and the `normalize-overpass` command), the tool-results
  * arm (default off, the O2 volatile flip with the exact ledger line, the read
@@ -16,10 +21,6 @@
  * the Harness. The folder runs standalone (`node Target/Test/Overpass/Test.js`)
  * and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
  */
-import assert from "node:assert/strict";
-
-import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

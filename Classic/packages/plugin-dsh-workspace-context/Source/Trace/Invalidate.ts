@@ -1,3 +1,8 @@
+import type State from "@Interface/State.js";
+import type { Envelope } from "@playform/lib-dsh-trace";
+
+import Contract from "./Contract.js";
+
 /**
  * @module Invalidate
  *
@@ -5,6 +10,7 @@
  * (Function/Cached).
  *
  * @remarks
+ *
  * A packet may cite any path in its FOCUS, NEIGHBORS or EVIDENCE bands, so
  * one invalidation invalidates every memoized packet - the next identical
  * query rebuilds against the graph's current revision. The caller-focus
@@ -14,11 +20,6 @@
  * Silent by design: the invalidation adds no ledger line (the module's
  * strings stay byte-exact); the trace ring is the evidence of the event.
  */
-import type State from "@Interface/State.js";
-import type { Envelope } from "@playform/lib-dsh-trace";
-
-import Contract from "./Contract.js";
-
 export default (State: State, Envelope: Envelope): void => {
 	try {
 		const Path = Contract(Envelope);

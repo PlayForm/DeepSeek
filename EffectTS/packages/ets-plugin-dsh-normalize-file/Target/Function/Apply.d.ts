@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "../Interface/Config.js";
+export default _default;
 /**
  * @module Apply
  *
@@ -6,6 +9,7 @@
  * `normalize-file` tool registration.
  *
  * @remarks
+ *
  * Apply is a THIN MODULE WIRE-UP in the factory family's shape: it builds the
  * State through `Factory.State` (the cell unwrap, the shared mappings
  * Ledger<-logFile and Enabled<-log, and the module's own fields via the setup
@@ -69,7 +73,4 @@
  * disposal semantics stay the Classic ones (the tool unregisters with the
  * plugin's fiber; the Scope holds nothing).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
-export default _default;
 declare function _default(Context: Context, Options: Config): void;

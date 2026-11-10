@@ -1,17 +1,3 @@
-/**
- * @module Test
- *
- * The workspace gate and the RECALL VALIDATION against the fake ctx and REAL temp workspaces.
- *
- * @remarks
- * (a) a FOREIGN workspace (a temp tree with the recalled path but no `.git`/`package.json` root)
- * produces NO note and the `abstained foreign-workspace` ledger line; (b) OUR workspace emits a
- * note naming only the recalled regular file that exists - a DELETED path and a bare DIRECTORY
- * are dropped; (c) a record whose files all vanish abstains `no-companions`; (d) a recalled path
- * in the anchor's OWN directory wins outright and the unrelated subtrees are dropped; (e) without
- * such a neighbor a same-tree recalled path ranks ahead of the other release tree's, which is
- * never dropped; (f) a foreign call never poisons the next in-workspace call.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -28,10 +14,29 @@ import {
 	WriteStore,
 } from "../Harness.js";
 
-/** A temp tree under the OS temp dir (fresh per folder process). */
+/**
+ * @module Test
+ *
+ * The workspace gate and the RECALL VALIDATION against the fake ctx and REAL temp workspaces.
+ *
+ * @remarks
+ *
+ * (a) a FOREIGN workspace (a temp tree with the recalled path but no `.git`/`package.json` root)
+ * produces NO note and the `abstained foreign-workspace` ledger line; (b) OUR workspace emits a
+ * note naming only the recalled regular file that exists - a DELETED path and a bare DIRECTORY
+ * are dropped; (c) a record whose files all vanish abstains `no-companions`; (d) a recalled path
+ * in the anchor's OWN directory wins outright and the unrelated subtrees are dropped; (e) without
+ * such a neighbor a same-tree recalled path ranks ahead of the other release tree's, which is
+ * never dropped; (f) a foreign call never poisons the next in-workspace call.
+ */
+/**
+ * A temp tree under the OS temp dir (fresh per folder process).
+ */
 const Tree = (Prefix: string): string => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
 
-/** Write one file under the tree (parents created). */
+/**
+ * Write one file under the tree (parents created).
+ */
 const Put = (Root: string, Relative: string, Body = "x"): string => {
 	const Full = Path.join(Root, Relative);
 	FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
@@ -39,15 +44,21 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
-/** Mark the tree as a workspace root (the pack-independent `package.json` marker). */
+/**
+ * Mark the tree as a workspace root (the pack-independent `package.json` marker).
+ */
 const Manifest = (Root: string): void => {
 	FileSystem.writeFileSync(Path.join(Root, "package.json"), "{}", "utf8");
 };
 
-/** The optional harness service the probe reads (the real shape: get(session)). */
+/**
+ * The optional harness service the probe reads (the real shape: get(session)).
+ */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** One valid history record. */
+/**
+ * One valid history record.
+ */
 const Rec = (Probe: string, Files: string[], Verify = "pnpm test"): unknown => ({
 	intent: "Repeat",
 	probe: Probe,
@@ -56,17 +67,23 @@ const Rec = (Probe: string, Files: string[], Verify = "pnpm test"): unknown => (
 	at: 1700000000,
 });
 
-/** The FOREIGN workspace: the recalled path, no root marker. */
+/**
+ * The FOREIGN workspace: the recalled path, no root marker.
+ */
 const Foreign = Tree("replay-suggester-foreign-");
 const ForeignFile = Put(Foreign, "src/Core.ts");
 
-/** OUR workspace: the root marker, the call path, and the recalled file. */
+/**
+ * OUR workspace: the root marker, the call path, and the recalled file.
+ */
 const Ours = Tree("replay-suggester-ours-");
 Manifest(Ours);
 const OursFile = Put(Ours, "README.md");
 Put(Ours, "src/Core.ts");
 
-/** The EMPTY workspace: the root marker, the call path, and one live file. */
+/**
+ * The EMPTY workspace: the root marker, the call path, and one live file.
+ */
 const Empty = Tree("replay-suggester-empty-");
 Manifest(Empty);
 const EmptyFile = Put(Empty, "README.md");

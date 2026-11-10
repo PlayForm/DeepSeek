@@ -1,3 +1,4 @@
+import type Factory from "@playform/plugin-dsh-factory";
 /**
  * @module Factory
  *
@@ -5,6 +6,7 @@
  * structural consumer precedent of the observe/monitor hooks).
  *
  * @remarks
+ *
  * The service holds the injected `pluginFactory` instance and uses: the
  * State builder, the ledger, and the exclusion match (unused by the packet
  * but part of the shared shape).
@@ -13,7 +15,6 @@
  * `ctx.pluginFactory` is typed at every consumption site (the typed view
  * arrives TYPE-ONLY from the factory package - erased at build).
  */
-import type Factory from "@playform/plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {
         /**

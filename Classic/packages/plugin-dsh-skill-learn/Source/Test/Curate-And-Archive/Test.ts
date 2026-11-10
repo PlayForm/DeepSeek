@@ -1,3 +1,13 @@
+import assert from "node:assert/strict";
+import * as Path from "node:path";
+
+import Archive, { Restore } from "../../../Target/Function/Archive.js";
+import Curate from "../../../Target/Function/Curate.js";
+import { Rows } from "../../../Target/Function/Ledger.js";
+import Usage from "../../../Target/Function/Usage.js";
+import type Configuration from "../../../Target/Interface/Configuration.js";
+import { CheckAsync, FakeFs, Finish, Home, Knobs, MakeCounter, Seed, State } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +15,7 @@
  * one-transition-per-pass rule, and the archive/restore pair.
  *
  * @remarks
+ *
  * The curator is the always-on, token-free half: a corpus that only ever grows
  * is a corpus nobody loads, and ageing it needs no model's opinion. The rules
  * are R1-R10 of plan section 7.1, of which R2 and R4 have no subject in this
@@ -27,31 +38,31 @@
  * `disable-model-invocation: true`, the archive holds a copy, and `Restore` puts
  * the frontmatter back.
  */
-import assert from "node:assert/strict";
-import * as Path from "node:path";
-
-import Archive, { Restore } from "../../../Target/Function/Archive.js";
-import Curate from "../../../Target/Function/Curate.js";
-import { Rows } from "../../../Target/Function/Ledger.js";
-import Usage from "../../../Target/Function/Usage.js";
-import type Configuration from "../../../Target/Interface/Configuration.js";
-import { CheckAsync, FakeFs, Finish, Home, Knobs, MakeCounter, Seed, State } from "../Harness.js";
-
-/** A SKILL.md body with matching frontmatter. */
+/**
+ * A SKILL.md body with matching frontmatter.
+ */
 const Body = (Name: string): string => `---\nname: ${Name}\ndescription: what it does\n---\n\n# ${Name}\n\nA step.\n`;
 
-/** The live `SKILL.md` of one skill. */
+/**
+ * The live `SKILL.md` of one skill.
+ */
 const Live = (Name: string): string => Path.join(Home, ".dsh", "skills", Name, "SKILL.md");
 
-/** The archived copy of one skill. */
+/**
+ * The archived copy of one skill.
+ */
 const Archived = (Name: string): string => Path.join(Home, ".dsh", "skills", ".archive", Name, "SKILL.md");
 
-/** The curator's clock, and the day its thresholds are stated in. */
+/**
+ * The curator's clock, and the day its thresholds are stated in.
+ */
 const Now = new Date("2026-11-02T12:00:00.000Z");
 const Day = 86_400_000;
 const Ago = (Days: number): Date => new Date(Now.getTime() - Days * Day);
 
-/** One scenario: a fresh state root, a fresh fake corpus, and a loaded store. */
+/**
+ * One scenario: a fresh state root, a fresh fake corpus, and a loaded store.
+ */
 interface Setting {
 	readonly Fs_: FakeFs;
 	readonly Store: Usage;
@@ -67,7 +78,9 @@ const Scene = async (Tag: string, Names: readonly string[]): Promise<Setting> =>
 	return { Fs_, Store, Configuration_ };
 };
 
-/** One agent-created record, anchored to `Created` and last active at `Used`. */
+/**
+ * One agent-created record, anchored to `Created` and last active at `Used`.
+ */
 const Record = (Store: Usage, Name: string, Created: Date, Used: Date | null): void => {
 	Store.Created(Name, Created);
 	Store.Seeded(Name, Created);

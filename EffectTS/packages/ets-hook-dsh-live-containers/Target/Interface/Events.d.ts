@@ -5,6 +5,7 @@
  * the listeners consume.
  *
  * @remarks
+ *
  * The STRUCTURAL TYPES of the wave-2 runtime data plus the service and event vocabulary
  * the wave-2 listeners consume (IMPLEMENTATION-DESIGN.md sections 2-6). Pure data and
  * declarations - no behavior.

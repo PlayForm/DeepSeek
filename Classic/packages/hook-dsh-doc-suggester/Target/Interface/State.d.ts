@@ -1,9 +1,16 @@
+import type Factory from "@playform/plugin-dsh-factory";
+import type { State as Shared } from "@playform/plugin-dsh-factory";
+import type Ring from "../Function/Ring.js";
+import type Decision from "./Decision.js";
+import type { Family } from "./Execution.js";
+import type Learning from "./Learning.js";
 /**
  * @module State
  *
  * Declares the per-apply plugin state: the factory's shared shape plus the suggester's fields.
  *
  * @remarks
+ *
  * The FACTORY's shared shape (built by `Factory.State(ctx, config, { ... })` - factory
  * SCHEME.md section 2.10) extended with the doc suggester's own fields.
  *
@@ -50,12 +57,6 @@
  * `ctx.__hookDshDocSuggesterState` attachment (never a return value from `apply` - the
  * loader treats apply returns specially).
  */
-import type Factory from "@playform/plugin-dsh-factory";
-import type { State as Shared } from "@playform/plugin-dsh-factory";
-import type Ring from "../Function/Ring.js";
-import type Decision from "./Decision.js";
-import type { Family } from "./Execution.js";
-import type Learning from "./Learning.js";
 export default interface State extends Shared {
     /**
      * The master switch (config `enabled`, volatile).

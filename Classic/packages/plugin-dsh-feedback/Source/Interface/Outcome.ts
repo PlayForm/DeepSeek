@@ -5,6 +5,7 @@
  * deferred caller-side integration, HONEST-FEEDBACK-PLUGIN section 2.3).
  *
  * @remarks
+ *
  * The outcome belongs to the BATCH, not to an agent's opinion, so it is its own
  * record beside the blocks - the honest apply truth the feedback journal and
  * summary carry:

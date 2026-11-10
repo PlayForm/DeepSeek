@@ -6,15 +6,23 @@
  * optional tool-name restriction (absent = any tool).
  */
 export default interface Signal {
-	/** The rule id this row implements. */
+	/**
+	 * The rule id this row implements.
+	 */
 	rule: string;
 
-	/** The regex source, matched against the family's call probe. */
+	/**
+	 * The regex source, matched against the family's call probe.
+	 */
 	pattern: string;
 
-	/** The evidence weight a match contributes. */
+	/**
+	 * The evidence weight a match contributes.
+	 */
 	weight: number;
 
-	/** Optional tool-name restriction: empty/undefined = any tool. */
+	/**
+	 * Optional tool-name restriction: empty/undefined = any tool.
+	 */
 	tools?: string[];
 }

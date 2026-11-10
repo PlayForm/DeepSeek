@@ -1,9 +1,14 @@
+import assert from "node:assert/strict";
+
+import * as Library from "../../Target/Library.js";
+
 /**
  * @module Harness
  *
  * The shared test harness for the workspace-live library tests.
  *
  * @remarks
+ *
  * The library is NOT a plugin bundle: it has no loader contract, no Config and
  * no context. The tests call its PURE functions directly through the real built
  * `Target/Library.js` named exports, so the harness is only the counter plus the
@@ -12,10 +17,6 @@
  * There is NO FAKE CLOCK and NO FAKE CTX: nothing here touches a context, the
  * filesystem, or time.
  */
-import assert from "node:assert/strict";
-
-import * as Library from "../../Target/Library.js";
-
 export const Render = Library.Render as (Section: any) => string;
 export const Collapse = Library.Collapse as (
 	Sections: any[],

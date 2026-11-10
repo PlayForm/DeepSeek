@@ -89,6 +89,7 @@ export type PanelConfigForms = {
  * One field of the generated config form.
  *
  * @remarks
+ *
  * `volatile` fields write through the revision-fenced settings mutate
  * (applies live); plain fields write through the plain-field bridge (applies
  * on remount); `secret` fields never expose their value.
@@ -108,6 +109,7 @@ export type PanelFormField = {
  * The rendered form view for one adapter section.
  *
  * @remarks
+ *
  * `secret` marks a namespace whose schema declares at least one secret field:
  * the plain-field bridge refuses such a namespace (the panel cannot restate a
  * redacted value in the whole-config patch), so its plain fields render

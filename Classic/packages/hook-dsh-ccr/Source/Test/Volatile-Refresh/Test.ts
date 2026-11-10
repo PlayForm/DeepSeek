@@ -1,3 +1,14 @@
+import assert from "node:assert/strict";
+import {
+	Check,
+	Finish,
+	MakeCounter,
+	Make,
+	Rm,
+	Validate,
+	Ledger,
+} from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +16,7 @@
  * in one singular test.
  *
  * @remarks
+ *
  * A unit smoke of `@playform/hook-dsh-ccr`: the fake ctx + the REAL factory + the REAL CCR
  * apply, from the Harness. The listener is registered alongside tools/post-execute (and, with
  * the engine flag ON, agent/pre-step), so a committed config change can reach the running State
@@ -20,17 +32,6 @@
  * Runs standalone (`node Target/Test/Volatile-Refresh/Test.js`) AND under the aggregate
  * (`Maintain/Run/Smokes/Index.mjs` spawns it).
  */
-import assert from "node:assert/strict";
-import {
-	Check,
-	Finish,
-	MakeCounter,
-	Make,
-	Rm,
-	Validate,
-	Ledger,
-} from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

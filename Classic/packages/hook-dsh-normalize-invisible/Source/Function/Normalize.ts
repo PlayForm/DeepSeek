@@ -1,3 +1,8 @@
+import type { StreamChunk } from "@deepseek-ai/dsh-llm";
+import type State from "@Interface/State.js";
+
+import Chunk from "./Chunk.js";
+
 /**
  * @module Normalize
  *
@@ -6,6 +11,7 @@
  * ledger line when anything was replaced.
  *
  * @remarks
+ *
  * This is the invisible hook's OWN Wire: the factory's Wire is fs/observed-hardwired (this
  * family's silence), while the invisible hook's normalization must be VISIBLE - it is the
  * feature - so it registers a plain `ctx.on("llm/stream", ...)` listener (Function/Apply) whose
@@ -49,11 +55,6 @@
  *   `name` is "edit" on every chunk individually (the edit tool's `old_string` must match the
  *   real file bytes).
  */
-import type { StreamChunk } from "@deepseek-ai/dsh-llm";
-import type State from "@Interface/State.js";
-
-import Chunk from "./Chunk.js";
-
 export default async function* (
 	Upstream: AsyncIterable<StreamChunk>,
 	State: State,

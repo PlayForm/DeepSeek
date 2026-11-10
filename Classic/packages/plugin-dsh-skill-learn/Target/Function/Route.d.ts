@@ -1,3 +1,5 @@
+import type Agent from "../Interface/Agent.js";
+import type Configuration from "../Interface/Configuration.js";
 /**
  * @module Route
  *
@@ -5,6 +7,7 @@
  * options second, and nothing else.
  *
  * @remarks
+ *
  * WHY THE OVERRIDE WINS: the review is an auxiliary call, and the operator may want it
  * on a cheaper model than the conversation (plan section 9, keys 28 and 29). An empty
  * override means "use the agent's route", which is the shipped posture, so the
@@ -20,9 +23,9 @@
  * ledger: `no-route` is one of the twelve outcome classes (plan section 3.2), and it
  * can only be produced by a resolver that answers with an absence.
  */
-import type Agent from "../Interface/Agent.js";
-import type Configuration from "../Interface/Configuration.js";
-/** A resolved route: both halves are present, by construction. */
+/**
+ * A resolved route: both halves are present, by construction.
+ */
 export interface Route {
     readonly provider: string;
     readonly model: string;

@@ -1,3 +1,7 @@
+import type Edge from "@Interface/Edge.js";
+import type Node from "@Interface/Node.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module References
  *
@@ -6,6 +10,7 @@
  * reference into one honest edge.
  *
  * @remarks
+ *
  * THE SERVICE IS PROBED, NEVER INJECTED (`ctx.get`), exactly like the trace bus: the loader
  * contract's `inject` stays ["fs", "storage"], so a bare fixture or a direct construction is
  * unchanged. The registered name is `workspaceSemantics`; the plan's short alias `semantics`
@@ -24,25 +29,29 @@
  * module never reads a file: it is handed the text the graph already read, and only converts
  * the service's character offsets to the graph's 1-based line spans.
  */
-import type Edge from "@Interface/Edge.js";
-import type Node from "@Interface/Node.js";
-import type State from "@Interface/State.js";
-
-/** The service names the consumer probes: the registered name, then the plan's alias. */
+/**
+ * The service names the consumer probes: the registered name, then the plan's alias.
+ */
 const Names = ["workspaceSemantics", "semantics"];
 
-/** The structural slice of the semantics service the graph consumes. */
+/**
+ * The structural slice of the semantics service the graph consumes.
+ */
 interface Semantics {
 	resolve(Path: string): Promise<{ references?: unknown } | undefined>;
 }
 
-/** The structural slice of one reference the consumer reads. */
+/**
+ * The structural slice of one reference the consumer reads.
+ */
 interface Reference {
 	target?: unknown;
 	span?: { start?: unknown; end?: unknown };
 }
 
-/** Probe the optional service through ctx.get (never an inject accessor). */
+/**
+ * Probe the optional service through ctx.get (never an inject accessor).
+ */
 const Probe = (StateRef: State): Semantics | undefined => {
 	for (const Name of Names) {
 		const Service = (StateRef.Context as { get?: (Name: string) => unknown }).get?.(Name);
@@ -55,7 +64,9 @@ const Probe = (StateRef: State): Semantics | undefined => {
 	return undefined;
 };
 
-/** The 1-based line of one character offset. */
+/**
+ * The 1-based line of one character offset.
+ */
 const Line = (Text: string, Offset: number): number => {
 	let Found = 1;
 	for (let Index = 0; Index < Offset && Index < Text.length; Index += 1) {

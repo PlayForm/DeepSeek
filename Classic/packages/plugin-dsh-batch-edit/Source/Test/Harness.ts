@@ -1,3 +1,10 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -5,6 +12,7 @@
  * factory instance and the real batch-edit apply.
  *
  * @remarks
+ *
  * The fake ctx carries tools registration capture, ctx listener capture, the
  * reflect.provide capture, the effect runner, logger capture, the distinct
  * root object with its own on/emit capture, and a content-backed fake fs
@@ -25,13 +33,6 @@
  * per-test patched Date.now (the folder restores it), so the no-timer rule
  * holds everywhere.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 export { Plugin };
 
 /**

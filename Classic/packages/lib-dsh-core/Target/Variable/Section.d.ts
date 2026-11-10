@@ -6,6 +6,7 @@
  * pinner).
  *
  * @remarks
+ *
  * The family's single source; the Cargo module's tables differ and stay module-side.
  */
 declare const _default: string[];

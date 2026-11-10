@@ -1,3 +1,9 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose } from "@playform/plugin-dsh-factory";
+
+import Names from "./Heuristics.js";
+import Defaults from "./Weights.js";
+
 /**
  * @module Config
  *
@@ -5,6 +11,7 @@
  * at load).
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every
  * default, so invalid configuration fails LOUD at load, and `apply` receives
  * a validated plain config object.
@@ -22,12 +29,6 @@
  * the pack is an explicit repo/user file resolved per call, never a config
  * path.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
-
-import Names from "./Heuristics.js";
-import Defaults from "./Weights.js";
-
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-edit-suggester.log";
 const DefaultEnabled = true;
 const DefaultThreshold = 0.75;

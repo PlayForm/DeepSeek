@@ -1,9 +1,17 @@
+import { mkdirSync as Make, writeFileSync as Write } from "node:fs";
+import { dirname as Parent } from "node:path";
+
+import type Handle from "@Interface/Handle.js";
+import type State from "@Interface/State.js";
+import { Expand } from "@playform/lib-dsh-core";
+
 /**
  * @module Persist
  *
  * The state write: the PRIMARY/FALLBACK split of the completion spec's wave 3 storage migration.
  *
  * @remarks
+ *
  * THE PRIMARY: the storage-domain KV domain (Function/Storage, the config `domain`). Every state
  * change writes the FULL state into the four tables - the members keyed by id, the queue under
  * `__queue`, the proposals keyed by id, the gates keyed by name - and every table is RECONCILED
@@ -26,17 +34,14 @@
  * is swallowed - the ledger and the live state stay the truth, and a state change must never fail
  * on its store.
  */
-import { mkdirSync as Make, writeFileSync as Write } from "node:fs";
-import { dirname as Parent } from "node:path";
-
-import type Handle from "@Interface/Handle.js";
-import type State from "@Interface/State.js";
-import { Expand } from "@playform/lib-dsh-core";
-
-/** The meta key of the idle-queue record in the `queue` table. */
+/**
+ * The meta key of the idle-queue record in the `queue` table.
+ */
 const QUEUE = "__queue";
 
-/** Write the full state into the JSON fallback file (the file-only path). */
+/**
+ * Write the full state into the JSON fallback file (the file-only path).
+ */
 const File = (State: State): void => {
 	try {
 		const Target = Expand(State.StateFile);
@@ -56,7 +61,9 @@ const File = (State: State): void => {
 	}
 };
 
-/** Reconcile one table with the live rows: drop the absent keys, put the rest. */
+/**
+ * Reconcile one table with the live rows: drop the absent keys, put the rest.
+ */
 const Sync = async (Handle: Handle, Name: string, Rows: [string, unknown][]): Promise<void> => {
 	const Table = Handle.table(Name);
 	const Keep = new Set(Rows.map(([Key]) => Key));
@@ -73,7 +80,9 @@ const Sync = async (Handle: Handle, Name: string, Rows: [string, unknown][]): Pr
 	}
 };
 
-/** Write the full state into the KV domain's four tables. */
+/**
+ * Write the full state into the KV domain's four tables.
+ */
 const Domain = async (State: State, Handle: Handle): Promise<void> => {
 	await Sync(Handle, "members", [...State.Members.entries()]);
 	await Sync(Handle, "queue", [[QUEUE, [...State.IdleQueue]]]);

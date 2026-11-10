@@ -4,6 +4,7 @@
  * The D5 trace vocabulary the live view follows.
  *
  * @remarks
+ *
  * The names are mirrored structurally from @playform/lib-dsh-trace
  * (Variable/Names.ts) and the batch transitions from the batch packages'
  * cordis events (batch/proposed, batch/decision, batch/state-change): the

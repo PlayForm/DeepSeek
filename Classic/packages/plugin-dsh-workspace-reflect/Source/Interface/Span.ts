@@ -5,6 +5,7 @@
  * plan speaks.
  *
  * @remarks
+ *
  * The range is the service's own Span (`Interface/Span` in the semantics
  * package). The reflective operations address LINES; this is the bridge type
  * the plan's edits carry.

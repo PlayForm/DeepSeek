@@ -1,3 +1,5 @@
+import { resolve } from "node:path";
+
 /**
  * @module Touch
  *
@@ -8,6 +10,7 @@
  * touch each.
  *
  * @remarks
+ *
  * The parser follows `Documentation/Plans/COST-TRACK-PLUGIN.md` section 1 and
  * `Temporary/Cost-Research/Backlog.md` E4. A search's argument is a scope (a
  * directory, a glob or a query), never a file, so it yields no touch of its
@@ -23,8 +26,6 @@
  * carry the file's own content, so no caller hashes a request, an error message
  * or a listing as though it were a file.
  */
-import { resolve } from "node:path";
-
 type Kind = "read" | "write" | "edit" | "delete" | "search";
 
 type Touched = { Path: string; Kind: Kind };

@@ -1,16 +1,19 @@
+import assert from "node:assert/strict";
+import { Check, Finish, LinesWith, Make, MakeCounter, Validate, rm } from "../Harness.js";
+
 /**
  * @module Test
  *
  * Exercises the residency record and the disposition pass.
  *
  * @remarks
+ *
  * Covers the weight-only-ranks rule, the five dispositions, the two shields (the open lease and the
  * active capability, with the revocation grace), the byte-exact disposition lines, and the purity.
  */
-import assert from "node:assert/strict";
-import { Check, Finish, LinesWith, Make, MakeCounter, Validate, rm } from "../Harness.js";
-
-/** An enabled service with a fresh state. */
+/**
+ * An enabled service with a fresh state.
+ */
 const Setup = (Raw: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: "/nonexistent/authority.log", enabled: true, ...Raw }));

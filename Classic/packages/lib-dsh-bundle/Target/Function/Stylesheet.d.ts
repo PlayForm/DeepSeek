@@ -1,7 +1,11 @@
 import type { Plugin } from "esbuild";
-/** The CSS text of one sheet, with the material resolved through the package's load paths. */
+/**
+ * The CSS text of one sheet, with the material resolved through the package's load paths.
+ */
 export declare function Compile(File: string, LoadPaths: string[]): string;
-/** The esbuild plugin: every `.scss` resolves to a JS module exporting its CSS. */
+/**
+ * The esbuild plugin: every `.scss` resolves to a JS module exporting its CSS.
+ */
 export default function Stylesheet(Directory: string): Plugin;
 /**
  * The material's build: its public surface is Target, so the partials are

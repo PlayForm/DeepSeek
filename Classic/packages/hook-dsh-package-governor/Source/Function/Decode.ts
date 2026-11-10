@@ -4,6 +4,7 @@
  * Parses a JSON string and returns null on any failure or on non-object JSON.
  *
  * @remarks
+ *
  * Error-contained: an unreadable or non-JSON package.json maps to null instead of a throw (the
  * caller logs the "observed non-JSON" line). Pure internal calculation - one of the two standing
  * exemptions.

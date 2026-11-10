@@ -1,3 +1,7 @@
+import type Node from "@Interface/Node.js";
+import type Query from "@Interface/Query.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Find
  *
@@ -5,15 +9,12 @@
  * limit.
  *
  * @remarks
+ *
  * `name` matches exactly, `pattern` is a case-insensitive substring over the id and the
  * name, and `kind` filters on the node kind.
  *
  * The limit defaults to `Config.limitDefault` and is capped at `Config.limitMaximum`.
  */
-import type Node from "@Interface/Node.js";
-import type Query from "@Interface/Query.js";
-import type State from "@Interface/State.js";
-
 export default (StateRef: State, Query: Query = {}): Node[] => {
 	const Limit = Math.min(
 		Math.max(Query.limit ?? StateRef.Config.limitDefault, 0),

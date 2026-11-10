@@ -1,5 +1,5 @@
-import type Invocation from "@Interface/Invocation.js";
-import type State from "@Interface/State.js";
+import type Invocation from "../../Interface/Invocation.js";
+import type State from "../../Interface/State.js";
 export default _default;
 /**
  * @module Bin

@@ -4,6 +4,7 @@
  * The shared batch contract (plan section 2).
  *
  * @remarks
+ *
  * Owned here as the pass-on's output; the ingester declares the same shape in
  * its own Interface (the PO C self-containment rule - no sibling imports).
  */

@@ -1,9 +1,15 @@
+import assert from "node:assert/strict";
+
+import { Dashes, Fullwidth, Quotes, Replace, ReplaceMap } from "../../../Target/Library.js";
+import { Check, Finish, MakeCounter } from "../Harness.js";
+
 /**
  * @module Test
  *
  * One singular test of the two replacement mechanics.
  *
  * @remarks
+ *
  * The test covers Replace (the generic class-to-string replacer:
  * match+count, count 0, literal `$&` insertion, lastIndex untouched) and
  * ReplaceMap (the char-to-char map replacer: the Quotes + Fullwidth flavors,
@@ -15,11 +21,6 @@
  * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit
  * smoke of `@playform/lib-dsh-core`: the REAL built entry only.
  */
-import assert from "node:assert/strict";
-
-import { Dashes, Fullwidth, Quotes, Replace, ReplaceMap } from "../../../Target/Library.js";
-import { Check, Finish, MakeCounter } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

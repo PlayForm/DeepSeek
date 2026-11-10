@@ -1,9 +1,13 @@
+import type Configuration from "@Interface/Config.js";
+import type Entry from "@Interface/Entry.js";
+
 /**
  * @module Curate
  *
  * The deterministic lifecycle pass: the ALWAYS-ON half of the Hermes curator, with the LLM consolidation pass left opt-in and out of this module.
  *
  * @remarks
+ *
  * It runs on the usage store alone and costs no tokens, which is why it is
  * the default posture: a corpus that only ever grows is a corpus nobody
  * loads, and pruning it needs no model's opinion.
@@ -25,9 +29,6 @@
  * record that has never been used - so an entry cannot be immortal by being
  * ignored.
  */
-import type Configuration from "@Interface/Config.js";
-import type Entry from "@Interface/Entry.js";
-
 /**
  * The day in ms (the knob's unit).
  */

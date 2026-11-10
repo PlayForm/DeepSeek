@@ -1,3 +1,27 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { UserMessage } from "@deepseek-ai/dsh-llm";
+import type { PostToolDecision, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
+import { Activate } from "@playform/lib-dsh-core";
+import { Adjacent, Families, Home, Resolve, Root as RootOf } from "@playform/lib-dsh-pack";
+
+import type Config from "../Interface/Config.js";
+import type { DocView, Family, Verdict } from "../Interface/Execution.js";
+import type State from "../Interface/State.js";
+import Version from "../Variable/Version.js";
+import Decide from "./Decide.js";
+import Decided from "./Decided.js";
+import Detect from "./Detect.js";
+import Filter from "./Filter.js";
+import History from "./History.js";
+import type { MeasureInput } from "./Measure.js";
+import BuildNote, { Prepend, Text } from "./Note.js";
+import Register from "./Register.js";
+import Ring, { type RingState } from "./Ring.js";
+import Score, { NoteKey } from "./Score.js";
+import Store from "./Store.js";
+import Weights from "./Weights.js";
+import Would from "./Would.js";
+
 /**
  * @module Apply
  *
@@ -6,6 +30,7 @@
  * unit's registration, and the doc suggester's listeners.
  *
  * @remarks
+ *
  * The mount registers two listeners, and the factory's own `loader/volatile-update`
  * listener makes three:
  *
@@ -80,30 +105,6 @@
  * function returns NOTHING; test probes (the end-phase) read the state through the
  * `ctx.__hookDshDocSuggesterState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { UserMessage } from "@deepseek-ai/dsh-llm";
-import type { PostToolDecision, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
-import { Activate } from "@playform/lib-dsh-core";
-import { Adjacent, Families, Home, Resolve, Root as RootOf } from "@playform/lib-dsh-pack";
-
-import type Config from "../Interface/Config.js";
-import type { DocView, Family, Verdict } from "../Interface/Execution.js";
-import type State from "../Interface/State.js";
-import Version from "../Variable/Version.js";
-import Decide from "./Decide.js";
-import Decided from "./Decided.js";
-import Detect from "./Detect.js";
-import Filter from "./Filter.js";
-import History from "./History.js";
-import type { MeasureInput } from "./Measure.js";
-import BuildNote, { Prepend, Text } from "./Note.js";
-import Register from "./Register.js";
-import Ring, { type RingState } from "./Ring.js";
-import Score, { NoteKey } from "./Score.js";
-import Store from "./Store.js";
-import Weights from "./Weights.js";
-import Would from "./Would.js";
-
 /**
  * The doc-task call's view: the doc path the call names.
  */

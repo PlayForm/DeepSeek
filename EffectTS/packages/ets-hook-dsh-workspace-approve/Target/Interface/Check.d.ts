@@ -4,6 +4,7 @@
  * The merge/execute side's result (Interface/Check).
  *
  * @remarks
+ *
  * The result never upgrades itself: an unbound change set, a mismatched
  * fingerprint, a non-approved decision, or a version that moved after the
  * approval each returns its own honest outcome. See Function/Check for the

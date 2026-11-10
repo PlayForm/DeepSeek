@@ -1,3 +1,5 @@
+import type Manifest from "../Interface/Manifest.js";
+export default _default;
 /**
  * @module Pin
  *
@@ -6,6 +8,7 @@
  * package.
  *
  * @remarks
+ *
  * Deterministic and idempotent: an already-pinned manifest maps to null (no
  * change), so P(P(c)) = P(c) and re-observing a pinned file is a no-op
  * rewrite. Pure internal calculation - part of the standing exemptions.
@@ -34,8 +37,6 @@
  * untouched, never inventing content. A deployment that wants wildcards
  * protected adds the package to the pin-policy keep-list.
  */
-import type Manifest from "../Interface/Manifest.js";
-export default _default;
 declare function _default(Current: Manifest, Sections?: string[], Keep?: string[]): {
     Next: Manifest;
     Pinned: number;

@@ -1,27 +1,3 @@
-/**
- * @module Test
- *
- * One singular test of the chain-pass refusals, the module transform contract,
- * and the P4 confined fence posture.
- *
- * @remarks
- * The chain-pass no-ops and refusals (undecodable manifest, no registry,
- * unreadable registry, strict strip), the module transform contract probed
- * directly (raw text in, keep-list ignored, the message composition, the passage
- * marking, the idempotent null), and the P4 confined fence posture.
- *
- * The SILENT REPLAY (the L2 precedent): the source suite is cumulative - the
- * undecodable-manifest check asserts the ABSOLUTE count of started jobs (the
- * source suite's section 5 started exactly one before this point). This folder
- * replays that generating fixture (the proj-a chain pass) silently, without
- * assertions, so the absolute count holds; the replayed fixture is verified
- * indirectly by that count assertion itself (a broken module prints a different
- * count and the check fails loudly).
- *
- * Runs standalone (`node Target/Test/Refusals-And-Transform/Test.js`) AND under
- * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
- * `@playform/hook-dsh-package-governor`.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -46,6 +22,31 @@ import {
 } from "../Harness.js";
 import BuildTransform from "../../../Target/Function/Transform.js";
 
+/**
+ * @module Test
+ *
+ * One singular test of the chain-pass refusals, the module transform contract,
+ * and the P4 confined fence posture.
+ *
+ * @remarks
+ *
+ * The chain-pass no-ops and refusals (undecodable manifest, no registry,
+ * unreadable registry, strict strip), the module transform contract probed
+ * directly (raw text in, keep-list ignored, the message composition, the passage
+ * marking, the idempotent null), and the P4 confined fence posture.
+ *
+ * The SILENT REPLAY (the L2 precedent): the source suite is cumulative - the
+ * undecodable-manifest check asserts the ABSOLUTE count of started jobs (the
+ * source suite's section 5 started exactly one before this point). This folder
+ * replays that generating fixture (the proj-a chain pass) silently, without
+ * assertions, so the absolute count holds; the replayed fixture is verified
+ * indirectly by that count assertion itself (a broken module prints a different
+ * count and the check fails loudly).
+ *
+ * Runs standalone (`node Target/Test/Refusals-And-Transform/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * `@playform/hook-dsh-package-governor`.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Boot();

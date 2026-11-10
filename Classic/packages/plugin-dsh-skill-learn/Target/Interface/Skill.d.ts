@@ -4,6 +4,7 @@
  * The STRUCTURAL catalog shapes: the index row and the loaded skill.
  *
  * @remarks
+ *
  * TAKEN FROM `@deepseek-ai/dsh-skill` and its filesystem provider, neither of which this
  * package can import (`@deepseek-ai/dsh-skill` is not installed), so the two shapes are
  * declared here exactly as far as the plugin reads them:
@@ -29,30 +30,54 @@
  * skill without a package directory has no support-file home, and the judge's
  * `support-path` rule needs that home to exist.
  */
-/** One index row from the catalog listing. */
+/**
+ * One index row from the catalog listing.
+ */
 export interface SkillRow {
-    /** The frontmatter name, which is the catalog's identity for the skill. */
+    /**
+     * The frontmatter name, which is the catalog's identity for the skill.
+     */
     readonly name: string;
-    /** The one-line description; absent or blank when the row carries none. */
+    /**
+     * The one-line description; absent or blank when the row carries none.
+     */
     readonly description?: string;
-    /** False when the file disables model invocation; absent when the provider does not report it. */
+    /**
+     * False when the file disables model invocation; absent when the provider does not report it.
+     */
     readonly modelInvocable?: boolean;
-    /** False when the file disables user invocation; carried for symmetry, never filtered on here. */
+    /**
+     * False when the file disables user invocation; carried for symmetry, never filtered on here.
+     */
     readonly userInvocable?: boolean;
 }
-/** The parsed skill `get` returns. */
+/**
+ * The parsed skill `get` returns.
+ */
 export interface LoadedSkill {
-    /** The frontmatter name. */
+    /**
+     * The frontmatter name.
+     */
     readonly name: string;
-    /** The frontmatter description, which the corpus contract requires to be non-empty. */
+    /**
+     * The frontmatter description, which the corpus contract requires to be non-empty.
+     */
     readonly description: string;
-    /** The exact file text, frontmatter included; a patch anchor is copied from it. */
+    /**
+     * The exact file text, frontmatter included; a patch anchor is copied from it.
+     */
     readonly content: string;
-    /** The package directory a support file is resolved against. */
+    /**
+     * The package directory a support file is resolved against.
+     */
     readonly resourceBase: {
-        /** The absolute package directory path. */
+        /**
+         * The absolute package directory path.
+         */
         readonly path: string;
     };
-    /** The absolute file path the catalog resolved, when the provider reports one. */
+    /**
+     * The absolute file path the catalog resolved, when the provider reports one.
+     */
     readonly path?: string;
 }

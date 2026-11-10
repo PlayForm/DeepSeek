@@ -1,3 +1,4 @@
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 /**
  * @module Config
  *
@@ -5,10 +6,10 @@
  * for the merge hook.
  *
  * @remarks
+ *
  * Every field is volatile. The contract is
  * Documentation/Plans/Workspace-Family/MERGE.md.
  */
-import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 export default interface Config {
     /**
      * The IDLE-forever switch: false means disabled, wired to nothing.

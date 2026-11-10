@@ -5,6 +5,7 @@
  * configuration throws at load, never silently defaults.
  *
  * @remarks
+ *
  * The schema already
  * guarantees the types; this pass enforces the COMPOSITION contracts the
  * schema cannot express:

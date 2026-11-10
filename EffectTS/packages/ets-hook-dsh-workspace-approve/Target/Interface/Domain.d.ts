@@ -4,6 +4,7 @@
  * The slice of the opened storage domain the hook uses (Interface/Domain).
  *
  * @remarks
+ *
  * One domain (named config `domain`, default workspace_approve), TWO tables:
  * `bindings` (one record per binding - keyed by the binding id) and `ring`
  * (ONE meta record `__ring` - the bounded ring of the last maxBindings

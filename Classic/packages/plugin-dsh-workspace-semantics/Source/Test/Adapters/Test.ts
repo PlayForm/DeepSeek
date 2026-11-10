@@ -1,18 +1,3 @@
-/**
- * @module Test
- *
- * The any-file adapters and the LSP deepener.
- *
- * @remarks
- * One fixture per adapter (JSON keys, YAML keys, Markdown link targets, package.json dependency
- * names) covers resolve, references and rename. The basename-before-extension selection keeps
- * package.json from falling through to the JSON adapter.
- *
- * The harness LSP seam is the PRIMARY TypeScript reference answer: the request the service sends,
- * the same-file filter, the deepened ledger line, and the rename derived from the seam's
- * locations. The lexical FALLBACK runs on every "cannot answer" path (lsp disabled, no query
- * method, a throwing seam).
- */
 import assert from "node:assert/strict";
 import {
 	Boot,
@@ -27,23 +12,51 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The JSON fixture: one key repeated as a string value (the v0 reference). */
+/**
+ * @module Test
+ *
+ * The any-file adapters and the LSP deepener.
+ *
+ * @remarks
+ *
+ * One fixture per adapter (JSON keys, YAML keys, Markdown link targets, package.json dependency
+ * names) covers resolve, references and rename. The basename-before-extension selection keeps
+ * package.json from falling through to the JSON adapter.
+ *
+ * The harness LSP seam is the PRIMARY TypeScript reference answer: the request the service sends,
+ * the same-file filter, the deepened ledger line, and the rename derived from the seam's
+ * locations. The lexical FALLBACK runs on every "cannot answer" path (lsp disabled, no query
+ * method, a throwing seam).
+ */
+/**
+ * The JSON fixture: one key repeated as a string value (the v0 reference).
+ */
 const JSON_TEXT = '{\n  "alpha": "alpha",\n  "beta": 2\n}\n';
 
-/** The YAML fixture: the scalar `name` repeats the key `name`. */
+/**
+ * The YAML fixture: the scalar `name` repeats the key `name`.
+ */
 const YAML_TEXT = "service:\n  name: alpha\n  copy: name\n";
 
-/** The Markdown fixture: two link targets, one heading. */
+/**
+ * The Markdown fixture: two link targets, one heading.
+ */
 const MARKDOWN_TEXT = "# Title\n\nSee [the doc](./other.md) and [again](./other.md).\n";
 
-/** The package.json fixture: `alpha` in two dependency sections. */
+/**
+ * The package.json fixture: `alpha` in two dependency sections.
+ */
 const PACKAGE_TEXT =
 	'{\n  "name": "demo",\n  "dependencies": {\n    "alpha": "1.0.0"\n  },\n  "devDependencies": {\n    "alpha": "2.0.0",\n    "beta": "3.0.0"\n  }\n}\n';
 
-/** The TypeScript fixture the deepener tests resolve. */
+/**
+ * The TypeScript fixture the deepener tests resolve.
+ */
 const TS_TEXT = "const foo = 1;\nfoo.bar;\n";
 
-/** An enabled mount with the any-file adapters registered and the files seeded. */
+/**
+ * An enabled mount with the any-file adapters registered and the files seeded.
+ */
 const Setup = async (
 	Config: Record<string, unknown> = {},
 	Contents: Record<string, string> = {},
@@ -62,7 +75,9 @@ const Setup = async (
 	return Run;
 };
 
-/** One same-file location the fake seam reports. */
+/**
+ * One same-file location the fake seam reports.
+ */
 const At = (Line: number, Character: number, Length: number): any => ({
 	uri: "file:///repo/a.ts",
 	range: {

@@ -1,9 +1,16 @@
+import { randomUUID as Identifier } from "node:crypto";
+
+import Envelope from "@Function/Envelope.js";
+import { Resolve } from "@Function/Handoff.js";
+import type { BatchDecision } from "@Interface/Batch.js";
+
 /**
  * @module Inbox
  *
  * The decision handoff into the harness agent-team inbox: THE HANDOFF.
  *
  * @remarks
+ *
  * The board and the other consumers listen on the inbox channel, so a
  * recorded decision is written there too - not only emitted on the bus - and
  * the batch's state survives whichever consumer is mounted.
@@ -23,12 +30,6 @@
  * No live agent at all (a cold harness, a smoke) is an honest ledger line -
  * the bus emission still carries the decision, so nothing is lost.
  */
-import { randomUUID as Identifier } from "node:crypto";
-
-import Envelope from "@Function/Envelope.js";
-import { Resolve } from "@Function/Handoff.js";
-import type { BatchDecision } from "@Interface/Batch.js";
-
 /**
  * The slice of the harness Agent the delivery uses (structural).
  */

@@ -17,6 +17,7 @@ import {
  * the text.
  *
  * @remarks
+ *
  * The stream normalizers each apply ONE flavor to the stream; the raw-write's
  * `normalize` applies a per-call SELECTION of them to the file content. The
  * transforms are the core's tables and replacers, imported directly - the
@@ -50,7 +51,6 @@ import {
  *   applied in the family order (unknown names match nothing and are ignored
  *   by construction; an empty selection is verbatim).
  */
-
 /**
  * The family's fixed order - the flavor names the tool's schema enumerates.
  */

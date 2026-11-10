@@ -1,3 +1,8 @@
+import ClassifyFn from "@Function/Classify.js";
+import HintFn, { PREFIX } from "@Function/Hint.js";
+import type { Role } from "@Interface/Policy.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Launch
  *
@@ -5,6 +10,7 @@
  * puts the routing hint INTO the child's prompt.
  *
  * @remarks
+ *
  * WHY A SECOND SEAM: `tools/pre-execute` covers the model-facing `subagent`
  * tool (Function/Inject), but a child started straight through the harness
  * service (`ctx.subagents.startActivation` - the queue's spawn, any host
@@ -33,11 +39,6 @@
  * FAIL-OPEN: any error logs the byte-stable warning and returns the decision
  * UNCHANGED - a hint can never block or alter a step.
  */
-import ClassifyFn from "@Function/Classify.js";
-import HintFn, { PREFIX } from "@Function/Hint.js";
-import type { Role } from "@Interface/Policy.js";
-import type State from "@Interface/State.js";
-
 /**
  * One model-facing content block (the fields the hint reads).
  */

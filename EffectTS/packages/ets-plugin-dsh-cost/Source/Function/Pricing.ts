@@ -127,6 +127,7 @@ type Rate = {
  * provider's own buckets, the instant and the money the ledger stored.
  *
  * @remarks
+ *
  * The recorded Tier is evidence of the capture-time band, never an input:
  * the walk re-derives the band from the buckets, which is exactly what a
  * rate change can move.
@@ -169,6 +170,7 @@ type Conditional = "at-or-below" | "above" | "invalid" | null;
  * nothing when the two hours are equal.
  *
  * @remarks
+ *
  * This is the drain's own rule, restated because the Call row records no
  * window column and the preview must re-derive the window from the call's
  * instant.
@@ -396,6 +398,7 @@ const CallOf = (Row: Record<string, SQLOutputValue>): CallRow => ({
  * `publish`'s transaction makes, and the two inserts it holds.
  *
  * @remarks
+ *
  * The resolution statement mirrors the capture path's Price.Select with
  * ValidFrom in place of EffectiveFrom - the half-open interval, the
  * exact-or-generic mode, region and window, the conditional rows excluded,

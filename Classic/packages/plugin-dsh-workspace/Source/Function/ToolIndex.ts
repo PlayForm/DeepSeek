@@ -1,3 +1,7 @@
+import { defineTool, type ToolRunContext } from "@deepseek-ai/dsh-tools";
+import type State from "@Interface/State.js";
+import type { Log } from "@Interface/State.js";
+
 /**
  * @module ToolIndex
  *
@@ -5,6 +9,7 @@
  * conversation can pull.
  *
  * @remarks
+ *
  * The family's core loop was dead while nothing filled the graph. A path
  * (default = the session working directory) and an optional maxFiles in, the
  * summary counts out: how many files this call indexed / skipped / failed, and
@@ -26,10 +31,6 @@
  * throwing purity guard). The disabled plugin no-ops to the family's byte-exact
  * refusal shape.
  */
-import { defineTool, type ToolRunContext } from "@deepseek-ai/dsh-tools";
-import type State from "@Interface/State.js";
-import type { Log } from "@Interface/State.js";
-
 /**
  * The session cwd, probed from the OPTIONAL harness service - never a hard
  * inject, never an unguarded accessor: the service may be absent (a bare

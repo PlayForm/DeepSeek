@@ -152,6 +152,7 @@ const StringOf = (Source: unknown, Key: string): string | undefined => {
  * with one entry per matching file.
  *
  * @remarks
+ *
  * undefined means the result carries no shape this parser knows, so the
  * rendered text is the fallback - never a guess.
  */

@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The lesson-nudge hook's Schemastery schema.
  *
  * @remarks
+ *
  * Composed with the factory's standalone Schema helper (`shared: false`), every knob volatile,
  * and `enabled` defaulting to FALSE - the idle-forever posture the family ships.
  *
@@ -11,9 +15,6 @@
  * those belong to the review service, and duplicating them here would let a profile configure a
  * cadence the counter does not honour.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
-
 const DefaultEnabled = false;
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-lesson-nudge.log";
 const DefaultMaxReviewsPerSession = 3;

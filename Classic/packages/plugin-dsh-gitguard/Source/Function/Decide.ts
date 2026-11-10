@@ -1,9 +1,15 @@
+import Segments from "@Function/Segments.js";
+import Subcommand from "@Function/Subcommand.js";
+import type Decision from "@Interface/Decision.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Decide
  *
  * The classifier (Function/Decide): one terminal command -> the verdict.
  *
  * @remarks
+ *
  * The guard chain (ORCHESTRATION-PLUGINS.md section 3):
  *
  * 1. the guard is disabled -> allow (the cold mount passes everything);
@@ -21,11 +27,6 @@
  * the whole command ("cd repo && git add -A" is denied). The verdict carries
  * the first denied subcommand for the ledger/refusal.
  */
-import Segments from "@Function/Segments.js";
-import Subcommand from "@Function/Subcommand.js";
-import type Decision from "@Interface/Decision.js";
-import type State from "@Interface/State.js";
-
 export default (State: State, Command: string): Decision => {
 	switch (true) {
 		case !State.On:

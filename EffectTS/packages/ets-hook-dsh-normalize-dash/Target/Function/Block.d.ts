@@ -1,3 +1,5 @@
+import type { ContentBlock } from "@deepseek-ai/dsh-llm";
+export default _default;
 /**
  * @module Block
  *
@@ -5,6 +7,7 @@
  * generic block-end normalizer with the transform INJECTED.
  *
  * @remarks
+ *
  * The dispatch structure (TextBlock.text, ReasoningBlock.text + the runtime
  * `thinking` defense, ToolCallBlock.arguments gated by the tool-args flag -
  * three-way since the edit exemption and the per-call raw marker: a block
@@ -19,8 +22,6 @@
  * The behavior is byte-identical to the previous in-file implementation
  * (which hardcoded its own Replace) - the hook-dsh-normalize-dash smoke is the arbiter.
  */
-import type { ContentBlock } from "@deepseek-ai/dsh-llm";
-export default _default;
 declare function _default(Input: ContentBlock, Replacement: string, ToolArgs: boolean, Raw: boolean): {
     block: ContentBlock;
     count: number;

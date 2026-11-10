@@ -4,6 +4,7 @@
  * One recorded judged call: the recall store's unit.
  *
  * @remarks
+ *
  * The completion spec's wave 2c re-spec for this package
  * (Documentation/Plans/Completion-Spec/03-SUGGESTERS.md) makes the hook the
  * PRODUCER of the recall history - the reader had no data before.

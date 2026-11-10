@@ -1,3 +1,4 @@
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 /**
  * @module Config
  *
@@ -5,7 +6,6 @@
  * every field is a volatile cell (hot-editable without remounting, the
  * factory's P10 refresh re-reads the mapped State fields in place).
  */
-import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 export default interface Config {
     /**
      * The IDLE-forever posture: the plugin ships disabled and enables only by

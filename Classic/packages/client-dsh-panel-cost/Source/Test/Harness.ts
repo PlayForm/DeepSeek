@@ -1,29 +1,34 @@
-// Source/Test/Harness.ts - the shared test harness for the PANEL-COST
-// smokes, with TWO faces because the package ships both halves: the alias
-// hooks load the REAL built Target (the plugin entry and the ./client
-// export), and each face is the fake ctx for one half.
-//
-// Make() is the fake HOST ctx: the plugin apply reads `ctx.get("webServer")`
-// structurally and registers one route, so the face answers "webServer"
-// with a fake server whose `register` captures the route into
-// Provided.routes, answers undefined for anything else, and collects the
-// logger lines. MakeClient() is the fake CLIENT ctx: the client apply
-// registers dictionaries and mounts one tab, so the face captures
-// locale.register, slots.inject, slots.register and effect, every seam
-// returning a disposer exactly as the real services do.
-//
-// There is no root listener, no fs capture and no waterfall here - the
-// host half touches no filesystem (the route body is the unwired
-// placeholder) and the client half is a pure browser module that touches
-// no filesystem and has no clock, so the harness has neither an fs seam
-// nor a time seam; Styles() no-ops without a document and the suite never
-// drives the DOM.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves
-// both fake ctxs actually wire the real applies (the vacuously-green
-// backstop for every folder's fixture).
 import assert from "node:assert/strict";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the PANEL-COST smokes, with TWO faces because the
+ * package ships both halves.
+ *
+ * @remarks
+ *
+ * The alias hooks load the REAL built Target (the plugin entry and the ./client
+ * export), and each face is the fake ctx for one half.
+ *
+ * Make() is the fake HOST ctx: the plugin apply reads `ctx.get("webServer")`
+ * structurally and registers one route, so the face answers "webServer" with a
+ * fake server whose `register` captures the route into Provided.routes, answers
+ * undefined for anything else, and collects the logger lines. MakeClient() is the
+ * fake CLIENT ctx: the client apply registers dictionaries and mounts one tab, so
+ * the face captures locale.register, slots.inject, slots.register and effect,
+ * every seam returning a disposer exactly as the real services do.
+ *
+ * There is no root listener, no fs capture and no waterfall here - the host half
+ * touches no filesystem (the route body is the unwired placeholder) and the client
+ * half is a pure browser module that touches no filesystem and has no clock, so
+ * the harness has neither an fs seam nor a time seam; Styles() no-ops without a
+ * document and the suite never drives the DOM.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves both fake
+ * ctxs actually wire the real applies (the vacuously-green backstop for every
+ * folder's fixture).
+ */
 // The alias hooks MUST be registered before any Target import resolves.
 await import("./Alias-Hooks.js");
 
@@ -46,7 +51,9 @@ export const Check = (Count: Counter, Label: string, Assertions: () => void): vo
 	}
 };
 
-/** End-of-folder guard: any failed assertion is a folder failure. */
+/**
+ * End-of-folder guard: any failed assertion is a folder failure.
+ */
 export const Finish = (Count: Counter, Name: string): number => {
 	if (Count.F !== 0) {
 		throw new Error(`${Name}: ${Count.F} failed check(s)`);
@@ -59,9 +66,13 @@ export const Finish = (Count: Counter, Name: string): number => {
 export const Library = await import("../../Target/Library.js");
 export const Client = await import("../../Target/Client.js");
 
-/** The loader row (the default export of the plugin entry). */
+/**
+ * The loader row (the default export of the plugin entry).
+ */
 export const Plugin = Library.default;
-/** The client half (the ./client export: { inject, apply }). */
+/**
+ * The client half (the ./client export: { inject, apply }).
+ */
 export const ClientPlugin = Client.default;
 
 /** The validated config the loader produces (defaults filled); the schema

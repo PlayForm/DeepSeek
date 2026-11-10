@@ -1,13 +1,3 @@
-/**
- * @module DetailRow
- *
- * The per-file accordion under an expanded step row.
- *
- * @remarks
- * The head with the priced total, the five priced buckets, one block per file sorted by its money
- * and capped at the file limit, the touched and allocation-only fallbacks, and the hidden notice.
- * The cell spans every column the resolved definition keeps, so it cannot outgrow the header.
- */
 import type { TurnsCells } from "@Function/Columns";
 import Count from "@Function/Count";
 import Price from "@Function/Price";
@@ -17,6 +7,17 @@ import type { ResolvedTable } from "@Interface/Table";
 import type { Translate } from "@Interface/Translate";
 import { createElement } from "react";
 
+/**
+ * @module DetailRow
+ *
+ * The per-file accordion under an expanded step row.
+ *
+ * @remarks
+ *
+ * The head with the priced total, the five priced buckets, one block per file sorted by its money
+ * and capped at the file limit, the touched and allocation-only fallbacks, and the hidden notice.
+ * The cell spans every column the resolved definition keeps, so it cannot outgrow the header.
+ */
 const DetailFileLimit = 100;
 
 type DetailRowProps = {

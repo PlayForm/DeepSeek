@@ -1,12 +1,3 @@
-/**
- * @module Test
- *
- * The loader contract, the cold disabled mount, the activation proof with the history load
- * outcome, the schema fail-loud, and the wiring order.
- *
- * @remarks
- * The history load outcome covers missing, loaded, corrupt - all byte-exact.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -28,7 +19,19 @@ import {
 	WriteStore,
 } from "../Harness.js";
 
-/** The L4 workspace: a real file the recalled record may name. */
+/**
+ * @module Test
+ *
+ * The loader contract, the cold disabled mount, the activation proof with the history load
+ * outcome, the schema fail-loud, and the wiring order.
+ *
+ * @remarks
+ *
+ * The history load outcome covers missing, loaded, corrupt - all byte-exact.
+ */
+/**
+ * The L4 workspace: a real file the recalled record may name.
+ */
 const Work = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "replay-suggester-loader-"));
 FileSystem.writeFileSync(Path.join(Work, "package.json"), "{}", "utf8");
 FileSystem.mkdirSync(Path.join(Work, "src"), { recursive: true });
@@ -191,7 +194,9 @@ export const runTest = async (): Promise<number> => {
 	return Finish(Count, "Loader-And-History");
 };
 
-/** A standard enabled mount against an absent store path. */
+/**
+ * A standard enabled mount against an absent store path.
+ */
 const Setup_Missing = (): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, historyPath: Store, enabled: true }));

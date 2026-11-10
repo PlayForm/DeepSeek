@@ -1,9 +1,14 @@
+import type { LaunchTarget, PanelRegistry, PanelSection, PanelSlot } from "@Interface/Panel.js";
+import Lines from "@Variable/Lines.js";
+import Slots from "@Variable/Slots.js";
+
 /**
  * @module Registry
  *
  * The slot-aware family panel registry, the body of the `playformFamilyPanel` service.
  *
  * @remarks
+ *
  * Sections are stored by id; re-registering the same id replaces it in place (an HMR reload
  * rebinds the closure without duplicating it).
  *
@@ -18,10 +23,6 @@
  * the current sections ordered by (order, id), optionally filtered to one slot. Every accepted
  * mutation bumps the version and notifies the subscribers.
  */
-import type { LaunchTarget, PanelRegistry, PanelSection, PanelSlot } from "@Interface/Panel.js";
-import Lines from "@Variable/Lines.js";
-import Slots from "@Variable/Slots.js";
-
 const Ordering = (Left: PanelSection, Right: PanelSection): number => {
 	switch (true) {
 		case Left.order !== Right.order:
@@ -31,11 +32,15 @@ const Ordering = (Left: PanelSection, Right: PanelSection): number => {
 	}
 };
 
-/** The declared child slot of one section: the v4.1 `slot`, else the legacy mount. */
+/**
+ * The declared child slot of one section: the v4.1 `slot`, else the legacy mount.
+ */
 const SlotOf = (Section: PanelSection): PanelSlot =>
 	Section.slot ?? (Section.mount === "overlay" ? Slots.overlay : Slots.section);
 
-/** The ownership key: one adapter per bundle per slot. */
+/**
+ * The ownership key: one adapter per bundle per slot.
+ */
 const Key = (Slot: PanelSlot, Bundle: string): string => `${Slot}::${Bundle}`;
 
 export default function Registry(Log?: (line: string) => void): PanelRegistry & {

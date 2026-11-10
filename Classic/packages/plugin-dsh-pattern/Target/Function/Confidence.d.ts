@@ -1,15 +1,3 @@
-/**
- * @module Confidence
- *
- * The arithmetic on one pattern's confidence: per-outcome deltas and the
- * half-life decay for the stale-pattern rule.
- *
- * @remarks
- * `ApplyOutcome` records deltas per outcome, clamped to 0..1. `Decay` implements
- * the half-life rule of PATTERN-GRAPH-PLUGIN.md risk 8: a pattern not updated
- * for n half-lives decays halfway toward the neutral 0.5 floor each half-life,
- * never below it. `Touch` refreshes the pattern's `updatedAt`.
- */
 import type Knobs from "../Interface/Config.js";
 import type { Outcome } from "../Interface/Outcome.js";
 import type Pattern from "../Interface/Pattern.js";

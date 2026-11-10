@@ -9,6 +9,7 @@ import { Emits, Fold, Names, Version } from "../../Target/Library.js";
  * the async variant, and the Finish guard.
  *
  * @remarks
+ *
  * The conversation is a pure library: NO ctx, NO factory, NO fs - every test
  * imports the REAL built `Target/Library.js` of this package only and feeds it
  * hand-written event arrays, so the harness here is just the counter: the
@@ -22,7 +23,6 @@ import { Emits, Fold, Names, Version } from "../../Target/Library.js";
  * `prepublishOnly.sh` gates the build on it. Imported as a library, this
  * module only exports.
  */
-
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks. Passed
  * by reference so Check can bump it from inside its callback.
@@ -88,7 +88,9 @@ export const Finish = (Count: Counter, Name: string): number => {
 	return Count.N;
 };
 
-/** Standalone entry: `node Target/Test/Harness.js --selfcheck`. */
+/**
+ * Standalone entry: `node Target/Test/Harness.js --selfcheck`.
+ */
 const InvokedDirectly =
 	process.argv[1] !== undefined &&
 	import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

@@ -1,9 +1,14 @@
+import { readFileSync } from "node:fs";
+
+import type { BuildOptions, Plugin } from "esbuild";
+
 /**
  * @module ESBuild
  *
  * The plain-ESM twin convention (the live-containers / factory / normalize family template).
  *
  * @remarks
+ *
  * The base configuration from @playform/build already applies: format esm, platform node, bundle
  * false - each Source file transpiles to its own Target file, imports stay external (the runtime
  * import of @deepseek-ai/schemastery is never bundled; the type-only imports of cordis and of
@@ -20,10 +25,6 @@
  * (read at config-load time) compile into `process.env.NAME_PACKAGE` and
  * `process.env.VERSION_PACKAGE` rather than relying on the build tool's default define.
  */
-import { readFileSync } from "node:fs";
-
-import type { BuildOptions, Plugin } from "esbuild";
-
 // The package manifest, read at config-load time.
 const Package = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as {
 	name?: string;

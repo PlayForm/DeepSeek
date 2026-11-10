@@ -1,3 +1,6 @@
+import type Binding from "@Interface/Binding.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Record
  *
@@ -5,6 +8,7 @@
  * and the bounded ring, then persists both into the domain fire-and-forget.
  *
  * @remarks
+ *
  * - `State.ById` is keyed by the binding id: the newest version of a binding
  *   (a decision update) replaces the previous one in place.
  * - `State.Ring` keeps every binding up to `State.MaxBindings`; the oldest is
@@ -16,9 +20,6 @@
  *   `__ring` in the `ring` table. Every put is `void .catch(() => {})` - a
  *   storage failure can never reach the caller's synchronous path.
  */
-import type Binding from "@Interface/Binding.js";
-import type State from "@Interface/State.js";
-
 export default (State: State, Binding: Binding): void => {
 	State.ById.set(Binding.id, Binding);
 	State.Ring.push(Binding);

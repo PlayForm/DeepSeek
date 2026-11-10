@@ -1,3 +1,16 @@
+import Count from "@Function/Count";
+import CountShort from "@Function/CountShort";
+import { Contributions, FileCalls, History } from "@Function/Fetch";
+import Price from "@Function/Price";
+import Rate from "@Function/Rate";
+import Stamp from "@Function/Stamp";
+import type CostContributionRow from "@Interface/ContributionRow";
+import type { Translate } from "@Interface/Translate";
+import type { CostFileCallRow, CostVersionRow } from "@playform/plugin-dsh-cost/service";
+import Dash from "@Variable/Dash";
+import EN_DICTIONARY from "@Variable/Locale-en.json";
+import { createElement, Fragment, useCallback, useEffect, useState } from "react";
+
 /**
  * @module ContributionsPage
  *
@@ -6,6 +19,7 @@
  * each row carrying its own evidence.
  *
  * @remarks
+ *
  * The research source is `Temporary/Cost-Research/Plan.md` lane B5b, with the research's A1
  * section 8 and A2 section 7.
  *
@@ -42,19 +56,6 @@
  * empty state of one conversation's calls, and the same three states of the version chain. Both
  * fetches resolve instead of throwing, so the pane always has a state to show.
  */
-import Count from "@Function/Count";
-import CountShort from "@Function/CountShort";
-import { Contributions, FileCalls, History } from "@Function/Fetch";
-import Price from "@Function/Price";
-import Rate from "@Function/Rate";
-import Stamp from "@Function/Stamp";
-import type CostContributionRow from "@Interface/ContributionRow";
-import type { Translate } from "@Interface/Translate";
-import type { CostFileCallRow, CostVersionRow } from "@playform/plugin-dsh-cost/service";
-import Dash from "@Variable/Dash";
-import EN_DICTIONARY from "@Variable/Locale-en.json";
-import { createElement, Fragment, useCallback, useEffect, useState } from "react";
-
 /**
  * The conversation table's one column definition: the shipped order, the percent widths that add
  * up to the whole table, and the label and tooltip keys each column resolves. The header, the

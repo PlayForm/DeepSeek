@@ -1,9 +1,14 @@
+import type { Candidate, Detection, KnowledgeRow, Verdict } from "../Interface/Execution.js";
+import type Projection from "../Interface/Projection.js";
+import Measure from "./Measure.js";
+
 /**
  * @module Score
  *
  * The confidence and the gate (plan sections 3.5-3.7, 4.7).
  *
  * @remarks
+ *
  * k = sigmoid(sum(weights) + b), b = -0.6, so a single weak signal does not cross the default
  * threshold;
  *
@@ -32,74 +37,112 @@
  * list. When the dismissals remove every candidate the verdict is the `dismissed`
  * suppression, not the ambiguous-target abstention - the list was not empty, it was refused.
  */
-import type { Candidate, Detection, KnowledgeRow, Verdict } from "../Interface/Execution.js";
-import type Projection from "../Interface/Projection.js";
-import Measure from "./Measure.js";
-
-/** The plan's bias: a single weak signal stays under the default threshold. */
+/**
+ * The plan's bias: a single weak signal stays under the default threshold.
+ */
 const Bias = -0.6;
 
-/** The documented neutral literal when the graph is absent or has no nodes. */
+/**
+ * The documented neutral literal when the graph is absent or has no nodes.
+ */
 const NeutralLiteral = 0.5;
 
-/** The legacy family-row score when no projection is available. */
+/**
+ * The legacy family-row score when no projection is available.
+ */
 const NeutralFamily = 0.4;
 
-/** The candidate score weights (plan section 3.7). */
+/**
+ * The candidate score weights (plan section 3.7).
+ */
 const Weights = { Scope: 0.35, Prior: 0.25, Literal: 0.25, History: 0.15, Recent: 0.2 };
 
-/** The gate input, built by Apply from the per-agent state and the config. */
+/**
+ * The gate input, built by Apply from the per-agent state and the config.
+ */
 export interface Gate {
-	/** The intent ids that emitted within the cooldown window. */
+	/**
+	 * The intent ids that emitted within the cooldown window.
+	 */
 	Cooled: string[];
 
-	/** The dedupe keys ("intent:candidate-set-hash") already noted this turn. */
+	/**
+	 * The dedupe keys ("intent:candidate-set-hash") already noted this turn.
+	 */
 	Noted: Set<string>;
 
-	/** The candidate paths suggested within the cooldown window. */
+	/**
+	 * The candidate paths suggested within the cooldown window.
+	 */
 	Recent: Set<string>;
 
-	/** Notes emitted this turn. */
+	/**
+	 * Notes emitted this turn.
+	 */
 	Notes: number;
 
-	/** The per-turn cap. */
+	/**
+	 * The per-turn cap.
+	 */
 	MaxNotes: number;
 
-	/** The config's threshold (the non-destructive default). */
+	/**
+	 * The config's threshold (the non-destructive default).
+	 */
 	Threshold: number;
 
-	/** The candidate cap. */
+	/**
+	 * The candidate cap.
+	 */
 	MaxCandidates: number;
 
-	/** The excluded directories (a candidate inside them is out of scope). */
+	/**
+	 * The excluded directories (a candidate inside them is out of scope).
+	 */
 	Exclude: string[];
 
-	/** The history lookup (the knowledge's Laplace inputs). */
+	/**
+	 * The history lookup (the knowledge's Laplace inputs).
+	 */
 	History: (Intent: string, Path: string) => KnowledgeRow | undefined;
 
-	/** The dismissal lookup (the knowledge's durable dismissals; Path undefined = the family). */
+	/**
+	 * The dismissal lookup (the knowledge's durable dismissals; Path undefined = the family).
+	 */
 	Dismissed: (Intent: string, Path: string | undefined) => boolean;
 
-	/** The graph projection, when one is available (Function/Projection). */
+	/**
+	 * The graph projection, when one is available (Function/Projection).
+	 */
 	Projection: Projection | undefined;
 }
 
-/** sigmoid. */
+/**
+ * sigmoid.
+ */
 const Sigmoid = (X: number): number => 1 / (1 + Math.exp(-X));
 
-/** Whether a candidate path sits inside one of the excluded directories. */
+/**
+ * Whether a candidate path sits inside one of the excluded directories.
+ */
 const Excluded = (Path: string, Exclude: string[]): boolean =>
 	Exclude.some((Dir) => Path === Dir || Path.startsWith(`${Dir}/`) || Path.includes(`/${Dir}/`));
 
-/** The candidate-set dedupe key: the intent plus its sorted paths. */
+/**
+ * The candidate-set dedupe key: the intent plus its sorted paths.
+ */
 const Key = (Intent: string, Paths: string[]): string =>
 	`${Intent}:${Paths.slice().sort().join("|")}`;
 
 export default (
-	/** The ranked detections (Detect's output). */
+	/**
+	 * The ranked detections (Detect's output).
+	 */
 	Detections: Detection[],
 
-	/** The gate input. */
+	/**
+	 * The gate input.
+	 */
 	Input: Gate,
 ): Verdict => {
 	const Winner = Detections[0];
@@ -232,5 +275,7 @@ export default (
 	return { action: "emit", reason: "", kappa: Kappa, candidates: Candidates };
 };
 
-/** The dedupe key for an emitted note (Apply records it for the next call). */
+/**
+ * The dedupe key for an emitted note (Apply records it for the next call).
+ */
 export const NoteKey = Key;

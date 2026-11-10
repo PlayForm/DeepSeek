@@ -1,3 +1,11 @@
+import { createHash, randomBytes } from "node:crypto";
+import FileSystem from "node:fs/promises";
+import Path from "node:path";
+
+import { Expand } from "@Function/Write.js";
+import type Configuration from "@Interface/Configuration.js";
+import type { LedgerEvidence, LedgerFile, LedgerRow } from "@Interface/Ledger.js";
+
 /**
  * @module Ledger
  *
@@ -5,6 +13,7 @@
  * at, and the delta manifests that make a revert possible.
  *
  * @remarks
+ *
  * TELEMETRY, NOT A GATE (tools/skill_ledger.py:8, Hermes-Curator-Pass.md:274-282).
  * Every public write path here swallows its failure and returns why: the write it
  * describes has already happened, so refusing the write because the record failed would
@@ -26,50 +35,64 @@
  * SKILL-LEARN-PLUGIN.md:401-406). It never touches a skill path; every skill mutation
  * goes through the fence in `Function/Write.ts`.
  */
-import { createHash, randomBytes } from "node:crypto";
-import FileSystem from "node:fs/promises";
-import Path from "node:path";
-
-import { Expand } from "@Function/Write.js";
-import type Configuration from "@Interface/Configuration.js";
-import type { LedgerEvidence, LedgerFile, LedgerRow } from "@Interface/Ledger.js";
-
-/** The six mutation kinds a row may name (Interface/Ledger.ts:38). */
+/**
+ * The six mutation kinds a row may name (Interface/Ledger.ts:38).
+ */
 const Actions: readonly string[] = ["create", "patch", "support", "archive", "restore", "revert"];
 
-/** One file a mutation touched, with the text it held; null text means it did not exist. */
+/**
+ * One file a mutation touched, with the text it held; null text means it did not exist.
+ */
 export interface Touched {
-	/** The absolute path the bytes belong to. */
+	/**
+	 * The absolute path the bytes belong to.
+	 */
 	readonly path: string;
 
-	/** The file's text, or null when the file did not exist on that side of the mutation. */
+	/**
+	 * The file's text, or null when the file did not exist on that side of the mutation.
+	 */
 	readonly text: string | null;
 }
 
-/** One mutation to record: what it did, to which skill, and the texts on both sides. */
+/**
+ * One mutation to record: what it did, to which skill, and the texts on both sides.
+ */
 export interface Mutation {
 	readonly actor: "curator" | "agent" | "user";
 	readonly action: "create" | "patch" | "support" | "archive" | "restore" | "revert";
 	readonly skill: string;
 	readonly evidence: LedgerEvidence;
 
-	/** The files as they were, with their text. */
+	/**
+	 * The files as they were, with their text.
+	 */
 	readonly before: readonly Touched[];
 
-	/** The files as they are, with their text. */
+	/**
+	 * The files as they are, with their text.
+	 */
 	readonly after: readonly Touched[];
 }
 
-/** The append's answer: the row id, or why there is none. */
+/**
+ * The append's answer: the row id, or why there is none.
+ */
 export interface Appended {
-	/** The twelve hex characters that name the row, or "" when the append failed. */
+	/**
+	 * The twelve hex characters that name the row, or "" when the append failed.
+	 */
 	readonly id: string;
 
-	/** Why the append failed, for the one log line; absent on success. */
+	/**
+	 * Why the append failed, for the one log line; absent on success.
+	 */
 	readonly error?: string;
 }
 
-/** The one pair of fields a row entry carries (Interface/Ledger.ts:13-18). */
+/**
+ * The one pair of fields a row entry carries (Interface/Ledger.ts:13-18).
+ */
 const Files = (Raw: readonly unknown[]): LedgerFile[] => {
 	const Listed: LedgerFile[] = [];
 	for (const Entry of Raw) {
@@ -84,7 +107,9 @@ const Files = (Raw: readonly unknown[]): LedgerFile[] => {
 	return Listed;
 };
 
-/** One ledger row read back from the JSONL, or undefined when the line is not a row. */
+/**
+ * One ledger row read back from the JSONL, or undefined when the line is not a row.
+ */
 const Read = (Raw: unknown): LedgerRow | undefined => {
 	const Value = (Raw ?? {}) as Record<string, unknown>;
 	const Id = Value["id"];
@@ -151,7 +176,9 @@ export const Capture = async (Text: string, Configuration_: Configuration): Prom
 	return Digest;
 };
 
-/** One blob's text, or null when the store does not hold it or the key is not a digest. */
+/**
+ * One blob's text, or null when the store does not hold it or the key is not a digest.
+ */
 export const Blob = async (
 	Digest: string,
 	Configuration_: Configuration,
@@ -175,7 +202,9 @@ export const Blob = async (
 	}
 };
 
-/** The delta of two manifests: unchanged paths are dropped, one-sided paths survive. */
+/**
+ * The delta of two manifests: unchanged paths are dropped, one-sided paths survive.
+ */
 const Delta = (
 	Before: readonly LedgerFile[],
 	After: readonly LedgerFile[],
@@ -188,7 +217,9 @@ const Delta = (
 	};
 };
 
-/** Capture one side of a mutation: every touched file that held text becomes a blob. */
+/**
+ * Capture one side of a mutation: every touched file that held text becomes a blob.
+ */
 const Manifest = async (
 	Files_: readonly Touched[],
 	Configuration_: Configuration,
@@ -235,7 +266,9 @@ export const Rows = async (Configuration_: Configuration): Promise<readonly Ledg
 	return Listed;
 };
 
-/** Append one row, capturing its blobs first. Never throws, and never blocks a write. */
+/**
+ * Append one row, capturing its blobs first. Never throws, and never blocks a write.
+ */
 export default async (Mutation_: Mutation, Configuration_: Configuration): Promise<Appended> => {
 	try {
 		const Before = await Manifest(Mutation_.before, Configuration_);

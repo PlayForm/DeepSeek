@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +9,7 @@
  * exports and the default object for the hook-dsh-normalize-quotes plugin.
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` +
  * `export const Config` + `export const inject` +
  * `export default { name, apply, Config, inject }` - the ONLY named exports in
@@ -58,10 +63,6 @@
  * (this is a NON-MANIFEST module: no fs/observed, no gate, no Stash traffic,
  * no policy discovery).
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "hook-dsh-normalize-quotes";
 
 /**

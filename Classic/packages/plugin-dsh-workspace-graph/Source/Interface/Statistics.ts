@@ -5,15 +5,23 @@
  * and edge counts over the valid mirror, and the current indexRevision.
  */
 export default interface Statistics {
-	/** The stored file count. */
+	/**
+	 * The stored file count.
+	 */
 	files: number;
 
-	/** The total node count over the valid mirror. */
+	/**
+	 * The total node count over the valid mirror.
+	 */
 	nodes: number;
 
-	/** The total edge count over the valid mirror. */
+	/**
+	 * The total edge count over the valid mirror.
+	 */
 	edges: number;
 
-	/** The current index revision, as a string. */
+	/**
+	 * The current index revision, as a string.
+	 */
 	indexRevision: string;
 }

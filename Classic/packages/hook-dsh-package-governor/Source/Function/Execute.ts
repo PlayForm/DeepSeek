@@ -1,3 +1,12 @@
+import type { FsTarget } from "@deepseek-ai/dsh-fs";
+import type Invocation from "@Interface/Invocation.js";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+
+import Policy from "./Update/Policy.js";
+import Run from "./Update/Run.js";
+import Verify from "./Update/Verify.js";
+
 /**
  * @module Execute
  *
@@ -5,6 +14,7 @@
  * the optional verify stage.
  *
  * @remarks
+ *
  * The function runs in the detached continuation started by Function/Dispatch. The policy is
  * resolved in-process, the chain deps are merged into ncu's reject list (the cordis-trap
  * guard: ncu must never bump a chain pin to public npm latest), every invocation runs through
@@ -16,15 +26,6 @@
  * Never rejects: every stage is contained; the promise always resolves a code. Ledger lines
  * go through the FACTORY (State.Factory.Append) - the strings are the module's.
  */
-import type { FsTarget } from "@deepseek-ai/dsh-fs";
-import type Invocation from "@Interface/Invocation.js";
-import type Registry from "@Interface/Registry.js";
-import type State from "@Interface/State.js";
-
-import Policy from "./Update/Policy.js";
-import Run from "./Update/Run.js";
-import Verify from "./Update/Verify.js";
-
 export default async (
 	State: State,
 	Root: string,

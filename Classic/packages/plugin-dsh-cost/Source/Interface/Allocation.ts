@@ -6,6 +6,7 @@
  * shared remainder and keeps the conservation law.
  *
  * @remarks
+ *
  * The row follows `Documentation/Plans/COST-TRACK-PLUGIN.md` section 2. The
  * direct half is the output side, weighted by changed bytes over the files the
  * step wrote; the amortized half is the input side, weighted by per-file

@@ -1,3 +1,10 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -5,6 +12,7 @@
  * package and imported by every test folder.
  *
  * @remarks
+ *
  * The fake ctx carries the ctx listener capture, a DISTINCT root object, the `reflect.provide`
  * capture for the service, the event capture for `batch/state-change`, the effect runner, the
  * logger capture and the fs seam. Beside it sit the REAL `@playform/plugin-dsh-batchstate` apply
@@ -20,13 +28,6 @@
  * NO FAKE CLOCK: the plugin stamps `Date.now()` for startedAt/finishedAt bookkeeping only; no
  * assertion depends on a wall-clock value (the compile output is derived purely from the state).
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 export { Plugin };
 
 /**
@@ -316,7 +317,9 @@ export const FakeStorage = (Options: { failOpen?: boolean; version?: number } = 
 		},
 	};
 
-	/** Seed one record (the restart scenario: the store outlives the process). */
+	/**
+	 * Seed one record (the restart scenario: the store outlives the process).
+	 */
 	Store.seed = (Name: string, Key: string, Value: unknown): void => {
 		if (!Store.tables.has(Name)) {
 			Store.tables.set(Name, new Map());

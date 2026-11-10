@@ -1,3 +1,5 @@
+import type Packet from "@Interface/Packet.js";
+
 /**
  * @module Render
  *
@@ -6,12 +8,11 @@
  * section's lines.
  *
  * @remarks
+ *
  * The STALE section is omitted entirely when the caller is current (the
  * contract: "STALE <the version the caller held, if it differs>"). This is
  * the exact text the token measurement and the budget clamp run against.
  */
-import type Packet from "@Interface/Packet.js";
-
 export default (Item: Packet): string => {
 	const Lines: string[] = [
 		Item.workspace,

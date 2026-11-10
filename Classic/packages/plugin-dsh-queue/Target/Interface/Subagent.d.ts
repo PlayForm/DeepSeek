@@ -1,3 +1,5 @@
+import type Agent from "./Agent.js";
+import type { AgentRoute } from "./Task.js";
 /**
  * @module Subagent
  *
@@ -6,6 +8,7 @@
  * @deepseek-ai/dsh-subagent's SubagentRuntime.startActivation).
  *
  * @remarks
+ *
  * This is the
  * ONLY launch seam the queue uses: never a private spawn, never a shell.
  *
@@ -26,8 +29,6 @@
  * against the registry), which is why the queue reads it from
  * `ctx.agents.currentInitiator()` rather than constructing one.
  */
-import type Agent from "./Agent.js";
-import type { AgentRoute } from "./Task.js";
 /**
  * One model-facing content block (the harness's ContentBlock subset the
  * queue writes: a single text block carrying the task's spec verbatim).

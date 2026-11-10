@@ -9,6 +9,7 @@ import RewriteBlocks from "./Blocks.js";
  * listener.
  *
  * @remarks
+ *
  * The principle: overpass normalizes only what re-enters the model or lands in a file - a
  * tool result here is PRE-COMMIT (the waterfall settles before the result is appended to the
  * durable log), so rewriting it is not history rewriting.
@@ -61,8 +62,9 @@ import RewriteBlocks from "./Blocks.js";
  * Pure per call: no module-level state - two concurrent dispatches share nothing, and an
  * HMR reload rebinds the closure cleanly.
  */
-
-/** The schema-default scope gates (the fallback for a hand-built config). */
+/**
+ * The schema-default scope gates (the fallback for a hand-built config).
+ */
 const DefaultScopes = {
 	conversation: true,
 	reasoning: true,
@@ -83,22 +85,32 @@ type Scopes = {
 	batch?: boolean | undefined;
 };
 
-/** The per-apply state cells the tool-results arm reads. */
+/**
+ * The per-apply state cells the tool-results arm reads.
+ */
 type State = {
 	Scopes?: Scopes | undefined;
 	Exempt?: string[] | undefined;
 };
 
-/** The structural tool execution: only the fields the arm reads. */
+/**
+ * The structural tool execution: only the fields the arm reads.
+ */
 type Execution = { name?: unknown; callId?: unknown };
 
-/** The structural tool execution result: only the content basis. */
+/**
+ * The structural tool execution result: only the content basis.
+ */
 type Result = { content?: unknown };
 
-/** The structural post-tool decision: the fields the arm reads/writes. */
+/**
+ * The structural post-tool decision: the fields the arm reads/writes.
+ */
 type Decision = { kind?: unknown; content?: readonly unknown[]; value?: unknown };
 
-/** The injected ledger sink: the factory's Append/Journal, module-typed. */
+/**
+ * The injected ledger sink: the factory's Append/Journal, module-typed.
+ */
 type Ledger<S> = {
 	Append: (State: S, Line: string) => void;
 	Journal: (State: S, Event: string, Path: string, Value: string) => void;

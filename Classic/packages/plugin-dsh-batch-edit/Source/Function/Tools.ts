@@ -1,3 +1,15 @@
+import { defineTool, type ToolRunContext } from "@deepseek-ai/dsh-tools";
+import type { JobsHub } from "@Interface/Events.js";
+import type Output from "@Interface/Output.js";
+import type { MachineRecord } from "@Interface/Process.js";
+import type State from "@Interface/State.js";
+import { Decide } from "@playform/plugin-dsh-factory";
+
+import * as Ledger from "./Ledger.js";
+import * as Machine from "./Machine.js";
+import * as Ops from "./Ops.js";
+import { Cells, Prose } from "./Present.js";
+
 /**
  * @module Tools
  *
@@ -6,6 +18,7 @@
  * RESIDUALS item 1).
  *
  * @remarks
+ *
  * Flat parameters, grouped by prefix; the canonical output value is ONE JSON
  * object; output.render turns it into the model-facing prose (Function/Present);
  * presentationMeta carries the diffs for the UI's diff card (the cookbook path -
@@ -25,18 +38,6 @@
  * - close - close the machine (halted processes settle to done-able; the
  *   settle-first rule runs in Machine.Close)
  */
-import { defineTool, type ToolRunContext } from "@deepseek-ai/dsh-tools";
-import type { JobsHub } from "@Interface/Events.js";
-import type Output from "@Interface/Output.js";
-import type { MachineRecord } from "@Interface/Process.js";
-import type State from "@Interface/State.js";
-import { Decide } from "@playform/plugin-dsh-factory";
-
-import * as Ledger from "./Ledger.js";
-import * as Machine from "./Machine.js";
-import * as Ops from "./Ops.js";
-import { Cells, Prose } from "./Present.js";
-
 /**
  * Find a machine by id: the calling agent's scope first, then every scope
  * (the multi-agent sharing residual - the session/event fold is later work;

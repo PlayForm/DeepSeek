@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "../Interface/Config.js";
+export default _default;
 /**
  * @module Apply
  *
@@ -6,6 +9,7 @@
  * provider, injected as `pluginFactory` - see Library.ts).
  *
  * @remarks
+ *
  *   1. State - the factory's State builder (cell unwrap, the fixed shared
  *      mappings Tool<-mutationTools / Policy<-policyFile / Ledger<-logFile /
  *      Enabled<-log / List<-exclude, the module fields by name, the fresh
@@ -31,7 +35,4 @@
  * in-flight/breaker maps through the `ctx.__hookDshGovernorCargoState`
  * attachment instead.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
-export default _default;
 declare function _default(Context: Context, Options: Config): void;

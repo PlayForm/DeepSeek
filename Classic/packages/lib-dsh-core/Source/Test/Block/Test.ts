@@ -1,3 +1,8 @@
+import assert from "node:assert/strict";
+
+import { Block, Dashes, Replace } from "../../../Target/Library.js";
+import { Check, Finish as Guard, MakeCounter } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +10,7 @@
  * transform.
  *
  * @remarks
+ *
  * The test covers text/reasoning/thinking rewritten, the tool-call JSON
  * gated by the tool-args flag ON + OFF, the three exemptions (edit,
  * raw-write, normalize-file), the raw-marker strip, and the unknown-block
@@ -17,11 +23,6 @@
  * NOTE: the harness's Finish guard is aliased to `Guard` here so the source
  * suite's fixture naming stays untouched.
  */
-import assert from "node:assert/strict";
-
-import { Block, Dashes, Replace } from "../../../Target/Library.js";
-import { Check, Finish as Guard, MakeCounter } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

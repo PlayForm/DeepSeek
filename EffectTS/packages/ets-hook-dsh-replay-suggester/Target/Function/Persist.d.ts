@@ -8,6 +8,7 @@ export default _default;
  * domain when it is open, the JSON fallback otherwise.
  *
  * @remarks
+ *
  * Serialised on the store chain by Function/Record, so two calls in one turn
  * can never interleave their writes, and the smokes' Flush seam sees every
  * write.
@@ -23,9 +24,15 @@ export default _default;
  * the append (the bounded size, never the lifetime total).
  */
 declare function _default(
-/** The plugin state (the handle, the mirror, the record path, the ledger). */
+/**
+ * The plugin state (the handle, the mirror, the record path, the ledger).
+ */
 State: State, 
-/** The entry just recorded (its intent is final by now). */
+/**
+ * The entry just recorded (its intent is final by now).
+ */
 Entry_: Entry, 
-/** The bounded store size right after this append (captured at record time). */
+/**
+ * The bounded store size right after this append (captured at record time).
+ */
 Size: number): Promise<void>;

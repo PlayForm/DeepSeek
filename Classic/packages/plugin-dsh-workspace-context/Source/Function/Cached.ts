@@ -1,3 +1,10 @@
+import type Packet from "@Interface/Packet.js";
+import type Query from "@Interface/Query.js";
+import type State from "@Interface/State.js";
+
+import CacheKey from "./CacheKey.js";
+import PacketBuild from "./Packet.js";
+
 /**
  * @module Cached
  *
@@ -7,6 +14,7 @@
  * oldest key past the fixed 256-entry bound.
  *
  * @remarks
+ *
  * The skipped build is the graph snapshot/find/expand reads, the ranking,
  * and the budget clamp.
  *
@@ -17,13 +25,6 @@
  * The memo is a performance cache only - a cleared map changes nothing but
  * the next build.
  */
-import type Packet from "@Interface/Packet.js";
-import type Query from "@Interface/Query.js";
-import type State from "@Interface/State.js";
-
-import CacheKey from "./CacheKey.js";
-import PacketBuild from "./Packet.js";
-
 const LIMIT = 256;
 
 export default (State: State, Options: Query): Packet => {

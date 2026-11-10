@@ -1,3 +1,16 @@
+import type { Context } from "@deepseek-ai/cordis";
+import Gate from "@Function/Gate.js";
+import Inbox from "@Function/Inbox.js";
+import Policy from "@Function/Policy.js";
+import { Now, Record, Sweep } from "@Function/Proposals.js";
+import Tool from "@Function/Tool.js";
+import type { BatchProposal } from "@Interface/Batch.js";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+import { Decide } from "@playform/plugin-dsh-factory";
+import Version from "@Variable/Version.js";
+
 /**
  * @module Apply
  *
@@ -5,6 +18,7 @@
  * durable activation proof, the listeners, and the tool registration.
  *
  * @remarks
+ *
  * L1 batch/proposed (emit, structural registration, host scope) is the
  * synchronous recorder. One proposal at a time: record it (a lower revision
  * than the recorded one is ignored), evaluate expiry, and evaluate the
@@ -35,19 +49,6 @@
  * - no awaits, no throws, no file I/O. The waterfall family is not touched by
  * this hook.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import Gate from "@Function/Gate.js";
-import Inbox from "@Function/Inbox.js";
-import Policy from "@Function/Policy.js";
-import { Now, Record, Sweep } from "@Function/Proposals.js";
-import Tool from "@Function/Tool.js";
-import type { BatchProposal } from "@Interface/Batch.js";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-import { Decide } from "@playform/plugin-dsh-factory";
-import Version from "@Variable/Version.js";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
  */

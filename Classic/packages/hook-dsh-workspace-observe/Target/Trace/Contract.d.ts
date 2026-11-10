@@ -8,6 +8,7 @@ export default _default;
  * `observe/stamp`.
  *
  * @remarks
+ *
  * The event carries the recorded stamp's path, version and origin (the hook's
  * own monotonic sequence stays private - the trace does not carry it). The
  * draft is completed by the bus (Function/Complete in

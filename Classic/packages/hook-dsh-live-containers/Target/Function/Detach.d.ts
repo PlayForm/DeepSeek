@@ -1,3 +1,6 @@
+import type { PreToolDecision, ToolDispatchExecution, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
+import type { Log } from "./Render.js";
+import type State from "../Interface/State.js";
 /**
  * @module Detach
  *
@@ -5,6 +8,7 @@
  * Requirements/01 section 12).
  *
  * @remarks
+ *
  * The pre-execute arm decides + starts the job + tags the exec object; the
  * execute arm, seeing the tag, returns the fabricated canonical-value result
  * WITHOUT calling `next()` - the bash body never runs, and the pipeline
@@ -24,15 +28,16 @@
  * the ledger records `transform failed <tool> -> inline`, and the call runs
  * inline exactly as if the plugin were not mounted. The listener NEVER denies.
  */
-import type { PreToolDecision, ToolDispatchExecution, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
-import type { Log } from "./Render.js";
-import type State from "../Interface/State.js";
 /** The inline marker (design section 4.1, byte-exact):
  * `[live] <job-id> running: <cmd-head> - output pending; proceed reasoning.` */
 export declare const Marker: (JobID: string, CmdHead: string) => string;
-/** The dedup variant's second line (design section 4.1, byte-exact). */
+/**
+ * The dedup variant's second line (design section 4.1, byte-exact).
+ */
 export declare const AlreadyLine: (JobID: string) => string;
-/** The retry-loop extension's line (design section 6 scenario 5, byte-exact). */
+/**
+ * The retry-loop extension's line (design section 6 scenario 5, byte-exact).
+ */
 export declare const RetryLine: (JobID: string, Attempt: number) => string;
 /** The AWAIT-MARKER detection (I2 section 2): the FIRST-KEY test on the
  * arguments - `{"__await":true` - exactly like the normalize family's

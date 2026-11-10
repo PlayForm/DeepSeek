@@ -1,12 +1,18 @@
-// Source/Test/Config-And-Tab/Test.ts - the client half's registration
-// surface, exercised through the records the real built client apply
-// actually produced: the one conversation.view tab (id, order, locale
-// namespace), the pre-locale label, the registered dictionaries, and the
-// Config schema's volatile defaults read from Target/Library.js through
-// the alias hooks.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, MakeClient, Plugin, Validate } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The client half's registration surface, exercised through the records the real
+ * built client apply actually produced.
+ *
+ * @remarks
+ *
+ * The suite proves the one conversation.view tab (id, order, locale namespace),
+ * the pre-locale label, the registered dictionaries, and the Config schema's
+ * volatile defaults read from Target/Library.js through the alias hooks.
+ */
 /** The schema evaluated once at suite start: the call yields the defaults
  *  when the test build resolves schemastery, and null when it does not (the
  *  call itself throws), which switches C4 to the key-presence fallback. */

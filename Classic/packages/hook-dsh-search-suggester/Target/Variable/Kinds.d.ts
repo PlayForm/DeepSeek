@@ -5,6 +5,7 @@
  * projection's kind test).
  *
  * @remarks
+ *
  * The order is the preference: Measure picks the first expected kind present at a path, so a
  * suite file answers a Test intent with its `Test` node (not its `File` node) and a
  * definition answers a Symbol intent with its `Symbol` node.
@@ -17,6 +18,8 @@
  * expects nothing in particular, and every hit counts as an unexpected kind (the lower
  * literal tier).
  */
-/** The expected node kinds per search family, in preference order. */
+/**
+ * The expected node kinds per search family, in preference order.
+ */
 declare const _default: Record<string, string[]>;
 export default _default;

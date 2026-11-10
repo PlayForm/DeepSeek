@@ -1,3 +1,5 @@
+import Match from "./Match.js";
+
 /**
  * @module Ring
  *
@@ -7,6 +9,7 @@
  * NOTE the follow-through watches.
  *
  * @remarks
+ *
  * Completion spec 03-SUGGESTERS section 2: "watch the next judged calls
  * within a window".
  *
@@ -19,8 +22,6 @@
  * forgets an open note without a verdict (the turn boundary is not a judged
  * call), so a reset never invents an outcome.
  */
-import Match from "./Match.js";
-
 /**
  * One open note awaiting its follow-through verdict.
  */

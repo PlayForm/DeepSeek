@@ -1,3 +1,8 @@
+import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +10,7 @@
  * custom-replacement run.
  *
  * @remarks
+ *
  * The one singular test covers the P5 record shape and routing, the
  * N=0/throw/identity negative controls, the custom `$`-literal replacement (the
  * Config unwrap, the literal insertion, its count line and its journal record),
@@ -22,11 +28,6 @@
  * (`node Target/Test/Journal-And-Custom/Test.js`) and under the aggregate
  * (`Maintain/Run/Smokes/Index.mjs` spawns it).
  */
-import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
-
-import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

@@ -1,3 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import Inbox from "@Function/Inbox.js";
+import Recover from "@Function/Recover.js";
+import ServiceClass from "@Function/Service.js";
+import Storage from "@Function/Storage.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+
 /**
  * @module Apply
  *
@@ -5,6 +15,7 @@
  * service, appends the activation proof, and recovers the store.
  *
  * @remarks
+ *
  * The State build is the factory's cell unwrap plus the P10 volatile refresh. The service
  * registration (Function/Service - `batchstate`) is constructed here so `ctx.batchstate` resolves.
  *
@@ -25,20 +36,14 @@
  * The function returns NOTHING (the loader contract: a returned value silently kills event
  * delivery). The test probe is the `ctx.__pluginDshBatchstateState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import Inbox from "@Function/Inbox.js";
-import Recover from "@Function/Recover.js";
-import ServiceClass from "@Function/Service.js";
-import Storage from "@Function/Storage.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-
-/** The storage-domain name rule (the library's UNIT_NAME_RE). */
+/**
+ * The storage-domain name rule (the library's UNIT_NAME_RE).
+ */
 const UNIT = /^[a-z][a-z0-9_]*$/;
 
-/** Unwrap one possibly-volatile config cell (`{ get }` reference or value). */
+/**
+ * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
+ */
 const Cell = (Value: unknown): unknown =>
 	typeof (Value as { get?: unknown } | null)?.get === "function"
 		? (Value as { get: () => unknown }).get()

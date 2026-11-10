@@ -1,4 +1,4 @@
-import type CheckSet from "@Interface/CheckSet.js";
+import type CheckSet from "../Interface/CheckSet.js";
 /**
  * @module DefaultCheckSets
  *

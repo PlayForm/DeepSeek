@@ -1,13 +1,3 @@
-/**
- * @module Child
- *
- * The minimal fallback path of the cargo upgrade runner, used when no
- * subprocess seam exists in this deployment.
- *
- * @remarks
- * Asynchronous (the continuation owns the wait); the abort signal kills the
- * child. The process management is not exempt — only the cargo CLI is.
- */
 import * as ChildProcess from "node:child_process";
 
 import type Invocation from "@Interface/Invocation.js";
@@ -17,6 +7,17 @@ import type PluginFactory from "@playform/plugin-dsh-factory";
 
 import Unavailable from "./Unavailable.js";
 
+/**
+ * @module Child
+ *
+ * The minimal fallback path of the cargo upgrade runner, used when no
+ * subprocess seam exists in this deployment.
+ *
+ * @remarks
+ *
+ * Asynchronous (the continuation owns the wait); the abort signal kills the
+ * child. The process management is not exempt — only the cargo CLI is.
+ */
 export default (
 	Factory: PluginFactory,
 	State: State,

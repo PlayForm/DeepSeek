@@ -4,6 +4,7 @@
  * The obligation outcome vocabulary (the Check function's return contract).
  *
  * @remarks
+ *
  * One entry per obligation:
  *
  * - "satisfied" - the check evaluated and passed.

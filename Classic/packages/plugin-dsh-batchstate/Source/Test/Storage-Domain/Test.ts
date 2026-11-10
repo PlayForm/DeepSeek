@@ -1,17 +1,3 @@
-/**
- * @module Test
- *
- * The storage-domain PRIMARY store and the JSON fallback: the byte-exact domain spec, the open,
- * the per-mutation round-trip, the reopen restoring the board, the absent-facility fallback and
- * the domain-version failure mode.
- *
- * @remarks
- * The domain spec carries name/version/layout/tables and NO compatibleVersions. The per-mutation
- * round-trip puts the spliced proposals, the gates, the members and the idle queue in their
- * tables, and a clear deletes them. A reopen (restart) restores the board. With the facility
- * absent the fallback still writes and reads the JSON state file. A domain-version mismatch
- * writes a loud line and then falls back to JSON.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {
@@ -29,7 +15,24 @@ import {
 	rm,
 } from "../Harness.js";
 
-/** The canonical proposal fixture (the batch contract the pass-on emits). */
+/**
+ * @module Test
+ *
+ * The storage-domain PRIMARY store and the JSON fallback: the byte-exact domain spec, the open,
+ * the per-mutation round-trip, the reopen restoring the board, the absent-facility fallback and
+ * the domain-version failure mode.
+ *
+ * @remarks
+ *
+ * The domain spec carries name/version/layout/tables and NO compatibleVersions. The per-mutation
+ * round-trip puts the spliced proposals, the gates, the members and the idle queue in their
+ * tables, and a clear deletes them. A reopen (restart) restores the board. With the facility
+ * absent the fallback still writes and reads the JSON state file. A domain-version mismatch
+ * writes a loud line and then falls back to JSON.
+ */
+/**
+ * The canonical proposal fixture (the batch contract the pass-on emits).
+ */
 const Proposal = (): any => ({
 	id: "prop-1",
 	intent: "version-bump",
@@ -51,13 +54,19 @@ const Proposal = (): any => ({
 	origin: "agent-a",
 });
 
-/** The board entry the state file / the proposals table holds. */
+/**
+ * The board entry the state file / the proposals table holds.
+ */
 const Entry = (): any => ({ proposal: Proposal(), status: "proposed", at: 1_000_000 });
 
-/** The gate the state file / the gates table holds. */
+/**
+ * The gate the state file / the gates table holds.
+ */
 const Gate = (): any => ({ name: "build", state: "green", owner: "" });
 
-/** One inbox message carrying the text (the harness's UserMessage shape). */
+/**
+ * One inbox message carrying the text (the harness's UserMessage shape).
+ */
 const Message = (Id: string, Text: string): any => ({
 	id: Id,
 	role: "user",
@@ -65,7 +74,9 @@ const Message = (Id: string, Text: string): any => ({
 	source: { kind: "user" },
 });
 
-/** The durable splice the agent-loop appends (the session/event channel). */
+/**
+ * The durable splice the agent-loop appends (the session/event channel).
+ */
 const Splice = (Run: any, Text: string, Id = "msg-1"): void => {
 	Run.CtxListeners["session/event"](
 		{ id: "agent-a" },
@@ -76,7 +87,9 @@ const Splice = (Run: any, Text: string, Id = "msg-1"): void => {
 	);
 };
 
-/** The proposal block the pass-on renders (the cross-package wire). */
+/**
+ * The proposal block the pass-on renders (the cross-package wire).
+ */
 const ProposalBlock = (Value: any): string =>
 	`[BATCH PROPOSAL - ${Value.id}]\n${JSON.stringify(Value)}`;
 
@@ -99,7 +112,9 @@ const Reopen = (Config: Record<string, unknown> = {}, Store?: any): any => {
 	return Setup(Config, Store);
 };
 
-/** The apply over the (already prepared) fixture state. */
+/**
+ * The apply over the (already prepared) fixture state.
+ */
 const Setup = (Config: Record<string, unknown> = {}, Store?: any): any =>
 	Make(Validate({ logFile: Ledger, enabled: true, stateFile: StateFile, ...Config }), (Context: any) => {
 		if (Store !== undefined) {
@@ -107,7 +122,9 @@ const Setup = (Config: Record<string, unknown> = {}, Store?: any): any =>
 		}
 	});
 
-/** The persisted JSON fallback file, parsed. */
+/**
+ * The persisted JSON fallback file, parsed.
+ */
 const ReadFile = (): any => JSON.parse(FileSystem.readFileSync(StateFile, "utf8"));
 
 export const runTest = async (): Promise<number> => {

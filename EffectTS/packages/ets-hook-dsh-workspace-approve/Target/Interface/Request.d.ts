@@ -5,6 +5,7 @@
  * change set being executed.
  *
  * @remarks
+ *
  * The check (Function/Check) answers one question about it: does an APPROVED
  * binding cover THIS EXACT candidate?
  */

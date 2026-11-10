@@ -1,9 +1,14 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
  * The entry module (mirrors Source/Library.rs).
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` +
  * `export const Config` + `export const inject` +
  * `export default { name, apply, Config, inject }` - the ONLY named exports
@@ -57,14 +62,14 @@
  * is keyed on the agent's session id; the durable record is the ledger file
  * (one log per module).
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
-/** The loader's plugin name. */
+/**
+ * The loader's plugin name.
+ */
 export const name = "hook-dsh-live-containers";
 
-/** The exported schema, validated and defaulted while the plugin loads. */
+/**
+ * The exported schema, validated and defaulted while the plugin loads.
+ */
 export const Config = Definition;
 
 /** The compiled package version (Source/Variable/Version, built in by the
@@ -93,8 +98,12 @@ export const inject = [
 	"jobs",
 ];
 
-/** The entry function (Function/Apply). */
+/**
+ * The entry function (Function/Apply).
+ */
 export const apply = Apply;
 
-/** The loader's default object: all four contract keys together. */
+/**
+ * The loader's default object: all four contract keys together.
+ */
 export default { name, apply, Config, inject };

@@ -1,12 +1,16 @@
 import type { CheckResult, MonitorEntry } from "../Interface/Events.js";
 import type State from "../Interface/State.js";
-/** The bytes of one string. */
+/**
+ * The bytes of one string.
+ */
 export declare const Bytes: (Text: string) => number;
 /** The version display: the raw token verbatim when <= 12 bytes, else the
  * first 12 bytes + "..". The staleness comparison ALWAYS uses the raw
  * tokens - this is display only. */
 export declare const VersionDisplay: (Version: string) => string;
-/** The writer display: "-" when absent. */
+/**
+ * The writer display: "-" when absent.
+ */
 export declare const Writer: (Writer: string | undefined) => string;
 /** One result's state (the worst-state order: stale > problem > infra >
  * clean > not-run-yet). */

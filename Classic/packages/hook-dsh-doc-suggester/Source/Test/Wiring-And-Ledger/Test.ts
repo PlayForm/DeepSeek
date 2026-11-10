@@ -1,18 +1,3 @@
-/**
- * @module Test
- *
- * The wiring and the ledger: the loader contract, the context-only listener registration, the
- * byte-exact activation and disabled lines, the config fail-loud, the schema defaults and the fs
- * purity.
- *
- * @remarks
- * The loader contract: the default object carries name/apply/Config/inject, and apply returns
- * nothing. The listeners register on the context only, with the distinct root identity. The
- * activation and disabled lines are byte-exact in both the logger form and the durable `[ISO]`
- * form. The suite also proves the config fail-loud and the schema defaults on the built State.
- *
- * The fs purity: the doc suggester is a NON-MANIFEST module, so it makes zero `ctx.fs` calls.
- */
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -35,6 +20,22 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The wiring and the ledger: the loader contract, the context-only listener registration, the
+ * byte-exact activation and disabled lines, the config fail-loud, the schema defaults and the fs
+ * purity.
+ *
+ * @remarks
+ *
+ * The loader contract: the default object carries name/apply/Config/inject, and apply returns
+ * nothing. The listeners register on the context only, with the distinct root identity. The
+ * activation and disabled lines are byte-exact in both the logger form and the durable `[ISO]`
+ * form. The suite also proves the config fail-loud and the schema defaults on the built State.
+ *
+ * The fs purity: the doc suggester is a NON-MANIFEST module, so it makes zero `ctx.fs` calls.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

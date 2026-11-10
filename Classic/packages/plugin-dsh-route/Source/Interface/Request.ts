@@ -1,3 +1,5 @@
+import type { Role, RouteHint } from "./Policy.js";
+
 /**
  * @module Request
  *
@@ -7,12 +9,10 @@
  * flag (the attempts ladder's automatic triggering).
  *
  * @remarks
+ *
  * Every field is optional on purpose: the OMSSION is the normal case the
  * plugin resolves silently - it is never an error to surface.
  */
-
-import type { Role, RouteHint } from "./Policy.js";
-
 export default interface Request {
 	/**
 	 * The declared task type, when the launcher declares one.

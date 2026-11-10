@@ -1,3 +1,20 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type {
+	PostToolDecision,
+	PreToolDecision,
+	ToolExecution,
+	ToolExecutionResult,
+} from "@deepseek-ai/dsh-tools";
+import Decide from "@Function/Decide.js";
+import Extract from "@Function/Extract.js";
+import Guard from "@Function/Guard.js";
+import Match from "@Function/Match.js";
+import ServiceClass from "@Function/Service.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+
 /**
  * @module Apply
  *
@@ -7,6 +24,7 @@
  * and the gate listeners.
  *
  * @remarks
+ *
  * L1 `tools/pre-execute` (waterfall, next() first, fail-open envelope): the
  * gate arm - extract the proposal (the operate family's attached record, or the
  * minimal synthesis from the call itself), run the recursion guard, run the
@@ -30,23 +48,6 @@
  * The function returns NOTHING (the loader contract). The test probe is the
  * `ctx.__hookDshWorkspaceGovernState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type {
-	PostToolDecision,
-	PreToolDecision,
-	ToolExecution,
-	ToolExecutionResult,
-} from "@deepseek-ai/dsh-tools";
-import Decide from "@Function/Decide.js";
-import Extract from "@Function/Extract.js";
-import Guard from "@Function/Guard.js";
-import Match from "@Function/Match.js";
-import ServiceClass from "@Function/Service.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
  */

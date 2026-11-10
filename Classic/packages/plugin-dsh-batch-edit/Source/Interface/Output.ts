@@ -1,3 +1,5 @@
+import type { ProcessStatus } from "./Process.js";
+
 /**
  * @module Output
  *
@@ -5,12 +7,11 @@
  * defineTool law).
  *
  * @remarks
+ *
  * The value renders to model-facing prose by output.render and carries the
  * per-file diffs for the UI's diff card through presentationMeta (the cookbook
  * path - no client half in v1).
  */
-import type { ProcessStatus } from "./Process.js";
-
 /**
  * One per-file cell in the output's `state` array.
  */

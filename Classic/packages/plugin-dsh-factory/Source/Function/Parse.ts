@@ -1,9 +1,12 @@
+import * as FileSystem from "node:fs";
+
 /**
  * @module Parse
  *
  * Read a JSON file, null on any failure.
  *
  * @remarks
+ *
  * Error-contained - every unreadable/non-JSON file maps to null instead of a
  * throw. Byte-identical with the trio's `Function/Parse`.
  *
@@ -12,8 +15,6 @@
  * listener's g2 stage stays await-free. The GOVERNED manifest is never read
  * here: that read goes through `ctx.fs.readText` (`Function/Continue`).
  */
-import * as FileSystem from "node:fs";
-
 export default (Path: string): unknown => {
 	try {
 		return JSON.parse(FileSystem.readFileSync(Path, "utf8"));

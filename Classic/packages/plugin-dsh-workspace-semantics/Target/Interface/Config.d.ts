@@ -1,3 +1,4 @@
+import type { Allowlist } from "@playform/plugin-dsh-factory";
 /**
  * @module Config
  *
@@ -5,23 +6,35 @@
  * and defaults it.
  *
  * @remarks
+ *
  * Every field is a volatile cell (the values may arrive as `{ get }`
  * references; the factory's State builder unwraps and hot-refreshes them in
  * place).
  */
-import type { Allowlist } from "@playform/plugin-dsh-factory";
 export default interface Config {
-    /** The durable ledger file (one log per module). */
+    /**
+     * The durable ledger file (one log per module).
+     */
     logFile: string;
-    /** Ledger enabled - write the durable log file. */
+    /**
+     * Ledger enabled - write the durable log file.
+     */
     log: boolean;
-    /** The master switch - the IDLE-forever posture: false by default. */
+    /**
+     * The master switch - the IDLE-forever posture: false by default.
+     */
     enabled: boolean;
-    /** The KV domain name. */
+    /**
+     * The KV domain name.
+     */
     domain: string;
-    /** The maximum number of built models kept in the index. */
+    /**
+     * The maximum number of built models kept in the index.
+     */
     maxEntries: number;
-    /** The excluded path patterns (no model is built for a matched path). */
+    /**
+     * The excluded path patterns (no model is built for a matched path).
+     */
     exclude: string[];
     /**
      * The workspace root the deepener's queries run against ("" = the process working

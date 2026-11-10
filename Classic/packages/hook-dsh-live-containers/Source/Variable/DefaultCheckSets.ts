@@ -1,3 +1,5 @@
+import type { CheckSetSpecification } from "@Interface/Events.js";
+
 /**
  * @module DefaultCheckSets
  *
@@ -5,6 +7,7 @@
  * section 3.2).
  *
  * @remarks
+ *
  * The same shape the `checksets` config cell holds: dict name -> spec. The
  * catalog is the default value of the `checksets` dict, so the explicit
  * enrollment path (`live_monitor <path>`) classifies out of the box:
@@ -23,10 +26,9 @@
  * renders the linked form and the plugin never re-runs npm (the R3 3.2
  * rule: the governor/pinner's own verbs are not duplicated).
  */
-
-import type { CheckSetSpecification } from "@Interface/Events.js";
-
-/** The schema default of the `checksets` dict (the four shipped sets). */
+/**
+ * The schema default of the `checksets` dict (the four shipped sets).
+ */
 export const DEFAULT_CHECK_SETS: Record<string, CheckSetSpecification> = {
 	tsc: { glob: "**/*.ts", command: "tsc --noEmit {{path}}", fast: true },
 	format: { glob: "**/*.ts", command: "npx prettier --check {{path}}", fast: true },

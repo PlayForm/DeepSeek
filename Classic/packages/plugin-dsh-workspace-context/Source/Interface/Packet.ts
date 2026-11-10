@@ -5,6 +5,7 @@
  * built result and its text form.
  *
  * @remarks
+ *
  * The builder (Function/Packet) produces the result; the render
  * (Function/Render) produces the text the tool and the service return.
  */

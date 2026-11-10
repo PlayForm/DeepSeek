@@ -1,15 +1,3 @@
-/**
- * @module Persist
- *
- * The learned knowledge file (plan section 5): load, update, save.
- *
- * @remarks
- * The file lives under ~/.dsh/search-suggester/ (never the repo), is written atomically (temp
- * + rename) with mode 0600, and keeps the journal bounded (the last 2000 entries, a ring). A
- * load failure or a corrupt file degrades to empty knowledge - the static pack alone is
- * enough to emit (the cold start of plan section 6.4) - and every failure logs through the
- * caller, never throws into the hot path.
- */
 import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
@@ -18,10 +6,27 @@ import { Expand } from "@playform/lib-dsh-core";
 
 import type { Dismissal, Knowledge, KnowledgeRow } from "../Interface/Execution.js";
 
-/** The journal ring's capacity (plan section 5.3). */
+/**
+ * @module Persist
+ *
+ * The learned knowledge file (plan section 5): load, update, save.
+ *
+ * @remarks
+ *
+ * The file lives under ~/.dsh/search-suggester/ (never the repo), is written atomically (temp
+ * + rename) with mode 0600, and keeps the journal bounded (the last 2000 entries, a ring). A
+ * load failure or a corrupt file degrades to empty knowledge - the static pack alone is
+ * enough to emit (the cold start of plan section 6.4) - and every failure logs through the
+ * caller, never throws into the hot path.
+ */
+/**
+ * The journal ring's capacity (plan section 5.3).
+ */
 const JournalLimit = 2000;
 
-/** The empty knowledge (the cold start). */
+/**
+ * The empty knowledge (the cold start).
+ */
 export const Empty = (): Knowledge => ({
 	schema: 1,
 	intents: {},
@@ -31,7 +36,9 @@ export const Empty = (): Knowledge => ({
 	stats: { emitted: 0, followed: 0, ignored: 0, dismissed: 0 },
 });
 
-/** The stats counters, defaulted field by field (an older file may lack one). */
+/**
+ * The stats counters, defaulted field by field (an older file may lack one).
+ */
 const Stats = (Value: unknown): Knowledge["stats"] => {
 	const Stats_ = (Value ?? {}) as Partial<Knowledge["stats"]>;
 	return {
@@ -42,7 +49,9 @@ const Stats = (Value: unknown): Knowledge["stats"] => {
 	};
 };
 
-/** One persisted dismissal, accepted only in its declared shape. */
+/**
+ * One persisted dismissal, accepted only in its declared shape.
+ */
 const ReadDismissal = (Value: unknown): Dismissal | undefined => {
 	const Entry = Value as { intent?: unknown; path?: unknown; until?: unknown } | undefined;
 	if (typeof Entry?.intent !== "string" || Entry.intent.length === 0) {

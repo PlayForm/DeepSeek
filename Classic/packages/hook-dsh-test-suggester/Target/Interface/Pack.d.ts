@@ -5,6 +5,7 @@
  * the note builder consume).
  *
  * @remarks
+ *
  * SEARCH-SUGGESTER-PLUGIN.md §8.2. This hook is a suggester-family CONSUMER:
  * the types here are the contract both the classifier (`Function/Detect`) and
  * the note builder consume. The rows are no longer a built-in projection

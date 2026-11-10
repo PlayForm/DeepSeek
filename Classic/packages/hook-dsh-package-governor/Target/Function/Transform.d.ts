@@ -1,3 +1,9 @@
+import type { FsTarget } from "@deepseek-ai/dsh-fs";
+import type Passage from "../Interface/Passage.js";
+import type Registry from "../Interface/Registry.js";
+import type State from "../Interface/State.js";
+import type { Transform } from "../Interface/Transform.js";
+export default _default;
 /**
  * @module Transform
  *
@@ -5,6 +11,7 @@
  * a factory transform.
  *
  * @remarks
+ *
  * The transform has the factory shape `(current, section, keep) => { next, count, message? } |
  * null` (SCHEME.md §3 item 3). The factory's Continue (Function/Continue - SCHEME.md §2.9)
  * owns everything around it: the Inflight registration, the `ctx.fs.readText`, the union
@@ -39,10 +46,4 @@
  * stage checked for the `unreadable registry.json ...` line - so the transform never re-reads
  * it.
  */
-import type { FsTarget } from "@deepseek-ai/dsh-fs";
-import type Passage from "../Interface/Passage.js";
-import type Registry from "../Interface/Registry.js";
-import type State from "../Interface/State.js";
-import type { Transform } from "../Interface/Transform.js";
-export default _default;
 declare function _default(State: State, Target: FsTarget, Registry: Registry | null, Passage: Passage): Transform;

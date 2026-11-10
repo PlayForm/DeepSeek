@@ -1,3 +1,18 @@
 import type State from "../Interface/State.js";
 export default _default;
+/**
+ * @module Resolve
+ *
+ * Host-side update-policy path resolution.
+ *
+ * @remarks
+ *
+ * Order: the configured global policyFile -> the file's own directory -> co-located with the
+ * discovered registry -> "" (the built-in default, handled inside the update job when no
+ * policy file resolves).
+ *
+ * Exemption (documented): `existsSync` probes on auxiliary discovery files only
+ * (update-policy.json sidecars) - part of the policy-discovery calculation, same exemption as
+ * Function/Discover. The governed manifest is never touched here.
+ */
 declare function _default(State: State, Dir: string, Found: string | null): string;

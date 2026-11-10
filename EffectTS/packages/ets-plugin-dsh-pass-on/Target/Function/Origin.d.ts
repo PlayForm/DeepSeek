@@ -6,6 +6,7 @@ export default _default;
  * and to whose inbox the decision returns.
  *
  * @remarks
+ *
  * 1. The caller's explicit origin (the tool/subagent that asked for the batch)
  *    wins.
  * 2. Otherwise the harness's INITIATOR - the exact agent whose driver chain

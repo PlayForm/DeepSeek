@@ -1,3 +1,10 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import * as Pinner from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -6,6 +13,7 @@
  * built Target.
  *
  * @remarks
+ *
  * The fake ctx carries on/emit/effect/get/reflect capture + the root seam;
  * the real-token fs backend runs real temp-dir I/O whose version tokens
  * dev:size:mtimeNs:ctimeNs enforce the replaceIfVersion guard; the real
@@ -20,13 +28,6 @@
  * prepublishOnly.sh gates the build on it. Imported as a library, this module
  * only exports.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import * as Pinner from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks.
  * Passed by reference so Check can bump it from inside its callback.

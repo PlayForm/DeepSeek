@@ -1,3 +1,14 @@
+import Clock from "@Function/Clock.js";
+import { Table } from "@Function/Counters.js";
+import {
+	RENDERED_KINDS,
+	type AgentState,
+	type BlockSpecification,
+	type Frame as FrameRow,
+	type Variables,
+} from "@Interface/Execution.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Render
  *
@@ -5,6 +16,7 @@
  * IMPLEMENTATION-DESIGN.md section 3.1, phase 1).
  *
  * @remarks
+ *
  * `{{token}}` replace ONLY - no eval, no expressions, no `new Function`
  * (research section 5: the programmable stage routes evaluation through the
  * ptc-runtime later; v1 has no evaluation path at all, provable by grep in
@@ -29,24 +41,19 @@
  * Fail-open: a render failure skips the block and logs
  * `render failed <id> -> skipped`; the assembly still resolves.
  */
-import Clock from "@Function/Clock.js";
-import { Table } from "@Function/Counters.js";
-import {
-	RENDERED_KINDS,
-	type AgentState,
-	type BlockSpecification,
-	type Frame as FrameRow,
-	type Variables,
-} from "@Interface/Execution.js";
-import type State from "@Interface/State.js";
-
-/** The ledger sink Apply passes down (Factory.Append with the State bound). */
+/**
+ * The ledger sink Apply passes down (Factory.Append with the State bound).
+ */
 export type Log = (Message: string) => void;
 
-/** The strict {{token}} grammar: one replace pass, no nesting, no expressions. */
+/**
+ * The strict {{token}} grammar: one replace pass, no nesting, no expressions.
+ */
 const Token = /\{\{([^{}]+)\}\}/g;
 
-/** The bytes of one string (the ledger's (<len> bytes) values). */
+/**
+ * The bytes of one string (the ledger's (<len> bytes) values).
+ */
 const Bytes = (Text: string): number => Buffer.byteLength(Text, "utf8");
 
 /** Substitute {{token}} groups from the variable table. A token the table
@@ -71,11 +78,15 @@ export const Substitute = (Template: string, Vars: Variables, ID: string, Append
 	return Text;
 };
 
-/** The fixed frame around one block body (the model-facing contract). */
+/**
+ * The fixed frame around one block body (the model-facing contract).
+ */
 export const Frame = (Separator: string, ID: string, Body: string): string =>
 	`${Separator} LIVE CONTAINER ${ID} (recomputed each request; not harness state) ${Separator}\n${Body}\n${Separator} END LIVE CONTAINER ${ID} ${Separator}`;
 
-/** The one-line summary a collapsed frame leaves behind (never silent). */
+/**
+ * The one-line summary a collapsed frame leaves behind (never silent).
+ */
 const Summary = (Separator: string, ID: string, Length: number): string =>
 	`${Separator} LIVE CONTAINER ${ID} (collapsed, ${Length} bytes; not harness state) ${Separator}`;
 
@@ -89,7 +100,9 @@ const KindTokens: Record<string, readonly string[] | undefined> = {
 	note: [],
 };
 
-/** The per-kind variable view (a VIEW of the shared table - no recompute). */
+/**
+ * The per-kind variable view (a VIEW of the shared table - no recompute).
+ */
 const View = (Kind: string, Table_: Variables, Own: Record<string, string>): Variables => {
 	const Allowed = KindTokens[Kind];
 	const Vars: Variables = {};

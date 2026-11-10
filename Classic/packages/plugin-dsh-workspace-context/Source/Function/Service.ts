@@ -1,3 +1,9 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import Cached from "@Function/Cached.js";
+import type Packet from "@Interface/Packet.js";
+import type Query from "@Interface/Query.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Service
  *
@@ -5,6 +11,7 @@
  * Service base and is REGISTERED FROM APPLY.
  *
  * @remarks
+ *
  * The loader contract for the object-form plugin: apply constructs the
  * service; the Service base constructor calls
  * ctx.reflect.provide("workspaceContext", this), so `ctx.workspaceContext`
@@ -19,12 +26,6 @@
  *   focusOf(caller)   - the caller's tracked focus, or undefined;
  *   statistics()      - { packets, clamped, stale, budget }.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import Cached from "@Function/Cached.js";
-import type Packet from "@Interface/Packet.js";
-import type Query from "@Interface/Query.js";
-import type State from "@Interface/State.js";
-
 export default class WorkspaceContext extends Service {
 	/**
 	 * The apply-built state the methods read and write.

@@ -1,3 +1,5 @@
+import type Proposal from "@Interface/Proposal.js";
+
 /**
  * @module Extract
  *
@@ -5,6 +7,7 @@
  * gate evaluates.
  *
  * @remarks
+ *
  * When the operate family attached its record (`arguments.proposal`) the
  * record is used as-is (validated field by field, never guessed); otherwise a
  * MINIMAL proposal is synthesized from the call itself - kind = tool name,
@@ -13,8 +16,6 @@
  * recursion-prevention fields are NEVER left empty), declared = false (the
  * lenient reading: the contributes obligation evaluates "n/a").
  */
-import type Proposal from "@Interface/Proposal.js";
-
 const TARGET_KEYS = ["path", "target", "file", "filePath", "notePath"];
 
 export default (Exec: {

@@ -1,3 +1,5 @@
+import type { CompiledIntent, Intent, Match } from "@Interface/Pack.js";
+
 /**
  * @module Detect
  *
@@ -5,6 +7,7 @@
  * against compiled rules and returns the winning Match or null.
  *
  * @remarks
+ *
  * The plan §4.3 shape: pure function, no LLM, no I/O, O(intents x rules) plus
  * a map lookup. Given the compiled rules (the synthetic `History` family
  * first, then an explicit pack's families) and a call probe (the tool name +
@@ -20,8 +23,6 @@
  * The regexes arrive precompiled (`Function/Apply` compiles once at apply) -
  * the hot path never compiles a regex.
  */
-import type { CompiledIntent, Intent, Match } from "@Interface/Pack.js";
-
 /**
  * The plan's bias constant (§3.5): keeps a single weak signal below the gate.
  */

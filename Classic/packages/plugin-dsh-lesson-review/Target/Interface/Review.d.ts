@@ -4,6 +4,7 @@
  * The review's INPUT snapshot and its result record.
  *
  * @remarks
+ *
  * THE SNAPSHOT IS PASSED IN, never re-read: the caller hands the service the
  * conversation it already holds, exactly as the Hermes fork receives
  * `messages_snapshot`. Two consequences, both deliberate:

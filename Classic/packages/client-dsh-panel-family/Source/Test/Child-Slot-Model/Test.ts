@@ -1,9 +1,13 @@
+import assert from "node:assert/strict";
+import { Check, Finish, MakeCounter, Make } from "../Harness.js";
+
 /**
  * @module Test
  *
  * The v4.1 child-slot model, proven against the real built client apply.
  *
  * @remarks
+ *
  * Both panels declare their child slots in the registration's `children`
  * table, the fifteen shipped adapters inject the section slot and register one
  * child each with its manifest through the inject face, and the slot-aware
@@ -15,14 +19,13 @@
  * mount, and each panel hands its declared child slot to the renderer through
  * renderSlot.
  */
-import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make } from "../Harness.js";
-
 const SECTION = "playform.panel.section";
 const OVERLAY = "playform.panel.overlay";
 const NAMESPACE = "client-dsh-panel-family";
 
-/** A minimal slot-aware adapter manifest (one per bundle per slot). */
+/**
+ * A minimal slot-aware adapter manifest (one per bundle per slot).
+ */
 const Adapter = (Id: string, Bundle: string, Order = 50, Slot: any = SECTION): any => ({
 	id: Id,
 	bundle: Bundle,

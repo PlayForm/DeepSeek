@@ -1,3 +1,8 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose } from "@playform/plugin-dsh-factory";
+import { NOTE_DENIED, NOTE_DENIED_TOOL, NOTE_FIRST, NOTE_PERSISTENT } from "@Variable/Notes.js";
+import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
+
 /**
  * @module Config
  *
@@ -5,6 +10,7 @@
  * at load).
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every
  * default, so invalid configuration fails LOUD at load instead of silently
  * falling back per-field, and `apply` receives a validated plain config
@@ -34,11 +40,6 @@
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance -
  * the loader consumes it through the Standard Schema `~standard` interface).
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
-import { NOTE_DENIED, NOTE_DENIED_TOOL, NOTE_FIRST, NOTE_PERSISTENT } from "@Variable/Notes.js";
-import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
-
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-tool-coach.log";
 const DefaultEnabled = true;
 const DefaultJudgeTools = ["bash", "pwsh"];

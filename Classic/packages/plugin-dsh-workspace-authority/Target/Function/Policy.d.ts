@@ -7,6 +7,7 @@ export default _default;
  * The policy table lookup: the first rule whose kind matches wins.
  *
  * @remarks
+ *
  * The first rule whose kind matches the residency record's kind (exactly or
  * "*") wins. No match returns undefined - the default disposition "keep"
  * applies (the license decides conservatively when unconfigured).

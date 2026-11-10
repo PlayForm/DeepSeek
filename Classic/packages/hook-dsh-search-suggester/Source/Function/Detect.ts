@@ -1,3 +1,5 @@
+import type { CallView, Detection, Intent } from "../Interface/Execution.js";
+
 /**
  * @module Detect
  *
@@ -5,6 +7,7 @@
  * returns the ranked detections.
  *
  * @remarks
+ *
  * The module is the plan's section 4.3. No LLM in the hot path; the rules are the pack's
  * regex sources compiled here per call (the hot path's compiled-once optimization is the
  * end-phase's measured concern; the PoC keeps one pure function); the cost is O(10 intents x
@@ -24,9 +27,9 @@
  * when its kappa is within 0.1) are chosen by Score, which owns the kappa math; Detect only
  * ranks.
  */
-import type { CallView, Detection, Intent } from "../Interface/Execution.js";
-
-/** The keywords that trigger the R12 context bonus per intent id. */
+/**
+ * The keywords that trigger the R12 context bonus per intent id.
+ */
 const CONTEXT_WORDS: Record<string, string> = {
 	Version: "bump|release|version",
 	Path: "rename|move|path",
@@ -41,16 +44,24 @@ const CONTEXT_WORDS: Record<string, string> = {
 };
 
 export default (
-	/** The pack: the intents in priority order. */
+	/**
+	 * The pack: the intents in priority order.
+	 */
 	Pack: Intent[],
 
-	/** The current judged call. */
+	/**
+	 * The current judged call.
+	 */
 	Call: CallView,
 
-	/** The ring: the last calls' intent ids, oldest first (the most recent 4 are read). */
+	/**
+	 * The ring: the last calls' intent ids, oldest first (the most recent 4 are read).
+	 */
 	Intents: string[],
 
-	/** The user text (the latest user message), lowercased. */
+	/**
+	 * The user text (the latest user message), lowercased.
+	 */
 	UserText: string,
 ): Detection[] => {
 	const Recent = Intents.slice(-4);

@@ -4,6 +4,7 @@
  * The STATIC dependency section names the cargo module may amend.
  *
  * @remarks
+ *
  * The Cargo.toml analog of the package.json governor's four dep sections. Two
  * dynamic shapes are handled where the sections are WALKED (Function/Decode
  * identifies dependency tables, and only identified tables are amendable):

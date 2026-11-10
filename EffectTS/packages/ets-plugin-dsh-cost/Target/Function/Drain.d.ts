@@ -7,6 +7,7 @@ import type Config from "../Interface/Config.js";
  * capture-queue acknowledgement.
  *
  * @remarks
+ *
  * Every caller that omits it books, which is the live flush and the whole
  * of the backfill's booking pass.
  */

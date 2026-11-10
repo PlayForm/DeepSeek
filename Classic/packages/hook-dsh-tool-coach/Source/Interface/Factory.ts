@@ -1,9 +1,12 @@
+import type Factory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Factory
  *
  * The STRUCTURAL VIEW of the injected @playform/plugin-dsh-factory service.
  *
  * @remarks
+ *
  * The family's class/service plugin, factory SCHEME.md §0-§2. The coach is the
  * factory's NON-MANIFEST consumer: it uses the State builder (cell unwrap +
  * shared fields + the P10 volatile refresh, §2.10) and the ledger (Append,
@@ -21,11 +24,11 @@
  * NOT re-declared here: @deepseek-ai/dsh-tools already augments `Events` with
  * the tools/* waterfalls - re-declaring them would be a conflicting duplicate.
  */
-import type Factory from "@playform/plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
-		/** The plugin-factory service (@playform/plugin-dsh-factory). */
+		/**
+		 * The plugin-factory service (@playform/plugin-dsh-factory).
+		 */
 		pluginFactory: Factory;
 	}
 }

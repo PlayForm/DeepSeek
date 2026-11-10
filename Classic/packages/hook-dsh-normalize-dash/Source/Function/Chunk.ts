@@ -11,6 +11,7 @@ import Replace from "./Replace.js";
  * INJECTED.
  *
  * @remarks
+ *
  * The dispatch structure (which chunk types, which fields, the identity
  * passthroughs, the reasoning gate, the tool-args gate - three-way since the
  * edit exemption and the per-call raw marker: a delta whose `name` is "edit"
@@ -28,7 +29,6 @@ import Replace from "./Replace.js";
  * (which hardcoded its own Replace) - the hook-dsh-normalize-dash smoke is
  * the arbiter.
  */
-
 export default (
 	Input: StreamChunk,
 	Replacement: string,

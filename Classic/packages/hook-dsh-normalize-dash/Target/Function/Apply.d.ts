@@ -8,6 +8,7 @@ export default _default;
  * shape.
  *
  * @remarks
+ *
  * It builds the State through `Factory.State` (the cell unwrap, the shared
  * mappings Ledger<-logFile / Enabled<-log and the module's own fields via the
  * setup `fields` map - factory `SCHEME.md` section 2.10), emits the durable

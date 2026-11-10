@@ -1,3 +1,7 @@
+import type Entry from "@Interface/Entry.js";
+import type File from "@Interface/File.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Restore
  *
@@ -5,6 +9,7 @@
  * gates from ONE state-shaped source and ledgers the recovery line.
  *
  * @remarks
+ *
  * The source is the KV domain's four tables OR the JSON fallback file (Interface/File); the ledger
  * line is the byte-exact `recovered (<n> members, queue <n>)`.
  *
@@ -24,10 +29,6 @@
  * - the proposals and the gates come back verbatim - the board's proposal memory and the arbiter
  *   truth survive the restart.
  */
-import type Entry from "@Interface/Entry.js";
-import type File from "@Interface/File.js";
-import type State from "@Interface/State.js";
-
 export default (State: State, Source: File): void => {
 	for (const Row of Source.members) {
 		switch (true) {

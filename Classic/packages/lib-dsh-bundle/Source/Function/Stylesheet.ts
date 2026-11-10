@@ -11,6 +11,7 @@ import { compile } from "sass-embedded";
  * the material's own publish build.
  *
  * @remarks
+ *
  * The client bundler turns a plugin's `Source/Stylesheet/Plugin.scss` into the
  * string its injector mounts; the material's own publish build copies the
  * partials to `Target` and compiles the base CSS there.
@@ -18,7 +19,6 @@ import { compile } from "sass-embedded";
  * The Dart-JS `sass` package crashes on Node 26 the moment it resolves an
  * imported path, so the compiler is sass-embedded.
  */
-
 /**
  * Every existing `node_modules` directory from `Directory` up to the file
  * system root, nearest first: a standalone package resolves its own
@@ -37,7 +37,9 @@ function Resolve(Directory: string): string[] {
 	return Paths;
 }
 
-/** The CSS text of one sheet, with the material resolved through the package's load paths. */
+/**
+ * The CSS text of one sheet, with the material resolved through the package's load paths.
+ */
 export function Compile(File: string, LoadPaths: string[]): string {
 	return compile(File, {
 		loadPaths: LoadPaths,
@@ -46,7 +48,9 @@ export function Compile(File: string, LoadPaths: string[]): string {
 	}).css;
 }
 
-/** The esbuild plugin: every `.scss` resolves to a JS module exporting its CSS. */
+/**
+ * The esbuild plugin: every `.scss` resolves to a JS module exporting its CSS.
+ */
 export default function Stylesheet(Directory: string): Plugin {
 	const Paths = Resolve(Directory);
 	return {

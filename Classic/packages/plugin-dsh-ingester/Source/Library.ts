@@ -1,3 +1,19 @@
+import { homedir as Home } from "node:os";
+
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type FileSystem from "@deepseek-ai/dsh-fs";
+import type { Allowlist } from "@playform/plugin-dsh-factory";
+
+import ClaimFn from "./Function/Claim.js";
+import ListenFn from "./Function/Listen.js";
+import type Config from "./Interface/Config.js";
+import type Decision from "./Interface/Decision.js";
+import type Proposal from "./Interface/Proposal.js";
+import type Result from "./Interface/Result.js";
+import type State from "./Interface/State.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -6,6 +22,7 @@
  * (Documentation/Plans/PASS-ON-AND-INGESTER.md section 4).
  *
  * @remarks
+ *
  * Class form (the factory's precedent): `export default class Ingester extends
  * Service` with `super(Context, "ingester")`, registered immediately on
  * construction and removed with its owning fiber.
@@ -34,22 +51,6 @@
  * inject: ["fs"] - the governed filesystem service is the write path; the
  * plugin registers NO fs/observed listener and never reads policy files.
  */
-import { homedir as Home } from "node:os";
-
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type FileSystem from "@deepseek-ai/dsh-fs";
-import type { Allowlist } from "@playform/plugin-dsh-factory";
-
-import ClaimFn from "./Function/Claim.js";
-import ListenFn from "./Function/Listen.js";
-import type Config from "./Interface/Config.js";
-import type Decision from "./Interface/Decision.js";
-import type Proposal from "./Interface/Proposal.js";
-import type Result from "./Interface/Result.js";
-import type State from "./Interface/State.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export default class Ingester extends Service {
 	static inject = ["fs"];
 

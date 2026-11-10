@@ -1,3 +1,12 @@
+import { defineTool } from "@deepseek-ai/dsh-tools";
+import * as Band from "@Function/Band.js";
+import Clock from "@Function/Clock.js";
+import * as Monitors from "@Function/Monitors.js";
+import type { Log } from "@Function/Render.js";
+import * as Storage from "@Function/Storage.js";
+import * as Watchlist from "@Function/Watchlist.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module MonitorTools
  *
@@ -5,6 +14,7 @@
  * `Plant.ts` defineTool idiom).
  *
  * @remarks
+ *
  * Read-only semantics, never a write path: the tools enroll, list, opt out
  * and dispatch checks - they never gate or deny an edit and never touch file
  * content.
@@ -16,22 +26,17 @@
  *   the debounce, admission-guarded; the model reads the full ring via
  *   `job_output` (the job id is in the output text).
  */
-import { defineTool } from "@deepseek-ai/dsh-tools";
-import * as Band from "@Function/Band.js";
-import Clock from "@Function/Clock.js";
-import * as Monitors from "@Function/Monitors.js";
-import type { Log } from "@Function/Render.js";
-import * as Storage from "@Function/Storage.js";
-import * as Watchlist from "@Function/Watchlist.js";
-import type State from "@Interface/State.js";
-
-/** The caller's agent id from the exec. */
+/**
+ * The caller's agent id from the exec.
+ */
 const CallerOf = (Exec: unknown): string => {
 	const ID = (Exec as { agent?: { id?: unknown } | undefined } | undefined)?.agent?.id;
 	return typeof ID === "string" && ID.length > 0 ? ID : "";
 };
 
-/** Build the live_monitor tool definition. */
+/**
+ * Build the live_monitor tool definition.
+ */
 export const Monitor = (Agent: State, Append: Log) =>
 	defineTool({
 		name: "live_monitor",
@@ -166,7 +171,9 @@ export const Monitor = (Agent: State, Append: Log) =>
 		},
 	});
 
-/** Build the live_monitor_check tool definition. */
+/**
+ * Build the live_monitor_check tool definition.
+ */
 export const Check = (Agent: State, Append: Log) =>
 	defineTool({
 		name: "live_monitor_check",

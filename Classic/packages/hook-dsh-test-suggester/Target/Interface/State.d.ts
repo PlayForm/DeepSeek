@@ -1,3 +1,7 @@
+import type Config from "./Config.js";
+import type { CompiledIntent } from "./Pack.js";
+import type Factory from "@playform/plugin-dsh-factory";
+import type { State as Shared } from "@playform/plugin-dsh-factory";
 /**
  * @module State
  *
@@ -5,6 +9,7 @@
  * test-suggester hook's own fields.
  *
  * @remarks
+ *
  * The shared half is built by `Factory.State(ctx, config, { ... })` (factory
  * SCHEME.md §2.10). The shared shape comes from the factory's NAMED type
  * export (`State`): the built Target/Library.d.ts ships RELATIVE specifiers,
@@ -48,10 +53,6 @@
  * detection time through `stateOf(session, key)`. Nothing here holds it, and
  * no WeakMap in this module is keyed on the session object.
  */
-import type Config from "./Config.js";
-import type { CompiledIntent } from "./Pack.js";
-import type Factory from "@playform/plugin-dsh-factory";
-import type { State as Shared } from "@playform/plugin-dsh-factory";
 export default interface State extends Shared {
     /**
      * The master switch (config `enabled`, volatile).

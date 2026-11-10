@@ -1,3 +1,10 @@
+import { MAIN, Seat } from "@Function/Capacity.js";
+import ScheduleFn from "@Function/Schedule.js";
+import SpawnFn, { type Settle } from "@Function/Spawn.js";
+import type RouteService from "@Interface/Route.js";
+import type State from "@Interface/State.js";
+import { Decide } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Dispatch
  *
@@ -9,6 +16,7 @@
  * (undefined when nothing was dispatchable).
  *
  * @remarks
+ *
  * THE SPAWN (the completion wave): when `autoSpawn` is on, the assignment
  * also STARTS the child through the harness subagent service
  * (Function/Spawn) - the routed dispatch's resolved triple becomes the
@@ -34,13 +42,6 @@
  * load block. The probe is once per dispatch, cheap, and typed through the
  * queue's own Interface/Route.ts (the self-contained sibling shape).
  */
-import { MAIN, Seat } from "@Function/Capacity.js";
-import ScheduleFn from "@Function/Schedule.js";
-import SpawnFn, { type Settle } from "@Function/Spawn.js";
-import type RouteService from "@Interface/Route.js";
-import type State from "@Interface/State.js";
-import { Decide } from "@playform/plugin-dsh-factory";
-
 export default (
 	State: State,
 	Agent: string,

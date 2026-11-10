@@ -1,15 +1,3 @@
-/**
- * @module Test
- *
- * The apply/inject contract of the client entry and its apply-time wiring.
- *
- * @remarks
- * The suite covers the loader row contract, the Config schema defaults and the
- * fail-loud validation, the client inject list, the provided registry service,
- * the effect labels, the byte-exact locale registrations, the two slot points
- * and the tab renderer registration, and the purity probe on the real built
- * code.
- */
 import assert from "node:assert/strict";
 import {
 	BuiltClientSource,
@@ -22,6 +10,19 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The apply/inject contract of the client entry and its apply-time wiring.
+ *
+ * @remarks
+ *
+ * The suite covers the loader row contract, the Config schema defaults and the
+ * fail-loud validation, the client inject list, the provided registry service,
+ * the effect labels, the byte-exact locale registrations, the two slot points
+ * and the tab renderer registration, and the purity probe on the real built
+ * code.
+ */
 export const runTest = (): number => {
 	const Count = MakeCounter();
 

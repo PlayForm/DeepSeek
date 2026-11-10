@@ -5,12 +5,17 @@
  * file's text.
  *
  * @remarks
+ *
  * The graph schema v0's span field, V4-1 section 3.1.
  */
 export default interface Span {
-	/** The offset of the first character (0-based). */
+	/**
+	 * The offset of the first character (0-based).
+	 */
 	start: number;
 
-	/** The offset one past the last character. */
+	/**
+	 * The offset one past the last character.
+	 */
 	end: number;
 }

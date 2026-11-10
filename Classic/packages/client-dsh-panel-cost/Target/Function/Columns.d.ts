@@ -1,3 +1,7 @@
+import Cells from "./Cells.js";
+import type CostBuckets from "../Interface/Buckets.js";
+import type { TableContext } from "../Interface/Table.js";
+import type CostTokens from "../Interface/Tokens.js";
 /**
  * @module Columns
  *
@@ -5,16 +9,13 @@
  * widths.
  *
  * @remarks
+ *
  * Every render delegates to the cell renderers in `Cells.ts`, so the header, the colgroup, the body
  * cells and the totals row all read the same definition and a hidden or reordered column cannot
  * desynchronise them. The token, cache and other-title renderers live here because `Cells.ts`
  * ships no renderer for them and this lane does not own that file; their markup is the markup the
  * three rows carried before.
  */
-import Cells from "./Cells.js";
-import type CostBuckets from "../Interface/Buckets.js";
-import type { TableContext } from "../Interface/Table.js";
-import type CostTokens from "../Interface/Tokens.js";
 /**
  * TurnsCells - the cell source one Turns row hands its definition: the props of every column's
  * renderer, already carrying the row's own cell class and its values. The three rows that render

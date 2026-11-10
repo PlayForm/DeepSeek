@@ -1,4 +1,4 @@
-import type Packet from "@Interface/Packet.js";
+import type Packet from "../Interface/Packet.js";
 export default _default;
 /**
  * @module Render

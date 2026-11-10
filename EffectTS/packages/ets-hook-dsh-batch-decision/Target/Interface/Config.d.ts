@@ -1,14 +1,15 @@
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 /**
  * @module Config
  *
  * The validated plugin-config shape the loader hands to `apply`.
  *
  * @remarks
+ *
  * The schema that produces it lives in Variable/Config.ts. Every cell is
  * volatile; the factory's State builder unwraps them and refreshes them in
  * place on loader/volatile.
  */
-import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 export default interface Config {
     /**
      * Master switch - the idle-forever posture: false is the default.

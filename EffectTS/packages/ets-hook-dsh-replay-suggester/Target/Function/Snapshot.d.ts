@@ -6,6 +6,7 @@ import type Store from "../Interface/Store.js";
  * The JSON FALLBACK store (Function/Snapshot), the DEGRADED tier.
  *
  * @remarks
+ *
  * The PRIMARY store is the storage-domain KV domain `replay_history`
  * (Function/Storage); this file is written and read ONLY when the harness
  * provides no storage facility (or its open fails) - the documented fallback,

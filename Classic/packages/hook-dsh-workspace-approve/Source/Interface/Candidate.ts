@@ -4,6 +4,7 @@
  * The EXACT change set an approval binds to.
  *
  * @remarks
+ *
  * The exact-approval semantics (APPROVE.md, the Representation-First research):
  * the human approves the CONCRETE candidate - identified by its path, the
  * content fingerprint of the change set, and the file version observed at the

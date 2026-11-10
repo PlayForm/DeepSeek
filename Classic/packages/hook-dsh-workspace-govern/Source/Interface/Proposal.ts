@@ -6,6 +6,7 @@
  * import; this hook never imports from sibling workspace packages).
  *
  * @remarks
+ *
  * The recursion-prevention fields are mandatory on every record: the operation
  * identifier, the parent identifier, the event category (GOVERN.md, the
  * distribution law).

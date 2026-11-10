@@ -1,3 +1,5 @@
+import { Default } from "@playform/lib-dsh-core";
+
 /**
  * @module Default
  *
@@ -5,6 +7,7 @@
  * config field), re-exported from the CORE's Variable/Default.
  *
  * @remarks
+ *
  * The CORE export is the family's single source - byte-identical. Every tool-layer write of a
  * file named package.json is governed UNLESS its path contains one of these segments:
  * node_modules, .git, .dsh (the harness home), .pnpm, .store, and the app bundle. The list is
@@ -12,6 +15,4 @@
  * and these segments keep it out of internals - anywhere mode is exclusion-first, never an
  * allowlist.
  */
-import { Default } from "@playform/lib-dsh-core";
-
 export default Default;

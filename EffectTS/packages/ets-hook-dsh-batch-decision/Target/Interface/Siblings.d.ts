@@ -4,6 +4,7 @@
  * The STRUCTURAL shapes of the services this hook calls but does NOT own.
  *
  * @remarks
+ *
  * PASS-ON-AND-INGESTER.md section 5: "it does not implement the pass-on or
  * the ingester; it calls them". Self-contained PoC posture: the shapes are
  * declared here and resolved via Context.get at use time (the tool-jobs

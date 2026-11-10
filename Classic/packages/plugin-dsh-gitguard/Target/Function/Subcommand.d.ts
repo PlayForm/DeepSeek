@@ -7,6 +7,7 @@ export default _default;
  * segment is not a git command.
  *
  * @remarks
+ *
  * - "git status" -> "status"
  * - "git  log --oneline" -> "log"
  * - "git" -> "" (bare git - e.g. `git --version` parses as bare, since a

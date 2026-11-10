@@ -1,9 +1,14 @@
+import assert from "node:assert/strict";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
+
 /**
  * @module Test
  *
  * The Raw-Write-Tool unit smoke: the `raw-write` tool surface.
  *
  * @remarks
+ *
  * The one singular test covers the captured registration (the name, the input
  * schema with the OPTIONAL normalize/govern unions, and the output envelope),
  * the execution path (verbatim by default, all six transforms on, the real
@@ -17,10 +22,6 @@
  * (`node Target/Test/Raw-Write-Tool/Test.js`) and under the aggregate
  * (`Maintain/Run/Smokes/Index.mjs` spawns it).
  */
-import assert from "node:assert/strict";
-
-import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

@@ -1,3 +1,10 @@
+import { defineTool } from "@deepseek-ai/dsh-tools";
+import type { JsonValue } from "@deepseek-ai/dsh-util-values";
+import Commit from "@Function/Commit.js";
+import PreviewFn from "@Function/Preview.js";
+import * as Query from "@Function/Query.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Tools
  *
@@ -7,15 +14,9 @@
  * factory's Write executor with an explicit version fence.
  *
  * @remarks
+ *
  *   workspace_merge  - preview | commit | batch | list | stats.
  */
-import { defineTool } from "@deepseek-ai/dsh-tools";
-import type { JsonValue } from "@deepseek-ai/dsh-util-values";
-import Commit from "@Function/Commit.js";
-import PreviewFn from "@Function/Preview.js";
-import * as Query from "@Function/Query.js";
-import type State from "@Interface/State.js";
-
 const Read = (Args: unknown, Key: string): unknown =>
 	Args !== null && typeof Args === "object" ? (Args as Record<string, unknown>)[Key] : undefined;
 

@@ -15,6 +15,7 @@ import type Output from "./Output.js";
  * continuation (Function/Continue).
  *
  * @remarks
+ *
  * The entire content -> next-content step of a module, from the raw file text
  * to the next content. The factory calls it exactly once per continuation
  * with:

@@ -1,18 +1,3 @@
-/**
- * @module Test
- *
- * THE SPAWN (the completion wave's arbiter): one queued task starts exactly one agent through
- * the harness subagent service with the expected prompt.
- *
- * @remarks
- * Also covers the approval posture refusing (autoSpawn false), a released seat pulling the next
- * queued task, the child's own result settling the task, the restart reconcile requeueing an
- * orphan and then failing it honestly, and every refusal being a byte-exact ledger line.
- *
- * The fake subagent service RECORDS every `startActivation` spec (the exact payload the harness
- * would receive) and hands back a controllable result, so every scenario is deterministic - no
- * sleeps, no timers, no clock.
- */
 import assert from "node:assert/strict";
 import {
 	Automation,
@@ -28,6 +13,22 @@ import {
 	Ledger,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE SPAWN (the completion wave's arbiter): one queued task starts exactly one agent through
+ * the harness subagent service with the expected prompt.
+ *
+ * @remarks
+ *
+ * Also covers the approval posture refusing (autoSpawn false), a released seat pulling the next
+ * queued task, the child's own result settling the task, the restart reconcile requeueing an
+ * orphan and then failing it honestly, and every refusal being a byte-exact ledger line.
+ *
+ * The fake subagent service RECORDS every `startActivation` spec (the exact payload the harness
+ * would receive) and hands back a controllable result, so every scenario is deterministic - no
+ * sleeps, no timers, no clock.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

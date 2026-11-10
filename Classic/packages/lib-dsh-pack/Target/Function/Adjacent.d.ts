@@ -1,5 +1,7 @@
 import type Touch from "../Interface/Touch.js";
-/** A candidate row: the followed path, how often it followed, and its score. */
+/**
+ * A candidate row: the followed path, how often it followed, and its score.
+ */
 export type Candidate = {
     readonly path: string;
     readonly count: number;

@@ -4,6 +4,7 @@
  * The slice of one graph node a reflective operation reads.
  *
  * @remarks
+ *
  * The shape is the workspace graph's `workspaceGraph.getNode(id)` answer. The
  * reflective Replace targets a node by its FROZEN id and verifies the node's
  * span with the content-derived fingerprint before rewriting it, so the slice

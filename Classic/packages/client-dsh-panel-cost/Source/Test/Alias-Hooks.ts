@@ -1,26 +1,35 @@
-// Source/Test/Alias-Hooks.ts - the module-resolution hooks for this
-// package's smoke suites. The built halves (Target/Library.js for the host
-// route, Target/Client.js for the client tab) keep the SOURCE aliases
-// `@Function/*`, `@Interface/*` and `@Variable/*` external (bundle: false -
-// the module system resolves them at materialization time), so a plain Node
-// run cannot import either built half without help. This hook maps the
-// aliases back onto the real built Target (and the real JSON dictionaries,
-// which the transpile-only plugin build does not copy into Target) so every
-// smoke loads the REAL built code - never a mock (the smoke-writing law).
-//
-// The mapping is rooted at the package root (the parentURL of the importing
-// Target file, cut at its `/Target/` marker), so the same rule serves
-// imports from Target/*.js and Target/Function/*.js alike. Everything else
-// (react, schemastery, node builtins, relative imports) falls through to
-// the default resolver untouched.
-//
-// Registered with `module.registerHooks` (the in-thread hook API), so the
-// registration is synchronous and applies to the dynamic imports the
-// Harness performs right after loading this module.
 import * as FileSystem from "node:fs";
 import * as Module from "node:module";
 
-/** The package-root URL of the module currently resolving an alias. */
+/**
+ * @module Alias-Hooks
+ *
+ * The module-resolution hooks that map the package's SOURCE aliases onto the real
+ * built Target for every smoke suite in this package.
+ *
+ * @remarks
+ *
+ * The built halves (Target/Library.js for the host route, Target/Client.js for the
+ * client tab) keep the SOURCE aliases `@Function/*`, `@Interface/*` and
+ * `@Variable/*` external (bundle: false - the module system resolves them at
+ * materialization time), so a plain Node run cannot import either built half
+ * without help. The hook maps the aliases back onto the real built Target (and the
+ * real JSON dictionaries, which the transpile-only plugin build does not copy into
+ * Target) so every smoke loads the REAL built code - never a mock (the
+ * smoke-writing law).
+ *
+ * The mapping is rooted at the package root (the parentURL of the importing Target
+ * file, cut at its `/Target/` marker), so the same rule serves imports from
+ * Target/*.js and Target/Function/*.js alike. Everything else (react, schemastery,
+ * node builtins, relative imports) falls through to the default resolver untouched.
+ *
+ * Registered with `module.registerHooks` (the in-thread hook API), so the
+ * registration is synchronous and applies to the dynamic imports the Harness
+ * performs right after loading this module.
+ */
+/**
+ * The package-root URL of the module currently resolving an alias.
+ */
 const Root = (Context: any): string => {
 	const Parent = String(Context.parentURL ?? "");
 	const Marker = Parent.indexOf("/Target/");

@@ -1,3 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import { Bound, type CommandResult } from "@playform/lib-dsh-core";
+import type Factory from "@playform/plugin-dsh-factory";
+
+import type Config from "../Interface/Config.js";
+import type Metric from "../Interface/Metric.js";
+import { DefaultRenderLimit } from "../Variable/Config.js";
+import Analysis from "./Analysis.js";
+import Open from "./Open.js";
+
 /**
  * @module Apply
  *
@@ -7,6 +17,7 @@
  * command, `/cost analysis [scope]`, registered through the commands service.
  *
  * @remarks
+ *
  * The registry's name law allows no spaces in a command name, so the plugin
  * registers under the family's "cost" name with the "analysis" verb as its
  * first word; the registration is fail-open (the normalize-file precedent): a
@@ -20,16 +31,6 @@
  * failure is recorded, the plugin still loads, and the command says so when it
  * is invoked.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import { Bound, type CommandResult } from "@playform/lib-dsh-core";
-import type Factory from "@playform/plugin-dsh-factory";
-
-import type Config from "../Interface/Config.js";
-import type Metric from "../Interface/Metric.js";
-import { DefaultRenderLimit } from "../Variable/Config.js";
-import Analysis from "./Analysis.js";
-import Open from "./Open.js";
-
 /**
  * The factory vocabulary and the command registry, published on this module's
  * augmentation (the cost tracker's precedent): the factory type arrives

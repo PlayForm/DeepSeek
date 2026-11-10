@@ -1,3 +1,7 @@
+import type FactoryHandle from "@Interface/Factory.js";
+import type Packet from "@Interface/Packet.js";
+import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
+
 /**
  * @module State
  *
@@ -5,6 +9,7 @@
  * own fields.
  *
  * @remarks
+ *
  * The shared shape carries Context, Module, Enabled/Ledger/List, the
  * machinery maps, and the P10 volatile refresh the factory's State builder
  * registers.
@@ -15,10 +20,6 @@
  * `name` export (plugin-dsh-workspace-context); the ledger prefix is the
  * module's OWN contract string.
  */
-import type FactoryHandle from "@Interface/Factory.js";
-import type Packet from "@Interface/Packet.js";
-import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
-
 interface Extra {
 	/**
 	 * Master switch (config `enabled`, volatile) - false = full no-op.

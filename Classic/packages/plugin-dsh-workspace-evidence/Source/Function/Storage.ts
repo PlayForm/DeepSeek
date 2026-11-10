@@ -1,3 +1,6 @@
+import type State from "@Interface/State.js";
+import type Validation from "@Interface/Validation.js";
+
 /**
  * @module Storage
  *
@@ -5,6 +8,7 @@
  * evidence store.
  *
  * @remarks
+ *
  * The factory's Function/{Open,Attach}.ts pattern, the observe hook's
  * precedent.
  *
@@ -32,9 +36,6 @@
  * load - the factory's live-verified pitfall); the type-only devDeps pin them
  * to the host-era versions.
  */
-import type State from "@Interface/State.js";
-import type Validation from "@Interface/Validation.js";
-
 /**
  * The structural shape of one persisted validation (the validation filter).
  */

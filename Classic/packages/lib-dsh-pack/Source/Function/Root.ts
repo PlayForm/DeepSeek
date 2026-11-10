@@ -9,12 +9,14 @@ import { dirname, join } from "node:path";
  * carries `.git` or `package.json`.
  *
  * @remarks
+ *
  * The workspace is the repo, not the signature. The walk stops at the
  * filesystem root; the explicit cwd is only the starting point for the walk
  * (when the path is empty), so a walk that finds no marker returns no root.
  */
-
-/** The path normalized the same way the fold normalizes it. */
+/**
+ * The path normalized the same way the fold normalizes it.
+ */
 const Clean = (Value: string): string => Value.replaceAll("\\", "/").replace(/^\.\//, "");
 
 export default (Path: string, Cwd?: string): string | undefined => {

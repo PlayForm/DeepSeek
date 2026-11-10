@@ -4,6 +4,7 @@
  * The four kinds of truth: reality, observation, representation, and intent.
  *
  * @remarks
+ *
  * The Representation-First research, V4-1 section 2.4: they are different truth
  * claims - what counts as proof differs per kind, and the evidence service owns
  * the taxonomy. A named export: a bare string-union type cannot be a default

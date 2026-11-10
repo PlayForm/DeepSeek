@@ -1,9 +1,18 @@
+import type Handle from "@Interface/Handle.js";
+import type { Table } from "@Interface/Handle.js";
+import type State from "@Interface/State.js";
+
+import Recover from "./Recover.js";
+import Restore from "./Restore.js";
+import { Save } from "./Snapshot.js";
+
 /**
  * @module Storage
  *
  * The storage-domain open and recovery: the PRIMARY tier of the recall store.
  *
  * @remarks
+ *
  * Pattern P4 of Temporary/Harness-Wave/Plan.md section 6; the shipped
  * sequence copied from hook-dsh-workspace-observe/Source/Function/Storage.ts
  * :51-103. THE DOMAIN: `replay_history`, version 1, per-record layout,
@@ -43,14 +52,6 @@
  * path (a module-level import of an unresolvable package would crash the
  * whole bundle load - the factory's live-verified pitfall).
  */
-import type Handle from "@Interface/Handle.js";
-import type { Table } from "@Interface/Handle.js";
-import type State from "@Interface/State.js";
-
-import Recover from "./Recover.js";
-import Restore from "./Restore.js";
-import { Save } from "./Snapshot.js";
-
 /**
  * The JSON fallback's fresh write (the mirror: the fallback file stays
  * current for one release while the domain is the primary tier). The save
@@ -103,10 +104,14 @@ const Shadow = (State: State, Handle: Handle): void => {
 };
 
 export default async (
-	/** The plugin state (the mirror, the handle, the ledger). */
+	/**
+	 * The plugin state (the mirror, the handle, the ledger).
+	 */
 	State: State,
 
-	/** The probed storage facility (ctx.storage.domain or ctx.storageDomain). */
+	/**
+	 * The probed storage facility (ctx.storage.domain or ctx.storageDomain).
+	 */
 	Facility: unknown,
 ): Promise<void> => {
 	try {

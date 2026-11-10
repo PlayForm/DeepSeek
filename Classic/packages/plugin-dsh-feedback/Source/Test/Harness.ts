@@ -1,3 +1,9 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -6,6 +12,7 @@
  * its built Target, constructed the way the registry does (new Feedback(ctx, config)).
  *
  * @remarks
+ *
  * The journal writes to a REAL temp-dir file (the durable JSON lines are part of the contract), so
  * every scenario starts from an empty ledger.
  *
@@ -18,12 +25,6 @@
  * (and by Parse), which the tests never assert on; the journal lines are parsed as JSON and compared
  * on their event/session/agentId/block fields only.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-
 export { Plugin };
 
 /**

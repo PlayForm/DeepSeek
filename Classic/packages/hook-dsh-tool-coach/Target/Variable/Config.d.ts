@@ -1,39 +1,3 @@
-/**
- * @module Config
- *
- * The plugin's Schemastery Config schema (a Variable: one constant built once
- * at load).
- *
- * @remarks
- * Cordis validates the exported schema while the plugin loads and fills every
- * default, so invalid configuration fails LOUD at load instead of silently
- * falling back per-field, and `apply` receives a validated plain config
- * object. The shape this schema produces is Interface/Config.ts; this is the
- * plan's Part 3 §3.4 schema, VERBATIM (the parent's binding decision), with
- * the three template constants, the default pattern rows and the default
- * exemptions supplied from the sibling Variables.
- *
- * COMPOSED BY THE FACTORY'S STANDALONE helper (`Schema(shared?, module?)` as a
- * MODULE-LEVEL named export, imported as Compose): the NON-MANIFEST posture
- * uses `shared: false` - the MINIMAL shared block, ONLY the two universal
- * volatile cells (`log`, `logFile`). The coach hooks the tool waterfalls, not
- * fs/observed, so the schema never advertises updateCooldownMs/mutationTools/
- * policyFile/exclude - machinery the module has none of. The coach's own
- * `logFile` default (its SEPARATE ledger, one log per module) is supplied
- * through its own fields, which override the minimal block's.
- *
- * VOLATILE CELLS: every knob in this schema is `.volatile()` - hot edits
- * commit WITHOUT remounting the plugin via the loader's
- * loader/volatile-update event; the factory's State builder refreshes the
- * mapped State fields IN PLACE, so a flip (enabled, enforce, threshold,
- * fetchLive, maxSectionTools, sectionTtl, ...) takes effect on the next judged
- * call. `enabled` is the coach's MASTER SWITCH (distinct from the shared `log`
- * cell, which governs only the durable ledger file).
- *
- * This is one of the modules in the tree with a runtime import of
- * @deepseek-ai/schemastery (the schema must be a real schemastery instance -
- * the loader consumes it through the Standard Schema `~standard` interface).
- */
 import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     log: Schema<boolean, boolean, "volatile-defined">;

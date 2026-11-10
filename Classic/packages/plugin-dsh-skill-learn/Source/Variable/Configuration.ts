@@ -1,3 +1,6 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Configuration
  *
@@ -10,6 +13,7 @@
  * truth.
  *
  * @remarks
+ *
  * `enabled` defaults to FALSE - the idle-forever posture: the patch row and the README
  * ship the service disabled, a cold mount logs `disabled (enabled=false)`, and the
  * trigger keeps answering `disabled` while the service stays resolvable, so no listener
@@ -27,9 +31,6 @@
  * THE TWO DAY THRESHOLDS ARE FLOORED AT 1: a cutoff at or past now would transition the
  * whole corpus on one bad config.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
-
 export default Compose(false, {
 	enabled: Schema.boolean()
 		.default(false)

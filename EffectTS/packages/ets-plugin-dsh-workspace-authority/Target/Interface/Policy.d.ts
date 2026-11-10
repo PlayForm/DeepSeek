@@ -4,6 +4,7 @@
  * One rule of the authority's policy table.
  *
  * @remarks
+ *
  * The plan's "a small table of rules per resource kind, with defaults, TTLs,
  * and the revocation timing". The kind matches the residency record's kind
  * exactly or "*"; the first match wins; no match falls back to the default

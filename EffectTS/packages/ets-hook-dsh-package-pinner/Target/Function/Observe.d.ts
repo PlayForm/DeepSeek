@@ -8,6 +8,7 @@ export default _default;
  * The fs/observed listener body, thin over the factory service.
  *
  * @remarks
+ *
  * The critical path stays AWAIT-FREE and THROW-FREE (a throw inside an
  * fs/observed listener fails the tool call AFTER the mutation already
  * succeeded): the synchronous gate and discovery run inline, and the API-aware

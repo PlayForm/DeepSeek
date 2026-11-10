@@ -1,19 +1,3 @@
-/**
- * @module Test
- *
- * Runs one singular test: tiers 0 and 3 at the edges.
- *
- * @remarks
- * Covers the enforce ladder (the tier-3 deny fires for the write class at the threshold with the
- * byte-exact NOTE_DENIED reason, the read class is not denied under 'write', 'all' denies read too,
- * 'off' never denies) and the exemptions (the carve-out logs its exempt line once, deduped per
- * pattern per agent; enabled=false is the full passthrough; an emptied pattern table is the N=0
- * passthrough). Runs standalone (`node Target/Test/Enforce-And-Exempts/Test.js`) AND under the
- * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
- *
- * Unit smoke of @playform/hook-dsh-tool-coach. The assertions are moved verbatim from
- * Classic/smokes/tool-coach-smoke.mjs (R5 + R6).
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {
@@ -34,6 +18,23 @@ import {
 	Ledger,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * Runs one singular test: tiers 0 and 3 at the edges.
+ *
+ * @remarks
+ *
+ * Covers the enforce ladder (the tier-3 deny fires for the write class at the threshold with the
+ * byte-exact NOTE_DENIED reason, the read class is not denied under 'write', 'all' denies read too,
+ * 'off' never denies) and the exemptions (the carve-out logs its exempt line once, deduped per
+ * pattern per agent; enabled=false is the full passthrough; an emptied pattern table is the N=0
+ * passthrough). Runs standalone (`node Target/Test/Enforce-And-Exempts/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of @playform/hook-dsh-tool-coach. The assertions are moved verbatim from
+ * Classic/smokes/tool-coach-smoke.mjs (R5 + R6).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

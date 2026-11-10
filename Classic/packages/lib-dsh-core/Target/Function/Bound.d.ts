@@ -6,6 +6,7 @@ export default _default;
  * remainder instead of printing everything.
  *
  * @remarks
+ *
  * The shipped list pages bound the same way (`packages/schedule/schedule/src/index.ts:108-111`);
  * the cost report already caps at 20 (`plugin-dsh-cost/Source/Function/Apply.ts:191-203`).
  * Pure: the caller owns every string.

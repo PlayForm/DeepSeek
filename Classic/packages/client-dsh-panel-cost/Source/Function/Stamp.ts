@@ -1,8 +1,14 @@
-// Stamp - the turn and step clock: month, day, hour and minute, zero
-// padded, in the browser's local time, the dash for a missing or malformed
-// stamp.
 import Dash from "@Variable/Dash";
 
+/**
+ * @module Stamp
+ *
+ * The turn and step clock: month, day, hour and minute, zero padded, in the browser's local time.
+ *
+ * @remarks
+ *
+ * The dash for a missing or malformed stamp.
+ */
 const Pad = (Value: number): string => String(Value).padStart(2, "0");
 
 export default function Stamp(Value: number | null): string {

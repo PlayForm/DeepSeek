@@ -6,6 +6,7 @@
  * per §9.2).
  *
  * @remarks
+ *
  * THE INTENTS ARE SYNTHESIZED PER CALL: Function/Apply builds the `Neighborhood` and `Sibling`
  * intents from the workspace graph query's own answer and prepends them as data. The private
  * literal pack (Variable/Defaults.ts) is RETIRED from the hot path and nothing imports it; its

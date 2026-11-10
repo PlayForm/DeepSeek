@@ -1,3 +1,4 @@
+import type { AgentState, Decision, Match } from "../Interface/Execution.js";
 /**
  * @module Count
  *
@@ -5,6 +6,7 @@
  * counters for one JUDGED call and returns the decision.
  *
  * @remarks
+ *
  * Plan Part 3 §3.5 step 2 + the tier ladder in TOOL-COACH-PLAN.md §5.
  * Terminal calls only; non-terminal tools are transparent and never reach
  * this function. All counters are in JUDGED calls.
@@ -31,7 +33,6 @@
  *      tools/pre-execute listener (before the call runs) when the offense's
  *      class has reached enforceThreshold strikes since the last note.
  */
-import type { AgentState, Decision, Match } from "../Interface/Execution.js";
 /**
  * The per-call knobs Count reads (the live State values, already unwrapped).
  */

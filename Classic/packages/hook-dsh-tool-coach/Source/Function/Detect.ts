@@ -1,9 +1,13 @@
+import Normalize, { Rank, Segments } from "@Function/Normalize.js";
+import type { CoachRow, Detection, Match } from "@Interface/Execution.js";
+
 /**
  * @module Detect
  *
  * The classifier for one judged terminal call.
  *
  * @remarks
+ *
  * Plan Part 3 §3.5 step 1 + the adversarial layer Part 2 §2.7. Detection is
  * NEVER exact-match only: command normalization (Function/Normalize) + the
  * pattern rows + an intent-marker scan + a craft library + a catch-all - the
@@ -35,10 +39,6 @@
  *   - wrappers (sh -c / bash -c / eval / xargs / find -exec) never exempt:
  *     the INNER payload is re-scanned through the same rows.
  */
-
-import Normalize, { Rank, Segments } from "@Function/Normalize.js";
-import type { CoachRow, Detection, Match } from "@Interface/Execution.js";
-
 /**
  * The command-word position markers that begin a wrapper payload.
  */

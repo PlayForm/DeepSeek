@@ -6,6 +6,7 @@ export default _default;
  * `.json`.
  *
  * @remarks
+ *
  * The repo layer overrides the user layer.
  */
 declare function _default(Root: string): string[];

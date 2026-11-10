@@ -1,15 +1,3 @@
-/**
- * @module Test
- *
- * THE POLICY BLOCK (D6) on the reflect service: the shared block's defaults in the schema and on
- * the built State, the `approve` verdict HOLDING a replace and a rename, the `auto` verdict
- * proceeding to the write path, and the rule that only the `write` key opens this gate.
- *
- * @remarks
- * The `approve` verdict holds with the documented lines and ZERO writes. The mount keeps the
- * SHIPPED `write: approve`; a scenario that wants the gate open passes `policy: { write: "auto" }`
- * explicitly.
- */
 import assert from "node:assert/strict";
 
 import {
@@ -25,7 +13,22 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * @module Test
+ *
+ * THE POLICY BLOCK (D6) on the reflect service: the shared block's defaults in the schema and on
+ * the built State, the `approve` verdict HOLDING a replace and a rename, the `auto` verdict
+ * proceeding to the write path, and the rule that only the `write` key opens this gate.
+ *
+ * @remarks
+ *
+ * The `approve` verdict holds with the documented lines and ZERO writes. The mount keeps the
+ * SHIPPED `write: approve`; a scenario that wants the gate open passes `policy: { write: "auto" }`
+ * explicitly.
+ */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",
@@ -37,7 +40,9 @@ const Defaults = {
 	message: "auto",
 };
 
-/** The seeded file: three lines, so a one-line span is targetable. */
+/**
+ * The seeded file: three lines, so a one-line span is targetable.
+ */
 const PATH = "/repo/src/a.ts";
 const CONTENT = "export const alpha = 1;\nexport const beta = 2;\nexport const gamma = 3;\n";
 
@@ -48,7 +53,9 @@ const Mount = (Config: Record<string, unknown> = {}): any => {
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }), Seed({ [PATH]: CONTENT }));
 };
 
-/** A one-line replace and a one-line rename (the two gated operations). */
+/**
+ * A one-line replace and a one-line rename (the two gated operations).
+ */
 const Replace = { kind: "replace", path: PATH, startLine: 1, endLine: 1, text: "export const delta = 1;" };
 const Rename = {
 	kind: "rename",

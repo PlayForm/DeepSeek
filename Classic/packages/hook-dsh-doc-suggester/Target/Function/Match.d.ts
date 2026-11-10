@@ -4,6 +4,7 @@
  * Tests whether a judged call path names one of a note's companions.
  *
  * @remarks
+ *
  * The follow-through's only lookup (completion spec 03-SUGGESTERS section 2: "a named
  * companion subsequently touched").
  *

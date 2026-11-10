@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The plugin's Schemastery Config schema (a Variable: one constant built once at load).
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every default
  * (docs/user/develop/basic/config.md:45), so invalid configuration fails LOUD at load instead of
  * silently falling back per-field, and `apply` receives a validated plain config object. The
@@ -38,9 +42,6 @@
  * Schema `~standard` interface; the import resolves from the running dsh's own copy,
  * docs/user/develop/basic/publish.md:103).
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
-
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-comment-filter.log";
 const DefaultEnabled = true;
 const DefaultTargets = ["read", "ccr_retrieve"];

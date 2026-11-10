@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "../Interface/Config.js";
+export default _default;
 /**
  * @module Apply
  *
@@ -5,6 +8,7 @@
  * `@playform/plugin-dsh-factory` service injected as `pluginFactory`.
  *
  * @remarks
+ *
  * The composition has four steps:
  *
  * 1. State — the factory's State builder (cell unwrap, the fixed shared
@@ -30,7 +34,4 @@
  * (live-verified 2026-10-03). Test probes read the per-dir in-flight/breaker
  * maps through the `ctx.__hookDshGovernorCargoState` attachment instead.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
-export default _default;
 declare function _default(Context: Context, Options: Config): void;

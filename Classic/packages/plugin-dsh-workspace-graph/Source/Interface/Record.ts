@@ -1,3 +1,6 @@
+import type Edge from "@Interface/Edge.js";
+import type Node from "@Interface/Node.js";
+
 /**
  * @module Record
  *
@@ -5,23 +8,29 @@
  * by the path.
  *
  * @remarks
+ *
  * `version` is the file version token at index time, `fingerprint` the file node's fingerprint,
  * and the nodes/edges are exactly what the parse produced. The meta record keyed `__meta`
  * carries `{ indexRevision }` and is NOT a Record.
  */
-import type Edge from "@Interface/Edge.js";
-import type Node from "@Interface/Node.js";
-
 export default interface Record {
-	/** The file version token at index time. */
+	/**
+	 * The file version token at index time.
+	 */
 	version: string;
 
-	/** The file node's fingerprint. */
+	/**
+	 * The file node's fingerprint.
+	 */
 	fingerprint: string;
 
-	/** The nodes the parse produced. */
+	/**
+	 * The nodes the parse produced.
+	 */
 	nodes: Node[];
 
-	/** The edges the parse produced. */
+	/**
+	 * The edges the parse produced.
+	 */
 	edges: Edge[];
 }

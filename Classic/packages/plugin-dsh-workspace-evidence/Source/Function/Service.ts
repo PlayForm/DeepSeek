@@ -1,9 +1,18 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import Declare from "@Function/Declare.js";
+import Invalidate from "@Function/Invalidate.js";
+import Ledger from "@Function/Ledger.js";
+import type State from "@Interface/State.js";
+import type { TruthKind } from "@Interface/TruthKind.js";
+import type Validation from "@Interface/Validation.js";
+
 /**
  * @module Service
  *
  * The `workspaceEvidence` service class, extending the cordis Service base.
  *
  * @remarks
+ *
  * It is REGISTERED FROM APPLY (the loader contract for the object-form plugin:
  * apply constructs the service; the Service base constructor calls
  * `ctx.reflect.provide("workspaceEvidence", this)`, so `ctx.workspaceEvidence`
@@ -20,14 +29,6 @@
  * - `list(status?)` - the objects, optionally filtered by status;
  * - `statistics()` - { validations, fresh, stale, superseded, sequence }.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import Declare from "@Function/Declare.js";
-import Invalidate from "@Function/Invalidate.js";
-import Ledger from "@Function/Ledger.js";
-import type State from "@Interface/State.js";
-import type { TruthKind } from "@Interface/TruthKind.js";
-import type Validation from "@Interface/Validation.js";
-
 export default class WorkspaceEvidence extends Service {
 	/**
 	 * The apply-built state the methods read and write.

@@ -1,3 +1,12 @@
+import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
+
+import type Catalog from "@Interface/Catalog.js";
+import type Config from "@Interface/Config.js";
+import type PricingService from "@Interface/PricingService.js";
+import type { PricingPreview } from "@Interface/PricingService.js";
+import type RateRow from "@Interface/RateRow.js";
+import type Revision from "@Interface/Revision.js";
+
 /**
  * @module Pricing
  *
@@ -7,6 +16,7 @@
  * revision.
  *
  * @remarks
+ *
  * The service follows `Temporary/Cost-Research/Plan.md` lane B4c and the
  * research's sections 3, 5, 6 and 7.
  *
@@ -88,15 +98,6 @@
  * Both totals cover the same calls (the ones the revision prices in that
  * currency), so `difference` compares like with like.
  */
-import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
-
-import type Catalog from "@Interface/Catalog.js";
-import type Config from "@Interface/Config.js";
-import type PricingService from "@Interface/PricingService.js";
-import type { PricingPreview } from "@Interface/PricingService.js";
-import type RateRow from "@Interface/RateRow.js";
-import type Revision from "@Interface/Revision.js";
-
 // One rate row as the engine reads it: the resolved row and every row of its
 // family share this shape, so one mapper serves the resolution and the walk.
 type Rate = {

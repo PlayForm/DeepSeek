@@ -1,9 +1,11 @@
+import type Plan from "../Interface/Plan.js";
 /**
  * @module Pin
  *
  * The surgical line-level rewrite of the raw Cargo.toml text.
  *
  * @remarks
+ *
  * This is the internal calculation that makes comment/formatting
  * preservation possible: smol-toml is used ONLY to identify entries -
  * Function/Decode/Satisfy - and THIS function operates on the raw text
@@ -38,7 +40,6 @@
  * header-path normalization), KeyOf (the plan key), Name (the declaration
  * matcher) and SpliceVersion (the in-line version splice).
  */
-import type Plan from "../Interface/Plan.js";
 export interface Outcome {
     /**
      * The rewritten text (unchanged when nothing matched or on refusal).

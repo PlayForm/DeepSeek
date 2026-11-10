@@ -1,3 +1,7 @@
+import Clock from "@Function/Clock.js";
+import type State from "@Interface/State.js";
+import type { DetachConfig } from "@Interface/State.js";
+
 /**
  * @module Policy
  *
@@ -5,6 +9,7 @@
  * 5.1-5.2; Requirements/01 sections 5 + 12).
  *
  * @remarks
+ *
  * Pure functions over the plugin's own state - no I/O, no eval.
  *
  * THE COMMAND-ONLY DETACH RULE (I1 12.1, HARD): the transform detaches ONLY
@@ -29,10 +34,6 @@
  *
  * All time reads go through the State's clock seam (the smoke's fake clock).
  */
-import Clock from "@Function/Clock.js";
-import type State from "@Interface/State.js";
-import type { DetachConfig } from "@Interface/State.js";
-
 /** The permanently non-detachable content-mutating family (I1 12.1, HARD -
  * hardcoded, never config; rejected even under "all" and "selected"). */
 export const NON_DETACHABLE: readonly string[] = ["write", "edit", "raw-write", "normalize-file"];
@@ -46,7 +47,9 @@ export const COMMAND_RUNNERS: readonly string[] = ["bash"];
  * on the bash executor's inline default). */
 export const INLINE_DEADLINE_MS = 120000;
 
-/** Whether the tool belongs to the permanently non-detachable family. */
+/**
+ * Whether the tool belongs to the permanently non-detachable family.
+ */
 export const IsNonDetachable = (Tool: string): boolean => NON_DETACHABLE.includes(Tool);
 
 /** Whether the tool is a command runner the producer can re-dispatch: the
@@ -122,7 +125,9 @@ export const RecordDuration = (
 	Agent.History.set(AgentID, PerAgent);
 };
 
-/** The same-prefix history average (undefined when no history). */
+/**
+ * The same-prefix history average (undefined when no history).
+ */
 export const HistoryAverage = (
 	Agent: State,
 	AgentID: string,
@@ -151,7 +156,9 @@ export const MatchesPattern = (Command: string, Patterns: readonly string[]): bo
 		}
 	});
 
-/** The per-agent live-job count for the admission guard. */
+/**
+ * The per-agent live-job count for the admission guard.
+ */
 export const LiveCount = (Agent: State, AgentID: string): number => {
 	const Records = Agent.Detached.get(AgentID);
 	if (Records === undefined) {
@@ -188,12 +195,16 @@ export const BudgetEntry = (
 export const WithinBudget = (Agent: State, AgentID: string, Turn: number): boolean =>
 	BudgetEntry(Agent, AgentID, Turn).used < Agent.FailsafesPerTurn;
 
-/** Spend one unit of the meta-budget (call only after the action happened). */
+/**
+ * Spend one unit of the meta-budget (call only after the action happened).
+ */
 export const SpendBudget = (Agent: State, AgentID: string, Turn: number): void => {
 	BudgetEntry(Agent, AgentID, Turn).used += 1;
 };
 
-/** Whether the meta-budget just ran out (the one summary line per turn). */
+/**
+ * Whether the meta-budget just ran out (the one summary line per turn).
+ */
 export const BudgetExhausted = (Agent: State, AgentID: string, Turn: number): boolean => {
 	const Entry = Agent.MetadataBudget.get(AgentID);
 	return Entry !== undefined && Entry.turn === Turn && Entry.used >= Agent.FailsafesPerTurn;
@@ -276,6 +287,8 @@ export const Decide = (
 	}
 };
 
-/** The elapsed seconds a standing frame shows (clock-driven). */
+/**
+ * The elapsed seconds a standing frame shows (clock-driven).
+ */
 export const ElapsedSeconds = (Agent: State, From: number): number =>
 	Math.max(0, Math.round((Clock(Agent) - From) / 1000));

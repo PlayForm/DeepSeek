@@ -17,6 +17,7 @@ import type { ReactNode } from "react";
  * register into.
  *
  * @remarks
+ *
  * The panel owns both render sites; an adapter's client half injects the slot
  * its manifest declares and registers one section component there - React
  * travels through slots, so the section inherits the locale `t`, the session
@@ -27,6 +28,7 @@ export type PanelSlot = "playform.panel.section" | "playform.panel.overlay";
  * A PanelMount is where a section shows up.
  *
  * @remarks
+ *
  * The slot is the v4.1 dispatch key; `mount` survives as the legacy field the
  * slot-aware registry maps onto a slot when an older registration omits
  * `slot`.
@@ -49,6 +51,7 @@ export type LaunchTarget = {
  * The props every section's render function receives.
  *
  * @remarks
+ *
  * `sessionId` is the active conversation session when the section sits in the
  * family tab; `useTrajectory` exposes the session's trajectory snapshot hook
  * when the renderer provides one; `open` launches a registered overlay view.
@@ -63,6 +66,7 @@ export type SectionProps = {
  * @playform/ets-lib-dsh-trace.
  *
  * @remarks
+ *
  * The package never imports the library at runtime or type level: the client
  * bundle must not reach a host package. A host that exposes the trace bus on
  * the client context hands the panel exactly this shape.
@@ -79,6 +83,7 @@ export type PanelEnvelope = {
  * tail (the trace's recent envelopes for this adapter, newest first).
  *
  * @remarks
+ *
  * With no trace exposed the tail is empty and `live` is false - the
  * documented static fallback.
  */
@@ -94,6 +99,7 @@ export type PanelStatus = {
  * render the legacy contract carried.
  *
  * @remarks
+ *
  * `namespace` is the settings namespace (the profile entry id) the config
  * form reads.
  */
@@ -116,6 +122,7 @@ export type PanelSection = {
  * ...)): slot-aware bookkeeping for the adapters' manifests.
  *
  * @remarks
+ *
  * register adds a section (one adapter per bundle per slot; a duplicate is
  * refused); unregister removes it and cascades its overlay views; entries
  * snapshots the current sections ordered by (order, id), optionally filtered

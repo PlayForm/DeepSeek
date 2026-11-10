@@ -1,3 +1,9 @@
+import type { Context } from "@deepseek-ai/cordis";
+
+import type Decision from "../Interface/Decision.js";
+import type Learning from "../Interface/Learning.js";
+import Table from "./Table.js";
+
 /**
  * @module Store
  *
@@ -5,6 +11,7 @@
  * writes the follow-through performs, and the decision-record memory.
  *
  * @remarks
+ *
  * Completion spec D8 + 03-SUGGESTERS section 2.
  *
  * THE PRIMARY IS THE SHARED PATTERN SERVICE, PROBED PER USE
@@ -43,12 +50,6 @@
  * companion (the pattern schema is the read-only contract, so the record is
  * projected onto its string fields rather than extending it).
  */
-import type { Context } from "@deepseek-ai/cordis";
-
-import type Decision from "../Interface/Decision.js";
-import type Learning from "../Interface/Learning.js";
-import Table from "./Table.js";
-
 /**
  * The neutral rate: the Laplace prior with zero observations (today's score).
  */

@@ -1,5 +1,5 @@
-import type Decision from "@Interface/Decision.js";
-import type State from "@Interface/State.js";
+import type Decision from "../Interface/Decision.js";
+import type State from "../Interface/State.js";
 export default _default;
 /**
  * @module Decide

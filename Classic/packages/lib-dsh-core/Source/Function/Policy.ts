@@ -7,6 +7,7 @@ import * as FileSystem from "node:fs";
  * and fall back to the module's built-in default on any failure.
  *
  * @remarks
+ *
  * The read is a plain fs read - an auxiliary configuration file, part of the registry/policy
  * discovery exemption. The family's byte-identical diagnostic lines are module-prefixed by
  * the module's Append:

@@ -1,3 +1,6 @@
+import type { BatchProposal } from "@Interface/Batch.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Policy
  *
@@ -5,6 +8,7 @@
  * section 5).
  *
  * @remarks
+ *
  * The first batch of an intent class ALWAYS requires the user; a policy
  * auto-approval requires every one of: autoApprove "on", the intent in the
  * allowlist, the target count within maxAutoTargets, the confidence at or
@@ -13,9 +17,6 @@
  * first-batch rule). The policy never approves an expired proposal: that is
  * the gate's outcome.
  */
-import type { BatchProposal } from "@Interface/Batch.js";
-import type State from "@Interface/State.js";
-
 export type PolicyOutcome = "auto-approve" | "require-user";
 
 export default (State_: State, Proposal: BatchProposal): PolicyOutcome => {

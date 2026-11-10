@@ -5,6 +5,7 @@
  * and the note builder consume.
  *
  * @remarks
+ *
  * SEARCH-SUGGESTER-PLUGIN.md §8.2 defines the pack-as-data contract; §9.3 is
  * the replay consumer's projection. This hook is a suggester-family CONSUMER
  * whose rows arrive per call: the synthesized `Repeat` family from the recall

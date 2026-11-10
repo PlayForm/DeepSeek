@@ -1,3 +1,7 @@
+import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
+import type { CheckResult, MonitorEntry } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Band
  *
@@ -5,6 +9,7 @@
  * section 6 - the C3 implements to these bytes).
  *
  * @remarks
+ *
  * Pure functions over the per-agent monitor state; no I/O, no eval.
  *
  * THE GLYPHS: U+2204 THERE DOES NOT EXIST (clean) and U+2205 EMPTY SET
@@ -18,16 +23,18 @@
  * section 5.2 set (the retirement closing line is the one documented
  * exception - a terminal one-time change).
  */
-import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
-import type { CheckResult, MonitorEntry } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
-
-/** The clean glyph: U+2204 THERE DOES NOT EXIST (the escaped source form). */
+/**
+ * The clean glyph: U+2204 THERE DOES NOT EXIST (the escaped source form).
+ */
 const CLEAN = "\u2204";
-/** The not-run-yet glyph: U+2205 EMPTY SET (the escaped source form). */
+/**
+ * The not-run-yet glyph: U+2205 EMPTY SET (the escaped source form).
+ */
 const EMPTY = "\u2205";
 
-/** The bytes of one string. */
+/**
+ * The bytes of one string.
+ */
 export const Bytes = (Text: string): number => Buffer.byteLength(Text, "utf8");
 
 /** The version display: the raw token verbatim when <= 12 bytes, else the
@@ -36,7 +43,9 @@ export const Bytes = (Text: string): number => Buffer.byteLength(Text, "utf8");
 export const VersionDisplay = (Version: string): string =>
 	Version.length <= 12 ? Version : `${Version.slice(0, 12)}..`;
 
-/** The writer display: "-" when absent. */
+/**
+ * The writer display: "-" when absent.
+ */
 export const Writer = (Writer: string | undefined): string =>
 	typeof Writer === "string" && Writer.length > 0 ? Writer : "-";
 
@@ -44,7 +53,9 @@ export const Writer = (Writer: string | undefined): string =>
  * clean > not-run-yet). */
 export type ResultState = "stale" | "problem" | "infra" | "clean" | "not-run";
 
-/** The state rank (higher = worse; not-run is the weakest). */
+/**
+ * The state rank (higher = worse; not-run is the weakest).
+ */
 const RANK: Record<ResultState, number> = {
 	stale: 4,
 	problem: 3,
@@ -69,7 +80,9 @@ const OutcomePart = (Result: CheckResult): string => {
 	return `clean (${CLEAN})${Recovered}`;
 };
 
-/** The facts part of a result line (the checked/exit details). */
+/**
+ * The facts part of a result line (the checked/exit details).
+ */
 const FactsPart = (Result: CheckResult): string => {
 	const Base = `checked ${JobsStartedAt(Result.ranAt)} v${VersionDisplay(Result.checkedVersion)} by ${Writer(Result.writer)}`;
 	if (Result.infra === "sandbox") {
@@ -81,7 +94,9 @@ const FactsPart = (Result: CheckResult): string => {
 	return `${Base} | exit ${Result.exit === null ? "null" : Result.exit}`;
 };
 
-/** The state of one result (stale is decided by the caller). */
+/**
+ * The state of one result (stale is decided by the caller).
+ */
 const StateOf = (Result: CheckResult): ResultState => {
 	if (Result.infra !== null) {
 		return "infra";
@@ -143,7 +158,9 @@ export const LinkedLine = (Entry: MonitorEntry): string =>
 export const NotRunLine = (Entry: MonitorEntry, WithNoChecks: boolean): string =>
 	`not run yet (${EMPTY}?) | enrolled ${JobsStartedAt(Entry.enrolledAt)} by ${Writer(Entry.lastWriter)}${WithNoChecks ? " | checks: none" : ""}`;
 
-/** One assembled line of the band body. */
+/**
+ * One assembled line of the band body.
+ */
 type BodyLine = { set: string | undefined; text: string; state: ResultState };
 
 /** The band body lines for one entry: one per check set - a linked set the
@@ -174,7 +191,9 @@ const Body = (State: State, Entry: MonitorEntry, Now: number): BodyLine[] => {
 	return Lines;
 };
 
-/** The band frame's parts without the cap decisions. */
+/**
+ * The band frame's parts without the cap decisions.
+ */
 const Parts = (
 	Entry: MonitorEntry,
 	Separator: string,
@@ -244,7 +263,9 @@ export const Frame = (
 	return { frame: Parts(Entry, Separator, Texts, Tail).join("\n"), truncated: Truncated };
 };
 
-/** The full-frame byte count of an entry (the collapsed line's value). */
+/**
+ * The full-frame byte count of an entry (the collapsed line's value).
+ */
 const FullFrameBytes = (
 	State: State,
 	Entry: MonitorEntry,

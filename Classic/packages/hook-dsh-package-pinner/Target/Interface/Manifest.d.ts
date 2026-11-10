@@ -4,6 +4,7 @@
  * One parsed package.json as the pinner sees it: an arbitrary JSON object.
  *
  * @remarks
+ *
  * Decoded by Function/Decode from the `ctx.fs.readText` content. Dependency
  * sections are named by the config `sections` (defaults in Variable/Section);
  * every other key is the author's own (the refusal guard in Function/Rewrite

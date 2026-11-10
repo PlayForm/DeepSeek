@@ -1,22 +1,38 @@
 import { type Seam } from "./Write.js";
 import type Configuration from "../Interface/Configuration.js";
 import type { SnapshotManifest } from "../Interface/Snapshot.js";
-/** What one capture produced. */
+/**
+ * What one capture produced.
+ */
 export interface Taken {
-    /** The snapshot id, or "" when the capture failed. */
+    /**
+     * The snapshot id, or "" when the capture failed.
+     */
     readonly id: string;
-    /** The manifest that was written, or null when the capture failed. */
+    /**
+     * The manifest that was written, or null when the capture failed.
+     */
     readonly manifest: SnapshotManifest | null;
-    /** Why the capture failed, for the one log line. */
+    /**
+     * Why the capture failed, for the one log line.
+     */
     readonly error?: string;
 }
-/** What one rotation did. */
+/**
+ * What one rotation did.
+ */
 export interface Rotated {
-    /** The snapshot ids the rotation pruned. */
+    /**
+     * The snapshot ids the rotation pruned.
+     */
     readonly pruned: readonly string[];
-    /** How many unreferenced blobs the sweep deleted. */
+    /**
+     * How many unreferenced blobs the sweep deleted.
+     */
     readonly swept: number;
-    /** Why the rotation stopped early, when it did. */
+    /**
+     * Why the rotation stopped early, when it did.
+     */
     readonly error?: string;
 }
 export default _default;

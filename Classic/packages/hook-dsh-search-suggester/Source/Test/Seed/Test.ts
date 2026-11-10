@@ -1,19 +1,3 @@
-/**
- * @module Test
- *
- * The P3 offline seed: the deterministic warm start of the learned knowledge,
- * with no LLM and no session history.
- *
- * @remarks
- * THE SEED SOURCE: an EXPLICIT pack's canonical candidates. The built-in pack is
- * retired, so a workspace without `.dsh/pack.yml` seeds nothing (the apply-time
- * mount asserts that), and the function itself is exercised directly with an
- * explicit family fixture: the canonical tier (prior 1.0) is seeded, while the
- * `<...>` placeholder, the `family: true` aggregate and the fallback tiers stay
- * cold. A candidate the graph projection proves is seeded twice, the seed never
- * overwrites an existing row, it does not save, and the `learn`/`seed` switches
- * turn it off.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import Seed from "../../Function/Seed.js";
@@ -32,7 +16,26 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The explicit family the seed reads: five targets across every tier. */
+/**
+ * @module Test
+ *
+ * The P3 offline seed: the deterministic warm start of the learned knowledge,
+ * with no LLM and no session history.
+ *
+ * @remarks
+ *
+ * THE SEED SOURCE: an EXPLICIT pack's canonical candidates. The built-in pack is
+ * retired, so a workspace without `.dsh/pack.yml` seeds nothing (the apply-time
+ * mount asserts that), and the function itself is exercised directly with an
+ * explicit family fixture: the canonical tier (prior 1.0) is seeded, while the
+ * `<...>` placeholder, the `family: true` aggregate and the fallback tiers stay
+ * cold. A candidate the graph projection proves is seeded twice, the seed never
+ * overwrites an existing row, it does not save, and the `learn`/`seed` switches
+ * turn it off.
+ */
+/**
+ * The explicit family the seed reads: five targets across every tier.
+ */
 const Family: Intent[] = [
 	{
 		id: "Version",
@@ -50,7 +53,9 @@ const Family: Intent[] = [
 	},
 ];
 
-/** The projection that proves one canonical row (the graph's own rank). */
+/**
+ * The projection that proves one canonical row (the graph's own rank).
+ */
 const Graph: Projection = {
 	revision: "r1",
 	nodes: 1,
@@ -58,7 +63,9 @@ const Graph: Projection = {
 	facts: new Map([["package.json", { kinds: ["File"], depth: 1, recency: 1 }]]),
 };
 
-/** The epoch-seconds stamp the seeded rows carry. */
+/**
+ * The epoch-seconds stamp the seeded rows carry.
+ */
 const At = 1700000000;
 
 export const runTest = async (): Promise<number> => {

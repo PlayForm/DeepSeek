@@ -1,3 +1,4 @@
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 /**
  * @module Config
  *
@@ -5,10 +6,10 @@
  * config object apply receives.
  *
  * @remarks
+ *
  * Every field is a volatile cell: a hot edit commits without remounting and
  * the factory's P10 refresh updates the State fields in place.
  */
-import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 export default interface Config {
     /**
      * Master switch. Shipped false (the IDLE-forever posture).

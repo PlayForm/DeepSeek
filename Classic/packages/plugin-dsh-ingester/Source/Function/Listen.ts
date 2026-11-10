@@ -1,3 +1,7 @@
+import type State from "../Interface/State.js";
+import Consume from "./Consume.js";
+import Record from "./Record.js";
+
 /**
  * @module Listen
  *
@@ -6,6 +10,7 @@
  * point).
  *
  * @remarks
+ *
  * - batch/proposed - the proposal is recorded (Function/Record);
  * - batch/decision - the decision is consumed (Function/Consume), which
  *   applies the validated change through the content fence.
@@ -15,10 +20,6 @@
  * package does not import (the self-contained rule). Both listeners are
  * fail-open: a dead consumer can never break the emit dispatch.
  */
-import type State from "../Interface/State.js";
-import Consume from "./Consume.js";
-import Record from "./Record.js";
-
 /**
  * The listener signature the loose cast exposes.
  */

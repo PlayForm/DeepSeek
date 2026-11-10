@@ -1,3 +1,11 @@
+import { readFileSync } from "node:fs";
+import { mkdir, writeFile } from "node:fs/promises";
+import { dirname } from "node:path";
+
+import type Entry from "@Interface/Entry.js";
+import type Store from "@Interface/Store.js";
+import { Expand } from "@playform/lib-dsh-core";
+
 /**
  * @module Snapshot
  *
@@ -5,6 +13,7 @@
  * persistence.
  *
  * @remarks
+ *
  * The PRIMARY store is the storage-domain KV domain `replay_history`
  * (Function/Storage); this file is written and read ONLY when the harness
  * provides no storage facility (or its open fails) - the documented fallback,
@@ -17,14 +26,6 @@
  * sleep. A stale, unreadable or wrong-version file is a silent miss - the
  * store starts fresh, never a throw.
  */
-import { readFileSync } from "node:fs";
-import { mkdir, writeFile } from "node:fs/promises";
-import { dirname } from "node:path";
-
-import type Entry from "@Interface/Entry.js";
-import type Store from "@Interface/Store.js";
-import { Expand } from "@playform/lib-dsh-core";
-
 /**
  * Read the fallback snapshot; null on any failure or version mismatch.
  */

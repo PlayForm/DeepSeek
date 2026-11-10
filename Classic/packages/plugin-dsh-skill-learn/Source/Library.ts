@@ -1,3 +1,46 @@
+import Path from "node:path";
+
+import { Service, type Context } from "@deepseek-ai/cordis";
+
+import type {} from "@deepseek-ai/dsh-agent";
+import type {} from "@deepseek-ai/dsh-tools";
+
+import { Activate } from "@playform/lib-dsh-core";
+
+import { Restore as Unarchive } from "./Function/Archive.js";
+import Catalog, { type CatalogOptions } from "./Function/Catalog.js";
+import Confirm, { type View as Carried } from "./Function/Confirm.js";
+import Consolidate, { type Request as ConsolidationRequest } from "./Function/Consolidate.js";
+import Curate from "./Function/Curate.js";
+import Digest, { type DigestResult } from "./Function/Digest.js";
+import Judge from "./Function/Judge.js";
+import Knobs from "./Function/Knobs.js";
+import Append from "./Function/Ledger.js";
+import Parse from "./Function/Parse.js";
+import Plan from "./Function/Plan.js";
+import Prompt from "./Function/Prompt.js";
+import Report from "./Function/Report.js";
+import Revert, { type Reverted } from "./Function/Revert.js";
+import Route from "./Function/Route.js";
+import Transcript from "./Function/Transcript.js";
+import Gate, { type Session } from "./Function/Trigger.js";
+import Usage from "./Function/Usage.js";
+import Write, { Expand, Locate, Text, type Seam } from "./Function/Write.js";
+import type Agent from "./Interface/Agent.js";
+import type Configuration from "./Interface/Configuration.js";
+import type { ConsolidationPlan, ConsolidationResult } from "./Interface/Consolidation.js";
+import type { Corpus } from "./Interface/Corpus.js";
+import type { Curation } from "./Interface/Curation.js";
+import type Message from "./Interface/Message.js";
+import type { Operation } from "./Interface/Operation.js";
+import type UsageRecord from "./Interface/Record.js";
+import type { ReviewInput, ReviewRefusal, ReviewResult, ReviewRule } from "./Interface/Review.js";
+import type { LlmSlice, SkillsSlice, WorkingDirectorySlice } from "./Interface/Services.js";
+import type { LoadedSkill } from "./Interface/Skill.js";
+import type { Outcome, Trigger } from "./Interface/Trigger.js";
+import Definition from "./Variable/Configuration.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -6,6 +49,7 @@
  * session into skill edits, and the curator that ages the corpus.
  *
  * @remarks
+ *
  * Loader contract: the CLASS form the family uses - `export default class
  * SkillLearnService extends Service` with `super(Context, "skillLearn")`, `static
  * inject`, `static Config = Definition` and the named `Config` schema export beside it
@@ -64,79 +108,58 @@
  * line (plan section 6.7). Nothing here throws into the emitter, and nothing here throws
  * into the maintenance task.
  */
-import Path from "node:path";
-
-import { Service, type Context } from "@deepseek-ai/cordis";
-
-import type {} from "@deepseek-ai/dsh-agent";
-import type {} from "@deepseek-ai/dsh-tools";
-
-import { Activate } from "@playform/lib-dsh-core";
-
-import { Restore as Unarchive } from "./Function/Archive.js";
-import Catalog, { type CatalogOptions } from "./Function/Catalog.js";
-import Confirm, { type View as Carried } from "./Function/Confirm.js";
-import Consolidate, { type Request as ConsolidationRequest } from "./Function/Consolidate.js";
-import Curate from "./Function/Curate.js";
-import Digest, { type DigestResult } from "./Function/Digest.js";
-import Judge from "./Function/Judge.js";
-import Knobs from "./Function/Knobs.js";
-import Append from "./Function/Ledger.js";
-import Parse from "./Function/Parse.js";
-import Plan from "./Function/Plan.js";
-import Prompt from "./Function/Prompt.js";
-import Report from "./Function/Report.js";
-import Revert, { type Reverted } from "./Function/Revert.js";
-import Route from "./Function/Route.js";
-import Transcript from "./Function/Transcript.js";
-import Gate, { type Session } from "./Function/Trigger.js";
-import Usage from "./Function/Usage.js";
-import Write, { Expand, Locate, Text, type Seam } from "./Function/Write.js";
-import type Agent from "./Interface/Agent.js";
-import type Configuration from "./Interface/Configuration.js";
-import type { ConsolidationPlan, ConsolidationResult } from "./Interface/Consolidation.js";
-import type { Corpus } from "./Interface/Corpus.js";
-import type { Curation } from "./Interface/Curation.js";
-import type Message from "./Interface/Message.js";
-import type { Operation } from "./Interface/Operation.js";
-import type UsageRecord from "./Interface/Record.js";
-import type { ReviewInput, ReviewRefusal, ReviewResult, ReviewRule } from "./Interface/Review.js";
-import type { LlmSlice, SkillsSlice, WorkingDirectorySlice } from "./Interface/Services.js";
-import type { LoadedSkill } from "./Interface/Skill.js";
-import type { Outcome, Trigger } from "./Interface/Trigger.js";
-import Definition from "./Variable/Configuration.js";
-import Version from "./Variable/Version.js";
-
-/** The corpus-wide counts (plan section 2, row 8). */
+/**
+ * The corpus-wide counts (plan section 2, row 8).
+ */
 export interface Status {
-	/** Every record the usage store holds. */
+	/**
+	 * Every record the usage store holds.
+	 */
 	readonly total: number;
 
-	/** Records in the `active` state. */
+	/**
+	 * Records in the `active` state.
+	 */
 	readonly active: number;
 
-	/** Records in the `stale` state. */
+	/**
+	 * Records in the `stale` state.
+	 */
 	readonly stale: number;
 
-	/** Records in the `archived` state; only `Restore` leaves it. */
+	/**
+	 * Records in the `archived` state; only `Restore` leaves it.
+	 */
 	readonly archived: number;
 
-	/** Records exempt from every transition. */
+	/**
+	 * Records exempt from every transition.
+	 */
 	readonly pinned: number;
 
-	/** Records in the curator's jurisdiction, which is what `Curate` walks. */
+	/**
+	 * Records in the curator's jurisdiction, which is what `Curate` walks.
+	 */
 	readonly tracked: number;
 
-	/** When the curator last ran, or null before its first pass. */
+	/**
+	 * When the curator last ran, or null before its first pass.
+	 */
 	readonly lastRunAt: string | null;
 }
 
-/** The lifecycle answer (`Pin`, `Restore`): the verdict, its class, and one clause. */
+/**
+ * The lifecycle answer (`Pin`, `Restore`): the verdict, its class, and one clause.
+ */
 export interface Lifecycle {
-	/** Whether the lifecycle move landed. */
+	/**
+	 * Whether the lifecycle move landed.
+	 */
 	readonly ok: boolean;
 
-	/** The class the move ended in; the first five are successes. */
+	/**
+	 * The class the move ended in; the first five are successes.
+	 */
 	readonly outcome:
 		| "pinned"
 		| "unpinned"
@@ -147,11 +170,15 @@ export interface Lifecycle {
 		| "foreign-root"
 		| "failed";
 
-	/** One clause naming why a move was refused, or the path it wrote. */
+	/**
+	 * One clause naming why a move was refused, or the path it wrote.
+	 */
 	readonly detail: string;
 }
 
-/** One review request: the leaf's input plus the claimed run's write budget. */
+/**
+ * One review request: the leaf's input plus the claimed run's write budget.
+ */
 export interface ReviewRequest extends ReviewInput {
 	/**
 	 * The session the write cap counts on. Present only when the run came from
@@ -162,68 +189,110 @@ export interface ReviewRequest extends ReviewInput {
 	readonly session?: Session;
 }
 
-/** The session a direct `Review` call spends, which is none: there is no claimed run. */
+/**
+ * The session a direct `Review` call spends, which is none: there is no claimed run.
+ */
 const Unbudgeted: Session = { writes: 0, spend: () => 0 };
 
-/** The digest a run that stopped before the transcript reports. */
+/**
+ * The digest a run that stopped before the transcript reports.
+ */
 const Empty = { text: "", kept: 0, collapsed: 0 } satisfies DigestResult;
 
-/** What one run learned about the corpus before the judge ran (plan section 4.6). */
+/**
+ * What one run learned about the corpus before the judge ran (plan section 4.6).
+ */
 interface Evidence {
-	/** Every name the run probed, and the catalog's answer; null when it resolved none. */
+	/**
+	 * Every name the run probed, and the catalog's answer; null when it resolved none.
+	 */
 	readonly skills: Map<string, LoadedSkill | null>;
 
-	/** The bodies the confirm prompt carried, by skill name. */
+	/**
+	 * The bodies the confirm prompt carried, by skill name.
+	 */
 	readonly bodies: Map<string, string>;
 
-	/** The support files the run read, by `Support` key; null when the file was absent. */
+	/**
+	 * The support files the run read, by `Support` key; null when the file was absent.
+	 */
 	readonly supports: Map<string, string | null>;
 }
 
-/** The run's working record, mutated as the pipeline advances so an early return still reports. */
+/**
+ * The run's working record, mutated as the pipeline advances so an early return still reports.
+ */
 interface Draft {
-	/** When the run started; the report's directory name and its first line. */
+	/**
+	 * When the run started; the report's directory name and its first line.
+	 */
 	readonly startedAt: Date;
 
-	/** The provider that answered, or "" when no call was made. */
+	/**
+	 * The provider that answered, or "" when no call was made.
+	 */
 	provider: string;
 
-	/** The model that answered, or "" when no call was made. */
+	/**
+	 * The model that answered, or "" when no call was made.
+	 */
 	model: string;
 
-	/** What the digest kept and collapsed. */
+	/**
+	 * What the digest kept and collapsed.
+	 */
 	digest: DigestResult;
 
-	/** How many skill bodies the confirm prompt carried. */
+	/**
+	 * How many skill bodies the confirm prompt carried.
+	 */
 	views: number;
 
-	/** How many operations the final reply named. */
+	/**
+	 * How many operations the final reply named.
+	 */
 	operations: number;
 
-	/** The skills whose bytes changed. */
+	/**
+	 * The skills whose bytes changed.
+	 */
 	applied: string[];
 
-	/** Every operation the judge or the fence refused. */
+	/**
+	 * Every operation the judge or the fence refused.
+	 */
 	refused: ReviewRefusal[];
 
-	/** The audit row ids the run appended. */
+	/**
+	 * The audit row ids the run appended.
+	 */
 	ledger: string[];
 
-	/** The snapshot taken before the run; always "" for a review, which takes none. */
+	/**
+	 * The snapshot taken before the run; always "" for a review, which takes none.
+	 */
 	snapshot: string;
 
-	/** The session's spent write count at the end of the run. */
+	/**
+	 * The session's spent write count at the end of the run.
+	 */
 	writes: number;
 }
 
-/** The family ledger line: `skillLearn: <clause> (logFile <path>)` (plan section 6.7). */
+/**
+ * The family ledger line: `skillLearn: <clause> (logFile <path>)` (plan section 6.7).
+ */
 const Line = (Clause: string, Knobs: Configuration): string =>
 	`skillLearn: ${Clause} (logFile ${Knobs.logFile})`;
 
-/** The message of a caught value, for a ledger clause. */
+/**
+ * The message of a caught value, for a ledger clause.
+ */
 const Reason = (Cause: unknown): string => (Cause instanceof Error ? Cause.message : String(Cause));
 
-/** The key one support file is carried under: a skill name and its path under it. */
+/**
+ * The key one support file is carried under: a skill name and its path under it.
+ */
 const Support = (Name: string, FilePath: string): string => `${Name}\n${FilePath}`;
 
 /**
@@ -253,7 +322,9 @@ const Contained = (Parent: string, Child: string): boolean => {
  */
 const Narrow = (Agent_: unknown): Agent => Agent_ as Agent;
 
-/** One field of a tool call's parsed arguments; `arguments` is declared `unknown`. */
+/**
+ * One field of a tool call's parsed arguments; `arguments` is declared `unknown`.
+ */
 const Field = (Given: unknown, Key: string): unknown =>
 	typeof Given === "object" && Given !== null ? Reflect.get(Given, Key) : undefined;
 
@@ -315,7 +386,9 @@ const Clause = (
 	}
 };
 
-/** The operation's carried body: the file the write would touch, as the model saw it. */
+/**
+ * The operation's carried body: the file the write would touch, as the model saw it.
+ */
 const Carry = (Operation: Operation, Evidence_: Evidence): string | null => {
 	switch (Operation.kind) {
 		case "create":
@@ -327,7 +400,9 @@ const Carry = (Operation: Operation, Evidence_: Evidence): string | null => {
 	}
 };
 
-/** The refusal every member of the absent seam reports, so the cause is one clause. */
+/**
+ * The refusal every member of the absent seam reports, so the cause is one clause.
+ */
 const Refuse = (): Promise<never> => Promise.reject(new Error("no fs service"));
 
 /**
@@ -353,13 +428,19 @@ const Absent: Seam = {
 export default class SkillLearnService extends Service {
 	static inject: string[] = [];
 
-	/** The loader-contract Config (validated at load; knobs via Configure). */
+	/**
+	 * The loader-contract Config (validated at load; knobs via Configure).
+	 */
 	static Config = Definition;
 
-	/** The knobs: constructor defaults plus the loader's validated config. */
+	/**
+	 * The knobs: constructor defaults plus the loader's validated config.
+	 */
 	private Knobs: Configuration;
 
-	/** The usage store (Function/Usage), bound to the expanded `storagePath` at construction. */
+	/**
+	 * The usage store (Function/Usage), bound to the expanded `storagePath` at construction.
+	 */
 	private Usage: Usage;
 
 	/**
@@ -370,10 +451,14 @@ export default class SkillLearnService extends Service {
 	 */
 	private Gate: Gate = new Gate();
 
-	/** The ledger sink (best-effort, never throws). */
+	/**
+	 * The ledger sink (best-effort, never throws).
+	 */
 	private Ledger: (Message: string) => void;
 
-	/** The harness context (the optional `llm`, `skills` and `workingDirectory` probes). */
+	/**
+	 * The harness context (the optional `llm`, `skills` and `workingDirectory` probes).
+	 */
 	private Context: Context;
 
 	constructor(Context_: Context, Raw?: unknown) {
@@ -475,7 +560,9 @@ export default class SkillLearnService extends Service {
 		});
 	}
 
-	/** Apply the validated config knobs (called by the host on load/volatile). */
+	/**
+	 * Apply the validated config knobs (called by the host on load/volatile).
+	 */
 	Configure(Options: Partial<Configuration>): void {
 		this.Knobs = { ...this.Knobs, ...Options };
 	}
@@ -517,12 +604,16 @@ export default class SkillLearnService extends Service {
 		return Verdict;
 	}
 
-	/** One review. Never throws; every degradation is one of the twelve classes. */
+	/**
+	 * One review. Never throws; every degradation is one of the twelve classes.
+	 */
 	async Review(Input: ReviewRequest): Promise<ReviewResult> {
 		return this.Pipeline(Narrow(Input.agent), Input.signal, Input.session ?? Unbudgeted);
 	}
 
-	/** The deterministic lifecycle pass, and the consolidation pass when it is enabled. */
+	/**
+	 * The deterministic lifecycle pass, and the consolidation pass when it is enabled.
+	 */
 	async Curate(Now: Date = new Date()): Promise<Curation> {
 		const Counts = await Curate(Now, this.Usage, this.Seam(), this.Knobs);
 		// The clock is recorded AFTER the pass, in the store that already persists,
@@ -585,7 +676,9 @@ export default class SkillLearnService extends Service {
 		return Result;
 	}
 
-	/** One observed load through the `skill` tool. A store failure ledgers and returns. */
+	/**
+	 * One observed load through the `skill` tool. A store failure ledgers and returns.
+	 */
 	async Record(Name: string, _Agent?: unknown): Promise<void> {
 		// The store is global and one chain serialises every write
 		// (`Function/Usage.ts:142-157`), so the agent is accepted for the caller's
@@ -594,7 +687,9 @@ export default class SkillLearnService extends Service {
 		await this.Save();
 	}
 
-	/** One audit row back to files, fail-closed (`Function/Revert.ts:1-24`). */
+	/**
+	 * One audit row back to files, fail-closed (`Function/Revert.ts:1-24`).
+	 */
 	async Revert(Identifier: string): Promise<Reverted> {
 		const Result = await Revert(Identifier, this.Seam(), this.Knobs);
 		switch (true) {
@@ -616,7 +711,9 @@ export default class SkillLearnService extends Service {
 		return Result;
 	}
 
-	/** The corpus-wide counts. Always answers; the store is quarantined before the read. */
+	/**
+	 * The corpus-wide counts. Always answers; the store is quarantined before the read.
+	 */
 	Status(): Status {
 		const All = this.Usage.All();
 		// The clock is the store's, not the instance's: a restart keeps it, which is
@@ -637,7 +734,9 @@ export default class SkillLearnService extends Service {
 		};
 	}
 
-	/** Exempt one skill from every transition, or lift the exemption. */
+	/**
+	 * Exempt one skill from every transition, or lift the exemption.
+	 */
 	async Pin(Name: string, Pinned: boolean): Promise<Lifecycle> {
 		const Root = Expand(this.Knobs.skillsRoot);
 		switch (true) {
@@ -657,7 +756,9 @@ export default class SkillLearnService extends Service {
 		return { ok: true, outcome: Pinned ? "pinned" : "unpinned", detail: "" };
 	}
 
-	/** Put one archived skill back into the catalog and reactivate its record. */
+	/**
+	 * Put one archived skill back into the catalog and reactivate its record.
+	 */
 	async Restore(Name: string): Promise<Lifecycle> {
 		const Result = await Unarchive(Name, this.Seam(), this.Knobs);
 		switch (true) {
@@ -672,7 +773,9 @@ export default class SkillLearnService extends Service {
 		return { ok: true, outcome: "restored", detail: Result.path };
 	}
 
-	/** The bounded digest of one derived transcript. */
+	/**
+	 * The bounded digest of one derived transcript.
+	 */
 	Digest(Messages: readonly Message[]): DigestResult {
 		return Digest(Messages, {
 			digestTail: this.Knobs.digestTail,
@@ -681,12 +784,16 @@ export default class SkillLearnService extends Service {
 		});
 	}
 
-	/** The byte-stable phase prompt; there is no assembly here by design. */
+	/**
+	 * The byte-stable phase prompt; there is no assembly here by design.
+	 */
 	Prompt(Phase: 1 | 2): string {
 		return Prompt(Phase);
 	}
 
-	/** Persist the usage store (the smoke seam). Swallows and ledgers. */
+	/**
+	 * Persist the usage store (the smoke seam). Swallows and ledgers.
+	 */
 	async Save(): Promise<void> {
 		const Result = await this.Usage.Save();
 		switch (true) {
@@ -931,7 +1038,9 @@ export default class SkillLearnService extends Service {
 		return this.Finish(Draft, Ended, Detail);
 	}
 
-	/** Write the run report and its one ledger line, and answer the result. */
+	/**
+	 * Write the run report and its one ledger line, and answer the result.
+	 */
 	private async Finish(Draft: Draft, Outcome: Outcome, Detail: string): Promise<ReviewResult> {
 		const Report_ = await Report(Expand(this.Knobs.reportsRoot), {
 			startedAt: Draft.startedAt.toISOString(),
@@ -985,7 +1094,9 @@ export default class SkillLearnService extends Service {
 		return Date.now() - Last >= this.Knobs.curateIntervalHours * 3_600_000;
 	}
 
-	/** One idle edge: the review, then the curator when its interval is due. */
+	/**
+	 * One idle edge: the review, then the curator when its interval is due.
+	 */
 	private async Edge(Agent: unknown): Promise<void> {
 		await this.Trigger(Agent);
 		switch (true) {
@@ -1022,18 +1133,24 @@ export default class SkillLearnService extends Service {
 		return Given;
 	}
 
-	/** The catalog (`ctx.skills`); a missing provider surfaces as a caught throw. */
+	/**
+	 * The catalog (`ctx.skills`); a missing provider surfaces as a caught throw.
+	 */
 	private Skills(): SkillsSlice {
 		return this.Context.get("skills");
 	}
 
-	/** The model service, or undefined when it is absent, which is the `no-llm` class. */
+	/**
+	 * The model service, or undefined when it is absent, which is the `no-llm` class.
+	 */
 	private Llm(): LlmSlice | undefined {
 		const Given = this.Context.get("llm");
 		return typeof Given?.stream === "function" ? Given : undefined;
 	}
 
-	/** Where the catalog is listed from: the agent's working directory, else the corpus root. */
+	/**
+	 * Where the catalog is listed from: the agent's working directory, else the corpus root.
+	 */
 	private async Where(Agent: Agent, Signal: AbortSignal): Promise<CatalogOptions> {
 		const Working: WorkingDirectorySlice | undefined = this.Context.get("workingDirectory");
 		if (Working === undefined || typeof Working.ensure !== "function") {
@@ -1046,7 +1163,9 @@ export default class SkillLearnService extends Service {
 		}
 	}
 
-	/** The catalog index; a provider that rejects is an empty index, never a failed run. */
+	/**
+	 * The catalog index; a provider that rejects is an empty index, never a failed run.
+	 */
 	private async Index(Where: CatalogOptions): Promise<readonly string[]> {
 		try {
 			return await Catalog(this.Skills(), Where);
@@ -1055,7 +1174,9 @@ export default class SkillLearnService extends Service {
 		}
 	}
 
-	/** One catalog lookup; a provider that rejects is a name the catalog does not resolve. */
+	/**
+	 * One catalog lookup; a provider that rejects is a name the catalog does not resolve.
+	 */
 	private async Lookup(Name: string, Where: CatalogOptions): Promise<LoadedSkill | undefined> {
 		try {
 			return await this.Skills().get(Name, Where);
@@ -1064,7 +1185,9 @@ export default class SkillLearnService extends Service {
 		}
 	}
 
-	/** One path's text; an absent or unreadable file is null, which is the `absent` case. */
+	/**
+	 * One path's text; an absent or unreadable file is null, which is the `absent` case.
+	 */
 	private async Body(Absolute: string): Promise<string | null> {
 		try {
 			return await Text(this.Seam(), Absolute);
@@ -1073,7 +1196,9 @@ export default class SkillLearnService extends Service {
 		}
 	}
 
-	/** Drop the catalog cache after a mutation, so the next read sees the new bytes. */
+	/**
+	 * Drop the catalog cache after a mutation, so the next read sees the new bytes.
+	 */
 	private Refresh(): void {
 		try {
 			this.Skills().invalidateCache();
@@ -1082,7 +1207,9 @@ export default class SkillLearnService extends Service {
 		}
 	}
 
-	/** The judge's read-only corpus view, over the evidence one run gathered. */
+	/**
+	 * The judge's read-only corpus view, over the evidence one run gathered.
+	 */
 	private CorpusView(Evidence_: Evidence): Corpus {
 		return {
 			resolve: (Name: string): string | null => {

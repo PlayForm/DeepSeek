@@ -1,3 +1,9 @@
+import { MAIN, Release } from "@Function/Capacity.js";
+import Restore from "@Function/Restore.js";
+import type { AgentsService } from "@Interface/Agent.js";
+import type State from "@Interface/State.js";
+import type Task from "@Interface/Task.js";
+
 /**
  * @module Reconcile
  *
@@ -7,6 +13,7 @@
  * LIVE agents and settle every orphan honestly.
  *
  * @remarks
+ *
  * Input: the persisted queue record from the previous process (the caller
  * keeps `Snapshot().tasks`; the family has no storage domain yet, so the
  * record is handed back rather than read from a store). Absent = reconcile
@@ -30,12 +37,6 @@
  * The reconcile does not dispatch: the caller's next dispatch (or the pull
  * after the settle) resumes the requeued work.
  */
-import { MAIN, Release } from "@Function/Capacity.js";
-import Restore from "@Function/Restore.js";
-import type { AgentsService } from "@Interface/Agent.js";
-import type State from "@Interface/State.js";
-import type Task from "@Interface/Task.js";
-
 /**
  * The reconcile report (the caller's audit of what moved).
  */

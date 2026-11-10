@@ -1,3 +1,8 @@
+import type { AgentsService } from "@Interface/Agent.js";
+import type State from "@Interface/State.js";
+import type SubagentsService from "@Interface/Subagent.js";
+import type Task from "@Interface/Task.js";
+
 /**
  * @module Spawn
  *
@@ -6,6 +11,7 @@
  * never a private spawn"; SUBAGENT-QUEUE-PLUGIN.md section 4.4).
  *
  * @remarks
+ *
  * The dispatcher calls this after the seat is taken and the state flipped;
  * the spec goes to the child VERBATIM (the queue never alters a task's spec) and
  * the resolved route goes as the child's `agentOptions`.
@@ -29,11 +35,6 @@
  * dispatcher supplies, which also pulls the next queued task into the freed
  * seat (the idle-slot automation).
  */
-import type { AgentsService } from "@Interface/Agent.js";
-import type State from "@Interface/State.js";
-import type SubagentsService from "@Interface/Subagent.js";
-import type Task from "@Interface/Task.js";
-
 /**
  * The settle callback: `true` = completed, `false` = failed.
  */

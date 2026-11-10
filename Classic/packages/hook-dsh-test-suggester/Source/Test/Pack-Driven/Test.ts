@@ -1,16 +1,3 @@
-/**
- * @module Test
- *
- * The EXPLICIT pack override: a temporary repo with its own `.dsh/pack.yml` still speaks when
- * the session history is empty.
- *
- * @remarks
- * The note names the pack's `test/Suite` companion and never the built-in one. The same workspace
- * WITHOUT the pack abstains `no-history` (the built-in pack is never a candidate source); a pack
- * in a rooted tree still governs even when its declared signature marker is absent (the root
- * gates, not the signature); and the monorepo path with no history abstains `no-history` instead
- * of naming the built-in pack's companions.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -24,10 +11,28 @@ import {
 	Setup,
 } from "../Harness.js";
 
-/** A temp tree under the OS temp dir (fresh per folder process). */
+/**
+ * @module Test
+ *
+ * The EXPLICIT pack override: a temporary repo with its own `.dsh/pack.yml` still speaks when
+ * the session history is empty.
+ *
+ * @remarks
+ *
+ * The note names the pack's `test/Suite` companion and never the built-in one. The same workspace
+ * WITHOUT the pack abstains `no-history` (the built-in pack is never a candidate source); a pack
+ * in a rooted tree still governs even when its declared signature marker is absent (the root
+ * gates, not the signature); and the monorepo path with no history abstains `no-history` instead
+ * of naming the built-in pack's companions.
+ */
+/**
+ * A temp tree under the OS temp dir (fresh per folder process).
+ */
 const Tree = (Prefix: string): string => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
 
-/** Write one file under the tree (parents created). */
+/**
+ * Write one file under the tree (parents created).
+ */
 const Put = (Root: string, Relative: string, Body = "x"): string => {
 	const Full = Path.join(Root, Relative);
 	FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
@@ -35,12 +40,16 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
-/** Mark the tree as a workspace root (the pack-independent `package.json` marker). */
+/**
+ * Mark the tree as a workspace root (the pack-independent `package.json` marker).
+ */
 const Manifest = (Root: string): void => {
 	FileSystem.writeFileSync(Path.join(Root, "package.json"), "{}", "utf8");
 };
 
-/** The temp pack: a custom signature and one test/Suite intent. */
+/**
+ * The temp pack: a custom signature and one test/Suite intent.
+ */
 const Pack = `signature:
   - docs/STYLE.md
 families:
@@ -60,33 +69,45 @@ families:
         reason: the temp suite
 `;
 
-/** The optional harness service the probe reads (the real shape: get(session)). */
+/**
+ * The optional harness service the probe reads (the real shape: get(session)).
+ */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** The judged read inside one tree (the absolute path anchors the root there). */
+/**
+ * The judged read inside one tree (the absolute path anchors the root there).
+ */
 const Probe = (Root: string): Record<string, unknown> => ({
 	file_path: Path.join(Root, "Source/Test/Foo/Test.ts"),
 	hint: "PASS",
 });
 
-/** The PACKED workspace: the manifest, the pack, its marker and the target. */
+/**
+ * The PACKED workspace: the manifest, the pack, its marker and the target.
+ */
 const Packed = Tree("test-suggester-packed-");
 Manifest(Packed);
 Put(Packed, ".dsh/pack.yml", Pack);
 Put(Packed, "docs/STYLE.md");
 Put(Packed, "SUITE.md");
 
-/** The SAME workspace without the pack: the manifest and the target only. */
+/**
+ * The SAME workspace without the pack: the manifest and the target only.
+ */
 const Bare = Tree("test-suggester-bare-");
 Manifest(Bare);
 Put(Bare, "SUITE.md");
 
-/** The UNSIGNED workspace: a pack whose signature marker is absent. */
+/**
+ * The UNSIGNED workspace: a pack whose signature marker is absent.
+ */
 const Unsigned = Tree("test-suggester-unsigned-");
 Manifest(Unsigned);
 Put(Unsigned, ".dsh/pack.yml", Pack);
 
-/** The MONOREPO-shaped tree: a manifest and a doc path, no pack and no smoke tree. */
+/**
+ * The MONOREPO-shaped tree: a manifest and a doc path, no pack and no smoke tree.
+ */
 const Monorepo = Tree("test-suggester-monorepo-");
 Manifest(Monorepo);
 Put(Monorepo, "Documentation/Plans/POC-LEDGER.md");

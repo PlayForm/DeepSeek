@@ -1,3 +1,7 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
+import DefaultLens from "@Variable/DefaultLens.js";
+
 /**
  * @module Config
  *
@@ -5,6 +9,7 @@
  * once at load).
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills
  * every default, so invalid configuration fails LOUD at load, and `apply`
  * receives a validated plain config object. The shape this schema produces
@@ -24,10 +29,6 @@
  *
  * `enabled` defaults to FALSE - the IDLE-forever posture.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
-import DefaultLens from "@Variable/DefaultLens.js";
-
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-context.log";
 const DefaultEnabled = false;
 // The budget: target 2k tokens (V4-1 section 3.5), hard cap configurable.

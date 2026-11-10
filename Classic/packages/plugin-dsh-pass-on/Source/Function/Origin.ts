@@ -5,6 +5,7 @@
  * and to whose inbox the decision returns.
  *
  * @remarks
+ *
  * The resolution order is:
  *
  * 1. The caller's explicit origin (the tool/subagent that asked for the batch)

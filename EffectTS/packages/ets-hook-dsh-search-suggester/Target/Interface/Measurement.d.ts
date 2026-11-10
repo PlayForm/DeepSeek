@@ -4,6 +4,7 @@
  * One pack candidate measured against the graph projection (Function/Measure).
  *
  * @remarks
+ *
  * The two scores it carries replace the neutral 0.5 literal of the PoC:
  * `literal` is the graph's proof of the candidate (node exists, kind matches
  * the intent's expected kinds, the node's recency), and `scope` is the path's

@@ -1,7 +1,7 @@
 import { Service, type Context } from "@deepseek-ai/cordis";
-import type Packet from "@Interface/Packet.js";
-import type Query from "@Interface/Query.js";
-import type State from "@Interface/State.js";
+import type Packet from "../Interface/Packet.js";
+import type Query from "../Interface/Query.js";
+import type State from "../Interface/State.js";
 /**
  * @module Service
  *

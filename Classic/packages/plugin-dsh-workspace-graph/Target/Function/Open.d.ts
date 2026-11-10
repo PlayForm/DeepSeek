@@ -1,9 +1,12 @@
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Open
  *
  * The optional storage-domain setup (the factory's `Function/Open` pattern).
  *
  * @remarks
+ *
  * The setup probes the facility (`ctx.storage.domain`, else `ctx.storageDomain`), declares
  * the domain named `Config.domain` (version 1, per-record layout, the backup-and-skip
  * invalid-record policy) with the single `records` table, opens it, loads the stored records
@@ -17,6 +20,4 @@
  * (in-memory only); a present facility whose open fails is loud (one best-effort ledger
  * line).
  */
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(StateRef: State): Promise<void>;

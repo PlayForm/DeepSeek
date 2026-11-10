@@ -1,3 +1,5 @@
+import type { Context } from "@deepseek-ai/cordis";
+export default _default;
 /**
  * @module Register
  *
@@ -6,6 +8,7 @@
  * event once for every agent.
  *
  * @remarks
+ *
  * WHY `ctx.inject` AND NOT THE `inject` ARRAY: the registry is a service a
  * shipped composition provides, but the hook must LOAD without it (a bare
  * mount, a test ctx, an older profile). Declaring `sessionProjections` in
@@ -27,6 +30,4 @@
  * degradation (the history stays empty and only an explicit pack may speak)
  * - the same posture as the `workingDirectory` probe in Function/Apply.
  */
-import type { Context } from "@deepseek-ai/cordis";
-export default _default;
 declare function _default(Context: Context): void;

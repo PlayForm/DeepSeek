@@ -1,3 +1,6 @@
+import type Dispatcher from "@Function/Dispatcher.js";
+import type Factory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Queue
  *
@@ -10,6 +13,7 @@
  * join point).
  *
  * @remarks
+ *
  * The shape here is the structural contract; the implementation lives in
  * Function/Dispatcher.ts.
  *
@@ -18,9 +22,6 @@
  * package (erased at build), so `ctx.pluginFactory` is fully typed at every
  * consumption site.
  */
-import type Dispatcher from "@Function/Dispatcher.js";
-import type Factory from "@playform/plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

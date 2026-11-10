@@ -6,6 +6,7 @@ import type { TruthKind } from "./TruthKind.js";
  * The validation object: one claim validated into one object.
  *
  * @remarks
+ *
  * The EVIDENCE.md contract: one claim validated into one object with its truth
  * kind, its verdict, and its declared dependencies. The dependencies are the
  * Acar seam: when a dependency changes, the object goes stale (the

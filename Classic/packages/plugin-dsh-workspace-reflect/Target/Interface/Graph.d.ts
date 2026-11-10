@@ -1,3 +1,4 @@
+import type Node from "./Node.js";
 /**
  * @module Graph
  *
@@ -5,6 +6,7 @@
  * the reflect service consumes.
  *
  * @remarks
+ *
  * The WAVE-1-BRIEF frozen contract, section 4.3. Declared here, not imported,
  * because the PoC is self-contained: the sibling package may not exist yet,
  * and the end-phase wires the real import. The handle is probed at use time
@@ -12,7 +14,6 @@
  * completes, only the reflective carry (the re-index) does not run, and a
  * node-targeted Replace falls back to its explicit span.
  */
-import type Node from "./Node.js";
 export default interface GraphHandle {
     /**
      * The frozen contract's method: re-index one file after a transformation,

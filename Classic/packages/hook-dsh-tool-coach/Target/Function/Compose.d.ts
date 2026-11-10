@@ -1,5 +1,23 @@
 import type { AgentState, Decision, ToolCatalog } from "../Interface/Execution.js";
 /**
+ * @module Compose
+ *
+ * The template system: fills the three templates with the decision's data and
+ * the fetched catalog entries.
+ *
+ * @remarks
+ *
+ * Plan Part 3 §3.3/§3.5 step 4.
+ *
+ * The fill is a SINGLE-PASS scanner over the template: each `${...}` token is
+ * read from the ORIGINAL template and replaced with its value; user data
+ * (the ${command} fill) is escaped (`${` -> `$${`) BEFORE insertion, so user
+ * content can never add an unfilled placeholder, and inserted values are
+ * never re-scanned. Any placeholder missing a fetched value degrades to the
+ * static line (Variable/Notes.STATIC_TOOL_LINES) - composed output never
+ * fails on a fetch gap.
+ */
+/**
  * The knob values the composers read (the live State values).
  */
 export interface ComposeConfig {

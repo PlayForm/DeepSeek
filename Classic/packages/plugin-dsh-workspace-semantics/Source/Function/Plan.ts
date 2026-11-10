@@ -1,9 +1,16 @@
+import Build from "@Function/Build.js";
+import Select from "@Function/Select.js";
+import type RenamePlan from "@Interface/RenamePlan.js";
+import type Span from "@Interface/Span.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Plan
  *
  * The rename semantics: the service's rename() computes the plan per format.
  *
  * @remarks
+ *
  * The rename means different things per format (the .ts symbol vs the .docx
  * displayed text vs the .rs item), so the plan is the ADAPTER's answer: the
  * adapter computes the edits from its reference list plus its own symbol
@@ -21,13 +28,9 @@
  * The model is built on demand: an unresolved path resolves first (the plan
  * needs the text and the references).
  */
-import Build from "@Function/Build.js";
-import Select from "@Function/Select.js";
-import type RenamePlan from "@Interface/RenamePlan.js";
-import type Span from "@Interface/Span.js";
-import type State from "@Interface/State.js";
-
-/** The workspace root the deepener's queries resolve against. */
+/**
+ * The workspace root the deepener's queries resolve against.
+ */
 const Root = (State: State): string => (State.Root.length > 0 ? State.Root : process.cwd());
 
 export default async (

@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -6,6 +10,7 @@
  * prefix since a tool is the primary surface, like plugin-dsh-factory).
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` +
  * `export const Config` + `export const inject` +
  * `export default { name, apply, Config, inject }` - the ONLY named exports in
@@ -40,10 +45,6 @@
  * Documentation/Plans/Batch-Edit-Tool/SCHEMA.md, STATE-MACHINE.md,
  * PACKAGE-AND-GOVERNANCE.md, ACCEPTANCE-CRITERIA.md.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "plugin-dsh-batch-edit";
 
 /**

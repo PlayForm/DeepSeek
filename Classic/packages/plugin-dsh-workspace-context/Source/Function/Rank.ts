@@ -1,3 +1,5 @@
+import type { GraphEdge } from "@Interface/Graph.js";
+
 /**
  * @module Rank
  *
@@ -6,10 +8,9 @@
  * broken by the edge's "from -> to" text for determinism.
  *
  * @remarks
+ *
  * Unknown edge kinds rank weakest (0) and are never silently promoted.
  */
-import type { GraphEdge } from "@Interface/Graph.js";
-
 export default (Edges: GraphEdge[], Weights: Record<string, number>): GraphEdge[] =>
 	[...Edges].sort((Left, Right) => {
 		const A = Weights[Left.kind] ?? 0;

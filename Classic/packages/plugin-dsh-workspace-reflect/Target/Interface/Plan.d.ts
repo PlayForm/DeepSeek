@@ -1,14 +1,15 @@
+import type Span from "./Span.js";
 /**
  * @module Plan
  *
  * The slice of the semantics service's rename plan the reflect reads.
  *
  * @remarks
+ *
  * The plan carries the identifier being renamed, the new name, and the
  * half-open character ranges to rewrite. The reflect filters the edits to the
  * operation's scope and applies them itself; the service never writes a file.
  */
-import type Span from "./Span.js";
 export default interface Plan {
     /**
      * The identifier the plan renames.

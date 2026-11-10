@@ -7,6 +7,7 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  * and defaults it.
  *
  * @remarks
+ *
  * Every field is a volatile cell (the values may arrive as `{ get }`
  * references; the factory's State builder unwraps and hot-refreshes them in
  * place).

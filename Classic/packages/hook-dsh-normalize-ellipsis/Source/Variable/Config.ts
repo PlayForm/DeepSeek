@@ -8,6 +8,7 @@ import { Schema as Compose } from "@playform/plugin-dsh-factory";
  * at load).
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every
  * default (`docs/user/develop/basic/config.md:45`), so invalid configuration
  * fails LOUD at load instead of silently falling back per-field, and `apply`
@@ -40,7 +41,6 @@ import { Schema as Compose } from "@playform/plugin-dsh-factory";
  * the import resolves from the running dsh's own copy,
  * `docs/user/develop/basic/publish.md:103`).
  */
-
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-normalize-ellipsis.log";
 const DefaultReplacement = "...";
 const DefaultNormalizeReasoning = true;
@@ -61,7 +61,9 @@ const DefaultToolResultsExempt = [
 	"ask_user_question",
 ];
 
-/** The plugin's validated Schemastery Config schema, defaulted at load. */
+/**
+ * The plugin's validated Schemastery Config schema, defaulted at load.
+ */
 export default Compose(false, {
 	// Ledger file - the ellipsis ledger, SEPARATE from the family's logs (one
 	// log per module) - volatile: hot-editable without remounting (overrides

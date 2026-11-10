@@ -5,6 +5,7 @@
  * factory's named type exports.
  *
  * @remarks
+ *
  * The v0.1.1 declaration fix made the structural mirror unnecessary. `next` is the NEXT
  * content of the governed file - an OBJECT for a JSON module (the factory's Continue
  * serializes JSON.stringify(next, null, 2) + "\n") or a raw STRING for a text-surgery module;

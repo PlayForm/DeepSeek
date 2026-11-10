@@ -11,6 +11,7 @@ import Replace from "./Replace.js";
  * INJECTED.
  *
  * @remarks
+ *
  * The dispatch structure (`TextBlock.text`, `ReasoningBlock.text` + the
  * runtime `thinking` defense, `ToolCallBlock.arguments` gated by the tool-args
  * flag - three-way since the edit exemption and the per-call raw marker: a
@@ -26,7 +27,6 @@ import Replace from "./Replace.js";
  * (which hardcoded its own Replace) - the hook-dsh-normalize-dash smoke is
  * the arbiter.
  */
-
 export default (
 	Input: ContentBlock,
 	Replacement: string,

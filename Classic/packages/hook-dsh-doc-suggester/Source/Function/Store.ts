@@ -1,9 +1,16 @@
+import type { Context } from "@deepseek-ai/cordis";
+
+import type Decision from "../Interface/Decision.js";
+import type Learning from "../Interface/Learning.js";
+import Table from "./Table.js";
+
 /**
  * @module Store
  *
  * Provides the learned layer's storage: the accept rates and the decision records.
  *
  * @remarks
+ *
  * The accept rates the score reads, the outcome writes the follow-through performs, and the
  * decision-record memory (completion spec D8 + 03-SUGGESTERS section 2).
  *
@@ -40,12 +47,6 @@
  * `path <values>` line per companion (the pattern schema is the read-only contract, so the
  * record is projected onto its string fields rather than extending it).
  */
-import type { Context } from "@deepseek-ai/cordis";
-
-import type Decision from "../Interface/Decision.js";
-import type Learning from "../Interface/Learning.js";
-import Table from "./Table.js";
-
 /**
  * The neutral rate: the Laplace prior with zero observations (today's score).
  */

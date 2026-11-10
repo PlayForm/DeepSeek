@@ -1,3 +1,6 @@
+import type { State as Shared } from "@playform/plugin-dsh-factory";
+import type PluginFactory from "@playform/plugin-dsh-factory";
+
 /**
  * @module State
  *
@@ -5,6 +8,7 @@
  * State builder.
  *
  * @remarks
+ *
  * `ctx.pluginFactory.State(ctx, config, setup)` — Function/Apply — and probed
  * by tests through the `ctx.__cargoGovernorState` attachment (never returned
  * from `apply` — the loader treats apply return values specially, a
@@ -35,9 +39,6 @@
  * `FsVersion` are branded strings the backend owns — the governor stores and
  * compares them but never parses or computes them (subsystems/filesystem.md).
  */
-import type { State as Shared } from "@playform/plugin-dsh-factory";
-import type PluginFactory from "@playform/plugin-dsh-factory";
-
 export default interface State extends Shared {
 	// ── the cargo module's own fields ────────────────────────────────────────
 	/** The injected @playform/plugin-dsh-factory service (the P2 UpdateKey
@@ -45,13 +46,19 @@ export default interface State extends Shared {
 	 *  Function/Apply — the governor-family pattern). */
 	Factory: PluginFactory;
 
-	/** Cooldown between update-stage dispatches, per directory (epoch ms). */
+	/**
+	 * Cooldown between update-stage dispatches, per directory (epoch ms).
+	 */
 	Wait: number;
 
-	/** Circuit breaker: consecutive failures per directory before pause. */
+	/**
+	 * Circuit breaker: consecutive failures per directory before pause.
+	 */
 	Limit: number;
 
-	/** cargo binary (bare name or absolute path). */
+	/**
+	 * cargo binary (bare name or absolute path).
+	 */
 	CargoBin: string;
 
 	/** Global pin-policy.json (the keep-list of the full-version normalization
@@ -59,19 +66,29 @@ export default interface State extends Shared {
 	 *  factory-supplied union keep-list by the transform. */
 	KeepFile: string;
 
-	/** Strict chain pass: strip unknown deps in a governed workspace. */
+	/**
+	 * Strict chain pass: strip unknown deps in a governed workspace.
+	 */
 	Strict: boolean;
 
-	/** Update stage mode — "cargo" (the only implemented mode). */
+	/**
+	 * Update stage mode — "cargo" (the only implemented mode).
+	 */
 	Mode: string;
 
-	/** Directory → epoch ms of the last update-stage dispatch (cooldown). */
+	/**
+	 * Directory → epoch ms of the last update-stage dispatch (cooldown).
+	 */
 	Stamp: Map<string, number>;
 
-	/** Directories with an update run in flight. */
+	/**
+	 * Directories with an update run in flight.
+	 */
 	Set: Set<string>;
 
-	/** Directory → consecutive update-stage failures (circuit breaker). */
+	/**
+	 * Directory → consecutive update-stage failures (circuit breaker).
+	 */
 	Count: Map<string, number>;
 
 	/** The module's `Section` state field (the factory's Continue hands it to

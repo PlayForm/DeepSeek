@@ -1,3 +1,9 @@
+import * as FileSystem from "node:fs";
+import * as Os from "node:os";
+
+import type HistoryStore from "@Interface/History.js";
+import type { ReplayRecord } from "@Interface/History.js";
+
 /**
  * @module History
  *
@@ -5,6 +11,7 @@
  * leniently, and recalls records at use time.
  *
  * @remarks
+ *
  * The store loads ONCE at apply (a JSON read on the boot path, not the hot
  * path - the plan §4.3 posture), is validated leniently, and is recalled from
  * at use time. A missing store is not an error: it degrades to silence with a
@@ -20,12 +27,6 @@
  * PRIVACY POSTURE (the plan §5.4): repo-relative paths only; the recall
  * compares literals only.
  */
-import * as FileSystem from "node:fs";
-import * as Os from "node:os";
-
-import type HistoryStore from "@Interface/History.js";
-import type { ReplayRecord } from "@Interface/History.js";
-
 /**
  * Expand a `~`-prefixed path (the store lives under ~/.dsh).
  */

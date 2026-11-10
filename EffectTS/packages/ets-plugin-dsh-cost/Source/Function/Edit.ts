@@ -152,6 +152,7 @@ const PatchText = (Fields: Record<string, unknown>): string | undefined => {
  * on neither side.
  *
  * @remarks
+ *
  * A patch that deletes a file carries no removed lines, so the row says the
  * removal side is unknown rather than empty.
  */

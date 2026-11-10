@@ -1,9 +1,14 @@
+import type { CompanionDecision } from "../Interface/Decision.js";
+import type { Family } from "../Interface/Execution.js";
+import { type MeasureInput } from "./Measure.js";
+export default _default;
 /**
  * @module Would
  *
  * Measures a gated silence's would-be companion rows for its decision record.
  *
  * @remarks
+ *
  * The WOULD-BE companion rows of a gated silence: the family's remaining companions
  * measured exactly as the score would have measured them, ranked and capped like an
  * emitted note.
@@ -14,10 +19,6 @@
  * the same leaf the score uses - so the recorded values of a silence and of an emission
  * cannot disagree.
  */
-import type { CompanionDecision } from "../Interface/Decision.js";
-import type { Family } from "../Interface/Execution.js";
-import { type MeasureInput } from "./Measure.js";
-export default _default;
 declare function _default(
 /**
  * The winning family (already existence-filtered).

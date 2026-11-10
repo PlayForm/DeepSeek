@@ -1,3 +1,10 @@
+import Section from "@Function/Section.js";
+import type { ClientContext } from "@Interface/Client.js";
+import type { PanelSection } from "@Interface/Panel.js";
+import type { PanelPorts } from "@Interface/Ports.js";
+import Slots from "@Variable/Slots.js";
+import { createElement } from "react";
+
 /**
  * @module Adapter
  *
@@ -5,6 +12,7 @@
  * directions of the v4.1 contribution model.
  *
  * @remarks
+ *
  * 1. The DATA path: the manifest goes into the slot-aware registry (`playformFamilyPanel`), which
  *    enforces one adapter per bundle per slot.
  * 2. The REACT path: the client half injects the child slot the manifest declares and registers one
@@ -14,16 +22,11 @@
  * Both registrations ride `ctx.effect`, so plugin unload removes the section and its manifest with
  * no residue. This is the template every per-bundle adapter copies into its own client half.
  */
-import Section from "@Function/Section.js";
-import type { ClientContext } from "@Interface/Client.js";
-import type { PanelSection } from "@Interface/Panel.js";
-import type { PanelPorts } from "@Interface/Ports.js";
-import Slots from "@Variable/Slots.js";
-import { createElement } from "react";
-
 const NAMESPACE = "client-dsh-panel-family";
 
-/** The registered component: the slot's inject face + standard props. */
+/**
+ * The registered component: the slot's inject face + standard props.
+ */
 const Component = (props: Record<string, unknown> = {}): unknown =>
 	createElement(Section, props as unknown as Parameters<typeof Section>[0]);
 

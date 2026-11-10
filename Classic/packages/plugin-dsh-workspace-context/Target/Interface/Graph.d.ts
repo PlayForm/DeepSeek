@@ -5,6 +5,7 @@
  * shape (the W1 contract, WAVE-1-BRIEF.md section 4.3).
  *
  * @remarks
+ *
  * The end-phase wires the real import; until then the context service
  * consumes the graph through this structural handle only (the injected
  * `workspaceGraph` accessor is probed at packet time - an absent sibling is

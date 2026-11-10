@@ -8,6 +8,7 @@ import type Target from "../Interface/Target.js";
  * The pack merge rules (D2, documented in `SCHEME.md`).
  *
  * @remarks
+ *
  * - Families merge BY ID (the domain-qualified key): the override's DECLARED
  *   scalar fields replace the base family's; its signals array replaces; its
  *   targets merge BY PATH (a same-path target replaces the base target in
@@ -23,8 +24,9 @@ import type Target from "../Interface/Target.js";
  * The override is the LATER layer: the extends chain is the base, then the user
  * layer, then the repo layer.
  */
-
-/** Merge two target lists by path. */
+/**
+ * Merge two target lists by path.
+ */
 const MergeTargets = (Base: Target[], Override: Target[]): Target[] => {
 	const Result = Base.map((Target) => ({ ...Target }));
 	for (const Target of Override) {
@@ -38,7 +40,9 @@ const MergeTargets = (Base: Target[], Override: Target[]): Target[] => {
 	return Result;
 };
 
-/** Merge two family maps by the domain-qualified key. */
+/**
+ * Merge two family maps by the domain-qualified key.
+ */
 const MergeFamilies = (
 	Base: Record<string, Family> | undefined,
 	Override: Record<string, Family> | undefined,
@@ -68,7 +72,9 @@ const MergeFamilies = (
 	return Result;
 };
 
-/** Merge one section object: arrays replace, scalars replace, objects recurse. */
+/**
+ * Merge one section object: arrays replace, scalars replace, objects recurse.
+ */
 const MergeSection = (Base: unknown, Override: unknown): unknown => {
 	if (Array.isArray(Override)) {
 		return Override;

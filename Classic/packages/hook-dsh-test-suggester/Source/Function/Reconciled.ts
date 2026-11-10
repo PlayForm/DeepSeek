@@ -5,6 +5,7 @@
  * additionalContexts notice.
  *
  * @remarks
+ *
  * The delivery surface is the same `additionalContexts` notice the candidate
  * families use; the message itself is built by `Function/Note`, so the source
  * label and the freeze contract are shared.

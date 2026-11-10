@@ -1,3 +1,5 @@
+import type { BatchDecision } from "../Interface/Batch.js";
+export default _default;
 /**
  * @module Envelope
  *
@@ -5,6 +7,7 @@
  * batch packages share through the harness inbox.
  *
  * @remarks
+ *
  * The block shape:
  *
  *   [BATCH DECISION - <id>]
@@ -16,6 +19,4 @@
  * self-contained rule): `[BATCH DECISION - ` on its own line, the JSON body
  * starting on the next line.
  */
-import type { BatchDecision } from "../Interface/Batch.js";
-export default _default;
 declare function _default(Decision: BatchDecision): string;

@@ -4,6 +4,7 @@
  * The format/parse pair for the retrieval marker.
  *
  * @remarks
+ *
  * The marker shape is
  *
  *     <<<CCR:<24hex>|<type>|<size>>>

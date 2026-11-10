@@ -1,3 +1,12 @@
+import Append from "@Function/Append.js";
+import Glob from "@Function/Glob.js";
+import type State from "@Interface/State.js";
+import { Key, type Envelope } from "@playform/lib-dsh-trace";
+
+import Contract from "./Contract.js";
+import Emit from "./Emit.js";
+import Invalidated from "./Invalidated.js";
+
 /**
  * @module Consume
  *
@@ -5,6 +14,7 @@
  * driven by the family's bus instead of a direct `ctx.root.on("fs/observed")` registration (D5).
  *
  * @remarks
+ *
  * It consumes `observe/stamp` and applies the same filter chain the `fs/observed` listener
  * applied:
  *
@@ -23,15 +33,6 @@
  * Only a real re-index ledgers a line, and that line is the re-index's own
  * (`reindexed <path> (<status>)`).
  */
-import Append from "@Function/Append.js";
-import Glob from "@Function/Glob.js";
-import type State from "@Interface/State.js";
-import { Key, type Envelope } from "@playform/lib-dsh-trace";
-
-import Contract from "./Contract.js";
-import Emit from "./Emit.js";
-import Invalidated from "./Invalidated.js";
-
 export default (StateRef: State, Envelope: Envelope): void => {
 	const Stamp = Contract(Envelope);
 	const Path = Stamp?.path ?? "unknown";

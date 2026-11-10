@@ -1,9 +1,17 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
  * The shared test harness for the SUBAGENT-QUEUE tests.
  *
  * @remarks
+ *
  * Combines the fake ctx (root listener capture with a DISTINCT root object, the ctx listener
  * capture, reflect.provide capture, the effect runner, the tools.register capture, the dshRoute
  * seam, logger capture + the fs seam) with the REAL `@playform/plugin-dsh-queue` apply from its
@@ -21,13 +29,6 @@
  * assertion depends on a wall-clock value (the sequence `queue-<n>` is the plugin's own
  * monotonic counter - the no-wall-clock rule). The only timing assertion is on that counter.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 export { Plugin };
 
 /**

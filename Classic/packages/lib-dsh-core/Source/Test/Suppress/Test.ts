@@ -1,9 +1,15 @@
+import assert from "node:assert/strict";
+
+import { Suppress } from "../../../Target/Library.js";
+import { Check, Finish, MakeCounter } from "../Harness.js";
+
 /**
  * @module Test
  *
  * One singular test of the byte-identical suppression-line composer.
  *
  * @remarks
+ *
  * The test covers the three shapes: the continuation error, the listener
  * error with a string cause, and the empty-message error that still composes
  * the line.
@@ -12,11 +18,6 @@
  * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit
  * smoke of `@playform/lib-dsh-core`: the REAL built entry only.
  */
-import assert from "node:assert/strict";
-
-import { Suppress } from "../../../Target/Library.js";
-import { Check, Finish, MakeCounter } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

@@ -1,3 +1,8 @@
+import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+
+import { Check, Finish, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +10,7 @@
  * family.
  *
  * @remarks
+ *
  * The one singular test covers the deprecated `normalizeToolArguments` flag on
  * (the plain fields, the activation line, and the delta and block rewrites),
  * the edit exemption (a byte-contracted `old_string` passes by identity), the
@@ -17,11 +23,6 @@
  * (`node Target/Test/Tool-Args-Exemptions/Test.js`) and under the aggregate
  * (`Maintain/Run/Smokes/Index.mjs` spawns it).
  */
-import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
-
-import { Check, Finish, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

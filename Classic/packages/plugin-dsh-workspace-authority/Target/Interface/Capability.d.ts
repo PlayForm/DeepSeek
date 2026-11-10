@@ -4,6 +4,7 @@
  * The CAPABILITY record: what the actor may do.
  *
  * @remarks
+ *
  * One of the three separate authority records (v4.1 section 3.9); it carries NO
  * weight and NO priority - the license is the authority, the weight is the
  * representation (the logged pitfall).

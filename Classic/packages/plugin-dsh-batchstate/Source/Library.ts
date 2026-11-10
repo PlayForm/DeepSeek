@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +9,7 @@
  * sections 2 and 7.
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` + `export const Config` + `export
  * const inject` + `export default { name, apply, Config, inject }` - the ONLY named exports in the
  * tree (cordis requires them); every other module is a nameless default export composed Rust-style.
@@ -28,10 +33,6 @@
  * The plugin is the OBJECT form (name/apply/Config/inject); the `batchstate` service is a Service
  * subclass in its own module (Function/Service) and is registered from apply.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "plugin-dsh-batchstate";
 
 // Loader contract (cordis): the exported schema is validated and defaulted

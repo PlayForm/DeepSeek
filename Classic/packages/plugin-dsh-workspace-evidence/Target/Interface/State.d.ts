@@ -1,3 +1,7 @@
+import type DomainHandle from "./Domain.js";
+import type FactoryHandle from "./Factory.js";
+import type Validation from "./Validation.js";
+import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
 /**
  * @module State
  *
@@ -5,6 +9,7 @@
  * own fields.
  *
  * @remarks
+ *
  * The shared part is Context, Module, Enabled/Ledger/List, the machinery maps,
  * and the P10 volatile refresh the factory's State builder registers.
  *
@@ -13,10 +18,6 @@
  * identity lives in the package name and the `name` export
  * (plugin-dsh-workspace-evidence).
  */
-import type DomainHandle from "./Domain.js";
-import type FactoryHandle from "./Factory.js";
-import type Validation from "./Validation.js";
-import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
 interface Extra {
     /**
      * Master switch (config `enabled`, volatile) - false = full no-op.

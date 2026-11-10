@@ -1,15 +1,3 @@
-// Source/Test/Migrate/Test.ts - THE MIGRATION LADDER (Documentation/Plans/
-// COST-TRACK-PLUGIN.md sections 14, 17.6, 17.3 and 17.4): opening a v1-shaped
-// ledger runs the v2, v3, v4, v5 and v6 rungs inside one transaction each -
-// the additive columns appear on Price, Call and Touch, the Alias and Verdict
-// tables and the FileLifetime view exist, the version stamp moves to 6, the
-// fresh DDL never re-runs, and the v1 data survives. Opening a v2-shaped
-// ledger runs the v3 through v6 rungs: the factor layer's columns and its
-// three tables appear, and the v2 data survives with the new defaults filled.
-// Opening a v3-shaped ledger runs the v4, v5 and v6 rungs: the Edit table,
-// the telemetry columns and the file-version grain appear, and the v3 data
-// survives. The fixtures here carry exactly the tables each ladder statement
-// touches, with the columns of their own version only.
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -19,6 +7,29 @@ import { DatabaseSync } from "node:sqlite";
 import Open from "../../../Target/Function/Open.js";
 import { Check, Finish, MakeCounter, Validate } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE MIGRATION LADDER (Documentation/Plans/COST-TRACK-PLUGIN.md sections 14,
+ * 17.6, 17.3 and 17.4), proved over ledgers shaped at v1, v2 and v3.
+ *
+ * @remarks
+ *
+ * Opening a v1-shaped ledger runs the v2, v3, v4, v5 and v6 rungs inside one
+ * transaction each - the additive columns appear on Price, Call and Touch, the
+ * Alias and Verdict tables and the FileLifetime view exist, the version stamp
+ * moves to 6, the fresh DDL never re-runs, and the v1 data survives.
+ *
+ * Opening a v2-shaped ledger runs the v3 through v6 rungs: the factor layer's
+ * columns and its three tables appear, and the v2 data survives with the new
+ * defaults filled.
+ *
+ * Opening a v3-shaped ledger runs the v4, v5 and v6 rungs: the Edit table, the
+ * telemetry columns and the file-version grain appear, and the v3 data survives.
+ *
+ * The fixtures here carry exactly the tables each ladder statement touches, with
+ * the columns of their own version only.
+ */
 // The v1 ledger shape: the six tables the v2 statements touch - the ALTERs
 // reach Price, Call and Touch; Alias and Verdict reference File and Session;
 // the FileLifetime view joins File, Allocation and Call.

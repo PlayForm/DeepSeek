@@ -1,3 +1,5 @@
+import type { PolicyShape } from "@Interface/Policy.js";
+
 /**
  * @module Policy
  *
@@ -6,6 +8,7 @@
  * DeepSeek max).
  *
  * @remarks
+ *
  * This is the fallback when the user's ~/.dsh policy is absent or partial; the
  * user's explicit configuration always wins (the plugin merges the user's
  * values over these defaults through the schema defaults, it never writes the
@@ -15,8 +18,6 @@
  * including suffixes; the provider is cloudflare-workers-ai; the effort tokens
  * are exactly low / high / max.
  */
-import type { PolicyShape } from "@Interface/Policy.js";
-
 /**
  * The shipped default policy the schema's defaults merge over.
  */

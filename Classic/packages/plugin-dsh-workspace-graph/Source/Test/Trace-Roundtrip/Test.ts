@@ -1,21 +1,3 @@
-/**
- * @module Test
- *
- * The trace round-trip (D5): observe -> trace -> graph -> context, across four
- * REAL built packages and ONE shared fake ctx.
- *
- * @remarks
- * - the observe hook hears `fs/observed` on the root, records its stamp
- *   (byte-exact ledger line) and emits `observe/stamp` on the factory's bus;
- * - the graph consumes the stamp through its Trace/ adapter, coalesces a pair
- *   into ONE re-index through the library's detached loop, and emits
- *   `graph/invalidated` (the replaced record) + `graph/indexed`;
- * - the context consumes `graph/invalidated` and drops its packet memo, so the
- *   next identical query rebuilds against the new revision.
- *
- * No sleeps anywhere: the graph's `State.Flush` is the loop's flush promise and
- * the bus's `flush()` settles deterministically.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -27,13 +9,34 @@ import ObservePlugin from "../../../../hook-dsh-workspace-observe/Target/Library
 import GraphClass from "../../../Target/Library.js";
 import { Check, CheckAsync, Finish, MakeCounter } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The trace round-trip (D5): observe -> trace -> graph -> context, across four
+ * REAL built packages and ONE shared fake ctx.
+ *
+ * @remarks
+ *
+ * - the observe hook hears `fs/observed` on the root, records its stamp
+ *   (byte-exact ledger line) and emits `observe/stamp` on the factory's bus;
+ * - the graph consumes the stamp through its Trace/ adapter, coalesces a pair
+ *   into ONE re-index through the library's detached loop, and emits
+ *   `graph/invalidated` (the replaced record) + `graph/indexed`;
+ * - the context consumes `graph/invalidated` and drops its packet memo, so the
+ *   next identical query rebuilds against the new revision.
+ *
+ * No sleeps anywhere: the graph's `State.Flush` is the loop's flush promise and
+ * the bus's `flush()` settles deterministically.
+ */
 const CORE = 'import { util } from "./util.ts";\n\nexport function core(): number {\n\treturn util;\n}\n';
 const CORE_CHANGED = `${CORE}\nexport function extra(): number {\n\treturn 2;\n}\n`;
 const UTIL = "export const util = 1;\n";
 const TEST_FILE = 'import { core } from "./core.ts";\n\nexport const suite = core;\n';
 const MARKDOWN = "# The workspace\n\nIntro text.\n\n## Section\n";
 
-/** The disk-backed fs the graph walks (the real tree the fixture writes). */
+/**
+ * The disk-backed fs the graph walks (the real tree the fixture writes).
+ */
 const DiskFs = (): any => {
 	const Fs: any = {
 		resolve: async (P: string) => {
@@ -82,7 +85,9 @@ const DiskFs = (): any => {
 	return Fs;
 };
 
-/** The shared fake ctx: the factory's provide/effect seams, the fs, the root. */
+/**
+ * The shared fake ctx: the factory's provide/effect seams, the fs, the root.
+ */
 const Make = (): any => {
 	const Provided: Record<string, unknown> = {};
 	const Lines: string[] = [];
@@ -150,7 +155,9 @@ const Make = (): any => {
 	};
 };
 
-/** Fire one fs/observed through the observe hook's root registration. */
+/**
+ * Fire one fs/observed through the observe hook's root registration.
+ */
 const Fire = (Run: any, Path_: string, Version: string, Kind = "present"): void => {
 	for (const Listener of Run.RootListeners["fs/observed"] ?? []) {
 		Listener(
@@ -161,7 +168,9 @@ const Fire = (Run: any, Path_: string, Version: string, Kind = "present"): void 
 	}
 };
 
-/** The captured logger lines that carry the needle. */
+/**
+ * The captured logger lines that carry the needle.
+ */
 const LinesWith = (Run: any, Needle: string): string[] =>
 	Run.Lines.filter((Line: string) => Line.includes(Needle));
 

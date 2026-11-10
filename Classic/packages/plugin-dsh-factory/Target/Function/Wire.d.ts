@@ -1,3 +1,7 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Wire
  *
@@ -5,6 +9,7 @@
  * API).
  *
  * @remarks
+ *
  * The listener is registered on the ROOT context -
  * `Context.root.on("fs/observed", Observe)` - not on the module's own plugin
  * context. Rationale: cordis dispatches events through the shared root bus
@@ -32,8 +37,4 @@
  * `Factory.Journal` with the "activated" event) before/after calling Wire -
  * the factory never owns the string.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(Context: Context, _State: State, Observe: (Target: FsTarget, Observation: FsObservation, Actor: object | undefined) => void): void;

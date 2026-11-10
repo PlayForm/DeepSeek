@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The service's Schemastery Config schema: one constant built once at load.
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every
  * default, so invalid configuration fails LOUD at load, and `apply` receives a
  * validated plain config object. The shape this schema produces is
@@ -38,9 +42,6 @@
  * adapter - the switch exists so a deployment can keep the model purely
  * lexical.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
-
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-semantics.log";
 const DefaultEnabled = false;
 // The KV domain name (the service's own domain, not a shared one).

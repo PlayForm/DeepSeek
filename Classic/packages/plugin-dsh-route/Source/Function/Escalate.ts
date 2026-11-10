@@ -1,3 +1,7 @@
+import Ladder from "@Function/Ladder.js";
+import type { PolicyShape } from "@Interface/Policy.js";
+import type Route from "@Interface/Route.js";
+
 /**
  * @module Escalate
  *
@@ -9,16 +13,13 @@
  * disables escalation.
  *
  * @remarks
+ *
  * At most ONE escalation.
  *
  * The rung's MODEL comes from Function/Ladder, so the live catalog
  * (`list_subagent_models`' source) decides which allowed model the rung
  * actually runs on; the effort stays the planner row's `max`.
  */
-import Ladder from "@Function/Ladder.js";
-import type { PolicyShape } from "@Interface/Policy.js";
-import type Route from "@Interface/Route.js";
-
 export default (
 	Escalations: number,
 	Policy: PolicyShape,

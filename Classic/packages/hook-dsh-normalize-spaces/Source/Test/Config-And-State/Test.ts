@@ -1,20 +1,3 @@
-/**
- * @module Test
- *
- * The Run-1 defaults of @playform/hook-dsh-normalize-spaces, covered in one
- * singular smoke.
- *
- * @remarks
- * Run 1 covers the defaults: the volatile config cells, the schema defaults,
- * the listener registration posture, the State wiring and the byte-exact
- * activation line.
- *
- * The file runs standalone (`node Target/Test/Config-And-State/Test.js`) and
- * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
- *
- * The smoke runs the fake ctx + the real factory + the real spaces apply
- * (the seams live in ../Harness.js).
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -27,6 +10,24 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The Run-1 defaults of @playform/hook-dsh-normalize-spaces, covered in one
+ * singular smoke.
+ *
+ * @remarks
+ *
+ * Run 1 covers the defaults: the volatile config cells, the schema defaults,
+ * the listener registration posture, the State wiring and the byte-exact
+ * activation line.
+ *
+ * The file runs standalone (`node Target/Test/Config-And-State/Test.js`) and
+ * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * The smoke runs the fake ctx + the real factory + the real spaces apply
+ * (the seams live in ../Harness.js).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

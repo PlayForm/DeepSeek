@@ -1,18 +1,19 @@
+import ClientApply from "@Function/Client.js";
+import type { ClientContext } from "@Interface/Client.js";
+
 /**
  * @module Client
  *
  * The client half entry of @playform/client-dsh-workspace-live: the named `inject` and the named `apply(ctx)`.
  *
  * @remarks
+ *
  * The built `./client` export; the module system serves it as a lazy-CJS
  * factory. `inject` lists the required client services: the slots registry and
  * the locale service. The body lives in `Function/Client.ts` - this entry is
  * wiring only, and the stylesheet mount lives in `Source/Bundle.ts` so the ESM
  * half stays style-free.
  */
-import ClientApply from "@Function/Client.js";
-import type { ClientContext } from "@Interface/Client.js";
-
 /**
  * Required client services: the slot registry and the locale service.
  */

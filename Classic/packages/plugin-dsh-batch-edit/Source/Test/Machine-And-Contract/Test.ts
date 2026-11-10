@@ -1,16 +1,3 @@
-/**
- * @module Test
- *
- * The loader contract, the machine lifecycle and the grammar contract of the
- * batch-edit plugin, covered in one singular test.
- *
- * @remarks
- * The test covers the loader contract, the IDLE-forever cold mount, the
- * byte-exact activation line, the fail-loud validation, the machine
- * lifecycle (open / insert / remove / state / close) with their byte-exact
- * ledger lines, the grammar parsers, the miss listing, and the
- * machinesPerAgent cap.
- */
 import assert from "node:assert/strict";
 import Plugin, { apply, Config, inject, name } from "../../../Target/Library.js";
 import * as Machine from "../../../Target/Function/Machine.js";
@@ -26,6 +13,20 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The loader contract, the machine lifecycle and the grammar contract of the
+ * batch-edit plugin, covered in one singular test.
+ *
+ * @remarks
+ *
+ * The test covers the loader contract, the IDLE-forever cold mount, the
+ * byte-exact activation line, the fail-loud validation, the machine
+ * lifecycle (open / insert / remove / state / close) with their byte-exact
+ * ledger lines, the grammar parsers, the miss listing, and the
+ * machinesPerAgent cap.
+ */
 /** A standard enabled mount over the given file fixture (the ledger always
  * goes to the harness's own temp file, never the user's home). */
 const Setup = (

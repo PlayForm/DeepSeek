@@ -1,3 +1,6 @@
+import assert from "node:assert/strict";
+import { Check, Finish, MakeCounter, Ledger, Make } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +8,7 @@
  * covered in one singular smoke.
  *
  * @remarks
+ *
  * Run S covers each scope on/off with everything else at defaults, the
  * effective-toolInput OR semantics with the deprecated field, and the S5
  * volatile scope flip applied to the NEXT stream without remount.
@@ -15,9 +19,6 @@
  * The smoke runs the fake ctx + the real factory + the real quotes apply
  * (the seams live in ../Harness.js).
  */
-import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Ledger, Make } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

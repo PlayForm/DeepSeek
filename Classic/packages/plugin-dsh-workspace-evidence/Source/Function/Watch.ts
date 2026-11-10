@@ -1,9 +1,15 @@
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import Duplicate from "@Function/Duplicate.js";
+import Invalidate from "@Function/Invalidate.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Watch
  *
  * The fs/observed listener: the invalidation seam.
  *
  * @remarks
+ *
  * Registered on the ROOT context through the factory's Wire (the exact
  * `Context.root.on("fs/observed", ...)` registration, the factory's
  * Function/Wire.ts - root registration is the posture that hears ALL
@@ -30,11 +36,6 @@
  * - the listener NEVER THROWS: the whole body is one try/catch - a malformed
  *   event is caught and ledgered as `failed <path> (<reason>)`.
  */
-import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
-import Duplicate from "@Function/Duplicate.js";
-import Invalidate from "@Function/Invalidate.js";
-import type State from "@Interface/State.js";
-
 export default (
 	State: State,
 	Target: FsTarget | undefined,

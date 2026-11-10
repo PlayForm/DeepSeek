@@ -1,3 +1,6 @@
+import type State from "@Interface/State.js";
+import type SymbolNode from "@Interface/SymbolNode.js";
+
 /**
  * @module Storage
  *
@@ -5,6 +8,7 @@
  * factory's Function/{Open,Attach}.ts pattern and the observe hook's precedent.
  *
  * @remarks
+ *
  * THE DOMAIN: the service's OWN domain, named config `domain` (default
  * workspace_semantics). Version 1, layout per-record, invalidRecords
  * backup-and-skip, TWO tables:
@@ -31,10 +35,9 @@
  * load - the factory's live-verified pitfall); the type-only devDeps pin them
  * to the host-era versions.
  */
-import type State from "@Interface/State.js";
-import type SymbolNode from "@Interface/SymbolNode.js";
-
-/** The structural shape of one persisted symbol (the validation filter). */
+/**
+ * The structural shape of one persisted symbol (the validation filter).
+ */
 const ValidSymbol = (Row: unknown): Row is SymbolNode => {
 	const Record = Row as Partial<SymbolNode> | null;
 	return (
@@ -46,7 +49,9 @@ const ValidSymbol = (Row: unknown): Row is SymbolNode => {
 	);
 };
 
-/** The structural shape of one persisted model. */
+/**
+ * The structural shape of one persisted model.
+ */
 const ValidModel = (Row: unknown): boolean => {
 	const Record = Row as {
 		path?: unknown;

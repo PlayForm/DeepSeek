@@ -8,6 +8,7 @@ import { resolve } from "node:path";
  * working directory and normalized.
  *
  * @remarks
+ *
  * A tool the vocabulary does not map and a malformed or alien arguments value
  * yield no touches; the parser never throws.
  *
@@ -17,7 +18,6 @@ import { resolve } from "node:path";
  * It is pure: `node:path` reads no filesystem, and a relative path with no
  * session cwd resolves to nothing (never the process's own cwd).
  */
-
 type Kind = "read" | "write" | "edit" | "delete" | "search";
 
 type Touched = { Path: string; Kind: Kind };

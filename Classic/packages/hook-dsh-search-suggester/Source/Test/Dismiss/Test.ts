@@ -1,19 +1,3 @@
-/**
- * @module Test
- *
- * The P4 dismiss tool: its registration, the recorded dismissal, the
- * suppressions, the durable reload, the TTL expiry, and the two refusals.
- *
- * @remarks
- * The registration through the loader's tool API, the recorded dismissal and its
- * byte-exact ledger line, the family suppression, the path-level candidate drop,
- * the durable reload, the TTL expiry, and the two refusals (unknown family,
- * disabled plugin).
- *
- * THE FAMILY VOCABULARY: the built-in pack is retired, so the note's family is
- * the synthetic `History` row; the refusal cases prove that a former built-in
- * family id is no longer known.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {
@@ -35,23 +19,50 @@ import {
 	Workspace,
 } from "../Harness.js";
 
-/** The judged call's anchor path (relative to the temp workspace). */
+/**
+ * @module Test
+ *
+ * The P4 dismiss tool: its registration, the recorded dismissal, the
+ * suppressions, the durable reload, the TTL expiry, and the two refusals.
+ *
+ * @remarks
+ *
+ * The registration through the loader's tool API, the recorded dismissal and its
+ * byte-exact ledger line, the family suppression, the path-level candidate drop,
+ * the durable reload, the TTL expiry, and the two refusals (unknown family,
+ * disabled plugin).
+ *
+ * THE FAMILY VOCABULARY: the built-in pack is retired, so the note's family is
+ * the synthetic `History` row; the refusal cases prove that a former built-in
+ * family id is no longer known.
+ */
+/**
+ * The judged call's anchor path (relative to the temp workspace).
+ */
 const Anchor = "README.md";
 
-/** The two companions touched right after the anchor. */
+/**
+ * The two companions touched right after the anchor.
+ */
 const Companions = ["CHANGELOG.md", "SCHEME.md"];
 
-/** The temp workspace the scenarios judge. */
+/**
+ * The temp workspace the scenarios judge.
+ */
 const Space = Workspace([Anchor, ...Companions]);
 
-/** One judged read of the anchor. */
+/**
+ * One judged read of the anchor.
+ */
 const Read = (Id: string): any => ({
 	name: "read",
 	arguments: { file_path: Space.At(Anchor) },
 	agent: AgentOf(Id),
 });
 
-/** Write a knowledge file with the given dismissals (the reload fixture). */
+/**
+ * Write a knowledge file with the given dismissals (the reload fixture).
+ */
 const Persist = (Dismissals: { intent: string; path?: string; until: number }[]): void => {
 	FileSystem.writeFileSync(
 		Knowledge,

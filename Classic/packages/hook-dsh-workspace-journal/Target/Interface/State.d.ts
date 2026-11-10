@@ -1,3 +1,8 @@
+import type BatchRecord from "./Batch.js";
+import type DomainHandle from "./Domain.js";
+import type EntryRecord from "./Entry.js";
+import type FactoryHandle from "./Factory.js";
+import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
 /**
  * @module State
  *
@@ -5,6 +10,7 @@
  * fields.
  *
  * @remarks
+ *
  * The shared half carries Context, Module, Enabled/Ledger/List, the machinery
  * maps, and the P10 volatile refresh the factory's State builder registers.
  *
@@ -14,11 +20,6 @@
  * (hook-dsh-workspace-journal); the ledger prefix is the module's OWN
  * contract string.
  */
-import type BatchRecord from "./Batch.js";
-import type DomainHandle from "./Domain.js";
-import type EntryRecord from "./Entry.js";
-import type FactoryHandle from "./Factory.js";
-import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
 interface Extra {
     /**
      * The master switch (config `enabled` - the IDLE-forever posture).

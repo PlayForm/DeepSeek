@@ -1,3 +1,7 @@
+import type { NodeKind, WorkspaceGraph } from "@Interface/Graph.js";
+import type Factory from "@playform/plugin-dsh-factory";
+import type { Allowlist, State as Shared } from "@playform/plugin-dsh-factory";
+
 /**
  * @module State
  *
@@ -5,6 +9,7 @@
  * workspace agent's own fields.
  *
  * @remarks
+ *
  * The shared shape is built by `Factory.State(ctx, config, { ... })` - factory
  * SCHEME.md §2.10. Every config-derived field below is refreshed IN PLACE by
  * the factory's P10 loader/volatile-update listener (every cell in the schema is
@@ -17,10 +22,6 @@
  * end-phase smokes probe the built State - never a return value from `apply`
  * (the loader treats apply returns specially).
  */
-import type { NodeKind, WorkspaceGraph } from "@Interface/Graph.js";
-import type Factory from "@playform/plugin-dsh-factory";
-import type { Allowlist, State as Shared } from "@playform/plugin-dsh-factory";
-
 export default interface State extends Shared {
 	/**
 	 * Master switch (config `enabled`, volatile) - false = full no-op.

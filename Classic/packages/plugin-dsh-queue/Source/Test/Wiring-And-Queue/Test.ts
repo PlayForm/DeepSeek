@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * The wiring and the enqueue path.
- *
- * @remarks
- * Covers the loader contract (the default object carries name/apply/Config/inject, apply returns
- * nothing), the IDLE-forever cold mount, the activation proof, the dshQueue service registered
- * from apply, the two tools registered, the enqueue ledger strings byte-exact, the fail-loud
- * capacity validation, the disabled tools, and the zero file-content guarantee.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -22,7 +11,21 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * The wiring and the enqueue path.
+ *
+ * @remarks
+ *
+ * Covers the loader contract (the default object carries name/apply/Config/inject, apply returns
+ * nothing), the IDLE-forever cold mount, the activation proof, the dshQueue service registered
+ * from apply, the two tools registered, the enqueue ledger strings byte-exact, the fail-loud
+ * capacity validation, the disabled tools, and the zero file-content guarantee.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));

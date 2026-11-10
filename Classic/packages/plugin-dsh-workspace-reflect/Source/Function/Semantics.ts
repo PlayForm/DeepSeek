@@ -1,9 +1,13 @@
+import type SemanticsHandle from "@Interface/Semantics.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Semantics
  *
  * The optional workspace-semantics service probe for the rename op.
  *
  * @remarks
+ *
  * The rename's scope-resolved plan comes from the semantics service (its
  * `rename(path, span, to)`), which may itself deepen the answer through the
  * harness LSP seam. THE SERVICE IS PROBED, NEVER INJECTED (`ctx.get`) - the
@@ -12,9 +16,6 @@
  * is accepted too. An absent service (or one without a rename method) is
  * `undefined`: the textual whole-word engine stays in charge.
  */
-import type SemanticsHandle from "@Interface/Semantics.js";
-import type State from "@Interface/State.js";
-
 /**
  * The probed names: the registered name first, then the plan's short alias.
  */

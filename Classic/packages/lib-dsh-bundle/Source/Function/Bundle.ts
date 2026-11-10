@@ -11,6 +11,7 @@ import Stylesheet from "./Stylesheet.js";
  * The client-half bundler: emits a harness-shaped client bundle.
  *
  * @remarks
+ *
  * THE CONTRACT (verified against the harness source):
  * `packages/preset/agent-preset/skills/cordis-plugin-development/templates/
  * decoration/client.js` and `packages/client/tsdown.client.ts`: a client
@@ -32,7 +33,6 @@ import Stylesheet from "./Stylesheet.js";
  * `Source/Function/Stylesheet.ts`, which is why the entry is `Source/Bundle.ts`
  * and the ESM half stays style-free.
  */
-
 /**
  * The harness module-table seed words: the exact PLATFORM_MODULES list the
  * shell resolves to its own single instance at require time

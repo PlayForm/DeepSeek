@@ -8,6 +8,7 @@ import type State from "../Interface/State.js";
  * REGISTERED FROM APPLY.
  *
  * @remarks
+ *
  * The loader contract for the object-form plugin: apply constructs the
  * service; the Service base constructor calls
  * ctx.reflect.provide("workspaceObserve", this), so `ctx.workspaceObserve`

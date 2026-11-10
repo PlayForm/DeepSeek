@@ -6,6 +6,7 @@
  * concepts").
  *
  * @remarks
+ *
  * The modules key off exactly one field: the tool name of the mutating
  * actor, the same one-field narrowing `@deepseek-ai/dsh-fs` uses for its own
  * `FsObservationActor` (it narrows `agent.session`; the gate narrows `name`
@@ -24,7 +25,9 @@
  * their events keep governing exactly as before.
  */
 export default interface Actor {
-    /** The tool name of the mutating actor, when one is present. */
+    /**
+     * The tool name of the mutating actor, when one is present.
+     */
     name?: string;
     /** The raw-write's marker: any value here routes the write's governance
      *  to the factory's direct `Govern` path exclusively (presence, not the

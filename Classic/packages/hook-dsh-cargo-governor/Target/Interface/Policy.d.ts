@@ -4,6 +4,7 @@
  * The shape of an `update-policy.json` for the cargo flavor (data, not code).
  *
  * @remarks
+ *
  * Resolved by Function/Resolve and materialized by Function/Update/Policy: the
  * configured file when given and readable, else the BUILT-IN DEFAULT (no
  * rejects, all dep tables, target latest, NO verifyCommand — never install
@@ -35,15 +36,25 @@
  *   (/bin/sh -c <command>), exit 127 non-fatal.
  */
 export default interface Policy {
-    /** Crates cargo upgrade must never bump (one --exclude flag per crate). */
+    /**
+     * Crates cargo upgrade must never bump (one --exclude flag per crate).
+     */
     reject?: string[];
-    /** Crates that gate every other update (one -p flag per crate; empty = all). */
+    /**
+     * Crates that gate every other update (one -p flag per crate; empty = all).
+     */
     allow?: string[];
-    /** Upgrade to latest INCOMPATIBLE versions: "allow" | "ignore". */
+    /**
+     * Upgrade to latest INCOMPATIBLE versions: "allow" | "ignore".
+     */
     incompatible?: "allow" | "ignore";
-    /** Upgrade PINNED requirements to latest incompatible: "allow" | "ignore". */
+    /**
+     * Upgrade PINNED requirements to latest incompatible: "allow" | "ignore".
+     */
     pinned?: "allow" | "ignore";
-    /** Upgrade to latest COMPATIBLE versions: "allow" | "ignore". */
+    /**
+     * Upgrade to latest COMPATIBLE versions: "allow" | "ignore".
+     */
     compatible?: "allow" | "ignore";
     /** Chain-pass canonical form: "caret" (bare resolved string — Cargo's
      *  implicit caret, the default) or "exact" (`=resolved`). No CLI mapping. */
@@ -51,7 +62,9 @@ export default interface Policy {
     /** Dependency groups — accepted for policy-file compatibility with the
      *  package.json governor; cargo upgrade rewrites every dep table. Ignored. */
     depGroups?: string[];
-    /** Target selection — no cargo-edit equivalent; accepted and ignored. */
+    /**
+     * Target selection — no cargo-edit equivalent; accepted and ignored.
+     */
     targets?: {
         default?: string;
         overrides?: Array<{
@@ -59,8 +72,12 @@ export default interface Policy {
             target: string;
         }>;
     };
-    /** Concurrent registry lookups — no cargo-edit equivalent; ignored. */
+    /**
+     * Concurrent registry lookups — no cargo-edit equivalent; ignored.
+     */
     concurrency?: number;
-    /** Shell command run after the upgrade; a non-zero exit fails the stage. */
+    /**
+     * Shell command run after the upgrade; a non-zero exit fails the stage.
+     */
     verifyCommand?: string | null;
 }

@@ -1,3 +1,5 @@
+import { sep as Separator } from "node:path";
+
 /**
  * @module Match
  *
@@ -5,11 +7,10 @@
  * the file is skipped.
  *
  * @remarks
+ *
  * No List (or empty) excludes nothing. Pure internal calculation - part of
  * the standing exemptions. Byte-identical with the trio's `Function/Match`.
  */
-import { sep as Separator } from "node:path";
-
 export default (Path: string, List: string[] | null | undefined): boolean => {
 	switch (true) {
 		case !List || List.length === 0:

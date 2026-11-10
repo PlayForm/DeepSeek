@@ -1,9 +1,15 @@
+import Decide from "@Function/Decide.js";
+import Envelope from "@Function/Envelope.js";
+import Propose from "@Function/Propose.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Inbox
  *
  * The harness inbox listener: THE SPLICE.
  *
  * @remarks
+ *
  * The batch packages talk to each other through the harness agent-team inbox - the same channel the
  * harness itself delivers agent messages on - so the board registers on the inbox events and
  * projects every batch block it sees into its state.
@@ -23,28 +29,31 @@
  * harness's agent/session packages, which this package does not depend on (the self-contained PoC
  * rule). An ordinary message without a batch block is ignored - silence is the default.
  */
-import Decide from "@Function/Decide.js";
-import Envelope from "@Function/Envelope.js";
-import Propose from "@Function/Propose.js";
-import type State from "@Interface/State.js";
-
-/** The message shape both inbox channels carry (structurally narrowed). */
+/**
+ * The message shape both inbox channels carry (structurally narrowed).
+ */
 interface Message {
 	id?: string | undefined;
 	content?: { type?: string; text?: string }[] | undefined;
 }
 
-/** The listener signature the loose cast exposes. */
+/**
+ * The listener signature the loose cast exposes.
+ */
 type Listen = (Name: string, Listener: (...Args: never[]) => void) => unknown;
 
-/** The text a message carries (the batch blocks ride text parts). */
+/**
+ * The text a message carries (the batch blocks ride text parts).
+ */
 const Text = (Message: Message | undefined): string =>
 	(Message?.content ?? [])
 		.filter((Part) => Part?.type === "text")
 		.map((Part) => Part?.text ?? "")
 		.join("");
 
-/** Project one inbox message onto the board (the one splice path). */
+/**
+ * Project one inbox message onto the board (the one splice path).
+ */
 const Handle = (State: State, Message: Message | undefined, Origin: string): void => {
 	const Body = Text(Message);
 	switch (true) {

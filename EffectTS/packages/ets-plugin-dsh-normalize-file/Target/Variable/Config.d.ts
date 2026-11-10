@@ -1,9 +1,11 @@
+import Schema from "@deepseek-ai/schemastery";
 /**
  * @module Config
  *
  * The plugin's Schemastery Config schema: one constant built once at load.
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every
  * default (docs/user/develop/basic/config.md:45), so invalid configuration
  * fails LOUD at load instead of silently falling back per-field, and `apply`
@@ -38,7 +40,6 @@
  * the import resolves from the running dsh's own copy,
  * docs/user/develop/basic/publish.md:103).
  */
-import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     log: Schema<boolean, boolean, "volatile-defined">;
     logFile: Schema<string, string, "volatile-defined">;

@@ -1,5 +1,5 @@
-import type Query from "@Interface/Query.js";
-import type State from "@Interface/State.js";
+import type Query from "../Interface/Query.js";
+import type State from "../Interface/State.js";
 export default _default;
 /**
  * @module CacheKey

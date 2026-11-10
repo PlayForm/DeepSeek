@@ -5,6 +5,7 @@
  * surface: the read half of the W1 frozen contract.
  *
  * @remarks
+ *
  * WAVE-1-BRIEF.md section 4.3 freezes the contract. The shapes are the
  * node, edge and query shapes the resolution rules consume. The operate hook
  * never imports the graph package; this declaration keeps the consumer

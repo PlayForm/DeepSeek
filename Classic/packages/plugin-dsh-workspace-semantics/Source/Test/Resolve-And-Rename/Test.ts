@@ -1,11 +1,3 @@
-/**
- * @module Test
- *
- * The resolve/rename/refusal semantics: the lazy model build through the default TypeScript
- * adapter, the byte-exact resolve and refusal lines, the symbol lookup and the reference list, the
- * invalidation-driven rebuild, the index cap, the any-file adapter seam, the rename plan and its
- * refusal arms, and the statistics triple.
- */
 import assert from "node:assert/strict";
 import {
 	Boot,
@@ -21,10 +13,22 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The TS snippet the resolve tests build against. */
+/**
+ * @module Test
+ *
+ * The resolve/rename/refusal semantics: the lazy model build through the default TypeScript
+ * adapter, the byte-exact resolve and refusal lines, the symbol lookup and the reference list, the
+ * invalidation-driven rebuild, the index cap, the any-file adapter seam, the rename plan and its
+ * refusal arms, and the statistics triple.
+ */
+/**
+ * The TS snippet the resolve tests build against.
+ */
 const Source = "const foo = 1;\nfoo.bar;\n";
 
-/** A standard enabled mount with seeded file contents. */
+/**
+ * A standard enabled mount with seeded file contents.
+ */
 const Setup = async (
 	Config: Record<string, unknown> = {},
 	Contents: Record<string, string> = { "/src/a.ts": Source },

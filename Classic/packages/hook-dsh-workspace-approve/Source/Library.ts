@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -7,6 +11,7 @@
  * binds -> the merge commits).
  *
  * @remarks
+ *
  * Loader contract: `export const name` plus `export const apply` plus
  * `export const Config` plus `export const inject` plus
  * `export default { name, apply, Config, inject }` - the ONLY named exports in
@@ -37,10 +42,6 @@
  * factory for the State builder, the ledger and the Wire registration, and it
  * writes nothing outside its own KV domain and its ledger.
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "hook-dsh-workspace-approve";
 
 /**

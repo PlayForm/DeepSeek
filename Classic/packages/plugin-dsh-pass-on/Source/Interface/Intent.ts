@@ -6,6 +6,7 @@
  * (Documentation/Plans/PASS-ON-AND-INGER.md section 3).
  *
  * @remarks
+ *
  * The intent names the kind; the params carry the kind's arguments.
  */
 export default interface Intent {

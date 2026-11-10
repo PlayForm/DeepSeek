@@ -7,10 +7,10 @@ import type Envelope from "@Interface/Envelope.js";
  * object payload.
  *
  * @remarks
+ *
  * The bus validates what it dispatches, so an adapter that receives a foreign
  * value ignores it instead of crashing.
  */
-
 export default (Value: unknown): Value is Envelope => {
 	if (Value === null || typeof Value !== "object") {
 		return false;

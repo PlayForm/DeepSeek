@@ -1,3 +1,5 @@
+import type Allowlist from "../Interface/Allowlist.js";
+export default _default;
 /**
  * @module Decide
  *
@@ -5,6 +7,7 @@
  * "approve" for one action class.
  *
  * @remarks
+ *
  * The action names ARE the block's keys (read, index, record, suggest,
  * write, commit, spawn, message), so a consumer's gate reads
  *
@@ -21,6 +24,4 @@
  * can only be MORE conservative than the D6 posture for writes, commits and
  * spawns and never silently widens an automatic action.
  */
-import type Allowlist from "../Interface/Allowlist.js";
-export default _default;
 declare function _default(Policy: Allowlist, Action: keyof Allowlist): "auto" | "approve";

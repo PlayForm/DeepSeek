@@ -5,6 +5,7 @@
  * buckets and the call's own source block (the provider and the model).
  *
  * @remarks
+ *
  * A missing bucket is an unreported one, `null`, charged at zero downstream.
  *
  * Both `Function/Fold` (the State's Calls) and `Function/Emits` (the

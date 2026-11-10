@@ -1,3 +1,5 @@
+import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
+import type State from "../Interface/State.js";
 /**
  * @module Overpass
  *
@@ -5,6 +7,7 @@
  * factory (@playform/ets-base-dsh/Overpass/ToolResults).
  *
  * @remarks
+ *
  * The generic machinery lives in the base; this file supplies only what
  * makes it THE NORMALIZE-ELLIPSIS:
  *
@@ -24,8 +27,6 @@
  * Function/Apply's `{ prepend: true }` registration and the import path stay
  * untouched.
  */
-import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
-import type State from "../Interface/State.js";
 /**
  * The schema-default scopes (the fallback for a hand-built config).
  */

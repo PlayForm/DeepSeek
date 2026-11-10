@@ -1,16 +1,3 @@
-/**
- * @module Test
- *
- * The loader contract and the mount of the workspace-evidence plugin, covered
- * in one singular test.
- *
- * @remarks
- * The test covers the loader contract and the mount: the default object
- * carries name/apply/Config/inject, the cold mount is IDLE-forever
- * (byte-exact disabled line, wired to nothing, the service still answers
- * with a loud refusal), the enabled mount wires the root listener and the
- * storage effect, and the fail-loud validation throws at load.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -24,7 +11,23 @@ import {
 	rm,
 } from "../Harness.js";
 
-/** A fresh run with an empty ledger. */
+/**
+ * @module Test
+ *
+ * The loader contract and the mount of the workspace-evidence plugin, covered
+ * in one singular test.
+ *
+ * @remarks
+ *
+ * The test covers the loader contract and the mount: the default object
+ * carries name/apply/Config/inject, the cold mount is IDLE-forever
+ * (byte-exact disabled line, wired to nothing, the service still answers
+ * with a loud refusal), the enabled mount wires the root listener and the
+ * storage effect, and the fail-loud validation throws at load.
+ */
+/**
+ * A fresh run with an empty ledger.
+ */
 const Setup = (Raw: Record<string, unknown> = {}, Attach?: (Context: any) => void): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, ...Raw }), Attach);

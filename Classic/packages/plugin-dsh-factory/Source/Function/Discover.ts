@@ -1,3 +1,6 @@
+import * as FileSystem from "node:fs";
+import { basename as Base, join as Join, dirname as Parent } from "node:path";
+
 /**
  * @module Discover
  *
@@ -5,6 +8,7 @@
  * boundaries and the filesystem root; null when none.
  *
  * @remarks
+ *
  * Identical across the trio (the registry filename is machinery, not module
  * vocabulary - all three modules discover the same registry.json).
  *
@@ -13,9 +17,6 @@
  * so the listener's g2 stage stays await-free. The walk-up never reads the
  * governed manifest.
  */
-import * as FileSystem from "node:fs";
-import { basename as Base, join as Join, dirname as Parent } from "node:path";
-
 export default (Dir: string): string | null => {
 	let Step = Dir;
 	while (Step && Step !== "/" && Step.length > 1) {

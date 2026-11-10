@@ -4,6 +4,7 @@
  * The operation's reply union: one reply, one honest outcome.
  *
  * @remarks
+ *
  * THE REPLY IS PART OF THE TYPE (the situated interaction protocols,
  * INVERSE-REPRESENTATION.md): every reflective operation returns this
  * CommitReply union, derived from the edit lifecycle

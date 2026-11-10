@@ -1,3 +1,9 @@
+import type Invocation from "../../Interface/Invocation.js";
+import type Job from "../../Interface/Job.js";
+import type Policy from "../../Interface/Policy.js";
+import type State from "../../Interface/State.js";
+import type PluginFactory from "@playform/plugin-dsh-factory";
+export default _default;
 /**
  * @module Upgrade
  *
@@ -6,6 +12,7 @@
  * fully-specified argv.
  *
  * @remarks
+ *
  * Never shell-interpreted, collect-mode stdio, owned abort signal —
  * docs/subsystems/subprocess.md — exactly as the package.json governor drives
  * ncu in bin mode. Rust does not co-opt into the TypeScript ecosystem — there
@@ -47,10 +54,4 @@
  * reader) — the same role names the package.json governor's Bin split uses
  * (the naming unification, P4).
  */
-import type Invocation from "../../Interface/Invocation.js";
-import type Job from "../../Interface/Job.js";
-import type Policy from "../../Interface/Policy.js";
-import type State from "../../Interface/State.js";
-import type PluginFactory from "@playform/plugin-dsh-factory";
-export default _default;
 declare function _default(Factory: PluginFactory, State: State, Binary: string, ManifestPath: string, Cwd: string, Invocation: Invocation, Chosen: Policy, Signal: AbortSignal, Sink: Job | undefined): Promise<boolean>;

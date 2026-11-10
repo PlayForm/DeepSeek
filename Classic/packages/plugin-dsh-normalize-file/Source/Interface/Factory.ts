@@ -1,3 +1,5 @@
+import type Factory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Factory
  *
@@ -5,6 +7,7 @@
  * (the family's class/service plugin, factory SCHEME.md sections 0-2).
  *
  * @remarks
+ *
  * The file-content normalizer is a NON-MANIFEST factory consumer: it consumes
  * the State builder (cell unwrap + shared fields, section 2.10), the ledger
  * (Append, section 2.1), the P5 journal (Journal) and - uniquely in the
@@ -29,8 +32,6 @@
  * declarations, which import @deepseek-ai/dsh-fs - importing this module's
  * types pulls the augmentation chain in.
  */
-import type Factory from "@playform/plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

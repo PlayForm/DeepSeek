@@ -1,3 +1,7 @@
+import type Allocation from "../Interface/Allocation.js";
+import type Config from "../Interface/Config.js";
+import type Touch from "../Interface/Touch.js";
+import type Usage from "../Interface/Usage.js";
 /**
  * @module Allocate
  *
@@ -6,6 +10,7 @@
  * remainder and keeps the conservation law.
  *
  * @remarks
+ *
  * The model follows `Documentation/Plans/COST-TRACK-PLUGIN.md` section 2. The
  * direct half is the output side - the model's decision to act - weighted by
  * changed bytes over the files the step wrote. The amortized half is the input
@@ -20,10 +25,6 @@
  * cache data the cached half is empty and the whole mass is uncached, so the
  * old call shape behaves exactly as before.
  */
-import type Allocation from "../Interface/Allocation.js";
-import type Config from "../Interface/Config.js";
-import type Touch from "../Interface/Touch.js";
-import type Usage from "../Interface/Usage.js";
 type Costed = {
     Input: number;
     Output: number;

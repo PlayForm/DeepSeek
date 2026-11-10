@@ -1,9 +1,15 @@
+import type Manifest from "@Interface/Manifest.js";
+import Section from "@Variable/Section.js";
+
+import ParseToml from "./ParseToml.js";
+
 /**
  * @module Decode
  *
  * Parses a Cargo.toml string and identifies the dependency tables.
  *
  * @remarks
+ *
  * The pass is parsing-only: the rewrite is Function/Pin's surgical line
  * manipulation on the raw text. Null is returned on any failure or on a
  * non-table root — an unreadable or non-TOML manifest maps to null instead of
@@ -30,11 +36,6 @@
  *
  * Pure internal calculation — one of the standing exemptions.
  */
-import type Manifest from "@Interface/Manifest.js";
-import Section from "@Variable/Section.js";
-
-import ParseToml from "./ParseToml.js";
-
 export default (Text: unknown): Manifest | null => {
 	const Data = ParseToml(Text);
 	switch (true) {

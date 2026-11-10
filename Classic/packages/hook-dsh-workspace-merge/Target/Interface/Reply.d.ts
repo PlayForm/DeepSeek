@@ -4,6 +4,7 @@
  * The COMMIT REPLY UNION, per file.
  *
  * @remarks
+ *
  * Derived from
  * the v4.1 edit lifecycle (`verified | recovery-required | conflict |
  * denied`), NOT a separate six-way enum; MERGE.md names the same union

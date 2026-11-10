@@ -1,9 +1,14 @@
+import type { FsTarget } from "@deepseek-ai/dsh-fs";
+import type State from "../Interface/State.js";
+import type PluginFactory from "@playform/plugin-dsh-factory";
+export default _default;
 /**
  * @module Settle
  *
  * The post-completion stage of the update continuation.
  *
  * @remarks
+ *
  * Updates the per-dir circuit breaker, reports the failure line (the module's
  * own ledger string, via the FACTORY's Append — State.Module supplies the
  * "hook-dsh-governor-cargo" prefix), then runs U₂ so the observation-policy's
@@ -27,8 +32,4 @@
  * strings, byte-identical: the smokes are the arbiter); the explicit Factory
  * parameter stays the module's.
  */
-import type { FsTarget } from "@deepseek-ai/dsh-fs";
-import type State from "../Interface/State.js";
-import type PluginFactory from "@playform/plugin-dsh-factory";
-export default _default;
 declare function _default(Factory: PluginFactory, State: State, Dir: string, Target: FsTarget, Actor: object | undefined, Code: number): Promise<number>;

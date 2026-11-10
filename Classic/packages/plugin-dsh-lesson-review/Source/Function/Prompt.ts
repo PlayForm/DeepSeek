@@ -1,9 +1,12 @@
+import { Fence, Header, Never, Order, Reply, Routing, Shape, Signals } from "@Variable/Blocks.js";
+
 /**
  * @module Prompt
  *
  * The review prompt composer: the blocks in Variable/Blocks joined in the ONE order the judge assumes, plus the optional explicit focus.
  *
  * @remarks
+ *
  * THE ORDER IS THE CONTRACT, not a style choice:
  *
  * - Header - the task and the "be active" instruction
@@ -22,8 +25,6 @@
  * into the blocks: the blocks stay byte-stable so the smokes can assert
  * them.
  */
-import { Fence, Header, Never, Order, Reply, Routing, Shape, Signals } from "@Variable/Blocks.js";
-
 export default (Focus?: string): string => {
 	const Body = [Header, Shape, Signals, Order, Fence, Routing, Never, Reply].join("\n\n");
 	const Trimmed = (Focus ?? "").trim();

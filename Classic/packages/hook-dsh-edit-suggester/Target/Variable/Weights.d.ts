@@ -5,6 +5,7 @@
  * DATA.
  *
  * @remarks
+ *
  * Completion spec 03-SUGGESTERS section 2: "the pickable heuristics table
  * with weights".
  *

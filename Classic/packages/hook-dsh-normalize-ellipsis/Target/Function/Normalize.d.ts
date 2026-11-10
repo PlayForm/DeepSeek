@@ -8,6 +8,7 @@ import type State from "../Interface/State.js";
  * NORMAL loop completion, writes the ledger line when anything was replaced.
  *
  * @remarks
+ *
  * This is the ellipsis hook's OWN Wire: the factory's Wire is
  * fs/observed-hardwired (this family's silence), while the ellipsis hook's
  * normalization must be VISIBLE - it is the feature - so it registers a plain

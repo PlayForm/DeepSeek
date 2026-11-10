@@ -1,3 +1,7 @@
+import type Decision from "../Interface/Decision.js";
+import type Proposal from "../Interface/Proposal.js";
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Decide
  *
@@ -5,6 +9,7 @@
  * checks, then the record and the ledger line.
  *
  * @remarks
+ *
  * The decision semantics:
  *
  * - A policy rule forces its outcome (deny -> deny, escalate -> escalate, allow
@@ -20,8 +25,4 @@
  *   `govern: escalated <operation> (approval required)`,
  *   `govern: recovery <obligation> (fail-open)`.
  */
-import type Decision from "../Interface/Decision.js";
-import type Proposal from "../Interface/Proposal.js";
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(State: State, Proposal_: Proposal, Append: (Message: string) => void): Decision;

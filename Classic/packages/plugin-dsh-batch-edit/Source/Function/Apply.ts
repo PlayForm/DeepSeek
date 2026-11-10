@@ -1,3 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
+import type Config from "@Interface/Config.js";
+import type FactoryService from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import Version from "@Variable/Version.js";
+
+import * as Machine from "./Machine.js";
+import Tools from "./Tools.js";
+
 /**
  * @module Apply
  *
@@ -6,6 +16,7 @@
  * lives in its own Function module (Machine, Ops, Tools, Present, Ledger).
  *
  * @remarks
+ *
  * The listener set is exactly three:
  *
  * - T1: the batch_edit tool registration (the tools seam, probed - the live
@@ -28,16 +39,6 @@
  * result is returned UNCHANGED. The function returns NOTHING (a returned value
  * silently kills event delivery).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
-import type Config from "@Interface/Config.js";
-import type FactoryService from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import Version from "@Variable/Version.js";
-
-import * as Machine from "./Machine.js";
-import Tools from "./Tools.js";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value):
  * the loader hands volatile fields as cells, so every validation read goes

@@ -1,3 +1,9 @@
+import type Dispatcher from "@Function/Dispatcher.js";
+import type Factory from "@playform/plugin-dsh-factory";
+import type { Allowlist, State as Shared } from "@playform/plugin-dsh-factory";
+
+import type Task from "./Task.js";
+
 /**
  * @module State
  *
@@ -5,16 +11,10 @@
  * Factory.State(ctx, config, { ... })) extended with the queue's own fields.
  *
  * @remarks
+ *
  * Every config-derived field is volatile in the schema, so the factory's P10
  * loader/volatile-update listener refreshes them in place.
  */
-
-import type Dispatcher from "@Function/Dispatcher.js";
-import type Factory from "@playform/plugin-dsh-factory";
-import type { Allowlist, State as Shared } from "@playform/plugin-dsh-factory";
-
-import type Task from "./Task.js";
-
 export default interface State extends Shared {
 	/**
 	 * Master switch (config `enabled`, volatile) - false = full passthrough.

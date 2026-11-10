@@ -1,15 +1,3 @@
-/**
- * @module Test
- *
- * The connect op and the reflective carry: the import insertion with a symbol, the comment form
- * without one, the idempotence, the identity rejection, the relative specifier computation, and
- * the carry.
- *
- * @remarks
- * The idempotence case is the already-connected path. The carry skips silently when the graph is
- * absent, reindexes with the byte-exact carried line when the graph is present, and contains a
- * graph failure without ever undoing the applied write.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -23,6 +11,19 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The connect op and the reflective carry: the import insertion with a symbol, the comment form
+ * without one, the idempotence, the identity rejection, the relative specifier computation, and
+ * the carry.
+ *
+ * @remarks
+ *
+ * The idempotence case is the already-connected path. The carry skips silently when the graph is
+ * absent, reindexes with the byte-exact carried line when the graph is present, and contains a
+ * graph failure without ever undoing the applied write.
+ */
 const CONTENT = "export const alpha = 1;\n";
 
 /** An enabled mount with an optional workspaceGraph attached (an array

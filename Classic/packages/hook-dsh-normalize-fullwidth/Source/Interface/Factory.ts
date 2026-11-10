@@ -1,3 +1,5 @@
+import type Factory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Factory
  *
@@ -5,6 +7,7 @@
  * class/service plugin, factory SCHEME.md §0-§2).
  *
  * @remarks
+ *
  * The fullwidth hook is a NON-MANIFEST factory consumer: it consumes the State builder (cell
  * unwrap + shared fields, §2.10), the ledger (Append, §2.1) and the probe-once Seam accessor
  * (§2.15) - but NOT the fs/observed Wire (§2.11, fs/observed-hardwired to this family's
@@ -20,8 +23,6 @@
  * `'llm/stream'` (options: GenerateOptions, next) => AsyncIterable<StreamChunk> - re-declaring
  * it would be a conflicting duplicate.
  */
-import type Factory from "@playform/plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

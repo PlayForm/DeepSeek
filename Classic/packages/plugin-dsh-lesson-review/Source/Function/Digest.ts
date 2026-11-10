@@ -1,9 +1,12 @@
+import type { ReviewMessage } from "@Interface/Review.js";
+
 /**
  * @module Digest
  *
  * The bounded conversation digest the review model receives.
  *
  * @remarks
+ *
  * THE SHAPE COMES FROM HERMES' `_digest_history`, and so does the reason for
  * it: when the review runs on the SAME model as the live turn it replays the
  * transcript as warm cache reads, but a routed (cheaper) model has a cold
@@ -25,8 +28,6 @@
  * what the reviewer needs, so the oldest collapsed lines are what get
  * dropped.
  */
-import type { ReviewMessage } from "@Interface/Review.js";
-
 /**
  * One collapsed or verbatim line's cap (the Hermes 300/200 split).
  */

@@ -1,3 +1,10 @@
+import OS from "node:os";
+import Path from "node:path";
+
+import type Configuration from "@Interface/Configuration.js";
+import type { Corpus } from "@Interface/Corpus.js";
+import type { Operation } from "@Interface/Operation.js";
+
 /**
  * @module Write
  *
@@ -5,6 +12,7 @@
  * the two pieces of vocabulary the whole write side shares.
  *
  * @remarks
+ *
  * THE FENCE IS THREE CHECKS IN ORDER, and each exists because the layer below it cannot
  * be trusted to make it (SKILL-LEARN-PLUGIN.md:427-445):
  *
@@ -39,54 +47,63 @@
  * structurally. `Expand` lives here for the family precedent that puts it beside the
  * write (Classic/packages/plugin-dsh-lesson-review/Source/Function/Apply.ts:26-28).
  */
-import OS from "node:os";
-import Path from "node:path";
-
-import type Configuration from "@Interface/Configuration.js";
-import type { Corpus } from "@Interface/Corpus.js";
-import type { Operation } from "@Interface/Operation.js";
-
-/** The opaque freshness token; the harness brands it and the fence keeps it opaque. */
+/**
+ * The opaque freshness token; the harness brands it and the fence keeps it opaque.
+ */
 type Version = string;
 
-/** One path resolved into a stable identity. */
+/**
+ * One path resolved into a stable identity.
+ */
 interface Target {
 	readonly targetKey: string;
 	readonly displayPath: string;
 }
 
-/** What `stat` reports, narrowed to the two fields the fence reads. */
+/**
+ * What `stat` reports, narrowed to the two fields the fence reads.
+ */
 interface Info {
 	readonly version: Version;
 	readonly type: "file" | "directory" | "other";
 }
 
-/** One direct child, narrowed to the fields the archive walk reads. */
+/**
+ * One direct child, narrowed to the fields the archive walk reads.
+ */
 interface Child {
 	readonly name: string;
 	readonly type: "file" | "directory" | "other";
 	readonly target: Target;
 }
 
-/** The guarded write intent; there is no third arm, because an unconditional write is the defect. */
+/**
+ * The guarded write intent; there is no third arm, because an unconditional write is the defect.
+ */
 type Intent =
 	| { readonly kind: "createIfAbsent" }
 	| { readonly kind: "replaceIfVersion"; readonly version: Version };
 
-/** What a full-file write reports; `before` is null exactly on a create. */
+/**
+ * What a full-file write reports; `before` is null exactly on a create.
+ */
 interface Written {
 	readonly before: string | null;
 	readonly after: string;
 }
 
-/** The literal edit request; `replaceAll` is always false, which is the harness's own anchor check. */
+/**
+ * The literal edit request; `replaceAll` is always false, which is the harness's own anchor check.
+ */
 interface Edit {
 	readonly oldString: string;
 	readonly newString: string;
 	readonly replaceAll: boolean;
 }
 
-/** What a literal edit reports; both sides are always present. */
+/**
+ * What a literal edit reports; both sides are always present.
+ */
 interface Edited {
 	readonly before: string;
 	readonly after: string;
@@ -107,9 +124,13 @@ export interface Seam {
 	contains(parent: Target, child: Target): boolean;
 }
 
-/** One operation's carried body, the corpus view, and the seams it needs. */
+/**
+ * One operation's carried body, the corpus view, and the seams it needs.
+ */
 export interface Attempt {
-	/** The judged operation to land. */
+	/**
+	 * The judged operation to land.
+	 */
 	readonly operation: Operation;
 
 	/**
@@ -123,22 +144,34 @@ export interface Attempt {
 	readonly configuration: Configuration;
 }
 
-/** One write that landed, with both texts, which is exactly what the ledger row needs. */
+/**
+ * One write that landed, with both texts, which is exactly what the ledger row needs.
+ */
 export interface Applied {
-	/** The absolute path the bytes landed at. */
+	/**
+	 * The absolute path the bytes landed at.
+	 */
 	readonly path: string;
 
-	/** The skill the write belongs to, by frontmatter name. */
+	/**
+	 * The skill the write belongs to, by frontmatter name.
+	 */
 	readonly skill: string;
 
-	/** The text before the write, or null for a creation. */
+	/**
+	 * The text before the write, or null for a creation.
+	 */
 	readonly before: string | null;
 
-	/** The text after the write. */
+	/**
+	 * The text after the write.
+	 */
 	readonly after: string;
 }
 
-/** The fence's answer: the applied write, or the class and clause that refused it. */
+/**
+ * The fence's answer: the applied write, or the class and clause that refused it.
+ */
 export type Fenced =
 	| { readonly ok: true; readonly applied: Applied }
 	| {
@@ -147,12 +180,18 @@ export type Fenced =
 			readonly detail: string;
 	  };
 
-/** One operation's paths: the file it writes and the skill directory that must hold it. */
+/**
+ * One operation's paths: the file it writes and the skill directory that must hold it.
+ */
 export interface Located {
-	/** The absolute path the operation writes. */
+	/**
+	 * The absolute path the operation writes.
+	 */
 	readonly path: string;
 
-	/** The skill directory the path may not leave. */
+	/**
+	 * The skill directory the path may not leave.
+	 */
 	readonly base: string;
 }
 
@@ -196,7 +235,9 @@ export const Locate = (
 	}
 };
 
-/** One path's text, or null when the target is absent. */
+/**
+ * One path's text, or null when the target is absent.
+ */
 export const Text = async (Seam_: Seam, Absolute: string): Promise<string | null> => {
 	const Target_ = await Seam_.resolve(Absolute);
 	switch (true) {
@@ -207,7 +248,9 @@ export const Text = async (Seam_: Seam, Absolute: string): Promise<string | null
 	}
 };
 
-/** The typed code of a harness failure, or the message when it carries none. */
+/**
+ * The typed code of a harness failure, or the message when it carries none.
+ */
 const Failure = (Cause: unknown): string => {
 	const Code = (Cause as { readonly code?: unknown } | undefined)?.code;
 	switch (true) {
@@ -220,7 +263,9 @@ const Failure = (Cause: unknown): string => {
 	}
 };
 
-/** The target's text and the version `stat` just returned, or undefined when it is absent. */
+/**
+ * The target's text and the version `stat` just returned, or undefined when it is absent.
+ */
 const Read = async (
 	Seam_: Seam,
 	Absolute: string,
@@ -235,7 +280,9 @@ const Read = async (
 	return { target: Target_, text: await Seam_.readText(Target_), version: Info_.version };
 };
 
-/** One landed write, built from either a full-file write or a literal edit. */
+/**
+ * One landed write, built from either a full-file write or a literal edit.
+ */
 const Landed = (Path_: string, Skill: string, Written_: Written): Applied => ({
 	path: Path_,
 	skill: Skill,

@@ -1,9 +1,21 @@
+import { dirname as Parent } from "node:path";
+
+import type { FsObservation, FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import type Passage from "@Interface/Passage.js";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+import { Suppress } from "@playform/lib-dsh-core";
+
+import Follow from "./Follow.js";
+import Transform from "./Transform.js";
+
 /**
  * @module Observe
  *
  * The fs/observed listener body, now a thin module residue.
  *
  * @remarks
+ *
  * The factory owns the machinery: `Factory.Gate` for the whole g1 gate set (the exact
  * pre-refactor order - target -> actor -> kind -> Stash idempotence -> basename ->
  * exclusion-first - logs nothing, SCHEME.md §2.6), the MODULE'S ledger lines for the outcomes
@@ -21,17 +33,6 @@
  * factory's Continue catches its own, and Function/Follow catches its own, so neither can
  * ever surface as a tool error (the silence invariant).
  */
-import { dirname as Parent } from "node:path";
-
-import type { FsObservation, FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
-import type Passage from "@Interface/Passage.js";
-import type Registry from "@Interface/Registry.js";
-import type State from "@Interface/State.js";
-import { Suppress } from "@playform/lib-dsh-core";
-
-import Follow from "./Follow.js";
-import Transform from "./Transform.js";
-
 export default (
 	State: State,
 	Target: FsTarget,

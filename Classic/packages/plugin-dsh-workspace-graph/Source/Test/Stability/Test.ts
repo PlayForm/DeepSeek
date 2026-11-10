@@ -1,3 +1,7 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { Check, Finish, MakeCounter, MakeGraph } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +9,7 @@
  * fingerprint.
  *
  * @remarks
+ *
  * Changing one symbol changes that symbol's fingerprint, the file's and its
  * block's, and leaves the other symbols' intact; the id set is unchanged across
  * the edit; every node carries the file version token from stat time; the
@@ -13,10 +18,6 @@
  * Unit smoke of `@playform/plugin-dsh-workspace-graph`: the fake ctx + the REAL
  * built class, from the Harness.
  */
-import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import { Check, Finish, MakeCounter, MakeGraph } from "../Harness.js";
-
 const FIXTURE_TS = readFileSync(
 	new URL("../../../Source/Test/Parse-And-Fingerprint/Fixture.ts", import.meta.url),
 	"utf8",

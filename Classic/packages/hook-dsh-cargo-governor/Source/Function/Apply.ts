@@ -1,3 +1,11 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "@Interface/Config.js";
+import type StateView from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+
+import * as Direct from "./Direct.js";
+import Observe from "./Observe.js";
+
 /**
  * @module Apply
  *
@@ -5,6 +13,7 @@
  * `@playform/plugin-dsh-factory` service injected as `pluginFactory`.
  *
  * @remarks
+ *
  * The composition has four steps:
  *
  * 1. State — the factory's State builder (cell unwrap, the fixed shared
@@ -30,14 +39,6 @@
  * (live-verified 2026-10-03). Test probes read the per-dir in-flight/breaker
  * maps through the `ctx.__hookDshGovernorCargoState` attachment instead.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "@Interface/Config.js";
-import type StateView from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-
-import * as Direct from "./Direct.js";
-import Observe from "./Observe.js";
-
 export default (Context: Context, Options: Config): void => {
 	// The injected factory service (inject: ["fs", "pluginFactory"] — the
 	// plugin stays PENDING until both exist; the accessor is the consumption

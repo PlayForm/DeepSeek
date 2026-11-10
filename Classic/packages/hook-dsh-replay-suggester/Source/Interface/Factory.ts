@@ -1,3 +1,5 @@
+import type Factory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Factory
  *
@@ -5,6 +7,7 @@
  * the State builder and the ledger as the hook consumes them.
  *
  * @remarks
+ *
  * Factory SCHEME.md §0-§2 describes the family's class/service plugin. The
  * replay-suggester hook is the factory's NON-MANIFEST consumer: it uses the
  * State builder (cell unwrap + shared fields, §2.10) and the ledger (Append,
@@ -22,8 +25,6 @@
  * `Events` with `'tools/post-execute'` - re-declaring it would be a
  * conflicting duplicate.
  */
-import type Factory from "@playform/plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

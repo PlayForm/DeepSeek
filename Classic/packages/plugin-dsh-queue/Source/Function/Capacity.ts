@@ -1,3 +1,5 @@
+import type State from "@Interface/State.js";
+
 /**
  * @module Capacity
  *
@@ -5,6 +7,7 @@
  * 2.2).
  *
  * @remarks
+ *
  * The RESERVATION model: the queue holds the tasks as data; the
  * dispatcher spawns when the capacity allows. Two capacities:
  *
@@ -18,8 +21,6 @@
  * impossible. A seat is taken at dispatch and released at completion, failure
  * or interruption (Function/Settle).
  */
-import type State from "@Interface/State.js";
-
 /**
  * The agent key for the main conversation's pool.
  */

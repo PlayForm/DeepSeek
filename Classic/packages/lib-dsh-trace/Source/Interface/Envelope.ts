@@ -5,6 +5,7 @@
  * `{ trace, kind, at, actor, payload }`.
  *
  * @remarks
+ *
  * - `trace` is the emission's correlation id: the bus assigns `trace-<sequence>`
  *   when the emitter supplies none, so a correlated chain can pass its own id
  *   through.
@@ -17,18 +18,28 @@
  *   facts).
  */
 export default interface Envelope {
-	/** The emission's correlation id (`trace-<sequence>` when the bus assigned it). */
+	/**
+	 * The emission's correlation id (`trace-<sequence>` when the bus assigned it).
+	 */
 	trace: string;
 
-	/** The event name. */
+	/**
+	 * The event name.
+	 */
 	kind: string;
 
-	/** The emission time in epoch milliseconds. */
+	/**
+	 * The emission time in epoch milliseconds.
+	 */
 	at: number;
 
-	/** The emitting actor object, when the emitter carried one. */
+	/**
+	 * The emitting actor object, when the emitter carried one.
+	 */
 	actor?: object;
 
-	/** The event's own payload. */
+	/**
+	 * The event's own payload.
+	 */
 	payload: Record<string, unknown>;
 }

@@ -1,3 +1,12 @@
+import type Invocation from "@Interface/Invocation.js";
+import type Job from "@Interface/Job.js";
+import type Policy from "@Interface/Policy.js";
+import type State from "@Interface/State.js";
+import type PluginFactory from "@playform/plugin-dsh-factory";
+
+import Child from "./Upgrade/Child.js";
+import Seam from "./Upgrade/Seam.js";
+
 /**
  * @module Upgrade
  *
@@ -6,6 +15,7 @@
  * fully-specified argv.
  *
  * @remarks
+ *
  * Never shell-interpreted, collect-mode stdio, owned abort signal —
  * docs/subsystems/subprocess.md — exactly as the package.json governor drives
  * ncu in bin mode. Rust does not co-opt into the TypeScript ecosystem — there
@@ -47,15 +57,6 @@
  * reader) — the same role names the package.json governor's Bin split uses
  * (the naming unification, P4).
  */
-import type Invocation from "@Interface/Invocation.js";
-import type Job from "@Interface/Job.js";
-import type Policy from "@Interface/Policy.js";
-import type State from "@Interface/State.js";
-import type PluginFactory from "@playform/plugin-dsh-factory";
-
-import Child from "./Upgrade/Child.js";
-import Seam from "./Upgrade/Seam.js";
-
 export default async (
 	Factory: PluginFactory,
 	State: State,

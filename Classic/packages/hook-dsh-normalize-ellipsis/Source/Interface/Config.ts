@@ -4,6 +4,7 @@
  * The validated plugin-config shape the loader hands to `apply`.
  *
  * @remarks
+ *
  * Cordis validates the exported Schemastery schema while the plugin loads and
  * fills every default (`docs/user/develop/basic/config.md:45`), so `apply`
  * receives a plain object of exactly this shape. The schema that produces it
@@ -19,16 +20,24 @@
  * are plain (remount on edit - they change the stream dispatch semantics).
  */
 export default interface Config {
-	/** Ledger enabled - write the durable log file (volatile). */
+	/**
+	 * Ledger enabled - write the durable log file (volatile).
+	 */
 	log: boolean;
 
-	/** Ledger file - the ellipsis ledger, separate from the family's logs (volatile). */
+	/**
+	 * Ledger file - the ellipsis ledger, separate from the family's logs (volatile).
+	 */
 	logFile: string;
 
-	/** The ellipsis replacement - the ASCII "..." three-dot sequence by default (volatile). */
+	/**
+	 * The ellipsis replacement - the ASCII "..." three-dot sequence by default (volatile).
+	 */
 	replacement: string;
 
-	/** Normalize `reasoning-delta` chunks and the assembled ReasoningBlock too. */
+	/**
+	 * Normalize `reasoning-delta` chunks and the assembled ReasoningBlock too.
+	 */
 	normalizeReasoning: boolean;
 
 	/**
@@ -53,23 +62,37 @@ export default interface Config {
 	toolResultsExempt: string[];
 }
 
-/** The granular scope gates' shape (identical in all the family's flavors). */
+/**
+ * The granular scope gates' shape (identical in all the family's flavors).
+ */
 export interface Scopes {
-	/** The text-delta text and the assembled text/reasoning blocks. */
+	/**
+	 * The text-delta text and the assembled text/reasoning blocks.
+	 */
 	conversation: boolean;
 
-	/** The reasoning-delta sub-gate (ANDed with `normalizeReasoning`). */
+	/**
+	 * The reasoning-delta sub-gate (ANDed with `normalizeReasoning`).
+	 */
 	reasoning: boolean;
 
-	/** The tool-call arguments arm (OR-ed with `normalizeToolArguments`). */
+	/**
+	 * The tool-call arguments arm (OR-ed with `normalizeToolArguments`).
+	 */
 	toolInput: boolean;
 
-	/** The tools/post-execute arm (tool results in the transcript). */
+	/**
+	 * The tools/post-execute arm (tool results in the transcript).
+	 */
 	toolResults: boolean;
 
-	/** The normalize-file tool (inert in the stream flavors). */
+	/**
+	 * The normalize-file tool (inert in the stream flavors).
+	 */
 	files: boolean;
 
-	/** The agent/pre-step arm (the incoming step batch). */
+	/**
+	 * The agent/pre-step arm (the incoming step batch).
+	 */
 	batch: boolean;
 }

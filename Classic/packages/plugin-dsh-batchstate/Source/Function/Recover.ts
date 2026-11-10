@@ -1,3 +1,11 @@
+import { readFileSync as Read } from "node:fs";
+
+import type File from "@Interface/File.js";
+import type State from "@Interface/State.js";
+import { Expand } from "@playform/lib-dsh-core";
+
+import Restore from "./Restore.js";
+
 /**
  * @module Recover
  *
@@ -5,6 +13,7 @@
  * the members, the queue, the spliced proposals and the arbiter gates (Function/Restore).
  *
  * @remarks
+ *
  * THE SPLIT (the completion spec's wave 3 storage migration): the PRIMARY store is the
  * storage-domain KV domain (Function/Storage); this file is the DEGRADED FALLBACK, engaged ONLY
  * when the harness provides no storage facility (Function/Apply's probe) or when the domain's open
@@ -16,14 +25,6 @@
  *
  * A missing or corrupt file starts the batch EMPTY - never guessed.
  */
-import { readFileSync as Read } from "node:fs";
-
-import type File from "@Interface/File.js";
-import type State from "@Interface/State.js";
-import { Expand } from "@playform/lib-dsh-core";
-
-import Restore from "./Restore.js";
-
 export default (State: State): void => {
 	try {
 		const Parsed = JSON.parse(Read(Expand(State.StateFile), "utf8")) as Partial<File>;

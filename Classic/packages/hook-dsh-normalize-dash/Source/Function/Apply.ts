@@ -21,6 +21,7 @@ import Write from "./Write.js";
  * shape.
  *
  * @remarks
+ *
  * It builds the State through `Factory.State` (the cell unwrap, the shared
  * mappings Ledger<-logFile / Enabled<-log and the module's own fields via the
  * setup `fields` map - factory `SCHEME.md` section 2.10), emits the durable
@@ -67,7 +68,6 @@ import Write from "./Write.js";
  * exemption, and the chunk vocabulary arrives through the waterfall, not
  * through an import.
  */
-
 export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
 	// augmentation; guaranteed present by the inject declaration).

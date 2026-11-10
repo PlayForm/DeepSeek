@@ -1,3 +1,6 @@
+import type { FsTarget } from "@deepseek-ai/dsh-fs";
+import type Registry from "../Interface/Registry.js";
+import type State from "../Interface/State.js";
 /**
  * @module Dispatch
  *
@@ -5,6 +8,7 @@
  * this context, otherwise as the historical detached, contained async continuation.
  *
  * @remarks
+ *
  * The detached continuation is the fallback for sdk-minimal deployments.
  *
  * The control flow is the CORE's shared update-stage envelope (@playform/lib-dsh-core,
@@ -37,9 +41,6 @@
  * the running update's controller; the collision lesson is factory-side now) and removed on
  * settlement.
  */
-import type { FsTarget } from "@deepseek-ai/dsh-fs";
-import type Registry from "../Interface/Registry.js";
-import type State from "../Interface/State.js";
 export declare const Envelope: {
     Dispatch: (State: State, Target: FsTarget, Actor: object | undefined, Dir: string, Registry: Registry | null, PolicyPath: string) => Promise<void>;
     Settle: (State: State, Dir: string, Target: FsTarget, Actor: object | undefined, Code: number) => Promise<number>;

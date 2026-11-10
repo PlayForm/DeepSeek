@@ -1,3 +1,11 @@
+import Path from "node:path";
+
+import { Expand, Locate } from "@Function/Write.js";
+import type Configuration from "@Interface/Configuration.js";
+import type { Corpus } from "@Interface/Corpus.js";
+import type { Operation } from "@Interface/Operation.js";
+import type { ReviewRefusal, ReviewRule } from "@Interface/Review.js";
+
 /**
  * @module Judge
  *
@@ -5,6 +13,7 @@
  * each, first refusal wins.
  *
  * @remarks
+ *
  * WHY A JUDGE AT ALL. Every rule here is a content rule the prompt states in prose
  * (SKILL-LEARN-PLUGIN.md:305-379) and that prose alone cannot enforce: a model that
  * ignores an instruction still produces a plausible artifact, and a plausible artifact
@@ -27,24 +36,25 @@
  * so a rule that could wait would be a rule whose refusal can arrive after the write
  * it was meant to stop (Interface/Corpus.ts:1-13).
  */
-import Path from "node:path";
-
-import { Expand, Locate } from "@Function/Write.js";
-import type Configuration from "@Interface/Configuration.js";
-import type { Corpus } from "@Interface/Corpus.js";
-import type { Operation } from "@Interface/Operation.js";
-import type { ReviewRefusal, ReviewRule } from "@Interface/Review.js";
-
-/** The corpus grammar: lowercase letters, digits, single hyphens (dsh-skill/lib/index.js:17). */
+/**
+ * The corpus grammar: lowercase letters, digits, single hyphens (dsh-skill/lib/index.js:17).
+ */
 const Grammar = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-/** The three roots a support file may live under (SKILL-LEARN-PLUGIN.md:278). */
+/**
+ * The three roots a support file may live under (SKILL-LEARN-PLUGIN.md:278).
+ */
 const Roots: readonly string[] = ["references", "templates", "scripts"];
 
-/** The 64-character ceiling the naming law states (SKILL-LEARN-PLUGIN.md:270). */
+/**
+ * The 64-character ceiling the naming law states (SKILL-LEARN-PLUGIN.md:270).
+ */
 const Ceiling = 64;
 
-/** The two legacy camelCase twins of the accepted kebab keys; the loader throws on them (DESIGN-BRIEF.md:60). */
+/**
+ * The two legacy camelCase twins of the accepted kebab keys; the loader throws on them
+ * (DESIGN-BRIEF.md:60).
+ */
 const Legacy = /^(?:disableModelInvocation|userInvocable):/m;
 
 /**
@@ -56,18 +66,26 @@ const Legacy = /^(?:disableModelInvocation|userInvocable):/m;
 const Reference =
 	/(?:\b(?:19|20)\d{2}-\d{2}-\d{2}\b)|(?:\b(?:0?[1-9]|1[0-2])\/(?:0?[1-9]|[12]\d|3[01])\/(?:19|20)\d{2}\b)|(?:\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},?\s+(?:19|20)\d{2}\b)|(?:#\d+)|(?:\b(?:PR|Issue|pr|issue)\s*-?\s*#?\d+\b)/;
 
-/** A quoted span longer than 40 characters: a user's sentence pasted in as content. */
+/**
+ * A quoted span longer than 40 characters: a user's sentence pasted in as content.
+ */
 const Quoted = /"[^"\n]{41,}"|'[^'\n]{41,}'/;
 
-/** A negative claim about a tool or a feature (SKILL-LEARN-PLUGIN.md:282). */
+/**
+ * A negative claim about a tool or a feature (SKILL-LEARN-PLUGIN.md:282).
+ */
 const Negative =
 	/\b(?:does not work|doesn't work|is broken|are broken|not supported|cannot be used|no longer works|fails to work)\b/i;
 
-/** The fix that turns a negative claim into a rule instead of a standing refusal. */
+/**
+ * The fix that turns a negative claim into a rule instead of a standing refusal.
+ */
 const Fix =
 	/\b(?:install|npm i|pnpm add|yarn add|bun add|export|environment variable|config(?:ure|uration)?|set the|enable|restart|update to|upgrade|use instead|workaround|add the)\b/i;
 
-/** The frontmatter block of a file, or null when it carries no `---` fence. */
+/**
+ * The frontmatter block of a file, or null when it carries no `---` fence.
+ */
 const Head = (Text: string): string | null => {
 	switch (true) {
 		case !Text.startsWith("---"):
@@ -84,7 +102,9 @@ const Head = (Text: string): string | null => {
 	}
 };
 
-/** Why the result would not load as a skill file, or null when it would (DESIGN-BRIEF.md:56-62). */
+/**
+ * Why the result would not load as a skill file, or null when it would (DESIGN-BRIEF.md:56-62).
+ */
 const Parseable = (Result: string, Name: string): string | null => {
 	const Block = Head(Result);
 
@@ -107,7 +127,9 @@ const Parseable = (Result: string, Name: string): string | null => {
 	}
 };
 
-/** Whether the frontmatter carries a non-empty description. */
+/**
+ * Whether the frontmatter carries a non-empty description.
+ */
 const Described = (Block: string): boolean => {
 	const Value = /^description:\s*(.*)$/m.exec(Block);
 	switch (true) {
@@ -118,13 +140,17 @@ const Described = (Block: string): boolean => {
 	}
 };
 
-/** The non-blank lines of a text, trimmed, which is what the duplicate rule compares. */
+/**
+ * The non-blank lines of a text, trimmed, which is what the duplicate rule compares.
+ */
 const Lines = (Text: string): readonly string[] =>
 	Text.split(/\r?\n/)
 		.map((Line) => Line.trim())
 		.filter((Line) => Line !== "");
 
-/** Whether any non-blank line of the added text already occurs verbatim in the target. */
+/**
+ * Whether any non-blank line of the added text already occurs verbatim in the target.
+ */
 const Repeats = (Added: string, Existing: string): boolean => {
 	const Seen = new Set(Lines(Existing));
 	for (const Line of Lines(Added)) {
@@ -138,7 +164,9 @@ const Repeats = (Added: string, Existing: string): boolean => {
 	return false;
 };
 
-/** How many times the anchor occurs in the body. */
+/**
+ * How many times the anchor occurs in the body.
+ */
 const Occurrences = (Body: string, Anchor: string): number => {
 	switch (true) {
 		case Anchor === "":
@@ -148,7 +176,9 @@ const Occurrences = (Body: string, Anchor: string): number => {
 	}
 };
 
-/** Whether a support path is under one of the three roots and cannot leave the skill. */
+/**
+ * Whether a support path is under one of the three roots and cannot leave the skill.
+ */
 const Support = (FilePath: string): boolean => {
 	const Parts = FilePath.split("/");
 	switch (true) {
@@ -165,7 +195,9 @@ const Support = (FilePath: string): boolean => {
 	}
 };
 
-/** One refusal, with the operation that earned it. */
+/**
+ * One refusal, with the operation that earned it.
+ */
 const Refuse = (Rule: ReviewRule, Detail: string, Operation_: Operation): ReviewRefusal => ({
 	operation: Operation_,
 	rule: Rule,

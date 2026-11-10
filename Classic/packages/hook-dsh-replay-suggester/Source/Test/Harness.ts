@@ -1,9 +1,17 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
  * The shared test harness for the REPLAY-SUGGESTER tests.
  *
  * @remarks
+ *
  * Combines the fake ctx (ctx listener capture, reflect.provide capture, the effect runner, the
  * logger capture, the fs capture that must stay untouched, the distinct root seam) with the REAL
  * `@playform/plugin-dsh-factory` instance from its built Target and the REAL replay-suggester
@@ -18,13 +26,6 @@
  *
  * NO FAKE CLOCK: the plugin has no clock dependency at all.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 export { Plugin };
 
 /**
@@ -103,7 +104,9 @@ export const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "replay-sugges
 export const Ledger = Path.join(Root, "replay-suggester.log");
 export const Store = Path.join(Root, "history.json");
 
-/** The producer's fallback-store counter: one fresh file per mount. */
+/**
+ * The producer's fallback-store counter: one fresh file per mount.
+ */
 let RecordCounter = 0;
 
 /**
@@ -415,7 +418,9 @@ export const FakeStorage = (Options: { failOpen?: boolean; version?: number } = 
 		},
 	};
 
-	/** Seed one record (the restart scenario: the store outlives the process). */
+	/**
+	 * Seed one record (the restart scenario: the store outlives the process).
+	 */
 	Facility.seed = (Name: string, Key: string, Value: unknown): void => {
 		if (!Facility.tables.has(Name)) {
 			Facility.tables.set(Name, new Map());

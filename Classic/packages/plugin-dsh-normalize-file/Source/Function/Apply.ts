@@ -1,3 +1,17 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+
+import Command, {
+	type CommandsService,
+	type ConfigEditorService,
+	type SettingsService,
+} from "./Command.js";
+import Overpass from "./Overpass.js";
+import StepBatch from "./StepBatch.js";
+import Write from "./Write.js";
+
 /**
  * @module Apply
  *
@@ -5,6 +19,7 @@
  * shape.
  *
  * @remarks
+ *
  * The work is: build the State through `Factory.State` (the cell unwrap, the
  * shared mappings Ledger<-logFile / Enabled<-log and the module's own fields
  * via the setup `fields` map - factory SCHEME.md section 2.10), emit the
@@ -55,20 +70,6 @@
  * import @deepseek-ai/dsh-fs). Nothing else is injected: the ledger append is
  * the factory's own plain-fs exemption.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-
-import Command, {
-	type CommandsService,
-	type ConfigEditorService,
-	type SettingsService,
-} from "./Command.js";
-import Overpass from "./Overpass.js";
-import StepBatch from "./StepBatch.js";
-import Write from "./Write.js";
-
 export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
 	// augmentation; guaranteed present by the inject declaration).

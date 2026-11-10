@@ -1,3 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import Observe from "@Function/Observe.js";
+import ServiceClass from "@Function/Service.js";
+import Storage from "@Function/Storage.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+
 /**
  * @module Apply
  *
@@ -6,6 +16,7 @@
  * own P5-style storage effect, and the boot recovery pass.
  *
  * @remarks
+ *
  * The State build uses the factory's cell unwrap + the P10 volatile refresh.
  * The service is Function/Service - `workspaceJournal`, constructed here so
  * `ctx.workspaceJournal` resolves. The contract is
@@ -22,17 +33,6 @@
  * silently kills event delivery). The test probe is the
  * `ctx.__hookDshWorkspaceJournalState` attachment.
  */
-
-import type { Context } from "@deepseek-ai/cordis";
-import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
-import Observe from "@Function/Observe.js";
-import ServiceClass from "@Function/Service.js";
-import Storage from "@Function/Storage.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
  */

@@ -1,9 +1,12 @@
+import type { PolicyShape, RoleSpec } from "../Interface/Policy.js";
+export default _default;
 /**
  * @module Ladder
  *
  * The escalation rung's model resolution against the live catalog.
  *
  * @remarks
+ *
  * ROUTING-ENFORCER-PLUGIN.md section 2.2 + exploration item 4: the policy's
  * planner row is the rung, but its model is only usable when the provider
  * actually advertises it. The catalog is the one `list_subagent_models`
@@ -22,6 +25,4 @@
  * The plugin never invents a model: every candidate comes from the user's
  * allowed set, and the escalation's effort stays the planner row's `max`.
  */
-import type { PolicyShape, RoleSpec } from "../Interface/Policy.js";
-export default _default;
 declare function _default(Policy: PolicyShape, Advertised?: readonly string[]): RoleSpec;

@@ -1,8 +1,3 @@
-// TurnRow - the turn row: the toggle button, the turn clock, the scope
-// markers, and one cell per resolved column. The row builds the cell source
-// from the turn's own aggregates and lets each column's render build its
-// cell, so a hidden or reordered column moves the header and the body
-// together.
 import type { TurnsCells } from "@Function/Columns";
 import Stamp from "@Function/Stamp";
 import type { ResolvedTable } from "@Interface/Table";
@@ -10,6 +5,17 @@ import type { Translate } from "@Interface/Translate";
 import type CostTurn from "@Interface/Turn";
 import { createElement } from "react";
 
+/**
+ * @module TurnRow
+ *
+ * The turn row: the toggle button, the turn clock, the scope markers, and one cell per resolved
+ * column.
+ *
+ * @remarks
+ *
+ * The row builds the cell source from the turn's own aggregates and lets each column's render
+ * build its cell, so a hidden or reordered column moves the header and the body together.
+ */
 const CacheMissThreshold = 0.5;
 
 type Marker = {

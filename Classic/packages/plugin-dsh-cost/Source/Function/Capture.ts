@@ -1,3 +1,5 @@
+import type Config from "../Interface/Config.js";
+
 /**
  * @module Capture
  *
@@ -5,6 +7,7 @@
  * push of one event into its session's queue when the capture gates allow.
  *
  * @remarks
+ *
  * The recorder follows `Documentation/Plans/COST-TRACK-PLUGIN.md` section 1.
  * Push stores one event when the gates allow (capture.sessions for every
  * session; capture.subagents additionally required once the session's origin is
@@ -17,8 +20,6 @@
  * per-session bound keeps a queue whose drain keeps failing from growing
  * without limit.
  */
-import type Config from "../Interface/Config.js";
-
 // The per-session ceiling: past it the oldest pending events are dropped, so
 // a batch that never commits costs a bounded amount of memory. A live flush
 // keeps the queue far below it, and the bound sits above any plausible single

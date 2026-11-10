@@ -4,6 +4,7 @@
  * The validated plugin-config shape the loader hands to `apply`.
  *
  * @remarks
+ *
  * Cordis validates the exported Schemastery schema while the plugin loads and fills every
  * default (docs/user/develop/basic/config.md:45), so `apply` receives a plain object of exactly
  * this shape. The schema that produces it lives in Variable/Config.ts; every field here is a

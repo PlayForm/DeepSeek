@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+
 /**
  * @module Hash
  *
@@ -5,6 +7,7 @@
  * the FIRST 24 hex characters (96 bits).
  *
  * @remarks
+ *
  * The plan's decision (§3): BLAKE3 (Aphrodite's 40-hex digest) needs a
  * wasm/native dependency - the family is zero-framework TypeScript and
  * `node:crypto` is free; 24 hex is collision-safe at the LRU's practical
@@ -16,7 +19,5 @@
  * exactly the bytes `Buffer.byteLength(Serialized)` counts, so the hash and
  * the size in the marker always describe the same bytes.
  */
-import { createHash } from "node:crypto";
-
 export default (Serialized: string): string =>
 	createHash("sha256").update(Serialized).digest("hex").slice(0, 24);

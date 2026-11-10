@@ -1,3 +1,5 @@
+import type { Context } from "@deepseek-ai/cordis";
+export default _default;
 /**
  * @module Register
  *
@@ -5,6 +7,7 @@
  * `ctx.sessionProjections`.
  *
  * @remarks
+ *
  * The seam receives every committed session event once for every agent.
  *
  * WHY `ctx.inject` AND NOT THE `inject` ARRAY: the registry is a service a
@@ -28,6 +31,4 @@
  * degradation (the history stays empty and only an explicit pack may speak) -
  * the same posture as the `workingDirectory` probe in `Function/Apply`.
  */
-import type { Context } from "@deepseek-ai/cordis";
-export default _default;
 declare function _default(Context: Context): void;

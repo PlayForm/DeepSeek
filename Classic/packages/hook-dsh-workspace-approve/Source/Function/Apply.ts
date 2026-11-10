@@ -1,3 +1,12 @@
+import type { Context } from "@deepseek-ai/cordis";
+import Invalidate from "@Function/Invalidate.js";
+import ServiceClass from "@Function/Service.js";
+import Storage from "@Function/Storage.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+
 /**
  * @module Apply
  *
@@ -9,6 +18,7 @@
  * storage effect. The contract is APPROVE.md.
  *
  * @remarks
+ *
  * The idle-forever posture: `enabled` defaults to false (the schema default and
  * the bundle patch row). A cold mount logs `disabled (enabled=false)`,
  * registers the service (it reads honestly from the empty state), and wires
@@ -18,15 +28,6 @@
  * kills event delivery). The test probe is the
  * `ctx.__hookDshWorkspaceApproveState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import Invalidate from "@Function/Invalidate.js";
-import ServiceClass from "@Function/Service.js";
-import Storage from "@Function/Storage.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
  */

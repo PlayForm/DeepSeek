@@ -1,3 +1,4 @@
+import type Factory from "@playform/plugin-dsh-factory";
 /**
  * @module Factory
  *
@@ -5,6 +6,7 @@
  * (@playform/plugin-dsh-factory, `ctx.pluginFactory`).
  *
  * @remarks
+ *
  * The pinner consumes the factory exclusively through the SERVICE
  * (inject: ["fs", "pluginFactory"]): the service is resolved by the loader -
  * never by a module import at the use sites - so this module is the single
@@ -24,7 +26,6 @@
  * reference; the single runtime import of the package lives in
  * Variable/Config, where the schema factory is bootstrapped at load).
  */
-import type Factory from "@playform/plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {
         /**

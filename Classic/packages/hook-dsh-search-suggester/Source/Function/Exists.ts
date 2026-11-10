@@ -1,3 +1,6 @@
+import { existsSync, readdirSync, statSync } from "node:fs";
+import { dirname, isAbsolute, join, resolve } from "node:path";
+
 /**
  * @module Exists
  *
@@ -5,6 +8,7 @@
  * call's three path bases.
  *
  * @remarks
+ *
  * The embedded packs are this repo's conventions as DATA, and they mix three bases:
  *
  *   - repo-relative (`CHANGELOG.md` and any other repo-relative path);
@@ -32,13 +36,14 @@
  *   - a target carrying a `<...>` placeholder (`Source/Test/<Suite>/Test.ts`) is illustrative
  *     and always kept.
  */
-import { existsSync, readdirSync, statSync } from "node:fs";
-import { dirname, isAbsolute, join, resolve } from "node:path";
-
-/** An illustrative target placeholder (`Source/Test/<Suite>/Test.ts`). */
+/**
+ * An illustrative target placeholder (`Source/Test/<Suite>/Test.ts`).
+ */
 const Placeholder = /<[^>]+>/;
 
-/** The nearest existing ancestor of a path (the path itself when it exists). */
+/**
+ * The nearest existing ancestor of a path (the path itself when it exists).
+ */
 const Anchor = (Start: string): string => {
 	let Current = Start;
 	while (!existsSync(Current)) {
@@ -51,7 +56,9 @@ const Anchor = (Start: string): string => {
 	return Current;
 };
 
-/** The directory the upward walk starts from. */
+/**
+ * The directory the upward walk starts from.
+ */
 const Begin = (Resolved: string): string => {
 	const Stat = statSync(Resolved, { throwIfNoEntry: false });
 	if (Stat === undefined) {
@@ -60,7 +67,9 @@ const Begin = (Resolved: string): string => {
 	return Stat.isDirectory() ? Resolved : dirname(Resolved);
 };
 
-/** The nearest ancestor of the resolved call path carrying package.json. */
+/**
+ * The nearest ancestor of the resolved call path carrying package.json.
+ */
 const Package = (Resolved: string, Root: string): string | undefined => {
 	let Current = Begin(Resolved);
 	while (true) {
@@ -78,17 +87,23 @@ const Package = (Resolved: string, Root: string): string | undefined => {
 	}
 };
 
-/** The bases a target may hang off, in the check order. */
+/**
+ * The bases a target may hang off, in the check order.
+ */
 const Bases = (Root: string, PackageRoot: string | undefined): string[] =>
 	PackageRoot === undefined ? [Root] : [Root, PackageRoot, dirname(PackageRoot)];
 
-/** Whether a literal path exists under any base. */
+/**
+ * Whether a literal path exists under any base.
+ */
 const Literal = (Companion: string, Paths: string[]): boolean =>
 	isAbsolute(Companion)
 		? existsSync(Companion)
 		: Paths.some((Base) => existsSync(join(Base, Companion)));
 
-/** Whether an immediate subdirectory of a root contains the rest. */
+/**
+ * Whether an immediate subdirectory of a root contains the rest.
+ */
 const Sibling = (Rest: string, Roots: string[]): boolean =>
 	Roots.some((Root) => {
 		try {
@@ -100,7 +115,9 @@ const Sibling = (Rest: string, Roots: string[]): boolean =>
 		}
 	});
 
-/** Whether a general glob's literal prefix directory exists under a base. */
+/**
+ * Whether a general glob's literal prefix directory exists under a base.
+ */
 const Prefix = (Companion: string, Paths: string[]): boolean => {
 	const Head = Companion.slice(0, Companion.indexOf("*"));
 	const Directory = Head.endsWith("/") ? Head.slice(0, -1) : dirname(Head);
@@ -112,16 +129,24 @@ const Prefix = (Companion: string, Paths: string[]): boolean => {
 };
 
 export default (
-	/** The companion path or glob (one of the pack's three bases). */
+	/**
+	 * The companion path or glob (one of the pack's three bases).
+	 */
 	Companion: string,
 
-	/** The call path the pack is judged against (absolute or cwd-relative). */
+	/**
+	 * The call path the pack is judged against (absolute or cwd-relative).
+	 */
 	CallPath: string,
 
-	/** The resolved workspace root (the gate's root). */
+	/**
+	 * The resolved workspace root (the gate's root).
+	 */
 	Root: string,
 
-	/** The session cwd, when the harness service exposes one. */
+	/**
+	 * The session cwd, when the harness service exposes one.
+	 */
 	Cwd: string | undefined,
 ): boolean => {
 	const Resolved = isAbsolute(CallPath) ? CallPath : resolve(Cwd ?? process.cwd(), CallPath);

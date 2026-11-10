@@ -1,3 +1,7 @@
+import Clock from "@Function/Clock.js";
+import type { Log } from "@Function/Render.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Failsafe
  *
@@ -5,6 +9,7 @@
  * 6).
  *
  * @remarks
+ *
  * The other scenarios live where their truth is: the hang + the live-timeout
  * in `Board.ScanDeadlines`, the delegation stall in Board (the I5 lease: the
  * declaration IS the trigger), the admission guard in Policy, the retry loop
@@ -23,10 +28,6 @@
  * internal error; killing goes through the registry's kill, gated behind
  * `hangAction`/config; `failsafes: "off"` is the default even when enabled.
  */
-import Clock from "@Function/Clock.js";
-import type { Log } from "@Function/Render.js";
-import type State from "@Interface/State.js";
-
 /** The drift thresholds the failsafe layer owns (the validator template's
  * automatic twin; 04 scenario 4 - thresholds are constants of the layer, the
  * session-stats block's own vars are the user-facing twin). */

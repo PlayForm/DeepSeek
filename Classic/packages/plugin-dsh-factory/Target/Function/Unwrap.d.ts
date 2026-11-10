@@ -6,6 +6,7 @@ export default _default;
  * (`Function/Apply` in the trio).
  *
  * @remarks
+ *
  * If a config field arrives as a Schemastery cell (`{ get }` - the loader's
  * representation for VOLATILE fields; log, logFile, updateCooldownMs and
  * mutationTools are volatile) it is unwrapped before the State is built; a

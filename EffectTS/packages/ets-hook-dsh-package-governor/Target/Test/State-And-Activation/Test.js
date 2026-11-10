@@ -1,1 +1,161 @@
-import e from"node:assert/strict";import{Check as a,Controllers as b,Context as s,Effects as l,EXCLUDE as c,Events as m,Finish as f,Furnace as u,Ledger as i,ledgerLines as v,MakeCounter as y,NCU_BIN as d,Services as q,StorageRecords as p,TOOLS as k,settle as P}from"../Harness.js";import h from"../../../Target/Library.js";const M=async()=>{const o=y();l.length=0;const g=h.Config({logFile:i}),S=h.apply(s,g),t=s.__hookDshGovernorPackageState;return a(o,"apply: returns nothing; the state exposed via ctx.__hookDshGovernorPackageState",()=>{e.equal(S,void 0,"apply returns nothing"),e.ok(t,"ctx.__hookDshGovernorPackageState probe attached")}),a(o,"State: Module + Tool \u2190 mutationTools (cell unwrapped by the factory)",()=>{e.equal(t.Module,"hook-dsh-governor-package"),e.deepEqual(t.Tool,k,"Tool <- mutationTools (cell unwrapped)")}),a(o,"State: module fields via the setup map (Strict/Wait/Limit/Binary/Mode)",()=>{e.equal(t.Strict,!1),e.equal(t.Wait,3e3),e.equal(t.Limit,3),e.equal(t.Binary,d),e.equal(t.Mode,"programmatic")}),a(o,"State: shared mappings (Policy/policyFile, Ledger/logFile, Enabled/log, List/exclude)",()=>{e.equal(t.Policy,""),e.equal(t.PolicyName,"update-policy.json","sidecar name for union discovery"),e.equal(t.Ledger,i),e.equal(t.Enabled,!0),e.deepEqual(t.List,c)}),a(o,"State: P9 subprocess seam probed once at build",()=>{e.equal(t.Subprocess,q.subprocess,"P9 subprocess probed at build")}),a(o,"State: the injected factory service stored on State",()=>{e.equal(t.Factory,u,"the injected factory stored on State")}),a(o,"State: fresh machinery + module gate collections (Stash/Inflight/Seams/Queue/Stamp/Set/Count)",()=>{e.ok(t.Stash instanceof Map&&t.Inflight instanceof Map&&t.Seams instanceof Map&&t.Queue.length===0&&u.PendingJournal.length===1&&t.Stamp instanceof Map&&t.Set instanceof Set&&t.Count instanceof Map,"fresh machinery + module gate collections (+ the pre-bind buffered activated record)"),t.Mode="bin"}),a(o,"Attach: P1 controller + P2/P5 effects; Wire registered fs/observed",()=>{e.deepEqual(l.map(r=>r[0]),["hook-dsh-governor-package-jobs","hook-dsh-governor-package-inflight","hook-dsh-governor-package-storage"],"factory.Attach registered P1/P2/P5 with the module labels"),e.deepEqual(b,["hook-dsh-governor-package"],"P1: jobs controller attached"),e.equal(m.filter(r=>r[0]==="fs/observed").length,1,"one fs/observed listener (Factory.Wire)")}),await P(),a(o,"activation: the P5 record drained into the opened domain",()=>{e.equal(t.Queue.length,0,"P5: pre-open queue drained into the stub domain"),e.equal(p.length,1),e.equal(p[0][1].event,"activated")}),a(o,"activation: durable proof line byte-identical ([ISO] format + summary fields)",()=>{const r=v();e.equal(r.length,1,"exactly one ledger line so far"),e.match(r[0],/^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] activated \(anywhere mode, logFile=/),e.ok(r[0].includes(`logFile=${i}, updateMode=programmatic, ncuBin=${d}, exclude=[${c.join(", ")}], policyFile=(discovery))`),"activation proof composed byte-identically")}),f(o,"State-And-Activation")},F=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(F){const o=await M();console.log(`${o} PASS - State-And-Activation`)}export{M as runTest};
+import assert from "node:assert/strict";
+import {
+  Check,
+  Controllers,
+  Context,
+  Effects,
+  EXCLUDE,
+  Events,
+  Finish,
+  Furnace,
+  Ledger,
+  ledgerLines,
+  MakeCounter,
+  NCU_BIN,
+  Services,
+  StorageRecords,
+  TOOLS,
+  settle
+} from "../Harness.js";
+import Governor from "../../../Target/Library.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  Effects.length = 0;
+  const Raw = Governor.Config({ logFile: Ledger });
+  const Returned = Governor.apply(Context, Raw);
+  const Probe = Context.__hookDshGovernorPackageState;
+  {
+    const Sub = "apply: returns nothing; the state exposed via ctx.__hookDshGovernorPackageState";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(Returned, void 0, "apply returns nothing");
+        assert.ok(Probe, "ctx.__hookDshGovernorPackageState probe attached");
+      });
+    }
+  }
+  {
+    const Sub = "State: Module + Tool \u2190 mutationTools (cell unwrapped by the factory)";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(Probe.Module, "hook-dsh-governor-package");
+        assert.deepEqual(Probe.Tool, TOOLS, "Tool <- mutationTools (cell unwrapped)");
+      });
+    }
+  }
+  {
+    const Sub = "State: module fields via the setup map (Strict/Wait/Limit/Binary/Mode)";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(Probe.Strict, false);
+        assert.equal(Probe.Wait, 3e3);
+        assert.equal(Probe.Limit, 3);
+        assert.equal(Probe.Binary, NCU_BIN);
+        assert.equal(Probe.Mode, "programmatic");
+      });
+    }
+  }
+  {
+    const Sub = "State: shared mappings (Policy/policyFile, Ledger/logFile, Enabled/log, List/exclude)";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(Probe.Policy, "");
+        assert.equal(Probe.PolicyName, "update-policy.json", "sidecar name for union discovery");
+        assert.equal(Probe.Ledger, Ledger);
+        assert.equal(Probe.Enabled, true);
+        assert.deepEqual(Probe.List, EXCLUDE);
+      });
+    }
+  }
+  {
+    const Sub = "State: P9 subprocess seam probed once at build";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(Probe.Subprocess, Services["subprocess"], "P9 subprocess probed at build");
+      });
+    }
+  }
+  {
+    const Sub = "State: the injected factory service stored on State";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(Probe.Factory, Furnace, "the injected factory stored on State");
+      });
+    }
+  }
+  {
+    const Sub = "State: fresh machinery + module gate collections (Stash/Inflight/Seams/Queue/Stamp/Set/Count)";
+    {
+      Check(Count, Sub, () => {
+        assert.ok(
+          Probe.Stash instanceof Map && Probe.Inflight instanceof Map && Probe.Seams instanceof Map && Probe.Queue.length === 0 && Furnace.PendingJournal.length === 1 && Probe.Stamp instanceof Map && Probe.Set instanceof Set && Probe.Count instanceof Map,
+          "fresh machinery + module gate collections (+ the pre-bind buffered activated record)"
+        );
+        Probe.Mode = "bin";
+      });
+    }
+  }
+  {
+    const Sub = "Attach: P1 controller + P2/P5 effects; Wire registered fs/observed";
+    {
+      Check(Count, Sub, () => {
+        assert.deepEqual(
+          Effects.map((e) => e[0]),
+          [
+            "hook-dsh-governor-package-jobs",
+            "hook-dsh-governor-package-inflight",
+            "hook-dsh-governor-package-storage"
+          ],
+          "factory.Attach registered P1/P2/P5 with the module labels"
+        );
+        assert.deepEqual(Controllers, ["hook-dsh-governor-package"], "P1: jobs controller attached");
+        assert.equal(
+          Events.filter((e) => e[0] === "fs/observed").length,
+          1,
+          "one fs/observed listener (Factory.Wire)"
+        );
+      });
+    }
+  }
+  await settle();
+  {
+    const Sub = "activation: the P5 record drained into the opened domain";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(Probe.Queue.length, 0, "P5: pre-open queue drained into the stub domain");
+        assert.equal(StorageRecords.length, 1);
+        assert.equal(StorageRecords[0][1].event, "activated");
+      });
+    }
+  }
+  {
+    const Sub = "activation: durable proof line byte-identical ([ISO] format + summary fields)";
+    {
+      Check(Count, Sub, () => {
+        const lines = ledgerLines();
+        assert.equal(lines.length, 1, "exactly one ledger line so far");
+        assert.match(
+          lines[0],
+          /^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] activated \(anywhere mode, logFile=/
+        );
+        assert.ok(
+          lines[0].includes(
+            `logFile=${Ledger}, updateMode=programmatic, ncuBin=${NCU_BIN}, exclude=[${EXCLUDE.join(
+              ", "
+            )}], policyFile=(discovery))`
+          ),
+          "activation proof composed byte-identically"
+        );
+      });
+    }
+  }
+  return Finish(Count, "State-And-Activation");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - State-And-Activation`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

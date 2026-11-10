@@ -1,3 +1,8 @@
+import { defineTool } from "@deepseek-ai/dsh-tools";
+import { Context } from "@Function/Query.js";
+import type State from "@Interface/State.js";
+import type { Log } from "@Interface/State.js";
+
 /**
  * @module ToolContext
  *
@@ -5,16 +10,12 @@
  * the ORIENTATION PACKET out.
  *
  * @remarks
+ *
  * V4-1 §3.4 + §3.5. The orient step of the orient -> drill -> act loop, in the
  * fixed WORKSPACE/SCOPE/MAP/FOCUS/NEIGHBORS/EVIDENCE/OPEN/STALE grammar,
  * bounded, ranked by edge strength, always versioned. A stale caller version
  * sets the STALE line. The disabled plugin no-ops to a clear refusal.
  */
-import { defineTool } from "@deepseek-ai/dsh-tools";
-import { Context } from "@Function/Query.js";
-import type State from "@Interface/State.js";
-import type { Log } from "@Interface/State.js";
-
 export default (State_: State, Append: Log) =>
 	defineTool({
 		name: "workspace_context",

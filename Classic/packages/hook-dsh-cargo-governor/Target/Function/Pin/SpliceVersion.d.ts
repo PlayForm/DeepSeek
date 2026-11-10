@@ -6,6 +6,7 @@ export default _default;
  * form.
  *
  * @remarks
+ *
  * The `version` key is tried FIRST so an inline table that also carries
  * `path`/`git` keys (`dep = { path = "../x", version = "0.1" }`) splices the
  * right string; the quoted-string form (`name = "0.3.4"`, with or without a

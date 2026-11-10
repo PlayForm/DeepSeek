@@ -1,21 +1,3 @@
-/**
- * @module Test
- *
- * One singular test of the direct-govern path, its selection semantics, the
- * two-chain-writer fold, and the update step through the Dispatch envelope.
- *
- * @remarks
- * The direct-govern path (`Furnace.Govern` to the registered cargo step: the
- * guarded write, the Stash seeding, the ledger byte-strings, no update stage;
- * the selection semantics: unknown names ignored, `true` running both steps in
- * the sequential fold order), the two-chain-writer fold (the live failure mode:
- * both writes land at the fresh-stat version), and the update step alone through
- * the Dispatch envelope.
- *
- * Runs standalone (`node Target/Test/Direct-Govern/Test.js`) AND under the
- * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
- * `@playform/hook-dsh-cargo-governor`.
- */
 import assert from "node:assert/strict";
 import * as Path from "node:path";
 import {
@@ -34,6 +16,25 @@ import {
 	SeamStub,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test of the direct-govern path, its selection semantics, the
+ * two-chain-writer fold, and the update step through the Dispatch envelope.
+ *
+ * @remarks
+ *
+ * The direct-govern path (`Furnace.Govern` to the registered cargo step: the
+ * guarded write, the Stash seeding, the ledger byte-strings, no update stage;
+ * the selection semantics: unknown names ignored, `true` running both steps in
+ * the sequential fold order), the two-chain-writer fold (the live failure mode:
+ * both writes land at the fresh-stat version), and the update step alone through
+ * the Dispatch envelope.
+ *
+ * Runs standalone (`node Target/Test/Direct-Govern/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * `@playform/hook-dsh-cargo-governor`.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

@@ -1,3 +1,13 @@
+import Carry from "@Function/Carry.js";
+import Fingerprint from "@Function/Fingerprint.js";
+import Locate from "@Function/Locate.js";
+import Observe from "@Function/Observe.js";
+import Publish from "@Function/Publish.js";
+import type { Operation } from "@Interface/Operation.js";
+import type Reply from "@Interface/Reply.js";
+import type State from "@Interface/State.js";
+import { Decide } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Replace
  *
@@ -5,6 +15,7 @@
  * span with new text.
  *
  * @remarks
+ *
  * TWO TARGET FORMS:
  *
  * - a NODE TARGET (`node` + `fingerprint`): the span is resolved through the
@@ -23,16 +34,6 @@
  * whole-file replacement smuggled in as a "block" op is rejected, never
  * applied. The publish goes through `Function/Publish` (the version fence).
  */
-import Carry from "@Function/Carry.js";
-import Fingerprint from "@Function/Fingerprint.js";
-import Locate from "@Function/Locate.js";
-import Observe from "@Function/Observe.js";
-import Publish from "@Function/Publish.js";
-import type { Operation } from "@Interface/Operation.js";
-import type Reply from "@Interface/Reply.js";
-import type State from "@Interface/State.js";
-import { Decide } from "@playform/plugin-dsh-factory";
-
 const Refuse = (State: State, Path: string, Reason: string): Reply => {
 	State.Factory.Append(State, `rejected ${Path} (${Reason})`);
 	return { status: "rejected", detail: Reason, version: undefined };

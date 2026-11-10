@@ -1,3 +1,6 @@
+import type Enforcer from "@Function/Enforcer.js";
+import type Factory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Service
  *
@@ -9,6 +12,7 @@
  * 2.4.
  *
  * @remarks
+ *
  * The shape here is the structural contract; the implementation lives in
  * Function/Enforcer.ts. Consumers that must stay decoupled from this package
  * (the self-contained PoC rule) re-declare the same shape in their own
@@ -20,9 +24,6 @@
  * (erased at build), so `ctx.pluginFactory` is fully typed at every
  * consumption site.
  */
-import type Enforcer from "@Function/Enforcer.js";
-import type Factory from "@playform/plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

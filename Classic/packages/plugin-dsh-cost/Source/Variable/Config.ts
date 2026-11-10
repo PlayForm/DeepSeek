@@ -1,38 +1,46 @@
-// Config - the plugin's Schemastery Config schema (a Variable: one constant
-// built once at load). Cordis validates the exported schema while the plugin
-// loads and fills every default, so invalid configuration fails LOUD at load
-// instead of silently falling back per-field, and `apply` receives a
-// validated plain config object. The shape this schema produces is
-// Interface/Config.ts.
-//
-// The required price-row columns use `.required()` so a malformed row fails
-// at load (schemastery's "missing required value"); the three optional rates
-// stay optional - an absent rate is an unpriced bucket (charged at zero), not
-// an error. The shipped `prices` default is the three-row price book; each
-// row's own `effectiveFrom`/`currency` defaults fill in at validation. The
-// factor layer's arrays (section 17): `modifiers` ships the four mode
-// multipliers and `priceWindows` the time-of-day windows (empty by default).
-//
-// EVERY DEFAULT IS A NAMED CONSTANT ABOVE THE SCHEMA (the harness convention,
-// Reuse-Host.md:41, 43), and the ledger and the log resolve through the
-// harness home precedence - an explicit configured path wins at the caller,
-// then $DSH_HOME, then ~/.dsh (Reuse-Host.md:11; lib-dsh-core Function/Home) -
-// so a profile-scoped home moves the ledger with it. The price book, the
-// modifier rows and the price windows are deployment data and are NOT aligned
-// to a harness value: the harness ships no price book (Reuse-Host.md:18).
-//
-// `log` is off by default: the harness ships no plugin diagnostic-log
-// convention, so a log file on by default would be this plugin's own
-// invention writing to the user's home (Reuse-Host.md:14).
-//
-// This is one of the modules in the tree with a runtime import of
-// @deepseek-ai/schemastery (the schema must be a real schemastery instance -
-// the loader consumes it through the Standard Schema `~standard` interface).
 import Schema from "@deepseek-ai/schemastery";
 import { Home } from "@playform/lib-dsh-core";
 
-// One price row's schema: the rate columns are per million tokens, in the
-// row's own currency.
+/**
+ * @module Config
+ *
+ * The plugin's Schemastery Config schema, one constant built once at load, the
+ * Variable that produces `Interface/Config.ts`'s validated shape.
+ *
+ * @remarks
+ *
+ * Cordis validates the exported schema while the plugin loads and fills every
+ * default, so invalid configuration fails LOUD at load instead of silently
+ * falling back per-field, and `apply` receives a validated plain config
+ * object. The required price-row columns use `.required()` so a malformed row
+ * fails at load (schemastery's "missing required value"); the three optional
+ * rates stay optional - an absent rate is an unpriced bucket (charged at
+ * zero), not an error. The shipped `prices` default is the three-row price
+ * book; each row's own `effectiveFrom`/`currency` defaults fill in at
+ * validation. The factor layer's arrays (section 17): `modifiers` ships the
+ * four mode multipliers and `priceWindows` the time-of-day windows (empty by
+ * default).
+ *
+ * Every default is a named constant above the schema (the harness convention,
+ * Reuse-Host.md:41, 43), and the ledger and the log resolve through the
+ * harness home precedence - an explicit configured path wins at the caller,
+ * then $DSH_HOME, then ~/.dsh (Reuse-Host.md:11; lib-dsh-core Function/Home) -
+ * so a profile-scoped home moves the ledger with it. The price book, the
+ * modifier rows and the price windows are deployment data and are NOT aligned
+ * to a harness value: the harness ships no price book (Reuse-Host.md:18).
+ *
+ * `log` is off by default: the harness ships no plugin diagnostic-log
+ * convention, so a log file on by default would be this plugin's own invention
+ * writing to the user's home (Reuse-Host.md:14).
+ *
+ * This is one of the modules in the tree with a runtime import of
+ * @deepseek-ai/schemastery (the schema must be a real schemastery instance -
+ * the loader consumes it through the Standard Schema `~standard` interface).
+ */
+/**
+ * One price row's schema: the rate columns are per million tokens, in the
+ * row's own currency.
+ */
 const Rate = () =>
 	Schema.object({
 		provider: Schema.string()
@@ -60,10 +68,12 @@ const Rate = () =>
 			.description("Currency of this row's rates."),
 	});
 
-// One modifier row's schema (section 17.2): an effective-dated multiplier
-// for one pricing mode, optionally scoped to one model. The multiplier
-// scales the priced total; a model-specific row beats a provider-wide one
-// of the same kind.
+/**
+ * One modifier row's schema (section 17.2): an effective-dated multiplier
+ * for one pricing mode, optionally scoped to one model. The multiplier
+ * scales the priced total; a model-specific row beats a provider-wide one
+ * of the same kind.
+ */
 const Modifier = () =>
 	Schema.object({
 		provider: Schema.string()
@@ -89,8 +99,10 @@ const Modifier = () =>
 		),
 	});
 
-// One time-of-day window's schema: the label a price row's Window column
-// resolves against and the UTC hours it covers.
+/**
+ * One time-of-day window's schema: the label a price row's Window column
+ * resolves against and the UTC hours it covers.
+ */
 const PriceWindow = () =>
 	Schema.object({
 		label: Schema.string()
@@ -106,14 +118,16 @@ const PriceWindow = () =>
 			.description("UTC hour the window ends at; a value past 24 wraps into the next day."),
 	});
 
-// The named defaults, one constant per field, declared above the schema and
-// referenced by `.default` (the harness convention, Reuse-Host.md:41, 43).
-// The two paths go through the harness home precedence, so the ledger is a
-// sibling of the profile's sessions and storages instead of a fixed tilde
-// path (Reuse-Host.md:11). The three data defaults below are this
-// deployment's own: the harness ships no price book, no modifier rows and no
-// price windows, and a copy of the harness's model defaults would price every
-// call at zero (Reuse-Host.md:18).
+/**
+ * The named defaults, one constant per field, declared above the schema and
+ * referenced by `.default` (the harness convention, Reuse-Host.md:41, 43).
+ * The two paths go through the harness home precedence, so the ledger is a
+ * sibling of the profile's sessions and storages instead of a fixed tilde
+ * path (Reuse-Host.md:11). The three data defaults below are this
+ * deployment's own: the harness ships no price book, no modifier rows and no
+ * price windows, and a copy of the harness's model defaults would price every
+ * call at zero (Reuse-Host.md:18).
+ */
 const DefaultDatabasePath = Home(["cost", "ledger.db"]);
 const DefaultCurrency = "USD";
 const DefaultClient = "default";

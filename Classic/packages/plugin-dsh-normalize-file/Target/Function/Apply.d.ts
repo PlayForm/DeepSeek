@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "../Interface/Config.js";
+export default _default;
 /**
  * @module Apply
  *
@@ -5,6 +8,7 @@
  * shape.
  *
  * @remarks
+ *
  * The work is: build the State through `Factory.State` (the cell unwrap, the
  * shared mappings Ledger<-logFile / Enabled<-log and the module's own fields
  * via the setup `fields` map - factory SCHEME.md section 2.10), emit the
@@ -55,7 +59,4 @@
  * import @deepseek-ai/dsh-fs). Nothing else is injected: the ledger append is
  * the factory's own plain-fs exemption.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
-export default _default;
 declare function _default(Context: Context, Options: Config): void;

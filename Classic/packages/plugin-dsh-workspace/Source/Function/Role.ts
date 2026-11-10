@@ -6,6 +6,7 @@ import type { WorkspaceGraph } from "@Interface/Graph.js";
  * The one-line role of a module file: the title of its FIRST DocSection.
  *
  * @remarks
+ *
  * Else "module". THE LOOKUP USES THE GRAPH'S DECLARED `find` SEMANTICS - a
  * case-insensitive SUBSTRING over the node id and name - never a glob. The
  * earlier `<path>*` form only worked against the FakeGraph's glob matcher and

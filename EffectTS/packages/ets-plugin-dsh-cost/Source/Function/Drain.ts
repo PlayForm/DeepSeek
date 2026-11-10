@@ -110,6 +110,7 @@ type TouchRow = { Path: string; Kind: "read" | "write" | "edit" | "delete" | "se
  * One tool/call's touches, waiting for the Call row they attach to.
  *
  * @remarks
+ *
  * A search-family call's set is deferred: it stays empty until the
  * tool/result that completes the call supplies the discovered files, so
  * Resolved marks whether the set is final and CallId pairs the call with
@@ -133,6 +134,7 @@ type PendingCall = {
  * never the file.
  *
  * @remarks
+ *
  * Only a call that reads exactly one file is remembered, because one result
  * body is one file's content.
  */
@@ -182,6 +184,7 @@ type ReplayState = {
  * capture-queue acknowledgement.
  *
  * @remarks
+ *
  * Every caller that omits it books, which is the live flush and the whole
  * of the backfill's booking pass.
  */
@@ -219,6 +222,7 @@ const OriginOf = (Data: Record<string, unknown>): string => {
  * result record (the field the telemetry reads).
  *
  * @remarks
+ *
  * A failed read returns an error message, never the file's text, so it is
  * never a version.
  */
@@ -259,6 +263,7 @@ const Saving = (
  * line and an empty body as none).
  *
  * @remarks
+ *
  * The digest is content-addressed: the same bytes always produce the same
  * hash, so a version row is reusable rather than repeatable.
  */
@@ -274,6 +279,7 @@ const Fingerprint = (Body: string): { Hash: string; Bytes: number; Lines: number
  * touch is "changed", a file with only read-kind touches is "read".
  *
  * @remarks
+ *
  * The restoration flag is the same evidence the touch's stage was
  * classified with (B6b), so a session that returns a file to an earlier
  * content hash records "reverted" rather than "changed" - and a file with

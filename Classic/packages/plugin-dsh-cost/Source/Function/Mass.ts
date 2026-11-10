@@ -1,3 +1,5 @@
+import Touch from "./Touch.js";
+
 /**
  * @module Mass
  *
@@ -7,6 +9,7 @@
  * originating tool/call targeted.
  *
  * @remarks
+ *
  * The walk follows `Documentation/Plans/COST-TRACK-PLUGIN.md` section 2.2. Each
  * surface message (system, user, assistant, tool result) is priced by the
  * estimator into Surface, and each tool result's tokens are carried to the
@@ -26,8 +29,6 @@
  * CachedSurface. PerPath stays the TOTAL mass (cached plus uncached), so the
  * allocator and every existing caller keep their meaning.
  */
-import Touch from "./Touch.js";
-
 export default (Estimate: (Message: unknown) => number) =>
 	(
 		Events: readonly unknown[],

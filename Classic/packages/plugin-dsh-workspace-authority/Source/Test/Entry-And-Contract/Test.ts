@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * Exercises the loader contract and the mount.
- *
- * @remarks
- * Covers the default object carrying name/apply/Config/inject, the cold mount being IDLE-forever
- * with the byte-exact disabled line, the enabled mount logging the byte-exact activation line with
- * the policy count, the fail-loud validation throwing at load, and the durable ledger carrying the
- * [ISO] forms.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -22,7 +11,21 @@ import {
 	rm,
 } from "../Harness.js";
 
-/** A fresh run with an empty ledger. */
+/**
+ * @module Test
+ *
+ * Exercises the loader contract and the mount.
+ *
+ * @remarks
+ *
+ * Covers the default object carrying name/apply/Config/inject, the cold mount being IDLE-forever
+ * with the byte-exact disabled line, the enabled mount logging the byte-exact activation line with
+ * the policy count, the fail-loud validation throwing at load, and the durable ledger carrying the
+ * [ISO] forms.
+ */
+/**
+ * A fresh run with an empty ledger.
+ */
 const Setup = (Raw: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, ...Raw }));

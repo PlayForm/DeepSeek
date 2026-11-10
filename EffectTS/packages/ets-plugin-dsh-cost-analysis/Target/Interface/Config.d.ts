@@ -6,6 +6,7 @@
  * interface.
  *
  * @remarks
+ *
  * Every field is defaulted by the schema, so all of them are always present
  * after validation.
  */

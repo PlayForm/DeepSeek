@@ -1,19 +1,3 @@
-/**
- * @module Test
- *
- * THE POLICY BLOCK (D6) on the queue.
- *
- * @remarks
- * Covers the shared block's defaults in the schema and on the built State, the `approve` verdict
- * HOLDING the spawn with the documented line, the `auto` verdict proceeding, and the precedence
- * (policy approve > autoSpawn knob, while a knob that is off still refuses on its own and writes
- * no line).
- *
- * The spawn fixture is the Harness's `Automation` mount (the enabled plugin + the fake
- * `ctx.subagents` recorder + the fake `ctx.agents` registry); the mount opts the gate OPEN by
- * default, so a scenario that wants the closed gate passes `policy: { spawn: "approve" }`
- * explicitly.
- */
 import assert from "node:assert/strict";
 
 import {
@@ -27,7 +11,26 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * @module Test
+ *
+ * THE POLICY BLOCK (D6) on the queue.
+ *
+ * @remarks
+ *
+ * Covers the shared block's defaults in the schema and on the built State, the `approve` verdict
+ * HOLDING the spawn with the documented line, the `auto` verdict proceeding, and the precedence
+ * (policy approve > autoSpawn knob, while a knob that is off still refuses on its own and writes
+ * no line).
+ *
+ * The spawn fixture is the Harness's `Automation` mount (the enabled plugin + the fake
+ * `ctx.subagents` recorder + the fake `ctx.agents` registry); the mount opts the gate OPEN by
+ * default, so a scenario that wants the closed gate passes `policy: { spawn: "approve" }`
+ * explicitly.
+ */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",

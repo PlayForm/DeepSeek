@@ -1,3 +1,11 @@
+import { resolve } from "node:path";
+import type { DatabaseSync } from "node:sqlite";
+
+import type { Context } from "@deepseek-ai/cordis";
+
+import type Config from "../Interface/Config.js";
+import Language from "./Language.js";
+
 /**
  * @module Annotate
  *
@@ -6,6 +14,7 @@
  * and written through the factory's write executor.
  *
  * @remarks
+ *
  * The writer follows `Documentation/Plans/COST-TRACK-PLUGIN.md` section 7. The
  * rendered block carries at most Config.annotate.maxLines content lines and is
  * written through the factory's write executor so the fresh-stat version guard
@@ -17,14 +26,6 @@
  * before anything is read. Every successful write leaves one Annotation row:
  * what was written, into which file, at what price, when.
  */
-import { resolve } from "node:path";
-import type { DatabaseSync } from "node:sqlite";
-
-import type { Context } from "@deepseek-ai/cordis";
-
-import type Config from "../Interface/Config.js";
-import Language from "./Language.js";
-
 type Totals = {
 	Direct: number;
 	Amortized: number;

@@ -1,3 +1,10 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -5,6 +12,7 @@
  * package and imported by every test folder.
  *
  * @remarks
+ *
  * The fake ctx carries the root listener capture with a DISTINCT root object, the ctx listener
  * capture, the `reflect.provide` capture, the effect runner, the logger capture and the fs seam.
  * Beside it sit the REAL `@playform/plugin-dsh-factory` instance from its built Target and the
@@ -25,13 +33,6 @@
  *
  * NO FAKE CLOCK: the plugin has no clock dependency at all - the harness needs no time seam.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 export { Plugin };
 
 /**

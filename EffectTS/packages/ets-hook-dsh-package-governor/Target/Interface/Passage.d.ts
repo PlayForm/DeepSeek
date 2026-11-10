@@ -1,4 +1,4 @@
-import type Manifest from "@Interface/Manifest.js";
+import type Manifest from "./Manifest.js";
 /**
  * @module Passage
  *

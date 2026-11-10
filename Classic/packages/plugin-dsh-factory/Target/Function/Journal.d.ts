@@ -1,3 +1,5 @@
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Journal
  *
@@ -5,6 +7,7 @@
  * appends ONE typed lifecycle record to the optional storage journal.
  *
  * @remarks
+ *
  * The call sites are the module's lifecycle events: activated, excluded,
  * governed/pinned, dispatched, update-failed. Purely best-effort: the sink
  * is one of the three routing stages below, and this wrapper guarantees a
@@ -31,8 +34,6 @@
  * 3. PER-STATE FALLBACK - the defensive default (no shared sink, buffer
  *    retired): the per-State sink (queue or retired no-op), unchanged.
  */
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(Factory: {
     SharedJournal?: (Event: string, Path: string, Detail: string, At?: number) => void;
     SharedJournals?: Map<string, (Event: string, Path: string, Detail: string, At?: number) => void>;

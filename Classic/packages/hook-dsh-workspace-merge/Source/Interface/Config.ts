@@ -1,3 +1,5 @@
+import type { Allowlist } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
@@ -5,8 +7,6 @@
  * produces for the merge hook: every field is volatile. The contract is
  * Documentation/Plans/Workspace-Family/MERGE.md.
  */
-import type { Allowlist } from "@playform/plugin-dsh-factory";
-
 export default interface Config {
 	/**
 	 * The IDLE-forever switch: false means disabled, wired to nothing.

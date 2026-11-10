@@ -4,6 +4,7 @@
  * The PASS DECISION the g1 gate set returns (`Function/Gate`).
  *
  * @remarks
+ *
  * The gate itself logs NOTHING: the caller (the module's fs/observed
  * listener) composes its own ledger lines for the outcomes it cares about -
  * traditionally at least the `excluded` one (`skipped (excluded) <path>`),
@@ -31,12 +32,18 @@
  * `path` carries the display path whenever one was readable.
  */
 export default interface Gate {
-	/** Whether the observation passes every g1 gate and may proceed to g2. */
+	/**
+	 * Whether the observation passes every g1 gate and may proceed to g2.
+	 */
 	pass: boolean;
 
-	/** Why the gate failed - absent when `pass` is true. */
+	/**
+	 * Why the gate failed - absent when `pass` is true.
+	 */
 	reason?: "target" | "govern" | "actor" | "kind" | "idempotent" | "basename" | "excluded";
 
-	/** The display path, when one was readable. */
+	/**
+	 * The display path, when one was readable.
+	 */
 	path?: string;
 }

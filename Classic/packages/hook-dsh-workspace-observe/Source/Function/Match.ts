@@ -5,6 +5,7 @@
  * `exclude` and `include`).
  *
  * @remarks
+ *
  * The factory's Match is the segment match (any path segment equal to a
  * listed name); the hook's frozen default list is the GLOB triple - a
  * `node_modules` prefix glob, a double star then a slash then `Target` then a

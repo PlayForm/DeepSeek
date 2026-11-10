@@ -1,3 +1,9 @@
+import Clock from "@Function/Clock.js";
+import type { Log } from "@Function/Render.js";
+import type { BoardState, Suggestion } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
+import { Compressed, Entry } from "@Variable/Catalog.js";
+
 /**
  * @module Suggester
  *
@@ -5,6 +11,7 @@
  * IMPLEMENTATION-DESIGN.md sections 2.6, 3.8, 4.5 as amended).
  *
  * @remarks
+ *
  * The suggester does not suggest a template NAME; it suggests a CONFIGURED
  * block: a one-shot detached subagent receives the request excerpt + the
  * compressed catalog + the task facts, and returns a strict JSON suggestion
@@ -23,13 +30,9 @@
  * within the same turn. With suggester "off" nothing spawns (the
  * zero-subagent guarantee, provable by the smoke harness's spawn counter).
  */
-import Clock from "@Function/Clock.js";
-import type { Log } from "@Function/Render.js";
-import type { BoardState, Suggestion } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
-import { Compressed, Entry } from "@Variable/Catalog.js";
-
-/** The suggestion id grammar (I6 3.3): `sug-<4 hex>`, per-agent-keyed. */
+/**
+ * The suggestion id grammar (I6 3.3): `sug-<4 hex>`, per-agent-keyed.
+ */
 export const NewID = (): string => {
 	const Hex = Math.floor(Math.random() * 0x10000)
 		.toString(16)
@@ -37,7 +40,9 @@ export const NewID = (): string => {
 	return `sug-${Hex}`;
 };
 
-/** The skip words (I6 6.1): the user is driving manually. */
+/**
+ * The skip words (I6 6.1): the user is driving manually.
+ */
 const SKIP_WORDS: readonly string[] = ["live container", "plant", "suggestion"];
 
 /** The gate (I6 6.1, conjunctive): first user message of a turn AND length
@@ -286,7 +291,9 @@ type BoardOpenFn = (
 ) => BoardState;
 let BoardOpen: BoardOpenFn | undefined;
 
-/** Bind the board module's Open (called once from Apply). */
+/**
+ * Bind the board module's Open (called once from Apply).
+ */
 export const BindBoard = (Open_: BoardOpenFn): void => {
 	BoardOpen = Open_;
 };
@@ -413,7 +420,9 @@ export const OnUserMessage = (
 	}
 };
 
-/** The configured-block suggestion frame (I6 section 4, byte-exact). */
+/**
+ * The configured-block suggestion frame (I6 section 4, byte-exact).
+ */
 export const Frame = (Agent: State, Suggestion_: Suggestion, Separator: string): string => {
 	const Catalog = Entry(Suggestion_.templateId);
 	const Lines: string[] = [
@@ -434,7 +443,9 @@ export const Frame = (Agent: State, Suggestion_: Suggestion, Separator: string):
 	return Lines.join("\n");
 };
 
-/** The plain note (D2 4.5 verbatim, the "section" tier). */
+/**
+ * The plain note (D2 4.5 verbatim, the "section" tier).
+ */
 export const PlainFrame = (Suggestion_: Suggestion, Separator: string): string =>
 	[
 		`${Separator} LIVE SUGGESTION (from a small helper model; act only if useful) ${Separator}`,

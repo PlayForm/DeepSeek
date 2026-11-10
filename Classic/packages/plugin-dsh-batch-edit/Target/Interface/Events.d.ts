@@ -5,6 +5,7 @@
  * types it needs.
  *
  * @remarks
+ *
  * The family's one-field narrowing law: the event contract keeps actors
  * opaque; every narrowing is a cast at the use site. The PoC rule binds: no
  * imports from the packages that declare the canonical types (dsh-tools /

@@ -7,6 +7,7 @@ import type { Section } from "../Interface/Section.js";
  * SUMMARIES.
  *
  * @remarks
+ *
  * The collapsed section is never a silent drop (the live-containers failsafe-8
  * rule): it stays visible as its summary line.
  *

@@ -1,9 +1,11 @@
+import type { CompanionDecision } from "./Decision.js";
 /**
  * @module Execution
  *
  * Declares the doc suggester's pack, detection, candidate, and verdict types.
  *
  * @remarks
+ *
  * The doc suggester's domain types: the pack row (a family and its companion set), the
  * detection, the scored companions, and the gate's verdict. Same algebra, same shapes as
  * the edit suggester (the family's shared pattern), different pack - and the synthetic
@@ -30,7 +32,6 @@
  * pickable heuristic values (`Interface/Decision`), so the note, the decision record and
  * the ledger line all read ONE computation.
  */
-import type { CompanionDecision } from "./Decision.js";
 export interface Signal {
     /**
      * The rule id this row implements.

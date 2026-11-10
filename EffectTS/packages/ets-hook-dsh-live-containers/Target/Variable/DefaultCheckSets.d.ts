@@ -1,9 +1,11 @@
+import type { CheckSetSpecification } from "../Interface/Events.js";
 /**
  * @module DefaultCheckSets
  *
  * Declares the shipped check-set catalog, the default value of the `checksets` dict.
  *
  * @remarks
+ *
  * DATA, not code; the FILE-MONITOR design section 3.2. The same shape the `checksets`
  * config cell holds: dict name -> spec. The catalog is the default value of the
  * `checksets` dict, so the explicit enrollment path (live_monitor <path>) classifies out
@@ -22,5 +24,4 @@
  * linked form and the plugin never re-runs npm (the R3 3.2 rule: the
  * governor/pinner's own verbs are not duplicated).
  */
-import type { CheckSetSpecification } from "../Interface/Events.js";
 export declare const DEFAULT_CHECK_SETS: Record<string, CheckSetSpecification>;

@@ -1,3 +1,12 @@
+import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
+import CatalogFn from "@Function/Catalog.js";
+import HintFn, { PREFIX } from "@Function/Hint.js";
+import MarkerFn from "@Function/Marker.js";
+import ResolveFn from "@Function/Resolve.js";
+import type Request from "@Interface/Request.js";
+import type Route from "@Interface/Route.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Inject
  *
@@ -8,6 +17,7 @@
  * silently resolves + injects the route per the user's policy.
  *
  * @remarks
+ *
  * THE SILENCE CONTRACT: no warning, no error, no reminder. The orchestrator's
  * call succeeds exactly as if it had passed the right values; the orchestrator
  * NEVER sees the model configuration. The only record is the plugin's own
@@ -35,15 +45,6 @@
  * left alone (Function/Launch adds the hint for children started outside
  * this tool, and the two never double up).
  */
-import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
-import CatalogFn from "@Function/Catalog.js";
-import HintFn, { PREFIX } from "@Function/Hint.js";
-import MarkerFn from "@Function/Marker.js";
-import ResolveFn from "@Function/Resolve.js";
-import type Request from "@Interface/Request.js";
-import type Route from "@Interface/Route.js";
-import type State from "@Interface/State.js";
-
 /**
  * The launch fields of the subagent tool's execution, loosely typed (the
  * agentOptions vocabulary is the harness's: provider/model/reasoningEffort/

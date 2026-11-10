@@ -1,15 +1,16 @@
+import Schema from "@deepseek-ai/schemastery";
+
 /**
  * @module Config
  *
  * The live client's Schemastery schema.
  *
  * @remarks
+ *
  * A Variable: one constant built once at load; the loader validates it and
  * fills every default, so invalid configuration fails LOUD at load. Every
  * knob is volatile.
  */
-import Schema from "@deepseek-ai/schemastery";
-
 export default Schema.object({
 	enabled: Schema.boolean().default(false).volatile(),
 	tabOrder: Schema.number().default(25).volatile(),

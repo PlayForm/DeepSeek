@@ -1,3 +1,20 @@
+import Count from "@Function/Count";
+import Fetch, {
+	Catalogs,
+	Rates as ReadRates,
+	Publish as Submit,
+	type CatalogAnswer,
+	type PublishAnswer,
+	type PublishRow,
+} from "@Function/Fetch";
+import Price from "@Function/Price";
+import type CostResponse from "@Interface/Response";
+import type { Valuation } from "@Interface/Response";
+import type { Translate } from "@Interface/Translate";
+import type { RateRow, Revision } from "@playform/plugin-dsh-cost/service";
+import Dash from "@Variable/Dash";
+import { createElement, Fragment, useCallback, useEffect, useState } from "react";
+
 /**
  * @module PricingSettings
  *
@@ -6,6 +23,7 @@
  * the one publish action that turns the draft into a new revision.
  *
  * @remarks
+ *
  * The research source is `Temporary/Cost-Research/Plan.md` lane B4f, with the research's A4
  * sections 1-3 and A6 section 6.
  *
@@ -43,23 +61,6 @@
  * the book does not separately price is a dash with the "not separately priced" title - never a
  * zero, because a missing rate is unpriced and a zero is a free bucket.
  */
-import Count from "@Function/Count";
-import Fetch, {
-	Catalogs,
-	Rates as ReadRates,
-	Publish as Submit,
-	type CatalogAnswer,
-	type PublishAnswer,
-	type PublishRow,
-} from "@Function/Fetch";
-import Price from "@Function/Price";
-import type CostResponse from "@Interface/Response";
-import type { Valuation } from "@Interface/Response";
-import type { Translate } from "@Interface/Translate";
-import type { RateRow, Revision } from "@playform/plugin-dsh-cost/service";
-import Dash from "@Variable/Dash";
-import { createElement, Fragment, useCallback, useEffect, useState } from "react";
-
 /**
  * The one column definition of the rate table: the shipped order, the widths that add up to the
  * full table, and the columns the sheet left-aligns. The header, the colgroup and every body cell
@@ -506,8 +507,10 @@ const Picker = (
 		),
 	);
 
-// Field - one draft input: the label, the text field the chip face styles,
-// and the one change handler.
+/**
+ * Field - one draft input: the label, the text field the chip face styles, and the one change
+ * handler.
+ */
 const Field = (
 	Label: string,
 	Value: string,
@@ -528,8 +531,10 @@ const Field = (
 		}),
 	);
 
-// FormProps - the draft form's one props bag: the row it edits, the draft it
-// shows, the shared reason and the four actions the block offers.
+/**
+ * FormProps - the draft form's one props bag: the row it edits, the draft it shows, the shared
+ * reason and the four actions the block offers.
+ */
 type FormProps = {
 	readonly Row: RateRow;
 	readonly Current: Draft;
@@ -541,9 +546,11 @@ type FormProps = {
 	readonly t: Translate;
 };
 
-// Form - the local draft of one rate row: the five rate fields, the two
-// instants and the revision's reason, with the revert and done actions. Every
-// keystroke goes to the parent's local state, so nothing here can write.
+/**
+ * Form - the local draft of one rate row: the five rate fields, the two instants and the
+ * revision's reason, with the revert and done actions. Every keystroke goes to the parent's local
+ * state, so nothing here can write.
+ */
 const Form = (Props: FormProps): ReturnType<typeof createElement> => {
 	const Row = Props.Row;
 	const Current = Props.Current;
@@ -613,8 +620,10 @@ const Form = (Props: FormProps): ReturnType<typeof createElement> => {
 	);
 };
 
-// MoneyCell - one required rate cell: the per-million amount in the row's own
-// currency, through the panel's one money formatter.
+/**
+ * MoneyCell - one required rate cell: the per-million amount in the row's own currency, through
+ * the panel's one money formatter.
+ */
 const MoneyCell = (
 	Cell: string,
 	Value: number,
@@ -626,8 +635,10 @@ const MoneyCell = (
 		createElement("span", { className: "playform-cost-money" }, Price(Value, Currency)),
 	);
 
-// OptionalCell - one optional rate cell: the dash with the "not separately
-// priced" title for a bucket the book leaves unpriced.
+/**
+ * OptionalCell - one optional rate cell: the dash with the "not separately priced" title for a
+ * bucket the book leaves unpriced.
+ */
 const OptionalCell = (
 	Cell: string,
 	Value: number | null,
@@ -642,8 +653,10 @@ const OptionalCell = (
 			: createElement("span", { className: "playform-cost-money" }, Price(Value, Currency)),
 	);
 
-// InstantCell - one instant cell: the local date and minute, or the dash with
-// the "open end" title for a NULL bound.
+/**
+ * InstantCell - one instant cell: the local date and minute, or the dash with the "open end" title
+ * for a NULL bound.
+ */
 const InstantCell = (
 	Cell: string,
 	Value: number | null,
@@ -657,9 +670,11 @@ const InstantCell = (
 	);
 };
 
-// BodyCell - one body cell of the rate table: the identity columns as text,
-// the five rates as money, the two instants as local dates, the bounds as
-// counts and the last column as the Edit action of that row.
+/**
+ * BodyCell - one body cell of the rate table: the identity columns as text, the five rates as
+ * money, the two instants as local dates, the bounds as counts and the last column as the Edit
+ * action of that row.
+ */
 const BodyCell = (
 	Id: Column,
 	Row: RateRow,
@@ -738,9 +753,11 @@ const BodyCell = (
 	}
 };
 
-// PricingSettingsProps - what the view hands the pane: the session the
-// preview reads, the row budget it reads with, the translator, and the
-// callback that pins a freshly published revision as the panel's valuation.
+/**
+ * PricingSettingsProps - what the view hands the pane: the session the preview reads, the row
+ * budget it reads with, the translator, and the callback that pins a freshly published revision as
+ * the panel's valuation.
+ */
 type PricingSettingsProps = {
 	readonly sessionId: string;
 	readonly rows: number;

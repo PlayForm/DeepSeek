@@ -1,9 +1,12 @@
+import type State from "@Interface/State.js";
+
 /**
  * @module Duplicate
  *
  * The repeat-event guard: the COALESCER on the fs/observed listener.
  *
  * @remarks
+ *
  * A repeat event for the same path that carries the SAME version within the
  * window on the module's clock announces a file state that was already
  * processed (the version token identifies the file state), so it is dropped
@@ -19,8 +22,6 @@
  * can never skip a first sighting. The guard lives on the fs/observed listener
  * only: the service's explicit `invalidate` calls are never coalesced.
  */
-import type State from "@Interface/State.js";
-
 // The coalescing window in milliseconds: a repeat inside the window that
 // carries the same version is dropped.
 const Window = 2000;

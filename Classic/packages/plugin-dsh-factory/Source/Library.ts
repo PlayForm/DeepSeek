@@ -1,3 +1,38 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
+import { Names } from "@playform/lib-dsh-trace";
+
+import Append from "./Function/Append.js";
+import AttachEffects from "./Function/Attach.js";
+import Continue from "./Function/Continue.js";
+import DecideFn from "./Function/Decide.js";
+import Discover from "./Function/Discover.js";
+import Gate from "./Function/Gate.js";
+import GovernFn, {
+	type Registry as GovernRegistry,
+	type Selection as GovernSelection,
+} from "./Function/Govern.js";
+import Journal from "./Function/Journal.js";
+import Match from "./Function/Match.js";
+import Parse from "./Function/Parse.js";
+import PolicyFn from "./Function/Policy.js";
+import RefreshFn from "./Function/Refresh.js";
+import Resolve from "./Function/Resolve.js";
+import SchemaFn from "./Function/Schema.js";
+import SeamFn from "./Function/Seam.js";
+import Build from "./Function/State.js";
+import CreateTrace from "./Function/Trace.js";
+import UpdateKey from "./Function/UpdateKey.js";
+import Wire from "./Function/Wire.js";
+import WriteFn, { type Over as WriteOver } from "./Function/Write.js";
+import type Allowlist from "./Interface/Allowlist.js";
+import type Decision from "./Interface/Gate.js";
+import type Setup from "./Interface/Options.js";
+import type Shape from "./Interface/State.js";
+import type Trace from "./Interface/Trace.js";
+import type Transform from "./Interface/Transform.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -6,6 +41,7 @@
  * (docs/user/develop/framework/service.md).
  *
  * @remarks
+ *
  * Loader contract: the class form - `export default class PluginFactory
  * extends Service` with `super(Context, "pluginFactory")`, registered
  * immediately on construction and removed with its owning fiber;
@@ -68,41 +104,6 @@
  * State.Module) and stay byte-identical when the module keeps its historical
  * name.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
-import { Names } from "@playform/lib-dsh-trace";
-
-import Append from "./Function/Append.js";
-import AttachEffects from "./Function/Attach.js";
-import Continue from "./Function/Continue.js";
-import DecideFn from "./Function/Decide.js";
-import Discover from "./Function/Discover.js";
-import Gate from "./Function/Gate.js";
-import GovernFn, {
-	type Registry as GovernRegistry,
-	type Selection as GovernSelection,
-} from "./Function/Govern.js";
-import Journal from "./Function/Journal.js";
-import Match from "./Function/Match.js";
-import Parse from "./Function/Parse.js";
-import PolicyFn from "./Function/Policy.js";
-import RefreshFn from "./Function/Refresh.js";
-import Resolve from "./Function/Resolve.js";
-import SchemaFn from "./Function/Schema.js";
-import SeamFn from "./Function/Seam.js";
-import Build from "./Function/State.js";
-import CreateTrace from "./Function/Trace.js";
-import UpdateKey from "./Function/UpdateKey.js";
-import Wire from "./Function/Wire.js";
-import WriteFn, { type Over as WriteOver } from "./Function/Write.js";
-import type Allowlist from "./Interface/Allowlist.js";
-import type Decision from "./Interface/Gate.js";
-import type Setup from "./Interface/Options.js";
-import type Shape from "./Interface/State.js";
-import type Trace from "./Interface/Trace.js";
-import type Transform from "./Interface/Transform.js";
-import Version from "./Variable/Version.js";
-
 /** The NAMED TYPE exports (P0-1): the four structural contracts + the output
  * shape, re-exported from the entry so consumers can `import type { State,
  * Options, Gate, Transform, Output } from "@playform/plugin-dsh-factory"`
@@ -172,7 +173,9 @@ export function Decide(Policy: Allowlist, Action: keyof Allowlist): "auto" | "ap
 	return DecideFn(Policy, Action);
 }
 
-/** The service: class form, injected on fs, registered as `pluginFactory`. */
+/**
+ * The service: class form, injected on fs, registered as `pluginFactory`.
+ */
 export default class PluginFactory extends Service {
 	static inject = ["fs"];
 
@@ -207,27 +210,37 @@ export default class PluginFactory extends Service {
 		}
 	}
 
-	/** The ledger: logger + appendFileSync, never throws. */
+	/**
+	 * The ledger: logger + appendFileSync, never throws.
+	 */
 	Append(State: Shape, Message: string): void {
 		Append(State, Message);
 	}
 
-	/** The exclusion-first segment match. */
+	/**
+	 * The exclusion-first segment match.
+	 */
 	Match(Path: string, List: string[] | null | undefined): boolean {
 		return Match(Path, List);
 	}
 
-	/** The auxiliary registry walk-up (plain-fs, the exemption). */
+	/**
+	 * The auxiliary registry walk-up (plain-fs, the exemption).
+	 */
 	Discover(Dir: string): string | null {
 		return Discover(Dir);
 	}
 
-	/** The auxiliary JSON read - null on any failure (the exemption). */
+	/**
+	 * The auxiliary JSON read - null on any failure (the exemption).
+	 */
 	Parse(Path: string): unknown {
 		return Parse(Path);
 	}
 
-	/** The union keep-list discovery (P3 chain-keys union included). */
+	/**
+	 * The union keep-list discovery (P3 chain-keys union included).
+	 */
 	ResolvePolicy(
 		State: Shape,
 		Dir: string,
@@ -238,7 +251,9 @@ export default class PluginFactory extends Service {
 		return Resolve(State, Dir, Found, Chain, Options);
 	}
 
-	/** The g1 gate set - returns the pass decision, logs nothing. */
+	/**
+	 * The g1 gate set - returns the pass decision, logs nothing.
+	 */
 	Gate(
 		State: Shape,
 		Target: FsTarget,
@@ -286,12 +301,16 @@ export default class PluginFactory extends Service {
 		});
 	}
 
-	/** The P₃/U₂ refresh: register the version, re-emit with the same actor. */
+	/**
+	 * The P₃/U₂ refresh: register the version, re-emit with the same actor.
+	 */
 	Refresh(State: Shape, Target: FsTarget, Actor: object | undefined, Version: FsVersion): void {
 		RefreshFn(State, Target, Actor, Version);
 	}
 
-	/** The detached contained continuation (the module supplies the transform). */
+	/**
+	 * The detached contained continuation (the module supplies the transform).
+	 */
 	Continue(
 		State: Shape,
 		Target: FsTarget,
@@ -304,7 +323,9 @@ export default class PluginFactory extends Service {
 		return Continue(State, Target, Actor, Dir, Found, Version, Transform);
 	}
 
-	/** The State builder: cell unwrap + shared fields + module extras. */
+	/**
+	 * The State builder: cell unwrap + shared fields + module extras.
+	 */
 	State<Extra extends object = Record<string, unknown>>(
 		Context: Context,
 		Config: unknown,
@@ -312,7 +333,9 @@ export default class PluginFactory extends Service {
 	): Shape & Extra {
 		return Build<Extra>(Context, Config, Setup);
 	}
-	/** The fs/observed registration (the module supplies its observe). */
+	/**
+	 * The fs/observed registration (the module supplies its observe).
+	 */
 	Wire(
 		Context: Context,
 		State: Shape,
@@ -321,7 +344,9 @@ export default class PluginFactory extends Service {
 		Wire(Context, State, Observe);
 	}
 
-	/** The lifecycle effects: P1 jobs controller, P2 inflight disposal, P5 storage. */
+	/**
+	 * The lifecycle effects: P1 jobs controller, P2 inflight disposal, P5 storage.
+	 */
 	Attach(Context: Context, Module: { state: Shape; name: string }): void {
 		AttachEffects(Context, Module);
 	}
@@ -381,7 +406,9 @@ export default class PluginFactory extends Service {
 	 *  listeners, stop dispatch), so a late emit is a contained no-op. */
 	Trace: Trace;
 
-	/** The Schemastery schema factory (shared volatile fields + module fields). */
+	/**
+	 * The Schemastery schema factory (shared volatile fields + module fields).
+	 */
 	Schema(
 		Shared?: {
 			log?: boolean;
@@ -406,7 +433,9 @@ export default class PluginFactory extends Service {
 		return UpdateKey(Target);
 	}
 
-	/** The probe-once optional-service accessor (never the dead accessor). */
+	/**
+	 * The probe-once optional-service accessor (never the dead accessor).
+	 */
 	Seam(State: Shape, Name: string): unknown {
 		return SeamFn(State, Name);
 	}
@@ -476,7 +505,9 @@ export default class PluginFactory extends Service {
 // family's optional-service posture).
 declare module "@deepseek-ai/cordis" {
 	interface Context {
-		/** The trace bus service (provided by the factory as `trace`). */
+		/**
+		 * The trace bus service (provided by the factory as `trace`).
+		 */
 		trace: Trace;
 	}
 }

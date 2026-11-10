@@ -6,6 +6,7 @@ import type Pack from "../Interface/Pack.js";
  * embedded packs, extracted here so the family has ONE source of truth.
  *
  * @remarks
+ *
  * The families are keyed by the domain-qualified id (`doc/Plan`,
  * `edit/Version`, `search/Version`, ...), so the six domains share the map
  * without colliding on the ids they reuse; a family's `id` stays unqualified
@@ -26,6 +27,8 @@ import type Pack from "../Interface/Pack.js";
  * packages project their own domain with `Families(Builtin, domain)`, so the
  * default behaviour is byte-identical to the embedded era.
  */
-/** The built-in pack for this monorepo, keyed by domain-qualified family id. */
+/**
+ * The built-in pack for this monorepo, keyed by domain-qualified family id.
+ */
 declare const Builtin: Pack;
 export default Builtin;

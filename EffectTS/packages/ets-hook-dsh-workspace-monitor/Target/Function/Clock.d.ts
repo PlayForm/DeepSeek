@@ -1,4 +1,4 @@
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 export default _default;
 /**
  * @module Clock

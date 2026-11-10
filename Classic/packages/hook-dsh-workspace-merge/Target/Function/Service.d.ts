@@ -1,3 +1,10 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type Batch from "../Interface/Batch.js";
+import type Commit from "../Interface/Commit.js";
+import type Preview from "../Interface/Preview.js";
+import type Record from "../Interface/Record.js";
+import type State from "../Interface/State.js";
+import type Statistics from "../Interface/Statistics.js";
 /**
  * @module Service
  *
@@ -6,6 +13,7 @@
  * Declaration merging below gives the typed accessor.
  *
  * @remarks
+ *
  * The methods are thin delegates (one Function module each):
  *
  *   preview(batch)     - the gates + digest, no write;
@@ -14,13 +22,6 @@
  *   batches()          - all recorded batches;
  *   statistics()       - the honest counts.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type Batch from "../Interface/Batch.js";
-import type Commit from "../Interface/Commit.js";
-import type Preview from "../Interface/Preview.js";
-import type Record from "../Interface/Record.js";
-import type State from "../Interface/State.js";
-import type Statistics from "../Interface/Statistics.js";
 export default class WorkspaceMerge extends Service {
     /**
      * The apply-built state the methods read and write.

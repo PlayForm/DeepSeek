@@ -1,9 +1,12 @@
+import type { JobSource, JobSpecification, ShellProcess, ShellSpecification } from "../Interface/Events.js";
+import type State from "../Interface/State.js";
 /**
  * @module Jobs
  *
  * Re-dispatches a detached command as a governed background job and captures its tail.
  *
  * @remarks
+ *
  * The producer re-dispatch (G2, IMPLEMENTATION-DESIGN.md section 5.1): the command-runner
  * wrapper that replicates the bash tool's OWN background adapter (dsh-tool-bash
  * startJob/processJob/processSources) over the SAME governed path - ctx.shell.resolve +
@@ -20,8 +23,6 @@
  * The wrapper is command-runner-only BY CONSTRUCTION (Policy.ts's detachable set); the
  * non-detachable mutation family never reaches it.
  */
-import type { JobSource, JobSpecification, ShellProcess, ShellSpecification } from "../Interface/Events.js";
-import type State from "../Interface/State.js";
 /**
  * The per-job private tail (bounded; the completion frame's output source).
  */

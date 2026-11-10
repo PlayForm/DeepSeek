@@ -1,3 +1,4 @@
+import type Output from "./Output.js";
 /**
  * @module Transform
  *
@@ -6,6 +7,7 @@
  * step of a module, from the RAW file text to the next content.
  *
  * @remarks
+ *
  * The factory calls it exactly once per continuation with:
  *
  * - `current` - the raw file text as read through `ctx.fs.readText` (null
@@ -29,7 +31,6 @@
  * expected conditions; an unexpected throw is contained by
  * `Function/Continue`.
  */
-import type Output from "./Output.js";
 export default interface Transform {
     (current: string | null, section: unknown, keep: string[]): Output | null;
 }

@@ -1,9 +1,11 @@
+import type { BlockSpecification } from "../Interface/Execution.js";
 /**
  * @module DefaultBlocks
  *
  * The DEFAULT block table (a Variable: pure data, not code).
  *
  * @remarks
+ *
  * The 14-entry catalog of Requirements/03 section 3, shipped as the schema
  * default of config `blocks` with the sensible enablements (todo-list,
  * command-runner and session-stats ON; the rest dormant) - and the PLUGIN
@@ -25,6 +27,7 @@
  * tokens are never a failure) and log `render unknown <id> <token>` - the
  * frames of the dormant entries are inert by construction (enabled: false).
  */
-import type { BlockSpecification } from "../Interface/Execution.js";
-/** The schema default of config `blocks` (the 14-entry catalog). */
+/**
+ * The schema default of config `blocks` (the 14-entry catalog).
+ */
 export declare const DEFAULT_BLOCKS: BlockSpecification[];

@@ -1,3 +1,5 @@
+import { type Envelope } from "@playform/lib-dsh-trace";
+export default _default;
 /**
  * @module Contract
  *
@@ -5,9 +7,8 @@
  * `graph/invalidated`, extracted as the payload's path.
  *
  * @remarks
+ *
  * A foreign envelope or a malformed payload yields `undefined` (the
  * invalidation is ignored - never a guessed cache clear).
  */
-import { type Envelope } from "@playform/lib-dsh-trace";
-export default _default;
 declare function _default(Envelope: Envelope): string | undefined;

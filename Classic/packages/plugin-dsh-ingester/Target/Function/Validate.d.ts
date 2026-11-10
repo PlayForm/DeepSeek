@@ -1,3 +1,6 @@
+import type Decision from "../Interface/Decision.js";
+import type Proposal from "../Interface/Proposal.js";
+export default _default;
 /**
  * @module Validate
  *
@@ -6,11 +9,9 @@
  * operations.
  *
  * @remarks
+ *
  * The digest and versions are checked per target against the live content
  * (Function/Apply's fence) - not here. Returns the failure reason, or null
  * when valid.
  */
-import type Decision from "../Interface/Decision.js";
-import type Proposal from "../Interface/Proposal.js";
-export default _default;
 declare function _default(Proposal: Proposal, Decision: Decision, Now: number): string | null;

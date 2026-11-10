@@ -1,3 +1,6 @@
+import type { ToolCatalog, ToolEntry } from "@Interface/Execution.js";
+import { STATIC_TOOL_LINES } from "@Variable/Notes.js";
+
 /**
  * @module Fetch
  *
@@ -6,6 +9,7 @@
  * their names, descriptions and primary parameter keys.
  *
  * @remarks
+ *
  * Plan Part 3 §3.1. The instruction set is "static text + dynamic tool
  * description": the coach fetches the tools via `ctx.tools.schemas()` (the
  * deep-cloned projection of the in-memory registry, allowlisted to
@@ -24,10 +28,6 @@
  * `fetchLive: false` (the escape hatch) uses the static table unconditionally
  * and never logs a fetch-failure line.
  */
-
-import type { ToolCatalog, ToolEntry } from "@Interface/Execution.js";
-import { STATIC_TOOL_LINES } from "@Variable/Notes.js";
-
 /**
  * The tools-service surface Fetch needs (structural; the injected `tools`).
  */

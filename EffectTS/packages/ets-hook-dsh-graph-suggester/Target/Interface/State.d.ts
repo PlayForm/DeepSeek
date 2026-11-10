@@ -1,3 +1,6 @@
+import type { CompiledIntent } from "./Pack.js";
+import type Factory from "@playform/ets-plugin-dsh-factory";
+import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 /**
  * @module State
  *
@@ -5,6 +8,7 @@
  * graph-suggester hook's own fields.
  *
  * @remarks
+ *
  * The FACTORY's shared shape (built by `Factory.State(ctx, config, { ... })` - factory
  * SCHEME.md §2.10) extended with the graph-suggester hook's own fields.
  *
@@ -37,9 +41,6 @@
  * - Factory - the injected factory service itself, consumed for the ledger
  *   (Factory.Append) - assigned once in Function/Apply.
  */
-import type { CompiledIntent } from "./Pack.js";
-import type Factory from "@playform/ets-plugin-dsh-factory";
-import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 export default interface State extends Shared {
     /**
      * The master switch (config `enabled`, volatile).

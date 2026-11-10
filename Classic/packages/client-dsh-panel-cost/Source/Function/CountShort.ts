@@ -1,3 +1,5 @@
+import Dash from "@Variable/Dash";
+
 /**
  * @module CountShort
  *
@@ -5,10 +7,9 @@
  * use.
  *
  * @remarks
+ *
  * Two decimals below 1,000, one decimal from 1,000 up, and one decimal M from 10,000,000 up.
  */
-import Dash from "@Variable/Dash";
-
 export default function CountShort(Value: number | null): string {
 	if (typeof Value !== "number" || !Number.isFinite(Value)) return Dash;
 	switch (true) {

@@ -1,3 +1,4 @@
+import type { Touch } from "@playform/ets-lib-dsh-pack";
 /**
  * @module Session
  *
@@ -7,6 +8,7 @@
  * history through.
  *
  * @remarks
+ *
  * The types are structural on purpose: the projection package is NOT a
  * dependency of this hook (no runtime import, no type import), so the seam is
  * described here by the faces the hook consumes, verified against the
@@ -55,7 +57,6 @@
  * of under that name. The two are unrelated: one is a per-session event fold,
  * the other a per-apply graph snapshot.
  */
-import type { Touch } from "@playform/ets-lib-dsh-pack";
 /**
  * The unit's host state: one session's touch history, the SAME shape the
  * retired `session/event` fold kept in `State.History` (the sequence number of

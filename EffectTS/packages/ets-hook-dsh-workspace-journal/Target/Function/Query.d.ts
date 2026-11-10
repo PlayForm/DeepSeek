@@ -1,3 +1,6 @@
+import type BatchRecord from "../Interface/Batch.js";
+import type EntryRecord from "../Interface/Entry.js";
+import type State from "../Interface/State.js";
 /**
  * @module Query
  *
@@ -5,12 +8,10 @@
  * statistics triple.
  *
  * @remarks
+ *
  * Pure reads over the in-memory maps; the domain persistence is never
  * touched.
  */
-import type BatchRecord from "../Interface/Batch.js";
-import type EntryRecord from "../Interface/Entry.js";
-import type State from "../Interface/State.js";
 /**
  * One batch by ID, or undefined.
  */

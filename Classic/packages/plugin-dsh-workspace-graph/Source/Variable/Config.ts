@@ -1,9 +1,14 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Policy } from "@playform/plugin-dsh-factory";
+import DEFAULT_EXCLUDE from "@Variable/Default.js";
+
 /**
  * @module Config
  *
  * The plugin's Schemastery Config schema (a Variable: one constant built once at load).
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every default, so
  * invalid configuration fails LOUD at load instead of silently falling back per-field. The
  * shape this schema produces is `Interface/Config.ts`; every field is one of the brief's frozen
@@ -20,10 +25,6 @@
  * The schema is a real `@deepseek-ai/schemastery` instance - the loader consumes it through the
  * Standard Schema `~standard` interface.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Policy } from "@playform/plugin-dsh-factory";
-import DEFAULT_EXCLUDE from "@Variable/Default.js";
-
 const DefaultEnabled = false;
 const DefaultDomain = "workspace_graph";
 const DefaultLanguages: Array<"typescript" | "javascript" | "markdown"> = [
@@ -42,7 +43,9 @@ const DefaultMaxFiles = 2000;
 const DefaultLimitDefault = 50;
 const DefaultLimitMaximum = 500;
 
-/** The plugin's Config schema: the frozen config table, every field volatile. */
+/**
+ * The plugin's Config schema: the frozen config table, every field volatile.
+ */
 export default Schema.object({
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	domain: Schema.string().default(DefaultDomain).volatile(),

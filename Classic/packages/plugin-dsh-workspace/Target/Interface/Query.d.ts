@@ -1,16 +1,17 @@
+import type { Edge, NodeKind } from "./Graph.js";
+import type { PacketView } from "./Packet.js";
 /**
  * @module Query
  *
  * The four navigation operations' canonical result shapes.
  *
  * @remarks
+ *
  * WORKSPACE-FAMILY-V4-1.md section 3.4: compact tables plus the ids, no full
  * file bodies unless a specific span is asked for; pagination is by CURSOR,
  * never by offset. Every tool returns exactly one canonical JSON value of one of
  * these shapes (the defineTool rule).
  */
-import type { Edge, NodeKind } from "./Graph.js";
-import type { PacketView } from "./Packet.js";
 /**
  * The compact node row the tools print (id, path, span, kind - plus the
  * fingerprint and the version so staleness is detectable in every answer).

@@ -1,3 +1,7 @@
+import type { Allowlist } from "@playform/plugin-dsh-factory";
+import type FactoryService from "./Factory.js";
+import type { FactoryState } from "./Factory.js";
+import type { MachineRecord } from "./Process.js";
 /**
  * @module State
  *
@@ -6,14 +10,11 @@
  * volatile refresh) plus the plugin's own fields.
  *
  * @remarks
+ *
  * The volatile schema knobs ride the factory's loader/volatile-update listener
  * and are refreshed IN PLACE, so a flip (enabled, deadlineMs, strictMode, ...)
  * lands on the next tool call without a remount.
  */
-import type { Allowlist } from "@playform/plugin-dsh-factory";
-import type FactoryService from "./Factory.js";
-import type { FactoryState } from "./Factory.js";
-import type { MachineRecord } from "./Process.js";
 export default interface State extends FactoryState {
     /**
      * The enable flip (config `enabled`; the IDLE-forever posture).

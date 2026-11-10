@@ -6,6 +6,7 @@
  * asserts them byte for byte, so nothing here may be reflowed, re-worded, or generated.
  *
  * @remarks
+ *
  * PROVENANCE: the text is the Hermes background review's five prompt blocks translated
  * onto this harness's corpus, with the three changes the plan states: the memory-routing
  * block is dropped because this plugin owns no memory store and never writes the
@@ -33,7 +34,9 @@
  * paragraph).
  */
 
-/** Everything both phases share: the task, the content rules, the limits, and the reply form. */
+/**
+ * Everything both phases share: the task, the content rules, the limits, and the reply form.
+ */
 export const Body = `You are the background skill learner of a DeepSeek Harness session. The session you are reading has already ended. Your job is to leave the skill corpus of this profile a little better than you found it, and then to stop.
 
 Be active. Most sessions produce at least one skill update, even a small one. A pass that writes nothing is a missed learning opportunity, not a neutral outcome. "Nothing to save." is a real answer, but it is not the default.
@@ -82,7 +85,9 @@ Hard limits:
 
 Reply with one JSON object and nothing else: no prose before it, no prose after it. One fenced json block around the object is accepted; anything else is rejected unread.`;
 
-/** The phase-1 section: the plan schema and why the caller loads the views it names. */
+/**
+ * The phase-1 section: the plan schema and why the caller loads the views it names.
+ */
 export const FirstRequest = `The first request asks for a plan:
 {
   "views": ["<skill-name>"],
@@ -95,13 +100,17 @@ export const FirstRequest = `The first request asks for a plan:
 
 "views" names the skills whose current body you need before you can write them. The caller loads them and sends a second request that carries those bodies; only that second request may return the final list. Return an empty views array when you already have everything you need.`;
 
-/** The phase-2 section: the final-list schema, whose bodies the caller has already carried. */
+/**
+ * The phase-2 section: the final-list schema, whose bodies the caller has already carried.
+ */
 export const SecondRequest = `The second request asks for the final list, and it carries the bodies you asked for:
 {
   "operations": [ ... the same three shapes ... ]
 }`;
 
-/** The rules both replies obey, identical in both phases. */
+/**
+ * The rules both replies obey, identical in both phases.
+ */
 export const Rules = `Rules for both replies:
 - operations is an array of at most eight objects. An empty array means nothing to save.
 - kind is exactly one of patch, create, support. No other kind exists, and there is no delete.
@@ -111,8 +120,12 @@ export const Rules = `Rules for both replies:
 - filePath starts with references/, templates/, or scripts/ and names a file.
 - reason is one sentence naming the lesson, not the incident.`;
 
-/** The phase-1 prompt: plan section 5 in full, one request for a plan and one for the final list. */
+/**
+ * The phase-1 prompt: plan section 5 in full, one request for a plan and one for the final list.
+ */
 export const PromptOne = [Body, FirstRequest, SecondRequest, Rules].join("\n\n");
 
-/** The phase-2 prompt: the same text with the first-request section removed. */
+/**
+ * The phase-2 prompt: the same text with the first-request section removed.
+ */
 export const PromptTwo = [Body, SecondRequest, Rules].join("\n\n");

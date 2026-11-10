@@ -1,3 +1,8 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import { type Input } from "./Enqueue.js";
+import { type Report } from "./Reconcile.js";
+import type State from "../Interface/State.js";
+import type Task from "../Interface/Task.js";
 /**
  * @module Dispatcher
  *
@@ -18,6 +23,7 @@
  *                             reconcile's seam; never a hot-path wait)
  *
  * @remarks
+ *
  * Every method delegates to one Function module; the State's volatile fields
  * are read live, so a capacity edit applies to the next dispatch without a
  * remount.
@@ -28,11 +34,6 @@
  * after every settle. The child's own result settles its task (completed /
  * failed), so the queue runs itself without a caller loop.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import { type Input } from "./Enqueue.js";
-import { type Report } from "./Reconcile.js";
-import type State from "../Interface/State.js";
-import type Task from "../Interface/Task.js";
 export default class Dispatcher extends Service {
     private Context;
     private State;

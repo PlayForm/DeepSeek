@@ -1,9 +1,13 @@
+import type Adapter from "@Interface/Adapter.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Register
  *
  * The adapter registry: one adapter entry per registration key it owns.
  *
  * @remarks
+ *
  * A registration key is the lowercased dotted EXTENSION, or the exact BASENAME
  * for a file adapter (package.json). The adapters are the any-file seam
  * (ANY-FILE-ADAPTERS: think adapters, think graphs) - the default TypeScript
@@ -12,9 +16,6 @@
  * last registration wins) with one ledger line; the count in the line is the
  * registry size (extensions plus file names).
  */
-import type Adapter from "@Interface/Adapter.js";
-import type State from "@Interface/State.js";
-
 export default (State: State, Adapter: Adapter): void => {
 	for (const Extension of Adapter.extensions) {
 		State.Adapters.set(Extension.toLowerCase(), Adapter);

@@ -1,3 +1,8 @@
+import * as FileSystem from "node:fs";
+
+import type Entry from "@Interface/Entry.js";
+import { Expand } from "@playform/lib-dsh-core";
+
 /**
  * @module Store
  *
@@ -5,6 +10,7 @@
  * OPTIONAL JSONL disk journal.
  *
  * @remarks
+ *
  * The plan §3: NOT the factory's storage journal - that is a typed LIFECYCLE
  * ledger; reusing it for MB-size BLOBs would corrupt the governance domain's
  * contract; the factory journal keeps only the plugin's lifecycle/ledger
@@ -31,11 +37,6 @@
  * its evictions to the CALLER: the ledger strings are the module's own
  * (Function/Apply composes them via Factory.Append), the store logs nothing.
  */
-import * as FileSystem from "node:fs";
-
-import type Entry from "@Interface/Entry.js";
-import { Expand } from "@playform/lib-dsh-core";
-
 /**
  * One eviction reported to the caller (the reason tags the ledger line).
  */

@@ -1,3 +1,6 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type Stamp from "../Interface/Stamp.js";
+import type State from "../Interface/State.js";
 /**
  * @module Service
  *
@@ -5,6 +8,7 @@
  * REGISTERED FROM APPLY.
  *
  * @remarks
+ *
  * This is the loader contract for the object-form plugin: apply constructs
  * the service; the Service base constructor calls
  * ctx.reflect.provide("workspaceObserve", this), so `ctx.workspaceObserve`
@@ -18,9 +22,6 @@
  *                         record with origin "manual", ledger (async);
  *   statistics()        - { paths, stamps, sequence }.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type Stamp from "../Interface/Stamp.js";
-import type State from "../Interface/State.js";
 export default class WorkspaceObserve extends Service {
     /**
      * The apply-built state the methods read and write.

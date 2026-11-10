@@ -1,3 +1,5 @@
+import type Decision from "./Decision.js";
+
 /**
  * @module Learning
  *
@@ -6,6 +8,7 @@
  * decision-record memory.
  *
  * @remarks
+ *
  * TWO BACKENDS, ONE CONTRACT: the shared pattern service
  * (`ctx.get("pattern")` probed per use, never injected) is the PRIMARY - its
  * records are the durable learned state, and a reopen reads them back; the
@@ -14,8 +17,6 @@
  * path: every rate answers the Laplace prior 1/3, so the default score is
  * byte-identical to the PoC.
  */
-import type Decision from "./Decision.js";
-
 export default interface Learning {
 	/**
 	 * Which backend answers: the shared pattern service or the memory

@@ -1,3 +1,22 @@
+import { basename } from "node:path";
+
+import type { Context } from "@deepseek-ai/cordis";
+import type { CommandResult } from "@playform/lib-dsh-core";
+import type Factory from "@playform/plugin-dsh-factory";
+
+import type Config from "../Interface/Config.js";
+import Annotate from "./Annotate.js";
+import Assess from "./Assess.js";
+import Backfill from "./Backfill.js";
+import Capture from "./Capture.js";
+import Drain from "./Drain.js";
+import Export from "./Export.js";
+import Forecast from "./Forecast.js";
+import Open from "./Open.js";
+import Provide from "./Provide.js";
+import Report from "./Report.js";
+import Rollup from "./Rollup.js";
+
 /**
  * @module Apply
  *
@@ -7,6 +26,7 @@
  * verbs plus the backfill job when the capture gate asks for it.
  *
  * @remarks
+ *
  * The State build is the factory's cell unwrap plus the P10 volatile refresh.
  * The ledger effect opens it, registers the two session listeners while the
  * ledger is open and closes it on dispose. The function returns NOTHING - the
@@ -35,25 +55,6 @@
  * the walk itself never runs on the boot path), and the jobs stack being absent
  * is a ledger line, not a crash.
  */
-import { basename } from "node:path";
-
-import type { Context } from "@deepseek-ai/cordis";
-import type { CommandResult } from "@playform/lib-dsh-core";
-import type Factory from "@playform/plugin-dsh-factory";
-
-import type Config from "../Interface/Config.js";
-import Annotate from "./Annotate.js";
-import Assess from "./Assess.js";
-import Backfill from "./Backfill.js";
-import Capture from "./Capture.js";
-import Drain from "./Drain.js";
-import Export from "./Export.js";
-import Forecast from "./Forecast.js";
-import Open from "./Open.js";
-import Provide from "./Provide.js";
-import Report from "./Report.js";
-import Rollup from "./Rollup.js";
-
 // The factory vocabulary, the command registry and the session-log seam,
 // published on this module's augmentation (the hook-dsh-ccr and the factory's
 // State precedent): the factory type arrives TYPE-ONLY from the factory
@@ -62,21 +63,31 @@ import Rollup from "./Rollup.js";
 // host dispatches them - the session itself as the subject.
 declare module "@deepseek-ai/cordis" {
 	interface Context {
-		/** The plugin-factory service (@playform/plugin-dsh-factory). */
+		/**
+		 * The plugin-factory service (@playform/plugin-dsh-factory).
+		 */
 		pluginFactory: Factory;
-		/** The human command registry (@deepseek-ai/dsh-commands). */
+		/**
+		 * The human command registry (@deepseek-ai/dsh-commands).
+		 */
 		commands: Commands;
 	}
 
 	interface Events {
-		/** One committed session log event; the subject is the session. */
+		/**
+		 * One committed session log event; the subject is the session.
+		 */
 		"session/event"(Subject: unknown, Event: unknown): void;
-		/** The session's durability checkpoint; the subject is the session. */
+		/**
+		 * The session's durability checkpoint; the subject is the session.
+		 */
 		"session/flush"(Subject: unknown): void;
 	}
 }
 
-/** The structural command-registry surface the plugin registers through. */
+/**
+ * The structural command-registry surface the plugin registers through.
+ */
 interface Commands {
 	register(Definition: {
 		name: string;

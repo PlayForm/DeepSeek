@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * Exercises the wiring and the contract.
- *
- * @remarks
- * Covers the loader contract (the default object carries name/apply/Config/inject; apply returns
- * nothing), the IDLE-forever cold mount, the enabled mount's byte-exact activation line, the five
- * tool registrations, the no-listeners posture (a pure consumer registers no root listeners and no
- * services), the State probe, the fail-loud validation, and the fs purity invariant.
- */
 import assert from "node:assert/strict";
 import Plugin, { apply, Config, inject, name } from "../../../Target/Library.js";
 import {
@@ -23,7 +12,21 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount over the standard graph. */
+/**
+ * @module Test
+ *
+ * Exercises the wiring and the contract.
+ *
+ * @remarks
+ *
+ * Covers the loader contract (the default object carries name/apply/Config/inject; apply returns
+ * nothing), the IDLE-forever cold mount, the enabled mount's byte-exact activation line, the five
+ * tool registrations, the no-listeners posture (a pure consumer registers no root listeners and no
+ * services), the State probe, the fail-loud validation, and the fs purity invariant.
+ */
+/**
+ * A standard enabled mount over the standard graph.
+ */
 const Setup = (): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true }), StandardGraph());

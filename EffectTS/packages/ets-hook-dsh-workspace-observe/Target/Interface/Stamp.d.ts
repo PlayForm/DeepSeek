@@ -4,6 +4,7 @@
  * The observation record the hook writes (Interface/Stamp).
  *
  * @remarks
+ *
  * One stamp per fs/observed event (or manual call): the path, the version
  * observed at the event, the origin, and the hook's own monotonic sequence.
  *

@@ -1,4 +1,4 @@
-import type { ToolCatalog } from "@Interface/Execution.js";
+import type { ToolCatalog } from "../Interface/Execution.js";
 /**
  * @module Fetch
  *

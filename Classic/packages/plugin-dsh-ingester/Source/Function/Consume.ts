@@ -1,3 +1,10 @@
+import type Decision from "../Interface/Decision.js";
+import type Proposal from "../Interface/Proposal.js";
+import type Result from "../Interface/Result.js";
+import type State from "../Interface/State.js";
+import Claim from "./Claim.js";
+import JournalFn from "./Journal.js";
+
 /**
  * @module Consume
  *
@@ -5,6 +12,7 @@
  * plan's target names.
  *
  * @remarks
+ *
  * The ingester hears the decision on the bus, resolves the proposal it recorded
  * from `batch/proposed`, and applies it through the existing content fence
  * (Function/Apply) - so an approved batch is applied by the event path alone,
@@ -13,13 +21,6 @@
  * A decision for a proposal the ingester never heard is refused with its own
  * journal line - never applied against a guessed proposal.
  */
-import type Decision from "../Interface/Decision.js";
-import type Proposal from "../Interface/Proposal.js";
-import type Result from "../Interface/Result.js";
-import type State from "../Interface/State.js";
-import Claim from "./Claim.js";
-import JournalFn from "./Journal.js";
-
 /**
  * The structural validation of a decision payload (the shape the consumer
  * requires before it touches a field).

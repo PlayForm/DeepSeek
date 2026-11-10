@@ -5,6 +5,7 @@
  * user owns the configuration, the plugin only enforces it.
  *
  * @remarks
+ *
  * The policy covers the agent-loop roles (coder / explorer / planner, each
  * with its explicit provider / model / reasoningEffort triple), the allowed
  * model set (the task-routing skill's three-model catalog is the shipped

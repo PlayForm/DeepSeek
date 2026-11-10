@@ -1,3 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import Dispatcher from "@Function/Dispatcher.js";
+import ToolEnqueue from "@Function/ToolEnqueue.js";
+import ToolStatus from "@Function/ToolStatus.js";
+import Validate from "@Function/Validate.js";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+import Version from "@Variable/Version.js";
+
 /**
  * @module Apply
  *
@@ -7,6 +17,7 @@
  * children.
  *
  * @remarks
+ *
  * The State build is the factory's cell unwrap + the P10 volatile refresh.
  * The function returns NOTHING (the loader treats apply returns
  * specially - a returned value silently kills event delivery).
@@ -24,16 +35,6 @@
  * posture is visible on the per-task lines (`spawned` / `spawn skipped` /
  * `spawn failed`), not on the activation proof.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import Dispatcher from "@Function/Dispatcher.js";
-import ToolEnqueue from "@Function/ToolEnqueue.js";
-import ToolStatus from "@Function/ToolStatus.js";
-import Validate from "@Function/Validate.js";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-import Version from "@Variable/Version.js";
-
 export default (Context: Context, Options: Config): void => {
 	// Fail-loud validation BEFORE the State build: invalid config throws at
 	// load, never silently defaults (the tool-coach precedent).

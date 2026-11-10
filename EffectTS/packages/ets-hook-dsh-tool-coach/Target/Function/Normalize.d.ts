@@ -1,4 +1,4 @@
-import type { CoachClass } from "@Interface/Execution.js";
+import type { CoachClass } from "../Interface/Execution.js";
 /**
  * @module Normalize
  *

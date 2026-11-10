@@ -1,5 +1,5 @@
-import type Proposal from "@Interface/Proposal.js";
-import type State from "@Interface/State.js";
+import type Proposal from "../Interface/Proposal.js";
+import type State from "../Interface/State.js";
 export default _default;
 /**
  * @module Persist

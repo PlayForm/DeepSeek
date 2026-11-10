@@ -1,3 +1,6 @@
+import type GraphHandle from "@Interface/Graph.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Carry
  *
@@ -5,6 +8,7 @@
  * in the optional workspace graph.
  *
  * @remarks
+ *
  * After an applied operation, the module asks the optional `workspaceGraph`
  * sibling service to re-index the changed file, so the graph's representation
  * stays current (the State:State -> State:Operational reference case of the
@@ -21,9 +25,6 @@
  * swallowed after one ledger line - the applied write is never undone by a
  * failed carry.
  */
-import type GraphHandle from "@Interface/Graph.js";
-import type State from "@Interface/State.js";
-
 export default async (State: State, Path: string): Promise<void> => {
 	try {
 		const Graph = (await Promise.resolve(

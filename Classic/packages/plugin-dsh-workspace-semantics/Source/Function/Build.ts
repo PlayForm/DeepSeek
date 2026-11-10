@@ -1,3 +1,8 @@
+import Select from "@Function/Select.js";
+import type Model from "@Interface/Model.js";
+import type ReferenceNode from "@Interface/ReferenceNode.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Build
  *
@@ -5,6 +10,7 @@
  * semantic model on demand.
  *
  * @remarks
+ *
  * A FRESH index hit (the model's version matches the path's latest observed
  * version) returns without any I/O. Otherwise the file's text is read through
  * the injected `fs` facility, the path's adapter is selected (Function/Select:
@@ -26,15 +32,14 @@
  * pattern). The revision is the service's own monotonic counter - never a wall
  * clock.
  */
-import Select from "@Function/Select.js";
-import type Model from "@Interface/Model.js";
-import type ReferenceNode from "@Interface/ReferenceNode.js";
-import type State from "@Interface/State.js";
-
-/** The workspace root the deepener's queries resolve against. */
+/**
+ * The workspace root the deepener's queries resolve against.
+ */
 const Root = (State: State): string => (State.Root.length > 0 ? State.Root : process.cwd());
 
-/** Drop index entries until the index fits the cap. */
+/**
+ * Drop index entries until the index fits the cap.
+ */
 const Cap = (State: State): void => {
 	while (State.Index.size > State.MaxEntries) {
 		let Oldest: string | undefined;

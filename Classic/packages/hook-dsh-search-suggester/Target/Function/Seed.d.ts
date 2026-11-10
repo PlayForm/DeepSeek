@@ -1,3 +1,6 @@
+import type { Intent, Knowledge } from "../Interface/Execution.js";
+import type Projection from "../Interface/Projection.js";
+export default _default;
 /**
  * @module Seed
  *
@@ -5,6 +8,7 @@
  * with NO LLM and NO session history.
  *
  * @remarks
+ *
  * The seed source (the only source):
  *
  *   - an EXPLICIT repo/user pack's canonical candidates - every target of the pack's
@@ -29,15 +33,20 @@
  * the next real write (an emit, a follow, a dismissal), so the cold-start file stays absent
  * until there is something to record.
  */
-import type { Intent, Knowledge } from "../Interface/Execution.js";
-import type Projection from "../Interface/Projection.js";
-export default _default;
 declare function _default(
-/** The loaded (or cold) knowledge, mutated in place. */
+/**
+ * The loaded (or cold) knowledge, mutated in place.
+ */
 Knowledge: Knowledge, 
-/** The explicit pack's search intents (the seed source; empty = no seed). */
+/**
+ * The explicit pack's search intents (the seed source; empty = no seed).
+ */
 Pack: Intent[], 
-/** The graph projection when one was available at load. */
+/**
+ * The graph projection when one was available at load.
+ */
 Projection: Projection | undefined, 
-/** The epoch-seconds timestamp recorded on every seeded row. */
+/**
+ * The epoch-seconds timestamp recorded on every seeded row.
+ */
 At: number): number;

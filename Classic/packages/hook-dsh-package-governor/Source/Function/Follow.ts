@@ -1,9 +1,20 @@
+import type { FsTarget } from "@deepseek-ai/dsh-fs";
+import type Passage from "@Interface/Passage.js";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+import { Suppress } from "@playform/lib-dsh-core";
+
+import Dispatch from "./Dispatch.js";
+import Filter from "./Filter.js";
+import Resolve from "./Resolve.js";
+
 /**
  * @module Follow
  *
  * The update-stage trigger that follows the factory's continuation.
  *
  * @remarks
+ *
  * The factory owns the chain pass's scaffolding (read, union keep-list, guarded write,
  * message, P₃ refresh), so the update stage - which the pre-refactor Function/Continue ran
  * inline after the rewrite - now runs OFF the settled continuation: Function/Observe chains
@@ -23,16 +34,6 @@
  * (`hook-dsh-governor-package: continuation error (suppressed): ...`), never the ledger,
  * never a rethrow, never an unhandled rejection - the silence invariant.
  */
-import type { FsTarget } from "@deepseek-ai/dsh-fs";
-import type Passage from "@Interface/Passage.js";
-import type Registry from "@Interface/Registry.js";
-import type State from "@Interface/State.js";
-import { Suppress } from "@playform/lib-dsh-core";
-
-import Dispatch from "./Dispatch.js";
-import Filter from "./Filter.js";
-import Resolve from "./Resolve.js";
-
 export default async (
 	State: State,
 	Target: FsTarget,

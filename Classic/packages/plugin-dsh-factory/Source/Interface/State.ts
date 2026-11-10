@@ -1,3 +1,8 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { FsTargetKey, FsVersion } from "@deepseek-ai/dsh-fs";
+import type SubprocessService from "@deepseek-ai/dsh-subprocess";
+import type Record from "@Interface/Journal.js";
+
 /**
  * @module State
  *
@@ -5,6 +10,7 @@
  * and every factory primitive consumes.
  *
  * @remarks
+ *
  * A module's own state is this shape plus its module-specific fields (copied
  * from config by the State builder's `fields` map) - a module declares its
  * own extended interface and its instances are assignable to this one, which
@@ -28,20 +34,19 @@
  * compares them but never parses or computes them
  * (subsystems/filesystem.md).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { FsTargetKey, FsVersion } from "@deepseek-ai/dsh-fs";
-import type SubprocessService from "@deepseek-ai/dsh-subprocess";
-import type Record from "@Interface/Journal.js";
-
 export default interface State {
-	/** The loading context - carries fs, logger, emit and the event bus. */
+	/**
+	 * The loading context - carries fs, logger, emit and the event bus.
+	 */
 	Context: Context;
 
 	/** The module identity - doubles as the logger/ledger prefix for every
 	 * factory-composed line ("hook-dsh-governor-package", "hook-dsh-pinner-package", ...). */
 	Module: string;
 
-	/** Actor tool names whose fs/observed events trigger the module. */
+	/**
+	 * Actor tool names whose fs/observed events trigger the module.
+	 */
 	Tool: string[];
 
 	/** The configured global policy file (config `policyFile`; "" means
@@ -52,16 +57,24 @@ export default interface State {
 	 *  ("pin-policy.json" / "update-policy.json"); "" disables sidecar lookup. */
 	PolicyName: string;
 
-	/** Ledger file (one global log per module). */
+	/**
+	 * Ledger file (one global log per module).
+	 */
 	Ledger: string;
 
-	/** Ledger enabled - write the durable log file. */
+	/**
+	 * Ledger enabled - write the durable log file.
+	 */
 	Enabled: boolean;
 
-	/** Excluded path segments (anywhere mode, exclusion-first). */
+	/**
+	 * Excluded path segments (anywhere mode, exclusion-first).
+	 */
 	List: string[];
 
-	/** targetKey -> version token we last processed (idempotence gate). */
+	/**
+	 * targetKey -> version token we last processed (idempotence gate).
+	 */
 	Stash: Map<FsTargetKey, FsVersion>;
 
 	/** targetKey -> abort controller of the detached continuation in flight
@@ -74,7 +87,9 @@ export default interface State {
 	 * `Function/Seam`. */
 	Subprocess: SubprocessService | undefined;
 
-	/** Probe-once cache of optional services (Function/Seam). */
+	/**
+	 * Probe-once cache of optional services (Function/Seam).
+	 */
 	Seams: Map<string, unknown>;
 
 	/** Storage journal sink (P5): queues into `Queue` until the optional
@@ -82,7 +97,9 @@ export default interface State {
 	 * to a no-op when the domain is absent (the Attach storage effect). */
 	Journal: (Event: string, Path: string, Detail: string, At?: number) => void;
 
-	/** Pre-open journal queue (capped at 256), drained by `Function/Open`. */
+	/**
+	 * Pre-open journal queue (capped at 256), drained by `Function/Open`.
+	 */
 	Queue: Record[];
 
 	/** The open storage domain handle (P5) - closed by the Attach effect's

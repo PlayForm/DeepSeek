@@ -1,9 +1,15 @@
+import type ReferenceNode from "@Interface/ReferenceNode.js";
+import type RenamePlan from "@Interface/RenamePlan.js";
+import type Span from "@Interface/Span.js";
+import type SymbolNode from "@Interface/SymbolNode.js";
+
 /**
  * @module Adapter
  *
  * The any-file adapter's semantics contract.
  *
  * @remarks
+ *
  * The ANY-FILE-ADAPTERS rule: think adapters, think graphs - each file type
  * gets its adapter that produces the file's knowledge graph and answers the
  * type's operations. The adapter is a pure function object: it never reads
@@ -16,13 +22,10 @@
  * an extension adapter). The basename is checked before the extension
  * (Function/Select), so package.json never falls through to the JSON adapter.
  */
-import type ReferenceNode from "@Interface/ReferenceNode.js";
-import type RenamePlan from "@Interface/RenamePlan.js";
-import type Span from "@Interface/Span.js";
-import type SymbolNode from "@Interface/SymbolNode.js";
-
 export default interface Adapter {
-	/** The file extensions (with dot, lowercase) the adapter owns. */
+	/**
+	 * The file extensions (with dot, lowercase) the adapter owns.
+	 */
 	extensions: string[];
 
 	/**
@@ -31,7 +34,9 @@ export default interface Adapter {
 	 */
 	files?: string[];
 
-	/** Build the model from the file's text. */
+	/**
+	 * Build the model from the file's text.
+	 */
 	scan(
 		text: string,
 		path: string,

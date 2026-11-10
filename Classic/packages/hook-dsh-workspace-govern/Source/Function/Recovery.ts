@@ -1,3 +1,5 @@
+import type RecoveryRule from "@Interface/Recovery.js";
+
 /**
  * @module Recovery
  *
@@ -5,6 +7,7 @@
  * per-obligation failure behavior).
  *
  * @remarks
+ *
  * One row per obligation; the behavior decides what happens when the
  * obligation CANNOT be evaluated (not when it evaluates to a denial - an honest
  * denial is a denial):
@@ -24,8 +27,6 @@
  * A config override (config `recovery`) replaces one row; an unknown obligation
  * or behavior in an override is ignored, never guessed.
  */
-import type RecoveryRule from "@Interface/Recovery.js";
-
 /**
  * The per-obligation failure behavior.
  */

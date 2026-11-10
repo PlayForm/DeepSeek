@@ -1,3 +1,6 @@
+import Schema from "@deepseek-ai/schemastery";
+import Default from "@Variable/Default.js";
+
 /**
  * @module Schema
  *
@@ -6,6 +9,7 @@
  * `exclude` + `policyFile` + the module's OWN schema fields.
  *
  * @remarks
+ *
  * Shared shape (P8 - the volatile cells, identical to the trio: hot edits
  * commit WITHOUT remounting the plugin):
  *
@@ -46,9 +50,6 @@
  * the import resolves from the running dsh's own copy,
  * docs/user/develop/basic/publish.md:103).
  */
-import Schema from "@deepseek-ai/schemastery";
-import Default from "@Variable/Default.js";
-
 export default (
 	Shared:
 		| {

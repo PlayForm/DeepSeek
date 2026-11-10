@@ -4,6 +4,7 @@
  * The one-call reflective operations: each op bundles the WHOLE transformation.
  *
  * @remarks
+ *
  * The AST-aware rename/connect/replace across the affected references, one
  * call instead of a tool choreography (REFLECT.md, the one-call semantics).
  * The spans are 1-based and inclusive, the same span grammar the graph's nodes

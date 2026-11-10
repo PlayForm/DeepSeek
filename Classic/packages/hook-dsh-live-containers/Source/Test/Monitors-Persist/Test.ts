@@ -1,15 +1,3 @@
-/**
- * @module Test
- *
- * The storage tests: the P5-style open with the byte-exact domain spec, the record shapes, the
- * pre-bind buffer and its cap, the absent facility, the loud open failure, the recovery and the
- * empty read.
- *
- * @remarks
- * The absent facility is a silent skip with an honest degradation after a restart. The recovery
- * covers the provenance and the time-stale treatment. The empty read never fabricates a clean
- * result.
- */
 import assert from "node:assert/strict";
 import {
 	Advance,
@@ -33,7 +21,22 @@ import {
 } from "../Harness.js";
 import type { MonitorRecord } from "../../../Target/Interface/Events.js";
 
-/** A standard persist mount. */
+/**
+ * @module Test
+ *
+ * The storage tests: the P5-style open with the byte-exact domain spec, the record shapes, the
+ * pre-bind buffer and its cap, the absent facility, the loud open failure, the recovery and the
+ * empty read.
+ *
+ * @remarks
+ *
+ * The absent facility is a silent skip with an honest degradation after a restart. The recovery
+ * covers the provenance and the time-stale treatment. The empty read never fabricates a clean
+ * result.
+ */
+/**
+ * A standard persist mount.
+ */
 const Setup = (Config: any = {}): { Jobs: any; Shell: any; Run: any } => {
 	const Jobs = FakeJobsHub();
 	const Shell = FakeShell();
@@ -49,7 +52,9 @@ const Setup = (Config: any = {}): { Jobs: any; Shell: any; Run: any } => {
 	return { Jobs, Shell, Run };
 };
 
-/** The stanza text of one assemble pass. */
+/**
+ * The stanza text of one assemble pass.
+ */
 const Stanza = async (Run: any): Promise<string> =>
 	(await WaveAssemble(Run)).sections.find((S: any) => S.name === "live-containers")?.text ?? "";
 

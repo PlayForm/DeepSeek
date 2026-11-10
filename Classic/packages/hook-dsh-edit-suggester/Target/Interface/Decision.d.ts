@@ -5,6 +5,7 @@
  * heuristic values, with which weights, and what became of it.
  *
  * @remarks
+ *
  * Completion spec 00-OVERVIEW D8 + 03-SUGGESTERS section 2.
  *
  * ONE RECORD PER DECISION, and a decision is either an emitted note or a

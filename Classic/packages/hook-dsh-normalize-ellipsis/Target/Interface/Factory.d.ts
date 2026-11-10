@@ -1,3 +1,4 @@
+import type Factory from "@playform/plugin-dsh-factory";
 /**
  * @module Factory
  *
@@ -5,6 +6,7 @@
  * (the family's class/service plugin, factory `SCHEME.md` sections 0-2).
  *
  * @remarks
+ *
  * The ellipsis hook is a NON-MANIFEST factory consumer: it consumes the State
  * builder (cell unwrap + shared fields, section 2.10), the ledger (`Append`,
  * section 2.1) and the probe-once Seam accessor (section 2.15) - but NOT the
@@ -23,10 +25,11 @@
  * AsyncIterable<StreamChunk> - re-declaring it would be a conflicting
  * duplicate.
  */
-import type Factory from "@playform/plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {
-        /** The plugin-factory service (@playform/plugin-dsh-factory). */
+        /**
+         * The plugin-factory service (@playform/plugin-dsh-factory).
+         */
         pluginFactory: Factory;
     }
 }

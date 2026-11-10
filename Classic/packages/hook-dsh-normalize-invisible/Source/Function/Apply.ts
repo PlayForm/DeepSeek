@@ -1,9 +1,25 @@
+import type { Context, Events } from "@deepseek-ai/cordis";
+import type { GenerateOptions, StreamChunk } from "@deepseek-ai/dsh-llm";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+
+import Command, {
+	type CommandsService,
+	type ConfigEditorService,
+	type SettingsService,
+} from "./Command.js";
+import Normalize from "./Normalize.js";
+import Overpass from "./Overpass.js";
+import StepBatch from "./StepBatch.js";
+
 /**
  * @module Apply
  *
  * The plugin entry function, a THIN MODULE WIRE-UP in the factory family's shape.
  *
  * @remarks
+ *
  * It builds the State through `Factory.State` (the cell unwrap, the shared mappings
  * Ledger<-logFile / Enabled<-log and the module's own fields via the setup `fields` map -
  * factory SCHEME.md §2.10), emits the durable activation proof (the module's own string, via
@@ -36,21 +52,6 @@
  * own plain-fs exemption, and the chunk vocabulary arrives through the waterfall, not through an
  * import.
  */
-import type { Context, Events } from "@deepseek-ai/cordis";
-import type { GenerateOptions, StreamChunk } from "@deepseek-ai/dsh-llm";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-
-import Command, {
-	type CommandsService,
-	type ConfigEditorService,
-	type SettingsService,
-} from "./Command.js";
-import Normalize from "./Normalize.js";
-import Overpass from "./Overpass.js";
-import StepBatch from "./StepBatch.js";
-
 export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
 	// augmentation; guaranteed present by the inject declaration).

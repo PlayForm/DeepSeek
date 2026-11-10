@@ -1,16 +1,23 @@
-// Source/Test/Telemetry/Test.ts - THE TELEMETRY THE LOG ALREADY CARRIES
-// (Documentation/Plans/COST-TRACK-PLUGIN.md section 17.4): one session's
-// records walked in order - the assistant/attempt events between a step/start
-// and the assistant/message counted as the retry count, the step-to-message
-// distance as the latency, the first stream record's time0 as the perceived
-// first-token latency (null when the stream is empty or the field is
-// absent), the utilization as the surface over the context window (null when
-// the window is absent) - and an unknown shape never throws.
 import assert from "node:assert/strict";
 
 import Telemetry from "../../../Target/Function/Telemetry.js";
 import { Check, Finish, MakeCounter } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE TELEMETRY THE LOG ALREADY CARRIES (Documentation/Plans/COST-TRACK-PLUGIN.md
+ * section 17.4), proved over one session's records walked in order.
+ *
+ * @remarks
+ *
+ * The assistant/attempt events between a step/start and the assistant/message count
+ * as the retry count, the step-to-message distance is the latency, the first
+ * stream record's time0 is the perceived first-token latency (null when the stream
+ * is empty or the field is absent), the utilization is the surface over the
+ * context window (null when the window is absent) - and an unknown shape never
+ * throws.
+ */
 // One step start and one assistant message, hand-built the way the session
 // log carries them (the timestamp under the record's data).
 const Step = { type: "step/start", data: { time: 1000 } };

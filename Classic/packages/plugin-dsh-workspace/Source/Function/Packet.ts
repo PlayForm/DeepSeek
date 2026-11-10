@@ -1,3 +1,9 @@
+import Role from "@Function/Role.js";
+import type { Edge, Node, WorkspaceGraph } from "@Interface/Graph.js";
+import type { PacketView } from "@Interface/Packet.js";
+import type { NodeRow } from "@Interface/Query.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Packet
  *
@@ -5,6 +11,7 @@
  * rank the neighbors, and estimate the tokens against the budget.
  *
  * @remarks
+ *
  * V4-1 §3.5. The packet is the orient step of the orient -> drill -> act loop;
  * it carries the version always, so a stale view is detectable.
  *
@@ -18,12 +25,6 @@
  * - The token estimate is characters / tokenCharsPerToken - no token counter is
  *   injected in v0; the budget enforcement is honest about being an estimate.
  */
-import Role from "@Function/Role.js";
-import type { Edge, Node, WorkspaceGraph } from "@Interface/Graph.js";
-import type { PacketView } from "@Interface/Packet.js";
-import type { NodeRow } from "@Interface/Query.js";
-import type State from "@Interface/State.js";
-
 /**
  * The edge-kind strength rank (higher wins; W1 has these two kinds).
  */

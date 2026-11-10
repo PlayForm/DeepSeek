@@ -1,3 +1,5 @@
+import { Quotes, ReplaceMap } from "@playform/lib-dsh-core";
+
 /**
  * @module Replace
  *
@@ -5,6 +7,7 @@
  * replacer, pinned to its table: the THIN DELEGATE.
  *
  * @remarks
+ *
  * The mechanism (the per-call regex built from the mapping's keys as
  * code-point escapes, the function replacer, the `{ text, count }` contract)
  * lives in @playform/lib-dsh-core's Normalize/ReplaceMap; this file supplies
@@ -16,6 +19,4 @@
  * installed as a directory link there); the flavor is a table plus a closure,
  * not a fork of the dispatch.
  */
-import { Quotes, ReplaceMap } from "@playform/lib-dsh-core";
-
 export default (Text: string): { text: string; count: number } => ReplaceMap(Text, Quotes);

@@ -1,3 +1,17 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
+import type Config from "@Interface/Config.js";
+import type { GraphEntry } from "@Interface/Graph.js";
+import type WorkspaceGraph from "@Interface/Graph.js";
+import type { Candidate, Intent } from "@Interface/Pack.js";
+import type { AgentMemory } from "@Interface/State.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+import Version from "@Variable/Version.js";
+
+import Detect, { Compile } from "./Detect.js";
+import BuildNote, { Prepend } from "./Note.js";
+
 /**
  * @module Apply
  *
@@ -6,6 +20,7 @@
  * listeners.
  *
  * @remarks
+ *
  * The graph-suggester's special step: the candidate list comes from the WORKSPACE GRAPH SERVICE
  * (`ctx.workspaceGraph.neighborhood(anchor, limit)`) - the instantiated connected component with
  * the ANCHOR EXCLUDED (the importers, the dependencies, the tests, the doc block) - and from
@@ -46,20 +61,6 @@
  * the graph service first; a runtime absence still routes through the abstention path, never
  * through a throw into the waterfall. The function returns NOTHING.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
-import type Config from "@Interface/Config.js";
-import type { GraphEntry } from "@Interface/Graph.js";
-import type WorkspaceGraph from "@Interface/Graph.js";
-import type { Candidate, Intent } from "@Interface/Pack.js";
-import type { AgentMemory } from "@Interface/State.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-import Version from "@Variable/Version.js";
-
-import Detect, { Compile } from "./Detect.js";
-import BuildNote, { Prepend } from "./Note.js";
-
 /**
  * The graph intents' confidence floor (the retired pack's floor, kept as the gate).
  */

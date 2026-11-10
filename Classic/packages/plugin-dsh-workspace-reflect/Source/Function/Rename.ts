@@ -1,3 +1,14 @@
+import Carry from "@Function/Carry.js";
+import Deepened from "@Function/Deepened.js";
+import Observe from "@Function/Observe.js";
+import Publish from "@Function/Publish.js";
+import Semantics from "@Function/Semantics.js";
+import Textual from "@Function/Textual.js";
+import type { Operation } from "@Interface/Operation.js";
+import type Reply from "@Interface/Reply.js";
+import type State from "@Interface/State.js";
+import { Decide } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Rename
  *
@@ -5,6 +16,7 @@
  * AST-aware rename across the affected references.
  *
  * @remarks
+ *
  * THE SEMANTICS SERVICE FIRST: when `ctx.workspaceSemantics` is present
  * (probed, never injected - `Function/Semantics`), the rename asks it for the
  * scope-resolved plan and applies the plan's edits inside the operation's
@@ -20,17 +32,6 @@
  * unchanged file. The publish goes through `Function/Publish` (the version
  * fence; a file that moved under the op yields a conflict).
  */
-import Carry from "@Function/Carry.js";
-import Deepened from "@Function/Deepened.js";
-import Observe from "@Function/Observe.js";
-import Publish from "@Function/Publish.js";
-import Semantics from "@Function/Semantics.js";
-import Textual from "@Function/Textual.js";
-import type { Operation } from "@Interface/Operation.js";
-import type Reply from "@Interface/Reply.js";
-import type State from "@Interface/State.js";
-import { Decide } from "@playform/plugin-dsh-factory";
-
 const Refuse = (State: State, Path: string, Reason: string): Reply => {
 	State.Factory.Append(State, `rejected ${Path} (${Reason})`);
 	return { status: "rejected", detail: Reason, version: undefined };

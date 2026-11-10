@@ -1,17 +1,18 @@
+import assert from "node:assert/strict";
+
+import { Check, Finish, MakeCounter, Packet } from "../Harness.js";
+
 /**
  * @module Test
  *
  * The Packet unit smoke: the orientation-packet renderer.
  *
  * @remarks
+ *
  * The folder covers the full eight-line grammar byte-exact, the `(none)`
  * placeholders for absent bands, the omitted FOCUS and STALE lines, and the
  * STALE-only-on-difference rule.
  */
-import assert from "node:assert/strict";
-
-import { Check, Finish, MakeCounter, Packet } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

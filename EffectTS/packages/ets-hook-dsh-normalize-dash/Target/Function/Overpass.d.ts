@@ -1,3 +1,5 @@
+import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
+import type State from "../Interface/State.js";
 /**
  * @module Overpass
  *
@@ -5,6 +7,7 @@
  * (@playform/ets-base-dsh/Overpass/ToolResults).
  *
  * @remarks
+ *
  * The generic machinery (next() first, the tool-results scope gate, the
  * exemption list, the accepted/non-value decision rules, the content basis,
  * the text-only block rewrite, the CCR marker guard, the fail-open, the
@@ -26,8 +29,6 @@
  * Function/Apply's `{ prepend: true }` registration and the import path stay
  * untouched.
  */
-import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
-import type State from "../Interface/State.js";
 /**
  * The schema-default scopes (the fallback for a hand-built config).
  */

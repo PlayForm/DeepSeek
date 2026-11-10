@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import ClientApply from "@Function/Client.js";
+
 /**
  * @module Client
  *
@@ -5,6 +8,7 @@
  * `inject` and the named `apply(ctx)` wiring.
  *
  * @remarks
+ *
  * The built `./client` export; the module system serves it as a lazy-CJS
  * factory. The body lives in `Function/Client.ts` - this entry is wiring only.
  *
@@ -13,9 +17,6 @@
  * export default { inject, apply };
  * ```
  */
-import type { Context } from "@deepseek-ai/cordis";
-import ClientApply from "@Function/Client.js";
-
 /**
  * Required client service: the harness's Remote gateway face.
  */

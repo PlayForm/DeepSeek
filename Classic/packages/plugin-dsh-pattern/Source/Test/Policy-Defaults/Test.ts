@@ -1,17 +1,20 @@
+import assert from "node:assert/strict";
+
+import { Check, Finish, Make, MakeCounter, PatternService } from "../Harness.js";
+
 /**
  * @module Test
  *
  * Exercises THE POLICY BLOCK (D6) on the pattern service.
  *
  * @remarks
+ *
  * Covers the shared block's defaults in the schema and in the service's knobs (`Knobs.policy`), the
  * override, and the registry's read/record posture.
  */
-import assert from "node:assert/strict";
-
-import { Check, Finish, Make, MakeCounter, PatternService } from "../Harness.js";
-
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",

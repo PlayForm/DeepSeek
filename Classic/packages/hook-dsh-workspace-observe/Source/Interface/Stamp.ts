@@ -5,6 +5,7 @@
  * fs/observed event (or manual call).
  *
  * @remarks
+ *
  * The stamp carries the path, the version observed at the event, the origin,
  * and the hook's own monotonic sequence.
  *

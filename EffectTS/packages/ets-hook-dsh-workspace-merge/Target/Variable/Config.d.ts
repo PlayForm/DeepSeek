@@ -1,9 +1,11 @@
+import Schema from "@deepseek-ai/schemastery";
 /**
  * @module Config
  *
  * The hook's Schemastery Config schema: one constant built once at load.
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills
  * every default, so invalid configuration fails LOUD at load. The shape
  * this schema produces is Interface/Config.ts; the contract is MERGE.md.
@@ -18,7 +20,6 @@
  *
  * `enabled` defaults to FALSE - the IDLE-forever posture.
  */
-import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     log: Schema<boolean, boolean, "volatile-defined">;
     logFile: Schema<string, string, "volatile-defined">;

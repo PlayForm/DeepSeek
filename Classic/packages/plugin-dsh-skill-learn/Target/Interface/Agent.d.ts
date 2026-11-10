@@ -1,9 +1,11 @@
+import type Message from "./Message.js";
 /**
  * @module Agent
  *
  * The STRUCTURAL live-agent shape the review reads, and nothing more.
  *
  * @remarks
+ *
  * TAKEN FROM `@deepseek-ai/dsh-agent`'s own declarations, which this package cannot
  * import (`@deepseek-ai/dsh-skill` is not installed, so the harness's skill types are
  * unavailable and every harness shape in this tree is declared structurally):
@@ -29,16 +31,21 @@
  * rather than awaiting it: the synchronous throw is the `busy` outcome, and an awaited
  * rejection would arrive too late to tell the two apart.
  */
-import type Message from "./Message.js";
 export default interface Agent {
-    /** The session-backed agent identity the ledger row records as evidence. */
+    /**
+     * The session-backed agent identity the ledger row records as evidence.
+     */
     readonly id: string;
-    /** The route this agent's requests use; both fields may be absent. */
+    /**
+     * The route this agent's requests use; both fields may be absent.
+     */
     readonly options: {
         readonly provider?: string;
         readonly model?: string;
     };
-    /** The live session; its derived history is the only transcript this plugin reads. */
+    /**
+     * The live session; its derived history is the only transcript this plugin reads.
+     */
     readonly session: {
         /**
          * The derived model-visible history (`dsh-session/lib/types/index.d.ts:347`),
@@ -48,13 +55,17 @@ export default interface Agent {
          */
         deriveMessages(): readonly Message[];
     };
-    /** The lifecycle state; only `idle` opens the maintenance phase. */
+    /**
+     * The lifecycle state; only `idle` opens the maintenance phase.
+     */
     readonly status: "idle" | "running";
     /**
      * Run one non-turn task from the true idle phase, with a signal aborted by
      * `cancel`. Throws synchronously when a turn or another task owns the agent.
      */
     runMaintenance<Result>(task: (signal: AbortSignal) => Promise<Result>): Promise<Result>;
-    /** Resolve after the current whole-agent activity reaches quiescence. */
+    /**
+     * Resolve after the current whole-agent activity reaches quiescence.
+     */
     whenIdle(): Promise<void>;
 }

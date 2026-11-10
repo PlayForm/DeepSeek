@@ -1,9 +1,12 @@
+import Strip from "./Strip.js";
+
 /**
  * @module Block
  *
  * The generic block-end normalizer: the assembled block carried by a `block-end` chunk.
  *
  * @remarks
+ *
  * The chunk carries the FULLY-ASSEMBLED block - the deltas AND the block must agree, or
  * consumers see inconsistencies between the live stream view and every assembler/replay
  * consumer. A content block is normalized field-wise:
@@ -73,8 +76,6 @@
  * is the raw-marker strip above: it may rewrite `arguments` while keeping `count: 0` -
  * marker removal is not normalization, so the ledger must not count it.
  */
-import Strip from "./Strip.js";
-
 type BlockShape =
 	| { type: "text"; text: string }
 	| { type: "reasoning"; text?: string | undefined }

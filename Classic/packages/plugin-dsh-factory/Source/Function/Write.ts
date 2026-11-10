@@ -1,3 +1,9 @@
+import { dirname as Parent } from "node:path";
+
+import type { FsTarget, FsWriteIntent, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
+import type { SandboxExecutionPolicy } from "@deepseek-ai/dsh-sandbox";
+import type State from "@Interface/State.js";
+
 /**
  * @module Write
  *
@@ -6,6 +12,7 @@
  * GUARDED ALIAS).
  *
  * @remarks
+ *
  * It owns the shared tail of the harness's built-in `write` pipeline
  * (subsystems/filesystem.md: resolve -> fs/write-intent waterfall ->
  * sandbox policy -> writeText -> fs/observed) for every family-side write:
@@ -61,26 +68,26 @@
  * The factory logs nothing here - the caller composes its own ledger line
  * from the outcome.
  */
-import { dirname as Parent } from "node:path";
-
-import type { FsTarget, FsWriteIntent, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
-import type { SandboxExecutionPolicy } from "@deepseek-ai/dsh-sandbox";
-import type State from "@Interface/State.js";
-
-/** The option bundle: what the caller adds on top of the shared pipeline. */
+/**
+ * The option bundle: what the caller adds on top of the shared pipeline.
+ */
 export interface Over {
 	/** An explicit intent skips the waterfall; `{ waterfall: true }` (the
 	 *  default) runs the fs/write-intent waterfall, `next() => undefined`. */
 	intent?: FsWriteIntent | { waterfall: true };
 
-	/** Forwarded to `writeText` end to end. */
+	/**
+	 * Forwarded to `writeText` end to end.
+	 */
 	signal?: AbortSignal | undefined;
 
 	/** `"standing"` (default): the built-in's no-escalation replica. `"p4"`:
 	 *  the sandbox-mode-decided per-call fence. Or an explicit policy. */
 	policy?: "standing" | "p4" | SandboxExecutionPolicy | undefined;
 
-	/** The fs/observed and fs/write-intent actor (the tool's `exec`). */
+	/**
+	 * The fs/observed and fs/write-intent actor (the tool's `exec`).
+	 */
 	actor?: object | undefined;
 
 	/** Emit `fs/observed { kind: "present", version }` after success
@@ -91,7 +98,9 @@ export interface Over {
 	 *  false - the guarded path's idempotence gate). */
 	stash?: boolean;
 
-	/** The caller's content step, applied before the write. */
+	/**
+	 * The caller's content step, applied before the write.
+	 */
 	transform?: (content: string) => string;
 }
 

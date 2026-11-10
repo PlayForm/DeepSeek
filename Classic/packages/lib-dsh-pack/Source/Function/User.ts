@@ -9,9 +9,9 @@ import Placement from "../Variable/Placement.js";
  * `.yaml`, then `.json`.
  *
  * @remarks
+ *
  * The JSON form needs no YAML parser.
  */
-
 export default (Slug: string, Home: string): string[] =>
 	Placement.Extensions.map((Extension) =>
 		join(Home, Placement.UserDirectory, `${Slug}${Extension}`),

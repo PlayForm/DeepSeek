@@ -1,9 +1,18 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import { fileURLToPath } from "node:url";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
  * The shared test harness for the TEST-SUGGESTER tests.
  *
  * @remarks
+ *
  * Combines the fake ctx (ctx listener capture, reflect.provide capture, the effect runner, the
  * logger capture, the fs capture that must stay untouched, the distinct root seam, the optional
  * `inject` seam) with the fake `sessionProjections` registry (register + stateOf + the eager
@@ -25,14 +34,6 @@
  *
  * NO FAKE CLOCK: the plugin has no clock dependency at all.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import { fileURLToPath } from "node:url";
-import Plugin from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 export { Plugin };
 
 /**
@@ -220,7 +221,9 @@ const MakeProjections = () => {
 		stateOf: StateOf,
 	};
 
-	/** Fold ONE committed event through every registered unit (the eager drive). */
+	/**
+	 * Fold ONE committed event through every registered unit (the eager drive).
+	 */
 	const Commit = (Session: any, Event: any): void => {
 		for (const [Key, Unit] of Units) {
 			const Next = Unit.apply(StateOf(Session, Key), Event);

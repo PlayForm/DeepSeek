@@ -1,3 +1,7 @@
+import assert from "node:assert/strict";
+
+import { Check, Finish, Library, MakeCounter } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,13 +9,12 @@
  * replace, and the section objects merge key by key.
  *
  * @remarks
+ *
  * Pure object fixtures: no filesystem.
  */
-import assert from "node:assert/strict";
-
-import { Check, Finish, Library, MakeCounter } from "../Harness.js";
-
-/** One family row with the given priority/threshold/targets. */
+/**
+ * One family row with the given priority/threshold/targets.
+ */
 const Family = (Priority: number, Threshold: number, Targets: Library.Target[], Rule = "rule") => ({
 	id: "Plan",
 	priority: Priority,
@@ -22,7 +25,9 @@ const Family = (Priority: number, Threshold: number, Targets: Library.Target[], 
 	targets: Targets,
 });
 
-/** One target row. */
+/**
+ * One target row.
+ */
 const Target = (Path: string, Reason: string): Library.Target => ({
 	path: Path,
 	kind: "doc",

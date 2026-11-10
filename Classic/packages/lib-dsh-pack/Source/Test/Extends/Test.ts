@@ -1,3 +1,7 @@
+import assert from "node:assert/strict";
+
+import { Check, Finish, Library, MakeCounter, Put, Tree } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,13 +9,12 @@
  * a cycle, a self-cycle, a missing link and an array of bases.
  *
  * @remarks
+ *
  * The repo layer always overrides its bases; a base already visited is merged once.
  */
-import assert from "node:assert/strict";
-
-import { Check, Finish, Library, MakeCounter, Put, Tree } from "../Harness.js";
-
-/** The repo layer: the slug, the signature and the extends link. */
+/**
+ * The repo layer: the slug, the signature and the extends link.
+ */
 const Repo = (Extends: string, Family = ""): string =>
 	`slug: repo
 signature:
@@ -19,7 +22,9 @@ signature:
 extends: ${Extends}
 ${Family}`;
 
-/** One base pack with one doc/Plan target. */
+/**
+ * One base pack with one doc/Plan target.
+ */
 const Pack = (Extends: string, Path: string, Priority: number): string =>
 	`${Extends === "" ? "" : `extends: ${Extends}\n`}families:
   "doc/Plan":

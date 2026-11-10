@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * Exercises the bind path and the human decision paths.
- *
- * @remarks
- * Covers the exact candidate binding (the pending record, the byte-exact bound line, the sequence),
- * the identity and constraint rejections, the bounded ring with its byte-exact capped line, the
- * approve/deny/revoke transitions with their byte-exact lines, the refused transitions, the
- * constraints-changed rejection, and the service read surface.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -23,7 +12,21 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount with overrides. */
+/**
+ * @module Test
+ *
+ * Exercises the bind path and the human decision paths.
+ *
+ * @remarks
+ *
+ * Covers the exact candidate binding (the pending record, the byte-exact bound line, the sequence),
+ * the identity and constraint rejections, the bounded ring with its byte-exact capped line, the
+ * approve/deny/revoke transitions with their byte-exact lines, the refused transitions, the
+ * constraints-changed rejection, and the service read surface.
+ */
+/**
+ * A standard enabled mount with overrides.
+ */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));

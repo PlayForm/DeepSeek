@@ -7,6 +7,7 @@ export default _default;
  * CORE's generic per-chunk dispatch with the transform INJECTED.
  *
  * @remarks
+ *
  * The dispatch structure (which chunk types, which fields, the identity
  * passthroughs, the reasoning gate, the tool-args gate - three-way since the
  * edit exemption and the per-call raw marker: a delta whose `name` is "edit"

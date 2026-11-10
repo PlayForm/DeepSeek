@@ -8,6 +8,7 @@ import Sheet from "../Stylesheet/Plugin.scss";
  * The stylesheet mount for the client bundle.
  *
  * @remarks
+ *
  * `Inject` registers the package's own stylesheet under the package
  * identifier, so the plugin's sheet ships with the bundle entry only.
  */

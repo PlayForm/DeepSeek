@@ -1,3 +1,6 @@
+import assert from "node:assert/strict";
+import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +8,7 @@
  * singular smoke.
  *
  * @remarks
+ *
  * The test covers the error paths: a missing file, a binary/undecodable
  * target, and a pre-aborted signal all reject with the tool's context prefix
  * (keeping the backend's error code) and produce no write and no journal
@@ -21,9 +25,6 @@
  * The unit smoke runs the fake ctx + the real factory + the real
  * normalize-file apply, from the Harness.
  */
-import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

@@ -1,19 +1,3 @@
-/**
- * @module Test
- *
- * One singular test of the governor's apply-time wiring and its activation
- * proof.
- *
- * @remarks
- * apply returns nothing, the state probe, the factory-built state fields, the
- * fresh machinery collections, the Attach P1/P2/P5 effects, and the activation:
- * the P5 record drained into the opened domain + the durable proof line
- * byte-identical.
- *
- * Runs standalone (`node Target/Test/State-And-Activation/Test.js`) AND under
- * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
- * `@playform/hook-dsh-package-governor`.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -35,6 +19,23 @@ import {
 } from "../Harness.js";
 import Governor from "../../../Target/Library.js";
 
+/**
+ * @module Test
+ *
+ * One singular test of the governor's apply-time wiring and its activation
+ * proof.
+ *
+ * @remarks
+ *
+ * apply returns nothing, the state probe, the factory-built state fields, the
+ * fresh machinery collections, the Attach P1/P2/P5 effects, and the activation:
+ * the P5 record drained into the opened domain + the durable proof line
+ * byte-identical.
+ *
+ * Runs standalone (`node Target/Test/State-And-Activation/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * `@playform/hook-dsh-package-governor`.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

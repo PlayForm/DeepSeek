@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * The wiring and the service surface: the loader contract, the IDLE-forever cold mount, the
- * activation proof, the absence of any listener or storage effect, the fail-loud validation, and
- * the service's dispatch surface.
- *
- * @remarks
- * `apply` returns nothing. Even when enabled the mount registers no listener and no storage
- * effect, because the ops are request/response over the service.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -22,6 +11,18 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The wiring and the service surface: the loader contract, the IDLE-forever cold mount, the
+ * activation proof, the absence of any listener or storage effect, the fail-loud validation, and
+ * the service's dispatch surface.
+ *
+ * @remarks
+ *
+ * `apply` returns nothing. Even when enabled the mount registers no listener and no storage
+ * effect, because the ops are request/response over the service.
+ */
 /** A standard enabled mount. The D6 policy gate is OPENED here (`write: auto`)
  *  because this folder exercises the operations; the shipped `write: approve`
  *  is arbitrated by `Source/Test/Policy-Defaults`. */

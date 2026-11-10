@@ -1,3 +1,9 @@
+import type Adapter from "./Adapter.js";
+import type Deepening from "./Deepening.js";
+import type DomainHandle from "./Domain.js";
+import type FactoryHandle from "./Factory.js";
+import type Model from "./Model.js";
+import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
 /**
  * @module State
  *
@@ -5,6 +11,7 @@
  * own fields.
  *
  * @remarks
+ *
  * The shared factory shape is Context, Module, Enabled/Ledger/List, the
  * machinery maps, and the P10 volatile refresh the factory's State builder
  * registers.
@@ -14,21 +21,19 @@
  * identity lives in the package name and the `name` export
  * (plugin-dsh-workspace-semantics).
  */
-import type Adapter from "./Adapter.js";
-import type Deepening from "./Deepening.js";
-import type DomainHandle from "./Domain.js";
-import type FactoryHandle from "./Factory.js";
-import type Model from "./Model.js";
-import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
 interface Extra {
-    /** The master switch (config `enabled` - the IDLE-forever posture). */
+    /**
+     * The master switch (config `enabled` - the IDLE-forever posture).
+     */
     On: boolean;
     /**
      * Config `domain` - the KV domain NAME (volatile). Named DomainName to stay clear of
      * the factory's shared `Domain` handle field.
      */
     DomainName: string;
-    /** Config `maxEntries` - the index bound (volatile). */
+    /**
+     * Config `maxEntries` - the index bound (volatile).
+     */
     MaxEntries: number;
     /**
      * The per-action allowlist (config `policy`, volatile) - the D6 block. Named `Allow`
@@ -52,20 +57,30 @@ interface Extra {
      * TypeScript/JavaScript extensions only.
      */
     AdapterNames: string[];
-    /** The injected factory instance (the State builder, the ledger, the match, the Wire). */
+    /**
+     * The injected factory instance (the State builder, the ledger, the match, the Wire).
+     */
     Factory: FactoryHandle;
-    /** The injected `fs` facility (readText for the lazy model build). */
+    /**
+     * The injected `fs` facility (readText for the lazy model build).
+     */
     Fs: unknown;
-    /** The built models, keyed by path (the index). */
+    /**
+     * The built models, keyed by path (the index).
+     */
     Index: Map<string, Model>;
-    /** The service's own monotonic index revision (never a wall clock). */
+    /**
+     * The service's own monotonic index revision (never a wall clock).
+     */
     Revision: number;
     /**
      * The adapter registry, keyed by extension (with dot, lowercase) or by exact basename
      * (the file adapters).
      */
     Adapters: Map<string, Adapter>;
-    /** The deepener registry, keyed by extension (with dot, lowercase). */
+    /**
+     * The deepener registry, keyed by extension (with dot, lowercase).
+     */
     Deepenings: Map<string, Deepening>;
     /**
      * The open storage domain handle; `undefined` while pending, after a silent skip

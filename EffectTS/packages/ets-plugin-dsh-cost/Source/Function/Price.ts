@@ -100,6 +100,7 @@ const Product = (
  * tier's window, priced at that tier's rate and summed.
  *
  * @remarks
+ *
  * A tier with a NULL TierTo is the open top tier and takes everything above
  * its floor; the walk never prices a token twice, because the windows tile
  * the axis.

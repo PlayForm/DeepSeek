@@ -1,3 +1,7 @@
+import type CostBuckets from "@Interface/Buckets.js";
+import type CostFile from "@Interface/File.js";
+import type CostTokens from "@Interface/Tokens.js";
+
 /**
  * @module Call
  *
@@ -6,14 +10,11 @@
  * the per-file money and touches folded into `files`.
  *
  * @remarks
+ *
  * The shape follows Design.md section 9.4. `tokens.total` and `cost.other` are
  * computed by the reader. The v4 telemetry is carried as nullable because the
  * live ledger leaves it NULL and no column renders it.
  */
-import type CostBuckets from "@Interface/Buckets.js";
-import type CostFile from "@Interface/File.js";
-import type CostTokens from "@Interface/Tokens.js";
-
 export default interface CostCall {
 	/**
 	 * The conversation turn the call ran in.

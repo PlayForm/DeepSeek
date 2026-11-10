@@ -1,3 +1,5 @@
+import type State from "../Interface/State.js";
+import { type CommandResult, type ConfigEditorService, type SettingsService } from "@playform/lib-dsh-core";
 /**
  * @module Command
  *
@@ -6,6 +8,7 @@
  * scope).
  *
  * @remarks
+ *
  * Every non-files branch delegates to the core's generic handler
  * (@playform/lib-dsh-core/Overpass/Command) - the grammar, the `scopes`
  * report, the `batch` one-shot arm, the `results on|off` settings/editor paths
@@ -23,8 +26,6 @@
  * Function/Apply. The service types are re-exported because Function/Apply
  * imports them from this module (the import path stays untouched).
  */
-import type State from "../Interface/State.js";
-import { type CommandResult, type ConfigEditorService, type SettingsService } from "@playform/lib-dsh-core";
 export type { CommandResult, CommandsService, ConfigEditorService, SettingsService, } from "@playform/lib-dsh-core";
 /**
  * The structural CommandInvocation: only the fields the handler reads.

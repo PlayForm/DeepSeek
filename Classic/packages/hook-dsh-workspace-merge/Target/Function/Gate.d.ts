@@ -1,9 +1,13 @@
+import type { FsTarget } from "@deepseek-ai/dsh-fs";
+import type Operation from "../Interface/Operation.js";
+import type State from "../Interface/State.js";
 /**
  * @module Gate
  *
  * THE ATOMIC GATES: the preflight that runs before ANY write.
  *
  * @remarks
+ *
  * Every gate failure rejects the whole batch (in all-or-nothing
  * mode) or is reported per-file (survivors mode) - the gate never lets a
  * partial batch start silently.
@@ -18,9 +22,6 @@
  *      observed version (a fence mismatch is a conflict; in
  *      all-or-nothing mode any conflict rejects the whole batch).
  */
-import type { FsTarget } from "@deepseek-ai/dsh-fs";
-import type Operation from "../Interface/Operation.js";
-import type State from "../Interface/State.js";
 /**
  * One gated file: the operation's path, the resolved write target, and the
  * version fence.

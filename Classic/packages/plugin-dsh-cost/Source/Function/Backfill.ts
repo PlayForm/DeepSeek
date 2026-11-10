@@ -1,3 +1,11 @@
+import type { DatabaseSync } from "node:sqlite";
+
+import type { Context } from "@deepseek-ai/cordis";
+
+import type Config from "../Interface/Config.js";
+import Capture from "./Capture.js";
+import Drain from "./Drain.js";
+
 /**
  * @module Backfill
  *
@@ -6,6 +14,7 @@
  * backfilled session lands the same rows a live session would.
  *
  * @remarks
+ *
  * The walk follows `Documentation/Plans/COST-TRACK-PLUGIN.md` section 6. On
  * first run the ledger is empty and every past conversation is unpriced, so the
  * walk reads the session-history query service (probed with ctx.get - the
@@ -27,14 +36,6 @@
  * booked, so the normal fold already covers the whole log and no prefix is
  * replayed.
  */
-import type { DatabaseSync } from "node:sqlite";
-
-import type { Context } from "@deepseek-ai/cordis";
-
-import type Config from "../Interface/Config.js";
-import Capture from "./Capture.js";
-import Drain from "./Drain.js";
-
 // One raw session-log event: the fields the drain folds.
 type EventRecord = { type?: unknown; data?: unknown; seq?: unknown; time?: unknown };
 

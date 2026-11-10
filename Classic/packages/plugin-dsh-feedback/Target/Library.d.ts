@@ -4,6 +4,45 @@ import type Config from "./Interface/Config.js";
 import type Outcome from "./Interface/Outcome.js";
 import type Summary from "./Interface/Summary.js";
 import Version from "./Variable/Version.js";
+/**
+ * @module Library
+ *
+ * The entry module of the FEEDBACK member (@playform/plugin-dsh-feedback,
+ * ctx.feedback), the fourth orchestration member
+ * (Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md).
+ *
+ * @remarks
+ *
+ * Class form (the factory's precedent): `export default class Feedback extends
+ * Service` with `super(Context, "feedback")`, registered immediately on
+ * construction and removed with its owning fiber; `static inject` declares
+ * nothing beyond the plugin's own needs (the feedback member is a NON-MANIFEST
+ * module - no fs/observed machinery, no waterfall listeners).
+ *
+ * THE SERVICE SURFACE (ctx.feedback - every signature documented in README.md
+ * / SCHEME.md):
+ *
+ * - Record(block) - store a block in the session's record + journal it
+ * - Push(block, parentSession) - the mechanical transfer hop through the
+ *   parentage
+ * - Delta(session, agentId, text) - the parent's append (never an edit)
+ * - Read(session, agentId, reader) - the recipient's OPTIONAL read (never
+ *   forced)
+ * - Summary(session) - the council view: the aggregate signals
+ * - Outcome(session, agentId, proposal, outcome, detail) - the batch outcome's
+ *   journal + summary record (the caller-side orchestration integration)
+ *
+ * THE HONESTY POLICY (plan section 6): the honest content is NEVER sanitized
+ * or filtered - the parents append deltas, NEVER rewrite the agents' signals.
+ * The read is ALWAYS the recipient's choice. The user's override wins.
+ *
+ * THE TRANSFER MECHANISM (plan section 4.1): the block travels as TEXT through
+ * the inbox machinery - a child's completion report carries the block, the
+ * parent's session/event listener sees the splice and records it WITHOUT
+ * reading it into the conversation; each session boundary adds one hop to the
+ * TRANSFERRED chain. The queue integration (end-phase) can also call Push
+ * directly.
+ */
 declare const BLOCK = "[HONEST FEEDBACK";
 export default class Feedback extends Service {
     static inject: string[];

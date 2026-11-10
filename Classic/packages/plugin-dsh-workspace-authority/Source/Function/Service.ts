@@ -1,9 +1,24 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type Capability from "@Interface/Capability.js";
+import type Lease from "@Interface/Lease.js";
+import type Residency from "@Interface/Residency.js";
+import type State from "@Interface/State.js";
+
+import Acquire from "./Acquire.js";
+import Authorize from "./Authorize.js";
+import Evict from "./Evict.js";
+import Grant from "./Grant.js";
+import Release from "./Release.js";
+import Residence from "./Residence.js";
+import Revoke from "./Revoke.js";
+
 /**
  * @module Service
  *
  * The `workspaceAuthority` service class, extending the cordis Service base.
  *
  * @remarks
+ *
  * It is REGISTERED FROM APPLY (the loader contract for the object-form plugin:
  * apply constructs the service; the Service base constructor calls
  * `ctx.reflect.provide("workspaceAuthority", this)`, so `ctx.workspaceAuthority`
@@ -21,20 +36,6 @@
  *   (keep/defer/evict/discard/promote);
  * - `statistics()` - the counts.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type Capability from "@Interface/Capability.js";
-import type Lease from "@Interface/Lease.js";
-import type Residency from "@Interface/Residency.js";
-import type State from "@Interface/State.js";
-
-import Acquire from "./Acquire.js";
-import Authorize from "./Authorize.js";
-import Evict from "./Evict.js";
-import Grant from "./Grant.js";
-import Release from "./Release.js";
-import Residence from "./Residence.js";
-import Revoke from "./Revoke.js";
-
 export default class WorkspaceAuthority extends Service {
 	/**
 	 * The apply-built state the methods read and write.

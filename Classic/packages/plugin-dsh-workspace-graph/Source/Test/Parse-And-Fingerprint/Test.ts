@@ -1,9 +1,15 @@
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { Check, Finish, MakeCounter, MakeGraph } from "../Harness.js";
+
 /**
  * @module Test
  *
  * The v0 parser against the committed fixtures.
  *
  * @remarks
+ *
  * The suite covers the exact node set and spans for the TypeScript fixture (A4),
  * the span containment invariants, the contains edges, the relative-import edge
  * with the skipped non-relative specifier, the Markdown DocSections with the
@@ -13,10 +19,6 @@
  * Unit smoke of `@playform/plugin-dsh-workspace-graph`: the fake ctx + the REAL
  * built class, from the Harness.
  */
-import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
-import { Check, Finish, MakeCounter, MakeGraph } from "../Harness.js";
 // The committed fixtures, read from the Source tree (the fixtures are part of
 // the test folder; the Target only carries the compiled tests).
 const FIXTURE_TS = readFileSync(

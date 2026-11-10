@@ -56,6 +56,7 @@ import type FileCallRow from "@Interface/FileCallRow.js";
  * to the per-call touch.
  *
  * @remarks
+ *
  * TouchRow is the same collapse on the touch side: the touch count is the
  * evidence flag and the stage is the call's own stage word - the greatest
  * name when one call recorded more than one touch of the file, so the row

@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * Exercises THE POLICY BLOCK (D6) on the workspace-govern hook.
- *
- * @remarks
- * Covers the shared block's defaults in the schema under the `automation` key (this hook's `policy`
- * is the decision rule table) and on the built State (`Allow` - the factory's shared `Policy` is
- * the global policy file path), the override, the package's no-gated-action posture, and the gate
- * decision still proceeding under the shipped defaults with zero file writes.
- */
 import assert from "node:assert/strict";
 
 import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";
@@ -25,7 +14,21 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * @module Test
+ *
+ * Exercises THE POLICY BLOCK (D6) on the workspace-govern hook.
+ *
+ * @remarks
+ *
+ * Covers the shared block's defaults in the schema under the `automation` key (this hook's `policy`
+ * is the decision rule table) and on the built State (`Allow` - the factory's shared `Policy` is
+ * the global policy file path), the override, the package's no-gated-action posture, and the gate
+ * decision still proceeding under the shipped defaults with zero file writes.
+ */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",

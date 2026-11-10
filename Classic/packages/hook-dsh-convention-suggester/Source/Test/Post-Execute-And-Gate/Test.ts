@@ -1,20 +1,3 @@
-/**
- * @module Test
- *
- * The listener behavior of the convention-suggester against the fake ctx:
- * emit, projection, silence, abstention, gates and reset.
- *
- * @remarks
- * The covered paths are the history emit path (the note built from the
- * session's own previous tool calls, with the byte-exact text, summary and
- * `suggest` ledger lines in both forms), the real projection path (committed
- * `tool/call` events, folded by the registered unit, read back through
- * `stateOf`), the silence path (a non-judged call and a no-history call,
- * which abstains `no-history`), the abstention path (a fully excluded
- * candidate set), the gate paths (cooldown, per-turn cap), the
- * block-decision shape, the per-agent memory isolation, and the
- * agent/pre-step per-turn reset.
- */
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -34,13 +17,37 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The anchor the history is keyed on: the judged call's own path. */
+/**
+ * @module Test
+ *
+ * The listener behavior of the convention-suggester against the fake ctx:
+ * emit, projection, silence, abstention, gates and reset.
+ *
+ * @remarks
+ *
+ * The covered paths are the history emit path (the note built from the
+ * session's own previous tool calls, with the byte-exact text, summary and
+ * `suggest` ledger lines in both forms), the real projection path (committed
+ * `tool/call` events, folded by the registered unit, read back through
+ * `stateOf`), the silence path (a non-judged call and a no-history call,
+ * which abstains `no-history`), the abstention path (a fully excluded
+ * candidate set), the gate paths (cooldown, per-turn cap), the
+ * block-decision shape, the per-agent memory isolation, and the
+ * agent/pre-step per-turn reset.
+ */
+/**
+ * The anchor the history is keyed on: the judged call's own path.
+ */
 const Anchor = "Source/Function/Apply.ts";
 
-/** The two companions the history names, in the fold's score order. */
+/**
+ * The two companions the history names, in the fold's score order.
+ */
 const Companions = ["Source/Library.ts", "README.md"];
 
-/** The history note's byte-exact text (k = 0.60 + 0.05 * 2). */
+/**
+ * The history note's byte-exact text (k = 0.60 + 0.05 * 2).
+ */
 const HistoryText = [
 	"[convention-suggester] intent=History confidence=0.70",
 	"targets (2):",
@@ -49,7 +56,9 @@ const HistoryText = [
 	"note: these files were touched right after this one in this workspace",
 ].join("\n");
 
-/** The byte-exact suggest line the history path appends. */
+/**
+ * The byte-exact suggest line the history path appends.
+ */
 const Suggest = "suggest History 0.70 2 candidates call write";
 
 /**
@@ -66,7 +75,9 @@ const Seed = (Run: any, Id: string): void => {
 	}
 };
 
-/** A judged write call on the anchor path. */
+/**
+ * A judged write call on the anchor path.
+ */
 const Write = (Id: string): any => ({
 	name: "write",
 	arguments: { file_path: Anchor },

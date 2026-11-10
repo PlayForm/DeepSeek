@@ -1,3 +1,6 @@
+import type { Scopes } from "./Config.js";
+import type Factory from "@playform/plugin-dsh-factory";
+import type { State as Shared } from "@playform/plugin-dsh-factory";
 /**
  * @module State
  *
@@ -6,6 +9,7 @@
  * extended with the spaces hook's own fields.
  *
  * @remarks
+ *
  * The shared half comes from the factory's NAMED type export (`State` - the
  * factory v0.1.1 declaration fix): the built Target/Library.d.ts ships
  * RELATIVE specifiers now, so a consumer's tsconfig paths never hijack the
@@ -41,9 +45,6 @@
  * (never a return value from `apply` - the loader treats apply returns
  * specially, a live-verified lesson recorded in the plugin-development skill).
  */
-import type { Scopes } from "./Config.js";
-import type Factory from "@playform/plugin-dsh-factory";
-import type { State as Shared } from "@playform/plugin-dsh-factory";
 export default interface State extends Shared {
     /**
      * The space replacement - the transform's only knob (config

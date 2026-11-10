@@ -1,9 +1,11 @@
+import type { Adapter, Envelope } from "@playform/lib-dsh-trace";
 /**
  * @module Trace
  *
  * The typed view of the `ctx.trace` service the factory provides.
  *
  * @remarks
+ *
  * The emit/on contract is the trace library's `Adapter` (so every plugin's
  * `Source/Trace/` adapter programs against the same shape); the factory adds
  * the service's own seams: `flush` (a settled promise for deterministic
@@ -12,12 +14,17 @@
  * (the unload path: stop dispatch and drop every listener; a late emit is a
  * contained no-op).
  */
-import type { Adapter, Envelope } from "@playform/lib-dsh-trace";
 export default interface Trace extends Adapter {
-    /** The deterministic settle seam: the bus dispatches synchronously, so this resolves at once. */
+    /**
+     * The deterministic settle seam: the bus dispatches synchronously, so this resolves at once.
+     */
     flush(): Promise<void>;
-    /** The bounded ring of recent envelopes, NEWEST first (an optional limit slices the head). */
+    /**
+     * The bounded ring of recent envelopes, NEWEST first (an optional limit slices the head).
+     */
     ring(Limit?: number): Envelope[];
-    /** The unload path: stop dispatch, drop every listener; never throws. */
+    /**
+     * The unload path: stop dispatch, drop every listener; never throws.
+     */
     dispose(): void;
 }

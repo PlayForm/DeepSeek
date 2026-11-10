@@ -1,3 +1,5 @@
+import type Trace from "../Interface/Trace.js";
+export default _default;
 /**
  * @module Trace
  *
@@ -8,6 +10,7 @@
  * separate indexer process and no separate indexer plugin).
  *
  * @remarks
+ *
  * The contract:
  *
  * - `emit(draft)` - complete the envelope through the library's Complete
@@ -28,6 +31,4 @@
  *   late emit or subscription is a contained no-op (the service may be
  *   unmounted while an adapter still holds it).
  */
-import type Trace from "../Interface/Trace.js";
-export default _default;
 declare function _default(): Trace;

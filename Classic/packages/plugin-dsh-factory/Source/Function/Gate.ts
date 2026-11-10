@@ -1,3 +1,12 @@
+import { basename as Base } from "node:path";
+
+import type { FsObservation, FsTarget, FsTargetKey, FsVersion } from "@deepseek-ai/dsh-fs";
+import type ActorView from "@Interface/Actor.js";
+import type Decision from "@Interface/Gate.js";
+import type State from "@Interface/State.js";
+
+import Match from "./Match.js";
+
 /**
  * @module Gate
  *
@@ -5,6 +14,7 @@
  * (`Function/Gate` in the service API).
  *
  * @remarks
+ *
  * Order, exactly as in the trio's `Function/Observe`:
  *
  * 1. the target exists and carries a string displayPath;
@@ -31,15 +41,6 @@
  * (default "Tool" - the State builder's fixed shared mapping) so a module
  * that renamed the field can point at it.
  */
-import { basename as Base } from "node:path";
-
-import type { FsObservation, FsTarget, FsTargetKey, FsVersion } from "@deepseek-ai/dsh-fs";
-import type ActorView from "@Interface/Actor.js";
-import type Decision from "@Interface/Gate.js";
-import type State from "@Interface/State.js";
-
-import Match from "./Match.js";
-
 export default (
 	State: State,
 	Target: FsTarget,

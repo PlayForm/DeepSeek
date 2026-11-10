@@ -1,3 +1,10 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -5,6 +12,7 @@
  * the real factory instance and the real workspace-evidence apply.
  *
  * @remarks
+ *
  * The fake ctx carries registration capture with a distinct root object, the
  * ctx listener capture, reflect.provide capture, the effect runner, the
  * logger capture, the fs purity capture, and the storageDomain probe; the
@@ -21,13 +29,6 @@
  * No fake clock: the sequence is the service's own monotonic counter (the
  * no-wall-clock rule); every timing assertion is on the counter.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 export { Plugin };
 
 /**
@@ -165,7 +166,9 @@ export const FakeStorage = (Options: { failOpen?: boolean } = {}): any => {
 		},
 	};
 
-	/** Seed one record (the restart scenario: the store outlives the process). */
+	/**
+	 * Seed one record (the restart scenario: the store outlives the process).
+	 */
 	Store.seed = (Name: string, Key: string, Value: unknown): void => {
 		if (!Store.tables.has(Name)) {
 			Store.tables.set(Name, new Map());

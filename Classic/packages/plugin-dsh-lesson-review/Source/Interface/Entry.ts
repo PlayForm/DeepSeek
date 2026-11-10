@@ -4,6 +4,7 @@
  * One corpus entry's usage record.
  *
  * @remarks
+ *
  * The `.usage.json` sidecar row of the Hermes original, reduced to the
  * fields the lifecycle actually reads.
  *

@@ -1,3 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import ServiceClass from "@Function/Service.js";
+import Storage from "@Function/Storage.js";
+import Tools from "@Function/Tools.js";
+import Validate from "@Function/Validate.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+
 /**
  * @module Apply
  *
@@ -7,6 +17,7 @@
  * Family/MERGE.md.
  *
  * @remarks
+ *
  * The State build is the factory's cell unwrap plus the P10 volatile
  * refresh; the service registration is `Function/Service`
  * (`workspaceMerge`, constructed here so `ctx.workspaceMerge` resolves);
@@ -21,16 +32,6 @@
  * The function returns NOTHING (the loader contract). The test probe is
  * the `ctx.__hookDshWorkspaceMergeState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import ServiceClass from "@Function/Service.js";
-import Storage from "@Function/Storage.js";
-import Tools from "@Function/Tools.js";
-import Validate from "@Function/Validate.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-
 export default (Context: Context, Options: Config): void => {
 	Validate(Options);
 	const Factory = Context.pluginFactory as unknown as FactoryHandle;

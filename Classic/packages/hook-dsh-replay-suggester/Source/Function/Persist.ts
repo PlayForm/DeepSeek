@@ -1,3 +1,8 @@
+import type Entry from "@Interface/Entry.js";
+import type State from "@Interface/State.js";
+
+import { Save } from "./Snapshot.js";
+
 /**
  * @module Persist
  *
@@ -5,6 +10,7 @@
  * the JSON fallback otherwise.
  *
  * @remarks
+ *
  * Function/Record serialises the writes on the store chain, so two calls in
  * one turn can never interleave their writes, and the smokes' Flush seam sees
  * every write.
@@ -19,11 +25,6 @@
  * measurable from the ledger alone. The count is the mirror's length AFTER
  * the append (the bounded size, never the lifetime total).
  */
-import type Entry from "@Interface/Entry.js";
-import type State from "@Interface/State.js";
-
-import { Save } from "./Snapshot.js";
-
 export default async (
 	/**
 	 * The plugin state (the handle, the mirror, the record path, the ledger).

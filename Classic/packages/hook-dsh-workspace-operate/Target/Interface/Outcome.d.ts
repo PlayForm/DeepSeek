@@ -1,3 +1,5 @@
+import type Proposal from "./Proposal.js";
+import type Refusal from "./Refusal.js";
 /**
  * @module Outcome
  *
@@ -5,10 +7,9 @@
  * typed refusal.
  *
  * @remarks
+ *
  * Never both, never neither.
  */
-import type Proposal from "./Proposal.js";
-import type Refusal from "./Refusal.js";
 export default interface Outcome {
     /**
      * The call's verdict.

@@ -1,3 +1,9 @@
+import { randomBytes } from "node:crypto";
+import FileSystem from "node:fs/promises";
+import Path from "node:path";
+
+import type UsageRecord from "@Interface/Record.js";
+
 /**
  * @module Usage
  *
@@ -5,6 +11,7 @@
  * the curator's whole input.
  *
  * @remarks
+ *
  * THE STORE IS A SIDECAR, never the corpus: the corpus is directories of markdown a
  * person reads and edits, so bookkeeping lives beside it where a bad write cannot
  * corrupt a skill (tools/skill_usage.py:1-2, :51-52).
@@ -36,52 +43,72 @@
  * and two saves cannot interleave, and each save lands through a temporary file and a
  * rename (tools/skill_usage.py:384, SKILL-LEARN-PLUGIN.md:657).
  */
-import { randomBytes } from "node:crypto";
-import FileSystem from "node:fs/promises";
-import Path from "node:path";
-
-import type UsageRecord from "@Interface/Record.js";
-
-/** What a load found, and why it found nothing. */
+/**
+ * What a load found, and why it found nothing.
+ */
 export interface LoadResult {
-	/** How many records the store held. */
+	/**
+	 * How many records the store held.
+	 */
 	readonly loaded: number;
 
-	/** How many entries were dropped because they were not records. */
+	/**
+	 * How many entries were dropped because they were not records.
+	 */
 	readonly dropped: number;
 
-	/** Why the store could not be read, when it could not. */
+	/**
+	 * Why the store could not be read, when it could not.
+	 */
 	readonly error?: string;
 
-	/** Where the unreadable store was moved, when the quarantine succeeded. */
+	/**
+	 * Where the unreadable store was moved, when the quarantine succeeded.
+	 */
 	readonly quarantined?: string;
 }
 
-/** What a save did. */
+/**
+ * What a save did.
+ */
 export interface SaveResult {
 	readonly ok: boolean;
 
-	/** Why the save failed, when it did. */
+	/**
+	 * Why the save failed, when it did.
+	 */
 	readonly error?: string;
 }
 
-/** One store entry: the name is the key, so the record does not carry it. */
+/**
+ * One store entry: the name is the key, so the record does not carry it.
+ */
 export interface Stored {
-	/** The skill name, which is the store's key. */
+	/**
+	 * The skill name, which is the store's key.
+	 */
 	readonly name: string;
 
-	/** The record itself. */
+	/**
+	 * The record itself.
+	 */
 	readonly record: UsageRecord;
 }
 
-/** What one use did, so the report can say whether the skill was reused after a patch. */
+/**
+ * What one use did, so the report can say whether the skill was reused after a patch.
+ */
 export interface Reused {
 	readonly record: UsageRecord;
 
-	/** Whether this was not the first use. */
+	/**
+	 * Whether this was not the first use.
+	 */
 	readonly reused: boolean;
 
-	/** Whether the skill was used again after a patch landed since the last reuse. */
+	/**
+	 * Whether the skill was used again after a patch landed since the last reuse.
+	 */
 	readonly reuseAfterPatch: boolean;
 }
 
@@ -93,7 +120,9 @@ export interface Reused {
  */
 const ClockKey = "curatedAt";
 
-/** A new record, with every field at its zero value (tools/skill_usage.py:348-353). */
+/**
+ * A new record, with every field at its zero value (tools/skill_usage.py:348-353).
+ */
 const Fresh = (Now: Date, CreatedBy: UsageRecord["createdBy"]): UsageRecord => ({
 	createdBy: CreatedBy,
 	useCount: 0,
@@ -110,7 +139,9 @@ const Fresh = (Now: Date, CreatedBy: UsageRecord["createdBy"]): UsageRecord => (
 	lastActivityAt: null,
 });
 
-/** The maximum of the two activity stamps; every stamp is ISO-8601 UTC, so the order is lexical. */
+/**
+ * The maximum of the two activity stamps; every stamp is ISO-8601 UTC, so the order is lexical.
+ */
 const Activity = (Record_: UsageRecord): string | null => {
 	const Stamps = [Record_.lastUsedAt, Record_.lastPatchedAt].filter(
 		(Stamp): Stamp is string => Stamp !== null,
@@ -123,7 +154,9 @@ const Activity = (Record_: UsageRecord): string | null => {
 	}
 };
 
-/** One stored entry, coerced field by field; undefined when it is not a record at all. */
+/**
+ * One stored entry, coerced field by field; undefined when it is not a record at all.
+ */
 const Coerce = (Raw: unknown): UsageRecord | undefined => {
 	switch (true) {
 		case typeof Raw !== "object" || Raw === null || Array.isArray(Raw):
@@ -169,10 +202,14 @@ const Coerce = (Raw: unknown): UsageRecord | undefined => {
 };
 
 export default class Usage {
-	/** The store path, already expanded by the caller. */
+	/**
+	 * The store path, already expanded by the caller.
+	 */
 	private Path: string;
 
-	/** The live records, keyed by skill name. */
+	/**
+	 * The live records, keyed by skill name.
+	 */
 	private Rows: Map<string, UsageRecord> = new Map();
 
 	/**
@@ -184,27 +221,37 @@ export default class Usage {
 	 */
 	private Clock: number | null = null;
 
-	/** The one load, so a save always follows a load and a second call is free. */
+	/**
+	 * The one load, so a save always follows a load and a second call is free.
+	 */
 	private Ready: Promise<LoadResult> | undefined;
 
-	/** The write chain, so two saves cannot interleave. */
+	/**
+	 * The write chain, so two saves cannot interleave.
+	 */
 	private Chain: Promise<void> = Promise.resolve();
 
-	/** Whether the store is unreadable AND could not be quarantined. */
+	/**
+	 * Whether the store is unreadable AND could not be quarantined.
+	 */
 	private Poisoned = false;
 
 	constructor(Path_: string) {
 		this.Path = Path_;
 	}
 
-	/** Load the store once; never throws. */
+	/**
+	 * Load the store once; never throws.
+	 */
 	Load(): Promise<LoadResult> {
 		const Ready = this.Ready ?? this.Read();
 		this.Ready = Ready;
 		return Ready;
 	}
 
-	/** Read the file, quarantining it when it cannot be trusted. */
+	/**
+	 * Read the file, quarantining it when it cannot be trusted.
+	 */
 	private async Read(): Promise<LoadResult> {
 		// The catch returns on every arm, so the empty initial value is never read.
 		let Text = "";
@@ -255,7 +302,9 @@ export default class Usage {
 		return { loaded: Loaded, dropped: Dropped };
 	}
 
-	/** Move an unreadable store aside and start empty; a failed move poisons the store. */
+	/**
+	 * Move an unreadable store aside and start empty; a failed move poisons the store.
+	 */
 	private async Quarantine(Cause: unknown): Promise<LoadResult> {
 		const Reason = Cause instanceof Error ? Cause.message : String(Cause);
 		const Stamp = new Date()
@@ -281,12 +330,16 @@ export default class Usage {
 		}
 	}
 
-	/** One record, or undefined when the store holds none. */
+	/**
+	 * One record, or undefined when the store holds none.
+	 */
 	Get(Name: string): UsageRecord | undefined {
 		return this.Rows.get(Name);
 	}
 
-	/** Every record, sorted by name, which is the report's stable order. */
+	/**
+	 * Every record, sorted by name, which is the report's stable order.
+	 */
 	All(): readonly Stored[] {
 		return [...this.Rows.entries()]
 			.sort(([Left], [Right]) => Left.localeCompare(Right))
@@ -321,7 +374,9 @@ export default class Usage {
 		}
 	}
 
-	/** Store one record and recompute the derived activity stamp. */
+	/**
+	 * Store one record and recompute the derived activity stamp.
+	 */
 	private Settle(Name: string, Next: UsageRecord): UsageRecord {
 		const Settled: UsageRecord = { ...Next, lastActivityAt: Activity(Next) };
 		this.Rows.set(Name, Settled);
@@ -352,7 +407,9 @@ export default class Usage {
 		};
 	}
 
-	/** One successful `patch` or `support` write: the count and the generation move together. */
+	/**
+	 * One successful `patch` or `support` write: the count and the generation move together.
+	 */
 	Patched(Name: string, Now: Date): UsageRecord {
 		const Existing = this.Rows.get(Name) ?? Fresh(Now, null);
 		return this.Settle(Name, {
@@ -374,13 +431,17 @@ export default class Usage {
 		return this.Settle(Name, Fresh(Now, "agent"));
 	}
 
-	/** Anchor a record's inactivity clock on first sight, without transitioning it (R3). */
+	/**
+	 * Anchor a record's inactivity clock on first sight, without transitioning it (R3).
+	 */
 	Seeded(Name: string, Now: Date): UsageRecord {
 		const Existing = this.Rows.get(Name) ?? Fresh(Now, null);
 		return this.Settle(Name, { ...Existing, firstSeenAt: Now.toISOString() });
 	}
 
-	/** Move one record's lifecycle state; `archivedAt` is set on archive and cleared otherwise. */
+	/**
+	 * Move one record's lifecycle state; `archivedAt` is set on archive and cleared otherwise.
+	 */
 	State(Name: string, Next: UsageRecord["state"], Now: Date): UsageRecord | undefined {
 		const Existing = this.Rows.get(Name);
 		if (Existing === undefined) {
@@ -393,7 +454,9 @@ export default class Usage {
 		});
 	}
 
-	/** Exempt one record from every transition, or lift the exemption. */
+	/**
+	 * Exempt one record from every transition, or lift the exemption.
+	 */
 	Pinned(Name: string, Pinned_: boolean): UsageRecord | undefined {
 		const Existing = this.Rows.get(Name);
 		if (Existing === undefined) {
@@ -402,7 +465,9 @@ export default class Usage {
 		return this.Settle(Name, { ...Existing, pinned: Pinned_ });
 	}
 
-	/** Persist the store: one chain, one temporary file, one rename. Never throws. */
+	/**
+	 * Persist the store: one chain, one temporary file, one rename. Never throws.
+	 */
 	async Save(): Promise<SaveResult> {
 		await this.Load();
 		switch (true) {

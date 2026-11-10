@@ -1,3 +1,9 @@
+import assert from "node:assert/strict";
+import { mkdtempSync } from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import FactoryClass from "../../Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -6,6 +12,7 @@
  * folder.
  *
  * @remarks
+ *
  * The fake ctx carries the capture seams `on`/`emit`/`effect`/`get`/`reflect`/`fs`/`logger` plus
  * the ROOT seam, since the Wire and the State builder register on the root scope. Every folder
  * constructs its own factory instance from the class (the Service base registers through
@@ -18,12 +25,6 @@
  * every folder's fixture); `prepublishOnly.sh` gates the build on it. Imported as a library, this
  * module only exports.
  */
-import assert from "node:assert/strict";
-import { mkdtempSync } from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import FactoryClass from "../../Target/Library.js";
-
 export { FactoryClass };
 
 /**

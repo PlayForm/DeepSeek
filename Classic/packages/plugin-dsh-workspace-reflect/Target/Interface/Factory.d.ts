@@ -4,6 +4,7 @@
  * The slice of the factory service the reflect plugin consumes.
  *
  * @remarks
+ *
  * The plugin holds the injected `pluginFactory` instance and uses: the State
  * builder (Function/State - cell unwrap + shared fields + the P10 volatile
  * refresh), the ledger (Function/Append - logger + appendFileSync, never

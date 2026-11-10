@@ -1,9 +1,12 @@
+import type { HeuristicValues } from "../Interface/Decision.js";
+export default _default;
 /**
  * @module Table
  *
  * Formats a six-value heuristic table as one canonical `name=value` line.
  *
  * @remarks
+ *
  * The one formatter for a six-value heuristic table: the decision record's stored lines and
  * the `decided` ledger line print the same `name=value` pairs in the canonical order, so
  * the two can be diffed.
@@ -15,6 +18,4 @@
  * Two decimals: the values are scores, and a two-decimal ledger keeps the lines short and
  * stable (the kappa's own precision in the note).
  */
-import type { HeuristicValues } from "../Interface/Decision.js";
-export default _default;
 declare function _default(Values: HeuristicValues): string;

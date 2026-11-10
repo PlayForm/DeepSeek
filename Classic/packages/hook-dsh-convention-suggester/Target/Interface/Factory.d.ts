@@ -1,3 +1,4 @@
+import type Factory from "@playform/plugin-dsh-factory";
 /**
  * @module Factory
  *
@@ -5,6 +6,7 @@
  * class/service plugin, factory SCHEME.md §0-§2).
  *
  * @remarks
+ *
  * The convention-suggester hook is the factory's NON-MANIFEST consumer: it uses the State builder
  * (cell unwrap + shared fields, §2.10) and the ledger (Append, §2.1) - but NOT the fs/observed
  * Wire (§2.11, fs/observed-hardwired to this family's silence): the hook implements its OWN
@@ -18,7 +20,6 @@
  * re-declared here: @deepseek-ai/dsh-tools already augments `Events` with
  * `'tools/post-execute'` - re-declaring it would be a conflicting duplicate.
  */
-import type Factory from "@playform/plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {
         /**

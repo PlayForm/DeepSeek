@@ -1,9 +1,11 @@
+import type Factory from "@playform/plugin-dsh-factory";
 /**
  * @module Factory
  *
  * The STRUCTURAL VIEW of the injected @playform/plugin-dsh-factory service.
  *
  * @remarks
+ *
  * The type arrives TYPE-ONLY from the factory package (erased at build: the built Target has NO
  * runtime import of the factory - at runtime the service resolves from the profile through the
  * injector). The augmentation below publishes the typed vocabulary on the cordis Context, so
@@ -13,7 +15,6 @@
  * (Append) - and nothing else: it registers its own `ctx.on("agent/status", ...)` listener, the
  * plain fiber-owned pattern.
  */
-import type Factory from "@playform/plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {
         /**

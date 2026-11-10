@@ -1,9 +1,13 @@
+import type { LiveView, Representation } from "@Interface/Presentation.js";
+import type { GraphSnapshot, WorkspaceEvent } from "@Interface/Siblings.js";
+
 /**
  * @module Store
  *
  * The live view's presentation store.
  *
  * @remarks
+ *
  * THE STABLE-UNTIL-EVENT CONTRACT (Documentation/Plans/Workspace-Family/
  * LIVE.md): the presentation does NOT re-render continuously - getSnapshot()
  * returns the same object reference until ingest() applies an event or a
@@ -19,9 +23,6 @@
  * ctx.workspaceGraph.snapshot(); the PoC type mirrors it from
  * `Interface/Siblings`).
  */
-import type { LiveView, Representation } from "@Interface/Presentation.js";
-import type { GraphSnapshot, WorkspaceEvent } from "@Interface/Siblings.js";
-
 export default function Store(config: { maxEvents: number; maxRepresentations: number }): {
 	getSnapshot: () => LiveView;
 	subscribe: (listener: () => void) => () => void;

@@ -1,18 +1,19 @@
+import type Manifest from "@Interface/Manifest.js";
+import type Registry from "@Interface/Registry.js";
+import Section from "@Variable/Section.js";
+
 /**
  * @module Satisfy
  *
  * The chain pass (P): canonicalize governed pins and keep public deps.
  *
  * @remarks
+ *
  * The canonical target is ALWAYS "^<resolved>" (FLOW.md §2 "propagate": pin = ^resolved in
  * every manifest that declares dep). Only a plain string comparison is needed - no semver
  * comparator to get wrong. Idempotent: an already-canonical manifest maps to null (no
  * change). Pure internal calculation - one of the two standing exemptions.
  */
-import type Manifest from "@Interface/Manifest.js";
-import type Registry from "@Interface/Registry.js";
-import Section from "@Variable/Section.js";
-
 export default (
 	Manifest: Manifest,
 	Registry: Registry | null,

@@ -5,6 +5,7 @@
  * the batch.
  *
  * @remarks
+ *
  * Plan section 3. The version is the content snapshot token.
  */
 export default interface Target {

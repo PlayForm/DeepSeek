@@ -1,3 +1,7 @@
+import type Plan from "@Interface/Plan.js";
+import type SemanticsHandle from "@Interface/Semantics.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Deepened
  *
@@ -6,6 +10,7 @@
  * text.
  *
  * @remarks
+ *
  * The service's plan is a character-offset list, so the block's line scope is
  * converted to a character range first.
  *
@@ -18,10 +23,6 @@
  * The rewritten text is returned, not published: the caller owns the version
  * fence (`Function/Publish`) and the module's own ledger line.
  */
-import type Plan from "@Interface/Plan.js";
-import type SemanticsHandle from "@Interface/Semantics.js";
-import type State from "@Interface/State.js";
-
 /**
  * The character offset of the first character of one 1-based line.
  */

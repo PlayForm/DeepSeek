@@ -1,3 +1,4 @@
+import type { Touch } from "@playform/lib-dsh-pack";
 /**
  * @module Projection
  *
@@ -6,6 +7,7 @@
  * the session history through.
  *
  * @remarks
+ *
  * The types are structural on purpose: the projection package is NOT a dependency of this hook
  * (no runtime import, no type import), so the seam is described here by the faces the hook
  * consumes, verified against the installed harness source and the subsystem guide:
@@ -41,7 +43,6 @@
  * consumer uses. A handle-based read would break on the installed build, where `register`
  * returns a function, not a handle.
  */
-import type { Touch } from "@playform/lib-dsh-pack";
 export interface SessionHistory {
     /**
      * The next touch's sequence number.

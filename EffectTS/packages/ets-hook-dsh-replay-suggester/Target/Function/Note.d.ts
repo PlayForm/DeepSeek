@@ -6,6 +6,7 @@ import type { UserMessage } from "@deepseek-ai/dsh-llm";
  * SEARCH-SUGGESTER-PLUGIN.md §4.6 surface 1; the tool-coach precedent).
  *
  * @remarks
+ *
  * Builds the labeled UserMessage the post-execute listener prepends to the
  * downstream decision's additionalContexts.
  *
@@ -31,7 +32,9 @@ declare module "@deepseek-ai/dsh-llm" {
         };
     }
 }
-/** Bind a notice summary to the harness's 120-char limit (ellipsized). */
+/**
+ * Bind a notice summary to the harness's 120-char limit (ellipsized).
+ */
 export declare const BoundSummary: (Summary: string) => string;
 export default _default;
 /**

@@ -1,21 +1,3 @@
-/**
- * @module Test
- *
- * One singular test: the FULL continuation lifecycle (the mini module).
- *
- * @remarks
- * The change path: Inflight registered during, the guarded write, the module message, the
- * same-actor re-emit, and Inflight removed after. The no-op paths are the null transform and the
- * count 0. The suite also proves the unreadable content handed to the transform as null, the
- * throw containment, the P3 chain-keys union in the transform, the fresh-version basis (the live
- * failure mode), and the string message logged verbatim.
- *
- * Runs standalone (`node Target/Test/Continue/Test.js`) AND under the aggregate
- * (`Maintain/Run/Smokes/Index.mjs` spawns it).
- *
- * Unit smoke of `@playform/plugin-dsh-factory`: the fake ctx plus the REAL factory class, from
- * the Harness.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -28,6 +10,25 @@ import {
 	FactoryClass,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the FULL continuation lifecycle (the mini module).
+ *
+ * @remarks
+ *
+ * The change path: Inflight registered during, the guarded write, the module message, the
+ * same-actor re-emit, and Inflight removed after. The no-op paths are the null transform and the
+ * count 0. The suite also proves the unreadable content handed to the transform as null, the
+ * throw containment, the P3 chain-keys union in the transform, the fresh-version basis (the live
+ * failure mode), and the string message logged verbatim.
+ *
+ * Runs standalone (`node Target/Test/Continue/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of `@playform/plugin-dsh-factory`: the fake ctx plus the REAL factory class, from
+ * the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

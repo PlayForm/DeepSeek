@@ -1,9 +1,15 @@
+import assert from "node:assert/strict";
+
+import { Default, Section } from "../../../Target/Library.js";
+import { Check, Finish, MakeCounter } from "../Harness.js";
+
 /**
  * @module Test
  *
  * One singular test of the two exported data lists.
  *
  * @remarks
+ *
  * The test asserts the lists carry their exact contents - Section (the
  * canonical npm dependency sections) and Default (the built-in exclusion
  * segments, anywhere mode, exclusion-first).
@@ -12,11 +18,6 @@
  * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit
  * smoke of `@playform/lib-dsh-core`: the REAL built entry only.
  */
-import assert from "node:assert/strict";
-
-import { Default, Section } from "../../../Target/Library.js";
-import { Check, Finish, MakeCounter } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

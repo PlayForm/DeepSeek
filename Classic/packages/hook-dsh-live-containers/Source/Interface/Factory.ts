@@ -1,3 +1,5 @@
+import type Factory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Factory
  *
@@ -5,6 +7,7 @@
  * (the family's class/service plugin, factory SCHEME.md §0-§2).
  *
  * @remarks
+ *
  * The plugin is the factory's NON-MANIFEST consumer: it uses the State
  * builder (cell unwrap + shared fields + the P10 volatile refresh, §2.10) and
  * the ledger (Append, §2.1) - but NOT the `fs/observed` Wire (§2.11,
@@ -24,11 +27,11 @@
  * system-prompt/assemble - re-declaring them would be a conflicting
  * duplicate.
  */
-import type Factory from "@playform/plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
-		/** The plugin-factory service (@playform/plugin-dsh-factory). */
+		/**
+		 * The plugin-factory service (@playform/plugin-dsh-factory).
+		 */
 		pluginFactory: Factory;
 	}
 }

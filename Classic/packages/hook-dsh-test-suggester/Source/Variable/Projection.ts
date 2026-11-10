@@ -4,6 +4,7 @@
  * The session-projection unit's identity and bounds, in one place.
  *
  * @remarks
+ *
  * The projection key is the key the registry keys the per-session cell by, the
  * touch cap is what the fold enforces, and the persisted-state version is what
  * the cache compares. The key is host-only (the unit declares no `wire`

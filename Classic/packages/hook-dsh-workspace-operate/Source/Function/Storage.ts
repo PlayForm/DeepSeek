@@ -1,3 +1,6 @@
+import type Proposal from "@Interface/Proposal.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Storage
  *
@@ -5,6 +8,7 @@
  * table's durable tier.
  *
  * @remarks
+ *
  * The pattern is the observe hook's Function/Storage, the factory's
  * {Open,Attach} precedent. THE DOMAIN: the hook's OWN domain, named config
  * `domain` (default workspace_operate) - NOT extension records in the shared
@@ -28,9 +32,6 @@
  * The dynamic imports keep the optional packages off the module-load path
  * (the factory's live-verified pitfall); the type-only devDeps pin them.
  */
-import type Proposal from "@Interface/Proposal.js";
-import type State from "@Interface/State.js";
-
 /**
  * The structural shape of one persisted proposal (the validation filter).
  */

@@ -1,3 +1,6 @@
+import type State from "../Interface/State.js";
+import type Summary from "../Interface/Summary.js";
+
 /**
  * @module Summary
  *
@@ -5,13 +8,11 @@
  * aggregate signals for the recipient's deliberate review.
  *
  * @remarks
+ *
  * Pure read: no block is force-read, no status is touched. The batch outcomes
  * the orchestration layer reported ride along (the apply truth is part of the
  * council's knowledge).
  */
-import type State from "../Interface/State.js";
-import type Summary from "../Interface/Summary.js";
-
 /**
  * Extract simple word tokens for the liked/disliked clusters.
  */

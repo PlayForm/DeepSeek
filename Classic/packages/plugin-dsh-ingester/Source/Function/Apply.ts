@@ -1,3 +1,12 @@
+import { createHash as Hash } from "node:crypto";
+
+import type Decision from "../Interface/Decision.js";
+import type Proposal from "../Interface/Proposal.js";
+import type Result from "../Interface/Result.js";
+import type State from "../Interface/State.js";
+import JournalFn from "./Journal.js";
+import ValidateFn from "./Validate.js";
+
 /**
  * @module Apply
  *
@@ -8,18 +17,10 @@
  * edit), journal before and after.
  *
  * @remarks
+ *
  * A conflict stops at that target (when stopOnConflict); the applied targets
  * are reported honestly - no invisible intermediate state.
  */
-import { createHash as Hash } from "node:crypto";
-
-import type Decision from "../Interface/Decision.js";
-import type Proposal from "../Interface/Proposal.js";
-import type Result from "../Interface/Result.js";
-import type State from "../Interface/State.js";
-import JournalFn from "./Journal.js";
-import ValidateFn from "./Validate.js";
-
 export default async (State: State, Proposal: Proposal, Decision: Decision): Promise<Result> => {
 	const PerTarget: Result["perTarget"] = [];
 	let Applied = 0;

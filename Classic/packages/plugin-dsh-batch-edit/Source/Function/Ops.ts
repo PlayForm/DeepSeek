@@ -1,3 +1,15 @@
+import { basename as Base } from "node:path";
+
+import type { ToolRunContext } from "@deepseek-ai/dsh-tools";
+import type { JobsHub } from "@Interface/Events.js";
+import type { FsTarget } from "@Interface/Fs.js";
+import type Output from "@Interface/Output.js";
+import type { MachineRecord, OpLine, ProcessCell, SearchSpec } from "@Interface/Process.js";
+import type State from "@Interface/State.js";
+
+import * as Ledger from "./Ledger.js";
+import { Cells } from "./Present.js";
+
 /**
  * @module Ops
  *
@@ -6,6 +18,7 @@
  * section 3.2).
  *
  * @remarks
+ *
  * Every write goes through Factory.Write and nothing else - the governors see
  * the batch's writes exactly as they see any write - with the actor WRAPPED in
  * the `govern` marker (Gate.ts route 2: the event path skips the marked events
@@ -36,18 +49,6 @@
  * the designed NO-OP: nothing written, nothing logged, the cell returns to
  * observed (the factory's no-op law).
  */
-import { basename as Base } from "node:path";
-
-import type { ToolRunContext } from "@deepseek-ai/dsh-tools";
-import type { JobsHub } from "@Interface/Events.js";
-import type { FsTarget } from "@Interface/Fs.js";
-import type Output from "@Interface/Output.js";
-import type { MachineRecord, OpLine, ProcessCell, SearchSpec } from "@Interface/Process.js";
-import type State from "@Interface/State.js";
-
-import * as Ledger from "./Ledger.js";
-import { Cells } from "./Present.js";
-
 /**
  * The governed basenames (the module gate's vocabulary).
  */

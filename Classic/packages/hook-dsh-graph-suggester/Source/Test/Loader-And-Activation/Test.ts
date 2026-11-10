@@ -1,17 +1,3 @@
-/**
- * @module Test
- *
- * One singular test of the graph-suggester's loader contract and activation
- * path.
- *
- * @remarks
- * The test covers the loader contract (the default object carries
- * name/apply/Config/inject), the cold disabled mount, the enabled activation
- * proof (byte-exact, the `graph` segment), the apply-time wiring (the two ctx
- * listeners in registration order), the empty boot rule set (the graph
- * intents are synthesized per call), the schema fail-loud, the anchor
- * exclusion at the mount seam, and the fs purity of the mount.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -28,6 +14,21 @@ import {
 	Validate,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test of the graph-suggester's loader contract and activation
+ * path.
+ *
+ * @remarks
+ *
+ * The test covers the loader contract (the default object carries
+ * name/apply/Config/inject), the cold disabled mount, the enabled activation
+ * proof (byte-exact, the `graph` segment), the apply-time wiring (the two ctx
+ * listeners in registration order), the empty boot rule set (the graph
+ * intents are synthesized per call), the schema fail-loud, the anchor
+ * exclusion at the mount seam, and the fs purity of the mount.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

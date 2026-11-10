@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The plugin's Schemastery Config schema: a Variable, one constant built once at load.
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every default, so invalid
  * configuration fails LOUD at load, and `apply` receives a validated plain config object. The shape
  * this schema produces is Interface/Config.ts; the contract is BATCH-STATE-PLUGIN.md sections 2.1
@@ -27,9 +31,6 @@
  * schema must be a real schemastery instance - the loader consumes it through the Standard Schema
  * `~standard` interface).
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
-
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-batchstate.log";
 const DefaultEnabled = false;
 const DefaultBatch = "default";
@@ -38,7 +39,9 @@ const DefaultStateFile = "~/.dsh/batch-state.json";
 const DefaultMaxRecent = 8;
 const DefaultMaxProposals = 16;
 
-/** The plugin's Config schema: composed by the factory's helper, every knob volatile. */
+/**
+ * The plugin's Config schema: composed by the factory's helper, every knob volatile.
+ */
 export default Compose(false, {
 	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),

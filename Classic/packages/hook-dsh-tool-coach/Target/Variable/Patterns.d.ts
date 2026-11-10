@@ -4,6 +4,7 @@
  * The default regression-pattern table and the default exemption list.
  *
  * @remarks
+ *
  * The plan's Part 2 tables, verbatim scope. The tool-coach only judges
  * TERMINAL calls (config `judgeTools`); these rows classify the COMMAND text.
  *

@@ -1,3 +1,7 @@
+import assert from "node:assert/strict";
+
+import { Check, Finish, Library, MakeCounter, Put, Tree } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -6,14 +10,13 @@
  * the user-only layer.
  *
  * @remarks
+ *
  * Every scenario uses a fresh root (the Load memo is per-root) and a temporary home (never
  * the real `~/.dsh`).
  */
-import assert from "node:assert/strict";
-
-import { Check, Finish, Library, MakeCounter, Put, Tree } from "../Harness.js";
-
-/** The repo layer's text: a custom signature, a slug, one doc family. */
+/**
+ * The repo layer's text: a custom signature, a slug, one doc family.
+ */
 const Repo = `signature:
   - docs/STYLE.md
 slug: custom

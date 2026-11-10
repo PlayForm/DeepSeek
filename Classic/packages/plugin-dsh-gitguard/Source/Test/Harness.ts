@@ -1,9 +1,17 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
  * The shared test harness for the GIT-GUARD tests.
  *
  * @remarks
+ *
  * The harness pairs the fake ctx (ctx listener capture for the
  * tools/pre-execute waterfall, a DISTINCT root object, `reflect.provide`
  * capture, the effect runner, logger capture + the fs seam) with the REAL
@@ -23,13 +31,6 @@
  * NO FAKE CLOCK: the guard has no clock dependency at all - every assertion
  * is on the classification, the listener capture, and the ledger lines.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import Plugin from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 export { Plugin };
 
 /**

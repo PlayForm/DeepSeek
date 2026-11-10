@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { Touch } from "@playform/lib-dsh-pack";
+export default _default;
 /**
  * @module History
  *
@@ -6,6 +9,7 @@
  * read-only host state without computing unrelated views").
  *
  * @remarks
+ *
  * WHY `ctx.get` AND NOT `ctx.sessionProjections`: the service is NOT in the plugin's `inject`
  * array (the hook must load without the registry), and a property read on an undeclared service
  * throws. The documented rule is explicit: "For a service a plugin reads opportunistically but
@@ -21,7 +25,4 @@
  * state: it is read only, never mutated (the subsystem guide: "callers must not mutate the
  * borrowed reference").
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { Touch } from "@playform/lib-dsh-pack";
-export default _default;
 declare function _default(Context: Context, Session: unknown): readonly Touch[];

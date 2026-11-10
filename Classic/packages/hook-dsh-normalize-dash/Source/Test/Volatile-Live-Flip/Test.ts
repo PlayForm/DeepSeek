@@ -1,9 +1,14 @@
+import assert from "node:assert/strict";
+
+import { Check, Finish, Ledger, Make, MakeCounter, Rm } from "../Harness.js";
+
 /**
  * @module Test
  *
  * The Volatile-Live-Flip unit smoke: the P10 volatile live-flip.
  *
  * @remarks
+ *
  * The one singular test covers a fresh mount whose `replacement` arrives as a
  * hand-built stable volatile cell, the factory's `loader/volatile-update`
  * dispatch refreshing State in place, and the next stream picking the new
@@ -15,10 +20,6 @@
  * (`node Target/Test/Volatile-Live-Flip/Test.js`) and under the aggregate
  * (`Maintain/Run/Smokes/Index.mjs` spawns it).
  */
-import assert from "node:assert/strict";
-
-import { Check, Finish, Ledger, Make, MakeCounter, Rm } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

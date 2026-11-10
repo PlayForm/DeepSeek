@@ -1,3 +1,10 @@
+import type { DatabaseSync } from "node:sqlite";
+
+import type Config from "../Interface/Config.js";
+import type Price from "../Interface/Price.js";
+import type Rule from "../Interface/Rule.js";
+import type Usage from "../Interface/Usage.js";
+
 /**
  * @module Price
  *
@@ -5,6 +12,7 @@
  * specific ledger price row in force at the call's own time.
  *
  * @remarks
+ *
  * The arithmetic follows `Documentation/Plans/COST-TRACK-PLUGIN.md` sections
  * 2, 6, 17.1 and 17.2. The row's effective interval is half-open
  * (EffectiveFrom <= at < EffectiveTo, a NULL EffectiveTo staying open forever),
@@ -56,13 +64,6 @@
  * An absent bucket (null tokens or a null rate) costs zero. The input side is
  * the UNCACHED remainder plus the cache buckets, never the whole input.
  */
-import type { DatabaseSync } from "node:sqlite";
-
-import type Config from "../Interface/Config.js";
-import type Price from "../Interface/Price.js";
-import type Rule from "../Interface/Rule.js";
-import type Usage from "../Interface/Usage.js";
-
 // One tier row of a rate card: the window the tier covers, the rates every
 // bucket prices at inside it (a null rate is an unpriced bucket) and the Note
 // that marks a conditional card.

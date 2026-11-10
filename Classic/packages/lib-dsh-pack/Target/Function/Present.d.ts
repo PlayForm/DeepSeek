@@ -6,6 +6,7 @@ export default _default;
  * user layer for its slug, or the default signature.
  *
  * @remarks
+ *
  * The locator skips every other ancestor without loading a pack, so the walk
  * stays cheap on a deep path.
  */

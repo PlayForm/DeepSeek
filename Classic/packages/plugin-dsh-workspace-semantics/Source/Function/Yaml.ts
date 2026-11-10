@@ -1,3 +1,8 @@
+import type Adapter from "@Interface/Adapter.js";
+import type ReferenceNode from "@Interface/ReferenceNode.js";
+import type Span from "@Interface/Span.js";
+import type SymbolNode from "@Interface/SymbolNode.js";
+
 /**
  * @module Yaml
  *
@@ -5,6 +10,7 @@
  * VALUE that repeats a key's text is a reference to that key.
  *
  * @remarks
+ *
  * The same v0 cross-reference convention the JSON adapter uses: YAML's
  * identifier space is its keys, so a repeated scalar is the only in-file
  * reference the format offers. Nesting is NOT qualified in v0: the symbol name
@@ -15,20 +21,19 @@
  * grammar (a colon, a quote, a trailing comment) is left alone. The spans are
  * the token's exact range, so a rename rewrites the token only.
  */
-import type Adapter from "@Interface/Adapter.js";
-import type ReferenceNode from "@Interface/ReferenceNode.js";
-import type Span from "@Interface/Span.js";
-import type SymbolNode from "@Interface/SymbolNode.js";
-
 /**
  * One mapping key: group 1 is the indent (plus an optional list dash), group 2 the key token.
  */
 const Key = /^([ \t]*(?:-[ \t]+)?)([A-Za-z0-9_.$-]+)([ \t]*):/gm;
 
-/** One plain scalar value: group 1 is the key prefix, group 2 the value. */
+/**
+ * One plain scalar value: group 1 is the key prefix, group 2 the value.
+ */
 const Scalar = /^([ \t]*(?:-[ \t]+)?[A-Za-z0-9_.$-]+[ \t]*:[ \t]+)([A-Za-z0-9_.$/-]+)[ \t]*$/gm;
 
-/** Every key token with its exact range. */
+/**
+ * Every key token with its exact range.
+ */
 const Keys = (Text: string): { text: string; span: Span }[] => {
 	const Found: { text: string; span: Span }[] = [];
 	for (const Match of Text.matchAll(Key)) {
@@ -39,7 +44,9 @@ const Keys = (Text: string): { text: string; span: Span }[] => {
 	return Found;
 };
 
-/** Every plain scalar value with its exact range. */
+/**
+ * Every plain scalar value with its exact range.
+ */
 const Scalars = (Text: string): { text: string; span: Span }[] => {
 	const Found: { text: string; span: Span }[] = [];
 	for (const Match of Text.matchAll(Scalar)) {

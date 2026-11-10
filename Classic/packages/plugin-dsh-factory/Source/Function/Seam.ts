@@ -1,3 +1,5 @@
+import type State from "@Interface/State.js";
+
 /**
  * @module Seam
  *
@@ -5,6 +7,7 @@
  * optional-dep probe, `ctx.get(name)` - tutorial 03:82-90).
  *
  * @remarks
+ *
  * NEVER the direct accessor fallback: `ctx.<name>` (e.g. `ctx.subprocess`)
  * THROWS on service accessors without inject ("cannot get property ... without
  * inject" - live-verified 2026-10-03); the probe is the safe form. The result
@@ -14,8 +17,6 @@
  * seam; new optional seams (storageDomain, jobs) should prefer it over ad-hoc
  * probes.
  */
-import type State from "@Interface/State.js";
-
 export default (State: State, Name: string): unknown => {
 	switch (true) {
 		case State.Seams.has(Name):

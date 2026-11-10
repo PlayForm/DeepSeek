@@ -1,3 +1,7 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Policy } from "@playform/plugin-dsh-factory";
+import { DEFAULT_KINDS } from "@Variable/Kinds.js";
+
 /**
  * @module Config
  *
@@ -5,6 +9,7 @@
  * at load).
  *
  * @remarks
+ *
  * Every tunable is a field; the shape this schema produces is
  * Interface/Config.ts.
  *
@@ -18,10 +23,6 @@
  * READ-ONLY - it never writes a file (plan section 3), so its idle risk is
  * nil; the write path lives entirely in the ingester.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Policy } from "@playform/plugin-dsh-factory";
-import { DEFAULT_KINDS } from "@Variable/Kinds.js";
-
 const DefaultEnabled = true;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-pass-on.log";
 const DefaultMaxTargets = 20;

@@ -1,3 +1,10 @@
+import { mkdirSync, writeFileSync } from "node:fs";
+import { dirname, extname, join, resolve } from "node:path";
+import type { DatabaseSync } from "node:sqlite";
+
+import type Config from "../Interface/Config.js";
+import Version from "../Variable/Version.js";
+
 /**
  * @module Export
  *
@@ -5,6 +12,7 @@
  * the configured export directory.
  *
  * @remarks
+ *
  * The formats follow `Documentation/Plans/COST-TRACK-PLUGIN.md` section 8. The
  * csv format is RFC 4180 quoting with CRLF records, one header row, one row per
  * Day, Project, File and Model. The json format is the re-derivable bundle -
@@ -16,13 +24,6 @@
  * configured export directory or the project root. The money columns round to
  * six decimals, the same precision the reports use.
  */
-import { mkdirSync, writeFileSync } from "node:fs";
-import { dirname, extname, join, resolve } from "node:path";
-import type { DatabaseSync } from "node:sqlite";
-
-import type Config from "../Interface/Config.js";
-import Version from "../Variable/Version.js";
-
 type Row = Record<string, unknown>;
 
 // The money columns, by name: every other column passes through untouched.

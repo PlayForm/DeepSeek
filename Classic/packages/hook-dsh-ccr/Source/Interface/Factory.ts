@@ -4,6 +4,7 @@
  * The STRUCTURAL VIEW of the injected @playform/plugin-dsh-factory service.
  *
  * @remarks
+ *
  * The family's class/service plugin, factory SCHEME.md §0-§2. The CCR hook is
  * the factory's NON-MANIFEST consumer: it uses the State builder (cell unwrap
  * + shared fields, §2.10) and the ledger (Append, §2.1) - but NOT the

@@ -1,9 +1,11 @@
+import type Factory from "@playform/plugin-dsh-factory";
 /**
  * @module Factory
  *
  * Publishes the typed plugin-factory service on the cordis Context.
  *
  * @remarks
+ *
  * The STRUCTURAL VIEW of the injected @playform/plugin-dsh-factory service (the family's
  * class/service plugin, factory SCHEME.md section 0-2). The doc suggester is the factory's
  * NON-MANIFEST consumer: it uses the State builder (cell unwrap + shared fields, section
@@ -21,7 +23,6 @@
  * with `'tools/post-execute'` (exec, result, next) => Promise\<PostToolDecision\> -
  * re-declaring it would be a conflicting duplicate.
  */
-import type Factory from "@playform/plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {
         /**

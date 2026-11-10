@@ -7,6 +7,7 @@ import Version from "./Variable/Version.js";
  * harness-free commonalities of the plugin families, as named exports.
  *
  * @remarks
+ *
  * The core is NOT a plugin bundle: no cordis patch, no loader contract, publishable on its
  * own. The modules' transforms import the helpers directly; the factory re-exports NOTHING
  * from the core (its 19-method surface stays stable).

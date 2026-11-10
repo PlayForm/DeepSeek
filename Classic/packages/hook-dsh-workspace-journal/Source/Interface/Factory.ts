@@ -1,9 +1,12 @@
+import type Factory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Factory
  *
  * The slice of the factory service the hook consumes.
  *
  * @remarks
+ *
  * The hook holds the injected `pluginFactory` instance and uses: the State
  * builder (cell unwrap + shared fields + the P10 volatile refresh), the
  * ledger (logger + appendFileSync, never throws), the exclusion match, the
@@ -17,8 +20,6 @@
  * injector). The augmentation below publishes the `pluginFactory` Context
  * property, so `ctx.pluginFactory` is typed at every consumption site.
  */
-import type Factory from "@playform/plugin-dsh-factory";
-
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**

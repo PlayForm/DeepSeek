@@ -1,3 +1,5 @@
+import type Allowlist from "@Interface/Allowlist.js";
+
 /**
  * @module Policy
  *
@@ -5,6 +7,7 @@
  * once at load).
  *
  * @remarks
+ *
  * Every consumer's `policy` block is built by the `Policy` helper
  * (`Function/Policy`) from this object, so the defaults are stated ONCE here
  * and the schema, the smoke suites and `Decide`'s fallback all read the same
@@ -17,10 +20,9 @@
  * wiring is the next refinement; the type is already in
  * @playform/lib-dsh-pack).
  */
-
-import type Allowlist from "@Interface/Allowlist.js";
-
-/** The D6 default posture: automatic reads, approval-gated writes/commits/spawns. */
+/**
+ * The D6 default posture: automatic reads, approval-gated writes/commits/spawns.
+ */
 export default {
 	read: "auto",
 	index: "auto",

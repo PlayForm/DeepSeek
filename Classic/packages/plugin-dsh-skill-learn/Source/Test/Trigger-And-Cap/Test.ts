@@ -1,3 +1,11 @@
+import assert from "node:assert/strict";
+
+import Gate from "../../../Target/Function/Trigger.js";
+import type { Session } from "../../../Target/Function/Trigger.js";
+import type { ReviewResult } from "../../../Target/Interface/Review.js";
+import type { Outcome } from "../../../Target/Interface/Trigger.js";
+import { CheckAsync, FakeAgent, Finish, Knobs, MakeCounter } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +13,7 @@
  * maintenance claim.
  *
  * @remarks
+ *
  * The gate is the only thing between the harness's idle edge and a model call,
  * so every arm here is about what does NOT happen: a disabled service, a count
  * below the threshold, a capped session and a busy agent each end the run before
@@ -18,15 +27,9 @@
  * through verbatim. That is what "reachable without a model" means - no folder
  * here needs an llm service to name a class.
  */
-import assert from "node:assert/strict";
-
-import Gate from "../../../Target/Function/Trigger.js";
-import type { Session } from "../../../Target/Function/Trigger.js";
-import type { ReviewResult } from "../../../Target/Interface/Review.js";
-import type { Outcome } from "../../../Target/Interface/Trigger.js";
-import { CheckAsync, FakeAgent, Finish, Knobs, MakeCounter } from "../Harness.js";
-
-/** A review that ends in one class and spends the given number of writes. */
+/**
+ * A review that ends in one class and spends the given number of writes.
+ */
 const Review =
 	(Result: Outcome, Spends = 0) =>
 	async (_Signal: AbortSignal, Session_: Session): Promise<ReviewResult> => {
@@ -36,12 +39,16 @@ const Review =
 		return { outcome: Result, applied: [], refused: [], report: "" };
 	};
 
-/** A review that rejects, which is the arm the gate must still classify. */
+/**
+ * A review that rejects, which is the arm the gate must still classify.
+ */
 const Explode = async (): Promise<ReviewResult> => {
 	throw new Error("the model call failed");
 };
 
-/** The seven classes the review itself produces, in the order the union lists them. */
+/**
+ * The seven classes the review itself produces, in the order the union lists them.
+ */
 const Returned: readonly Outcome[] = [
 	"no-llm",
 	"no-route",

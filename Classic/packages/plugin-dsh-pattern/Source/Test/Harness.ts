@@ -1,3 +1,9 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import PatternService from "../../Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -8,6 +14,7 @@
  * fresh set, so every folder is standalone-green.
  *
  * @remarks
+ *
  * THE STORE SEAMS: the JSON fallback uses the REAL node fs/promises against
  * `~/.dsh/pattern/registry.json` - the harness redirects $HOME to a fresh OS temp directory BEFORE
  * any construction, so the service never reads or writes the user's real home directory, and every
@@ -23,19 +30,17 @@
  * NO FAKE CLOCK: Record and Decay take an explicit `Now` argument, so every timing assertion is on
  * the passed value - the no-wall-clock rule holds without a time seam.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import PatternService from "../../Target/Library.js";
-
 export { PatternService };
 
-/** The fresh temp home: the service's `~/.dsh` paths resolve inside it. */
+/**
+ * The fresh temp home: the service's `~/.dsh` paths resolve inside it.
+ */
 export const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "pattern-smoke-home-"));
 process.env["HOME"] = Home;
 
-/** The per-folder counter. */
+/**
+ * The per-folder counter.
+ */
 export type Counter = {
 	N: number;
 	F: number;
@@ -211,7 +216,9 @@ export const FakeStorage = (Options: { failOpen?: boolean; version?: number } = 
 		},
 	};
 
-	/** Seed one record (the restart scenario: the store outlives the process). */
+	/**
+	 * Seed one record (the restart scenario: the store outlives the process).
+	 */
 	Store.seed = (Name: string, Key: string, Value: unknown): void => {
 		if (!Store.tables.has(Name)) {
 			Store.tables.set(Name, new Map());

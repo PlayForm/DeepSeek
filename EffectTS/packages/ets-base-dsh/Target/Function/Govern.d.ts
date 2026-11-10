@@ -65,6 +65,7 @@ import { Effect } from "effect";
  * One registered step: the module's name plus its run closure.
  *
  * @remarks
+ *
  * The closure captures the module's own State (built in that module's apply),
  * so the chain pass, the update stage and every ledger line stay module-owned.
  * The run may return a promise (the sequential fold awaits it - the step's
@@ -85,6 +86,7 @@ export type Registry = {
  * The selection.
  *
  * @remarks
+ *
  * `true` or `"all"` selects every registered step; an array (or a single
  * name) selects only the named steps; the #14 marker form `{ steps, parallel
  * }` selects the inner selection with the fold's concurrency switched;

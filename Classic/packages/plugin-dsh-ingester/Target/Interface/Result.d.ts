@@ -4,6 +4,7 @@
  * The honest apply report (plan section 2, BatchResult).
  *
  * @remarks
+ *
  * Every target gets its own outcome; the applied targets are reported even
  * when a later one fails - no invisible intermediate state.
  */

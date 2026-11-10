@@ -1,3 +1,5 @@
+import type Factory from "@playform/plugin-dsh-factory";
+import type { State as Shared } from "@playform/plugin-dsh-factory";
 /**
  * @module State
  *
@@ -6,6 +8,7 @@
  * comment filter's own fields.
  *
  * @remarks
+ *
  * The shared half comes from the factory's NAMED type export (`State`): the built
  * Target/Library.d.ts ships RELATIVE specifiers, so a consumer's tsconfig paths never hijack the
  * declaration imports. The runtime object carries the full shared machinery
@@ -46,12 +49,11 @@
  * return value from `apply` - the loader treats apply returns specially, a live-verified lesson
  * recorded in plugin-development).
  */
-import type Factory from "@playform/plugin-dsh-factory";
-import type { State as Shared } from "@playform/plugin-dsh-factory";
 /**
  * The core arm factory's structural scope-gate view.
  *
  * @remarks
+ *
  * The shared ToolResults machinery reads exactly this field, and the adapter pins it open (the
  * module Gate is the only decision point in this flavor).
  */

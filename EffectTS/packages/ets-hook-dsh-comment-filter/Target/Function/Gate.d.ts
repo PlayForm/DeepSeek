@@ -1,3 +1,4 @@
+import type State from "../Interface/State.js";
 /**
  * @module Gate
  *
@@ -6,6 +7,7 @@
  * downstream decision unchanged and writes no ledger line).
  *
  * @remarks
+ *
  * The gate is PURE, TOTAL and NEVER THROWS: the only inputs are the State
  * and the execution's identity, and a state that cannot be read means
  * "leave the result alone" (the fail-open direction - a broken gate must
@@ -35,7 +37,6 @@
  * falls back to the last text seen by ANY agent - the documented Global
  * fallback.
  */
-import type State from "../Interface/State.js";
 /**
  * The structural tool execution: only the fields the gate reads.
  */

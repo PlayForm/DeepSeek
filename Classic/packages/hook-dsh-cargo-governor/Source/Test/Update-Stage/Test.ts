@@ -1,19 +1,3 @@
-/**
- * @module Test
- *
- * One singular test of the update stage, the CLI mapping, verifyCommand, the
- * U2 stat-based refresh, and the jobs envelope.
- *
- * @remarks
- * The update stage (the Filter skip, the no-registry dispatch, the
- * cooldown/in-flight/breaker gates), the CLI mapping (the argv, the digest line,
- * the failure path, the cargo-edit-unavailable paths), verifyCommand (ok, 127
- * non-fatal, failing), the U2 stat-based refresh, and the jobs envelope.
- *
- * Runs standalone (`node Target/Test/Update-Stage/Test.js`) AND under the
- * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
- * `@playform/hook-dsh-cargo-governor`.
- */
 import assert from "node:assert/strict";
 import * as Path from "node:path";
 import {
@@ -34,6 +18,23 @@ import {
 	SeamStub,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test of the update stage, the CLI mapping, verifyCommand, the
+ * U2 stat-based refresh, and the jobs envelope.
+ *
+ * @remarks
+ *
+ * The update stage (the Filter skip, the no-registry dispatch, the
+ * cooldown/in-flight/breaker gates), the CLI mapping (the argv, the digest line,
+ * the failure path, the cargo-edit-unavailable paths), verifyCommand (ok, 127
+ * non-fatal, failing), the U2 stat-based refresh, and the jobs envelope.
+ *
+ * Runs standalone (`node Target/Test/Update-Stage/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * `@playform/hook-dsh-cargo-governor`.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

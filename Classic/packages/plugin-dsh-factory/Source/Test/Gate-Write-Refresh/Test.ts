@@ -1,21 +1,3 @@
-/**
- * @module Test
- *
- * One singular test: the write path - the full g1 Gate matrix, the GuardedWrite executor and the
- * Refresh same-actor re-emit.
- *
- * @remarks
- * The g1 Gate matrix covers target/govern/actor/kind/idempotent/basename/excluded/pass plus the
- * empty-tool-list and govern-marker cases. The GuardedWrite executor covers the replaceIfVersion
- * intent, both P4 sandbox postures, the Stash pre-registration and the abort-signal forwarding.
- * The Refresh same-actor re-emit carries its best-effort containment.
- *
- * Runs standalone (`node Target/Test/Gate-Write-Refresh/Test.js`) AND under the aggregate
- * (`Maintain/Run/Smokes/Index.mjs` spawns it).
- *
- * Unit smoke of `@playform/plugin-dsh-factory`: the fake ctx plus the REAL factory class, from
- * the Harness.
- */
 import assert from "node:assert/strict";
 import { mkdirSync } from "node:fs";
 import * as Path from "node:path";
@@ -29,6 +11,25 @@ import {
 	FactoryClass,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the write path - the full g1 Gate matrix, the GuardedWrite executor and the
+ * Refresh same-actor re-emit.
+ *
+ * @remarks
+ *
+ * The g1 Gate matrix covers target/govern/actor/kind/idempotent/basename/excluded/pass plus the
+ * empty-tool-list and govern-marker cases. The GuardedWrite executor covers the replaceIfVersion
+ * intent, both P4 sandbox postures, the Stash pre-registration and the abort-signal forwarding.
+ * The Refresh same-actor re-emit carries its best-effort containment.
+ *
+ * Runs standalone (`node Target/Test/Gate-Write-Refresh/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of `@playform/plugin-dsh-factory`: the fake ctx plus the REAL factory class, from
+ * the Harness.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

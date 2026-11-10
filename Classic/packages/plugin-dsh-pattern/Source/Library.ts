@@ -1,3 +1,22 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+
+import { Decay as DecayConfidence } from "./Function/Confidence.js";
+import Knobs from "./Function/Knobs.js";
+import Learner from "./Function/Learner.js";
+import Matcher from "./Function/Matcher.js";
+import Open from "./Function/Open.js";
+import Registry from "./Function/Registry.js";
+import { Expand, Load, Save } from "./Function/Snapshot.js";
+import type Configuration from "./Interface/Config.js";
+import type Handle from "./Interface/Handle.js";
+import type { MatchResult } from "./Interface/Match.js";
+import type { Outcome } from "./Interface/Outcome.js";
+import type Pattern from "./Interface/Pattern.js";
+import type Snapshot from "./Interface/Snapshot.js";
+import Definition from "./Variable/Config.js";
+import DefaultPatterns from "./Variable/DefaultPatterns.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +24,7 @@
  * service plugin of the pattern-graph family.
  *
  * @remarks
+ *
  * PATTERN-GRAPH-PLUGIN.md section 4: "the core owns the service and the
  * storage". Loader contract: the CLASS form, mirroring the factory -
  * `export default class PatternService extends Service` with
@@ -47,25 +67,6 @@
  * fallback as a FULL snapshot (it replaces the catalog, exactly as the PoC
  * did).
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-
-import { Decay as DecayConfidence } from "./Function/Confidence.js";
-import Knobs from "./Function/Knobs.js";
-import Learner from "./Function/Learner.js";
-import Matcher from "./Function/Matcher.js";
-import Open from "./Function/Open.js";
-import Registry from "./Function/Registry.js";
-import { Expand, Load, Save } from "./Function/Snapshot.js";
-import type Configuration from "./Interface/Config.js";
-import type Handle from "./Interface/Handle.js";
-import type { MatchResult } from "./Interface/Match.js";
-import type { Outcome } from "./Interface/Outcome.js";
-import type Pattern from "./Interface/Pattern.js";
-import type Snapshot from "./Interface/Snapshot.js";
-import Definition from "./Variable/Config.js";
-import DefaultPatterns from "./Variable/DefaultPatterns.js";
-import Version from "./Variable/Version.js";
-
 /**
  * The neutral ledger line builder (module-owned strings, byte-stable).
  */

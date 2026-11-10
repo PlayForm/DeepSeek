@@ -1,9 +1,11 @@
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 /**
  * @module Config
  *
  * The validated plugin-config shape the loader hands to `apply`.
  *
  * @remarks
+ *
  * Cordis validates the exported Schemastery schema while the plugin loads
  * and fills every default, so `apply` receives a plain object of exactly
  * this shape. The schema that produces it lives in Variable/Config.ts.
@@ -13,7 +15,6 @@
  * State builder unwraps them and refreshes them in place on
  * loader/volatile.
  */
-import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 export default interface Config {
     /**
      * Ledger enabled - write the durable log file (the shared `log` cell).

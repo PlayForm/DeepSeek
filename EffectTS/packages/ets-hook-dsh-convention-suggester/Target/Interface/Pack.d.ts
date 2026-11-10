@@ -5,6 +5,7 @@
  * pack-as-data contract; the convention consumer's projection per §9.4).
  *
  * @remarks
+ *
  * This hook is a suggester-family CONSUMER that carries its own private pack
  * (the two-consumer extraction rule: no shared core service until the family
  * proves two consumers; an explicit repo/user pack is the data). The types

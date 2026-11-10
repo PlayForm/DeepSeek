@@ -1,4 +1,4 @@
-import type { AgentState, Decision, ToolCatalog } from "@Interface/Execution.js";
+import type { AgentState, Decision, ToolCatalog } from "../Interface/Execution.js";
 /**
  * @module Compose
  *

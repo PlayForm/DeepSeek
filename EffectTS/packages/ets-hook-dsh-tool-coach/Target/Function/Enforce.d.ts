@@ -1,4 +1,4 @@
-import type { AgentState, Match } from "@Interface/Execution.js";
+import type { AgentState, Match } from "../Interface/Execution.js";
 /**
  * @module Enforce
  *

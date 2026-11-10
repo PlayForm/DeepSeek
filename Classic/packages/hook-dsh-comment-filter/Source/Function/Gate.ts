@@ -1,3 +1,5 @@
+import type State from "@Interface/State.js";
+
 /**
  * @module Gate
  *
@@ -5,6 +7,7 @@
  * it BY IDENTITY.
  *
  * @remarks
+ *
  * The core then returns the downstream decision unchanged and writes no ledger line. It is PURE,
  * TOTAL and NEVER THROWS: the only inputs are the State and the execution's identity, and a
  * state that cannot be read means "leave the result alone" (the fail-open direction - a broken
@@ -29,8 +32,6 @@
  * carries, which is what makes the `Map<object, string>` stash work. A call with no agent (a
  * bare dispatch) falls back to the last text seen by ANY agent - the documented Global fallback.
  */
-import type State from "@Interface/State.js";
-
 /**
  * The structural tool execution: only the fields the gate reads.
  */

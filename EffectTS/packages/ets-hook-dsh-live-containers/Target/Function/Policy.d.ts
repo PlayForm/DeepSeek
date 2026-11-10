@@ -1,6 +1,41 @@
 import type State from "../Interface/State.js";
 import type { DetachConfig } from "../Interface/State.js";
 /**
+ * @module Policy
+ *
+ * Decides per call whether the command-runner transform may detach it.
+ *
+ * @remarks
+ *
+ * The per-call detach decision engine (IMPLEMENTATION-DESIGN.md sections 3.2, 5.1-5.2;
+ * Requirements/01 sections 5 + 12). Pure functions over the plugin's own state - no I/O,
+ * no eval.
+ *
+ * THE COMMAND-ONLY DETACH RULE (I1 12.1, HARD): the transform detaches ONLY the
+ * command-executing tools. The content-mutating family - write, edit, raw-write,
+ * normalize-file - is PERMANENTLY NON-DETACHABLE, hardcoded here and checked FIRST:
+ * rejected even when mode is "all" or the tool is listed in selectedTools. Read-only
+ * observation tools are out of the default detach set and may detach under "selected"
+ * only.
+ *
+ * THE EFFECTIVE-GATE ORDER (I2 section 3, binding):
+ *
+ * ```
+ * DETACH = TRANSFORM_ON
+ *        AND NOT NON_DETACHABLE(tool)    (this file, checked FIRST)
+ *        AND NOT AWAIT_MARKER(call)      (Detach.ts, after the class rule)
+ *        AND NOT DEDUP_LIVE(agent, call) (Detach.ts)
+ *        AND NOT ESCALATION(call)        (Detach.ts)
+ *        AND POLICY_DECIDE(...)          (this file's guards, last)
+ * ```
+ *
+ * This file owns the classification, the dedup key, the mode logic and the guard rails
+ * (capacity, minLatencyMs, interactive, meta-budget). Detach.ts owns the marker check and
+ * the waterfall branches.
+ *
+ * All time reads go through the State's clock seam (the smoke's fake clock).
+ */
+/**
  * The permanently non-detachable content-mutating family (I1 12.1, HARD - hardcoded,
  * never config; rejected even under "all" and "selected").
  */

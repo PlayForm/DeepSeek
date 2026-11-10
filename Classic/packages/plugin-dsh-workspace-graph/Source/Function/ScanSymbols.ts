@@ -1,9 +1,12 @@
+import type { Span } from "@Interface/Node.js";
+
 /**
  * @module ScanSymbols
  *
  * The v0 TypeScript and JavaScript declaration scanner (no compiler API).
  *
  * @remarks
+ *
  * A symbol match is one declaration line: optional export, default, declare, abstract or
  * async modifiers, then one of the tracked keywords (function, class, interface, type, enum,
  * const, let, var), then the name - exported and non-exported alike. Nested names are NOT
@@ -17,8 +20,6 @@
  * Comment lines are skipped; braces inside strings are counted naively (the v0 honesty limit
  * - a string containing an unbalanced brace can skew a span).
  */
-import type { Span } from "@Interface/Node.js";
-
 export interface SymbolMatch {
 	name: string;
 	keyword: string;

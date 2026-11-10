@@ -1,9 +1,14 @@
+import assert from "node:assert/strict";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm } from "../Harness.js";
+
 /**
  * @module Test
  *
  * The Overpass unit smoke: the overpass arms and the human command (Run O).
  *
  * @remarks
+ *
  * The one singular test covers the tool-results arm (`tools/post-execute`), the
  * step-batch arm (`agent/pre-step`), the `normalize-overpass` command, the
  * ordering guard and the history-safety invariant, with the volatile flips
@@ -14,10 +19,6 @@
  * (`node Target/Test/Overpass/Test.js`) and under the aggregate
  * (`Maintain/Run/Smokes/Index.mjs` spawns it).
  */
-import assert from "node:assert/strict";
-
-import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

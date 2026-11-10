@@ -1,3 +1,5 @@
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Adapter
  *
@@ -5,6 +7,7 @@
  * invalidate the packet memo.
  *
  * @remarks
+ *
  * The bus (`ctx.trace`) is provided by @playform/plugin-dsh-factory, which
  * the context already injects; the adapter resolves it through the factory's
  * probe-once `Seam` accessor (`ctx.get("trace")`), so a context without the
@@ -14,6 +17,4 @@
  * disabled context wires nothing), and the subscription is registered on the
  * fiber effect so an unload drops it.
  */
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(State: State): void;

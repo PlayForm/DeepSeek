@@ -1,3 +1,7 @@
+import Apply from "@Function/Apply.js";
+import Definition from "@Variable/Config.js";
+import Version from "@Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +9,7 @@
  * panel).
  *
  * @remarks
+ *
  * Loader contract (cordis): `export const name` + `export const apply` + `export const Config` +
  * `export const inject` + `export default { name, apply, Config, inject }` - the ONLY named
  * exports in the tree; every other module is a nameless default export composed Rust-style.
@@ -22,10 +27,6 @@
  * through the generated playformFamilyPanel Remote namespace (the documented residual).
  * fiberPhases come from the existing remote.pluginManager - no new endpoint.
  */
-import Apply from "@Function/Apply.js";
-import Definition from "@Variable/Config.js";
-import Version from "@Variable/Version.js";
-
 export const name = "client-dsh-panel-family-host";
 
 export const Config = Definition;
@@ -49,6 +50,7 @@ export const inject: string[] = ["webServer"];
  * Apply: provide the three services and log the activation.
  *
  * @remarks
+ *
  * Returns nothing (the loader contract).
  */
 export function apply(

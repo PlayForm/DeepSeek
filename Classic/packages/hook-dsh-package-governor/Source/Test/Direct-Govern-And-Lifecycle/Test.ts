@@ -1,28 +1,3 @@
-/**
- * @module Test
- *
- * One singular test of the direct-govern path and the lifecycle that follows
- * it.
- *
- * @remarks
- * The direct-govern path (`Factory.Govern` to the registered steps: the P2
- * namespaced UpdateKey, canonicalize with and without a registry, the update
- * step alone, the selection fold, the two-chain-writer fold in both
- * registration orders), plus the lifecycle: the idempotent second author write
- * (cooldown), the P2 disposal, the P5 close, and the P5-absent retirement.
- *
- * The SILENT REPLAY (the L2 precedent): the idempotence check asserts the
- * cooldown gate for proj-b, which the source suite had already stamped by the
- * no-registry dispatch of section 6. Since the no-flap rule the chain pass no
- * longer dispatches on the no-registry path, so the fixture arms the cooldown
- * itself: proj-b carries a registry and a stale chain pin, so the first author
- * write governed-writes and dispatches (arming the cooldown) and the second
- * author write - the stale pin re-introduced - is the cooldown-gated one.
- *
- * Runs standalone (`node Target/Test/Direct-Govern-And-Lifecycle/Test.js`) AND
- * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
- * `@playform/hook-dsh-package-governor`.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -53,6 +28,32 @@ import {
 } from "../Harness.js";
 import FactoryClass from "../../../../plugin-dsh-factory/Target/Library.js";
 
+/**
+ * @module Test
+ *
+ * One singular test of the direct-govern path and the lifecycle that follows
+ * it.
+ *
+ * @remarks
+ *
+ * The direct-govern path (`Factory.Govern` to the registered steps: the P2
+ * namespaced UpdateKey, canonicalize with and without a registry, the update
+ * step alone, the selection fold, the two-chain-writer fold in both
+ * registration orders), plus the lifecycle: the idempotent second author write
+ * (cooldown), the P2 disposal, the P5 close, and the P5-absent retirement.
+ *
+ * The SILENT REPLAY (the L2 precedent): the idempotence check asserts the
+ * cooldown gate for proj-b, which the source suite had already stamped by the
+ * no-registry dispatch of section 6. Since the no-flap rule the chain pass no
+ * longer dispatches on the no-registry path, so the fixture arms the cooldown
+ * itself: proj-b carries a registry and a stale chain pin, so the first author
+ * write governed-writes and dispatches (arming the cooldown) and the second
+ * author write - the stale pin re-introduced - is the cooldown-gated one.
+ *
+ * Runs standalone (`node Target/Test/Direct-Govern-And-Lifecycle/Test.js`) AND
+ * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * `@playform/hook-dsh-package-governor`.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Boot();

@@ -8,19 +8,25 @@ type Scopes = {
     files?: boolean | undefined;
     batch?: boolean | undefined;
 };
-/** The per-apply state cells the handler reads. */
+/**
+ * The per-apply state cells the handler reads.
+ */
 type State = {
     Module: string;
     Scopes?: Scopes | undefined;
     Exempt?: string[] | undefined;
     Overpass?: boolean | undefined;
 };
-/** The structural CommandInvocation: only the fields the handler reads. */
+/**
+ * The structural CommandInvocation: only the fields the handler reads.
+ */
 type Invocation = {
     rawInput?: unknown;
     signal?: unknown;
 };
-/** The structural `commands` service surface the Apply registration uses. */
+/**
+ * The structural `commands` service surface the Apply registration uses.
+ */
 export type CommandsService = {
     register: (Definition: {
         name: string;
@@ -28,7 +34,9 @@ export type CommandsService = {
         handler: (Invocation: Invocation) => Promise<CommandResult> | CommandResult;
     }) => unknown;
 };
-/** The structural CommandResult (success/error with text). */
+/**
+ * The structural CommandResult (success/error with text).
+ */
 export type CommandResult = {
     kind: "success";
     text?: string;
@@ -36,7 +44,9 @@ export type CommandResult = {
     kind: "error";
     text: string;
 };
-/** Structural views of the optional config-writing services. */
+/**
+ * Structural views of the optional config-writing services.
+ */
 export type SettingsService = {
     describe?: () => unknown;
     update?: (ns: string, patch: object) => Promise<void> | void;

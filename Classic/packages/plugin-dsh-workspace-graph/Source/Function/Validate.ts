@@ -1,3 +1,5 @@
+import type Configuration from "@Interface/Config.js";
+
 /**
  * @module Validate
  *
@@ -5,12 +7,11 @@
  * loud").
  *
  * @remarks
+ *
  * The schema's own type checks run first (Schemastery throws on a wrong-typed field), then
  * THESE structural rules run on the plain values, each throwing with its exact frozen message.
  * The module returns the validated plain Configuration the State is built from.
  */
-import type Configuration from "@Interface/Config.js";
-
 const UNIT_NAME = /^[a-z][a-z0-9_]*$/;
 
 const LANGUAGES = new Set(["typescript", "javascript", "markdown"]);

@@ -5,13 +5,20 @@
  * lane - read before edit), and the OFF-LIMITS surfaces (owned by another lane only).
  *
  * @remarks
+ *
  * Derived from the file-ownership matrix at call time - pre-baked, never negotiated.
  */
 export default interface Scope {
-    /** The agent's own surfaces. */
+    /**
+     * The agent's own surfaces.
+     */
     yours: string[];
-    /** Surfaces shared with another ACTIVE lane (the lane id -> the shared surfaces). */
+    /**
+     * Surfaces shared with another ACTIVE lane (the lane id -> the shared surfaces).
+     */
     shared: Record<string, string[]>;
-    /** Surfaces another lane owns exclusively - OFF-LIMITS. */
+    /**
+     * Surfaces another lane owns exclusively - OFF-LIMITS.
+     */
     offLimits: string[];
 }

@@ -1,3 +1,5 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { FsObservation, FsStat, FsTarget, FsVersion, FsWriteOutcome } from "./Fs.js";
 /**
  * @module Factory
  *
@@ -7,14 +9,13 @@
  * @playform/plugin-dsh-factory).
  *
  * @remarks
+ *
  * The PoC rule binds: no import from sibling workspace packages; the end-phase
  * wires the real typed import. Every signature below is the subset the batch
  * edit tool consumes - Append, State, Wire, Write, Govern, RegisterGovern,
  * Gate is NOT needed (the factory logs nothing on the listener path and the
  * machine composes its own lines).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { FsObservation, FsStat, FsTarget, FsVersion, FsWriteOutcome } from "./Fs.js";
 /**
  * The subset of the factory's shared per-apply State the batch tool needs:
  * Context (fs/logger/emit), Module (the ledger prefix), Ledger, Stash (the

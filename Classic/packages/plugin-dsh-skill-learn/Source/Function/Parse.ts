@@ -1,3 +1,6 @@
+import type { Operation } from "@Interface/Operation.js";
+import type { ConfirmReply, ParseFailure, ParseResult, PlanReply } from "@Interface/Reply.js";
+
 /**
  * @module Parse
  *
@@ -5,6 +8,7 @@
  * and nothing repaired.
  *
  * @remarks
+ *
  * THE FAILURE MODE THIS PREVENTS: a lenient parser. A reviewer that answers with
  * prose, a second fenced block, or an operation kind nobody implemented must be a
  * FAILED review, not a silently empty one - an empty operation list and a broken reply
@@ -36,36 +40,49 @@
  * rather than its evidence. So this parser requires the anchors to be strings and
  * leaves blankness to the judge.
  */
-import type { Operation } from "@Interface/Operation.js";
-import type { ConfirmReply, ParseFailure, ParseResult, PlanReply } from "@Interface/Reply.js";
-
-/** The corpus name grammar (`dsh-skill/lib/index.js:17`). */
+/**
+ * The corpus name grammar (`dsh-skill/lib/index.js:17`).
+ */
 const Grammar = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-/** The three kinds the reply schema admits; there is no delete and no archive (plan section 5). */
+/**
+ * The three kinds the reply schema admits; there is no delete and no archive (plan section 5).
+ */
 const Kinds: readonly string[] = ["patch", "create", "support"];
 
-/** The fence the plan accepts, and only this one. */
+/**
+ * The fence the plan accepts, and only this one.
+ */
 const Fenced = /^```json\r?\n([\s\S]*?)\r?\n?```$/;
 
-/** One failure: the id and the detail both callers print. */
+/**
+ * One failure: the id and the detail both callers print.
+ */
 type Failure = { readonly ok: false; readonly id: ParseFailure; readonly detail: string };
 
-/** A failure in the shape every result union carries. */
+/**
+ * A failure in the shape every result union carries.
+ */
 const Fail = (Id: ParseFailure, Detail: string): Failure => ({
 	ok: false,
 	id: Id,
 	detail: Detail,
 });
 
-/** A missing, non-string or blank operation field. */
+/**
+ * A missing, non-string or blank operation field.
+ */
 const Field = (Position: number, Name: string, What: string): Failure =>
 	Fail("field", `operation ${Position} field "${Name}" ${What}`);
 
-/** One operation, or the id and detail that stopped it. */
+/**
+ * One operation, or the id and detail that stopped it.
+ */
 type OperationResult = { readonly ok: true; readonly operation: Operation } | Failure;
 
-/** One operation entry: fields first, then the kind, then the name grammar. */
+/**
+ * One operation entry: fields first, then the kind, then the name grammar.
+ */
 const Read = (Entry: unknown, Position: number): OperationResult => {
 	switch (true) {
 		case Entry === null || typeof Entry !== "object" || Array.isArray(Entry):

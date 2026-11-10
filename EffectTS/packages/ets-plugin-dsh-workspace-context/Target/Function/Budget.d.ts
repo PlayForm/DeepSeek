@@ -1,5 +1,5 @@
-import type Packet from "@Interface/Packet.js";
-import type State from "@Interface/State.js";
+import type Packet from "../Interface/Packet.js";
+import type State from "../Interface/State.js";
 export default _default;
 /**
  * @module Budget

@@ -1,12 +1,3 @@
-// Source/Test/Fold-And-Format/Test.ts - the model layer folded and
-// formatted through the real built Target: the Price ladder acceptance
-// cases (Design.md section 13.3), the Count/CountShort/Rate/Lines/Share
-// formatters, and the Fold groupBy of Design.md section 10 over hand-built
-// call fixtures - the bucket sums, the dominant provider and model, the
-// unpriced/error/retry counters, the file and tool tallies, and the
-// no-throw posture on malformed responses. No re-implementation: every
-// assertion runs against the built Target/Function modules, loaded after
-// the shared Harness registers the alias hooks.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter } from "../Harness.js";
 import Fold from "../../../Target/Function/Fold.js";
@@ -17,6 +8,21 @@ import Rate from "../../../Target/Function/Rate.js";
 import Share from "../../../Target/Function/Share.js";
 import Lines from "../../../Target/Function/Lines.js";
 
+/**
+ * @module Test
+ *
+ * The model layer folded and formatted through the real built Target.
+ *
+ * @remarks
+ *
+ * The suite covers the Price ladder acceptance cases (Design.md section 13.3),
+ * the Count/CountShort/Rate/Lines/Share formatters, and the Fold groupBy of
+ * Design.md section 10 over hand-built call fixtures - the bucket sums, the
+ * dominant provider and model, the unpriced/error/retry counters, the file and
+ * tool tallies, and the no-throw posture on malformed responses. No
+ * re-implementation: every assertion runs against the built Target/Function
+ * modules, loaded after the shared Harness registers the alias hooks.
+ */
 // -- fixtures: CostCall-shaped rows with every optional field filled --
 
 const Tokens = (Input: number, Read: number, Write: number, Output: number): any => ({

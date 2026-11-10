@@ -6,6 +6,7 @@ export default _default;
  * The lease release path: close the record, ledger.
  *
  * @remarks
+ *
  * Releasing an unknown or already-closed lease is reported honestly, never
  * faked.
  */

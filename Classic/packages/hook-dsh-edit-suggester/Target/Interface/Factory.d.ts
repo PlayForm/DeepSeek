@@ -1,9 +1,11 @@
+import type Factory from "@playform/plugin-dsh-factory";
 /**
  * @module Factory
  *
  * The STRUCTURAL VIEW of the injected @playform/plugin-dsh-factory service.
  *
  * @remarks
+ *
  * The family's class/service plugin, factory SCHEME.md section 0-2. The edit
  * suggester is the factory's NON-MANIFEST consumer: it uses the State builder
  * (cell unwrap + shared fields, section 2.10) and the ledger (Append, section
@@ -23,7 +25,6 @@
  * `Events` with `'tools/post-execute'` (exec, result, next) => Promise
  * <PostToolDecision> - re-declaring it would be a conflicting duplicate.
  */
-import type Factory from "@playform/plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {
         /**

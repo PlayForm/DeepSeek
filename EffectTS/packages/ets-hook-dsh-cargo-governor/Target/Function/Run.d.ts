@@ -1,3 +1,9 @@
+import type { FsTarget } from "@deepseek-ai/dsh-fs";
+import type Job from "../Interface/Job.js";
+import type Registry from "../Interface/Registry.js";
+import type State from "../Interface/State.js";
+import type PluginFactory from "@playform/ets-plugin-dsh-factory";
+export default _default;
 /**
  * @module Run
  *
@@ -5,6 +11,7 @@
  * verify stage.
  *
  * @remarks
+ *
  * Runs in the detached continuation started by Function/Dispatch; the SAME
  * ROLE as the package.json governor's Function/Update/Run - the naming
  * unification, P4. The policy is resolved in-process (the same non-quiet
@@ -23,10 +30,4 @@
  * supplies the "hook-dsh-governor-cargo" prefix - the strings stay the
  * module's).
  */
-import type { FsTarget } from "@deepseek-ai/dsh-fs";
-import type Job from "../Interface/Job.js";
-import type Registry from "../Interface/Registry.js";
-import type State from "../Interface/State.js";
-import type PluginFactory from "@playform/ets-plugin-dsh-factory";
-export default _default;
 declare function _default(Factory: PluginFactory, State: State, Root: string, Target: FsTarget, _Actor: object | undefined, Registry: Registry | null, PolicyPath: string, Signal: AbortSignal, Sink: Job | undefined): Promise<number>;

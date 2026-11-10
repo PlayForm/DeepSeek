@@ -1,3 +1,6 @@
+import type Entry from "@Interface/Entry.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Restore
  *
@@ -5,6 +8,7 @@
  * newest `historyDepth`, and repopulates the mirror and the sequence counter.
  *
  * @remarks
+ *
  * Both tiers (the KV domain and the JSON fallback) land here, so their
  * behaviour is identical.
  *
@@ -17,9 +21,6 @@
  * nothing. Byte-exact (SCHEME.md) and distinct from the seeded history
  * reader's lines: this is the PRODUCER's own store, not the fixtures' seed.
  */
-import type Entry from "@Interface/Entry.js";
-import type State from "@Interface/State.js";
-
 /**
  * Whether a parsed value is a plausible entry.
  */

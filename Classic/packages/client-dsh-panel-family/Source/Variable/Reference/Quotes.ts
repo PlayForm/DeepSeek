@@ -1,3 +1,6 @@
+import type { PanelSection } from "@Interface/Panel.js";
+import Trace from "@Variable/Trace.js";
+
 /**
  * @module Quotes
  *
@@ -5,6 +8,7 @@
  * (order 11, right after the dash reference at 10).
  *
  * @remarks
+ *
  * It copies the reference pattern exactly: the child slot its manifest registers into (the v4.1
  * model), the settings namespace its config form reads, its static activation posture, and the D5
  * trace names it follows.
@@ -14,9 +18,6 @@
  * (`logFile`, the `scopes` object, `toolResultsExempt`) ride the revision-fenced mutate and its two
  * semantic gates (`normalizeReasoning`, `normalizeToolArguments`) ride the plain bridge.
  */
-import type { PanelSection } from "@Interface/Panel.js";
-import Trace from "@Variable/Trace.js";
-
 export default {
 	id: "adapter-hook-dsh-normalize-quotes",
 	bundle: "@playform/hook-dsh-normalize-quotes",

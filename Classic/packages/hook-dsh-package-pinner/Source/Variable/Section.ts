@@ -1,3 +1,5 @@
+import { Section } from "@playform/lib-dsh-core";
+
 /**
  * @module Section
  *
@@ -6,6 +8,7 @@
  * Variable/Section.
  *
  * @remarks
+ *
  * A deployment can narrow or extend the list without a code edit; the CORE's
  * Variable/Section is the family's single source. Function/Pin rewrites
  * version values ONLY inside these sections and the refusal guard allows ONLY
@@ -13,6 +16,4 @@
  * pinner can never restructure a file; a difference in any other section
  * refuses the rewrite outright.
  */
-import { Section } from "@playform/lib-dsh-core";
-
 export default Section;

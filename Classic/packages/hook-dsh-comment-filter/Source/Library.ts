@@ -1,3 +1,7 @@
+import Apply from "./Function/Apply.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -7,6 +11,7 @@
  * nameless default export composed Rust-style.
  *
  * @remarks
+ *
  * THE DEFAULT OBJECT CARRIES ALL OF THEM: `export default { name, apply }` SHADOWS the named
  * exports - inject and Config MUST also sit on the default object, or service accessors throw
  * `cannot get property "fs" without inject` (live-verified 2026-10-03; a smoke that calls apply
@@ -40,10 +45,6 @@
  * factory; the fs/observed Wire and the storage Journal are not (non-manifest module: no fs, no
  * gate, no Stash traffic).
  */
-import Apply from "./Function/Apply.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "hook-dsh-comment-filter";
 
 /**
@@ -63,6 +64,7 @@ export { Version };
  * Required services (skill: declare, never rely on load order).
  *
  * @remarks
+ *
  * The factory (@playform/plugin-dsh-factory) provides the State builder (cell unwrap + shared
  * fields), the ledger (Append/Journal), and the core arm factory it feeds. Nothing else: the
  * tool-result vocabulary arrives through the `tools/post-execute` waterfall, and the step

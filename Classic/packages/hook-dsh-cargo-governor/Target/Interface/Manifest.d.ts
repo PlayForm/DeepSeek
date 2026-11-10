@@ -4,6 +4,7 @@
  * One parsed Cargo.toml as the cargo module sees it.
  *
  * @remarks
+ *
  * Not the raw smol-toml value (the rewrite is surgical line-level string
  * manipulation on the raw text — a TOML stringify would destroy comments and
  * formatting), but the IDENTIFICATION the parse is used for (Function/Decode):
@@ -18,7 +19,9 @@
  * nowhere locally for path/git entries).
  */
 export default interface Manifest {
-    /** The identified dependency tables. */
+    /**
+     * The identified dependency tables.
+     */
     sections: Array<{
         /** Normalized dotted section path as it appears in the raw text, with
          *  quoted segments unquoted: "dependencies", "dev-dependencies",

@@ -1,12 +1,19 @@
-// Table - the table shell: the colgroup, the sticky header row carrying the
-// column locale keys, and the body and footer the view composes. Every part
-// reads the one resolved definition the view hands down, so the header and
-// the widths cannot drift from the cells the rows emit.
 import type { TurnsCells } from "@Function/Columns";
 import type { ResolvedTable } from "@Interface/Table";
 import type { Translate } from "@Interface/Translate";
 import { createElement } from "react";
 
+/**
+ * @module Table
+ *
+ * The table shell: the colgroup, the sticky header row carrying the column locale keys, and the
+ * body and footer the view composes.
+ *
+ * @remarks
+ *
+ * Every part reads the one resolved definition the view hands down, so the header and the widths
+ * cannot drift from the cells the rows emit.
+ */
 type TableProps = {
 	Body: readonly ReturnType<typeof createElement>[];
 	Totals: ReturnType<typeof createElement>;

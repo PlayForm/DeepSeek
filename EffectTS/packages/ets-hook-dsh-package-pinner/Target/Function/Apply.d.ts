@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "../Interface/Config.js";
+export default _default;
 /**
  * @module Apply
  *
@@ -5,6 +8,7 @@
  * owning only its identity, its ledger strings and its observe/transform.
  *
  * @remarks
+ *
  * Everything here is factory machinery (ctx.pluginFactory, injected - the
  * loader holds this bundle pending until the factory service exists):
  * - State - Furnace.State(ctx, config, { module: "hook-dsh-pinner-package",
@@ -49,7 +53,4 @@
  * semantics stay the Classic ones (the P2 Inflight abort kills any in-flight
  * pass's controller; the factory's Attach effect owns that).
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
-export default _default;
 declare function _default(Context: Context, Options: Config): void;

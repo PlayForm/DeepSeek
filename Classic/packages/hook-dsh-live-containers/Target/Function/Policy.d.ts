@@ -1,5 +1,37 @@
 import type State from "../Interface/State.js";
 import type { DetachConfig } from "../Interface/State.js";
+/**
+ * @module Policy
+ *
+ * The per-call detach decision engine (IMPLEMENTATION-DESIGN.md sections 3.2,
+ * 5.1-5.2; Requirements/01 sections 5 + 12).
+ *
+ * @remarks
+ *
+ * Pure functions over the plugin's own state - no I/O, no eval.
+ *
+ * THE COMMAND-ONLY DETACH RULE (I1 12.1, HARD): the transform detaches ONLY
+ * the command-executing tools. The content-mutating family - write, edit,
+ * raw-write, normalize-file - is PERMANENTLY NON-DETACHABLE, hardcoded here
+ * and checked FIRST: rejected even when mode is "all" or the tool is listed
+ * in `selectedTools`. Read-only observation tools are out of the default
+ * detach set and may detach under "selected" only.
+ *
+ * THE EFFECTIVE-GATE ORDER (I2 section 3, binding):
+ *
+ *     DETACH = TRANSFORM_ON
+ *            AND NOT NON_DETACHABLE(tool)    (this file, checked FIRST)
+ *            AND NOT AWAIT_MARKER(call)      (Detach.ts, after the class rule)
+ *            AND NOT DEDUP_LIVE(agent, call) (Detach.ts)
+ *            AND NOT ESCALATION(call)        (Detach.ts)
+ *            AND POLICY_DECIDE(...)          (this file's guards, last)
+ *
+ * This file owns the classification, the dedup key, the mode logic and the
+ * guard rails (capacity, `minLatencyMs`, interactive, meta-budget). Detach.ts
+ * owns the marker check and the waterfall branches.
+ *
+ * All time reads go through the State's clock seam (the smoke's fake clock).
+ */
 /** The permanently non-detachable content-mutating family (I1 12.1, HARD -
  * hardcoded, never config; rejected even under "all" and "selected"). */
 export declare const NON_DETACHABLE: readonly string[];
@@ -10,7 +42,9 @@ export declare const COMMAND_RUNNERS: readonly string[];
 /** The inline-deadline cap liveTimeoutMs must respect (the I1 12.2 rule keyed
  * on the bash executor's inline default). */
 export declare const INLINE_DEADLINE_MS = 120000;
-/** Whether the tool belongs to the permanently non-detachable family. */
+/**
+ * Whether the tool belongs to the permanently non-detachable family.
+ */
 export declare const IsNonDetachable: (Tool: string) => boolean;
 /** Whether the tool is a command runner the producer can re-dispatch: the
  * hardcoded base family, or a tool the "selected" allowlist names (the
@@ -32,7 +66,9 @@ export declare const CommandPrefix: (Command: string) => string;
  * duration is recorded like any inline call - the I2 7.7 honesty rule, no
  * marker-based exclusion). */
 export declare const RecordDuration: (Agent: State, AgentID: string, Command: string, Ms: number) => void;
-/** The same-prefix history average (undefined when no history). */
+/**
+ * The same-prefix history average (undefined when no history).
+ */
 export declare const HistoryAverage: (Agent: State, AgentID: string, Command: string) => number | undefined;
 /** Whether the command matches any long-running marker (substring match on
  * the command line, the I1 heuristic's cheap shape). */
@@ -40,7 +76,9 @@ export declare const MatchesMarker: (Command: string, Markers: readonly string[]
 /** Whether the command matches any selected pattern (regex allowlist; a
  * malformed pattern matches nothing - fail-open). */
 export declare const MatchesPattern: (Command: string, Patterns: readonly string[]) => boolean;
-/** The per-agent live-job count for the admission guard. */
+/**
+ * The per-agent live-job count for the admission guard.
+ */
 export declare const LiveCount: (Agent: State, AgentID: string) => number;
 /** The per-turn meta-budget bookkeeping (design section 6 scenario 7): the
  * meta-budget bounds the layer's automatic modifications - the detach
@@ -52,9 +90,13 @@ export declare const BudgetEntry: (Agent: State, AgentID: string, Turn: number) 
 /** The per-agent failsafe meta-budget check: true when a modification may
  * proceed; false means pass-through for the rest of the turn. */
 export declare const WithinBudget: (Agent: State, AgentID: string, Turn: number) => boolean;
-/** Spend one unit of the meta-budget (call only after the action happened). */
+/**
+ * Spend one unit of the meta-budget (call only after the action happened).
+ */
 export declare const SpendBudget: (Agent: State, AgentID: string, Turn: number) => void;
-/** Whether the meta-budget just ran out (the one summary line per turn). */
+/**
+ * Whether the meta-budget just ran out (the one summary line per turn).
+ */
 export declare const BudgetExhausted: (Agent: State, AgentID: string, Turn: number) => boolean;
 /** The fail-loud config checks (design section 2.3): mode "all" FAILS LOUD at
  * load unless allRequiresConfirm is true; liveTimeoutMs is validated against
@@ -71,5 +113,7 @@ export type Decision = {
     ledger: string;
 };
 export declare const Decide: (Agent: State, AgentID: string, Tool: string, Command: string, Turn: number) => Decision;
-/** The elapsed seconds a standing frame shows (clock-driven). */
+/**
+ * The elapsed seconds a standing frame shows (clock-driven).
+ */
 export declare const ElapsedSeconds: (Agent: State, From: number) => number;

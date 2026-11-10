@@ -1,3 +1,7 @@
+import { readFileSync } from "node:fs";
+
+import type { BuildOptions, Plugin } from "esbuild";
+
 /**
  * @module Test-ESBuild
  *
@@ -6,16 +10,13 @@
  * false), so each test folder runs standalone AND under the aggregate runner.
  *
  * @remarks
+ *
  * The mirrored outbase keeps the relative import depth valid from both trees. NOT
  * minified; sourcemaps on.
  *
  * The Target-Test plugin wipes ONLY Target/Test on start - the plugin build owns Target
  * and runs BEFORE this step (prepublishOnly.sh order).
  */
-import { readFileSync } from "node:fs";
-
-import type { BuildOptions, Plugin } from "esbuild";
-
 // The package manifest, read at config-load time: its version becomes the
 // build-time constant the define block below compiles into the test Target
 // (the same define the plugin build applies).

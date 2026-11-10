@@ -5,6 +5,7 @@
  * workspace's record of effective latest versions).
  *
  * @remarks
+ *
  * THE SAME discovery as the package.json governor: the nearest registry.json
  * walking UP from the written file's directory, stopping at node_modules
  * boundaries and the filesystem root (Function/Discover); read by
@@ -17,6 +18,8 @@
  * stage).
  */
 export default interface Registry {
-    /** Dependency name → the resolved version the chain pins against. */
+    /**
+     * Dependency name → the resolved version the chain pins against.
+     */
     effectiveLatest?: Record<string, string>;
 }

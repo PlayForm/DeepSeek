@@ -1,14 +1,15 @@
+import type { Allowlist } from "@playform/plugin-dsh-factory";
 /**
  * @module Config
  *
  * The validated shape the Schemastery schema produces for the operate hook.
  *
  * @remarks
+ *
  * The schema lives in Variable/Config.ts; every field is volatile (the
  * factory's State builder refreshes these in place on a hot edit). The
  * contract is Documentation/Plans/Workspace-Family/OPERATE.md.
  */
-import type { Allowlist } from "@playform/plugin-dsh-factory";
 export default interface Config {
     /**
      * The IDLE-forever switch: false means disabled, wired to nothing.

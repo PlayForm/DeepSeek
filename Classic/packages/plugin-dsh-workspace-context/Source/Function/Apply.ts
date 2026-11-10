@@ -1,3 +1,13 @@
+import type { Context } from "@deepseek-ai/cordis";
+import ServiceClass from "@Function/Service.js";
+import Tool from "@Function/Tool.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+
+import Adapter from "../Trace/Adapter.js";
+
 /**
  * @module Apply
  *
@@ -6,6 +16,7 @@
  * registration, and the optional token-meter probe.
  *
  * @remarks
+ *
  * The State build is the factory's cell unwrap + the P10 volatile refresh.
  * The service registration is Function/Service (`workspaceContext`,
  * constructed here so `ctx.workspaceContext` resolves). The trace adapter
@@ -22,16 +33,6 @@
  * silently kills event delivery). The test probe is the
  * `ctx.__pluginDshWorkspaceContextState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import ServiceClass from "@Function/Service.js";
-import Tool from "@Function/Tool.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-
-import Adapter from "../Trace/Adapter.js";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
  */

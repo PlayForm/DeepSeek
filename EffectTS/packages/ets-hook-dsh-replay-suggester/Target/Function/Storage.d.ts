@@ -7,6 +7,7 @@ export default _default;
  * the recall store.
  *
  * @remarks
+ *
  * THE DOMAIN: `replay_history`, version 1, per-record layout,
  * backup-and-skip invalid records, and NO `compatibleVersions` - the library
  * rejects an entry that is not strictly BELOW the declared version, so `[1]`
@@ -29,7 +30,11 @@ export default _default;
  * whole bundle load - the factory's live-verified pitfall).
  */
 declare function _default(
-/** The plugin state (the mirror, the handle, the ledger). */
+/**
+ * The plugin state (the mirror, the handle, the ledger).
+ */
 State: State, 
-/** The probed storage facility (ctx.storage.domain or ctx.storageDomain). */
+/**
+ * The probed storage facility (ctx.storage.domain or ctx.storageDomain).
+ */
 Facility: unknown): Promise<void>;

@@ -1,3 +1,17 @@
+import type { FsVersion } from "@deepseek-ai/dsh-fs";
+import type Passage from "@Interface/Passage.js";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+import type PluginFactory from "@playform/plugin-dsh-factory";
+
+import Decode from "./Decode.js";
+import Pin from "./Pin.js";
+import Resolve from "./Resolve.js";
+import Satisfy from "./Satisfy.js";
+import Guard from "./Transform/Guard.js";
+import KeepFile from "./Transform/Keep.js";
+import PolicyLoader from "./Update/Policy.js";
+
 /**
  * @module Transform
  *
@@ -5,6 +19,7 @@
  * step of the cargo module, as a factory transform.
  *
  * @remarks
+ *
  * Interface/Transform in the factory: `(current, section, keep) =>
  * { next, count, message? } | null`. The factory's Continue hands off here
  * with the raw file text (null when the read failed), the module's `Section`
@@ -47,20 +62,6 @@
  * the surgical line rewrite, Normalize's padding, and the auxiliary
  * pin-policy.json read (plain fs, never the governed manifest).
  */
-import type { FsVersion } from "@deepseek-ai/dsh-fs";
-import type Passage from "@Interface/Passage.js";
-import type Registry from "@Interface/Registry.js";
-import type State from "@Interface/State.js";
-import type PluginFactory from "@playform/plugin-dsh-factory";
-
-import Decode from "./Decode.js";
-import Pin from "./Pin.js";
-import Resolve from "./Resolve.js";
-import Satisfy from "./Satisfy.js";
-import Guard from "./Transform/Guard.js";
-import KeepFile from "./Transform/Keep.js";
-import PolicyLoader from "./Update/Policy.js";
-
 export default (
 	Factory: PluginFactory,
 	State: State,

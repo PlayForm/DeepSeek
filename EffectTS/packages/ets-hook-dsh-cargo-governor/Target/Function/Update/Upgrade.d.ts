@@ -1,3 +1,9 @@
+import type Invocation from "../../Interface/Invocation.js";
+import type Job from "../../Interface/Job.js";
+import type Policy from "../../Interface/Policy.js";
+import type State from "../../Interface/State.js";
+import type PluginFactory from "@playform/ets-plugin-dsh-factory";
+export default _default;
 /**
  * @module Upgrade
  *
@@ -5,6 +11,7 @@
  * `ctx.subprocess` seam.
  *
  * @remarks
+ *
  * The CLI is cargo-edit's `cargo upgrade`, with a fully-specified argv
  * (never shell-interpreted, collect-mode stdio, owned abort signal -
  * docs/subsystems/subprocess.md), exactly as the package.json governor
@@ -46,10 +53,4 @@
  * reader) - the same role names the package.json governor's Bin split uses
  * (the naming unification, P4).
  */
-import type Invocation from "../../Interface/Invocation.js";
-import type Job from "../../Interface/Job.js";
-import type Policy from "../../Interface/Policy.js";
-import type State from "../../Interface/State.js";
-import type PluginFactory from "@playform/ets-plugin-dsh-factory";
-export default _default;
 declare function _default(Factory: PluginFactory, State: State, Binary: string, ManifestPath: string, Cwd: string, Invocation: Invocation, Chosen: Policy, Signal: AbortSignal, Sink: Job | undefined): Promise<boolean>;

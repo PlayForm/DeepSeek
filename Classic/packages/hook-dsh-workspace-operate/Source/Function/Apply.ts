@@ -1,3 +1,14 @@
+import type { Context } from "@deepseek-ai/cordis";
+import Observe from "@Function/Observe.js";
+import ServiceClass from "@Function/Service.js";
+import Storage from "@Function/Storage.js";
+import * as Tools from "@Function/Tools.js";
+import Validate from "@Function/Validate.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+
 /**
  * @module Apply
  *
@@ -6,6 +17,7 @@
  * tools, and the own storage effect.
  *
  * @remarks
+ *
  * The State build uses the factory's cell unwrap + the P10 volatile refresh.
  * The service registration is Function/Service (`workspaceOperate`,
  * constructed here so `ctx.workspaceOperate` resolves). The fence tracker is
@@ -26,17 +38,6 @@
  * silently kills event delivery). The test probe is the
  * `ctx.__hookDshWorkspaceOperateState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import Observe from "@Function/Observe.js";
-import ServiceClass from "@Function/Service.js";
-import Storage from "@Function/Storage.js";
-import * as Tools from "@Function/Tools.js";
-import Validate from "@Function/Validate.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-
 export default (Context: Context, Options: Config): void => {
 	Validate(Options);
 	const Factory = Context.pluginFactory as unknown as FactoryHandle;

@@ -1,12 +1,12 @@
+import type { Allowlist } from "@playform/plugin-dsh-factory";
+
+import type KindSpec from "./KindSpec.js";
+
 /**
  * @module Config
  *
  * The schema's runtime shape (Variable/Config.ts produces it).
  */
-import type { Allowlist } from "@playform/plugin-dsh-factory";
-
-import type KindSpec from "./KindSpec.js";
-
 export default interface Config {
 	/**
 	 * The pass-on's on/off switch (the schema's `enabled`, default false).

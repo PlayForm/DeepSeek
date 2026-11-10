@@ -1,14 +1,22 @@
-// Source/Test/Forecast/Test.ts - THE PROJECTION (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 17.5): the forecast stays a query over the
-// Rollup - a flat three-day history projects the mean times thirty with the
-// band collapsed onto it, an outlier day separates the median from the mean
-// and opens the band, and a single-day history projects with no spread.
 import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
 
 import Forecast from "../../../Target/Function/Forecast.js";
 import { Check, Finish, MakeCounter } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE PROJECTION (Documentation/Plans/COST-TRACK-PLUGIN.md section 17.5), proved
+ * over histories read straight from the Rollup.
+ *
+ * @remarks
+ *
+ * The forecast stays a query over the Rollup - a flat three-day history projects
+ * the mean times thirty with the band collapsed onto it, an outlier day separates
+ * the median from the mean and opens the band, and a single-day history projects
+ * with no spread.
+ */
 // The Rollup's own shape (the DDL's), enough for the forecast to read.
 const Make = (): DatabaseSync => {
 	const Database = new DatabaseSync(":memory:");

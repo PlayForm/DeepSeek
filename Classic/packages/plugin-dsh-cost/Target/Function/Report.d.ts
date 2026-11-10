@@ -1,3 +1,4 @@
+import type { DatabaseSync } from "node:sqlite";
 /**
  * @module Report
  *
@@ -6,6 +7,7 @@
  * factor, edit-grain and coverage reads.
  *
  * @remarks
+ *
  * The reads follow `Documentation/Plans/COST-TRACK-PLUGIN.md` sections 3 and
  * 16. FileCost serves the file rows, ClientCost the client rows, SessionCost
  * joined through the Session and Project dimensions the project rows, and the
@@ -27,7 +29,6 @@
  * free. The FileCost view carries no token column, so file rows report Tokens
  * zero.
  */
-import type { DatabaseSync } from "node:sqlite";
 type Row = {
     Scope: "file" | "project" | "client" | "model" | "session";
     Key: string;

@@ -1,13 +1,3 @@
-/**
- * @module Test
- *
- * Exercises the five tools and the orientation packet, executed against the real built library.
- *
- * @remarks
- * Covers the disabled refusals, the map/find/expand/context/index executes with their byte-exact
- * ledger lines, the cursor pagination, the deferred-kind honesty, the packet grammar rendered
- * byte-exactly, the token truncation, the stale marker, and the tool output.render contract.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -22,7 +12,20 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount over the standard graph. */
+/**
+ * @module Test
+ *
+ * Exercises the five tools and the orientation packet, executed against the real built library.
+ *
+ * @remarks
+ *
+ * Covers the disabled refusals, the map/find/expand/context/index executes with their byte-exact
+ * ledger lines, the cursor pagination, the deferred-kind honesty, the packet grammar rendered
+ * byte-exactly, the token truncation, the stale marker, and the tool output.render contract.
+ */
+/**
+ * A standard enabled mount over the standard graph.
+ */
 const Setup = (): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true }), StandardGraph());

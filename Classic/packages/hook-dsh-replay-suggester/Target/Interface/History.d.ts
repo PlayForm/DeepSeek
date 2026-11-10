@@ -5,6 +5,7 @@
  * recall reads.
  *
  * @remarks
+ *
  * The self-contained PoC rule applies: no import from sibling packages. The
  * store is the seed of the search-suggester's journal
  * (SEARCH-SUGGESTER-PLUGIN.md §9.3: "the search consumer's journal is the

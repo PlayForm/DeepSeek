@@ -1,21 +1,3 @@
-/**
- * @module Test
- *
- * The overpass arms and the human command of
- * @playform/hook-dsh-normalize-spaces, covered in one singular smoke.
- *
- * @remarks
- * Run O covers the tool-results arm (tools/post-execute), the step-batch arm
- * (agent/pre-step), the normalize-overpass command, the ordering guard and
- * the history-safety invariant, with the volatile flips (O2/O10) and the
- * one-shot batch grammar (O12).
- *
- * The file runs standalone (`node Target/Test/Overpass/Test.js`) and under
- * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
- *
- * The smoke runs the fake ctx + the real factory + the real spaces apply
- * (the seams live in ../Harness.js).
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -27,6 +9,25 @@ import {
 	rm,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The overpass arms and the human command of
+ * @playform/hook-dsh-normalize-spaces, covered in one singular smoke.
+ *
+ * @remarks
+ *
+ * Run O covers the tool-results arm (tools/post-execute), the step-batch arm
+ * (agent/pre-step), the normalize-overpass command, the ordering guard and
+ * the history-safety invariant, with the volatile flips (O2/O10) and the
+ * one-shot batch grammar (O12).
+ *
+ * The file runs standalone (`node Target/Test/Overpass/Test.js`) and under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * The smoke runs the fake ctx + the real factory + the real spaces apply
+ * (the seams live in ../Harness.js).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

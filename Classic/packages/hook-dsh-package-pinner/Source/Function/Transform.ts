@@ -1,3 +1,12 @@
+import type Manifest from "@Interface/Manifest.js";
+import type State from "@Interface/State.js";
+import { Refusal } from "@playform/lib-dsh-core";
+import type Factory from "@playform/plugin-dsh-factory";
+import SectionDefault from "@Variable/Section.js";
+
+import Decode from "./Decode.js";
+import Pin from "./Pin.js";
+
 /**
  * @module Transform
  *
@@ -5,6 +14,7 @@
  * step.
  *
  * @remarks
+ *
  * The contract (`(current, section, keep) => { next, count, message? } | null`)
  * is called by the factory's Continue exactly once per detached pass with the
  * RAW file text (null when the read failed), the module's own `Section` state
@@ -38,15 +48,6 @@
  *   replaceIfVersion + the P4 fence + Stash pre-registration), logs the
  *   message and refreshes the observation-policy's record (same actor).
  */
-import type Manifest from "@Interface/Manifest.js";
-import type State from "@Interface/State.js";
-import { Refusal } from "@playform/lib-dsh-core";
-import type Factory from "@playform/plugin-dsh-factory";
-import SectionDefault from "@Variable/Section.js";
-
-import Decode from "./Decode.js";
-import Pin from "./Pin.js";
-
 /**
  * The factory transform contract (the factory's Interface/Transform).
  */

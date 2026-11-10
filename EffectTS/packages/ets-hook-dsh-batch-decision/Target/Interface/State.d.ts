@@ -1,3 +1,6 @@
+import type { BatchDecision, BatchProposal } from "./Batch.js";
+import type Factory from "@playform/ets-plugin-dsh-factory";
+import type { Allowlist, State as Shared } from "@playform/ets-plugin-dsh-factory";
 /**
  * @module State
  *
@@ -5,6 +8,7 @@
  * batch-decision hook's own fields.
  *
  * @remarks
+ *
  * The shared shape is built by `Factory.State(ctx, config, { ... })`. Every
  * config-derived field is refreshed IN PLACE by the factory's P10
  * volatile-refresh listener (every cell in the schema is volatile), so a
@@ -13,9 +17,6 @@
  * `Now` is the clock seam (the smoke's fake-clock requirement, the
  * live-containers precedent): when set, every time read goes through it.
  */
-import type { BatchDecision, BatchProposal } from "./Batch.js";
-import type Factory from "@playform/ets-plugin-dsh-factory";
-import type { Allowlist, State as Shared } from "@playform/ets-plugin-dsh-factory";
 /**
  * One proposal pending a decision, plus its recorded decision when made.
  */

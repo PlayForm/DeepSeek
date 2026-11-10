@@ -1,3 +1,4 @@
+import type { SkillsSlice } from "../Interface/Services.js";
 /**
  * @module Catalog
  *
@@ -6,6 +7,7 @@
  * that normally applies it.
  *
  * @remarks
+ *
  * WHY THE FILTER IS THE PLUGIN'S JOB: `ctx.skills.list` returns every skill the
  * registry resolved, and the `skill` tool is what normally hides a skill whose
  * frontmatter disables model invocation (`dsh-skill/lib/index.js:37-47`,
@@ -28,8 +30,9 @@
  * because a multi-line description would break the one line per skill shape the
  * prompt describes (plan section 4.1).
  */
-import type { SkillsSlice } from "../Interface/Services.js";
-/** Where to list from: the agent's working directory and the run's signal. */
+/**
+ * Where to list from: the agent's working directory and the run's signal.
+ */
 export interface CatalogOptions {
     readonly cwd?: string;
     readonly signal?: AbortSignal;

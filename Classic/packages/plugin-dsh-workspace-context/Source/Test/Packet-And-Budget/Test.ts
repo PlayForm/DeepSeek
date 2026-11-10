@@ -1,11 +1,3 @@
-/**
- * @module Test
- *
- * The packet build and the budget clamp: the eight fixed sections against a fake sibling graph,
- * the ranked neighbors, the lens filtering, the absent-graph degradation, the staleness contract,
- * the focus tracking, the budget clamp with its byte-exact ledger line, the optional token meter,
- * the tool surface, and the zero-fs purity.
- */
 import assert from "node:assert/strict";
 import Render from "../../../Target/Function/Render.js";
 import {
@@ -21,7 +13,17 @@ import {
 	rm,
 } from "../Harness.js";
 
-/** A fake sibling graph: two workspace files and one doc, with edges. */
+/**
+ * @module Test
+ *
+ * The packet build and the budget clamp: the eight fixed sections against a fake sibling graph,
+ * the ranked neighbors, the lens filtering, the absent-graph degradation, the staleness contract,
+ * the focus tracking, the budget clamp with its byte-exact ledger line, the optional token meter,
+ * the tool surface, and the zero-fs purity.
+ */
+/**
+ * A fake sibling graph: two workspace files and one doc, with edges.
+ */
 const Graph = (): any => {
 	const Nodes: any[] = [
 		{
@@ -72,7 +74,9 @@ const Graph = (): any => {
 	};
 };
 
-/** An enabled mount with an empty ledger, the graph (default) and optional extra attachments. */
+/**
+ * An enabled mount with an empty ledger, the graph (default) and optional extra attachments.
+ */
 const Setup = (
 	Raw: Record<string, unknown> = {},
 	WithGraph = true,

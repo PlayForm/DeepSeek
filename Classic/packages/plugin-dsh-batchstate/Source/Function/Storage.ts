@@ -1,9 +1,19 @@
+import type Entry from "@Interface/Entry.js";
+import type Gate from "@Interface/Gate.js";
+import type Handle from "@Interface/Handle.js";
+import type Member from "@Interface/Member.js";
+import type State from "@Interface/State.js";
+
+import Recover from "./Recover.js";
+import Restore from "./Restore.js";
+
 /**
  * @module Storage
  *
  * The storage-domain open and recovery: the PRIMARY store.
  *
  * @remarks
+ *
  * THE DOMAIN: the plugin's OWN domain, named by the config `domain` (default `batch_state`).
  * Version 1, per-record layout, backup-and-skip invalid records, and NO `compatibleVersions` - the
  * library rejects an entry that is not strictly BELOW the declared version, so `[1]` against
@@ -28,16 +38,9 @@
  * import of an unresolvable package would crash the whole bundle load - the factory's live-verified
  * pitfall).
  */
-import type Entry from "@Interface/Entry.js";
-import type Gate from "@Interface/Gate.js";
-import type Handle from "@Interface/Handle.js";
-import type Member from "@Interface/Member.js";
-import type State from "@Interface/State.js";
-
-import Recover from "./Recover.js";
-import Restore from "./Restore.js";
-
-/** One table's records, in store order (the untrusted rows Restore filters). */
+/**
+ * One table's records, in store order (the untrusted rows Restore filters).
+ */
 const Rows = (Handle: Handle, Name: string): unknown[] =>
 	[...Handle.table(Name).entries()].map(([, Value]) => Value);
 

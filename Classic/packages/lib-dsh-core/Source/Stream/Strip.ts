@@ -4,6 +4,7 @@
  * The per-call raw marker remover: the stream-normalization family's opt-out convention.
  *
  * @remarks
+ *
  * A tool call whose arguments JSON opens with the marker `{"__normalize":false` (the FIRST
  * key) is RAW: its arguments pass through the family's tool-args gate UNNORMALIZED - and the
  * marker entry itself must be REMOVED before the executed call reaches the tool, because the

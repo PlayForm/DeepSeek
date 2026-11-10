@@ -1,9 +1,14 @@
+import assert from "node:assert/strict";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
+
 /**
  * @module Test
  *
  * The Config-And-State unit smoke: the apply-time wiring of the dash hook.
  *
  * @remarks
+ *
  * The one singular test covers the apply-time wiring - the Config defaults and
  * volatile cells, the listener set, the State unwraps, and the
  * fresh-State-per-apply posture (no module-level globals).
@@ -14,10 +19,6 @@
  * The folder runs standalone (`node Target/Test/Config-And-State/Test.js`) and
  * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
  */
-import assert from "node:assert/strict";
-
-import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();

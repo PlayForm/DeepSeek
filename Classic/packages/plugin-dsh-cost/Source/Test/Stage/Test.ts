@@ -1,14 +1,21 @@
-// Source/Test/Stage/Test.ts - THE STAGE CLASSIFIER (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 16.1): the six rules, in their exact order -
-// a search locates, a restored touch reverts, a read after an edit verifies,
-// a read after a read rereads, a first read reads, every mutating touch
-// edits - and anything the classifier cannot place is a discovery, never a
-// guess. The order itself is asserted where the rules could collide.
 import assert from "node:assert/strict";
 
 import Stage from "../../../Target/Function/Stage.js";
 import { Check, Finish, MakeCounter } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * THE STAGE CLASSIFIER (Documentation/Plans/COST-TRACK-PLUGIN.md section 16.1),
+ * proved over its six rules in their exact order.
+ *
+ * @remarks
+ *
+ * A search locates, a restored touch reverts, a read after an edit verifies, a
+ * read after a read rereads, a first read reads, every mutating touch edits - and
+ * anything the classifier cannot place is a discovery, never a guess. The order
+ * itself is asserted where the rules could collide.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Check(Count, "B1: a search is a discovery, ahead of every other rule", () => {

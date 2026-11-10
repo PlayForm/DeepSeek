@@ -1,3 +1,4 @@
+import type Lens from "../Interface/Lens.js";
 /**
  * @module DefaultLens
  *
@@ -5,6 +6,7 @@
  * selectable views.
  *
  * @remarks
+ *
  * A lens names the node kinds eligible as focus/neighbors and the edge kinds
  * that count as neighbors; the packet builder filters both through the
  * active lens. V4-1 section 3.5 leaves the lens set open; the smallest
@@ -19,6 +21,5 @@
  * the lens table already names the full v4-1 edge vocabulary so later waves
  * need no lens change.
  */
-import type Lens from "../Interface/Lens.js";
 declare const DEFAULT_LENS: Lens[];
 export default DEFAULT_LENS;

@@ -4,6 +4,7 @@
  * The STRUCTURAL conversation message the digest and the requests use.
  *
  * @remarks
+ *
  * TAKEN FROM `@deepseek-ai/dsh-llm`'s message and block declarations, which this package
  * cannot import: a message is `{role, content}` where `content` is a list of typed
  * blocks (`dsh-llm/lib/types/message.d.ts:139-172`, roles closed at `MessageRoleMap`;
@@ -24,26 +25,38 @@
  * rather than a missing one.
  */
 
-/** One text block: the visible model-facing text. */
+/**
+ * One text block: the visible model-facing text.
+ */
 export interface TextBlock {
 	readonly type: "text";
 
-	/** The block's text. */
+	/**
+	 * The block's text.
+	 */
 	readonly text: string;
 }
 
-/** One tool call: the type only, with the name optional. */
+/**
+ * One tool call: the type only, with the name optional.
+ */
 export interface ToolCallBlock {
 	readonly type: "tool-call";
 
-	/** The tool's name; absent when the model's call carried none. */
+	/**
+	 * The tool's name; absent when the model's call carried none.
+	 */
 	readonly name?: string;
 }
 
-/** The two block types this plugin reads; every other block is dropped upstream. */
+/**
+ * The two block types this plugin reads; every other block is dropped upstream.
+ */
 export type ContentBlock = TextBlock | ToolCallBlock;
 
-/** The message the digest and the two requests are built from. */
+/**
+ * The message the digest and the two requests are built from.
+ */
 export default interface Message {
 	/**
 	 * The five roles the harness's message map closes over. `developer` is
@@ -52,6 +65,8 @@ export default interface Message {
 	 */
 	readonly role: "system" | "user" | "assistant" | "tool" | "developer";
 
-	/** The model-facing blocks, in order. */
+	/**
+	 * The model-facing blocks, in order.
+	 */
 	readonly content: readonly ContentBlock[];
 }

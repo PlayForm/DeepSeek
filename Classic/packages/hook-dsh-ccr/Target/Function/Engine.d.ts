@@ -1,3 +1,4 @@
+import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 /**
  * @module Engine
  *
@@ -5,6 +6,7 @@
  * tool-result bytes at the `agent/pre-step` waterfall boundary.
  *
  * @remarks
+ *
  * Config `contextEngine`, OFF by default. The plan §7 phase 4; Aphrodite's
  * context engine, R:173-179, protectFirst/protectLast included.
  *
@@ -80,7 +82,6 @@
  *     only (stored results keep just their hash) - memory growth is
  *     bounded by what was never stored.
  */
-import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 /**
  * One observed tool result in the engine's log. `content` is present only
  * for a result that passed through WITHOUT being stored (the archivable

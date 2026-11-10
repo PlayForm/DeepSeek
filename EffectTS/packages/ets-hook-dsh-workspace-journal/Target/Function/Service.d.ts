@@ -1,3 +1,9 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type BatchRecord from "../Interface/Batch.js";
+import type EntryRecord from "../Interface/Entry.js";
+import type Result from "../Interface/Result.js";
+import type { RecoveryReport } from "../Interface/Result.js";
+import type State from "../Interface/State.js";
 /**
  * @module Service
  *
@@ -5,6 +11,7 @@
  * registered from apply.
  *
  * @remarks
+ *
  * REGISTERED FROM APPLY (the Service base constructor calls
  * ctx.reflect.provide("workspaceJournal", this), so `ctx.workspaceJournal`
  * resolves). Declaration merging below gives the typed accessor.
@@ -24,12 +31,6 @@
  *   entries(batchId)     - one batch's revert data;
  *   statistics()         - { batches, entries, applying }.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type BatchRecord from "../Interface/Batch.js";
-import type EntryRecord from "../Interface/Entry.js";
-import type Result from "../Interface/Result.js";
-import type { RecoveryReport } from "../Interface/Result.js";
-import type State from "../Interface/State.js";
 export default class WorkspaceJournal extends Service {
     /**
      * The apply-built state the methods read and write.

@@ -11,6 +11,7 @@ import Usage from "./Usage.js";
  * conversation state of one session.
  *
  * @remarks
+ *
  * The shapes follow the conversation spine's section 3.1.
  *
  * It reads exactly the shapes the harness records - `session`, `turn/start`,
@@ -24,7 +25,6 @@ import Usage from "./Usage.js";
  *
  * The fold is pure: no I/O, no clock, no global state.
  */
-
 /**
  * The field guards: a missing or alien field folds to its zero value, never
  * thrown on (the same guards the projection keeps).

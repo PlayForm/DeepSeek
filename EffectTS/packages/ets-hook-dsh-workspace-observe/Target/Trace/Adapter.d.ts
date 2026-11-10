@@ -1,3 +1,6 @@
+import type Stamp from "../Interface/Stamp.js";
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Adapter
  *
@@ -5,6 +8,7 @@
  * each recorded stamp, emit `observe/stamp` on the family's bus.
  *
  * @remarks
+ *
  * THE BUS IS OPTIONAL HERE: the service (`ctx.trace`) is provided by
  * @playform/ets-plugin-dsh-factory, and the hook already injects the
  * factory - the adapter resolves the bus through the factory's probe-once
@@ -13,7 +17,4 @@
  * nothing. The emit never throws into the recorder: the adapter is one
  * contained call and the bus itself is fail-open.
  */
-import type Stamp from "../Interface/Stamp.js";
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(State: State, Stamp: Stamp): void;

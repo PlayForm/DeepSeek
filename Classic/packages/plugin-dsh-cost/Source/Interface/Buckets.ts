@@ -5,6 +5,7 @@
  * ledger stored for one priced bucket, and the segments add up to the total.
  *
  * @remarks
+ *
  * The shape follows Design.md section 9.6. `total` is the authoritative
  * CostTotal, and `other` is the residual `max(0, total - cacheRead - input -
  * output)` so the four bar segments always add up to the total.

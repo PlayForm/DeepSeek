@@ -1,9 +1,12 @@
+import type { PacketView } from "@Interface/Packet.js";
+
 /**
  * @module Render
  *
  * The orientation packet's text renderer: the fixed eight-line grammar.
  *
  * @remarks
+ *
  * Declared locally because the PoC is self-contained: the shared client
  * library's Packet renderer is structurally identical, and the end-phase wires
  * the real import (POC-BRIEF section 2 rule 5 - the lib-dsh-workspace-live
@@ -11,8 +14,6 @@
  * absent bands render the `(none)` placeholder - the grammar is always
  * COMPLETE, never partially omitted. Pure: PacketView in, text out.
  */
-import type { PacketView } from "@Interface/Packet.js";
-
 /**
  * One band of the grammar: tag + entries + the empty placeholder.
  */

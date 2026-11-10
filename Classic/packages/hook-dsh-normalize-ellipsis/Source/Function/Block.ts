@@ -10,6 +10,7 @@ import Replace from "./Replace.js";
  * CORE's generic block-end normalizer with the transform INJECTED.
  *
  * @remarks
+ *
  * The dispatch structure (`TextBlock.text`, `ReasoningBlock.text` + the
  * runtime `thinking` defense, `ToolCallBlock.arguments` gated by the tool-args
  * flag - three-way since the edit exemption and the per-call raw marker: a

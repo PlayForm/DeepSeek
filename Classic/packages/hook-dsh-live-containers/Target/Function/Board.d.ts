@@ -1,7 +1,9 @@
 import type { Log } from "./Render.js";
 import type { BoardState, JobEvent } from "../Interface/Events.js";
 import type State from "../Interface/State.js";
-/** The boards of one agent. */
+/**
+ * The boards of one agent.
+ */
 export declare const For: (Agent: State, AgentID: string) => Map<string, BoardState>;
 /** Open one board (the live_plant path). The ledger order: plant opened
  * first, then the enrollments (I5: enrollment opens the lease entries). */
@@ -24,16 +26,22 @@ export declare const OnSettled: (Agent: State, Event: JobEvent, Append: Log) => 
  * folded since resets to the full window. The declaration renders in the SAME
  * assembly's frame (the decrement runs before render). */
 export declare const OnTurn: (Agent: State, AgentID: string, Append: Log) => void;
-/** The stale declaration row (I5 3.1, byte-exact). */
+/**
+ * The stale declaration row (I5 3.1, byte-exact).
+ */
 export declare const StaleRow: (AgentID: string, Turns: number) => string;
 /** The failsafe hook (I5 4.1): the declaration IS the trigger - on prune,
  * drop the member from the expect count (only after the stale row rendered
  * at least one assembly, I5 4.2). The prune is the lease's only automatic
  * modification and counts against failsafesPerTurn (I5 4.3). */
 export declare const FailsafeStall: (Agent: State, AgentID: string, Append: Log) => void;
-/** The agent-board frame (D2 4.4 + I5, byte-exact). */
+/**
+ * The agent-board frame (D2 4.4 + I5, byte-exact).
+ */
 export declare const Frame: (Agent: State, Board: BoardState, Separator: string) => string;
-/** The closing line (I5 7.2, byte-exact variants). */
+/**
+ * The closing line (I5 7.2, byte-exact variants).
+ */
 export declare const ClosingLine: (Board: BoardState, Seconds: number) => string;
 /** The standing-section contribution for one agent, as SEPARATE frames (the
  * collapse pass needs per-frame granularity). Returns [] when nothing renders. */

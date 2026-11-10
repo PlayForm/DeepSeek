@@ -1,9 +1,12 @@
+import type { ReviewMessage } from "@Interface/Review.js";
+
 /**
  * @module Snapshot
  *
  * The live-session projection: the ONE integration seam of this package, and the only module that reads a harness object it does not own.
  *
  * @remarks
+ *
  * THE CONTRACT IS "MESSAGES IN", NOT "SESSION OUT". The service's `Review`
  * takes a snapshot (Interface/Review), exactly like the Hermes fork takes
  * `messages_snapshot`; this module is the adapter that produces one from a
@@ -31,8 +34,6 @@
  * block stringified into a digest is noise the reviewer would treat as
  * prose).
  */
-import type { ReviewMessage } from "@Interface/Review.js";
-
 /**
  * The role + content shape any candidate projection is expected to carry.
  */

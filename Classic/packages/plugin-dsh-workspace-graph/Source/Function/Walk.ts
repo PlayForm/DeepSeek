@@ -1,3 +1,7 @@
+import type State from "@Interface/State.js";
+
+import Glob from "./Glob.js";
+
 /**
  * @module Walk
  *
@@ -5,6 +9,7 @@
  * resolved root that yields the CANDIDATE file display paths in a stable order.
  *
  * @remarks
+ *
  * The rules, in the frozen order:
  *
  * 1. every listing is sorted by entry name (the backend already returns a stable order;
@@ -24,18 +29,18 @@
  * fatal); a listing error AT the root propagates, because a typo'd root must fail loud instead
  * of reporting an honest-looking zero.
  */
-import type State from "@Interface/State.js";
-
-import Glob from "./Glob.js";
-
-/** The minimal structural view of one directory entry (ctx.fs.listDir). */
+/**
+ * The minimal structural view of one directory entry (ctx.fs.listDir).
+ */
 interface Entry {
 	name: string;
 	type: "file" | "directory" | "other";
 	target: { targetKey: string; displayPath: string };
 }
 
-/** The minimal structural view of a resolved directory target. */
+/**
+ * The minimal structural view of a resolved directory target.
+ */
 interface Target {
 	targetKey: string;
 	displayPath: string;

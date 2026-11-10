@@ -1,9 +1,19 @@
+import { dirname as Parent } from "node:path";
+
+import type { FsObservation, FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import type State from "@Interface/State.js";
+import { Suppress } from "@playform/lib-dsh-core";
+import type Factory from "@playform/plugin-dsh-factory";
+
+import Transform from "./Transform.js";
+
 /**
  * @module Observe
  *
  * The fs/observed listener body, THIN over the factory service.
  *
  * @remarks
+ *
  * The critical path stays AWAIT-FREE and THROW-FREE (a throw inside an
  * fs/observed listener fails the tool call AFTER the mutation already
  * succeeded): the synchronous gate and discovery run inline, and the API-aware
@@ -25,15 +35,6 @@
  *   keep-list (with the P3 chain-keys interlock), and calls the MODULE'S
  *   transform (Function/Transform - the range law).
  */
-import { dirname as Parent } from "node:path";
-
-import type { FsObservation, FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
-import type State from "@Interface/State.js";
-import { Suppress } from "@playform/lib-dsh-core";
-import type Factory from "@playform/plugin-dsh-factory";
-
-import Transform from "./Transform.js";
-
 export default (
 	Furnace: Factory,
 	State: State,

@@ -1,3 +1,4 @@
+import type Plan from "../Interface/Plan.js";
 /**
  * @module Pin
  *
@@ -5,6 +6,7 @@
  * calculation that makes comment and formatting preservation possible.
  *
  * @remarks
+ *
  * smol-toml is used ONLY to identify entries — Function/Decode/Satisfy — and
  * THIS function operates on the raw text lines, so comments, inline comments,
  * blank lines, and spacing survive byte-for-byte; only the version requirement
@@ -37,13 +39,18 @@
  * header-path normalization), KeyOf (the plan key), Name (the declaration
  * matcher) and SpliceVersion (the in-line version splice).
  */
-import type Plan from "../Interface/Plan.js";
 export interface Outcome {
-    /** The rewritten text (unchanged when nothing matched or on refusal). */
+    /**
+     * The rewritten text (unchanged when nothing matched or on refusal).
+     */
     Text: string;
-    /** Whether any line was modified. */
+    /**
+     * Whether any line was modified.
+     */
     Changed: boolean;
-    /** Refusal message when the rewrite was aborted, else null. */
+    /**
+     * Refusal message when the rewrite was aborted, else null.
+     */
     Refusal: string | null;
 }
 export default _default;

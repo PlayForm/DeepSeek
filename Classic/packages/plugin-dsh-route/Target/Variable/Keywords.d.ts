@@ -1,3 +1,4 @@
+import type { KeywordTable } from "../Interface/Policy.js";
 /**
  * @module Keywords
  *
@@ -6,6 +7,7 @@
  * user's policy the final authority").
  *
  * @remarks
+ *
  * The plan's rules: "read-only", "survey", "research" -> explorer; "fix",
  * "implement", "restructure" -> coder; "design", "plan", "architecture" ->
  * planner.
@@ -22,7 +24,6 @@
  * keyword parameter defaults to this table, and a literal-inferred type would
  * reject the KeywordTable the state carries (Record<string, string[]>).
  */
-import type { KeywordTable } from "../Interface/Policy.js";
 /**
  * The shipped keyword table, keyed by role.
  */

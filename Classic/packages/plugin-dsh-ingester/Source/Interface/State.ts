@@ -1,8 +1,3 @@
-/**
- * @module State
- *
- * The service's runtime state.
- */
 import type { Context } from "@deepseek-ai/cordis";
 import type FileSystem from "@deepseek-ai/dsh-fs";
 
@@ -10,6 +5,11 @@ import type Config from "./Config.js";
 import type Proposal from "./Proposal.js";
 import type Result from "./Result.js";
 
+/**
+ * @module State
+ *
+ * The service's runtime state.
+ */
 export default interface State {
 	/**
 	 * The config-derived knobs.

@@ -1,3 +1,5 @@
+import type { DatabaseSync } from "node:sqlite";
+
 /**
  * @module Rollup
  *
@@ -6,13 +8,12 @@
  * Allocation joined Call, File, Project, Session and Client.
  *
  * @remarks
+ *
  * The refresh follows `Documentation/Plans/COST-TRACK-PLUGIN.md` section 3 and
  * covers the file, project, client, model and session scopes. The rebuild is a
  * pure upsert over a GROUP BY, so a recompute lands byte-identical totals. It
  * returns the row count written.
  */
-import type { DatabaseSync } from "node:sqlite";
-
 // The UTC day keys one refresh covers: the explicit day, the days of a batch's
 // own timestamps (the live path - a flush refreshes exactly the days it just
 // folded), or every day that has priced calls (the rebuild path).

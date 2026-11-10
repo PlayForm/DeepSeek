@@ -4,6 +4,7 @@
  * The inbox block parser: the ONE wire format the batch packages share through the harness inbox.
  *
  * @remarks
+ *
  * The producer (the pass-on for a proposal, the decision hook for a decision) renders a block
  *
  * ```
@@ -25,11 +26,17 @@
  */
 export type Kind = "proposal" | "decision";
 export interface Envelope {
-    /** The block kind: a proposal or a decision. */
+    /**
+     * The block kind: a proposal or a decision.
+     */
     kind: Kind;
-    /** The proposal or decision id, trimmed. */
+    /**
+     * The proposal or decision id, trimmed.
+     */
     id: string;
-    /** The parsed JSON body, or undefined when the body is unparseable or not an object. */
+    /**
+     * The parsed JSON body, or undefined when the body is unparseable or not an object.
+     */
     payload: Record<string, unknown> | undefined;
 }
 export default _default;

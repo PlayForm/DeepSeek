@@ -5,6 +5,7 @@
  * visible width and frequently smuggle hidden instructions into model output.
  *
  * @remarks
+ *
  *   U+00AD         soft hyphen
  *   U+200B         zero-width space
  *   U+200C         zero-width non-joiner

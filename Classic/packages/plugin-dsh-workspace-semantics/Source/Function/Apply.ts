@@ -1,9 +1,27 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import Adapters from "@Function/Adapters.js";
+import Deepen from "@Function/Deepen.js";
+import Lsp from "@Function/Lsp.js";
+import Register from "@Function/Register.js";
+import ServiceClass from "@Function/Service.js";
+import Storage from "@Function/Storage.js";
+import TypeScriptAdapter from "@Function/TypeScript.js";
+import Watch from "@Function/Watch.js";
+import type Adapter from "@Interface/Adapter.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+import Catalog from "@Variable/Adapters.js";
+
 /**
  * @module Apply
  *
  * The plugin entry function.
  *
  * @remarks
+ *
  * The entry path is fail-loud validation, the State build (the factory's cell
  * unwrap + the P10 volatile refresh), the service registration (Function/Service
  * - `workspaceSemantics`, constructed here so `ctx.workspaceSemantics` resolves),
@@ -24,24 +42,9 @@
  * kills event delivery). The test probe is the
  * `ctx.__pluginDshWorkspaceSemanticsState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
-import Adapters from "@Function/Adapters.js";
-import Deepen from "@Function/Deepen.js";
-import Lsp from "@Function/Lsp.js";
-import Register from "@Function/Register.js";
-import ServiceClass from "@Function/Service.js";
-import Storage from "@Function/Storage.js";
-import TypeScriptAdapter from "@Function/TypeScript.js";
-import Watch from "@Function/Watch.js";
-import type Adapter from "@Interface/Adapter.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-import Catalog from "@Variable/Adapters.js";
-
-/** Unwrap one possibly-volatile config cell (`{ get }` reference or value). */
+/**
+ * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
+ */
 const Cell = (Value: unknown): unknown =>
 	typeof (Value as { get?: unknown } | null)?.get === "function"
 		? (Value as { get: () => unknown }).get()

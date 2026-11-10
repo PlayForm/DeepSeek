@@ -4,6 +4,7 @@
  * The review prompt's byte-stable text, one block per rule family.
  *
  * @remarks
+ *
  * THE PROVENANCE OF EVERY SENTENCE: these blocks are the Hermes background
  * review's prompts (`agent/background_review.py`: `_LESSON_LAYER_BLOCK`,
  * `_SKILL_REVIEW_PROMPT`, `_DO_NOT_CAPTURE_BLOCK`, `_COMBINED_REVIEW_PROMPT`,

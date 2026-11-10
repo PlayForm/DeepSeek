@@ -1,3 +1,6 @@
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
@@ -5,6 +8,7 @@
  * family.
  *
  * @remarks
+ *
  * Loader contract (cordis): `export const name` + `export const apply` + `export const Config` +
  * `export const inject` + `export default { name, apply, Config, inject }`.
  *
@@ -23,9 +27,6 @@
  * `overlayMaxWidth`, `locale`) are the package's own tunables; the client half reads them through
  * the validated config object that the Loader row carries.
  */
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 export const name = "client-dsh-panel-family";
 
 export const Config = Definition;
@@ -37,10 +38,14 @@ export const Config = Definition;
  */
 export { Version };
 
-/** No host services are required: the empty host half touches nothing. */
+/**
+ * No host services are required: the empty host half touches nothing.
+ */
 export const inject: string[] = [];
 
-/** The empty host half - the Loader row exists to serve the client half. */
+/**
+ * The empty host half - the Loader row exists to serve the client half.
+ */
 export function apply(): void {}
 
 export default { name, apply, Config, inject };

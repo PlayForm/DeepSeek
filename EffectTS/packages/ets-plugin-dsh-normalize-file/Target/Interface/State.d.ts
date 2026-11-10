@@ -1,3 +1,7 @@
+import type { Scopes } from "./Config.js";
+import type Factory from "@playform/ets-plugin-dsh-factory";
+import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
+import type { Scope } from "effect";
 /**
  * @module State
  *
@@ -5,6 +9,7 @@
  * file-content normalizer's own fields.
  *
  * @remarks
+ *
  * The shared shape is built by `Factory.State(ctx, config, { ... })` - factory
  * SCHEME.md section 2.10. The shared half comes from the factory's NAMED type
  * export (`State` - the factory v0.1.1 declaration fix): the built
@@ -58,10 +63,6 @@
  * loader: the normalizer's disposal semantics stay the Classic ones (the tool
  * unregisters with the plugin's fiber; the Scope holds nothing).
  */
-import type { Scopes } from "./Config.js";
-import type Factory from "@playform/ets-plugin-dsh-factory";
-import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
-import type { Scope } from "effect";
 export default interface State extends Shared {
     /**
      * The dash replacement - the transform's only knob (config `replacement`).

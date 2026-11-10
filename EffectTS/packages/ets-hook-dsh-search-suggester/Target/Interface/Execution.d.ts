@@ -6,6 +6,7 @@
  * scored candidates, and the learned knowledge shape.
  *
  * @remarks
+ *
  * These are the SELF-CONTAINED PoC declarations: the pack is data, and the
  * end-phase extraction (the core pattern service after two consumers) moves
  * these definitions, never their shapes.

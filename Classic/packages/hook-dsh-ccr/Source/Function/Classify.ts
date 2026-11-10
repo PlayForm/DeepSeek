@@ -1,9 +1,12 @@
+import type { ContentBlock } from "@deepseek-ai/dsh-llm";
+
 /**
  * @module Classify
  *
  * The reduced 7-type classifier plus the error override.
  *
  * @remarks
+ *
  * The plan §2.2: Aphrodite's 30-type taxonomy is proxy-shaped; DSH needs 7.
  * The verdict order:
  *
@@ -28,8 +31,6 @@
  * terminal, error, grep, paths, file, json, web, default) and the preview
  * builder (Function/Preview). Pure - no I/O, no clock.
  */
-import type { ContentBlock } from "@deepseek-ai/dsh-llm";
-
 /**
  * The joined TEXT of the content blocks (the text blocks' text, newline-
  * joined; non-text blocks fall through to their JSON projection). Shared by

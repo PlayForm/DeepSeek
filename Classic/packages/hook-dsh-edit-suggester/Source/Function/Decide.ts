@@ -1,9 +1,14 @@
+import type Decision from "../Interface/Decision.js";
+import type { CompanionDecision, HeuristicValues } from "../Interface/Decision.js";
+import type Learning from "../Interface/Learning.js";
+
 /**
  * @module Decide
  *
  * Build one D8 decision record and hand it to the learned layer.
  *
  * @remarks
+ *
  * Completion spec 00-OVERVIEW D8: "every heuristic and every decision
  * pickable and logged"; 03-SUGGESTERS section 2: "every decision records
  * { heuristic, weight, value, outcome }".
@@ -17,10 +22,6 @@
  * stays `pending` by design: no note was emitted, so there is no window to
  * close - the placeholder is the honest "no outcome exists".
  */
-import type Decision from "../Interface/Decision.js";
-import type { CompanionDecision, HeuristicValues } from "../Interface/Decision.js";
-import type Learning from "../Interface/Learning.js";
-
 export default (
 	/**
 	 * The learned layer (the store that persists the record).

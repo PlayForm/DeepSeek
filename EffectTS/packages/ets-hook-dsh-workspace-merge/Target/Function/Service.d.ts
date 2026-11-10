@@ -1,3 +1,10 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type Batch from "../Interface/Batch.js";
+import type Commit from "../Interface/Commit.js";
+import type Preview from "../Interface/Preview.js";
+import type Record from "../Interface/Record.js";
+import type State from "../Interface/State.js";
+import type Statistics from "../Interface/Statistics.js";
 /**
  * @module Service
  *
@@ -5,6 +12,7 @@
  * registered from apply.
  *
  * @remarks
+ *
  * REGISTERED FROM APPLY (the loader contract for the object-form plugin).
  * Declaration merging below gives the typed accessor.
  *
@@ -16,13 +24,6 @@
  *   batches()          - all recorded batches;
  *   statistics()       - the honest counts.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type Batch from "../Interface/Batch.js";
-import type Commit from "../Interface/Commit.js";
-import type Preview from "../Interface/Preview.js";
-import type Record from "../Interface/Record.js";
-import type State from "../Interface/State.js";
-import type Statistics from "../Interface/Statistics.js";
 export default class WorkspaceMerge extends Service {
     /**
      * The apply-built state the methods read and write.

@@ -14,6 +14,7 @@
  * ```
  *
  * @remarks
+ *
  * The block is the unit of the council knowledge: it is recorded at the
  * agent's completion, transferred through the parentage mechanically, ALWAYS
  * modified in the parent sessions (the parents append their own observations

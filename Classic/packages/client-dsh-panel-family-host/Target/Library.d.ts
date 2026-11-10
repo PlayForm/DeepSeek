@@ -1,3 +1,5 @@
+import Apply from "./Function/Apply.js";
+import Version from "./Variable/Version.js";
 /**
  * @module Library
  *
@@ -5,6 +7,7 @@
  * panel).
  *
  * @remarks
+ *
  * Loader contract (cordis): `export const name` + `export const apply` + `export const Config` +
  * `export const inject` + `export default { name, apply, Config, inject }` - the ONLY named
  * exports in the tree; every other module is a nameless default export composed Rust-style.
@@ -22,8 +25,6 @@
  * through the generated playformFamilyPanel Remote namespace (the documented residual).
  * fiberPhases come from the existing remote.pluginManager - no new endpoint.
  */
-import Apply from "./Function/Apply.js";
-import Version from "./Variable/Version.js";
 export declare const name = "client-dsh-panel-family-host";
 export declare const Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
     enabled: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
@@ -53,6 +54,7 @@ export declare const inject: string[];
  * Apply: provide the three services and log the activation.
  *
  * @remarks
+ *
  * Returns nothing (the loader contract).
  */
 export declare function apply(context: Parameters<typeof Apply>[0], config: Parameters<typeof Apply>[1]): void;

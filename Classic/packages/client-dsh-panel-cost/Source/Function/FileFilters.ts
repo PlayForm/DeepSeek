@@ -1,16 +1,17 @@
+import type CostFileRow from "@Interface/FileRow";
+
 /**
  * @module FileFilters
  *
  * The Files view's client-side filter state and predicate.
  *
  * @remarks
+ *
  * The case-insensitive path substring, the touch-kind choice derived from the row's counts, the
  * stage choice over the distinct stage set, and the sort order whose default is this
  * conversation's cost. It is pure and total: no React, no mutation of the envelope's rows, and no
  * input can make it throw.
  */
-import type CostFileRow from "@Interface/FileRow";
-
 /**
  * Kind - the four touch-kind choices: every file, the files the conversation edited, the files it
  * wrote, and the files it only read.

@@ -1,3 +1,11 @@
+import type {
+	PanelFormField,
+	PanelFormInput,
+	PanelFormView,
+	PanelNamespaceView,
+} from "@Interface/Form.js";
+import type { PanelSection } from "@Interface/Panel.js";
+
 /**
  * @module Form
  *
@@ -5,6 +13,7 @@
  * `settings.describe` envelope).
  *
  * @remarks
+ *
  * The walk resolves the schema's `refs` table, flattens object fields to dotted paths, and marks
  * each field with the two write routes: `volatile` fields apply live through the revision-fenced
  * settings mutate, plain fields apply on remount through the plain-field bridge, and
@@ -14,15 +23,9 @@
  * provenance (`overridden`) is a key-presence test, never a value comparison. A missing settings
  * client is `unavailable`; a missing namespace view is `loading` (the documented states).
  */
-import type {
-	PanelFormField,
-	PanelFormInput,
-	PanelFormView,
-	PanelNamespaceView,
-} from "@Interface/Form.js";
-import type { PanelSection } from "@Interface/Panel.js";
-
-/** One resolved schema node (the serialized Schemastery envelope's shape). */
+/**
+ * One resolved schema node (the serialized Schemastery envelope's shape).
+ */
 type Node = {
 	type?: unknown;
 	meta?: Record<string, unknown>;
@@ -34,7 +37,9 @@ type Node = {
 const IsRecord = (Value: unknown): Value is Record<string, unknown> =>
 	typeof Value === "object" && Value !== null && !Array.isArray(Value);
 
-/** The schema envelope's shared-reference table (empty when there is none). */
+/**
+ * The schema envelope's shared-reference table (empty when there is none).
+ */
 const RefsOf = (Schema: unknown): Record<string, unknown> => {
 	switch (true) {
 		case IsRecord(Schema) && IsRecord(Schema["refs"]):
@@ -74,7 +79,9 @@ const Resolve = (Value: unknown, Refs: Record<string, unknown>, Depth = 0): Node
 	}
 };
 
-/** Read a nested value by an object-key path. */
+/**
+ * Read a nested value by an object-key path.
+ */
 const GetPath = (Value: unknown, Path: readonly string[]): unknown => {
 	let Current: unknown = Value;
 	for (const Key of Path) {
@@ -92,7 +99,9 @@ const GetPath = (Value: unknown, Path: readonly string[]): unknown => {
 	return Current;
 };
 
-/** Report whether the final path key exists independently of its value. */
+/**
+ * Report whether the final path key exists independently of its value.
+ */
 const HasPath = (Value: unknown, Path: readonly string[]): boolean => {
 	switch (true) {
 		case Path.length === 0:
@@ -112,7 +121,9 @@ const HasPath = (Value: unknown, Path: readonly string[]): boolean => {
 	}
 };
 
-/** The literal options of a union of const nodes, when the field is one. */
+/**
+ * The literal options of a union of const nodes, when the field is one.
+ */
 const Options = (Node: Node, Refs: Record<string, unknown>): string[] | undefined => {
 	switch (true) {
 		case Node.type !== "union" || !Array.isArray(Node.list):
@@ -127,7 +138,9 @@ const Options = (Node: Node, Refs: Record<string, unknown>): string[] | undefine
 	}
 };
 
-/** Flatten one object node's fields (nested objects inherit the volatile flag). */
+/**
+ * Flatten one object node's fields (nested objects inherit the volatile flag).
+ */
 const Fields = (
 	Root: Node,
 	Refs: Record<string, unknown>,

@@ -1,3 +1,7 @@
+import type { Intent } from "../Interface/Execution.js";
+import type Projection from "../Interface/Projection.js";
+import Measure from "./Measure.js";
+
 /**
  * @module Projected
  *
@@ -5,6 +9,7 @@
  * renders in place of the static pack targets.
  *
  * @remarks
+ *
  * This is the P2 re-spec: the section carries the projection, not the hand list. The rows are
  * the intent's candidates measured against the graph (Function/Measure): a candidate the
  * graph cannot prove is not in the index, a literal target contributes the concrete node
@@ -17,23 +22,29 @@
  * to the static pack list (the documented neutral behavior). The count is rendered only when
  * a row aggregates several matched paths (the family-row convention of Function/Note).
  */
-import type { Intent } from "../Interface/Execution.js";
-import type Projection from "../Interface/Projection.js";
-import Measure from "./Measure.js";
-
-/** One projected index row. */
+/**
+ * One projected index row.
+ */
 export interface Row {
-	/** The concrete graph path. */
+	/**
+	 * The concrete graph path.
+	 */
 	path: string;
 
-	/** The pack candidate's reason phrase. */
+	/**
+	 * The pack candidate's reason phrase.
+	 */
 	reason: string;
 
-	/** The number of matched paths this row aggregates (omitted when 1). */
+	/**
+	 * The number of matched paths this row aggregates (omitted when 1).
+	 */
 	count?: number;
 }
 
-/** The internal row with its ordering key. */
+/**
+ * The internal row with its ordering key.
+ */
 interface Scored {
 	path: string;
 	reason: string;
@@ -43,13 +54,19 @@ interface Scored {
 }
 
 export default (
-	/** The built projection (Function/Projection). */
+	/**
+	 * The built projection (Function/Projection).
+	 */
 	Projection: Projection,
 
-	/** The intent whose index is projected. */
+	/**
+	 * The intent whose index is projected.
+	 */
 	Intent: Intent,
 
-	/** The maximum rows (the caller's maxCandidates). */
+	/**
+	 * The maximum rows (the caller's maxCandidates).
+	 */
 	Limit: number,
 ): Row[] | undefined => {
 	const Scored: Scored[] = [];

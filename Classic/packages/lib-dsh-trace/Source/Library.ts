@@ -8,6 +8,7 @@ import Version from "./Variable/Version.js";
  * spec's D5), as named exports.
  *
  * @remarks
+ *
  * The library is NOT a plugin bundle: no cordis patch, no loader contract,
  * publishable on its own. The SERVICE lives in `@playform/plugin-dsh-factory`
  * (`ctx.trace`); every adapting plugin carries its own adapter in its own
@@ -28,7 +29,6 @@ import Version from "./Variable/Version.js";
  *   (`Draft`), the bus contract (`Adapter`), the observe/stamp payload
  *   (`Stamp`) and the detached loop's contract (`Queue`).
  */
-
 export { default as Names } from "./Variable/Names.js";
 export { default as Bound } from "./Variable/Bound.js";
 export { default as Complete } from "./Function/Complete.js";
@@ -47,6 +47,7 @@ export type { default as Queue } from "./Interface/Queue.js";
  * ESBuild define).
  *
  * @remarks
+ *
  * This is a LIBRARY, not a plugin bundle: no cordis patch, no loader contract
  * and no `Config` export. `Version` sits beside the other named exports rather
  * than after a `Config` export, and the loader contract's four names are

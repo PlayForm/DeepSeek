@@ -1,3 +1,6 @@
+import type { PanelSection } from "@Interface/Panel.js";
+import Trace from "@Variable/Trace.js";
+
 /**
  * @module CargoGovernor
  *
@@ -5,6 +8,7 @@
  * Rust-side twin of the package governor.
  *
  * @remarks
+ *
  * Same reference pattern: the child slot, the settings namespace, the static activation posture,
  * and the D5 trace names.
  *
@@ -12,9 +16,6 @@
  * `mutationTools` cells plus the plain `policyFile`/`exclude`) followed by its own fields
  * (`strict`, `maxUpdateFailures`, `cargoBin`, `keepFile`, `updateMode`).
  */
-import type { PanelSection } from "@Interface/Panel.js";
-import Trace from "@Variable/Trace.js";
-
 export default {
 	id: "adapter-hook-dsh-cargo-governor",
 	bundle: "@playform/hook-dsh-cargo-governor",

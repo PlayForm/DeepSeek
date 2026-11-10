@@ -1,14 +1,3 @@
-/**
- * @module Test
- *
- * The write API and the compiler: the ledger lines, the `batch/state-change` events, the
- * `startedAt` stamp and the reactivation, the queue movements and the completions ring cap, the
- * compiled blocks byte-exact, and the full snapshot.
- *
- * @remarks
- * The task/status/scope/queue/clear ledger lines are byte-exact. The compiled context/scope/else
- * blocks are byte-exact too.
- */
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -21,7 +10,21 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * The write API and the compiler: the ledger lines, the `batch/state-change` events, the
+ * `startedAt` stamp and the reactivation, the queue movements and the completions ring cap, the
+ * compiled blocks byte-exact, and the full snapshot.
+ *
+ * @remarks
+ *
+ * The task/status/scope/queue/clear ledger lines are byte-exact. The compiled context/scope/else
+ * blocks are byte-exact too.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, stateFile: "/nonexistent/batch-state.json", ...Config }));

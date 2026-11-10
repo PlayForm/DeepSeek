@@ -1,3 +1,16 @@
+import type {
+	PreToolDecision,
+	ToolDispatchExecution,
+	ToolExecution,
+	ToolExecutionResult,
+} from "@deepseek-ai/dsh-tools";
+import Clock from "@Function/Clock.js";
+import * as Jobs from "@Function/Jobs.js";
+import * as Policy from "@Function/Policy.js";
+import type { Log } from "@Function/Render.js";
+import type { DetachRecord, ShellSpecification, TagRecord } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Detach
  *
@@ -5,6 +18,7 @@
  * Requirements/01 section 12).
  *
  * @remarks
+ *
  * The pre-execute arm decides + starts the job + tags the exec object; the
  * execute arm, seeing the tag, returns the fabricated canonical-value result
  * WITHOUT calling `next()` - the bash body never runs, and the pipeline
@@ -24,29 +38,20 @@
  * the ledger records `transform failed <tool> -> inline`, and the call runs
  * inline exactly as if the plugin were not mounted. The listener NEVER denies.
  */
-import type {
-	PreToolDecision,
-	ToolDispatchExecution,
-	ToolExecution,
-	ToolExecutionResult,
-} from "@deepseek-ai/dsh-tools";
-import Clock from "@Function/Clock.js";
-import * as Jobs from "@Function/Jobs.js";
-import * as Policy from "@Function/Policy.js";
-import type { Log } from "@Function/Render.js";
-import type { DetachRecord, ShellSpecification, TagRecord } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
-
 /** The inline marker (design section 4.1, byte-exact):
  * `[live] <job-id> running: <cmd-head> - output pending; proceed reasoning.` */
 export const Marker = (JobID: string, CmdHead: string): string =>
 	`[live] ${JobID} running: ${CmdHead} - output pending; proceed reasoning.`;
 
-/** The dedup variant's second line (design section 4.1, byte-exact). */
+/**
+ * The dedup variant's second line (design section 4.1, byte-exact).
+ */
 export const AlreadyLine = (JobID: string): string =>
 	`[live] already running as ${JobID}; job_output ${JobID} to check.`;
 
-/** The retry-loop extension's line (design section 6 scenario 5, byte-exact). */
+/**
+ * The retry-loop extension's line (design section 6 scenario 5, byte-exact).
+ */
 export const RetryLine = (JobID: string, Attempt: number): string =>
 	`[live] already running as ${JobID} (${Attempt}rd attempt) - use job_output.`;
 
@@ -78,7 +83,9 @@ export const IsEscalation = (Exec: ToolExecution): boolean => {
 	return typeof Args["sandbox_permissions"] === "string";
 };
 
-/** The command argument of a command-runner call. */
+/**
+ * The command argument of a command-runner call.
+ */
 const CommandOf = (Exec: ToolExecution): string => {
 	const Args = (Exec.arguments ?? {}) as Record<string, unknown>;
 	const Value = Args["command"];

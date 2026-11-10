@@ -1,3 +1,8 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+
+import Folders from "./Folders.js";
+
 /**
  * @module Roster
  *
@@ -5,6 +10,7 @@
  * actually run.
  *
  * @remarks
+ *
  * Maintain/Run/Smokes/Index.mjs enumerates
  * `<package>/Target/Test/<Folder>/Test.js` (one folder per suite, the compiled
  * Test.ts plus the README that declares the count), so a Source folder without
@@ -15,11 +21,6 @@
  * runner has no list to drift from (it derives the folders on every run), so
  * the built tree IS the roster.
  */
-import { existsSync } from "node:fs";
-import { join } from "node:path";
-
-import Folders from "./Folders.js";
-
 export default (PackageRoot: string): Set<string> => {
 	const Built = join(PackageRoot, "Target", "Test");
 	return new Set(Folders(Built).filter((Folder) => existsSync(join(Built, Folder, "Test.js"))));

@@ -1,15 +1,16 @@
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 /**
  * @module Config
  *
  * The validated, defaulted configuration shape the schema produces.
  *
  * @remarks
+ *
  * The shape the schema (Variable/Config) produces, after the loader
  * validates and defaults it. Every field is a volatile cell (the values may
  * arrive as `{ get }` references; the factory's State builder unwraps and
  * hot-refreshes them in place).
  */
-import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 export default interface Config {
     /**
      * The durable ledger file (one log per module).

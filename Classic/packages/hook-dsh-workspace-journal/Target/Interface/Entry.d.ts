@@ -4,6 +4,7 @@
  * One per-file entry of a batch: the REVERT DATA.
  *
  * @remarks
+ *
  * The caller (the merge step) captures the pre-image BEFORE the write lands -
  * the content and the version as they were - and hands it to the journal with
  * the batch's other entries, so `revert` can replay the batch backward

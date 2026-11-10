@@ -1,19 +1,3 @@
-/**
- * @module Test
- *
- * The compression and retrieval contract, in one singular test.
- *
- * @remarks
- * A unit smoke of `@playform/hook-dsh-ccr`: the fake ctx + the REAL factory + the REAL CCR
- * apply, from the Harness. Covers the marker replacement (the exact [terminal:preview] + marker
- * bytes), the strict 24-hex marker parsing, the granular range retrieval and the out-of-range
- * clamp, the auto-expand store path (full content, retrievable by hash, above-limit marker
- * return), the TTL expiry and the LRU budget eviction, the compressFailures error tier, the full
- * classifier/multiplier matrix, and the compressed line's durable [ISO] form.
- *
- * Runs standalone (`node Target/Test/Retrieve-And-Marker/Test.js`) AND under the aggregate
- * (`Maintain/Run/Smokes/Index.mjs` spawns it).
- */
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import {
@@ -34,6 +18,23 @@ import {
 	SizeOf,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The compression and retrieval contract, in one singular test.
+ *
+ * @remarks
+ *
+ * A unit smoke of `@playform/hook-dsh-ccr`: the fake ctx + the REAL factory + the REAL CCR
+ * apply, from the Harness. Covers the marker replacement (the exact [terminal:preview] + marker
+ * bytes), the strict 24-hex marker parsing, the granular range retrieval and the out-of-range
+ * clamp, the auto-expand store path (full content, retrievable by hash, above-limit marker
+ * return), the TTL expiry and the LRU budget eviction, the compressFailures error tier, the full
+ * classifier/multiplier matrix, and the compressed line's durable [ISO] form.
+ *
+ * Runs standalone (`node Target/Test/Retrieve-And-Marker/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	const Raw1 = Validate({ logFile: Ledger });

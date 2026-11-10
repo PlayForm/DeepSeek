@@ -14,6 +14,7 @@ export type {
  * `normalize-overpass` handler (`@playform/lib-dsh-core/Overpass/Command`).
  *
  * @remarks
+ *
  * The grammar, the `scopes` report, the `batch` one-shot arm, the
  * `results on|off` settings/editor paths, the usage line and the `files`
  * decline line all live in the core; the module keeps:

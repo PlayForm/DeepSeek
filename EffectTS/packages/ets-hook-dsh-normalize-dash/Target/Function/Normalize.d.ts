@@ -1,3 +1,5 @@
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Normalize
  *
@@ -5,6 +7,7 @@
  * hook.
  *
  * @remarks
+ *
  * In the Classic flavor this module was the stream wrapper itself (an
  * async-generator over the upstream chunk stream that yielded each chunk
  * through the pure dispatch and, after a NORMAL loop completion, wrote the
@@ -43,6 +46,4 @@
  * materialization). This callback closes over only the State (the factory
  * service and the ledger file), which is per-apply, never module-level.
  */
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(State: State): (Count: number) => void;

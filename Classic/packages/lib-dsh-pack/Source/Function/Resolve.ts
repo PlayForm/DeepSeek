@@ -18,6 +18,7 @@ import User from "./User.js";
  * The layered resolution (D2), the heart of the library.
  *
  * @remarks
+ *
  * 1. Read the repo layer (`<root>/.dsh/pack.yml`) to discover a declared
  *    `slug` (the user layer is keyed by it).
  * 2. Read the user layer (`<home>/.dsh/playform/workspaces/<slug>.yml`).
@@ -32,7 +33,6 @@ import User from "./User.js";
  * The merge rules live in `Function/Merge`; the parser decision in
  * `Function/Parse`. The result is a normalized `Pack` (`Function/Normalize`).
  */
-
 export default (Root: string, Options?: Options): Pack | undefined => {
 	const Home_ = Home(Options);
 	const RepoPath = Pick(Repository(Root));

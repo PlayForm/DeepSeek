@@ -4,6 +4,7 @@
  * The slice of the opened storage domain the hook uses (Interface/Domain).
  *
  * @remarks
+ *
  * One domain (named config `domain`, default workspace_audit), TWO tables:
  * `lines` (one record per line id) and `ring` (ONE meta record `__ring` - the
  * bounded ring of the last maxLines lines). Puts are fire-and-forget from the

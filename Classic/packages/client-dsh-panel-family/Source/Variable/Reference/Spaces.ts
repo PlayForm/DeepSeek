@@ -1,3 +1,6 @@
+import type { PanelSection } from "@Interface/Panel.js";
+import Trace from "@Variable/Trace.js";
+
 /**
  * @module Spaces
  *
@@ -5,13 +8,11 @@
  * (order 13).
  *
  * @remarks
+ *
  * Same reference pattern: the child slot, the settings namespace, the static activation posture,
  * and the D5 trace names. The spaces schema carries the volatile `replacement` knob (the plain
  * ASCII space by default).
  */
-import type { PanelSection } from "@Interface/Panel.js";
-import Trace from "@Variable/Trace.js";
-
 export default {
 	id: "adapter-hook-dsh-normalize-spaces",
 	bundle: "@playform/hook-dsh-normalize-spaces",

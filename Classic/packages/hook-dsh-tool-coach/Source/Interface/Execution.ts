@@ -5,6 +5,7 @@
  * the per-agent coaching state, the fetch result, and the per-call decision.
  *
  * @remarks
+ *
  * Pure data - no behavior (the family's Rust-style composition separates
  * Interface from Function).
  */

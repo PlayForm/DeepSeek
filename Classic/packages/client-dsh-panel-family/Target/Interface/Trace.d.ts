@@ -1,9 +1,11 @@
+import type { PanelEnvelope } from "./Panel.js";
 /**
  * @module Trace
  *
  * The panel's live status source contract.
  *
  * @remarks
+ *
  * The D5 bus is the factory's `ctx.trace` service
  * (`Classic/packages/plugin-dsh-factory/Source/Interface/Trace.ts`); a client-side host that
  * exposes it in the browser supplies the same `on`/`ring` face.
@@ -12,7 +14,6 @@
  * and reads the bounded ring, so the panel never needs the host's emit/flush/dispose halves and
  * never imports the trace library or the factory.
  */
-import type { PanelEnvelope } from "./Panel.js";
 /**
  * The live status source: subscribe to one trace event name (the returned disposer unsubscribes)
  * and optionally read the bounded recent-envelope ring (newest first).

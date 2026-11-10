@@ -1,9 +1,15 @@
+import { defineTool } from "@deepseek-ai/dsh-tools";
+
+import type State from "../Interface/State.js";
+import { Dismiss, Save } from "./Persist.js";
+
 /**
  * @module Dismiss
  *
  * The `suggestion_dismiss` tool, promoted from the sketch to a registered tool.
  *
  * @remarks
+ *
  * The module is the plan's section 4.7 dismiss path and the P4 item of the search suggester's
  * completion spec. Contract:
  *
@@ -28,19 +34,20 @@
  * This file only BUILDS the definition; the registration call lives in Function/Apply (the
  * batch-decision/ccr idiom: the definition is readonly after registration).
  */
-import { defineTool } from "@deepseek-ai/dsh-tools";
-
-import type State from "../Interface/State.js";
-import { Dismiss, Save } from "./Persist.js";
-
-/** The synthetic family the session history builds (Function/Apply). */
+/**
+ * The synthetic family the session history builds (Function/Apply).
+ */
 const History = "History";
 
 export default (
-	/** The built per-apply state (the knowledge, the TTL, the family vocabulary). */
+	/**
+	 * The built per-apply state (the knowledge, the TTL, the family vocabulary).
+	 */
 	State: State,
 
-	/** The ledger append (the factory's Append, bound by Apply). */
+	/**
+	 * The ledger append (the factory's Append, bound by Apply).
+	 */
 	Append: (Message: string) => void,
 ) =>
 	defineTool({

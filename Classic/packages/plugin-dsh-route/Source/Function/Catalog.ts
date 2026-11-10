@@ -1,3 +1,5 @@
+import type CatalogService from "@Interface/Catalog.js";
+
 /**
  * @module Catalog
  *
@@ -7,6 +9,7 @@
  * `listModels` / `resolveModelInfo`).
  *
  * @remarks
+ *
  * The route plugin consumes the narrowest slice: the advertised model ids for
  * ONE provider.
  *
@@ -16,8 +19,6 @@
  * `undefined`, which Function/Ladder reads as "no catalog proof - keep the
  * policy's rung". Silence is the contract; a catalog failure never surfaces.
  */
-import type CatalogService from "@Interface/Catalog.js";
-
 export default async (Context: unknown, Provider: string): Promise<string[] | undefined> => {
 	const Llm = (Context as { get?: (Name: string) => unknown } | undefined)?.get?.("llm") as
 		CatalogService | undefined;

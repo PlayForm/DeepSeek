@@ -11,6 +11,7 @@ import Chunk from "./Chunk.js";
  * NORMAL loop completion, writes the ledger line when anything was replaced.
  *
  * @remarks
+ *
  * This is the hook-dsh-normalize-dash's OWN Wire: the factory's Wire is
  * fs/observed-hardwired (this family's silence), while the
  * hook-dsh-normalize-dash's normalization must be VISIBLE - it is the
@@ -59,7 +60,6 @@ import Chunk from "./Chunk.js";
  *   delta/block whose `name` is "edit" on every chunk individually (the edit
  *   tool's `old_string` must match the real file bytes).
  */
-
 export default async function* (
 	Upstream: AsyncIterable<StreamChunk>,
 	State: State,

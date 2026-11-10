@@ -1,3 +1,5 @@
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module ToolEnqueue
  *
@@ -6,12 +8,11 @@
  * schedules).
  *
  * @remarks
+ *
  * The definition is built once at apply (the
  * registration is readonly after registration); the tool's result is one
  * canonical JSON value.
  */
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(State: State): {
     name: string;
     description: string;

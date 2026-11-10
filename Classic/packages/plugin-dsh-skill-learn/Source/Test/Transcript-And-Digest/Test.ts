@@ -1,9 +1,18 @@
+import assert from "node:assert/strict";
+
+import Digest from "../../../Target/Function/Digest.js";
+import type { DigestLimits } from "../../../Target/Function/Digest.js";
+import Transcript from "../../../Target/Function/Transcript.js";
+import type Message from "../../../Target/Interface/Message.js";
+import { Call, Check, FakeAgent, Finish, Foreign, MakeCounter, Say, Turn } from "../Harness.js";
+
 /**
  * @module Test
  *
  * The transcript projection and the bounded digest the review model receives.
  *
  * @remarks
+ *
  * `deriveMessages()` is the only history accessor the harness has, and the
  * digest is the only place the review spends its input budget. The two rules
  * that make the digest safe are the two that are easiest to break: the tail is
@@ -14,26 +23,24 @@
  * `reasoning` block is a block the plugin never sends, so it must be dropped at
  * the boundary rather than silently reaching the digest.
  */
-import assert from "node:assert/strict";
-
-import Digest from "../../../Target/Function/Digest.js";
-import type { DigestLimits } from "../../../Target/Function/Digest.js";
-import Transcript from "../../../Target/Function/Transcript.js";
-import type Message from "../../../Target/Interface/Message.js";
-import { Call, Check, FakeAgent, Finish, Foreign, MakeCounter, Say, Turn } from "../Harness.js";
-
-/** The digest's one bracketed header, copied byte for byte from `Function/Digest.ts:58-59`. */
+/**
+ * The digest's one bracketed header, copied byte for byte from `Function/Digest.ts:58-59`.
+ */
 const Header =
 	"[Earlier conversation digest - older turns summarised to bound the review's cost. Recent turns follow verbatim below.]";
 
-/** The three limits one scenario reads. */
+/**
+ * The three limits one scenario reads.
+ */
 const Limits = (Tail: number, User = 300, Assistant = 200): DigestLimits => ({
 	digestTail: Tail,
 	digestUserChars: User,
 	digestAssistantChars: Assistant,
 });
 
-/** A row whose content is not a block list, which the projection must still handle. */
+/**
+ * A row whose content is not a block list, which the projection must still handle.
+ */
 const Broken = (Role: string): Message => JSON.parse(JSON.stringify({ role: Role, content: "not-a-list" }));
 
 export const runTest = async (): Promise<number> => {

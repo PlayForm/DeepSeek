@@ -1,9 +1,17 @@
+import type State from "@Interface/State.js";
+import type { Domain } from "@Interface/State.js";
+
+import Append from "./Append.js";
+import IsRecord from "./IsRecord.js";
+import Store from "./Store.js";
+
 /**
  * @module Open
  *
  * The optional storage-domain setup (the factory's `Function/Open` pattern).
  *
  * @remarks
+ *
  * The setup probes the facility (`ctx.storage.domain`, else `ctx.storageDomain`), declares
  * the domain named `Config.domain` (version 1, per-record layout, the backup-and-skip
  * invalid-record policy) with the single `records` table, opens it, loads the stored records
@@ -17,13 +25,6 @@
  * (in-memory only); a present facility whose open fails is loud (one best-effort ledger
  * line).
  */
-import type State from "@Interface/State.js";
-import type { Domain } from "@Interface/State.js";
-
-import Append from "./Append.js";
-import IsRecord from "./IsRecord.js";
-import Store from "./Store.js";
-
 export default async (StateRef: State): Promise<void> => {
 	try {
 		const Context = StateRef.Context as {

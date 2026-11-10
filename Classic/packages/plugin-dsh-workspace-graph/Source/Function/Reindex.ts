@@ -1,3 +1,8 @@
+import type State from "@Interface/State.js";
+
+import Append from "./Append.js";
+import IndexFile from "./Index.js";
+
 /**
  * @module Reindex
  *
@@ -6,6 +11,7 @@
  * `reindexed <path> (<status>)` line with the status `indexFile` reported.
  *
  * @remarks
+ *
  * The per-path in-flight bookkeeping belongs to the library's loop (the coalescing queue
  * keyed by path) - this run never touches it, so a throw can never wedge a path as
  * permanently pending.
@@ -17,11 +23,6 @@
  * unhandled rejection - so the body is one try/catch and a defensive failure is ledgered with
  * the module's existing `failed` line, never thrown into the bus.
  */
-import type State from "@Interface/State.js";
-
-import Append from "./Append.js";
-import IndexFile from "./Index.js";
-
 export default async (StateRef: State, Path: string): Promise<void> => {
 	try {
 		const Outcome = await IndexFile(StateRef, Path);

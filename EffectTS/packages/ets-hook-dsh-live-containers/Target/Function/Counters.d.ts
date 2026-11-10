@@ -1,9 +1,12 @@
+import type { AgentState, Variables } from "../Interface/Execution.js";
+import type State from "../Interface/State.js";
 /**
  * @module Counters
  *
  * Holds the per-scope state and builds the built-in variable table one render resolves.
  *
  * @remarks
+ *
  * Research section 3: "the variables v1 ships" - {{time}} {{date}} {{tz}} {{messageCount}}
  * {{turnCount}} {{sinceLastTool}} {{sessionId}} {{cwd}}. The per-scope state lives in a
  * WeakMap keyed on the scope/agent object (the tool-coach precedent; the assemble context
@@ -16,8 +19,6 @@
  * All time reads go through the Clock module (the smoke's fake clock). No I/O, no eval -
  * pure functions over the state.
  */
-import type { AgentState, Variables } from "../Interface/Execution.js";
-import type State from "../Interface/State.js";
 /**
  * The module's default scope key (a dispatch without a scope shares it).
  */

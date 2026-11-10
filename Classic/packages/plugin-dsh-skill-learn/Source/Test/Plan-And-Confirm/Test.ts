@@ -1,22 +1,3 @@
-/**
- * @module Test
- *
- * The two requests: the plan call that carries the index and no bodies, and the
- * confirm call that carries every body the plan asked to see.
- *
- * @remarks
- * The phase split IS the read-before-write property. Phase 1 can only name the
- * skills whose bodies it needs, phase 2 is the only request that may return the
- * final list, and the union the caller loads is `views` plus every patch and
- * support target. The union itself is computed in `Source/Library.ts` (a
- * parallel lane), so this folder proves the two halves the leaves own: phase 1
- * carries no body, phase 2 renders exactly the set it is handed, and a patch
- * target that was not carried cannot pass the judge.
- *
- * TWO CALLS MAXIMUM is asserted where it is enforceable: phase 1's reply may
- * carry `views`, phase 2's reply may not, so a third request is not expressible
- * rather than merely discouraged.
- */
 import assert from "node:assert/strict";
 
 import Catalog from "../../../Target/Function/Catalog.js";
@@ -42,7 +23,29 @@ import {
 	MakeCounter,
 } from "../Harness.js";
 
-/** The user text of one request: a review call sends exactly one message. */
+/**
+ * @module Test
+ *
+ * The two requests: the plan call that carries the index and no bodies, and the
+ * confirm call that carries every body the plan asked to see.
+ *
+ * @remarks
+ *
+ * The phase split IS the read-before-write property. Phase 1 can only name the
+ * skills whose bodies it needs, phase 2 is the only request that may return the
+ * final list, and the union the caller loads is `views` plus every patch and
+ * support target. The union itself is computed in `Source/Library.ts` (a
+ * parallel lane), so this folder proves the two halves the leaves own: phase 1
+ * carries no body, phase 2 renders exactly the set it is handed, and a patch
+ * target that was not carried cannot pass the judge.
+ *
+ * TWO CALLS MAXIMUM is asserted where it is enforceable: phase 1's reply may
+ * carry `views`, phase 2's reply may not, so a third request is not expressible
+ * rather than merely discouraged.
+ */
+/**
+ * The user text of one request: a review call sends exactly one message.
+ */
 const Sent = (Request: StreamRequest | undefined): string => {
 	const Message_ = Request?.messages[0];
 	const Block = Message_?.content[0];
@@ -50,21 +53,31 @@ const Sent = (Request: StreamRequest | undefined): string => {
 	return Block.type === "text" ? Block.text : "";
 };
 
-/** The phase-1 marker, copied byte for byte from `Function/Plan.ts:47`. */
+/**
+ * The phase-1 marker, copied byte for byte from `Function/Plan.ts:47`.
+ */
 const First = "Phase 1 of 2: return the plan. Reply with one JSON object and nothing else.";
 
-/** The phase-2 marker, copied byte for byte from `Function/Confirm.ts:56-57`. */
+/**
+ * The phase-2 marker, copied byte for byte from `Function/Confirm.ts:56-57`.
+ */
 const Second =
 	"Phase 2 of 2: return the final list. The bodies above are the current text. Reply with one JSON object and nothing else.";
 
-/** The route every request in this folder uses. */
+/**
+ * The route every request in this folder uses.
+ */
 const Route_ = { provider: "fake-provider", model: "fake-model" };
 
-/** The views a phase-1 reply carries, or none for the phase-2 shape. */
+/**
+ * The views a phase-1 reply carries, or none for the phase-2 shape.
+ */
 const Views = (Reply: PlanReply | ConfirmReply): readonly string[] =>
 	"views" in Reply ? Reply.views : [];
 
-/** A valid skill file with one unique anchor, for the union check. */
+/**
+ * A valid skill file with one unique anchor, for the union check.
+ */
 const Body =
 	"---\nname: alpha\ndescription: what it does\n---\n\n# alpha\n\nstep one here\n";
 

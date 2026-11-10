@@ -1,3 +1,8 @@
+import * as FileSystem from "node:fs";
+
+import type State from "@Interface/State.js";
+import type PluginFactory from "@playform/plugin-dsh-factory";
+
 /**
  * @module Keep
  *
@@ -5,6 +10,7 @@
  * the factory-supplied union keep-list by the transform.
  *
  * @remarks
+ *
  * The factory keep discovery reads State.Policy as its global field, which for
  * THIS module is the UPDATE policy, so the keepFile union is the module's own
  * concern — with the exact pre-refactor semantics: an unreadable source logs
@@ -12,11 +18,6 @@
  * nothing. The keep-list wins over full-version NORMALIZATION, never over the
  * chain.
  */
-import * as FileSystem from "node:fs";
-
-import type State from "@Interface/State.js";
-import type PluginFactory from "@playform/plugin-dsh-factory";
-
 export default (Factory: PluginFactory, State: State, Keep: string[]): string[] => {
 	const Merged = [...Keep];
 	switch (true) {

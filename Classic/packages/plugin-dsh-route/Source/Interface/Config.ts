@@ -1,3 +1,7 @@
+import type { Allowlist } from "@playform/plugin-dsh-factory";
+
+import type { KeywordTable, PolicyShape, Role } from "./Policy.js";
+
 /**
  * @module Config
  *
@@ -5,13 +9,10 @@
  * config object apply receives).
  *
  * @remarks
+ *
  * Every field is a volatile cell: a hot edit commits without remounting and
  * the factory's P10 refresh updates the State fields in place.
  */
-import type { Allowlist } from "@playform/plugin-dsh-factory";
-
-import type { KeywordTable, PolicyShape, Role } from "./Policy.js";
-
 export default interface Config {
 	/**
 	 * Master switch. Shipped false (the IDLE-forever posture).

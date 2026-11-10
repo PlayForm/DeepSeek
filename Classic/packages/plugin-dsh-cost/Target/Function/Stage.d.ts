@@ -6,6 +6,7 @@ export default _default;
  * from the tool kind and the file's own prior touch kinds in the session.
  *
  * @remarks
+ *
  * The classification follows `Documentation/Plans/COST-TRACK-PLUGIN.md` section
  * 16.1. A file does not "get touched"; it moves through stages, and each stage
  * has a different cost shape. The order is exact: a search locates, a restored

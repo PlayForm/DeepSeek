@@ -1,3 +1,12 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type SubprocessService from "@deepseek-ai/dsh-subprocess";
+import type Entry from "@Interface/Journal.js";
+import type Options from "@Interface/Options.js";
+import type State from "@Interface/State.js";
+
+import Seam from "./Seam.js";
+import Unwrap from "./Unwrap.js";
+
 /**
  * @module State
  *
@@ -5,6 +14,7 @@
  * `State(ctx, config, { module, fields, policyFileName? })`.
  *
  * @remarks
+ *
  * Defensive cell unwrap (`Function/Unwrap` - volatile Schemastery cells), the
  * FIXED shared field mappings (Tool<-mutationTools, Policy<-policyFile,
  * Ledger<-logFile, Enabled<-log, List<-exclude), the module's own fields
@@ -39,15 +49,6 @@
  * keeps the previous value (the same defensive rule as the initial unwrap);
  * unknown or non-volatile key paths are ignored.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type SubprocessService from "@deepseek-ai/dsh-subprocess";
-import type Entry from "@Interface/Journal.js";
-import type Options from "@Interface/Options.js";
-import type State from "@Interface/State.js";
-
-import Seam from "./Seam.js";
-import Unwrap from "./Unwrap.js";
-
 export default <Extra extends object = Record<string, unknown>>(
 	Context: Context,
 	Config: unknown,
@@ -156,7 +157,9 @@ export default <Extra extends object = Record<string, unknown>>(
 // payload is the changed paths, each either a key array or a dotted string).
 declare module "@deepseek-ai/cordis" {
 	interface Events {
-		/** Volatile config values committed into the running fiber without a remount. */
+		/**
+		 * Volatile config values committed into the running fiber without a remount.
+		 */
 		"loader/volatile-update"(Paths: unknown): void;
 	}
 }

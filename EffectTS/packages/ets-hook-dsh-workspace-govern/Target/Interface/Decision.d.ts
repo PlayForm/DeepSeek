@@ -4,6 +4,7 @@
  * The gate's outcome: one decision per evaluation.
  *
  * @remarks
+ *
  * The gate semantics: the proposals become the effects ONLY through the
  * gates. One decision per evaluation, with the per-obligation outcomes
  * recorded so the ledger line can show what the means-check actually saw.

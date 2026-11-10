@@ -4,6 +4,7 @@
  * One watched file's state in the monitor's watch map.
  *
  * @remarks
+ *
  * The entry is created by the watch recorder (Function/Watch) on the first
  * fs/observed event for the path and updated in place afterwards; the sweep
  * (Function/Sweep) advances its cadence bookkeeping. All time values are

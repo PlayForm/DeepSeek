@@ -1,9 +1,11 @@
+import Schema from "@deepseek-ai/schemastery";
 /**
  * @module Config
  *
  * The hook's Schemastery Config schema: one constant built once at load.
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills
  * every default, so invalid configuration fails LOUD at load, and `apply`
  * receives a validated plain config object. The shape this schema produces
@@ -25,7 +27,6 @@
  * disabled, never appears in the profile's bundles, and enables only by an
  * explicit ACTIVATE.
  */
-import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     log: Schema<boolean, boolean, "volatile-defined">;
     logFile: Schema<string, string, "volatile-defined">;

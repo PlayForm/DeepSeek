@@ -1,3 +1,4 @@
+import type { Role } from "./Task.js";
 /**
  * @module Route
  *
@@ -6,6 +7,7 @@
  * Interface/ - never import from a sibling that may not be wired).
  *
  * @remarks
+ *
  * This is
  * the structural contract of the `dshRoute` service
  * (@playform/plugin-dsh-route, ROUTING-ENFORCER-PLUGIN.md section 2.1); the
@@ -13,7 +15,6 @@
  * when it is absent (the plugin ships disabled) - a contained skip, never a
  * load block.
  */
-import type { Role } from "./Task.js";
 /**
  * Re-export the role vocabulary in the queue's own terms (the three routing
  * roles of the task-routing skill).

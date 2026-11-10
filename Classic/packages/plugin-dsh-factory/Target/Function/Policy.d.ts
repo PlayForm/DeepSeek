@@ -1,3 +1,5 @@
+import Schema from "@deepseek-ai/schemastery";
+export default _default;
 /**
  * @module Policy
  *
@@ -8,6 +10,7 @@
  *     Compose(false, { ..., policy: Policy() })
  *
  * @remarks
+ *
  * The block carries ONE key per action class (read, index, record, suggest,
  * write, commit, spawn, message), each an enum of "auto" | "approve" whose
  * default is the D6 posture from `Variable/Policy` (read/index/record/suggest/
@@ -28,9 +31,9 @@
  * defaults per action when a pack is resolved (the wiring is the next
  * refinement; the type already exists in @playform/lib-dsh-pack).
  */
-import Schema from "@deepseek-ai/schemastery";
-export default _default;
-/** The policy block: one "auto" | "approve" verdict per action class. */
+/**
+ * The policy block: one "auto" | "approve" verdict per action class.
+ */
 declare function _default(): Schema<NoInfer<Schemastery.ObjectS<NoInfer<{
     read: Schema<"approve" | "auto", "approve" | "auto", "defined">;
     index: Schema<"approve" | "auto", "approve" | "auto", "defined">;

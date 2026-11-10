@@ -1,3 +1,10 @@
+import type { Context } from "@deepseek-ai/cordis";
+import ServiceClass from "@Function/Service.js";
+import type Config from "@Interface/Config.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/lib-dsh-core";
+
 /**
  * @module Apply
  *
@@ -5,6 +12,7 @@
  * service registration, and the activation proof.
  *
  * @remarks
+ *
  * The State builds with the factory's cell unwrap + the P10 volatile refresh;
  * the service registers through `Function/Service` (`workspaceReflect`,
  * constructed here so `ctx.workspaceReflect` resolves). The contract is
@@ -24,13 +32,6 @@
  * kills event delivery). The test probe is the
  * `ctx.__pluginDshWorkspaceReflectState` attachment.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import ServiceClass from "@Function/Service.js";
-import type Config from "@Interface/Config.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
-
 /**
  * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
  */

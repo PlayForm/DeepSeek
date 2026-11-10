@@ -1,3 +1,9 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose } from "@playform/plugin-dsh-factory";
+
+import Default from "./Default.js";
+import Section from "./Section.js";
+
 /**
  * @module Config
  *
@@ -5,6 +11,7 @@
  * at load).
  *
  * @remarks
+ *
  * Cordis validates the exported schema while the plugin loads and fills every
  * default (docs/user/develop/basic/config.md:45), so invalid configuration
  * fails LOUD at load instead of silently falling back per-field, and `apply`
@@ -29,12 +36,6 @@
  * instance (`ctx.pluginFactory`, from inject) is what every runtime call goes
  * through.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
-
-import Default from "./Default.js";
-import Section from "./Section.js";
-
 const DefaultLog = false;
 
 export default Compose(

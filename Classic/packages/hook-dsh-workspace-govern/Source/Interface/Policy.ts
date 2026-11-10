@@ -5,6 +5,7 @@
  * proposal kind, with defaults").
  *
  * @remarks
+ *
  * The kind matches the proposal kind exactly or `*`; the decision is the gate
  * outcome the rule forces. First matching rule wins; no match means the checks
  * decide.

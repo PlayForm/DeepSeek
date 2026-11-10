@@ -1,3 +1,10 @@
+import Clock from "@Function/Clock.js";
+import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
+import * as Policy from "@Function/Policy.js";
+import type { Log } from "@Function/Render.js";
+import type { BoardMember, BoardState, JobEvent, LeaseEntry } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Board
  *
@@ -5,6 +12,7 @@
  * sections 3.4, 4.4 as amended).
  *
  * @remarks
+ *
  * A planted block is a LEASE: the board declares its reporters and a window
  * of N consecutive parent turns without a foldable report from a running
  * member; on expiry the block SELF-DECLARES the stale row - and that
@@ -18,23 +26,22 @@
  * stale declarations are section changes at the next parent request. There is
  * no completion-style dynamic context for boards - a board is RUNNING state.
  */
-import Clock from "@Function/Clock.js";
-import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
-import * as Policy from "@Function/Policy.js";
-import type { Log } from "@Function/Render.js";
-import type { BoardMember, BoardState, JobEvent, LeaseEntry } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
-
-/** The byte length of one string. */
+/**
+ * The byte length of one string.
+ */
 const Bytes = (Text: string): number => Buffer.byteLength(Text, "utf8");
 
-/** Cap one string to N bytes, single line (the row payload cap). */
+/**
+ * Cap one string to N bytes, single line (the row payload cap).
+ */
 const Cap = (Text: string, Maximum: number): string => {
 	const Cut = Text.split("\n")[0] ?? "";
 	return Cut.length > Maximum ? Cut.slice(0, Maximum) : Cut;
 };
 
-/** The boards of one agent. */
+/**
+ * The boards of one agent.
+ */
 export const For = (Agent: State, AgentID: string): Map<string, BoardState> => {
 	const Existing = Agent.Boards.get(AgentID);
 	if (Existing !== undefined) {
@@ -45,7 +52,9 @@ export const For = (Agent: State, AgentID: string): Map<string, BoardState> => {
 	return Fresh;
 };
 
-/** The fresh member row. */
+/**
+ * The fresh member row.
+ */
 const NewMember = (AgentID: string): BoardMember => ({
 	agentId: AgentID,
 	status: "running",
@@ -331,7 +340,9 @@ export const OnTurn = (Agent: State, AgentID: string, Append: Log): void => {
 	}
 };
 
-/** The stale declaration row (I5 3.1, byte-exact). */
+/**
+ * The stale declaration row (I5 3.1, byte-exact).
+ */
 export const StaleRow = (AgentID: string, Turns: number): string =>
 	`[stale]     ${AgentID} - unreported for ${Turns} parent turns; re-dispatch or mark failed`;
 
@@ -368,7 +379,9 @@ export const FailsafeStall = (Agent: State, AgentID: string, Append: Log): void 
 	}
 };
 
-/** The row label padding: label then spaces to column 12 (I5 3.1). */
+/**
+ * The row label padding: label then spaces to column 12 (I5 3.1).
+ */
 const Row = (Label: string, Body: string): string =>
 	`${Label}${" ".repeat(Math.max(1, 12 - Label.length))}${Body}`;
 
@@ -384,7 +397,9 @@ const MONITORED_OUTCOMES: Record<string, string> = {
 	denied: "check denied (sandbox) (x)",
 };
 
-/** The agent-board frame (D2 4.4 + I5, byte-exact). */
+/**
+ * The agent-board frame (D2 4.4 + I5, byte-exact).
+ */
 export const Frame = (Agent: State, Board: BoardState, Separator: string): string => {
 	const At = Clock(Agent);
 
@@ -515,7 +530,9 @@ export const Frame = (Agent: State, Board: BoardState, Separator: string): strin
 	return Lines.join("\n");
 };
 
-/** The closing line (I5 7.2, byte-exact variants). */
+/**
+ * The closing line (I5 7.2, byte-exact variants).
+ */
 export const ClosingLine = (Board: BoardState, Seconds: number): string =>
 	Board.pruned > 0
 		? `board closed: ${Board.members.filter((Member) => Member.status === "done").length}/${Board.expect} done, ${Board.pruned} pruned stale in ${Seconds}s`

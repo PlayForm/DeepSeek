@@ -1,9 +1,13 @@
+import type { Candidate, Detection, Verdict } from "../Interface/Execution.js";
+import Measure, { type MeasureInput } from "./Measure.js";
+
 /**
  * @module Score
  *
  * The confidence and the gate.
  *
  * @remarks
+ *
  * Completion spec D8 + 03-SUGGESTERS section 2: the pickable heuristic
  * scorer.
  *
@@ -33,9 +37,6 @@
  * for the ordered, capped companion list. Every row is measured by
  * Function/Measure, the same leaf a gated silence's decision record uses.
  */
-import type { Candidate, Detection, Verdict } from "../Interface/Execution.js";
-import Measure, { type MeasureInput } from "./Measure.js";
-
 /**
  * The plan's bias: a single weak signal stays under the default threshold.
  */

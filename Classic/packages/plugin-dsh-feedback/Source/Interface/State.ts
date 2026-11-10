@@ -1,18 +1,19 @@
-/**
- * @module State
- *
- * The service's runtime state, built once in the constructor.
- *
- * @remarks
- * The in-memory council map is keyed per session; the durable record is the
- * ledger file (one log per module).
- */
 import type { Context } from "@deepseek-ai/cordis";
 
 import type FeedbackBlock from "./Block.js";
 import type Config from "./Config.js";
 import type Outcome from "./Outcome.js";
 
+/**
+ * @module State
+ *
+ * The service's runtime state, built once in the constructor.
+ *
+ * @remarks
+ *
+ * The in-memory council map is keyed per session; the durable record is the
+ * ledger file (one log per module).
+ */
 /**
  * The per-session council slice: the blocks by agent id, in record order.
  */

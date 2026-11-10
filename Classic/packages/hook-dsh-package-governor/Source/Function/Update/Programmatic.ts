@@ -1,9 +1,15 @@
+import { join as Join } from "node:path";
+
+import type Invocation from "@Interface/Invocation.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Programmatic
  *
  * The default update mode: the npm-check-updates library via run(...) in-process.
  *
  * @remarks
+ *
  * The library is declared as a bundle dependency; the harness auto-installs plugin
  * dependencies into the profile. The function runs inside the detached update continuation -
  * no external binary. THE npm-check-updates library is one of the two standing exemptions: it
@@ -11,11 +17,6 @@
  * (State.Factory.Append - the continuation runs in the host process, so the lines land in the
  * same ledger directly instead of the old child's inherited fd).
  */
-import { join as Join } from "node:path";
-
-import type Invocation from "@Interface/Invocation.js";
-import type State from "@Interface/State.js";
-
 export default async (
 	State: State,
 	Invocation: Invocation,

@@ -1,3 +1,6 @@
+import type { Context } from "@deepseek-ai/cordis";
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Write
  *
@@ -5,6 +8,7 @@
  * family's explicit, visible, opt-in door to files ALREADY on disk.
  *
  * @remarks
+ *
  * The stream normalizers (normalize-dash + the five flavors) rewrite model
  * output by name-exempting `edit`, `raw-write` and THIS tool's calls (the
  * core's Stream/Chunk + Stream/Block): the arguments carry a FILE PATH, and a
@@ -37,7 +41,4 @@
  * definition object is never mutated - this file only BUILDS it; the
  * registration call itself lives in Function/Apply.
  */
-import type { Context } from "@deepseek-ai/cordis";
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(Context: Context, State: State): import("@deepseek-ai/dsh-tools").ToolDefinition;

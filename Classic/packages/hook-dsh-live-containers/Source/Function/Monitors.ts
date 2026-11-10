@@ -1,25 +1,3 @@
-/**
- * @module Monitors
- *
- * The live file monitor engine (the FILE-MONITOR design sections 3-6).
- *
- * @remarks
- * The `fs/observed` observer (L11), the checkpoint scan (the debounce, the
- * deadline, the slow schedule, the retirement - no real timers), the check
- * dispatch through the SHIPPED G2 wrapper (one wrapper, two callers), the
- * settle fold, the per-agent stanza part, and the enrollment bookkeeping.
- *
- * THE FAIL-OPEN ENVELOPE (the R3 point 7, hard): every listener path is
- * wrapped - never throws into the `fs/observed` dispatch, the jobs events or
- * the assemble waterfall; a dispatch start failure keeps the band's
- * last-known result and renders STALE (the version moved); a renderer
- * failure skips the stanza and logs.
- *
- * THE HONESTY CLUSTER (the R3 points 1/2/7, hard): a clean glyph renders
- * ONLY from an observed settle with exit 0 of the exact check set for the
- * exact version with provenance "live"; a settle-less version bump NEVER
- * renders clean; the linked-governance check never produces a verdict.
- */
 import { basename as Base, dirname as Parent } from "node:path";
 
 import * as Band from "@Function/Band.js";
@@ -37,6 +15,29 @@ import type {
 } from "@Interface/Events.js";
 import type State from "@Interface/State.js";
 
+/**
+ * @module Monitors
+ *
+ * The live file monitor engine (the FILE-MONITOR design sections 3-6).
+ *
+ * @remarks
+ *
+ * The `fs/observed` observer (L11), the checkpoint scan (the debounce, the
+ * deadline, the slow schedule, the retirement - no real timers), the check
+ * dispatch through the SHIPPED G2 wrapper (one wrapper, two callers), the
+ * settle fold, the per-agent stanza part, and the enrollment bookkeeping.
+ *
+ * THE FAIL-OPEN ENVELOPE (the R3 point 7, hard): every listener path is
+ * wrapped - never throws into the `fs/observed` dispatch, the jobs events or
+ * the assemble waterfall; a dispatch start failure keeps the band's
+ * last-known result and renders STALE (the version moved); a renderer
+ * failure skips the stanza and logs.
+ *
+ * THE HONESTY CLUSTER (the R3 points 1/2/7, hard): a clean glyph renders
+ * ONLY from an observed settle with exit 0 of the exact check set for the
+ * exact version with provenance "live"; a settle-less version bump NEVER
+ * renders clean; the linked-governance check never produces a verdict.
+ */
 /** The structural fs/observed types (the factory's Wire signature, verified
  * against @deepseek-ai/dsh-fs; kept minimal - only the fields this module
  * reads). */
@@ -47,7 +48,9 @@ export type FSObservation = { kind?: unknown; version?: unknown } | undefined;
  * deadline scan; "assemble" adds the slow schedule and the retirement scan. */
 export type Phase = "event" | "assemble";
 
-/** The writer display of an actor: the writing exec's agent id, "-" when absent. */
+/**
+ * The writer display of an actor: the writing exec's agent id, "-" when absent.
+ */
 const WriterOf = (Actor: object | undefined): string => {
 	const ID = (Actor as { agent?: { id?: unknown } | undefined } | undefined)?.agent?.id;
 	return typeof ID === "string" && ID.length > 0 ? ID : "-";
@@ -60,7 +63,9 @@ const AgentOf = (Actor: object | undefined): string => {
 	return typeof ID === "string" && ID.length > 0 ? ID : "(unowned)";
 };
 
-/** Enroll (or refresh) one file in an agent's monitor set. Returns the entry. */
+/**
+ * Enroll (or refresh) one file in an agent's monitor set. Returns the entry.
+ */
 export const Enroll = (
 	State: State,
 	AgentID: string,
@@ -309,7 +314,9 @@ export const Dispatch = async (
 	return Started.jobId;
 };
 
-/** The job label: the first 80 bytes (the design's label cap). */
+/**
+ * The job label: the first 80 bytes (the design's label cap).
+ */
 const Label = (Text: string): string => (Text.length > 80 ? Text.slice(0, 80) : Text);
 
 /** The checkpoint scan (called at every checkpoint, fail-open): the deadline

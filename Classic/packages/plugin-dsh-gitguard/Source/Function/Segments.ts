@@ -5,6 +5,7 @@
  * compound ("cd x && git status"), so the guard classifies EVERY segment.
  *
  * @remarks
+ *
  * The command is split on the shell separators (`&&`, `||`, `;`, `|`, newline);
  * each segment is trimmed; empty segments are dropped.
  *

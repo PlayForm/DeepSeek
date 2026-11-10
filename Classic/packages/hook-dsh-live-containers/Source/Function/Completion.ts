@@ -1,3 +1,8 @@
+import Clock from "@Function/Clock.js";
+import type { Log } from "@Function/Render.js";
+import type { DetachRecord, JobEvent, SessionEvent } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Completion
  *
@@ -5,6 +10,7 @@
  * IMPLEMENTATION-DESIGN.md section 3.3 as amended).
  *
  * @remarks
+ *
  * THE CARRIER (I3, verified): the completion block is a REGISTERED DYNAMIC
  * CONTEXT (`ctx.systemPrompt.context`) whose text the plugin flips from the
  * completed frame to the delivered text exactly once per delivery; the loop
@@ -37,18 +43,19 @@
  *
  *     [live] completion report (harness-appended; not a user request):
  */
-import Clock from "@Function/Clock.js";
-import type { Log } from "@Function/Render.js";
-import type { DetachRecord, JobEvent, SessionEvent } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
-
-/** The context registration name (the SCHEME's seam evidence). */
+/**
+ * The context registration name (the SCHEME's seam evidence).
+ */
 export const CONTEXT_NAME = "live-containers-completion";
 
-/** The wrapper line (I3 2.5, byte-exact). */
+/**
+ * The wrapper line (I3 2.5, byte-exact).
+ */
 export const Wrapper = "[live] completion report (harness-appended; not a user request):";
 
-/** The per-frame resume pointer (design section 4.2, byte-exact). */
+/**
+ * The per-frame resume pointer (design section 4.2, byte-exact).
+ */
 export const FrameHint = (JobID: string): string =>
 	`[live] job_output ${JobID} to read the full output.`;
 
@@ -68,7 +75,9 @@ const DOMAIN_TOKENS: readonly string[] = [
 	"cmake",
 ];
 
-/** The hint's domain phrase from the batch's first cmdHead (I4 2.3). */
+/**
+ * The hint's domain phrase from the batch's first cmdHead (I4 2.3).
+ */
 const DomainNoun = (Frames: DetachRecord[]): string => {
 	const First = Frames[0]?.cmdHead ?? "";
 	const Token = First.trim().split(/\s+/)[0] ?? "";
@@ -82,7 +91,9 @@ const Elapsed = (Agent: State, Record: DetachRecord): number => {
 	return Math.max(0, Math.round((End - Record.startedAt) / 1000));
 };
 
-/** The byte length of one string. */
+/**
+ * The byte length of one string.
+ */
 const Bytes = (Text: string): number => Buffer.byteLength(Text, "utf8");
 
 /** The status line + the failure extras of one frame (design section 4.2 +
@@ -153,7 +164,9 @@ export const ComposeFrame = (
 	return Lines.join("\n");
 };
 
-/** The elided-tail marker (I4 1.3, byte-exact). */
+/**
+ * The elided-tail marker (I4 1.3, byte-exact).
+ */
 const Elided = (JobID: string): string =>
 	`output (tail elided; cap reached - job_output ${JobID} for the full output)`;
 
@@ -204,7 +217,9 @@ const Fit = (Agent: State, Frames: DetachRecord[], Append: Log): string[] => {
 	return Kept;
 };
 
-/** The resume hint (I4 2.2, byte-exact, one line, <= 200 bytes). */
+/**
+ * The resume hint (I4 2.2, byte-exact, one line, <= 200 bytes).
+ */
 export const ResumeHint = (
 	Agent: State,
 	AgentID: string,
@@ -262,7 +277,9 @@ export const ComposePending = (
 	return [Wrapper, ...Bodies].join("\n\n") + "\n" + ResumeHint(Agent, AgentID, Sorted, TurnSet);
 };
 
-/** The pending slot accessor. */
+/**
+ * The pending slot accessor.
+ */
 const Slot = (
 	Agent: State,
 	AgentID: string,

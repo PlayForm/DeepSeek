@@ -1,9 +1,16 @@
+import Emit from "@Function/Emit.js";
+import Persist from "@Function/Persist.js";
+import type Entry from "@Interface/Entry.js";
+import type Proposal from "@Interface/Proposal.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Propose
  *
  * The inbox splice: it records one batch proposal on the board.
  *
  * @remarks
+ *
  * THE SPLICE the plan's exploration item 1 asked for: the proposal arrives as an inbox message (the
  * harness agent-team channel), the board parses it (Function/Envelope) and projects it into its
  * state, so the board, the compiled context and every consumer see the SAME proposal.
@@ -19,21 +26,21 @@
  * The write is ledgered, persisted (Function/Persist) and emitted as `batch/state-change` kind
  * `proposal` AFTER the state moved - the same contract the write API follows.
  */
-import Emit from "@Function/Emit.js";
-import Persist from "@Function/Persist.js";
-import type Entry from "@Interface/Entry.js";
-import type Proposal from "@Interface/Proposal.js";
-import type State from "@Interface/State.js";
-
-/** Read one string field off the untrusted payload. */
+/**
+ * Read one string field off the untrusted payload.
+ */
 const Text = (Raw: Record<string, unknown>, Key: string): string =>
 	typeof Raw[Key] === "string" ? (Raw[Key] as string) : "";
 
-/** Read one number field off the untrusted payload. */
+/**
+ * Read one number field off the untrusted payload.
+ */
 const Count = (Raw: Record<string, unknown>, Key: string): number =>
 	typeof Raw[Key] === "number" && Number.isFinite(Raw[Key]) ? (Raw[Key] as number) : 0;
 
-/** Normalize the untrusted payload into the board's proposal contract. */
+/**
+ * Normalize the untrusted payload into the board's proposal contract.
+ */
 const Shape = (Raw: Record<string, unknown>, Origin: string): Proposal => ({
 	id: Text(Raw, "id"),
 	intent: Text(Raw, "intent"),

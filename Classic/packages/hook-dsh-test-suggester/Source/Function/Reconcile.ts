@@ -1,3 +1,13 @@
+import { existsSync, readFileSync, statSync } from "node:fs";
+import { basename, isAbsolute, join, relative, sep } from "node:path";
+
+import type Drift from "@Interface/Drift.js";
+import type { Reconciliation } from "@Interface/Drift.js";
+
+import Counts from "./Counts.js";
+import Folders from "./Folders.js";
+import Roster from "./Roster.js";
+
 /**
  * @module Reconcile
  *
@@ -5,6 +15,7 @@
  * CLAIMS with the tree it actually has.
  *
  * @remarks
+ *
  * The completion spec's wave 2c re-spec for this package
  * (Documentation/Plans/Completion-Spec/03-SUGGESTERS.md).
  *
@@ -32,16 +43,6 @@
  * never fixes, and never throws (a package without a smoke tree answers
  * `undefined` - the documented silence).
  */
-import { existsSync, readFileSync, statSync } from "node:fs";
-import { basename, isAbsolute, join, relative, sep } from "node:path";
-
-import type Drift from "@Interface/Drift.js";
-import type { Reconciliation } from "@Interface/Drift.js";
-
-import Counts from "./Counts.js";
-import Folders from "./Folders.js";
-import Roster from "./Roster.js";
-
 /**
  * The repo-relative display of a path (a relative one is already displayable;
  * the workspace root itself displays as its own name).

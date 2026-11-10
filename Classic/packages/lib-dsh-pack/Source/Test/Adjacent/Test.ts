@@ -1,3 +1,8 @@
+import assert from "node:assert/strict";
+import { join } from "node:path";
+
+import { Check, Finish, Library, MakeCounter, Put, Tree } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -7,15 +12,13 @@
  * opt-out on Resolve.
  *
  * @remarks
+ *
  * The Root and Resolve scenarios are the only ones that touch the disk, and they use a
  * temporary home (never the real `~/.dsh`).
  */
-import assert from "node:assert/strict";
-import { join } from "node:path";
-
-import { Check, Finish, Library, MakeCounter, Put, Tree } from "../Harness.js";
-
-/** One Touch row, spelled out (the fixtures are the folded history). */
+/**
+ * One Touch row, spelled out (the fixtures are the folded history).
+ */
 const Call = (Seq: number, Path: string, Tool = "Write"): Library.Touch => ({
 	seq: Seq,
 	path: Path,

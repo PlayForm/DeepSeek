@@ -1,3 +1,8 @@
+import assert from "node:assert/strict";
+
+import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";
+import { Check, Finish, LinesWith, Make, MakeCounter, Validate, rm } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +10,7 @@
  * singular test.
  *
  * @remarks
+ *
  * The test covers the shared block's defaults in the schema and on the built
  * State (`Allow`), the per-action override, and the service's read-only
  * posture - its own action classes (read and record) are automatic, so it
@@ -15,12 +21,9 @@
  * fake fs, which proves the automatic posture lets it proceed and that the
  * call touches no file content.
  */
-import assert from "node:assert/strict";
-
-import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";
-import { Check, Finish, LinesWith, Make, MakeCounter, Validate, rm } from "../Harness.js";
-
-/** The D6 defaults, written out (the contract, not a mirror). */
+/**
+ * The D6 defaults, written out (the contract, not a mirror).
+ */
 const Defaults = {
 	read: "auto",
 	index: "auto",
@@ -32,7 +35,9 @@ const Defaults = {
 	message: "auto",
 };
 
-/** An enabled service with an empty ledger (the ledger path never writes). */
+/**
+ * An enabled service with an empty ledger (the ledger path never writes).
+ */
 const Setup = (Raw: Record<string, unknown> = {}): any => {
 	rm();
 	return Make(Validate({ logFile: "/nonexistent/evidence.log", enabled: true, ...Raw }));

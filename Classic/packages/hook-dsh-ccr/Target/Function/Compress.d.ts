@@ -1,3 +1,6 @@
+import type { ContentBlock } from "@deepseek-ai/dsh-llm";
+import type State from "../Interface/State.js";
+import type { Eviction } from "./Store.js";
 /**
  * @module Compress
  *
@@ -5,6 +8,7 @@
  * stored-only (auto-expand), or passed through.
  *
  * @remarks
+ *
  * Plan §2. Given the tool name, the failure flag and the result's content
  * blocks the function returns a verdict the Apply stage turns into ledger
  * lines and (for `replace`) the preview + marker decision:
@@ -37,9 +41,6 @@
  * (`decision.content ?? result.content`, the spill-policy precedent) - the
  * store keeps what the model would have seen.
  */
-import type { ContentBlock } from "@deepseek-ai/dsh-llm";
-import type State from "../Interface/State.js";
-import type { Eviction } from "./Store.js";
 /**
  * The verdict: pass, store-only (auto-expand), or replace (preview + marker).
  */

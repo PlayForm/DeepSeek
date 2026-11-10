@@ -1,9 +1,16 @@
+import * as FileSystem from "node:fs";
+
+import type { Eviction } from "@Function/Store.js";
+import type Entry from "@Interface/Entry.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Storage
  *
  * The CCR hook's own storage-domain open, recovery and write mirror.
  *
  * @remarks
+ *
  * Pattern P4 of Temporary/Harness-Wave/Plan.md section 6; the shipped
  * sequence copied from
  * hook-dsh-workspace-observe/Source/Function/Storage.ts:51-103.
@@ -50,12 +57,6 @@
  * bundle load - the factory's live-verified pitfall); the type-only
  * devDependencies pin them to the host-era versions.
  */
-import * as FileSystem from "node:fs";
-
-import type { Eviction } from "@Function/Store.js";
-import type Entry from "@Interface/Entry.js";
-import type State from "@Interface/State.js";
-
 /**
  * The structural handle shape (the precedent's view: only `put` and
  * `entries` are consumed on the tables; `close` is kept for the effect's

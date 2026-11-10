@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The hook's Schemastery schema (one constant built once at load).
  *
  * @remarks
+ *
  * Composed with the factory's standalone Schema helper (`shared: false` - the minimal block,
  * only the universal log/logFile volatile cells; the hook hooks no fs/observed machinery). Every
  * knob is a volatile cell so a hot edit lands on the next decision without a remount.
@@ -13,9 +17,6 @@
  * defaults to "off" - the second explicit flip after the plugin's own enable (the conservative
  * policy, PASS-ON-AND-INGESTER.md section 5: the write path is never auto-approved by default).
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
-
 const DefaultEnabled = false;
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-batch-decision.log";
 const DefaultAutoApprove = "off";

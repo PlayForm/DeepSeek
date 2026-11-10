@@ -1,3 +1,7 @@
+import type { Log } from "@Function/Render.js";
+import type { MonitorEntry, MonitorRecord } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Storage
  *
@@ -6,6 +10,7 @@
  * `Function/{Open,Attach}.ts` pattern).
  *
  * @remarks
+ *
  * THE DOMAIN: a NEW storage domain `live_containers_monitors` (version 1,
  * layout per-record, invalidRecords backup-and-skip, ONE table `checks`).
  * NOT extension records in the shared `package_governance` domain: the v2
@@ -32,11 +37,9 @@
  * checks)`. When the read surface is absent or fails: no recovery - the
  * bands render `not run yet` (honesty, never fabrication).
  */
-import type { Log } from "@Function/Render.js";
-import type { MonitorEntry, MonitorRecord } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
-
-/** The queue cap for the pre-bind buffer (the factory Queue pattern). */
+/**
+ * The queue cap for the pre-bind buffer (the factory Queue pattern).
+ */
 const QUEUE_CAP = 256;
 
 /** The record write path (best-effort, never on a caller path): through the
@@ -55,7 +58,9 @@ export const Record = (State: State, Entry: MonitorRecord): void => {
 	}
 };
 
-/** The recovery load: rebuild the monitor set from the domain's records. */
+/**
+ * The recovery load: rebuild the monitor set from the domain's records.
+ */
 const Recover = (
 	State: State,
 	Handle: { table(name: string): { entries(): IterableIterator<[string, unknown]> } },

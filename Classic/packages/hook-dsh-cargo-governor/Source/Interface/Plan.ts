@@ -5,6 +5,7 @@
  * (Function/Pin).
  *
  * @remarks
+ *
  * The exact entry-level changes, as pure data. The rewrite never re-derives
  * them from parsed values — it applies only these, line-surgically, so nothing
  * outside the planned entries can change.
@@ -16,13 +17,21 @@ export default interface Plan {
 	 *  bare resolved value — Cargo's implicit caret — or `=resolved` when the
 	 *  policy says exact pins). */
 	replacements: Array<{
-		/** Normalized dependency section path (Function/Decode's form). */
+		/**
+		 * Normalized dependency section path (Function/Decode's form).
+		 */
 		section: string;
-		/** The crate name. */
+		/**
+		 * The crate name.
+		 */
 		name: string;
-		/** The current version requirement string. */
+		/**
+		 * The current version requirement string.
+		 */
 		from: string;
-		/** The canonical version requirement string. */
+		/**
+		 * The canonical version requirement string.
+		 */
 		to: string;
 	}>;
 

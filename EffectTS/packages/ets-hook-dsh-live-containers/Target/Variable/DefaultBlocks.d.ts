@@ -1,9 +1,11 @@
+import type { BlockSpecification } from "../Interface/Execution.js";
 /**
  * @module DefaultBlocks
  *
  * Declares the DEFAULT block table the schema default of config `blocks` ships.
  *
  * @remarks
+ *
  * A Variable: pure data, not code. The 14-entry catalog of Requirements/03 section 3,
  * shipped as the schema default of config `blocks` with the sensible enablements
  * (todo-list, command-runner and session-stats ON; the rest dormant) - and the PLUGIN
@@ -24,5 +26,4 @@
  * log `render unknown <id> <token>` - the frames of the dormant entries are inert by
  * construction (enabled: false).
  */
-import type { BlockSpecification } from "../Interface/Execution.js";
 export declare const DEFAULT_BLOCKS: BlockSpecification[];

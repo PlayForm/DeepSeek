@@ -1,3 +1,5 @@
+import type { HeuristicValues } from "../Interface/Decision.js";
+export default _default;
 /**
  * @module Weights
  *
@@ -6,6 +8,7 @@
  * use.
  *
  * @remarks
+ *
  * Completion spec D8: "every heuristic and every decision pickable".
  *
  *   - a name NOT in the enabled list is dropped: its effective weight is 0;
@@ -16,8 +19,6 @@
  * The resolver runs per judged call (the config cells are volatile), so a hot
  * edit to `heuristics` or `weights` lands on the next call without a remount.
  */
-import type { HeuristicValues } from "../Interface/Decision.js";
-export default _default;
 declare function _default(
 /**
  * The enabled heuristic names (config `heuristics`, volatile).

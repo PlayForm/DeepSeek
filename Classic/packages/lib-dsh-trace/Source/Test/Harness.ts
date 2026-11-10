@@ -8,6 +8,7 @@ import { Loop } from "../../Target/Library.js";
  * Finish guard and the async variant for the loop's `Flush`.
  *
  * @remarks
+ *
  * The trace is a pure unit: NO fake ctx, NO factory. Every test imports the
  * REAL built `Target/Library.js` of its own bundle only, so the harness here is
  * minimal: one Check per source-suite ok group, with the callback carrying that
@@ -20,7 +21,6 @@ import { Loop } from "../../Target/Library.js";
  * `prepublishOnly.sh` gates the build on it. Imported as a library, this module
  * only exports.
  */
-
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks.
  * Passed by reference so Check can bump it from inside its callback.

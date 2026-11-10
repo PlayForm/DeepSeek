@@ -1,3 +1,6 @@
+import type Decision from "../Interface/Decision.js";
+import Table from "./Table.js";
+
 /**
  * @module Decided
  *
@@ -5,6 +8,7 @@
  * decision in a single byte-stable line.
  *
  * @remarks
+ *
  * The decision is answerable from the ledger alone (D8: every decision
  * logged):
  *
@@ -17,9 +21,6 @@
  * `store` names the backend that answered, so a live operator can tell the
  * durable learning from the memory fallback without reading the state.
  */
-import type Decision from "../Interface/Decision.js";
-import Table from "./Table.js";
-
 export default (
 	/**
 	 * The decision record to print.

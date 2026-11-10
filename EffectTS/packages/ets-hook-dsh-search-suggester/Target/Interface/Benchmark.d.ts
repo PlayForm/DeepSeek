@@ -6,6 +6,7 @@
  * of the call in the fixed sequence that produced it.
  *
  * @remarks
+ *
  * The benchmark scorer (Function/Benchmark) groups these by intent.
  */
 export interface Note {

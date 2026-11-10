@@ -4,6 +4,7 @@
  * The escalation marker detector for a re-dispatch prompt's spec text.
  *
  * @remarks
+ *
  * ROUTING-ENFORCER-PLUGIN.md section 2.2, the task-routing skill's attempts
  * ladder: an agent report that ends with `ESCALATION: <concrete reason>` is
  * the ladder's failure signal, so a re-dispatch prompt carrying that report

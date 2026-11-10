@@ -8,6 +8,7 @@
  * counter).
  *
  * @remarks
+ *
  * Puts are fire-and-forget from the commit path (never awaited
  * by the caller); the recovery read is synchronous (`entries`).
  */

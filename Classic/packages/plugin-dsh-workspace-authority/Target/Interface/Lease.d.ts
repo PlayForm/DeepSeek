@@ -4,6 +4,7 @@
  * The LEASE record: for how long.
  *
  * @remarks
+ *
  * One of the three separate authority records (v4.1 section 3.9); it carries NO
  * permission set - what the holder may do lives in the capability, the lease
  * only holds time.

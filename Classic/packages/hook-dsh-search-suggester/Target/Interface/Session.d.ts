@@ -1,3 +1,4 @@
+import type { Touch } from "@playform/lib-dsh-pack";
 /**
  * @module Session
  *
@@ -6,6 +7,7 @@
  * folds the session history through.
  *
  * @remarks
+ *
  * The types are structural on purpose: the projection package is NOT a dependency of this
  * hook (no runtime import, no type import), so the seam is described here by the faces the
  * hook consumes, verified against the installed harness source and the subsystem guide:
@@ -47,19 +49,28 @@
  * the session-projection seam lives here instead of under that name. The two are unrelated:
  * one is a per-session event fold, the other a per-apply graph snapshot.
  */
-import type { Touch } from "@playform/lib-dsh-pack";
 export interface SessionHistory {
-    /** The next touch's sequence number. */
+    /**
+     * The next touch's sequence number.
+     */
     Seq: number;
-    /** The folded touches, oldest first. */
+    /**
+     * The folded touches, oldest first.
+     */
     Touches: Touch[];
 }
 export interface SessionEvent {
-    /** The event kind (`tool/call`, `tool/result`, `turn/start`, ...). */
+    /**
+     * The event kind (`tool/call`, `tool/result`, `turn/start`, ...).
+     */
     readonly type?: string;
-    /** The committed log position. */
+    /**
+     * The committed log position.
+     */
     readonly seq?: number;
-    /** The event payload. */
+    /**
+     * The event payload.
+     */
     readonly data?: {
         readonly name?: unknown;
         readonly arguments?: unknown;
@@ -69,21 +80,35 @@ export interface StateSchema<S> {
     parse(Value: unknown): S;
 }
 export interface ProjectionUnit<S> {
-    /** The projection key this unit owns. */
+    /**
+     * The projection key this unit owns.
+     */
     readonly key: string;
-    /** Validates persisted state before it seeds a fold. */
+    /**
+     * Validates persisted state before it seeds a fold.
+     */
     readonly stateSchema: StateSchema<S>;
-    /** State for the empty log and its immutable Session metadata. */
+    /**
+     * State for the empty log and its immutable Session metadata.
+     */
     init(header: unknown, inheritedEventCount: unknown): S;
-    /** Pure transition: previous state + one committed event -> next state. */
+    /**
+     * Pure transition: previous state + one committed event -> next state.
+     */
     apply(state: S, event: SessionEvent): S;
-    /** Persisted-cache invalidation version. */
+    /**
+     * Persisted-cache invalidation version.
+     */
     readonly stateVersion: number;
 }
 export interface ProjectionRegistry {
-    /** Install one unit on the calling context's fiber. */
+    /**
+     * Install one unit on the calling context's fiber.
+     */
     register(unit: ProjectionUnit<SessionHistory>): unknown;
-    /** Read one unit's live read-only host state for one session. */
+    /**
+     * Read one unit's live read-only host state for one session.
+     */
     stateOf(session: unknown, key: string): SessionHistory | undefined;
 }
 export interface ProjectionChild {

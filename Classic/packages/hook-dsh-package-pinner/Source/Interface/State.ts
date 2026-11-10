@@ -1,3 +1,5 @@
+import type { State as Shared } from "@playform/plugin-dsh-factory";
+
 /**
  * @module State
  *
@@ -5,6 +7,7 @@
  * pinner's own field.
  *
  * @remarks
+ *
  * Since the factory refactor the State is the factory's shared shape (the
  * shape Function/State of @playform/plugin-dsh-factory builds, consumed by
  * every factory primitive) extended with the pinner's own field:
@@ -41,8 +44,6 @@
  * - the pinner stores and compares them but never parses or computes them
  * (subsystems/filesystem.md).
  */
-import type { State as Shared } from "@playform/plugin-dsh-factory";
-
 export default interface State extends Shared {
 	/**
 	 * Dependency sections the pinner may rewrite (config `sections`).

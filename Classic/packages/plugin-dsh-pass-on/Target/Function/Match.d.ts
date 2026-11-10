@@ -6,6 +6,7 @@ export default _default;
  * RegExp, anchored at both ends.
  *
  * @remarks
+ *
  * A double star crosses directories; a `*` does not. No dependency on an
  * external glob library (the PO C self-containment rule).
  */

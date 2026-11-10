@@ -1,9 +1,40 @@
+import { existsSync, readFileSync } from "node:fs";
+import {
+	appendFile as Append,
+	mkdir as Mkdir,
+	rename as Rename,
+	writeFile as WriteFile,
+} from "node:fs/promises";
+import OS from "node:os";
+import { dirname as Dirname, join as Join } from "node:path";
+
+import { Service, type Context } from "@deepseek-ai/cordis";
+import { Activate } from "@playform/lib-dsh-core";
+
+import Apply from "./Function/Apply.js";
+import Curate, { type Curation } from "./Function/Curate.js";
+import Digest, { type DigestResult } from "./Function/Digest.js";
+import Judge from "./Function/Judge.js";
+import Knobs from "./Function/Knobs.js";
+import Parse, { type ParseResult } from "./Function/Parse.js";
+import Prompt from "./Function/Prompt.js";
+import Report, { type RunReport } from "./Function/Report.js";
+import Snapshot from "./Function/Snapshot.js";
+import Usage, { Fresh } from "./Function/Usage.js";
+import type Configuration from "./Interface/Config.js";
+import type { Corpus } from "./Interface/Corpus.js";
+import type { Op, Proposal } from "./Interface/Proposal.js";
+import type { ReviewInput, ReviewMessage, ReviewResult } from "./Interface/Review.js";
+import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
+
 /**
  * @module Library
  *
  * The entry module of the LESSON-REVIEW service (@playform/plugin-dsh-lesson-review), the self-improvement review of the family.
  *
  * @remarks
+ *
  * Loader contract: the CLASS form, mirroring the pattern service -
  * `export default class LessonService extends Service` with
  * `super(Context, "lesson")`, registered immediately on construction. The
@@ -50,36 +81,6 @@
  * each returns an outcome class and writes one ledger line, and none of
  * them throws into the caller's maintenance task.
  */
-import { existsSync, readFileSync } from "node:fs";
-import {
-	appendFile as Append,
-	mkdir as Mkdir,
-	rename as Rename,
-	writeFile as WriteFile,
-} from "node:fs/promises";
-import OS from "node:os";
-import { dirname as Dirname, join as Join } from "node:path";
-
-import { Service, type Context } from "@deepseek-ai/cordis";
-import { Activate } from "@playform/lib-dsh-core";
-
-import Apply from "./Function/Apply.js";
-import Curate, { type Curation } from "./Function/Curate.js";
-import Digest, { type DigestResult } from "./Function/Digest.js";
-import Judge from "./Function/Judge.js";
-import Knobs from "./Function/Knobs.js";
-import Parse, { type ParseResult } from "./Function/Parse.js";
-import Prompt from "./Function/Prompt.js";
-import Report, { type RunReport } from "./Function/Report.js";
-import Snapshot from "./Function/Snapshot.js";
-import Usage, { Fresh } from "./Function/Usage.js";
-import type Configuration from "./Interface/Config.js";
-import type { Corpus } from "./Interface/Corpus.js";
-import type { Op, Proposal } from "./Interface/Proposal.js";
-import type { ReviewInput, ReviewMessage, ReviewResult } from "./Interface/Review.js";
-import Definition from "./Variable/Config.js";
-import Version from "./Variable/Version.js";
-
 /**
  * Expand a leading `~` (the family's path convention for every knob).
  */

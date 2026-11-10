@@ -9,6 +9,7 @@ import Version from "./Variable/Version.js";
  * ellipsis normalizer's registration.
  *
  * @remarks
+ *
  * Loader contract: `export const name` + `export const apply` +
  * `export const Config` + `export const inject` + `export default { name,
  * apply, Config, inject }` - the ONLY named exports in the tree (cordis
@@ -62,7 +63,6 @@ import Version from "./Variable/Version.js";
  * (this is a NON-MANIFEST module: no fs/observed, no gate, no Stash traffic,
  * no policy discovery).
  */
-
 export const name = "hook-dsh-normalize-ellipsis";
 
 /**

@@ -1,9 +1,11 @@
+import Schema from "@deepseek-ai/schemastery";
 /**
  * @module Config
  *
  * Declares the lesson-nudge hook's Schemastery schema.
  *
  * @remarks
+ *
  * Composed with the factory's standalone Schema helper (`shared: false`), every knob
  * volatile, and `enabled` defaulting to FALSE - the idle-forever posture the family
  * ships.
@@ -12,7 +14,6 @@
  * prompt: those belong to the review service, and duplicating them here would let a
  * profile configure a cadence the counter does not honour.
  */
-import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     log: Schema<boolean, boolean, "volatile-defined">;
     logFile: Schema<string, string, "volatile-defined">;

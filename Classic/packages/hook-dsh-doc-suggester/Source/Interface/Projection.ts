@@ -1,9 +1,12 @@
+import type { Touch } from "@playform/lib-dsh-pack";
+
 /**
  * @module Projection
  *
  * Declares the structural view of the harness's session-projection seam.
  *
  * @remarks
+ *
  * The STRUCTURAL view of the harness's session-projection seam
  * (`ctx.sessionProjections`, the `SessionProjectionRegistry` of
  * `@deepseek-ai/dsh-session-projection`), the seam the hook folds the session history
@@ -44,8 +47,6 @@
  * shipped consumer uses. A handle-based read would break on the installed build, where
  * `register` returns a function, not a handle.
  */
-import type { Touch } from "@playform/lib-dsh-pack";
-
 // The unit's host state: one session's touch history, the SAME shape the
 // retired in-listener fold kept in `State.History` (the sequence number of the
 // next touch and the touches, oldest first, capped at 512). Host-only: the

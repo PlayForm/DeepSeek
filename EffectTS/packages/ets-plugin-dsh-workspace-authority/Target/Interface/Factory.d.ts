@@ -1,9 +1,11 @@
+import type Factory from "@playform/ets-plugin-dsh-factory";
 /**
  * @module Factory
  *
  * The slice of the injected factory service the authority consumes.
  *
  * @remarks
+ *
  * FactoryHandle is the slice of the injected
  * @playform/ets-plugin-dsh-factory service the authority consumes (the
  * family's class/service plugin). The service uses: the State builder
@@ -16,7 +18,6 @@
  * `ctx.pluginFactory` is typed at every consumption site (the typed view
  * arrives TYPE-ONLY from the factory package - erased at build).
  */
-import type Factory from "@playform/ets-plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {
         /**

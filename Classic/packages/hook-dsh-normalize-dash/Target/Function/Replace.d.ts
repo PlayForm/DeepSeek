@@ -6,6 +6,7 @@ export default _default;
  * generic class-to-string replacer, pinned to its table.
  *
  * @remarks
+ *
  * The pattern (and the whole Replace mechanism: the function replacer, the
  * per-call regex construction, the `{ text, count }` contract) lives in
  * `@playform/lib-dsh-core`'s `Normalize/Replace` + `Normalize/Dashes`; this

@@ -5,6 +5,7 @@
  * caller identity and the caller-held version (the staleness contract).
  *
  * @remarks
+ *
  * All fields optional; the SCOPE section renders what was given.
  */
 export default interface Query {

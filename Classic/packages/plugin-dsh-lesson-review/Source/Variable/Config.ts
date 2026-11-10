@@ -1,9 +1,13 @@
+import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
+
 /**
  * @module Config
  *
  * The lesson-review service's Schemastery schema (one constant built once at load).
  *
  * @remarks
+ *
  * Composed with the factory's standalone Schema helper (`shared: false` -
  * the minimal block, only the universal log/logFile volatile cells; the
  * service hooks no fs/observed machinery). Every knob is a volatile cell so
@@ -20,9 +24,6 @@
  * it RECEIVES. A review that blows any of the three is a configuration
  * defect, not a runtime surprise.
  */
-import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
-
 const DefaultEnabled = false;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-lesson-review.log";
 const DefaultDomain = "lesson";

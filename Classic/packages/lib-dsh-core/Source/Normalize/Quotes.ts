@@ -5,6 +5,7 @@
  * the four double-quote code points, mapped to their ASCII counterparts.
  *
  * @remarks
+ *
  * The curly families arrive from smart-quote processors and code editors; the straight forms
  * are the unambiguous literals every parser, shell and diff understands:
  *

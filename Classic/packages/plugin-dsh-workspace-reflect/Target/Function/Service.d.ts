@@ -1,3 +1,7 @@
+import { Service, type Context } from "@deepseek-ai/cordis";
+import type { Operation } from "../Interface/Operation.js";
+import type Reply from "../Interface/Reply.js";
+import type State from "../Interface/State.js";
 /**
  * @module Service
  *
@@ -5,6 +9,7 @@
  * apply, with one thin delegate per reflective operation.
  *
  * @remarks
+ *
  * The service extends the cordis Service base and is REGISTERED FROM APPLY
  * (the loader contract for the object-form plugin: apply constructs the
  * service; the Service base constructor calls
@@ -20,10 +25,6 @@
  * - `replace(op)` - replace a block's span with new text;
  * - `act(op)` - the dispatch by the operation's kind.
  */
-import { Service, type Context } from "@deepseek-ai/cordis";
-import type { Operation } from "../Interface/Operation.js";
-import type Reply from "../Interface/Reply.js";
-import type State from "../Interface/State.js";
 export default class WorkspaceReflect extends Service {
     /**
      * The apply-built state the methods read and write.

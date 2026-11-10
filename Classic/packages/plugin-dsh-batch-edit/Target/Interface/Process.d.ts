@@ -1,3 +1,4 @@
+import type { FsVersion } from "./Fs.js";
 /**
  * @module Process
  *
@@ -6,6 +7,7 @@
  * machine holds.
  *
  * @remarks
+ *
  * The states are the live containers' BoardMember/MonitorEntry states
  * re-typed; the transitions are ALL event-driven, no timers.
  *
@@ -21,7 +23,6 @@
  * - errored - the transition failed loudly: the preview mismatch, the
  *   sandbox denial, the search-not-found under strict mode
  */
-import type { FsVersion } from "./Fs.js";
 export type ProcessStatus = "observed" | "running" | "halted" | "done" | "errored";
 /**
  * The halt reason vocabulary (STATE-MACHINE.md 3.3's transition halted line:

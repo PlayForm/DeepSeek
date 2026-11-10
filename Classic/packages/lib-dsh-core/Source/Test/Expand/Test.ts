@@ -1,16 +1,3 @@
-/**
- * @module Test
- *
- * One singular test of the tilde expansion for config-supplied paths.
- *
- * @remarks
- * The test covers the bare "~" is the home, the "~/x" form joins the home,
- * and every other path (absolute, relative, empty) passes through unchanged.
- *
- * The file runs standalone (`node Target/Test/Expand/Test.js`) AND under the
- * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit smoke
- * of `@playform/lib-dsh-core`: the REAL built entry only.
- */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -19,6 +6,20 @@ import * as Path from "node:path";
 import { Expand } from "../../../Target/Library.js";
 import { Check, Finish, MakeCounter } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test of the tilde expansion for config-supplied paths.
+ *
+ * @remarks
+ *
+ * The test covers the bare "~" is the home, the "~/x" form joins the home,
+ * and every other path (absolute, relative, empty) passes through unchanged.
+ *
+ * The file runs standalone (`node Target/Test/Expand/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit smoke
+ * of `@playform/lib-dsh-core`: the REAL built entry only.
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

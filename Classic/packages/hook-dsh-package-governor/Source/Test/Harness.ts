@@ -1,3 +1,10 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import * as Governor from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -5,6 +12,7 @@
  * package and imported by every test folder.
  *
  * @remarks
+ *
  * The harness carries the fake ctx (on/emit/effect/get/fs/reflect capture + the
  * root seam), the REAL `@playform/plugin-dsh-factory` instance from its built
  * Target, and the governor's REAL built Target - the seams from the source
@@ -23,13 +31,6 @@
  * `prepublishOnly.sh` gates the build on it. Imported as a library, this module
  * only exports.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import * as Governor from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks.
  * Passed by reference so Check can bump it from inside its callback.

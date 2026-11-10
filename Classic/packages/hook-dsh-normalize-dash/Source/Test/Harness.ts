@@ -1,3 +1,9 @@
+import assert from "node:assert/strict";
+import { rmSync } from "node:fs";
+
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+import NormalizeDash from "../../Target/Library.js";
+
 /**
  * @module Harness
  *
@@ -5,6 +11,7 @@
  * apply.
  *
  * @remarks
+ *
  * The fake ctx captures `on()` listeners, serves the REAL
  * `@playform/plugin-dsh-factory` instance from its built Target through
  * `get()`, and captures logger lines. The REAL dash apply also comes from the
@@ -22,12 +29,6 @@
  * (the vacuously-green backstop for every folder's fixture). `prepublishOnly.sh`
  * gates the build on it. Imported as a library, this module only exports.
  */
-import assert from "node:assert/strict";
-import { rmSync } from "node:fs";
-
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-import NormalizeDash from "../../Target/Library.js";
-
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks. Passed
  * by reference so Check can bump it from inside its callback.

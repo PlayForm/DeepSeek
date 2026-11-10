@@ -1,3 +1,6 @@
+import assert from "node:assert/strict";
+import { Check, Finish, MakeCounter, Make, Rm, Ledger } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +8,7 @@
  * @playform/plugin-dsh-normalize-file, covered in one singular smoke.
  *
  * @remarks
+ *
  * The test covers the P10 volatile live-flip and the files scope gate: the
  * replacement arriving as a hand-built stable volatile cell and being
  * refreshed in place by the factory's loader/volatile-update dispatch (no
@@ -17,9 +21,6 @@
  * The unit smoke runs the fake ctx + the real factory + the real
  * normalize-file apply, from the Harness.
  */
-import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Ledger } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

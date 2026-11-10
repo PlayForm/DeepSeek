@@ -1,9 +1,15 @@
+import assert from "node:assert/strict";
+
+import { Dashes, Ellipsis, Fullwidth, Invisible, Quotes, Spaces } from "../../../Target/Library.js";
+import { Check, Finish, MakeCounter } from "../Harness.js";
+
 /**
  * @module Test
  *
  * One singular test of the six normalization tables.
  *
  * @remarks
+ *
  * The test asserts the tables carry their exact contents - the four
  * character classes (Dashes, Ellipsis, Spaces, Invisible) with the g flag
  * and their pattern sources verbatim, and the two maps (Quotes, Fullwidth)
@@ -13,11 +19,6 @@
  * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit smoke
  * of `@playform/lib-dsh-core`: the REAL built entry only.
  */
-import assert from "node:assert/strict";
-
-import { Dashes, Ellipsis, Fullwidth, Invisible, Quotes, Spaces } from "../../../Target/Library.js";
-import { Check, Finish, MakeCounter } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

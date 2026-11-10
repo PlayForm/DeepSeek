@@ -4,6 +4,7 @@
  * The host package's documented refusal lines: the plain-field bridge's ledger strings.
  *
  * @remarks
+ *
  * The activation line stays the package's one `host:` line (Function/Apply); every bridge refusal
  * carries the `bridge:` prefix and is byte-exact - the smoke suite asserts each one verbatim and
  * SCHEME section 5 documents them. The accepted write's audit line is NOT here: it comes from

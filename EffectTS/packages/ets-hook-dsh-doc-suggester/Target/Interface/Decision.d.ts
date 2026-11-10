@@ -6,6 +6,7 @@
  * spec 00-OVERVIEW D8 + 03-SUGGESTERS section 2).
  *
  * @remarks
+ *
  * ONE RECORD PER DECISION, and a decision is either an emitted note or a
  * GATED SILENCE worth learning from (`low-confidence`, `already-touched`). A
  * record carries:

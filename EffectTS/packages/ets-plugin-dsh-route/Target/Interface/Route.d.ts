@@ -1,14 +1,15 @@
+import type { Role, RoleSpec, RouteHint } from "./Policy.js";
 /**
  * @module Route
  *
  * The resolver's output: the resolved triple plus the audit facts.
  *
  * @remarks
+ *
  * ROUTING-ENFORCER-PLUGIN.md section 2.1. The resolution is DETERMINISTIC
  * and pure: the same request and the same policy always produce the same
  * route, with the same source classification.
  */
-import type { Role, RoleSpec, RouteHint } from "./Policy.js";
 /**
  * How the route was produced (the ledger's explicit-or-resolved /
  * corrected-or-kept flags):

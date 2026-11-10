@@ -6,6 +6,7 @@
  * verdict.
  *
  * @remarks
+ *
  * Same algebra, same shapes as the doc suggester (the family's shared
  * pattern), different pack - and the synthetic History family is a pack row
  * like any other.

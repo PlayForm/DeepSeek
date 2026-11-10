@@ -1,3 +1,4 @@
+import type Reply from "./Reply.js";
 /**
  * @module Record
  *
@@ -5,11 +6,11 @@
  * per-file replies.
  *
  * @remarks
+ *
  * This is the journal the
  * recovery domain reads later - the record is stored in the hook's own KV
  * domain at every commit, keyed by the batch id.
  */
-import type Reply from "./Reply.js";
 export default interface Record {
     /**
      * The batch id.

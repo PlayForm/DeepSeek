@@ -1,9 +1,11 @@
+import Schema from "@deepseek-ai/schemastery";
 /**
  * @module Config
  *
  * The lesson-review service's Schemastery schema.
  *
  * @remarks
+ *
  * One constant built once at load. Composed with the factory's standalone Schema helper
  * (`shared: false` - the minimal block, only the universal log/logFile
  * volatile cells; the service hooks no fs/observed machinery). Every knob is
@@ -20,7 +22,6 @@
  * RECEIVES. A review that blows any of the three is a configuration defect,
  * not a runtime surprise.
  */
-import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     log: Schema<boolean, boolean, "volatile-defined">;
     logFile: Schema<string, string, "volatile-defined">;

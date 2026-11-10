@@ -1,3 +1,5 @@
+import type Decision from "../Interface/Decision.js";
+export default _default;
 /**
  * @module Decided
  *
@@ -6,6 +8,7 @@
  * the ledger alone (D8: every decision logged).
  *
  * @remarks
+ *
  * The line is
  * `decided <Family> <kappa> <n> companions <head path> <values> weights
  * <weights> store=<pattern|memory>`.
@@ -18,8 +21,8 @@
  * tell the durable learning from the memory fallback without reading the
  * state.
  */
-import type Decision from "../Interface/Decision.js";
-export default _default;
 declare function _default(
-/** The decision record to print. */
+/**
+ * The decision record to print.
+ */
 Record: Decision): string;

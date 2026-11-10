@@ -1,3 +1,8 @@
+import type ReferenceNode from "@Interface/ReferenceNode.js";
+import type RenamePlan from "@Interface/RenamePlan.js";
+import type Span from "@Interface/Span.js";
+import type SymbolNode from "@Interface/SymbolNode.js";
+
 /**
  * @module Deepening
  *
@@ -6,6 +11,7 @@
  * approximates.
  *
  * @remarks
+ *
  * The harness exposes exactly one such seam today - `ctx.lsp`
  * (@deepseek-ai/dsh-lsp) with its four read operations (goToDefinition /
  * findReferences / goToImplementation / hover) - so the deepener supplies the
@@ -19,16 +25,15 @@
  * the lexical reference list. The deepener never reads or writes a file: it is
  * handed the text the service already read.
  */
-import type ReferenceNode from "@Interface/ReferenceNode.js";
-import type RenamePlan from "@Interface/RenamePlan.js";
-import type Span from "@Interface/Span.js";
-import type SymbolNode from "@Interface/SymbolNode.js";
-
 export default interface Deepening {
-	/** The name the ledger reports (`deepened <path> ... via <name>`). */
+	/**
+	 * The name the ledger reports (`deepened <path> ... via <name>`).
+	 */
 	name: string;
 
-	/** The file extensions (with dot, lowercase) the deepener owns. */
+	/**
+	 * The file extensions (with dot, lowercase) the deepener owns.
+	 */
 	extensions: string[];
 
 	/**

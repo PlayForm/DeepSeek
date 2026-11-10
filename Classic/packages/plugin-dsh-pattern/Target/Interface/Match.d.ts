@@ -4,6 +4,7 @@
  * The matcher's input shape and the ranked match it returns.
  *
  * @remarks
+ *
  * PATTERN-GRAPH-PLUGIN.md section 2.3: "the match is context -> Pattern<X>; the
  * suggestion is the instantiated target subgraph plus the next steps".
  */

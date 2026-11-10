@@ -1,73 +1,3 @@
-// Serve - the host half's route registration: GET <Path>?session=<id>&rows=<n>
-// answers one JSON envelope with content-type "application/json; charset=utf-8"
-// and cache-control "no-store", status 200 with the outcome in the envelope.
-// The same route carries the file-scoped reads: GET <Path>?file=<encoded path>
-// answers the conversations that contributed to that file's cost,
-// GET <Path>?file=<encoded path>&conversation=<session id> answers that
-// conversation's calls that allocated money to the same file - the deeper
-// level of the same product question, as { ok, calls } - and
-// GET <Path>?history=<encoded path> answers the content versions the ledger
-// recorded for that same file with the touches bound to each - the lineage
-// level, as { ok, versions } - under the same status and headers, because the
-// engine's file-scoped reads return plain rows and the browser can only
-// receive JSON.
-// The host half is transport only and owns NO SQL: the ledger is
-// @playform/plugin-dsh-cost's business, and this route parses the query,
-// clamps the row budget and carries the answer. The service is resolved
-// structurally as `ctx.get("cost")` - the injection mechanism, the same way
-// the family host reads its trace bus - so the package never imports the
-// ledger library and a plugin that loads after the panel is still found at
-// request time. Library declares `inject: ["webServer"]`, so the loader
-// orders this row after the harness web server; the server itself is still
-// probed structurally (the fail-open switch (true) guard of
-// client-dsh-panel-family-host/Source/Function/Stream.ts). The route path
-// comes from Variable/Path and never from the query.
-//
-// THE VALUATION SELECTION (lane B4d; the research's section 8): the session
-// route also accepts `basis` and `revision`, validates the basis against the
-// four the engine declares, and hands the selection to the engine, which
-// answers the envelope's `valuation` block. An unknown basis, or a revision
-// that is not a positive integer, answers the existing error envelope with one
-// actionable line before the engine is called. Without both parameters the
-// route answers exactly what it answered before this lane.
-//
-// THE PRICING SURFACE (lane B4d): two more routes ride the same server. GET
-// <CatalogPath> answers { ok, catalogs, revisions } - every catalog the ledger
-// carries and every revision of each, flattened in catalog order so the
-// settings view groups them by CatalogId - and GET <RatePath>?revision=<id>
-// answers { ok, rates }, one revision's rate rows in card order. Both read the
-// engine's `costPricing` service structurally and own no SQL; both answer the
-// same unavailable envelope the session route answers when that service is
-// absent, because a settings surface must render a state rather than a crash.
-//
-// THE PUBLISH ROUTE (lane B4f) is the surface's one write: POST <PublishPath>
-// with a JSON body of { catalogId, baseRevisionId, reason, rows } answers
-// { ok, revision } after the engine's `publish` inserted one published
-// revision and its rate rows in one transaction. The transport owns the body
-// boundary: it caps the size, parses the JSON, validates every field the
-// engine inserts (a non-negative rate, a currency, a mode, a window, a
-// half-open interval, a tier band that does not invert) and refuses with the
-// existing error envelope and one actionable line. Nothing observed is
-// written: the route can only add a revision and its rate rows, and a refused
-// publish leaves the ledger exactly as it was. The route is appended after
-// `rates`, so the three reads keep their registration order.
-//
-// The decision chain: a present, non-blank `history` answers the engine's
-// version rows as { ok: true, versions }; a present, non-blank `file` with a
-// non-blank `conversation` answers the engine's per-call rows as
-// { ok: true, calls }; a present, non-blank `file` alone answers the engine's
-// contribution rows as { ok: true, contributions }, without an envelope of its
-// own; otherwise a blank session id answers code "session" without calling the
-// engine; an unknown basis or a malformed revision answers code "error" with
-// one line; a missing cost service answers code "unavailable" with the one
-// actionable line that names the missing package; a service that throws
-// answers code "error"; otherwise the service's own envelope is answered
-// verbatim, because it owns the ledger path, the currency facts and the codes.
-// Every failure is logged once through ctx.logger.warn with the
-// "cost route: " prefix, and the response write never throws into the request
-// lifecycle. The panel's own envelopes name the route in `path`, because the
-// host half no longer knows the ledger file - the convention
-// Function/Fetch.ts documents for the browser half.
 import type { IncomingMessage, ServerResponse } from "node:http";
 
 import type { Context } from "@deepseek-ai/cordis";
@@ -88,6 +18,74 @@ import type {
 import Limits from "@Variable/Limits.js";
 import Path, { CatalogPath, PublishPath, RatePath } from "@Variable/Path.js";
 
+/**
+ * @module Serve
+ *
+ * The host half's route registration: the session, file-scoped, lineage, pricing and publish
+ * routes, all answered as one JSON envelope with status 200.
+ *
+ * @remarks
+ *
+ * GET `<Path>?session=<id>&rows=<n>` answers one JSON envelope with content-type
+ * "application/json; charset=utf-8" and cache-control "no-store", status 200 with the outcome in
+ * the envelope. The same route carries the file-scoped reads: GET `<Path>?file=<encoded path>`
+ * answers the conversations that contributed to that file's cost, GET
+ * `<Path>?file=<encoded path>&conversation=<session id>` answers that conversation's calls that
+ * allocated money to the same file - the deeper level of the same product question, as
+ * `{ ok, calls }` - and GET `<Path>?history=<encoded path>` answers the content versions the
+ * ledger recorded for that same file with the touches bound to each - the lineage level, as
+ * `{ ok, versions }` - under the same status and headers, because the engine's file-scoped reads
+ * return plain rows and the browser can only receive JSON.
+ *
+ * The host half is transport only and owns NO SQL: the ledger is
+ * `@playform/plugin-dsh-cost`'s business, and this route parses the query, clamps the row budget
+ * and carries the answer. The service is resolved structurally as `ctx.get("cost")` - the
+ * injection mechanism, the same way the family host reads its trace bus - so the package never
+ * imports the ledger library and a plugin that loads after the panel is still found at request
+ * time. Library declares `inject: ["webServer"]`, so the loader orders this row after the harness
+ * web server; the server itself is still probed structurally (the fail-open switch (true) guard of
+ * `client-dsh-panel-family-host/Source/Function/Stream.ts`). The route path comes from
+ * `Variable/Path` and never from the query.
+ *
+ * THE VALUATION SELECTION (lane B4d; the research's section 8): the session route also accepts
+ * `basis` and `revision`, validates the basis against the four the engine declares, and hands the
+ * selection to the engine, which answers the envelope's `valuation` block. An unknown basis, or a
+ * revision that is not a positive integer, answers the existing error envelope with one actionable
+ * line before the engine is called. Without both parameters the route answers exactly what it
+ * answered before this lane.
+ *
+ * THE PRICING SURFACE (lane B4d): two more routes ride the same server. GET `<CatalogPath>`
+ * answers `{ ok, catalogs, revisions }` - every catalog the ledger carries and every revision of
+ * each, flattened in catalog order so the settings view groups them by CatalogId - and GET
+ * `<RatePath>?revision=<id>` answers `{ ok, rates }`, one revision's rate rows in card order. Both
+ * read the engine's `costPricing` service structurally and own no SQL; both answer the same
+ * unavailable envelope the session route answers when that service is absent, because a settings
+ * surface must render a state rather than a crash.
+ *
+ * THE PUBLISH ROUTE (lane B4f) is the surface's one write: POST `<PublishPath>` with a JSON body
+ * of `{ catalogId, baseRevisionId, reason, rows }` answers `{ ok, revision }` after the engine's
+ * `publish` inserted one published revision and its rate rows in one transaction. The transport
+ * owns the body boundary: it caps the size, parses the JSON, validates every field the engine
+ * inserts (a non-negative rate, a currency, a mode, a window, a half-open interval, a tier band
+ * that does not invert) and refuses with the existing error envelope and one actionable line.
+ * Nothing observed is written: the route can only add a revision and its rate rows, and a refused
+ * publish leaves the ledger exactly as it was. The route is appended after `rates`, so the three
+ * reads keep their registration order.
+ *
+ * The decision chain: a present, non-blank `history` answers the engine's version rows as
+ * `{ ok: true, versions }`; a present, non-blank `file` with a non-blank `conversation` answers
+ * the engine's per-call rows as `{ ok: true, calls }`; a present, non-blank `file` alone answers
+ * the engine's contribution rows as `{ ok: true, contributions }`, without an envelope of its own;
+ * otherwise a blank session id answers code "session" without calling the engine; an unknown basis
+ * or a malformed revision answers code "error" with one line; a missing cost service answers code
+ * "unavailable" with the one actionable line that names the missing package; a service that throws
+ * answers code "error"; otherwise the service's own envelope is answered verbatim, because it owns
+ * the ledger path, the currency facts and the codes. Every failure is logged once through
+ * `ctx.logger.warn` with the "cost route: " prefix, and the response write never throws into the
+ * request lifecycle. The panel's own envelopes name the route in `path`, because the host half no
+ * longer knows the ledger file - the convention `Function/Fetch.ts` documents for the browser
+ * half.
+ */
 type WebServer = {
 	register(route: {
 		path: string;
@@ -101,24 +99,29 @@ const AbsentMessage =
 const PricingMessage =
 	"client-dsh-panel-cost: the pricing service is not available - @playform/plugin-dsh-cost provides it when its ledger opens, so check that the plugin is loaded and its databasePath opens";
 
-// The publish route's own refusals: a body the transport cannot read never
-// reaches the engine, so its line is the transport's; a body the engine
-// refuses keeps the engine's line, which already names what to fix.
+/**
+ * The publish route's own refusals: a body the transport cannot read never reaches the engine, so
+ * its line is the transport's; a body the engine refuses keeps the engine's line, which already
+ * names what to fix.
+ */
 const BodyMessage =
 	"client-dsh-panel-cost: the publish route needs a JSON body - POST { catalogId, baseRevisionId, reason, rows }";
 
 const MethodMessage =
 	"client-dsh-panel-cost: the publish route accepts POST only - send the revision as a POST body";
 
-// The publish body's cap: one rate book is a few hundred rows, so a megabyte
-// is generous and a runaway upload is refused before it is parsed.
+/**
+ * The publish body's cap: one rate book is a few hundred rows, so a megabyte is generous and a
+ * runaway upload is refused before it is parsed.
+ */
 const MaxBody = 1_000_000;
 
-// The four bases the engine's ValuationSelection declares, spelled as a
-// record so a fifth basis in the engine's union is a compile error here rather
-// than a query this route silently rejects. The browser half mirrors the same
-// union, because the transport owns its own validation and imports the engine
-// for types only.
+/**
+ * The four bases the engine's ValuationSelection declares, spelled as a record so a fifth basis in
+ * the engine's union is a compile error here rather than a query this route silently rejects. The
+ * browser half mirrors the same union, because the transport owns its own validation and imports
+ * the engine for types only.
+ */
 const Bases: Readonly<Record<ValuationBasis, true>> = {
 	"as-recorded": true,
 	corrected: true,
@@ -140,28 +143,34 @@ const IsService = (Candidate: unknown): Candidate is CostService =>
 	Candidate !== null &&
 	typeof (Candidate as CostService).session === "function";
 
-// IsContributionService - the file-scoped read's own guard: the session
-// guard plus the contributions method, so an engine that carries only the
-// session read answers the unavailable line instead of throwing a TypeError
-// the catch would have to name.
+/**
+ * IsContributionService - the file-scoped read's own guard: the session guard plus the
+ * contributions method, so an engine that carries only the session read answers the unavailable
+ * line instead of throwing a TypeError the catch would have to name.
+ */
 const IsContributionService = (Candidate: unknown): Candidate is CostService =>
 	IsService(Candidate) && typeof Candidate.contributions === "function";
 
-// IsCallService - the deeper file-scoped read's guard: the contribution guard
-// plus the fileCalls method, so an engine from before this lane answers the
-// unavailable line rather than throwing inside the route.
+/**
+ * IsCallService - the deeper file-scoped read's guard: the contribution guard plus the fileCalls
+ * method, so an engine from before this lane answers the unavailable line rather than throwing
+ * inside the route.
+ */
 const IsCallService = (Candidate: unknown): Candidate is CostService =>
 	IsContributionService(Candidate) && typeof Candidate.fileCalls === "function";
 
-// IsVersionService - the lineage read's guard: the call guard plus the history
-// method, so an engine that carries only the two earlier file-scoped reads
-// answers the unavailable line instead of throwing inside the route.
+/**
+ * IsVersionService - the lineage read's guard: the call guard plus the history method, so an
+ * engine that carries only the two earlier file-scoped reads answers the unavailable line instead
+ * of throwing inside the route.
+ */
 const IsVersionService = (Candidate: unknown): Candidate is CostService =>
 	IsCallService(Candidate) && typeof Candidate.history === "function";
 
-// IsPricing - the pricing surface's guard: the three reads the two routes
-// carry, so a partial service answers the unavailable line rather than
-// throwing inside the route.
+/**
+ * IsPricing - the pricing surface's guard: the three reads the two routes carry, so a partial
+ * service answers the unavailable line rather than throwing inside the route.
+ */
 const IsPricing = (Candidate: unknown): Candidate is PricingService =>
 	typeof Candidate === "object" &&
 	Candidate !== null &&
@@ -169,39 +178,48 @@ const IsPricing = (Candidate: unknown): Candidate is PricingService =>
 	typeof (Candidate as PricingService).revisions === "function" &&
 	typeof (Candidate as PricingService).rates === "function";
 
-// IsPublisher - the publish route's guard: the three reads plus the one
-// write, so a service that only lists answers the unavailable line instead of
-// throwing a TypeError inside the route.
+/**
+ * IsPublisher - the publish route's guard: the three reads plus the one write, so a service that
+ * only lists answers the unavailable line instead of throwing a TypeError inside the route.
+ */
 const IsPublisher = (Candidate: unknown): Candidate is PricingService =>
 	IsPricing(Candidate) && typeof (Candidate as PricingService).publish === "function";
 
-// The file-scoped answer: the contribution rows under the same
-// 200-with-envelope convention as the session read, with the rows unwrapped
-// because the engine's contribution read carries no envelope of its own.
+/**
+ * The file-scoped answer: the contribution rows under the same 200-with-envelope convention as the
+ * session read, with the rows unwrapped because the engine's contribution read carries no envelope
+ * of its own.
+ */
 type ContributionAnswer = {
 	ok: true;
 	contributions: readonly CostContributionRow[];
 };
 
-// The per-call answer: one conversation's calls that allocated money to the
-// same file, unwrapped the same way the contribution answer is - the ok flag
-// and the calls array are the shape the browser's guard reads.
+/**
+ * The per-call answer: one conversation's calls that allocated money to the same file, unwrapped
+ * the same way the contribution answer is - the ok flag and the calls array are the shape the
+ * browser's guard reads.
+ */
 type FileCallAnswer = {
 	ok: true;
 	calls: readonly CostFileCallRow[];
 };
 
-// The version answer: the file's content versions with the touches bound to
-// each, unwrapped the same way the contribution and call answers are - the ok
-// flag and the versions array are the shape the browser's guard reads.
+/**
+ * The version answer: the file's content versions with the touches bound to each, unwrapped the
+ * same way the contribution and call answers are - the ok flag and the versions array are the
+ * shape the browser's guard reads.
+ */
 type VersionAnswer = {
 	ok: true;
 	versions: readonly CostVersionRow[];
 };
 
-// The pricing answers: the catalogs with their revisions, and one revision's
-// rate rows. Both are unwrapped the same way the contribution answer is - the
-// ok flag is the shape the browser's guard reads.
+/**
+ * The pricing answers: the catalogs with their revisions, and one revision's rate rows. Both are
+ * unwrapped the same way the contribution answer is - the ok flag is the shape the browser's guard
+ * reads.
+ */
 type CatalogAnswer = {
 	ok: true;
 	catalogs: readonly Catalog[];
@@ -213,17 +231,19 @@ type RateAnswer = {
 	rates: readonly RateRow[];
 };
 
-// The publish answer: the one write's new revision, unwrapped the same way
-// the pricing reads are.
+/**
+ * The publish answer: the one write's new revision, unwrapped the same way the pricing reads are.
+ */
 type PublishAnswer = {
 	ok: true;
 	revision: Revision;
 };
 
-// The publish body the transport hands the engine: the catalog, the base
-// revision the draft corrects, the reason the audit reads and the rate rows
-// the revision will carry. The field names are the body's own, so the
-// validation reads as the wire shape it checks.
+/**
+ * The publish body the transport hands the engine: the catalog, the base revision the draft
+ * corrects, the reason the audit reads and the rate rows the revision will carry. The field names
+ * are the body's own, so the validation reads as the wire shape it checks.
+ */
 type PublishBody = {
 	readonly CatalogId: number;
 	readonly BaseRevisionId: number | null;
@@ -240,9 +260,11 @@ type AnswerBody =
 	| RateAnswer
 	| PublishAnswer;
 
-// The body reader: the JSON text a POST carries, capped at one rate book's
-// worth. A request the port cannot read, or one that runs past the cap, is
-// refused with the transport's own line before any parsing happens.
+/**
+ * The body reader: the JSON text a POST carries, capped at one rate book's worth. A request the
+ * port cannot read, or one that runs past the cap, is refused with the transport's own line before
+ * any parsing happens.
+ */
 const Read = (req: IncomingMessage): Promise<string> =>
 	new Promise<string>((Done, Fail) => {
 		switch (true) {
@@ -276,9 +298,10 @@ const Read = (req: IncomingMessage): Promise<string> =>
 		}
 	});
 
-// Parse - the body text as a JSON value, or the transport's one line. An
-// empty body is the same refusal as an unparseable one, because a publish
-// with no body names no catalog and no rate row.
+/**
+ * Parse - the body text as a JSON value, or the transport's one line. An empty body is the same
+ * refusal as an unparseable one, because a publish with no body names no catalog and no rate row.
+ */
 const Parse = (Text: string): unknown => {
 	switch (true) {
 		case Text.trim() === "":
@@ -298,9 +321,11 @@ const Label = (Value: unknown): string => (typeof Value === "string" ? Value : "
 const Figure = (Value: unknown): number | null =>
 	typeof Value === "number" && Number.isFinite(Value) ? Value : null;
 
-// Required - one required rate of a rate row: a non-negative finite number,
-// else the one line naming the row and the field. The engine stores what this
-// validated, so the transport refuses rather than storing a guess.
+/**
+ * Required - one required rate of a rate row: a non-negative finite number, else the one line
+ * naming the row and the field. The engine stores what this validated, so the transport refuses
+ * rather than storing a guess.
+ */
 const Required = (Value: unknown, Index: number, Field: string): number => {
 	const Parsed = Figure(Value);
 	if (Parsed === null || Parsed < 0) {
@@ -311,10 +336,11 @@ const Required = (Value: unknown, Index: number, Field: string): number => {
 	return Parsed;
 };
 
-// OptionalRate - one optional rate: absent and null both mean the bucket is
-// not separately priced, a non-negative finite number is the rate, and
-// anything else is refused, because a missing rate must stay unpriced rather
-// than become a zero.
+/**
+ * OptionalRate - one optional rate: absent and null both mean the bucket is not separately priced,
+ * a non-negative finite number is the rate, and anything else is refused, because a missing rate
+ * must stay unpriced rather than become a zero.
+ */
 const OptionalRate = (Value: unknown, Index: number, Field: string): number | null => {
 	switch (true) {
 		case Value === null || Value === undefined:
@@ -331,8 +357,10 @@ const OptionalRate = (Value: unknown, Index: number, Field: string): number | nu
 	}
 };
 
-// OptionalMoment - one optional instant: null means the interval or the tier
-// is open, a finite number is the bound, and anything else is refused.
+/**
+ * OptionalMoment - one optional instant: null means the interval or the tier is open, a finite
+ * number is the bound, and anything else is refused.
+ */
 const OptionalMoment = (Value: unknown, Index: number, Field: string): number | null => {
 	switch (true) {
 		case Value === null || Value === undefined:
@@ -349,11 +377,12 @@ const OptionalMoment = (Value: unknown, Index: number, Field: string): number | 
 	}
 };
 
-// RowOf - one rate row of the publish body, validated field by field: the
-// identity fields a card cannot do without, the two required rates, the three
-// optional ones, the half-open interval and the tier band. The two
-// ledger-assigned ids are placeholders, because publish assigns the revision
-// id and the row id and never reads what the caller sent there.
+/**
+ * RowOf - one rate row of the publish body, validated field by field: the identity fields a card
+ * cannot do without, the two required rates, the three optional ones, the half-open interval and
+ * the tier band. The two ledger-assigned ids are placeholders, because publish assigns the
+ * revision id and the row id and never reads what the caller sent there.
+ */
 const RowOf = (Value: unknown, Index: number): RateRow => {
 	if (typeof Value !== "object" || Value === null) {
 		throw new Error(
@@ -429,10 +458,12 @@ const RowOf = (Value: unknown, Index: number): RateRow => {
 	};
 };
 
-// RequestOf - the publish body the engine accepts: one catalog, the base
-// revision the draft corrects, the reason the audit reads and the rate rows
-// the revision carries. Every field is validated here because the browser is
-// the only writer and the ledger must never receive a half-formed book.
+/**
+ * RequestOf - the publish body the engine accepts: one catalog, the base revision the draft
+ * corrects, the reason the audit reads and the rate rows the revision carries. Every field is
+ * validated here because the browser is the only writer and the ledger must never receive a
+ * half-formed book.
+ */
 const RequestOf = (Value: unknown): PublishBody => {
 	if (typeof Value !== "object" || Value === null || Array.isArray(Value)) {
 		throw new Error(BodyMessage);

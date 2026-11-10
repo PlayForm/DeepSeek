@@ -5,6 +5,7 @@
  * consumes.
  *
  * @remarks
+ *
  * Declared here so the hook never imports the storage library's types: an
  * absent storage package can then never break the module load (the factory's
  * live-verified pitfall - the storage packages are imported DYNAMICALLY

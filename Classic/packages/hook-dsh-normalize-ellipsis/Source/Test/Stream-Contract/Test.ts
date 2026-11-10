@@ -1,3 +1,8 @@
+import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm, Validate } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +10,7 @@
  * the Run-1 stream.
  *
  * @remarks
+ *
  * The one singular test covers the `next()` mechanics, the untouched options,
  * the passthrough-by-identity groups, the rewrite groups, the count ledger
  * line, and the P5 journal routing of the count event (the factory pre-bind
@@ -15,11 +21,6 @@
  * (`node Target/Test/Stream-Contract/Test.js`) and under the aggregate
  * (`Maintain/Run/Smokes/Index.mjs` spawns it).
  */
-import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
-
-import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm, Validate } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

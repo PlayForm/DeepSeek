@@ -1,9 +1,11 @@
+import type Entry from "./Entry.js";
 /**
  * @module Store
  *
  * The JSON fallback's on-disk shape, version 1.
  *
  * @remarks
+ *
  * The PRIMARY store is the storage-domain KV domain `replay_history`
  * (Function/Storage); this file is the DEGRADED fallback, written and read
  * ONLY when the harness provides no storage facility or its open fails (the
@@ -13,7 +15,6 @@
  * A stale or unreadable file is a silent miss (the store starts fresh): a
  * persistence failure must never reach the hot path.
  */
-import type Entry from "./Entry.js";
 export default interface Store {
     /**
      * The snapshot schema version (1).

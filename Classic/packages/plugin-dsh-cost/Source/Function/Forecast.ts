@@ -1,3 +1,5 @@
+import type { DatabaseSync } from "node:sqlite";
+
 /**
  * @module Forecast
  *
@@ -6,6 +8,7 @@
  * thirty-day period with its confidence band.
  *
  * @remarks
+ *
  * The projection follows `Documentation/Plans/COST-TRACK-PLUGIN.md` section
  * 17.5. It is anchored at each key's own latest day, so an old ledger still
  * projects, and answers the mean, the median, the mean of the last seven days,
@@ -15,8 +18,6 @@
  * projection). The forecast never writes a row; the caller labels it an
  * estimate in every export.
  */
-import type { DatabaseSync } from "node:sqlite";
-
 type Row = {
 	Scope: string;
 	Key: string;

@@ -1,18 +1,3 @@
-/**
- * @module Config
- *
- * The plugin's Schemastery Config schema (a Variable: one constant built at
- * load).
- *
- * @remarks
- * Every tunable is a field; the shape this schema produces is
- * Interface/Config.ts.
- *
- * The class plugin (`export default class Ingester extends Service`) carries
- * this schema as a static `Config` (validated before construction). The
- * ingester is THE ONLY WRITER of the batch flow (plan section 4) - its knobs
- * bound the write path.
- */
 import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     enabled: Schema<boolean, boolean, "defined">;

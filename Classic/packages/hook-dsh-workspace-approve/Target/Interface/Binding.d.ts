@@ -4,6 +4,7 @@
  * The approval record: one candidate bound to one human decision.
  *
  * @remarks
+ *
  * The decision is the Commitment (who accepted responsibility - NOT the
  * authorization itself) plus the lifecycle state the AuthorizationDecision
  * derives from.

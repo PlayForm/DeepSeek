@@ -1,16 +1,3 @@
-/**
- * @module State
- *
- * The plugin's per-apply state: the SHARED factory shape plus the batch-state's own fields.
- *
- * @remarks
- * The shared shape carries Context, Module, Enabled/Ledger, the machinery maps and the P10
- * volatile refresh the factory's State builder registers.
- *
- * Module is "batchstate" - the module-owned ledger lines are `batchstate: ...` and the factory's
- * Append prefixes with `<State.Module>: `. The npm identity lives in the package name and the
- * `name` export (plugin-dsh-batchstate); the ledger prefix is the module's OWN contract string.
- */
 import type Entry from "@Interface/Entry.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type Gate from "@Interface/Gate.js";
@@ -18,29 +5,59 @@ import type Handle from "@Interface/Handle.js";
 import type Member from "@Interface/Member.js";
 import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
 
+/**
+ * @module State
+ *
+ * The plugin's per-apply state: the SHARED factory shape plus the batch-state's own fields.
+ *
+ * @remarks
+ *
+ * The shared shape carries Context, Module, Enabled/Ledger, the machinery maps and the P10
+ * volatile refresh the factory's State builder registers.
+ *
+ * Module is "batchstate" - the module-owned ledger lines are `batchstate: ...` and the factory's
+ * Append prefixes with `<State.Module>: `. The npm identity lives in the package name and the
+ * `name` export (plugin-dsh-batchstate); the ledger prefix is the module's OWN contract string.
+ */
 interface Extra {
-	/** The master switch (config `enabled` - the IDLE-forever posture). */
+	/**
+	 * The master switch (config `enabled` - the IDLE-forever posture).
+	 */
 	On: boolean;
 
-	/** Config `batch` - the batch key (multi-batch isolation; volatile). */
+	/**
+	 * Config `batch` - the batch key (multi-batch isolation; volatile).
+	 */
 	Batch: string;
 
-	/** Config `stateFile` - the well-known JSON state file, the FALLBACK store (volatile). */
+	/**
+	 * Config `stateFile` - the well-known JSON state file, the FALLBACK store (volatile).
+	 */
 	StateFile: string;
 
-	/** Config `domain` - the KV domain name, the PRIMARY store (volatile). */
+	/**
+	 * Config `domain` - the KV domain name, the PRIMARY store (volatile).
+	 */
 	DomainName: string;
 
-	/** Config `maxRecent` - the completions ring bound (volatile). */
+	/**
+	 * Config `maxRecent` - the completions ring bound (volatile).
+	 */
 	MaxRecent: number;
 
-	/** Config `maxProposals` - the spliced-proposal ring bound (volatile). */
+	/**
+	 * Config `maxProposals` - the spliced-proposal ring bound (volatile).
+	 */
 	MaxProposals: number;
 
-	/** The injected factory instance (the State builder, the ledger). */
+	/**
+	 * The injected factory instance (the State builder, the ledger).
+	 */
 	Factory: FactoryHandle;
 
-	/** The open KV domain (undefined in the JSON fallback). */
+	/**
+	 * The open KV domain (undefined in the JSON fallback).
+	 */
 	Handle: Handle | undefined;
 
 	/** The persistence chain: the open/recovery and every state write, in order (the smokes await
@@ -51,20 +68,28 @@ interface Extra {
 	 * (Function/Persist decides on the chain). */
 	Store: "domain" | "file" | "pending";
 
-	/** The live members, keyed by the agent id. */
+	/**
+	 * The live members, keyed by the agent id.
+	 */
 	Members: Map<string, Member>;
 
 	/** The idle queue, in order (the member ids). Named IdleQueue to stay clear of the factory's
 	 * shared pre-open journal `Queue` field. */
 	IdleQueue: string[];
 
-	/** The completions ring, newest first, bounded by MaxRecent. */
+	/**
+	 * The completions ring, newest first, bounded by MaxRecent.
+	 */
 	Recent: { id: string; status: string; task: string; at: number }[];
 
-	/** The spliced batch proposals, in splice order, bounded by MaxProposals. */
+	/**
+	 * The spliced batch proposals, in splice order, bounded by MaxProposals.
+	 */
 	Proposals: Map<string, Entry>;
 
-	/** The arbiter gates by name (the Gates block's live truth). */
+	/**
+	 * The arbiter gates by name (the Gates block's live truth).
+	 */
 	Gates: Map<string, Gate>;
 
 	/** The message ids already spliced (the live emit and the durable splice of one message must

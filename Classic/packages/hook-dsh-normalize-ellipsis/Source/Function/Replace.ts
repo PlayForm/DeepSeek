@@ -7,6 +7,7 @@ import { Ellipsis, Replace } from "@playform/lib-dsh-core";
  * class-to-string replacer, pinned to its table.
  *
  * @remarks
+ *
  * The mechanism (the function replacer, the per-call regex construction, the
  * `{ text, count }` contract) lives in `@playform/lib-dsh-core`'s
  * `Normalize/Replace`; this file supplies only the two arguments that make it

@@ -10,6 +10,7 @@ import Adapter from "../Trace/Adapter.js";
  * and the bounded ring, then persists both into the domain fire-and-forget.
  *
  * @remarks
+ *
  * The caller is the SYNCHRONOUS listener - no awaits anywhere.
  *
  * - `State.Latest` is keyed by the path: the newest stamp per path overwrites

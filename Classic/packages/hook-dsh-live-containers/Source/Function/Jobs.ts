@@ -1,9 +1,18 @@
+import type {
+	JobSource,
+	JobSpecification,
+	ShellProcess,
+	ShellSpecification,
+} from "@Interface/Events.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Jobs
  *
  * The producer re-dispatch (G2, IMPLEMENTATION-DESIGN.md section 5.1).
  *
  * @remarks
+ *
  * The command-runner wrapper that replicates the bash tool's OWN background
  * adapter (dsh-tool-bash startJob/processJob/processSources) over the SAME
  * governed path - `ctx.shell.resolve` + `ctx.shell.execute` (sandbox +
@@ -20,23 +29,21 @@
  * The wrapper is command-runner-only BY CONSTRUCTION (`Policy.ts`'s
  * detachable set); the non-detachable mutation family never reaches it.
  */
-import type {
-	JobSource,
-	JobSpecification,
-	ShellProcess,
-	ShellSpecification,
-} from "@Interface/Events.js";
-import type State from "@Interface/State.js";
-
-/** The per-job private tail (bounded; the completion frame's output source). */
+/**
+ * The per-job private tail (bounded; the completion frame's output source).
+ */
 export class JobTail {
 	Stdout = "";
 	Stderr = "";
 
-	/** The 2 KiB total cap for the rendered tail (the I3 section 5 bound). */
+	/**
+	 * The 2 KiB total cap for the rendered tail (the I3 section 5 bound).
+	 */
 	static readonly CapBytes = 2048;
 
-	/** The bytes of one string. */
+	/**
+	 * The bytes of one string.
+	 */
 	static Bytes = (Text: string): number => Buffer.byteLength(Text, "utf8");
 
 	/** The head mode (the monitor path's additive mode; FILE-MONITOR design
@@ -281,13 +288,17 @@ export const CommandHead = (Command: string, Maximum = 80): string => {
 	return Single.length > Maximum ? Single.slice(0, Maximum) : Single;
 };
 
-/** The standing frame's cmd line: the first 120 bytes. */
+/**
+ * The standing frame's cmd line: the first 120 bytes.
+ */
 export const CommandLine = (Command: string, Maximum = 120): string => {
 	const Single = Command.replace(/\r?\n/g, " | ");
 	return Single.length > Maximum ? Single.slice(0, Maximum) : Single;
 };
 
-/** The clock-stable start time string (HH:MM:SS) for the standing frame. */
+/**
+ * The clock-stable start time string (HH:MM:SS) for the standing frame.
+ */
 export const StartedAt = (At: number): string => {
 	try {
 		return new Intl.DateTimeFormat("en-GB", {

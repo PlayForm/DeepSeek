@@ -1,3 +1,24 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import {
+	AgentOf,
+	CheckAsync,
+	Commit,
+	FakeStorage,
+	Finish,
+	Ledger,
+	Make,
+	MakeCounter,
+	Pattern,
+	Post,
+	Pre,
+	rm,
+	Setup,
+	Validate,
+} from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,6 +26,7 @@
  * with the candidates coming from the SESSION HISTORY and never from a built-in pack literal.
  *
  * @remarks
+ *
  * The history is the `ctx.sessionProjections` unit's per-session cell, committed through the
  * registry's eager drive and read at detection time through `stateOf`.
  *
@@ -28,40 +50,29 @@
  * NO SLEEPS: the window is counted in judged calls, and the pattern service's Flush/Save are
  * awaited (its documented seams) before the reopen.
  */
-import assert from "node:assert/strict";
-import * as FileSystem from "node:fs";
-import * as OS from "node:os";
-import * as Path from "node:path";
-import {
-	AgentOf,
-	CheckAsync,
-	Commit,
-	FakeStorage,
-	Finish,
-	Ledger,
-	Make,
-	MakeCounter,
-	Pattern,
-	Post,
-	Pre,
-	rm,
-	Setup,
-	Validate,
-} from "../Harness.js";
-
-/** The neutral rate (the Laplace prior with zero observations). */
+/**
+ * The neutral rate (the Laplace prior with zero observations).
+ */
 const Neutral = 1 / 3;
 
-/** The pattern service's documented accept move. */
+/**
+ * The pattern service's documented accept move.
+ */
 const AcceptBonus = 0.1;
 
-/** The pattern service's documented reject penalty. */
+/**
+ * The pattern service's documented reject penalty.
+ */
 const RejectPenalty = 0.2;
 
-/** A temp tree under the OS temp dir (fresh per folder process). */
+/**
+ * A temp tree under the OS temp dir (fresh per folder process).
+ */
 const Tree = (Prefix: string): string => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
 
-/** Write one file under the tree (parents created). */
+/**
+ * Write one file under the tree (parents created).
+ */
 const Put = (Root: string, Relative: string, Body = "x"): string => {
 	const Full = Path.join(Root, Relative);
 	FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
@@ -80,13 +91,19 @@ const Anchor = Put(Workspace, "Source/Variable/Config.ts");
 Put(Workspace, "docs/STYLE.md");
 const Changelog = Put(Workspace, "docs/CHANGELOG.md");
 
-/** A third path that only ages the follow-through window. */
+/**
+ * A third path that only ages the follow-through window.
+ */
 const Other = Put(Workspace, "docs/OTHER.md");
 
-/** The optional harness service the probe reads (the real shape: get(session)). */
+/**
+ * The optional harness service the probe reads (the real shape: get(session)).
+ */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** The note text of the two equal-prior companions, in history order. */
+/**
+ * The note text of the two equal-prior companions, in history order.
+ */
 const NoteOrder = (Head: string): string =>
 	`[edit-suggester] family=History confidence=0.87\ncompanions (2):\n- ${Head} - touched 1 time(s) after this file\n- ${Head === "docs/STYLE.md" ? "docs/CHANGELOG.md" : "docs/STYLE.md"} - touched 1 time(s) after this file\nnote: this file rarely stands alone; check whether these need the same change.`;
 
@@ -105,21 +122,27 @@ const Seed = async (Run: any, Id: string): Promise<void> => {
 	Commit(Run, Id, "docs/CHANGELOG.md");
 };
 
-/** The judged anchor edit (the note trigger). */
+/**
+ * The judged anchor edit (the note trigger).
+ */
 const Emit = (Id: string): any => ({
 	name: "edit",
 	arguments: { file_path: Anchor },
 	agent: AgentOf(Id),
 });
 
-/** The judged companion edit (the follow signal). */
+/**
+ * The judged companion edit (the follow signal).
+ */
 const Touch = (Id: string): any => ({
 	name: "edit",
 	arguments: { file_path: Changelog },
 	agent: AgentOf(Id),
 });
 
-/** The judged non-family call (it only ages the window). */
+/**
+ * The judged non-family call (it only ages the window).
+ */
 const Age = (Id: string): any => ({
 	name: "edit",
 	arguments: { file_path: Other },

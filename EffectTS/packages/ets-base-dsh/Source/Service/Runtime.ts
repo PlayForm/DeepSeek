@@ -79,6 +79,7 @@ export type Services = Context.Context<Tags>;
  * layers - the full graph for one factory shell.
  *
  * @remarks
+ *
  * The Journal layer captures the instance: the routing reads its
  * SharedJournal/PendingJournal fields at call time.
  */
@@ -104,6 +105,7 @@ export const layers = (Factory: Host): Layer.Layer<Tags> =>
  * factory config).
  *
  * @remarks
+ *
  * `endpoint` is the OTel collector's OTLP/HTTP base URL (the exporter posts
  * the protobuf spans there), `serviceName` the resource's service.name
  * (default: this package's name). Omitting the endpoint falls back to the
@@ -122,6 +124,7 @@ export interface Tracing {
  * batch span processor.
  *
  * @remarks
+ *
  * Type-only references - erased at runtime; the optional packages are never
  * on the module-load path. `NodeSdk` is a subpath module in
  * @effect/opentelemetry 4.x - the root barrel exports only the
@@ -148,6 +151,7 @@ type TracingLayer = Layer.Layer<typeof import("@effect/opentelemetry").Resource.
  * default - the no-op Tracer, byte-identical behavior).
  *
  * @remarks
+ *
  * The loader (or a test harness) sets it through `enableTracing` before
  * constructing the factory shells, because the runtime is materialized
  * synchronously in the constructor - a knob set after construction is picked
@@ -162,6 +166,7 @@ export const tracing: { config: Tracing | undefined } = { config: undefined };
  * would crash the whole bundle load).
  *
  * @remarks
+ *
  * Any load failure resolves `null` and tracing stays OFF - best-effort,
  * never a throw into the plugin.
  */
@@ -191,6 +196,7 @@ const loadOtel = (): Promise<OtelBundle | null> =>
  * configuration and dynamically load the optional OpenTelemetry bundle.
  *
  * @remarks
+ *
  * Resolves `true` when the bundle loaded and the next `materialize` (and
  * every one after it) will merge the `NodeSdk.layer` tracing layer;
  * resolves `false` when the optional packages are absent or unloadable -

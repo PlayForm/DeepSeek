@@ -5,6 +5,7 @@
  * (Documentation/Plans/UI-Family/PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md).
  *
  * @remarks
+ *
  * Two methods, least privilege: the endpoint reads `~/.dsh` family logs only and has no write
  * surface. The package's ONE write surface is the separate plain-field bridge contract
  * (`Interface/Bridge.ts`); the D5 forwarding face is `Interface/Trace.ts`.

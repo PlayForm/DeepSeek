@@ -1,9 +1,13 @@
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import type State from "../Interface/State.js";
+export default _default;
 /**
  * @module Observe
  *
  * The fs/observed listener: the SYNCHRONOUS RECORDER.
  *
  * @remarks
+ *
  * Registered on the ROOT context through the factory's Wire (the exact
  * `Context.root.on("fs/observed", ...)` registration). Discipline:
  * NO awaits, NO I/O, NO throws, no file content ever read.
@@ -18,7 +22,4 @@
  * Guard chain: own actor → excluded. A malformed event is caught and
  * ledgered "failed <path> (<reason>)" (never thrown into the emitter).
  */
-import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
-import type State from "../Interface/State.js";
-export default _default;
 declare function _default(State: State, Target: FsTarget | undefined, _Observation: FsObservation | undefined, Actor: object | undefined): void;

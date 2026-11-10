@@ -1,9 +1,15 @@
+import assert from "node:assert/strict";
+import { rmSync } from "node:fs";
+import CommentFilter from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
 /**
  * @module Harness
  *
  * The shared test harness for the COMMENT FILTER tests.
  *
  * @remarks
+ *
  * The harness pairs the fake ctx (listener capture, `get` returning the REAL
  * `@playform/plugin-dsh-factory` instance from its built Target, logger
  * capture) with the REAL comment-filter apply from the built Target - the
@@ -20,11 +26,6 @@
  * `prepublishOnly.sh` gates the build on it. Imported as a library, this
  * module only exports.
  */
-import assert from "node:assert/strict";
-import { rmSync } from "node:fs";
-import CommentFilter from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
-
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks. Passed
  * by reference so Check can bump it from inside its callback.

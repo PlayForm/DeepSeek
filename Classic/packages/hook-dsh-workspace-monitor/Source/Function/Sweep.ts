@@ -1,9 +1,13 @@
+import Clock from "@Function/Clock.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Sweep
  *
  * The sweep form: the CLOCK-BASED SCHEDULE over the watch map.
  *
  * @remarks
+ *
  * The sweep is a deadline scan over the watch map, run inside the event-driven
  * checkpoints (every fs/observed event calls it from Function/Watch; nothing
  * else ever calls it) - there is NO setTimeout and NO setInterval anywhere in
@@ -18,9 +22,6 @@
  * so an all-quiet tree costs one Clock read and a loop - the quiet-ledger
  * discipline.
  */
-import Clock from "@Function/Clock.js";
-import type State from "@Interface/State.js";
-
 export default (State: State): void => {
 	const Now = Clock(State);
 	let Swept = 0;

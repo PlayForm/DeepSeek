@@ -1,3 +1,5 @@
+import { PromptOne, PromptTwo } from "@Variable/Blocks.js";
+
 /**
  * @module Prompt
  *
@@ -5,6 +7,7 @@
  * assembled at call time.
  *
  * @remarks
+ *
  * WHY THERE IS NO ASSEMBLY HERE: the prompt is the contract the strict parser
  * enforces, so the two texts are constants and this leaf only picks one. A composer
  * would let a caller's argument (a focus, a count, a date) reach the model, and the
@@ -18,8 +21,6 @@
  * direction - the plan prompt asks for a plan and describes both requests, so it can
  * never mis-describe a request the model is answering.
  */
-import { PromptOne, PromptTwo } from "@Variable/Blocks.js";
-
 export default (Phase: 1 | 2): string => {
 	switch (true) {
 		case Phase === 2:

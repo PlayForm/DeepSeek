@@ -1,15 +1,3 @@
-/**
- * @module Test
- *
- * The wiring and the recovery: the loader contract, the IDLE-forever cold mount, the activation
- * proof, the service registered from apply, the fail-loud validation, the state file recovery and
- * the zero context-fs guarantee.
- *
- * @remarks
- * The loader contract: the default object carries name/apply/Config/inject, and apply returns
- * nothing. The state file recovery covers the missing, seeded and corrupt cases, with the honest
- * active downgrade.
- */
 import assert from "node:assert/strict";
 import * as Path from "node:path";
 import {
@@ -26,7 +14,22 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/**
+ * @module Test
+ *
+ * The wiring and the recovery: the loader contract, the IDLE-forever cold mount, the activation
+ * proof, the service registered from apply, the fail-loud validation, the state file recovery and
+ * the zero context-fs guarantee.
+ *
+ * @remarks
+ *
+ * The loader contract: the default object carries name/apply/Config/inject, and apply returns
+ * nothing. The state file recovery covers the missing, seeded and corrupt cases, with the honest
+ * active downgrade.
+ */
+/**
+ * A standard enabled mount.
+ */
 const Setup = (Config: Record<string, unknown> = {}, Attach?: (C: any, R: any) => void): any => {
 	rm();
 	return Make(Validate({ logFile: Ledger, enabled: true, stateFile: StateFile, ...Config }), Attach);

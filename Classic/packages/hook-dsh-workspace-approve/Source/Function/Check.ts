@@ -1,3 +1,8 @@
+import type Binding from "@Interface/Binding.js";
+import type Check from "@Interface/Check.js";
+import type Request from "@Interface/Request.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Check
  *
@@ -5,6 +10,7 @@
  * binding cover THIS EXACT change set?
  *
  * @remarks
+ *
  * The guard chain, in order (each outcome its own honest decision):
  *
  * 1. No binding for the path plus fingerprint -> `unbound`.
@@ -20,11 +26,6 @@
  * implementation against the approved candidate, it never grants authority by
  * itself - the authority licensing happened earlier in the flow.
  */
-import type Binding from "@Interface/Binding.js";
-import type Check from "@Interface/Check.js";
-import type Request from "@Interface/Request.js";
-import type State from "@Interface/State.js";
-
 export default (State: State, Request: Request): Check => {
 	const Path = String(Request.path ?? "");
 	const Fingerprint = String(Request.fingerprint ?? "");

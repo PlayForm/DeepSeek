@@ -4,6 +4,7 @@
  * One override of the fail-open recovery table.
  *
  * @remarks
+ *
  * The DEFAULT table (`Function/Recovery`) maps every obligation to its honest
  * failure behavior; a config override replaces one row. Behavior values:
  *

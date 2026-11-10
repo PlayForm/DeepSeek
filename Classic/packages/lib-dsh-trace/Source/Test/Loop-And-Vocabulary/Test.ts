@@ -1,3 +1,8 @@
+import assert from "node:assert/strict";
+
+import { Bound, Complete, IsEnvelope, IsStamp, Key, Loop, Names } from "../../../Target/Library.js";
+import { Check, CheckAsync, Finish, MakeCounter } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -7,15 +12,11 @@
  * fail-open containment, its disposer, per-key independence, and the fixed ring bound.
  *
  * @remarks
+ *
  * Runs standalone (`node Target/Test/Loop-And-Vocabulary/Test.js`) AND under the aggregate
  * (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of @playform/lib-dsh-trace: the
  * REAL built entry only.
  */
-import assert from "node:assert/strict";
-
-import { Bound, Complete, IsEnvelope, IsStamp, Key, Loop, Names } from "../../../Target/Library.js";
-import { Check, CheckAsync, Finish, MakeCounter } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

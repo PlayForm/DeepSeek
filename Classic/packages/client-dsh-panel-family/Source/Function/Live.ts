@@ -1,9 +1,13 @@
+import type { PanelEnvelope } from "@Interface/Panel.js";
+import type { PanelLive, PanelTrace } from "@Interface/Trace.js";
+
 /**
  * @module Live
  *
  * The panel's bounded tail over the D5 trace.
  *
  * @remarks
+ *
  * One instance per client apply: it seeds from the bus's recent ring when the host exposes one (the
  * panel attaches mid-session, so the held history is the honest starting status), then subscribes
  * to the event names the adapters follow and keeps the recent envelopes newest first (the same
@@ -14,9 +18,6 @@
  * the plugin. Without a trace the tail stays empty and every subscription is a no-op (the static
  * fallback).
  */
-import type { PanelEnvelope } from "@Interface/Panel.js";
-import type { PanelLive, PanelTrace } from "@Interface/Trace.js";
-
 const Bound = 8;
 
 export default function Live(Trace: PanelTrace | undefined, Kinds: readonly string[]): PanelLive {

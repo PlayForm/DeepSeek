@@ -1,9 +1,18 @@
+import FileSystem from "node:fs/promises";
+import Path from "node:path";
+
+import { Capture, Rows } from "@Function/Ledger.js";
+import { Expand, type Seam } from "@Function/Write.js";
+import type Configuration from "@Interface/Configuration.js";
+import type { SnapshotFile, SnapshotManifest } from "@Interface/Snapshot.js";
+
 /**
  * @module Snapshot
  *
  * The whole-tree manifest, its rotation, and the blob sweep.
  *
  * @remarks
+ *
  * A SNAPSHOT NAMES CONTENT INSTEAD OF COPYING IT. Every file's bytes already live in
  * the blob store, so a snapshot of an unchanged corpus costs one small JSON file, and a
  * rotation can drop a manifest without losing a byte that a retained ledger row still
@@ -22,54 +31,72 @@
  * because a capture may be in flight before its row exists
  * (tools/skill_ledger.py:485-497).
  */
-import FileSystem from "node:fs/promises";
-import Path from "node:path";
-
-import { Capture, Rows } from "@Function/Ledger.js";
-import { Expand, type Seam } from "@Function/Write.js";
-import type Configuration from "@Interface/Configuration.js";
-import type { SnapshotFile, SnapshotManifest } from "@Interface/Snapshot.js";
-
-/** How deep the corpus walk descends: `SKILL.md`, `references/<file>`, and one more level. */
+/**
+ * How deep the corpus walk descends: `SKILL.md`, `references/<file>`, and one more level.
+ */
 const Depth = 3;
 
-/** The one-hour grace a blob gets before the sweep may delete it. */
+/**
+ * The one-hour grace a blob gets before the sweep may delete it.
+ */
 const Grace = 3_600_000;
 
-/** The snapshot id: `<YYYY-MM-DD>T<HH-MM-SSZ>`, with `-NN` on a same-second collision. */
+/**
+ * The snapshot id: `<YYYY-MM-DD>T<HH-MM-SSZ>`, with `-NN` on a same-second collision.
+ */
 const Shape = /^\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}Z(?:-\d{2})?$/;
 
-/** What one capture produced. */
+/**
+ * What one capture produced.
+ */
 export interface Taken {
-	/** The snapshot id, or "" when the capture failed. */
+	/**
+	 * The snapshot id, or "" when the capture failed.
+	 */
 	readonly id: string;
 
-	/** The manifest that was written, or null when the capture failed. */
+	/**
+	 * The manifest that was written, or null when the capture failed.
+	 */
 	readonly manifest: SnapshotManifest | null;
 
-	/** Why the capture failed, for the one log line. */
+	/**
+	 * Why the capture failed, for the one log line.
+	 */
 	readonly error?: string;
 }
 
-/** What one rotation did. */
+/**
+ * What one rotation did.
+ */
 export interface Rotated {
-	/** The snapshot ids the rotation pruned. */
+	/**
+	 * The snapshot ids the rotation pruned.
+	 */
 	readonly pruned: readonly string[];
 
-	/** How many unreferenced blobs the sweep deleted. */
+	/**
+	 * How many unreferenced blobs the sweep deleted.
+	 */
 	readonly swept: number;
 
-	/** Why the rotation stopped early, when it did. */
+	/**
+	 * Why the rotation stopped early, when it did.
+	 */
 	readonly error?: string;
 }
 
-/** The id for one instant, with the milliseconds and the colons removed. */
+/**
+ * The id for one instant, with the milliseconds and the colons removed.
+ */
 const Identify = (At: Date): string =>
 	At.toISOString()
 		.replace(/\.\d{3}Z$/, "Z")
 		.replace(/:/g, "-");
 
-/** Every regular file under one directory, skipping dot entries such as the archive. */
+/**
+ * Every regular file under one directory, skipping dot entries such as the archive.
+ */
 const Walk = async (
 	Seam_: Seam,
 	Directory: string,
@@ -96,7 +123,9 @@ const Walk = async (
 	}
 };
 
-/** Write one manifest through a temporary file and a rename. */
+/**
+ * Write one manifest through a temporary file and a rename.
+ */
 const Publish = async (File: string, Manifest_: SnapshotManifest): Promise<void> => {
 	const Temporary = `${File}.${String(process.pid)}.tmp`;
 	await FileSystem.mkdir(Path.dirname(File), { recursive: true });

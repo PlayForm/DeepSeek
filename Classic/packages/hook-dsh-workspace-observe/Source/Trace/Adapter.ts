@@ -11,6 +11,7 @@ import Contract from "./Contract.js";
  * each recorded stamp, emit `observe/stamp` on the family's bus.
  *
  * @remarks
+ *
  * THE BUS IS OPTIONAL HERE: the service (`ctx.trace`) is provided by
  * @playform/plugin-dsh-factory, and the hook already injects the factory - the
  * adapter resolves the bus through the factory's probe-once `Seam` accessor

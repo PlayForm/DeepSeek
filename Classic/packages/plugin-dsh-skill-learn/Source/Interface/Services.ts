@@ -1,9 +1,14 @@
+import type Agent from "@Interface/Agent.js";
+import type Message from "@Interface/Message.js";
+import type { LoadedSkill, SkillRow } from "@Interface/Skill.js";
+
 /**
  * @module Services
  *
  * The STRUCTURAL context slices the service injects or probes.
  *
  * @remarks
+ *
  * TAKEN FROM the harness declarations this package cannot import (the skill package is
  * not installed, and the fs/llm declarations are the only typed authority the design was
  * measured against):
@@ -36,109 +41,167 @@
  * never an option this type offers, because omitting it would mean an unconditional
  * overwrite.
  */
-import type Agent from "@Interface/Agent.js";
-import type Message from "@Interface/Message.js";
-import type { LoadedSkill, SkillRow } from "@Interface/Skill.js";
-
-/** An opaque resolved target; `targetKey` is identity and must never be parsed. */
+/**
+ * An opaque resolved target; `targetKey` is identity and must never be parsed.
+ */
 export interface FsTarget {
-	/** The opaque identity token. */
+	/**
+	 * The opaque identity token.
+	 */
 	readonly targetKey: string;
 
-	/** The absolute spelling the caller asked for, for messages and the ledger. */
+	/**
+	 * The absolute spelling the caller asked for, for messages and the ledger.
+	 */
 	readonly displayPath: string;
 }
 
-/** Metadata only, never content; `version` is the token a guarded write needs. */
+/**
+ * Metadata only, never content; `version` is the token a guarded write needs.
+ */
 export interface FsInfo {
-	/** The opaque freshness token a guarded write carries. */
+	/**
+	 * The opaque freshness token a guarded write carries.
+	 */
 	readonly version: string;
 
-	/** The node kind the stat saw. */
+	/**
+	 * The node kind the stat saw.
+	 */
 	readonly type: "file" | "directory" | "other";
 
-	/** The file's size in bytes, when the provider reports one. */
+	/**
+	 * The file's size in bytes, when the provider reports one.
+	 */
 	readonly size?: number;
 }
 
-/** The fence: create refuses an existing target, replace refuses an absent or changed one. */
+/**
+ * The fence: create refuses an existing target, replace refuses an absent or changed one.
+ */
 export type FsWriteIntent =
-	/** Refuse an existing target with FS_NOT_OBSERVED. */
+	/**
+	 * Refuse an existing target with FS_NOT_OBSERVED.
+	 */
 	| { readonly kind: "createIfAbsent" }
-	/** Refuse an absent or moved target with FS_STALE_VERSION. */
+	/**
+	 * Refuse an absent or moved target with FS_STALE_VERSION.
+	 */
 	| { readonly kind: "replaceIfVersion"; readonly version: string };
 
 export interface FsWriteOutcome {
-	/** Whether the write created or updated the target. */
+	/**
+	 * Whether the write created or updated the target.
+	 */
 	readonly operation: "create" | "update";
 
-	/** The version after the write, which is what the next guard carries. */
+	/**
+	 * The version after the write, which is what the next guard carries.
+	 */
 	readonly version: string;
 
-	/** The prior text, or null on a create; the ledger's `before` blob comes from it. */
+	/**
+	 * The prior text, or null on a create; the ledger's `before` blob comes from it.
+	 */
 	readonly before: string | null;
 
-	/** The text as written; the ledger's `after` blob comes from it. */
+	/**
+	 * The text as written; the ledger's `after` blob comes from it.
+	 */
 	readonly after: string;
 }
 
 export interface FsEditRequest {
-	/** The anchor text the edit matches exactly once. */
+	/**
+	 * The anchor text the edit matches exactly once.
+	 */
 	readonly oldString: string;
 
-	/** The replacement text. */
+	/**
+	 * The replacement text.
+	 */
 	readonly newString: string;
 
-	/** Always false for a skill patch: exactly one anchor is the rule the fence enforces. */
+	/**
+	 * Always false for a skill patch: exactly one anchor is the rule the fence enforces.
+	 */
 	readonly replaceAll: boolean;
 }
 
 export interface FsEditOutcome {
-	/** The version after the edit. */
+	/**
+	 * The version after the edit.
+	 */
 	readonly version: string;
 
-	/** The text before the edit. */
+	/**
+	 * The text before the edit.
+	 */
 	readonly before: string;
 
-	/** The text after the edit. */
+	/**
+	 * The text after the edit.
+	 */
 	readonly after: string;
 }
 
-/** One direct child of a listed directory: metadata and a resolved target, never content. */
+/**
+ * One direct child of a listed directory: metadata and a resolved target, never content.
+ */
 export interface FsDirEntry {
-	/** The child's name as the listing reported it. */
+	/**
+	 * The child's name as the listing reported it.
+	 */
 	readonly name: string;
 
-	/** The node kind. */
+	/**
+	 * The node kind.
+	 */
 	readonly type: "file" | "directory" | "other";
 
-	/** The resolved target for the child. */
+	/**
+	 * The resolved target for the child.
+	 */
 	readonly target: FsTarget;
 
-	/** The child's version, when the provider reports one. */
+	/**
+	 * The child's version, when the provider reports one.
+	 */
 	readonly version?: string;
 
-	/** The child's size in bytes, when the provider reports one. */
+	/**
+	 * The child's size in bytes, when the provider reports one.
+	 */
 	readonly size?: number;
 }
 
 export interface FsSlice {
-	/** Resolve one path spelling into an opaque target identity. */
+	/**
+	 * Resolve one path spelling into an opaque target identity.
+	 */
 	resolve(
 		path: string,
 		options?: { readonly cwd?: string; readonly signal?: AbortSignal },
 	): Promise<FsTarget>;
 
-	/** One target's metadata, or `undefined` when it is absent. */
+	/**
+	 * One target's metadata, or `undefined` when it is absent.
+	 */
 	stat(target: FsTarget, signal?: AbortSignal): Promise<FsInfo | undefined>;
 
-	/** One target's full text; the read the digest and the fence compare. */
+	/**
+	 * One target's full text; the read the digest and the fence compare.
+	 */
 	readText(target: FsTarget, signal?: AbortSignal): Promise<string>;
 
-	/** The direct children of a directory; the archive copy walks a skill package with it. */
+	/**
+	 * The direct children of a directory; the archive copy walks a skill package with it.
+	 */
 	listDir(target: FsTarget, signal?: AbortSignal): Promise<readonly FsDirEntry[]>;
 
-	/** Write a whole file behind the guarded write intent. */
+	/**
+	 * Write a whole file behind the guarded write intent.
+	 */
 	writeText(
 		target: FsTarget,
 		content: string,
@@ -146,7 +209,9 @@ export interface FsSlice {
 		signal?: AbortSignal,
 	): Promise<FsWriteOutcome>;
 
-	/** Edit one file behind a literal anchor and an expected version. */
+	/**
+	 * Edit one file behind a literal anchor and an expected version.
+	 */
 	editText(
 		target: FsTarget,
 		edit: FsEditRequest,
@@ -154,22 +219,30 @@ export interface FsSlice {
 		signal?: AbortSignal,
 	): Promise<FsEditOutcome>;
 
-	/** Canonical containment: the root fence and the archive refusal both use it. */
+	/**
+	 * Canonical containment: the root fence and the archive refusal both use it.
+	 */
 	contains(parent: FsTarget, child: FsTarget): boolean;
 
-	/** The host path of a resolved target, for the configured-root comparisons. */
+	/**
+	 * The host path of a resolved target, for the configured-root comparisons.
+	 */
 	processPath(target: FsTarget): string;
 }
 
 export interface SkillsSlice {
-	/** One row per discovered skill; the model-invocability filter runs over these. */
+	/**
+	 * One row per discovered skill; the model-invocability filter runs over these.
+	 */
 	list(options?: {
 		readonly cwd?: string;
 		readonly scope?: string;
 		readonly signal?: AbortSignal;
 	}): Promise<readonly SkillRow[]>;
 
-	/** The parsed skill, or `undefined` when the catalog does not resolve the name. */
+	/**
+	 * The parsed skill, or `undefined` when the catalog does not resolve the name.
+	 */
 	get(
 		name: string,
 		options?: { readonly cwd?: string; readonly signal?: AbortSignal },
@@ -214,7 +287,9 @@ export interface LlmRequest {
  * blocks they actually build.
  */
 export interface StreamRequest extends LlmRequest {
-	/** The one-shot system prompt; the loop's own requests leave it unset. */
+	/**
+	 * The one-shot system prompt; the loop's own requests leave it unset.
+	 */
 	readonly system: string;
 	readonly messages: readonly Message[];
 	readonly maxTokens: number;
@@ -244,38 +319,61 @@ export interface LlmSlice {
 }
 
 export interface WorkingDirectorySlice {
-	/** The agent's working directory, created on demand (`dsh-working-directory/lib/types/index.d.ts:73`). */
+	/**
+	 * The agent's working directory, created on demand
+	 * (`dsh-working-directory/lib/types/index.d.ts:73`).
+	 */
 	ensure(agent: Agent, signal?: AbortSignal): Promise<string>;
 }
 
-/** The logger cordis injects; every level is a one-way line. */
+/**
+ * The logger cordis injects; every level is a one-way line.
+ */
 export interface LoggerSlice {
-	/** One informational line. */
+	/**
+	 * One informational line.
+	 */
 	info(format: unknown, ...parameter: unknown[]): void;
 
-	/** One warning line. */
+	/**
+	 * One warning line.
+	 */
 	warn(format: unknown, ...parameter: unknown[]): void;
 
-	/** One error line. */
+	/**
+	 * One error line.
+	 */
 	error(format: unknown, ...parameter: unknown[]): void;
 
-	/** One debug line. */
+	/**
+	 * One debug line.
+	 */
 	debug(format: unknown, ...parameter: unknown[]): void;
 }
 
 export default interface Services {
-	/** Injected: the only seam that may touch a file. */
+	/**
+	 * Injected: the only seam that may touch a file.
+	 */
 	readonly fs: FsSlice;
 
-	/** Injected: the catalog the review reads and the cache a write invalidates. */
+	/**
+	 * Injected: the catalog the review reads and the cache a write invalidates.
+	 */
 	readonly skills: SkillsSlice;
 
-	/** Probed: absent is the `no-llm` outcome, never a throw. */
+	/**
+	 * Probed: absent is the `no-llm` outcome, never a throw.
+	 */
 	readonly llm?: LlmSlice;
 
-	/** Probed: absent falls back to the configured corpus root. */
+	/**
+	 * Probed: absent falls back to the configured corpus root.
+	 */
 	readonly workingDirectory?: WorkingDirectorySlice;
 
-	/** Probed: absent means no ledger line, never a failed run. */
+	/**
+	 * Probed: absent means no ledger line, never a failed run.
+	 */
 	readonly logger?: LoggerSlice;
 }

@@ -1,3 +1,5 @@
+import type { Touch } from "@playform/lib-dsh-pack";
+
 /**
  * @module Projection
  *
@@ -6,6 +8,7 @@
  * through.
  *
  * @remarks
+ *
  * The seam is the `SessionProjectionRegistry` of
  * `@deepseek-ai/dsh-session-projection`. The types are structural on purpose:
  * the projection package is NOT a dependency of this hook (no runtime import,
@@ -49,8 +52,6 @@
  * every shipped consumer uses. A handle-based read would break on the
  * installed build, where `register` returns a function, not a handle.
  */
-import type { Touch } from "@playform/lib-dsh-pack";
-
 /**
  * The unit's host state: one session's touch history, the SAME shape the
  * retired `session/event` fold kept in `State.History` (the sequence number of

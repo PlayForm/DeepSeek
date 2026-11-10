@@ -1,3 +1,5 @@
+import type Message from "@Interface/Message.js";
+
 /**
  * @module Digest
  *
@@ -6,6 +8,7 @@
  * 4.4 states it.
  *
  * @remarks
+ *
  * WHY A DIGEST AT ALL: the review runs on a ROUTED model, whose prompt cache is cold
  * for this conversation anyway, so a compact replay costs a fraction of a full one and
  * loses nothing the reviewer needs (plan section 4.1). The Hermes function returns
@@ -33,49 +36,73 @@
  * evidence and is kept whole (plan section 4.4, "kept verbatim"). There is no total
  * cap, by the same row: the tail bound and the two per-line caps are the whole budget.
  */
-import type Message from "@Interface/Message.js";
-
-/** The three caps the digest reads from the resolved knobs. */
+/**
+ * The three caps the digest reads from the resolved knobs.
+ */
 export interface DigestLimits {
-	/** Messages kept verbatim; older ones collapse into the summary lines. */
+	/**
+	 * Messages kept verbatim; older ones collapse into the summary lines.
+	 */
 	readonly digestTail: number;
 
-	/** The cap on one `USER: ` summary line. */
+	/**
+	 * The cap on one `USER: ` summary line.
+	 */
 	readonly digestUserChars: number;
 
-	/** The cap on one `ASSISTANT: ` summary line. */
+	/**
+	 * The cap on one `ASSISTANT: ` summary line.
+	 */
 	readonly digestAssistantChars: number;
 }
 
-/** The digest text plus the two counts the report prints to prove its shape. */
+/**
+ * The digest text plus the two counts the report prints to prove its shape.
+ */
 export interface DigestResult {
-	/** The digest text; empty only for an empty transcript. */
+	/**
+	 * The digest text; empty only for an empty transcript.
+	 */
 	readonly text: string;
 
-	/** How many trailing messages were kept verbatim. */
+	/**
+	 * How many trailing messages were kept verbatim.
+	 */
 	readonly kept: number;
 
-	/** How many leading messages collapsed into the summary. */
+	/**
+	 * How many leading messages collapsed into the summary.
+	 */
 	readonly collapsed: number;
 }
 
-/** One bracketed line naming the digest and why it exists (`agent/background_review.py:357-361`). */
+/**
+ * One bracketed line naming the digest and why it exists (`agent/background_review.py:357-361`).
+ */
 const Header =
 	"[Earlier conversation digest - older turns summarised to bound the review's cost. Recent turns follow verbatim below.]";
 
-/** The two per-line caps; `undefined` means uncapped, which is the verbatim tail. */
+/**
+ * The two per-line caps; `undefined` means uncapped, which is the verbatim tail.
+ */
 interface Caps {
 	readonly user: number | undefined;
 	readonly assistant: number | undefined;
 }
 
-/** The tail is uncapped: it is evidence, not a summary. */
+/**
+ * The tail is uncapped: it is evidence, not a summary.
+ */
 const Whole: Caps = { user: undefined, assistant: undefined };
 
-/** Newlines flattened to one space, then trimmed (`agent/background_review.py:349`). */
+/**
+ * Newlines flattened to one space, then trimmed (`agent/background_review.py:349`).
+ */
 const Flatten = (Text: string): string => Text.replace(/\s+/g, " ").trim();
 
-/** A message's text, from its `text` blocks only, in order. */
+/**
+ * A message's text, from its `text` blocks only, in order.
+ */
 const Text = (Message: Message): string => {
 	const Parts: string[] = [];
 	for (const Block of Message.content) {
@@ -85,7 +112,9 @@ const Text = (Message: Message): string => {
 	return Parts.join("\n");
 };
 
-/** The tool names a message calls, with `?` where a name is absent. */
+/**
+ * The tool names a message calls, with `?` where a name is absent.
+ */
 const Names = (Message: Message): readonly string[] => {
 	const Called: string[] = [];
 	for (const Block of Message.content) {
@@ -96,7 +125,9 @@ const Names = (Message: Message): readonly string[] => {
 	return Called;
 };
 
-/** One line's text, cut to its cap when the line is a summary line. */
+/**
+ * One line's text, cut to its cap when the line is a summary line.
+ */
 const Cut = (Text: string, Limit: number | undefined): string =>
 	Limit === undefined ? Text : Text.slice(0, Limit);
 

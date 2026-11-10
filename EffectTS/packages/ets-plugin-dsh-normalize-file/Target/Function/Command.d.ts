@@ -1,3 +1,5 @@
+import type State from "../Interface/State.js";
+import { type CommandResult, type ConfigEditorService, type SettingsService } from "@playform/ets-base-dsh";
 /**
  * @module Command
  *
@@ -5,6 +7,7 @@
  * other branch to the ETS base's generic handler.
  *
  * @remarks
+ *
  * The FILES SWEEP is the one real implementation (the six stream flavors
  * decline that scope), and every non-files branch delegates to the ETS base's
  * generic handler (@playform/ets-base-dsh/Overpass/Command) - the grammar, the
@@ -22,8 +25,6 @@
  * byte-identical. The service types are re-exported because Function/Apply
  * imports them from this module (the import path stays untouched).
  */
-import type State from "../Interface/State.js";
-import { type CommandResult, type ConfigEditorService, type SettingsService } from "@playform/ets-base-dsh";
 export type { CommandResult, CommandsService, ConfigEditorService, SettingsService, } from "@playform/ets-base-dsh";
 /**
  * The structural CommandInvocation: only the fields the handler reads.

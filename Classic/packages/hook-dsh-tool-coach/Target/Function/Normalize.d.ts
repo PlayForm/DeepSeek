@@ -1,9 +1,11 @@
+import type { CoachClass } from "../Interface/Execution.js";
 /**
  * @module Normalize
  *
  * Command normalization and segment splitting.
  *
  * @remarks
+ *
  * Plan Part 2 §2.7a. Detection is NEVER exact-match only: before any
  * matching, the raw command is normalized so obfuscated variants resolve to
  * the same text the pattern rows and the intent-marker scan see.
@@ -28,7 +30,6 @@
  * highest-priority class wins. Trailing redirect context belongs to the
  * segment it follows, so `cat f > out.txt` is one segment with a redirect.
  */
-import type { CoachClass } from "../Interface/Execution.js";
 /**
  * The class priority rank of a class (lower = more severe).
  */

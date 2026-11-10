@@ -1,21 +1,3 @@
-/**
- * @module Test
- *
- * The pin pass end to end and the no-op paths of
- * @playform/hook-dsh-package-pinner, covered in one singular test.
- *
- * @remarks
- * The test covers the pin pass end to end - the range law across all four
- * sections (strip ^/~/= one leading prefix, everything else untouched, the
- * documented ^1.* edge, non-string values, the refusal domain preserved, the
- * serialization), the guarded write with Stash pre-registration and the P3
- * same-actor re-emit, the silent re-entrant no-op, the author's next guarded
- * write at the fresh version, and the three no-op paths (already pinned,
- * non-JSON, vanished) all silent-writes-none.
- *
- * The file runs standalone (`node Target/Test/Pin-Pass-And-No-Ops/Test.js`)
- * and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
- */
 import assert from "node:assert/strict";
 import * as Path from "node:path";
 import {
@@ -34,6 +16,25 @@ import {
 	token,
 } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * The pin pass end to end and the no-op paths of
+ * @playform/hook-dsh-package-pinner, covered in one singular test.
+ *
+ * @remarks
+ *
+ * The test covers the pin pass end to end - the range law across all four
+ * sections (strip ^/~/= one leading prefix, everything else untouched, the
+ * documented ^1.* edge, non-string values, the refusal domain preserved, the
+ * serialization), the guarded write with Stash pre-registration and the P3
+ * same-actor re-emit, the silent re-entrant no-op, the author's next guarded
+ * write at the fresh version, and the three no-op paths (already pinned,
+ * non-JSON, vanished) all silent-writes-none.
+ *
+ * The file runs standalone (`node Target/Test/Pin-Pass-And-No-Ops/Test.js`)
+ * and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	const World = Boot();

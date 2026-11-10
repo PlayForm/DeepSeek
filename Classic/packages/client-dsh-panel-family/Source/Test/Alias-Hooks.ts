@@ -1,3 +1,6 @@
+import * as FileSystem from "node:fs";
+import * as Module from "node:module";
+
 /**
  * @module Alias-Hooks
  *
@@ -5,6 +8,7 @@
  * real built Target instead of a mock.
  *
  * @remarks
+ *
  * The built client half (`Target/Client.js` and its `Function/` imports) keeps
  * the SOURCE aliases `@Function/*` and `@Variable/*` external (bundle: false -
  * the module system resolves them at materialization time), so a plain Node run
@@ -23,10 +27,9 @@
  * registration is synchronous and applies to the dynamic imports the Harness
  * performs right after loading this module.
  */
-import * as FileSystem from "node:fs";
-import * as Module from "node:module";
-
-/** The package-root URL of the module currently resolving an alias. */
+/**
+ * The package-root URL of the module currently resolving an alias.
+ */
 const Root = (Context: any): string => {
 	const Parent = String(Context.parentURL ?? "");
 	const Marker = Parent.indexOf("/Target/");

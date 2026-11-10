@@ -4,6 +4,7 @@
  * The fixed replay corpus of the P4 benchmark: fifty search-class calls in five lanes of ten.
  *
  * @remarks
+ *
  * The corpus is the plan's section 10.5. Each lane is one intent and one agent (the per-agent
  * ring keeps the lanes independent without a user message). The calls are the plan's release
  * / test / doc / config / symbol lanes reduced to their literals: the first call of a lane
@@ -19,16 +20,24 @@
  * Deterministic data: no timestamps, no absolute paths, no session ids.
  */
 export interface Call {
-	/** The lane's agent id (one ring per lane). */
+	/**
+	 * The lane's agent id (one ring per lane).
+	 */
 	agent: string;
 
-	/** The tool name. */
+	/**
+	 * The tool name.
+	 */
 	name: string;
 
-	/** The tool arguments (the classifier reads pattern / file_path / command). */
+	/**
+	 * The tool arguments (the classifier reads pattern / file_path / command).
+	 */
 	arguments: Record<string, unknown>;
 
-	/** The lane's user message (the R12 context word), driven before the call. */
+	/**
+	 * The lane's user message (the R12 context word), driven before the call.
+	 */
 	context?: string;
 }
 

@@ -1,2 +1,20 @@
 export default _default;
+/**
+ * @module Roster
+ *
+ * The aggregate runner's roster for one package: the smoke folders it will
+ * actually run.
+ *
+ * @remarks
+ *
+ * Maintain/Run/Smokes/Index.mjs enumerates
+ * `<package>/Target/Test/<Folder>/Test.js` (one folder per suite, the compiled
+ * Test.ts plus the README that declares the count), so a Source folder without
+ * a built Target folder is NOT in the roster - the runner never sees it and
+ * the count it claims is never exercised.
+ *
+ * The roster is read from the built tree, not from a hand-maintained list: the
+ * runner has no list to drift from (it derives the folders on every run), so
+ * the built tree IS the roster.
+ */
 declare function _default(PackageRoot: string): Set<string>;

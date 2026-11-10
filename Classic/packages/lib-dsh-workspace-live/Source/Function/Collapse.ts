@@ -10,13 +10,13 @@ import Render from "./Render.js";
  * SUMMARIES.
  *
  * @remarks
+ *
  * The collapsed section is never a silent drop (the live-containers failsafe-8
  * rule): it stays visible as its summary line.
  *
  * The function is pure: sections in, a `{ text, collapsed }` list out; the
  * caller joins the texts with the separator it owns.
  */
-
 /**
  * One collapsed entry: the rendered text (full frame or one-line summary) and
  * whether it was collapsed by the budget.

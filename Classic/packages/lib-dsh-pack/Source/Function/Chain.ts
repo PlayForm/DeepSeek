@@ -10,20 +10,24 @@ import User from "./User.js";
  * Resolve an `extends:` chain into its base packs, deepest base first.
  *
  * @remarks
+ *
  * A named pack is looked up in the USER layer
  * (`<home>/.dsh/playform/workspaces/<name>.yml`): the base-workspace pack the
  * D2 deep-link override inherits. A missing name is skipped, because a stale
  * link must not silence a repo, and a name already visited in the chain is
  * skipped too (the cycle guard; the pack is merged once).
  */
-
-/** Load one named base pack from the user layer, or undefined. */
+/**
+ * Load one named base pack from the user layer, or undefined.
+ */
 const Base = (Name: string, Home: string): Pack | undefined => {
 	const Path = Pick(User(Name, Home));
 	return Path === undefined ? undefined : Read(Path);
 };
 
-/** Walk one name: its own bases first, then itself. */
+/**
+ * Walk one name: its own bases first, then itself.
+ */
 const Walk = (Name: string, Home: string, Seen: Set<string>): Pack[] => {
 	if (Seen.has(Name)) {
 		return [];

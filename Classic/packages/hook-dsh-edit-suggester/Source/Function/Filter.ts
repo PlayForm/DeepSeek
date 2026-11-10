@@ -1,3 +1,6 @@
+import type { Detection } from "../Interface/Execution.js";
+import Exists from "./Exists.js";
+
 /**
  * @module Filter
  *
@@ -6,15 +9,13 @@
  * three bases, BEFORE the score/gate step.
  *
  * @remarks
+ *
  * The three bases are the repo root, the package root, and the package
  * parent. A family whose whole companion set is absent survives as a
  * detection with zero targets, and Score turns that into the
  * `no-companions` abstention (the family is still named in the ledger, so
  * the silence stays diagnosable).
  */
-import type { Detection } from "../Interface/Execution.js";
-import Exists from "./Exists.js";
-
 export default (
 	/**
 	 * The ranked detections (Detect's output).

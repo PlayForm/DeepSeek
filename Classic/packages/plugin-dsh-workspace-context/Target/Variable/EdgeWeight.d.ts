@@ -4,6 +4,7 @@
  * The edge-strength ranking table (DATA, not code).
  *
  * @remarks
+ *
  * V4-1 section 3.5: "ranked by edge strength (a call beats a reference, a
  * test beats a mention)". Higher wins. The graph's v0 edge set is
  * contains/imports; the table already carries the full v4-1 vocabulary so

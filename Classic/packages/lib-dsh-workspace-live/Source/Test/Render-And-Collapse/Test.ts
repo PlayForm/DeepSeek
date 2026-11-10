@@ -1,3 +1,7 @@
+import assert from "node:assert/strict";
+
+import { Check, Collapse, Finish, MakeCounter, Render } from "../Harness.js";
+
 /**
  * @module Test
  *
@@ -5,14 +9,11 @@
  * collapse.
  *
  * @remarks
+ *
  * The folder covers the fixed frame byte-exact (with and without the version
  * stamp), the empty section, the fully-fitting budget, the overflow summary
  * (never a silent drop), and the order preservation.
  */
-import assert from "node:assert/strict";
-
-import { Check, Collapse, Finish, MakeCounter, Render } from "../Harness.js";
-
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

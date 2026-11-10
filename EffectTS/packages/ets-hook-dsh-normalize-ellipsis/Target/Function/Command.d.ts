@@ -1,3 +1,4 @@
+import { Command } from "@playform/ets-base-dsh";
 /**
  * @module Command
  *
@@ -5,6 +6,7 @@
  * `normalize-overpass` handler (@playform/ets-base-dsh/Overpass/Command).
  *
  * @remarks
+ *
  * The grammar, the scopes report, the batch arm, the results paths, the
  * usage line and the files decline line all live in the base; the module
  * keeps its identity through State.Module (the Classic identity,
@@ -14,6 +16,5 @@
  * The service types are re-exported because Function/Apply imports them from
  * this module (the import path stays untouched).
  */
-import { Command } from "@playform/ets-base-dsh";
 export type { CommandResult, CommandsService, ConfigEditorService, SettingsService, } from "@playform/ets-base-dsh";
 export default Command;

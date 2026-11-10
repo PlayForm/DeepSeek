@@ -1,3 +1,7 @@
+import { MAIN } from "@Function/Capacity.js";
+import type State from "@Interface/State.js";
+import type Task from "@Interface/Task.js";
+
 /**
  * @module Pull
  *
@@ -8,6 +12,7 @@
  * enqueue, so a queue with free capacity starts its work immediately.
  *
  * @remarks
+ *
  * GATED ON THE SPAWN: the pull runs only when BOTH `autoDispatch` and
  * `autoSpawn` are on. An automatic assignment the plugin cannot launch would
  * strand the task in `dispatched` with a held seat - the manual posture
@@ -18,10 +23,6 @@
  * capacity gate refuses at zero, so the drain terminates without a timer and
  * without a clock.
  */
-import { MAIN } from "@Function/Capacity.js";
-import type State from "@Interface/State.js";
-import type Task from "@Interface/Task.js";
-
 export default (State: State, Dispatch: (Agent: string) => Task | undefined): string[] => {
 	switch (true) {
 		case !State.AutoDispatch:

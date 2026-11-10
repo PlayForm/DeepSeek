@@ -1,9 +1,11 @@
+import type Factory from "@playform/ets-plugin-dsh-factory";
 /**
  * @module Factory
  *
  * Publishes the typed view of the injected plugin-factory service on the cordis Context.
  *
  * @remarks
+ *
  * The STRUCTURAL VIEW of the injected @playform/ets-plugin-dsh-factory service. The type
  * arrives TYPE-ONLY from the factory package (erased at build: the built Target has NO
  * runtime import of the factory - at runtime the service resolves from the profile
@@ -14,7 +16,6 @@
  * (Append) - and nothing else: it registers its own `ctx.on("agent/status", ...)`
  * listener, the plain fiber-owned pattern.
  */
-import type Factory from "@playform/ets-plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {
         /**

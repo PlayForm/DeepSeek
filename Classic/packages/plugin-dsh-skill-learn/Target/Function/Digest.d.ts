@@ -1,3 +1,4 @@
+import type Message from "../Interface/Message.js";
 /**
  * @module Digest
  *
@@ -6,6 +7,7 @@
  * 4.4 states it.
  *
  * @remarks
+ *
  * WHY A DIGEST AT ALL: the review runs on a ROUTED model, whose prompt cache is cold
  * for this conversation anyway, so a compact replay costs a fraction of a full one and
  * loses nothing the reviewer needs (plan section 4.1). The Hermes function returns
@@ -33,23 +35,38 @@
  * evidence and is kept whole (plan section 4.4, "kept verbatim"). There is no total
  * cap, by the same row: the tail bound and the two per-line caps are the whole budget.
  */
-import type Message from "../Interface/Message.js";
-/** The three caps the digest reads from the resolved knobs. */
+/**
+ * The three caps the digest reads from the resolved knobs.
+ */
 export interface DigestLimits {
-    /** Messages kept verbatim; older ones collapse into the summary lines. */
+    /**
+     * Messages kept verbatim; older ones collapse into the summary lines.
+     */
     readonly digestTail: number;
-    /** The cap on one `USER: ` summary line. */
+    /**
+     * The cap on one `USER: ` summary line.
+     */
     readonly digestUserChars: number;
-    /** The cap on one `ASSISTANT: ` summary line. */
+    /**
+     * The cap on one `ASSISTANT: ` summary line.
+     */
     readonly digestAssistantChars: number;
 }
-/** The digest text plus the two counts the report prints to prove its shape. */
+/**
+ * The digest text plus the two counts the report prints to prove its shape.
+ */
 export interface DigestResult {
-    /** The digest text; empty only for an empty transcript. */
+    /**
+     * The digest text; empty only for an empty transcript.
+     */
     readonly text: string;
-    /** How many trailing messages were kept verbatim. */
+    /**
+     * How many trailing messages were kept verbatim.
+     */
     readonly kept: number;
-    /** How many leading messages collapsed into the summary. */
+    /**
+     * How many leading messages collapsed into the summary.
+     */
     readonly collapsed: number;
 }
 export default _default;

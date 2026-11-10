@@ -4,6 +4,7 @@
  * The live view's slot vocabulary.
  *
  * @remarks
+ *
  * `tab` is the host slot the workspace tab mounts into; `pane` is the host
  * slot the live view mounts into as a right-Sidebar tab body (a keyed seat
  * declared by ui-sidebar-right, keyed by the tab type's own id); `section`

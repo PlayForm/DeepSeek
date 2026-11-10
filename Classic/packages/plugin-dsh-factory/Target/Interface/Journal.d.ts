@@ -5,6 +5,7 @@
  * optional `storageDomain` seam, P5).
  *
  * @remarks
+ *
  * One record is appended per lifecycle event: `activated` (the plugin came
  * up), `excluded` (a write was skipped by the exclusion list), `governed`
  * (the chain pass rewrote the manifest), `dispatched` (the update stage
@@ -17,12 +18,20 @@
  * name requires a new domain version.
  */
 export default interface Journal {
-    /** Lifecycle event name (the enum fixed in Function/Open's zod schema). */
+    /**
+     * Lifecycle event name (the enum fixed in Function/Open's zod schema).
+     */
     event: string;
-    /** File path (or update-stage directory) the event belongs to; "" for `activated`. */
+    /**
+     * File path (or update-stage directory) the event belongs to; "" for `activated`.
+     */
     path: string;
-    /** Event payload (version token, mode, exit code, summary). */
+    /**
+     * Event payload (version token, mode, exit code, summary).
+     */
     detail: string;
-    /** Epoch ms when the event happened (preserved through the pre-open queue). */
+    /**
+     * Epoch ms when the event happened (preserved through the pre-open queue).
+     */
     at: number;
 }

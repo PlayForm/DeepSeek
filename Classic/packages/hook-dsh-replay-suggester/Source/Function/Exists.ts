@@ -1,3 +1,6 @@
+import { existsSync, readdirSync, statSync } from "node:fs";
+import { dirname, isAbsolute, join, resolve } from "node:path";
+
 /**
  * @module Exists
  *
@@ -5,6 +8,7 @@
  * exists under any of the call's three path bases.
  *
  * @remarks
+ *
  * The embedded packs are this repo's conventions as DATA, and they mix three
  * bases:
  *
@@ -45,9 +49,6 @@
  * This module stays base-aware for any future static target an explicit pack
  * may carry.
  */
-import { existsSync, readdirSync, statSync } from "node:fs";
-import { dirname, isAbsolute, join, resolve } from "node:path";
-
 /**
  * An illustrative target placeholder (`Source/Test/<Suite>/Test.ts`).
  */
@@ -160,16 +161,24 @@ export const IsFile = (Path: string): boolean => {
 };
 
 export default (
-	/** The companion path or glob (one of the pack's three bases). */
+	/**
+	 * The companion path or glob (one of the pack's three bases).
+	 */
 	Companion: string,
 
-	/** The call path the pack is judged against (absolute or cwd-relative). */
+	/**
+	 * The call path the pack is judged against (absolute or cwd-relative).
+	 */
 	CallPath: string,
 
-	/** The resolved workspace root (the gate's root). */
+	/**
+	 * The resolved workspace root (the gate's root).
+	 */
 	Root: string,
 
-	/** The session cwd, when the harness service exposes one. */
+	/**
+	 * The session cwd, when the harness service exposes one.
+	 */
 	Cwd: string | undefined,
 ): boolean => {
 	const Resolved = isAbsolute(CallPath) ? CallPath : resolve(Cwd ?? process.cwd(), CallPath);

@@ -1,3 +1,9 @@
+import type { DatabaseSync } from "node:sqlite";
+
+import type Config from "../Interface/Config.js";
+import type Metric from "../Interface/Metric.js";
+import type Reading from "../Interface/Reading.js";
+
 /**
  * @module Analysis
  *
@@ -5,6 +11,7 @@
  * 11, 12 and 16.2-16.4), the REAL queries now.
  *
  * @remarks
+ *
  * Every family is one SELECT over the ledger the cost plugin wrote, the plugin
  * never writes, and each Reading is one key of the asked scope with its metric
  * rows. Every method honours the scope (file, project, client, model, session)
@@ -13,12 +20,6 @@
  * closed database, an unknown scope, an empty key filter or a family switched
  * off in Config.metrics.
  */
-import type { DatabaseSync } from "node:sqlite";
-
-import type Config from "../Interface/Config.js";
-import type Metric from "../Interface/Metric.js";
-import type Reading from "../Interface/Reading.js";
-
 /**
  * One query row, every cell unknown until a guard reads it.
  */

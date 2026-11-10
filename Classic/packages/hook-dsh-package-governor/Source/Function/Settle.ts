@@ -1,3 +1,5 @@
+import { Envelope } from "./Dispatch.js";
+
 /**
  * @module Settle
  *
@@ -5,6 +7,7 @@
  * report and the U₂ refresh hand-off.
  *
  * @remarks
+ *
  * The stage replaces the old child's `exit` callback: it updates the per-dir circuit breaker,
  * reports the failure line, then runs U₂ - stat the mutated manifest (metadata, never content
  * - subsystems/filesystem.md) and hand the stat's version to the FACTORY'S Refresh (SCHEME.md
@@ -21,6 +24,4 @@
  * Dependencies - the State's maps, the factory delegates and the module's own ledger strings,
  * byte-identical: the smokes are the arbiter).
  */
-import { Envelope } from "./Dispatch.js";
-
 export default Envelope.Settle;

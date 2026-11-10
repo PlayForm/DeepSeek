@@ -4,6 +4,7 @@
  * The review's OUTPUT vocabulary and the judge's verdict.
  *
  * @remarks
+ *
  * The reply is a strict JSON object with ONE key (`ops`), and every
  * operation is one of five kinds. The set is closed on purpose: an
  * open-ended "do whatever you think" reply is exactly what makes an

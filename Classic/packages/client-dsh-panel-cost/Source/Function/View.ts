@@ -1,38 +1,3 @@
-// View - the panel component: the section shell, the scroll region with the
-// sticky-header table, the five states of the design's section 8, the
-// load-older strip with the reading-position restore, the summary strip, and
-// the valuation control of the toolbar (lane B4e; the research's sections 4
-// and 8). It fetches the route on mount and on every session, row-budget or
-// valuation-selection change, folds the envelope, and never throws: a failed
-// fetch, a malformed body, or a missing session id renders a state line.
-//
-// THE PAGE BAND (lane B5c; the research's section 2 navigation and section
-// 8's dynamic list): the toolbar's chips are the workspace's page band -
-// Overview first, then Turns, Files, Contributions and Pricing - and the
-// page is view state whose default is Overview. The valuation control
-// beside the band stays the shell's persistent context outside the page
-// area, and the Files pane keeps its own path, kind, stage and sort
-// filters. The Overview page reads only the envelope the session fetch
-// already folded, so the band adds no request and a page switch never
-// refetches.
-//
-// THE PRICING PANE (lane B4f; the research's A4 sections 1-3 and A6 section
-// 6): the band's fifth chip renders Function/PricingSettings in the same
-// scroll region, under the same toolbar, so the page band and the
-// valuation control stay reachable while the rate book is open. The pane owns
-// its reads and its draft; the view only hands it the session, the row budget
-// and the callback that pins a freshly published revision as the panel's
-// valuation - which is what makes the recorded views revalue through the
-// selection they already send.
-//
-// THE CONTRIBUTIONS PANE (lane B5b; the research's A1 section 8 and A2
-// section 7): the band's fourth chip renders Function/ContributionsPage
-// in the same scroll region, so the file-to-conversation-to-call product
-// question is one click from the turn table. The pane owns its path, its two
-// reads and its expansion state; the view hands it the path the Files filter
-// already holds, which is what makes a filtered Files table a starting point
-// for the question, and the session's currency, so both panes format money
-// the same way.
 import { Button } from "@deepseek-ai/dsh-client-ui-primitives";
 import Turns, { type TurnsCells } from "@Function/Columns";
 import ContributionsPage from "@Function/ContributionsPage";
@@ -60,27 +25,68 @@ import Limits from "@Variable/Limits";
 import EN_DICTIONARY from "@Variable/Locale-en.json";
 import { createElement, Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+/**
+ * @module View
+ *
+ * The panel component: the section shell, the scroll region with the sticky-header table, the five
+ * states of the design's section 8, the load-older strip, the summary strip, the page band, and
+ * the valuation control of the toolbar.
+ *
+ * @remarks
+ *
+ * It fetches the route on mount and on every session, row-budget or valuation-selection change,
+ * folds the envelope, and never throws: a failed fetch, a malformed body, or a missing session id
+ * renders a state line.
+ *
+ * THE PAGE BAND (lane B5c; the research's section 2 navigation and section 8's dynamic list): the
+ * toolbar's chips are the workspace's page band - Overview first, then Turns, Files, Contributions
+ * and Pricing - and the page is view state whose default is Overview. The valuation control beside
+ * the band stays the shell's persistent context outside the page area, and the Files pane keeps
+ * its own path, kind, stage and sort filters. The Overview page reads only the envelope the
+ * session fetch already folded, so the band adds no request and a page switch never refetches.
+ *
+ * THE PRICING PANE (lane B4f; the research's A4 sections 1-3 and A6 section 6): the band's fifth
+ * chip renders `Function/PricingSettings` in the same scroll region, under the same toolbar, so
+ * the page band and the valuation control stay reachable while the rate book is open. The pane
+ * owns its reads and its draft; the view only hands it the session, the row budget and the
+ * callback that pins a freshly published revision as the panel's valuation - which is what makes
+ * the recorded views revalue through the selection they already send.
+ *
+ * THE CONTRIBUTIONS PANE (lane B5b; the research's A1 section 8 and A2 section 7): the band's
+ * fourth chip renders `Function/ContributionsPage` in the same scroll region, so the
+ * file-to-conversation-to-call product question is one click from the turn table. The pane owns
+ * its path, its two reads and its expansion state; the view hands it the path the Files filter
+ * already holds, which is what makes a filtered Files table a starting point for the question, and
+ * the session's currency, so both panes format money the same way.
+ */
 const DefaultRows = 200;
 const MaxRows = 2000;
 
 type Phase = "loading" | "ready" | "empty" | "unavailable" | "error";
 
-// Recorded - the default valuation: the ledger's own money, sent as the plain
-// request the panel has always made, with no basis and no revision parameter.
+/**
+ * Recorded - the default valuation: the ledger's own money, sent as the plain request the panel
+ * has always made, with no basis and no revision parameter.
+ */
 const Recorded: ValuationSelection = { basis: "as-recorded" };
 
-// Comparison - the envelope's valuation block: the recorded-versus-revised
-// headline a selected basis adds over the same session.
+/**
+ * Comparison - the envelope's valuation block: the recorded-versus-revised headline a selected
+ * basis adds over the same session.
+ */
 type Comparison = NonNullable<CostResponse["valuation"]>;
 
-// Choice - one option of the valuation select: the value a change event
-// carries and the label the option shows.
+/**
+ * Choice - one option of the valuation select: the value a change event carries and the label the
+ * option shows.
+ */
 type Choice = { readonly value: string; readonly label: string };
 
-// Bases - the four bases the engine's valuation block can carry, spelled as a
-// record so a fifth basis in the engine's union is a compile error here and a
-// malformed block never renders a basis the dictionary cannot name (the
-// browser half of the Serve.ts mirror).
+/**
+ * Bases - the four bases the engine's valuation block can carry, spelled as a record so a fifth
+ * basis in the engine's union is a compile error here and a malformed block never renders a basis
+ * the dictionary cannot name (the browser half of the Serve.ts mirror).
+ */
 const Bases: Readonly<Record<Comparison["basis"], true>> = {
 	"as-recorded": true,
 	corrected: true,
@@ -88,10 +94,11 @@ const Bases: Readonly<Record<Comparison["basis"], true>> = {
 	scenario: true,
 };
 
-// BudgetOf - the starting row budget: the configured prop, clamped, and the
-// module default when the prop is missing or unusable. A session change
-// returns the budget to this value so one session's grown window does not
-// carry into the next.
+/**
+ * BudgetOf - the starting row budget: the configured prop, clamped, and the module default when
+ * the prop is missing or unusable. A session change returns the budget to this value so one
+ * session's grown window does not carry into the next.
+ */
 const BudgetOf = (Rows: number | undefined): number => {
 	if (typeof Rows !== "number" || !Number.isFinite(Rows) || Rows < 1) return DefaultRows;
 	return Math.min(MaxRows, Math.floor(Rows));
@@ -120,28 +127,33 @@ const StepScaleOf = (Turn: CostTurn): number => {
 	return Top;
 };
 
-// Value - the text a change event carries. The DOM overload of createElement
-// cannot infer the element type from a string tag, so the event arrives as
-// unknown and the field is read defensively.
+/**
+ * Value - the text a change event carries. The DOM overload of createElement cannot infer the
+ * element type from a string tag, so the event arrives as unknown and the field is read
+ * defensively.
+ */
 const Value = (Event: unknown): string => {
 	const Target = (Event as { target?: unknown } | null)?.target;
 	const Text = (Target as { value?: unknown } | null)?.value;
 	return typeof Text === "string" ? Text : "";
 };
 
-// StageName - the shipped stage word; a stage the dictionary does not carry
-// is shown as the ledger spelled it rather than as a missing key.
+/**
+ * StageName - the shipped stage word; a stage the dictionary does not carry is shown as the ledger
+ * spelled it rather than as a missing key.
+ */
 const StageName = (Stage: string, t: Translate): string => {
 	const Known = (EN_DICTIONARY as unknown as Record<string, string>)[`stage.${Stage}`];
 	return Known === undefined ? Stage : t(`stage.${Stage}`);
 };
 
-// Choices - the valuation select's revision options: every published revision
-// of every catalog the catalogs answer carried, labelled with its catalog name
-// and its revision id. The route flattens the revisions in catalog order, so
-// the list follows that order; a revision whose catalog the answer omitted is
-// labelled by its revision alone, because a partial answer must still list
-// every revision it named.
+/**
+ * Choices - the valuation select's revision options: every published revision of every catalog the
+ * catalogs answer carried, labelled with its catalog name and its revision id. The route flattens
+ * the revisions in catalog order, so the list follows that order; a revision whose catalog the
+ * answer omitted is labelled by its revision alone, because a partial answer must still list every
+ * revision it named.
+ */
 const Choices = (Answer: CatalogAnswer, t: Translate): readonly Choice[] => {
 	const Names = new Map<number, string>();
 	for (const One of Answer.catalogs) Names.set(One.CatalogId, One.Name);
@@ -158,8 +170,10 @@ const Choices = (Answer: CatalogAnswer, t: Translate): readonly Choice[] => {
 	return Listed;
 };
 
-// Chosen - the selection one select value names: the recorded read for the
-// recorded option, and a revision-pinned correction for a revision option.
+/**
+ * Chosen - the selection one select value names: the recorded read for the recorded option, and a
+ * revision-pinned correction for a revision option.
+ */
 const Chosen = (Text: string): ValuationSelection => {
 	const Cut = Text.indexOf(":");
 	const Id = Cut === -1 ? 0 : Number(Text.slice(Cut + 1));
@@ -171,15 +185,18 @@ const Chosen = (Text: string): ValuationSelection => {
 	}
 };
 
-// ChoiceOf - the select value of one selection: the inverse of Chosen.
+/**
+ * ChoiceOf - the select value of one selection: the inverse of Chosen.
+ */
 const ChoiceOf = (Selection: ValuationSelection): string =>
 	Selection.revisionId === undefined ? "recorded" : `revision:${Selection.revisionId}`;
 
-// ValuationOf - the comparison block one envelope carries, or undefined when it
-// carries none. The block is read defensively like every other envelope field:
-// the route is the only writer, but a malformed body must not throw and must
-// not render a half-filled line, so a block whose basis or figures are not the
-// shape the comparison renders is treated as absent.
+/**
+ * ValuationOf - the comparison block one envelope carries, or undefined when it carries none. The
+ * block is read defensively like every other envelope field: the route is the only writer, but a
+ * malformed body must not throw and must not render a half-filled line, so a block whose basis or
+ * figures are not the shape the comparison renders is treated as absent.
+ */
 const ValuationOf = (Envelope: unknown): Comparison | undefined => {
 	const Block = (Envelope as { valuation?: unknown } | null)?.valuation;
 	switch (true) {
@@ -200,8 +217,10 @@ const ValuationOf = (Envelope: unknown): Comparison | undefined => {
 	}
 };
 
-// Chip - one chip of the view switcher and of the filter bar: the two chip
-// classes the sheet ships, the pressed state, and the handler.
+/**
+ * Chip - one chip of the view switcher and of the filter bar: the two chip classes the sheet
+ * ships, the pressed state, and the handler.
+ */
 const Chip = (
 	Label: string,
 	Active: boolean,
