@@ -1,21 +1,26 @@
-// Machine - the state machine and the process cells (SCHEMA.md section 2.2,
-// STATE-MACHINE.md section 3): the registry of open machines, the insert /
-// remove / open / close verbs, the fs/observed stale-halt observer, and the
-// grammar parsers for the agent-prepared schema (searches + ops, validated
-// fail-loud at open - the live containers' Apply.ts Validate precedent).
-//
-// THE EVENT-LOOP LAW: the fs/observed observer (OnObserved) is a SYNCHRONOUS
-// cell-flipper only - no awaits, no throws, no I/O; all async work (reads,
-// previews, writes) runs inside the tool's execute through Ops.ts. The
-// observer flips a held cell to halted("stale") when the version token
-// MOVED underneath (the file went stale BEFORE committing) and logs the
-// contract line only on an actual flip - an idle machine never logs (the
-// silence invariant).
-//
-// THE GOVERN MARKER: the observer SKIPS every event whose actor carries the
-// `govern` field (the batch's own writes through the factory's Gate.ts route
-// 2) and every event the machine's own Stash idempotence gate catches - the
-// machine never halts on its own reconciliations.
+/**
+ * @module Machine
+ *
+ * Owns the state machine and the process cells (`SCHEMA.md` section 2.2,
+ * `STATE-MACHINE.md` section 3): the registry of open machines, the insert /
+ * remove / open / close verbs, the fs/observed stale-halt observer, and the
+ * grammar parsers for the agent-prepared schema (searches + ops, validated
+ * fail-loud at open - the live containers' Apply.ts Validate precedent).
+ *
+ * @remarks
+ * THE EVENT-LOOP LAW: the fs/observed observer (OnObserved) is a SYNCHRONOUS
+ * cell-flipper only - no awaits, no throws, no I/O; all async work (reads,
+ * previews, writes) runs inside the tool's execute through Ops.ts. The
+ * observer flips a held cell to halted("stale") when the version token MOVED
+ * underneath (the file went stale BEFORE committing) and logs the contract
+ * line only on an actual flip - an idle machine never logs (the silence
+ * invariant).
+ *
+ * THE GOVERN MARKER: the observer SKIPS every event whose actor carries the
+ * `govern` field (the batch's own writes through the factory's Gate.ts route
+ * 2) and every event the machine's own Stash idempotence gate catches - the
+ * machine never halts on its own reconciliations.
+ */
 import { readdirSync } from "node:fs";
 import { dirname as Dir, isAbsolute, resolve as ResolvePath } from "node:path";
 
@@ -25,17 +30,23 @@ import type State from "@Interface/State.js";
 
 import * as Ledger from "./Ledger.js";
 
-/** The maximum glob expansion per pattern (the eviction-adjacent cap). */
+/**
+ * The maximum glob expansion per pattern (the eviction-adjacent cap).
+ */
 const GlobCap = 200;
 
-/** The agent id of an exec (the planted-board keying; "(unowned)" is the
- *  module-global fallback the counters use). */
+/**
+ * The agent id of an exec (the planted-board keying; "(unowned)" is the
+ * module-global fallback the counters use).
+ */
 export const AgentOf = (Exec: unknown): string => {
 	const ID = (Exec as { agent?: { id?: string } } | undefined)?.agent?.id;
 	return typeof ID === "string" && ID.length > 0 ? ID : "(unowned)";
 };
 
-/** The (possibly created) per-agent machine map. */
+/**
+ * The (possibly created) per-agent machine map.
+ */
 export const ScopeOf = (State: State, Agent: string): Map<string, MachineRecord> => {
 	let Scope = State.Machines.get(Agent);
 	if (Scope === undefined) {
@@ -45,8 +56,10 @@ export const ScopeOf = (State: State, Agent: string): Map<string, MachineRecord>
 	return Scope;
 };
 
-/** Every machine in the registry (the observer scans all agents - the
- *  fs/observed event carries no agent id). */
+/**
+ * Every machine in the registry (the observer scans all agents - the
+ * fs/observed event carries no agent id).
+ */
 export const AllMachines = (State: State): MachineRecord[] => {
 	const Out: MachineRecord[] = [];
 	for (const Scope of State.Machines.values()) {
@@ -57,7 +70,9 @@ export const AllMachines = (State: State): MachineRecord[] => {
 	return Out;
 };
 
-/** One process cell in the observed state. */
+/**
+ * One process cell in the observed state.
+ */
 const Cell = (Path: string, Version: FsVersion | undefined): ProcessCell => ({
 	path: Path,
 	status: "observed",
@@ -69,8 +84,10 @@ const Cell = (Path: string, Version: FsVersion | undefined): ProcessCell => ({
 	opAt: undefined,
 });
 
-/** Parse the named searches: `name=pattern` (literal) or
- *  `name=re:/pattern/flags` (a simple regex, the v1 scope). */
+/**
+ * Parses the named searches: `name=pattern` (literal) or
+ * `name=re:/pattern/flags` (a simple regex, the v1 scope).
+ */
 export const ParseSearches = (Entries: string[] | undefined): Map<string, SearchSpec> => {
 	const Searches = new Map<string, SearchSpec>();
 	for (const Entry of Entries ?? []) {
@@ -96,9 +113,11 @@ export const ParseSearches = (Entries: string[] | undefined): Map<string, Search
 	return Searches;
 };
 
-/** Parse one op line of the transition table: the machine grammar
- *  `file=<selector> search=<name> op=<MODE> [with=<text>] [mode=first|all|<count>]`.
- *  `with` takes the REST of the line (the replacement may contain spaces). */
+/**
+ * Parses one op line of the transition table: the machine grammar
+ * `file=<selector> search=<name> op=<MODE> [with=<text>] [mode=first|all|<count>]`.
+ * `with` takes the REST of the line (the replacement may contain spaces).
+ */
 export const ParseOp = (Line: string): OpLine => {
 	const Fail = (Why: string): never => {
 		throw new Error(`plugin-dsh-batch-edit: malformed op "${Line}" - ${Why}`);
@@ -164,7 +183,9 @@ export const ParseOp = (Line: string): OpLine => {
 	return Op;
 };
 
-/** Parse the whole transition table with the configured cap. */
+/**
+ * Parses the whole transition table with the configured cap.
+ */
 export const ParseOps = (Lines: string[] | undefined, Cap: number): OpLine[] => {
 	const Parsed = (Lines ?? []).map(ParseOp);
 	if (Parsed.length > Cap) {
@@ -175,9 +196,11 @@ export const ParseOps = (Lines: string[] | undefined, Cap: number): OpLine[] => 
 	return Parsed;
 };
 
-/** The glob matcher: `**` crosses separators, `*` and `?` stay within one.
- *  The plain-fs walk is the factory's Discover exemption precedent (an
- *  auxiliary read-only discovery, not a governed write). */
+/**
+ * The glob matcher: `**` crosses separators, `*` and `?` stay within one.
+ * The plain-fs walk is the factory's Discover exemption precedent (an
+ * auxiliary read-only discovery, not a governed write).
+ */
 const GlobToRegExp = (Pattern: string): RegExp => {
 	const Escaped = Pattern.replace(/[.+^${}()|[\]\\]/g, "\\$&");
 	const Source = Escaped.replace(/\*\*\//g, "(?:.*/)?")
@@ -187,8 +210,10 @@ const GlobToRegExp = (Pattern: string): RegExp => {
 	return new RegExp(`^${Source}$`);
 };
 
-/** Expand one pattern: an exact path returns itself (checked by the caller's
- *  resolve); a glob walks from its base directory. */
+/**
+ * Expands one pattern: an exact path returns itself (checked by the caller's
+ * resolve); a glob walks from its base directory.
+ */
 export const ExpandGlob = (Pattern: string): string[] => {
 	if (!Pattern.includes("*")) {
 		return [Pattern];
@@ -212,9 +237,11 @@ export const ExpandGlob = (Pattern: string): string[] => {
 	return Hits;
 };
 
-/** Resolve the file list into held process cells: an exact path resolves
- *  through the fs backend's stat (the version read); a glob expands first.
- *  Misses are LISTED, never guessed. Returns the cells and the misses. */
+/**
+ * Resolves the file list into held process cells: an exact path resolves
+ * through the fs backend's stat (the version read); a glob expands first.
+ * Misses are LISTED, never guessed. Returns the cells and the misses.
+ */
 export const Hold = async (
 	State: State,
 	Patterns: string[] | undefined,
@@ -249,8 +276,10 @@ export const Hold = async (
 	return { cells: Cells, misses: Misses };
 };
 
-/** Add already-held cells to a machine, deduplicating on path, and log the
- *  contract insertion lines. */
+/**
+ * Adds already-held cells to a machine, deduplicating on path, and logs the
+ * contract insertion lines.
+ */
 export const Adopt = (Machine: MachineRecord, Cells: ProcessCell[]): void => {
 	for (const Item of Cells) {
 		const Existing = Machine.files.get(Item.path);
@@ -270,8 +299,10 @@ export const Adopt = (Machine: MachineRecord, Cells: ProcessCell[]): void => {
 	}
 };
 
-/** Open a machine: build the record from the agent's prepared schema,
- *  validate fail-loud, adopt the cells, log the contract lines. */
+/**
+ * Opens a machine: builds the record from the agent's prepared schema,
+ * validates fail-loud, adopts the cells, logs the contract lines.
+ */
 export const Open = (
 	_State: State,
 	ID: string,
@@ -310,7 +341,9 @@ export const Open = (
 	return Machine;
 };
 
-/** Insert into an open machine mid-life (the lease stays). */
+/**
+ * Inserts into an open machine mid-life (the lease stays).
+ */
 export const Insert = (
 	Machine: MachineRecord,
 	Cells: ProcessCell[],
@@ -329,7 +362,9 @@ export const Insert = (
 	}
 };
 
-/** Drop files from an open machine. */
+/**
+ * Drops files from an open machine.
+ */
 export const Remove = (
 	Machine: MachineRecord,
 	Paths: string[],
@@ -342,8 +377,10 @@ export const Remove = (
 	}
 };
 
-/** Close a machine: settle-first - running cells halt with the interrupted
- *  reason (nothing silently dropped), the machine is marked closed. */
+/**
+ * Closes a machine: settle-first - running cells halt with the interrupted
+ * reason (nothing silently dropped), the machine is marked closed.
+ */
 export const Close = (Machine: MachineRecord, Append: (Message: string) => void): void => {
 	for (const Item of Machine.files.values()) {
 		if (Item.status === "running") {
@@ -356,11 +393,13 @@ export const Close = (Machine: MachineRecord, Append: (Message: string) => void)
 	Append(Ledger.Closed(Machine.id));
 };
 
-/** The fs/observed observer (registered through the factory's Wire on the
- *  ROOT context): SYNCHRONOUS, side-effect-only. An external touch of a held
- *  file whose version moved flips the cell to halted("stale") and logs the
- *  contract line; our own writes (the `govern` actor marker) and our own
- *  Stash idempotence re-emits are skipped. */
+/**
+ * The fs/observed observer (registered through the factory's Wire on the
+ * ROOT context): SYNCHRONOUS, side-effect-only. An external touch of a held
+ * file whose version moved flips the cell to halted("stale") and logs the
+ * contract line; our own writes (the `govern` actor marker) and our own Stash
+ * idempotence re-emits are skipped.
+ */
 export const OnObserved = (
 	State: State,
 	Target: FsTarget,
@@ -393,7 +432,9 @@ export const OnObserved = (
 	}
 };
 
-/** A new machine id (`mach-<n>`; deterministic counter, never a clock). */
+/**
+ * A new machine id (`mach-<n>`; deterministic counter, never a clock).
+ */
 export const NextID = (State: State): string => {
 	State.Counter += 1;
 	return `mach-${State.Counter}`;

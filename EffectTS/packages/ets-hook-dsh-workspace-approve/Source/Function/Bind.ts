@@ -1,16 +1,23 @@
-// Bind - the service's bind path (Function/Bind): register one EXACT
-// candidate as a pending binding. The exact-approval semantics:
-//
-//   * the candidate must carry a non-empty path, a non-empty fingerprint and
-//     a non-empty version - a candidate missing its identity is rejected
-//     (decision `rejected`, ledger `rejected <path> (<reason>)`), never
-//     bound with made-up values;
-//   * with config `requireConstraints` (the default), a candidate without at
-//     least one constraint is rejected - the constraints travel with the
-//     approval (APPROVE.md), so an approval without a stated constraint set
-//     is not an approval;
-//   * the binding id is `ap-<sequence>`; the sequence is the plugin's own
-//     monotonic counter, never a wall clock.
+/**
+ * @module Bind
+ *
+ * The service's bind path (Function/Bind): register one EXACT candidate as a
+ * pending binding.
+ *
+ * @remarks
+ * The exact-approval semantics:
+ *
+ *   - the candidate must carry a non-empty path, a non-empty fingerprint and
+ *     a non-empty version - a candidate missing its identity is rejected
+ *     (decision `rejected`, ledger `rejected <path> (<reason>)`), never
+ *     bound with made-up values;
+ *   - with config `requireConstraints` (the default), a candidate without at
+ *     least one constraint is rejected - the constraints travel with the
+ *     approval (APPROVE.md), so an approval without a stated constraint set
+ *     is not an approval;
+ *   - the binding id is `ap-<sequence>`; the sequence is the plugin's own
+ *     monotonic counter, never a wall clock.
+ */
 import Record from "@Function/Record.js";
 import type Binding from "@Interface/Binding.js";
 import type Candidate from "@Interface/Candidate.js";

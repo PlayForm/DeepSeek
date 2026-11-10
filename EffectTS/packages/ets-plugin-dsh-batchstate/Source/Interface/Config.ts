@@ -1,38 +1,65 @@
-// Config - the shape the schema (Variable/Config) produces, after the loader
-// validates and defaults it. Every field is a volatile cell (the values may
-// arrive as `{ get }` references; the factory's State builder unwraps and
-// hot-refreshes them in place).
-import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
+/**
+ * @module Config
+ *
+ * The shape the schema (Variable/Config) produces, after the loader
+ * validates and defaults it.
+ *
+ * @remarks
+ * Every field is a volatile cell (the values may arrive as `{ get }`
+ * references; the factory's State builder unwraps and hot-refreshes them in
+ * place).
+ */ import type { Allowlist, Allowlist } from "@playform/ets-plugin-dsh-factory";
 
+/**
+ * The plugin's resolved configuration.
+ */
 export default interface Config {
-	/** The durable ledger file (one log per module). */
+	/**
+	 * The durable ledger file (one log per module).
+	 */
 	logFile: string;
 
-	/** Ledger enabled - write the durable log file. */
+	/**
+	 * Ledger enabled - write the durable log file.
+	 */
 	log: boolean;
 
-	/** The master switch - the IDLE-forever posture: false by default. */
+	/**
+	 * The master switch - the IDLE-forever posture: false by default.
+	 */
 	enabled: boolean;
 
-	/** The batch key (multi-batch isolation). */
+	/**
+	 * The batch key (multi-batch isolation).
+	 */
 	batch: string;
 
-	/** The KV domain name - the PRIMARY store. */
+	/**
+	 * The KV domain name - the PRIMARY store.
+	 */
 	domain: string;
 
-	/** The well-known JSON state file - the FALLBACK store, engaged only when
-	 *  the storage facility is absent (or its open fails). */
+	/**
+	 * The well-known JSON state file - the FALLBACK store, engaged only
+	 * when the storage facility is absent (or its open fails).
+	 */
 	stateFile: string;
 
-	/** The completions ring bound. */
+	/**
+	 * The completions ring bound.
+	 */
 	maxRecent: number;
 
-	/** The spliced-proposal ring bound (the board's inbox memory). */
+	/**
+	 * The spliced-proposal ring bound (the board's inbox memory).
+	 */
 	maxProposals: number;
 
-	/** The per-action allowlist (D6): the shared factory block. The board
-	 *  records and projects - `read`/`record`/`suggest` are automatic; the
-	 *  write/commit/spawn verdicts stay the shipped `approve`. A resolved
-	 *  pack's `policy` section overrides it per action. */
+	/**
+	 * The per-action allowlist (D6): the shared factory block. The board
+	 * records and projects - `read`/`record`/`suggest` are automatic; the
+	 * write/commit/spawn verdicts stay the shipped `approve`. A resolved
+	 * pack's `policy` section overrides it per action.
+	 */
 	policy: Allowlist;
 }

@@ -23,7 +23,7 @@
  * Function/Apply. The service types are re-exported because Function/Apply
  * imports them from this module (the import path stays untouched).
  */
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 import { type CommandResult, type ConfigEditorService, type SettingsService } from "@playform/lib-dsh-core";
 export type { CommandResult, CommandsService, ConfigEditorService, SettingsService, } from "@playform/lib-dsh-core";
 /**

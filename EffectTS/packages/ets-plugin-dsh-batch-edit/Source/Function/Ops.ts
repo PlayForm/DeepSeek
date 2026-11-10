@@ -1,36 +1,43 @@
-// Ops - the transition-table executor: the commit driver that turns the
-// machine's prepared table into applied writes (SCHEMA.md section 2.1,
-// STATE-MACHINE.md section 3.2). Every write goes through Factory.Write and
-// nothing else - the governors see the batch's writes exactly as they see
-// any write - with the actor WRAPPED in the `govern` marker (Gate.ts route 2:
-// the event path skips the marked events silently) and the governed
-// basenames (package.json / Cargo.toml) re-run through the factory's DIRECT
-// path exactly once per write, immediately after the write succeeds. Never
-// bypass governance - RE-ROUTE it deliberately.
-//
-// THE ATOMIC GATE (ranked suggestion 3): no partial application. Phase 1
-// (plan) validates every selected file against its HELD version and computes
-// the next content plus the diff BEFORE any write; a planning failure
-// (stale version, search-not-found under strict mode) halts or errors that
-// FILE alone - the machine stays open (the halted process, protected and
-// resumable), the rest of the batch proceeds. Phase 2 (apply) writes through
-// Factory.Write with the explicit `replaceIfVersion` intent (the
-// fresh-stat version guard); a write failure stops the apply loop and
-// returns the unwritten remainder to observed - nothing half-committed gets
-// a successor write.
-//
-// THE DEADLINE: the in-line deadline (capped at 120000) is scanned between
-// files with a clock read, never a timer; files not yet written when the
-// deadline passes continue as ONE background job through the jobs hub (the
-// typed jobId handle), and the settle truth arrives through the jobs
-// subscription and the next presentation. Without a jobs hub the remainder
-// halts with the deadline reason - graceful degradation, never a hang.
-//
-// PREVIEW PARITY: the returned diffs are computed from the SAME content that
-// is written, so they match the applied result byte-for-byte (the
-// acceptance-criteria check 3). A planned file with zero changed occurrences
-// is the designed NO-OP: nothing written, nothing logged, the cell returns
-// to observed (the factory's no-op law).
+/**
+ * @module Ops
+ *
+ * Drives the transition-table executor: the commit driver that turns the
+ * machine's prepared table into applied writes (`SCHEMA.md` section 2.1,
+ * `STATE-MACHINE.md` section 3.2).
+ *
+ * @remarks
+ * Every write goes through Factory.Write and nothing else - the governors see
+ * the batch's writes exactly as they see any write - with the actor WRAPPED
+ * in the `govern` marker (Gate.ts route 2: the event path skips the marked
+ * events silently) and the governed basenames (package.json / Cargo.toml)
+ * re-run through the factory's DIRECT path exactly once per write,
+ * immediately after the write succeeds. Never bypass governance - RE-ROUTE it
+ * deliberately.
+ *
+ * THE ATOMIC GATE (ranked suggestion 3): no partial application. Phase 1
+ * (plan) validates every selected file against its HELD version and computes
+ * the next content plus the diff BEFORE any write; a planning failure (stale
+ * version, search-not-found under strict mode) halts or errors that FILE
+ * alone - the machine stays open (the halted process, protected and
+ * resumable), the rest of the batch proceeds. Phase 2 (apply) writes through
+ * Factory.Write with the explicit `replaceIfVersion` intent (the fresh-stat
+ * version guard); a write failure stops the apply loop and returns the
+ * unwritten remainder to observed - nothing half-committed gets a successor
+ * write.
+ *
+ * THE DEADLINE: the in-line deadline (capped at 120000) is scanned between
+ * files with a clock read, never a timer; files not yet written when the
+ * deadline passes continue as ONE background job through the jobs hub (the
+ * typed jobId handle), and the settle truth arrives through the jobs
+ * subscription and the next presentation. Without a jobs hub the remainder
+ * halts with the deadline reason - graceful degradation, never a hang.
+ *
+ * PREVIEW PARITY: the returned diffs are computed from the SAME content that
+ * is written, so they match the applied result byte-for-byte (the
+ * acceptance-criteria check 3). A planned file with zero changed occurrences
+ * is the designed NO-OP: nothing written, nothing logged, the cell returns to
+ * observed (the factory's no-op law).
+ */
 import { basename as Base } from "node:path";
 
 import type { ToolRunContext } from "@deepseek-ai/dsh-tools";
@@ -44,16 +51,24 @@ import * as Ledger from "./Ledger.js";
 import { Cells } from "./Present.js";
 import Shield from "./Shield.js";
 
-/** The governed basenames (the module gate's vocabulary). */
+/**
+ * The governed basenames (the module gate's vocabulary).
+ */
 const GovernedBasenames = ["package.json", "Cargo.toml"];
 
-/** The in-line deadline cap (the composition contract). */
+/**
+ * The in-line deadline cap (the composition contract).
+ */
 const DeadlineCap = 120000;
 
-/** The deadline floor (the schema validates 1000..120000). */
+/**
+ * The deadline floor (the schema validates 1000..120000).
+ */
 const DeadlineFloor = 1000;
 
-/** One planned file transition: everything decided before any write. */
+/**
+ * One planned file transition: everything decided before any write.
+ */
 interface Plan {
 	cell: ProcessCell;
 	target: FsTarget;
@@ -63,8 +78,10 @@ interface Plan {
 	diff: string;
 }
 
-/** The op selector match: an exact held path, or a simple glob over the
- *  held set (`*` within one segment, `**` across segments). */
+/**
+ * The op selector match: an exact held path, or a simple glob over the held
+ * set (`*` within one segment, `**` across segments).
+ */
 const OpMatches = (Path: string, Selector: string): boolean => {
 	if (!Selector.includes("*")) {
 		return Path === Selector;
@@ -77,9 +94,11 @@ const OpMatches = (Path: string, Selector: string): boolean => {
 	return new RegExp(`^${Source}$`).test(Path);
 };
 
-/** Apply one op to a content string. Returns the next content and the
- *  number of changed occurrences (0 = the designed no-op). Throws the
- *  contained "search not found" error under strict counting. */
+/**
+ * Applies one op to a content string. Returns the next content and the number
+ * of changed occurrences (0 = the designed no-op). Throws the contained
+ * "search not found" error under strict counting.
+ */
 export const ApplyOp = (
 	Content: string,
 	Needle: RegExp | string,
@@ -175,10 +194,11 @@ export const ApplyOp = (
 	}
 };
 
-/** A capped line diff between two contents: the removed/added lines as
- *  `- old` / `+ new` pairs, computed with a bounded LCS table; beyond the
- *  cap the diff degrades to a line-count summary (the honest large-batch
- *  form). */
+/**
+ * A capped line diff between two contents: the removed/added lines as
+ * `- old` / `+ new` pairs, computed with a bounded LCS table; beyond the cap
+ * the diff degrades to a line-count summary (the honest large-batch form).
+ */
 export const Diff = (Before: string, After: string, Cap = 2000): string => {
 	const A = Before.split("\n");
 	const B = After.split("\n");
@@ -224,9 +244,11 @@ export const Diff = (Before: string, After: string, Cap = 2000): string => {
 	return Parts.join("\n");
 };
 
-/** Plan one file: resolve (the fresh-version guard), read, apply every op
- *  selected for it, diff. Throws a contained message on any failure
- *  ("stale" for the version mismatch - the caller maps it to the halt). */
+/**
+ * Plans one file: resolve (the fresh-version guard), read, apply every op
+ * selected for it, diff. Throws a contained message on any failure ("stale"
+ * for the version mismatch - the caller maps it to the halt).
+ */
 export const PlanFile = async (
 	State: State,
 	Machine: MachineRecord,
@@ -278,9 +300,11 @@ export const PlanFile = async (
 	};
 };
 
-/** Apply one planned write through the factory's write executor with the
- *  govern-wrapped actor, then re-route governance through the direct path
- *  for the governed basenames. Returns the fresh version. */
+/**
+ * Applies one planned write through the factory's write executor with the
+ * govern-wrapped actor, then re-routes governance through the direct path for
+ * the governed basenames. Returns the fresh version.
+ */
 const ApplyWrite = async (
 	State: State,
 	Plan: Plan,
@@ -305,7 +329,9 @@ const ApplyWrite = async (
 		return Outcome.version;
 	});
 
-/** The commit driver. Returns the canonical output value. */
+/**
+ * The commit driver. Returns the canonical output value.
+ */
 export const Commit = async (
 	State: State,
 	Machine: MachineRecord,

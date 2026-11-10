@@ -1,6 +1,13 @@
-// Extends - the normalized `extends:` list of a pack: absent is [], a
-// scalar is one name, an array is the list. Normalize also normalizes it,
-// but the chain reads layers that may not have gone through Normalize.
+/**
+ * @module Extends
+ *
+ * Reads the normalized `extends:` list of a pack.
+ *
+ * @remarks
+ * An absent `extends` is an empty list, a scalar is one name, and an array is
+ * the list. Normalize also normalizes it, but the chain reads layers that may
+ * not have gone through Normalize.
+ */
 import type Pack from "../Interface/Pack.js";
 
 export default (Pack: Pack): string[] => {

@@ -1,11 +1,17 @@
-// Status - the write API's setStatus (Function/Status): the state
-// transition (idle -> active -> completed -> failed -> interrupted; the
-// queue movements). A terminal status (completed/failed/interrupted)
-// stamps finishedAt once, drops the member from the queue (the members
-// behind shift up), and appends the completion to the bounded ring (the
-// oldest drop is implicit - the ring is compact by contract, plan section
-// 3 item 5). A reactivation to active clears finishedAt. The transition
-// is ledgered and emitted AFTER the state is updated.
+/**
+ * @module Status
+ *
+ * The write API's setStatus (Function/Status): the state transition (idle
+ * -> active -> completed -> failed -> interrupted; the queue movements).
+ *
+ * @remarks
+ * A terminal status (completed/failed/interrupted) stamps finishedAt once,
+ * drops the member from the queue (the members behind shift up), and
+ * appends the completion to the bounded ring (the oldest drop is implicit -
+ * the ring is compact by contract, plan section 3 item 5). A reactivation
+ * to active clears finishedAt. The transition is ledgered and emitted AFTER
+ * the state is updated.
+ */
 import Emit from "@Function/Emit.js";
 import Ensure from "@Function/Ensure.js";
 import Persist from "@Function/Persist.js";

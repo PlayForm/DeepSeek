@@ -1,119 +1,25 @@
-import assert from "node:assert/strict";
-import { Check, Finish, Library, MakeCounter, Put, Tree } from "../Harness.js";
-const Repo = (Extends, Family = "") => `slug: repo
+import r from"node:assert/strict";import{Check as m,Finish as i,Library as l,MakeCounter as h,Put as o,Tree as d}from"../Harness.js";const p=(t,e="")=>`slug: repo
 signature:
   - docs/S.md
-extends: ${Extends}
-${Family}`;
-const Pack = (Extends, Path, Priority) => `${Extends === "" ? "" : `extends: ${Extends}
+extends: ${t}
+${e}`,c=(t,e,s)=>`${t===""?"":`extends: ${t}
 `}families:
   "doc/Plan":
-    priority: ${Priority}
+    priority: ${s}
     targets:
-      - path: ${Path}
+      - path: ${e}
         prior: 1.0
-        reason: the ${Path} companion
-`;
-const runTest = async () => {
-  const Count = MakeCounter();
-  {
-    const Home = Tree("pack-extends-home-");
-    const Root = Tree("pack-extends-chain-");
-    Put(Home, ".dsh/playform/workspaces/base.yml", Pack("", "docs/BASE.md", 1));
-    Put(Home, ".dsh/playform/workspaces/mid.yml", Pack("base", "docs/MID.md", 2));
-    Put(
-      Root,
-      ".dsh/pack.yml",
-      Repo("mid", `families:
+        reason: the ${e} companion
+`,k=async()=>{const t=h();{const e=d("pack-extends-home-"),s=d("pack-extends-chain-");o(e,".dsh/playform/workspaces/base.yml",c("","docs/BASE.md",1)),o(e,".dsh/playform/workspaces/mid.yml",c("base","docs/MID.md",2)),o(s,".dsh/pack.yml",p("mid",`families:
   "doc/Plan":
     threshold: 0.5
-`)
-    );
-    Put(Root, "docs/S.md");
-    Check(Count, "E1: the chain merges base, middle and repo in order", () => {
-      const Plan = Library.Resolve(Root, { home: Home }).families?.["doc/Plan"];
-      assert.equal(Plan?.priority, 2);
-      assert.equal(Plan?.threshold, 0.5);
-      assert.deepEqual(
-        Plan?.targets.map((Target) => Target.path),
-        ["docs/BASE.md", "docs/MID.md"]
-      );
-    });
-  }
-  {
-    const Home = Tree("pack-extends-home-");
-    const Root = Tree("pack-extends-cycle-");
-    Put(Home, ".dsh/playform/workspaces/a.yml", Pack("b", "docs/A.md", 1));
-    Put(Home, ".dsh/playform/workspaces/b.yml", Pack("a", "docs/B.md", 2));
-    Put(Root, ".dsh/pack.yml", Repo("a"));
-    Put(Root, "docs/S.md");
-    Check(Count, "E2: a cycle is guarded and each pack merges once", () => {
-      const Plan = Library.Resolve(Root, { home: Home }).families?.["doc/Plan"];
-      assert.deepEqual(
-        Plan?.targets.map((Target) => Target.path),
-        ["docs/B.md", "docs/A.md"]
-      );
-    });
-  }
-  {
-    const Home = Tree("pack-extends-home-");
-    const Root = Tree("pack-extends-self-");
-    Put(Home, ".dsh/playform/workspaces/base.yml", Pack("", "docs/BASE.md", 1));
-    Put(Root, ".dsh/pack.yml", Repo("[repo, base]"));
-    Put(Root, "docs/S.md");
-    Check(Count, "E3: a self-cycle is skipped and the other base applies", () => {
-      const Plan = Library.Resolve(Root, { home: Home }).families?.["doc/Plan"];
-      assert.deepEqual(
-        Plan?.targets.map((Target) => Target.path),
-        ["docs/BASE.md"]
-      );
-    });
-  }
-  {
-    const Home = Tree("pack-extends-home-");
-    const Root = Tree("pack-extends-missing-");
-    Put(Home, ".dsh/playform/workspaces/base.yml", Pack("", "docs/BASE.md", 1));
-    Put(Root, ".dsh/pack.yml", Repo("[missing, base]"));
-    Put(Root, "docs/S.md");
-    Check(Count, "E4: a missing extends link is skipped, the rest resolves", () => {
-      const Plan = Library.Resolve(Root, { home: Home }).families?.["doc/Plan"];
-      assert.equal(Plan?.targets.length, 1);
-      assert.equal(Plan?.targets[0]?.path, "docs/BASE.md");
-    });
-  }
-  {
-    const Home = Tree("pack-extends-home-");
-    const Root = Tree("pack-extends-array-");
-    Put(Home, ".dsh/playform/workspaces/a.yml", Pack("", "docs/A.md", 1));
-    Put(Home, ".dsh/playform/workspaces/b.yml", Pack("", "docs/B.md", 2));
-    Put(Root, ".dsh/pack.yml", Repo("[a, b]"));
-    Put(Root, "docs/S.md");
-    Check(Count, "E5: an extends array merges both bases in order", () => {
-      const Plan = Library.Resolve(Root, { home: Home }).families?.["doc/Plan"];
-      assert.deepEqual(
-        Plan?.targets.map((Target) => Target.path),
-        ["docs/A.md", "docs/B.md"]
-      );
-    });
-  }
-  {
-    const Home = Tree("pack-extends-home-");
-    const Root = Tree("pack-extends-override-");
-    Put(
-      Home,
-      ".dsh/playform/workspaces/base.yml",
-      `families:
+`)),o(s,"docs/S.md"),m(t,"E1: the chain merges base, middle and repo in order",()=>{const a=l.Resolve(s,{home:e}).families?.["doc/Plan"];r.equal(a?.priority,2),r.equal(a?.threshold,.5),r.deepEqual(a?.targets.map(n=>n.path),["docs/BASE.md","docs/MID.md"])})}{const e=d("pack-extends-home-"),s=d("pack-extends-cycle-");o(e,".dsh/playform/workspaces/a.yml",c("b","docs/A.md",1)),o(e,".dsh/playform/workspaces/b.yml",c("a","docs/B.md",2)),o(s,".dsh/pack.yml",p("a")),o(s,"docs/S.md"),m(t,"E2: a cycle is guarded and each pack merges once",()=>{const a=l.Resolve(s,{home:e}).families?.["doc/Plan"];r.deepEqual(a?.targets.map(n=>n.path),["docs/B.md","docs/A.md"])})}{const e=d("pack-extends-home-"),s=d("pack-extends-self-");o(e,".dsh/playform/workspaces/base.yml",c("","docs/BASE.md",1)),o(s,".dsh/pack.yml",p("[repo, base]")),o(s,"docs/S.md"),m(t,"E3: a self-cycle is skipped and the other base applies",()=>{const a=l.Resolve(s,{home:e}).families?.["doc/Plan"];r.deepEqual(a?.targets.map(n=>n.path),["docs/BASE.md"])})}{const e=d("pack-extends-home-"),s=d("pack-extends-missing-");o(e,".dsh/playform/workspaces/base.yml",c("","docs/BASE.md",1)),o(s,".dsh/pack.yml",p("[missing, base]")),o(s,"docs/S.md"),m(t,"E4: a missing extends link is skipped, the rest resolves",()=>{const a=l.Resolve(s,{home:e}).families?.["doc/Plan"];r.equal(a?.targets.length,1),r.equal(a?.targets[0]?.path,"docs/BASE.md")})}{const e=d("pack-extends-home-"),s=d("pack-extends-array-");o(e,".dsh/playform/workspaces/a.yml",c("","docs/A.md",1)),o(e,".dsh/playform/workspaces/b.yml",c("","docs/B.md",2)),o(s,".dsh/pack.yml",p("[a, b]")),o(s,"docs/S.md"),m(t,"E5: an extends array merges both bases in order",()=>{const a=l.Resolve(s,{home:e}).families?.["doc/Plan"];r.deepEqual(a?.targets.map(n=>n.path),["docs/A.md","docs/B.md"])})}{const e=d("pack-extends-home-"),s=d("pack-extends-override-");o(e,".dsh/playform/workspaces/base.yml",`families:
   "doc/Plan":
     targets:
       - path: docs/SAME.md
         prior: 1.0
         reason: the base reason
-`
-    );
-    Put(
-      Root,
-      ".dsh/pack.yml",
-      `slug: repo
+`),o(s,".dsh/pack.yml",`slug: repo
 signature:
   - docs/S.md
 extends: base
@@ -123,23 +29,4 @@ families:
       - path: docs/SAME.md
         prior: 1.0
         reason: the repo reason
-`
-    );
-    Put(Root, "docs/S.md");
-    Check(Count, "E6: the repo layer overrides its base on the same path", () => {
-      const Plan = Library.Resolve(Root, { home: Home }).families?.["doc/Plan"];
-      assert.equal(Plan?.targets.length, 1);
-      assert.equal(Plan?.targets[0]?.reason, "the repo reason");
-    });
-  }
-  return Finish(Count, "Extends");
-};
-const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
-if (InvokedDirectly) {
-  const Pass = await runTest();
-  console.log(`${Pass} PASS - Extends`);
-}
-export {
-  runTest
-};
-//# sourceMappingURL=Test.js.map
+`),o(s,"docs/S.md"),m(t,"E6: the repo layer overrides its base on the same path",()=>{const a=l.Resolve(s,{home:e}).families?.["doc/Plan"];r.equal(a?.targets.length,1),r.equal(a?.targets[0]?.reason,"the repo reason")})}return i(t,"Extends")},y=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(y){const t=await k();console.log(`${t} PASS - Extends`)}export{k as runTest};

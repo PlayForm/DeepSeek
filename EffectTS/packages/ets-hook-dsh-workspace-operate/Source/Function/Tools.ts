@@ -1,14 +1,21 @@
-// Tools - the operate hook's two model surfaces (Function/Tools, the
-// live-containers MonitorTools idiom): the tools live inside their owning
-// hook (OPERATE.md; the ccr registers ccr_retrieve). The propose tool
-// returns the Outcome verbatim - a proposed proposal or the typed refusal,
-// rendered as one canonical JSON value; it NEVER writes a file (the
-// proposal's application is the later approve/merge steps' work).
-//
-//   workspace_propose    - create a typed proposal (rename | connect |
-//                          replace) through the resolution rules;
-//   workspace_proposals  - the read/manage surface: list, get, withdraw,
-//                          stats.
+/**
+ * @module Tools
+ *
+ * The operate hook's two model surfaces (the live-containers MonitorTools
+ * idiom).
+ *
+ * @remarks
+ * The tools live inside their owning hook (OPERATE.md; the ccr registers
+ * ccr_retrieve). The propose tool returns the Outcome verbatim - a proposed
+ * proposal or the typed refusal, rendered as one canonical JSON value; it
+ * NEVER writes a file (the proposal's application is the later
+ * approve/merge steps' work).
+ *
+ *   workspace_propose    - create a typed proposal (rename | connect |
+ *                          replace) through the resolution rules;
+ *   workspace_proposals  - the read/manage surface: list, get, withdraw,
+ *                          stats.
+ */
 import { defineTool } from "@deepseek-ai/dsh-tools";
 import type { JsonValue } from "@deepseek-ai/dsh-util-values";
 import Propose from "@Function/Propose.js";
@@ -24,7 +31,9 @@ const ReadStr = (Args: unknown, Key: string): string => {
 	return typeof Value === "string" ? Value : "";
 };
 
-/** Build the workspace_propose tool definition. */
+/**
+ * Build the workspace_propose tool definition.
+ */
 export const ProposeTool = (State: State) =>
 	defineTool({
 		name: "workspace_propose",
@@ -155,7 +164,9 @@ export const ProposeTool = (State: State) =>
 		},
 	});
 
-/** Build the workspace_proposals tool definition. */
+/**
+ * Build the workspace_proposals tool definition.
+ */
 export const ProposalsTool = (State: State) =>
 	defineTool({
 		name: "workspace_proposals",

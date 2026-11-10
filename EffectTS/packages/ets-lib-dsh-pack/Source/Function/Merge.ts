@@ -1,24 +1,31 @@
-// Merge - the pack merge rules (D2, documented in SCHEME.md):
-//
-//   * families merge BY ID (the domain-qualified key): the override's
-//     DECLARED scalar fields replace the base family's; its signals array
-//     replaces; its targets merge BY PATH (a same-path target replaces the
-//     base target in place, a new path appends in override order);
-//   * every other section (signature, indexer, policy, learning, slug,
-//     extends) follows scalars-replace, arrays-replace; a nested section
-//     object merges key by key with the same rule.
-//
-// The layers are merged RAW (before Normalize): an absent field is not a
-// default, so it never overwrites the base. Normalize runs once, on the
-// merged result, and fills the schema defaults there.
-//
-// The override is the LATER layer: the extends chain is the base, then the
-// user layer, then the repo layer.
+/**
+ * @module Merge
+ *
+ * Applies the pack merge rules (D2, documented in SCHEME.md).
+ *
+ * @remarks
+ * Families merge BY ID (the domain-qualified key): the override's DECLARED
+ * scalar fields replace the base family's; its signals array replaces; its
+ * targets merge BY PATH (a same-path target replaces the base target in
+ * place, a new path appends in override order). Every other section
+ * (signature, indexer, policy, learning, slug, extends) follows
+ * scalars-replace, arrays-replace; a nested section object merges key by key
+ * with the same rule.
+ *
+ * The layers are merged RAW (before Normalize): an absent field is not a
+ * default, so it never overwrites the base. Normalize runs once, on the merged
+ * result, and fills the schema defaults there.
+ *
+ * The override is the LATER layer: the extends chain is the base, then the
+ * user layer, then the repo layer.
+ */
 import type Family from "../Interface/Family.js";
 import type Pack from "../Interface/Pack.js";
 import type Target from "../Interface/Target.js";
 
-/** Merge two target lists by path. */
+/**
+ * Merges two target lists by path.
+ */
 const MergeTargets = (Base: Target[], Override: Target[]): Target[] => {
 	const Result = Base.map((Target) => ({ ...Target }));
 	for (const Target of Override) {
@@ -32,7 +39,9 @@ const MergeTargets = (Base: Target[], Override: Target[]): Target[] => {
 	return Result;
 };
 
-/** Merge two family maps by the domain-qualified key. */
+/**
+ * Merges two family maps by the domain-qualified key.
+ */
 const MergeFamilies = (
 	Base: Record<string, Family> | undefined,
 	Override: Record<string, Family> | undefined,
@@ -62,7 +71,9 @@ const MergeFamilies = (
 	return Result;
 };
 
-/** Merge one section object: arrays replace, scalars replace, objects recurse. */
+/**
+ * Merges one section object: arrays replace, scalars replace, objects recurse.
+ */
 const MergeSection = (Base: unknown, Override: unknown): unknown => {
 	if (Array.isArray(Override)) {
 		return Override;

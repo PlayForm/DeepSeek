@@ -1,10 +1,16 @@
-// Classify - the check-set classification (Function/Classify): match one
-// path against the checksets table's globs and return the matching set
-// identifiers in the table's insertion order (the deterministic order the
-// ledger and the smoke rely on). The glob translator handles the catalog's
-// patterns: a leading `**/` (any directory depth, including none), interior
-// `**/` segments, and a `*` basename wildcard. A spec without a glob
-// matches nothing.
+/**
+ * @module Classify
+ *
+ * The check-set classification: match one path against the checksets table's
+ * globs and return the matching set identifiers in insertion order.
+ *
+ * @remarks
+ * The matching order is the table's insertion order, the deterministic order
+ * the ledger and the smoke rely on. The glob translator handles the catalog's
+ * patterns: a leading double star then a slash (any directory depth,
+ * including none), interior double-star-then-slash segments, and a `*`
+ * basename wildcard. A spec without a glob matches nothing.
+ */
 const Glob = (Pattern: string): RegExp => {
 	let Source = "";
 	for (let Index = 0; Index < Pattern.length; Index += 1) {

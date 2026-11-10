@@ -1,7 +1,13 @@
-// Surfaces - the write API's setScope (Function/Surfaces): the scope
-// registry update - the surfaces (paths) the member owns. The list is
-// copied (the caller's array is never aliased), the update is ledgered and
-// emitted after the state is updated.
+/**
+ * @module Surfaces
+ *
+ * The write API's setScope (Function/Surfaces): the scope registry update -
+ * the surfaces (paths) the member owns.
+ *
+ * @remarks
+ * The list is copied (the caller's array is never aliased), the update is
+ * ledgered and emitted after the state is updated.
+ */
 import Emit from "@Function/Emit.js";
 import Ensure from "@Function/Ensure.js";
 import Persist from "@Function/Persist.js";

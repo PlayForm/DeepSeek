@@ -1,14 +1,20 @@
-// Validate - the fail-loud configuration validation (Function/Validate):
-// runs BEFORE the State build so an invalid config throws at load, never
-// silently defaults. The rules mirror the Schemastery schema (Variable/
-// Config.ts).
+/**
+ * @module Validate
+ *
+ * The fail-loud configuration validation: runs BEFORE the State build so
+ * an invalid config throws at load, never silently defaults.
+ *
+ * @remarks
+ * The rules mirror the Schemastery schema (Variable/Config.ts).
+ */
 export default (Options: unknown): void => {
 	const Raw = (Options ?? {}) as Record<string, unknown>;
 	const Fail = (Message: string): never => {
 		throw new Error(`merge: ${Message}`);
 	};
 
-	/** Unwrap one possibly-volatile config cell (`{ get }` reference or value). */
+	// Unwrap one possibly-volatile config cell (`{ get }` reference or
+	// value).
 	const Cell = (Value: unknown): unknown =>
 		typeof (Value as { get?: unknown } | null)?.get === "function"
 			? (Value as { get: () => unknown }).get()

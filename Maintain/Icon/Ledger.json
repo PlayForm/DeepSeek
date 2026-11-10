@@ -671,8 +671,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "0ca6a3de27b053041e6b01ca2e6396f0e5f4ebe689d85b8dd231ea095b3d94ab",
-				"colour": "d3c2119c2a53d3b8c63bc168c0609cab39568a2bd740c09fd479cb92b3bede9e"
+				"mono": "bcbfff49d8ed61eeada4bf30214eb53ece651628e97bce9bb8869e01957228de",
+				"colour": "6ab38823f2954ac92bbe4b8145d823bfa349c7cf4bdb5f00a4590156b502f7dc"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-test-suggester.svg",

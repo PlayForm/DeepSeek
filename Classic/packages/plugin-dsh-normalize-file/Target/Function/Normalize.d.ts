@@ -56,7 +56,7 @@
  * Pure module: no module-level state (two concurrent calls share nothing -
  * every value is a local), so HMR reloads and parallel calls cannot interfere.
  */
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 /**
  * The target type is the shared write executor's own second parameter.
  */

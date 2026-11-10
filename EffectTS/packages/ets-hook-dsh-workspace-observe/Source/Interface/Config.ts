@@ -1,34 +1,57 @@
-// Config - the shape the schema (Variable/Config) produces, after the loader
-// validates and defaults it. Every field is a volatile cell (the values may
-// arrive as `{ get }` references; the factory's State builder unwraps and
-// hot-refreshes them in place).
+/**
+ * @module Config
+ *
+ * The shape the schema (Variable/Config) produces, after the loader
+ * validates and defaults it.
+ *
+ * @remarks
+ * Every field is a volatile cell (the values may arrive as `{ get }`
+ * references; the factory's State builder unwraps and hot-refreshes them in
+ * place).
+ */
 import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 
 export default interface Config {
-	/** The durable ledger file (one log per module). */
+	/**
+	 * The durable ledger file (one log per module).
+	 */
 	logFile: string;
 
-	/** Ledger enabled - write the durable log file. */
+	/**
+	 * Ledger enabled - write the durable log file.
+	 */
 	log: boolean;
 
-	/** The master switch - the IDLE-forever posture: false by default. */
+	/**
+	 * The master switch - the IDLE-forever posture: false by default.
+	 */
 	enabled: boolean;
 
-	/** The KV domain name. */
+	/**
+	 * The KV domain name.
+	 */
 	domain: string;
 
-	/** The ring bound. */
+	/**
+	 * The ring bound.
+	 */
 	maxStamps: number;
 
-	/** The optional allowlist; empty means every path. */
+	/**
+	 * The optional allowlist; empty means every path.
+	 */
 	include: string[];
 
-	/** The excluded path patterns. */
+	/**
+	 * The excluded path patterns.
+	 */
 	exclude: string[];
 
-	/** The per-action allowlist (D6) - the shared factory block. This
-	 *  package's action class is RECORD (automatic); it has NO gated action,
-	 *  so the block documents the posture without refusing anything. A
-	 *  resolved pack's `policy` section overrides it per action. */
+	/**
+	 * The per-action allowlist (D6) - the shared factory block. This
+	 * package's action class is RECORD (automatic); it has NO gated action,
+	 * so the block documents the posture without refusing anything. A
+	 * resolved pack's `policy` section overrides it per action.
+	 */
 	policy: Allowlist;
 }

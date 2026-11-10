@@ -1,15 +1,21 @@
-// Graph - the SELF-CONTAINED structural mirror of the workspaceGraph
-// service surface (Interface/Graph), the W1 frozen contract's read half
-// (WAVE-1-BRIEF.md section 4.3): the node, edge and query shapes the
-// resolution rules consume. The operate hook never imports the graph
-// package; this declaration keeps the consumer honest and compiles without
-// the sibling.
-//
-//   GraphNode        - the W1 Node (id, kind, path, name, span, fingerprint,
-//                      version);
-//   GraphEdgeRecord  - the W1 Edge (kind, from, to, span);
-//   GraphHandle      - the structural service slice (find, expand, snapshot)
-//                      the rules probe once (Function/Graph).
+/**
+ * @module Graph
+ *
+ * The SELF-CONTAINED structural mirror of the workspaceGraph service
+ * surface (Interface/Graph), the W1 frozen contract's read half
+ * (WAVE-1-BRIEF.md section 4.3).
+ *
+ * @remarks
+ * It covers the node, edge and query shapes the resolution rules consume.
+ * The operate hook never imports the graph package; this declaration keeps
+ * the consumer honest and compiles without the sibling.
+ *
+ *   GraphNode        - the W1 Node (id, kind, path, name, span, fingerprint,
+ *                      version);
+ *   GraphEdgeRecord  - the W1 Edge (kind, from, to, span);
+ *   GraphHandle      - the structural service slice (find, expand, snapshot)
+ *                      the rules probe once (Function/Graph).
+ */
 export interface GraphNode {
 	id: string;
 	kind: "File" | "Symbol" | "Block" | "Test" | "DocSection";

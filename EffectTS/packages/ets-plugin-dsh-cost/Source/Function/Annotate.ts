@@ -1,23 +1,34 @@
-// Annotate - the comment writer (Documentation/Plans/COST-TRACK-PLUGIN.md
-// section 7): the accumulated cost of one file, read from the ledger, is
-// rendered as at most Config.annotate.maxLines content lines between the
-// marker delimiters in the file's own comment language, then written through
-// the factory's write executor so the fresh-stat version guard applies - an
-// existing block is replaced in place (its line count may change), an absent
-// block is appended after one blank line at end of file, and a second run
-// with the same numbers is a no-op. A file with no recorded cost is skipped
-// with a reason, never invented; an unknown extension is skipped, never
-// guessed; the gate Config.annotate.enabled (off by default) refuses the
-// write before anything is read. Every successful write leaves one Annotation
-// row: what was written, into which file, at what price, when.
-import { resolve } from "node:path";
-import type { DatabaseSync } from "node:sqlite";
+/**
+ * @module Annotate
+ *
+ * The comment writer (Documentation/Plans/COST-TRACK-PLUGIN.md section 7):
+ * the accumulated cost of one file, read from the ledger, rendered as at
+ * most Config.annotate.maxLines content lines between the marker
+ * delimiters in the file's own comment language.
+ *
+ * @remarks
+ * The rendered block is written through the factory's write executor so the
+ * fresh-stat version guard applies - an existing block is replaced in place
+ * (its line count may change), an absent block is appended after one blank
+ * line at end of file, and a second run with the same numbers is a no-op. A
+ * file with no recorded cost is skipped with a reason, never invented; an
+ * unknown extension is skipped, never guessed; the gate
+ * Config.annotate.enabled (off by default) refuses the write before
+ * anything is read. Every successful write leaves one Annotation row: what
+ * was written, into which file, at what price, when.
+ */ import { resolve, resolve } from "node:path";
+import type { DatabaseSync, DatabaseSync } from "node:sqlite";
 
-import type { Context } from "@deepseek-ai/cordis";
+import type { Context, Context } from "@deepseek-ai/cordis";
 
 import type Config from "../Interface/Config.js";
+import type Config from "../Interface/Config.js";
+import Language from "./Language.js";
 import Language from "./Language.js";
 
+/**
+ * One file's accumulated cost totals.
+ */
 type Totals = {
 	Direct: number;
 	Amortized: number;
@@ -27,23 +38,32 @@ type Totals = {
 	Currency: string;
 };
 
+/**
+ * One priced model row.
+ */
 type ModelRow = { Model: string; Cost: number };
 
-// One weave outcome: the new content is byte-identical (unchanged), the
-// existing block is malformed (refused), or the content is ready to write.
+/**
+ * One weave outcome: the new content is byte-identical (unchanged), the
+ * existing block is malformed (refused), or the content is ready to write.
+ */
 type Woven =
 	| { Kind: "unchanged" }
 	| { Kind: "refused"; Reason: string }
 	| { Kind: "ready"; Content: string; Reason: string };
 
-// One comment line in the file's own syntax: the prefix opens the line and,
-// for the markup family, the close token ends it.
+/**
+ * One comment line in the file's own syntax: the prefix opens the line
+ * and, for the markup family, the close token ends it.
+ */
 const Wrapped = (Line: string, End: string, Text: string): string =>
 	End.length === 0 ? `${Line} ${Text}` : `${Line} ${Text} ${End}`;
 
-// The block: the marker delimiters plus at most Max content lines - the cost
-// line first, then the model mix (at most eight rows on one line), then the
-// call count and the first and last priced day.
+/**
+ * The block: the marker delimiters plus at most Max content lines - the
+ * cost line first, then the model mix (at most eight rows on one line),
+ * then the call count and the first and last priced day.
+ */
 const Block = (
 	Line: string,
 	End: string,
@@ -80,15 +100,20 @@ const Block = (
 	return [Wrap(`${Marker}:begin`), ...Content, Wrap(`${Marker}:end`)];
 };
 
-// One priced day: the UTC date of the epoch millisecond.
+/**
+ * One priced day: the UTC date of the epoch millisecond.
+ */
 const Stamp = (At: number | null): string =>
 	At === null ? "unknown" : new Date(At).toISOString().slice(0, 10);
 
-// The weave: an existing marker block (a line carrying the begin marker with
-// a later line carrying the end marker) is replaced in place; an unterminated
-// block is refused, never forced; an absent block is appended after one blank
-// line at end of file. An identical rebuild is the unchanged outcome - the
-// idempotence rule of a second run with the same numbers.
+/**
+ * The weave: an existing marker block (a line carrying the begin marker
+ * with a later line carrying the end marker) is replaced in place; an
+ * unterminated block is refused, never forced; an absent block is appended
+ * after one blank line at end of file. An identical rebuild is the
+ * unchanged outcome - the idempotence rule of a second run with the same
+ * numbers.
+ */
 const Weave = (Content: string, Lines: readonly string[], Marker: string): Woven => {
 	const Split = Content.split("\n");
 	const Begin = Split.findIndex((One) => One.includes(`${Marker}:begin`));

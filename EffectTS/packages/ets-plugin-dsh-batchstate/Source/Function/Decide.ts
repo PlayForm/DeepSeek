@@ -1,15 +1,24 @@
-// Decide - the decision splice (Function/Decide): record one decision the
-// hook delivered into the same inbox channel. The board never decides; it
-// reflects the decision onto the proposal's status so the compiled context
-// stops showing an approved batch as pending.
-//
-// A decision for a proposal the board does not hold (a stale board after a
-// restart, a decision that overtook its proposal) is refused with its own
-// ledger line - never silently absorbed, never guessed.
+/**
+ * @module Decide
+ *
+ * The decision splice (Function/Decide): record one decision the hook
+ * delivered into the same inbox channel.
+ *
+ * @remarks
+ * The board never decides; it reflects the decision onto the proposal's
+ * status so the compiled context stops showing an approved batch as pending.
+ *
+ * A decision for a proposal the board does not hold (a stale board after a
+ * restart, a decision that overtook its proposal) is refused with its own
+ * ledger line - never silently absorbed, never guessed.
+ */
 import Emit from "@Function/Emit.js";
 import Persist from "@Function/Persist.js";
 import type State from "@Interface/State.js";
 
+/**
+ * The accepted decision outcomes.
+ */
 const OUTCOMES = ["approved", "denied", "expired"] as const;
 
 export default (State: State, Payload: Record<string, unknown>): void => {

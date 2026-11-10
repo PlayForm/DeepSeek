@@ -1,29 +1,36 @@
-// Storage - the storage-domain open and recovery (Function/Storage), the
-// PRIMARY store. THE DOMAIN: the plugin's OWN domain, named by the config
-// `domain` (default `batch_state`). Version 1, per-record layout,
-// backup-and-skip invalid records, and NO `compatibleVersions` - the library
-// rejects an entry that is not strictly BELOW the declared version, so `[1]`
-// against version 1 throws at load (the family's learned rule). FOUR tables:
-//   * `members`   - one record per agent id: the member as last written;
-//   * `queue`     - ONE record `__queue`: the idle queue (member ids);
-//   * `proposals` - one record per proposal id: the spliced board entry;
-//   * `gates`     - one record per gate name: the arbiter truth.
-//
-// The recovery is the SAME Function/Restore the JSON fallback uses: the four
-// tables are projected onto Interface/File and restored once on mount, so the
-// byte-exact `recovered (<n> members, queue <n>)` line, the honest
-// active -> interrupted downgrade and the malformed-row skip are identical on
-// both stores.
-//
-// Best-effort and detached (the family's P5-style posture): the open is
-// kicked off from Apply's effect with `void`, every failure is contained
-// here. A PRESENT facility whose open fails is LOUD: one best-effort ledger
-// line `storage open failed: <reason>`, then the JSON fallback recovers (the
-// documented degraded store) - never rethrown.
-//
-// The dynamic imports keep the optional storage packages off the module-load
-// path (a module-level import of an unresolvable package would crash the
-// whole bundle load - the factory's live-verified pitfall).
+/**
+ * @module Storage
+ *
+ * The storage-domain open and recovery (Function/Storage), the PRIMARY
+ * store.
+ *
+ * @remarks
+ * THE DOMAIN: the plugin's OWN domain, named by the config `domain`
+ * (default `batch_state`). Version 1, per-record layout, backup-and-skip
+ * invalid records, and NO `compatibleVersions` - the library rejects an
+ * entry that is not strictly BELOW the declared version, so `[1]` against
+ * version 1 throws at load (the family's learned rule). FOUR tables:
+ *   * `members`   - one record per agent id: the member as last written;
+ *   * `queue`     - ONE record `__queue`: the idle queue (member ids);
+ *   * `proposals` - one record per proposal id: the spliced board entry;
+ *   * `gates`     - one record per gate name: the arbiter truth.
+ *
+ * The recovery is the SAME Function/Restore the JSON fallback uses: the
+ * four tables are projected onto Interface/File and restored once on mount,
+ * so the byte-exact `recovered (<n> members, queue <n>)` line, the honest
+ * active -> interrupted downgrade and the malformed-row skip are identical
+ * on both stores.
+ *
+ * Best-effort and detached (the family's P5-style posture): the open is
+ * kicked off from Apply's effect with `void`, every failure is contained
+ * here. A PRESENT facility whose open fails is LOUD: one best-effort ledger
+ * line `storage open failed: <reason>`, then the JSON fallback recovers
+ * (the documented degraded store) - never rethrown.
+ *
+ * The dynamic imports keep the optional storage packages off the
+ * module-load path (a module-level import of an unresolvable package would
+ * crash the whole bundle load - the factory's live-verified pitfall).
+ */
 import type Entry from "@Interface/Entry.js";
 import type Gate from "@Interface/Gate.js";
 import type Handle from "@Interface/Handle.js";
@@ -33,7 +40,10 @@ import type State from "@Interface/State.js";
 import Recover from "./Recover.js";
 import Restore from "./Restore.js";
 
-/** One table's records, in store order (the untrusted rows Restore filters). */
+/**
+ * One table's records, in store order (the untrusted rows Restore
+ * filters).
+ */
 const Rows = (Handle: Handle, Name: string): unknown[] =>
 	[...Handle.table(Name).entries()].map(([, Value]) => Value);
 

@@ -1,21 +1,36 @@
-// Allocate - the attribution model (Documentation/Plans/COST-TRACK-PLUGIN.md
-// section 2): one call's price split into the direct half (the output side -
-// the model's decision to act - weighted by changed bytes over the files the
-// step wrote) and the amortized half (the input side - the context that made
-// the decision possible - split per cache bucket: the uncached input weighted
-// by each file's uncached mass, the cached input by its cached mass, because
-// one blended ratio misprices a file whose tokens are cached against one
-// whose are not), plus the one unattributed row that absorbs the shared
-// remainder and keeps the conservation law (section 2.3): the sum of every
-// row equals the call's CostTotal within 1e-9, asserted here because a
-// violation is a bug in the allocator, not a rounding artifact to be waved
-// through. With no cache data the cached half is empty and the whole mass is
-// uncached, so the old call shape behaves exactly as before.
+import type Allocation from "../Interface/Allocation.js";
+/**
+ * @module Allocate
+ *
+ * The attribution model (Documentation/Plans/COST-TRACK-PLUGIN.md section
+ * 2): one call's price split into the direct half and the amortized half,
+ * plus the one unattributed row.
+ *
+ * @remarks
+ * The direct half is the output side - the model's decision to act -
+ * weighted by changed bytes over the files the step wrote. The amortized
+ * half is the input side - the context that made the decision possible -
+ * split per cache bucket: the uncached input weighted by each file's
+ * uncached mass, the cached input by its cached mass, because one blended
+ * ratio misprices a file whose tokens are cached against one whose are
+ * not. The unattributed row absorbs the shared remainder and keeps the
+ * conservation law (section 2.3): the sum of every row equals the call's
+ * CostTotal within 1e-9, asserted here because a violation is a bug in the
+ * allocator, not a rounding artifact to be waved through. With no cache
+ * data the cached half is empty and the whole mass is uncached, so the old
+ * call shape behaves exactly as before.
+ */
 import type Allocation from "../Interface/Allocation.js";
 import type Config from "../Interface/Config.js";
+import type Config from "../Interface/Config.js";
+import type Touch from "../Interface/Touch.js";
 import type Touch from "../Interface/Touch.js";
 import type Usage from "../Interface/Usage.js";
+import type Usage from "../Interface/Usage.js";
 
+/**
+ * One priced call.
+ */
 type Costed = {
 	Input: number;
 	Output: number;
@@ -26,6 +41,9 @@ type Costed = {
 	Currency: string;
 };
 
+/**
+ * One step's context masses over the touched files.
+ */
 type Massed = {
 	Surface: number;
 	PerPath: Map<string, number>;
@@ -33,11 +51,16 @@ type Massed = {
 	CachedSurface?: number;
 };
 
+/**
+ * One path's share of a step's weights and masses.
+ */
 type Share = { Weight: number; Context: number; Uncached: number; Cached: number };
 
-// One path's accumulated shares: two touches of the same path in one step
-// merge into one row with the summed weight and the summed masses (the total
-// context, its cached portion and its uncached remainder).
+/**
+ * One path's accumulated shares: two touches of the same path in one step
+ * merge into one row with the summed weight and the summed masses (the
+ * total context, its cached portion and its uncached remainder).
+ */
 const Accumulate = (
 	Shares: Map<string, Share>,
 	Path: string,

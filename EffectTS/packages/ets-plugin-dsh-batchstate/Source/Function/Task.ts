@@ -1,11 +1,17 @@
-// Task - the write API's setTask (Function/Task): update the member's
-// CURRENT ACTIVITY (the LIVE task - the agents report their phase changes;
-// the parent sets the task at the activation), ledger the line, then emit
-// the batch/state-change event (the plan's refresh trigger: the consumers
-// re-splice the compiled block). The FIRST active transition stamps
-// startedAt once - a later setTask never resets it. A member that was
-// completed/failed/interrupted and reports a task is REACTIVATED (status
-// active, finishedAt cleared - the redo case).
+/**
+ * @module Task
+ *
+ * The write API's setTask (Function/Task): update the member's CURRENT
+ * ACTIVITY, ledger the line, then emit the batch/state-change event.
+ *
+ * @remarks
+ * The LIVE task - the agents report their phase changes; the parent sets
+ * the task at the activation - is the plan's refresh trigger: the consumers
+ * re-splice the compiled block. The FIRST active transition stamps
+ * startedAt once - a later setTask never resets it. A member that was
+ * completed/failed/interrupted and reports a task is REACTIVATED (status
+ * active, finishedAt cleared - the redo case).
+ */
 import Emit from "@Function/Emit.js";
 import Ensure from "@Function/Ensure.js";
 import Persist from "@Function/Persist.js";

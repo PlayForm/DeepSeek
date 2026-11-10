@@ -1,15 +1,25 @@
-// Adjacent - the co-touch candidates for one path, folded from the session
-// history: for every call that touched the anchor path, the calls that follow
-// it within the window contribute `1 / (1 + distance)` to the followed path's
-// score and one to its count, so a repeatedly co-touched path outranks a
-// single one and a near neighbour outranks a far one. The anchor itself is
-// never a candidate. Pure and deterministic - no I/O, no ordering surprises.
+/**
+ * @module Adjacent
+ *
+ * Folds the session history into the co-touch candidates for one path.
+ *
+ * @remarks
+ * For every call that touched the anchor path, the calls that follow it within
+ * the window contribute `1 / (1 + distance)` to the followed path's score and
+ * one to its count, so a repeatedly co-touched path outranks a single one and a
+ * near neighbour outranks a far one. The anchor itself is never a candidate.
+ * Pure and deterministic - no I/O, no ordering surprises.
+ */
 import type Touch from "../Interface/Touch.js";
 
-/** The path normalized the same way the fold normalizes it. */
+/**
+ * The path normalized the same way the fold normalizes it.
+ */
 const Clean = (Value: string): string => Value.replaceAll("\\", "/").replace(/^\.\//, "");
 
-/** A candidate row: the followed path, how often it followed, and its score. */
+/**
+ * A candidate row: the followed path, how often it followed, and its score.
+ */
 export type Candidate = { readonly path: string; readonly count: number; readonly score: number };
 
 export default (

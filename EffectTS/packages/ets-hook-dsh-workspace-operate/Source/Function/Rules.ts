@@ -1,25 +1,31 @@
-// Rules - THE RESOLUTION RULES (Function/Rules): they decide what CAN be
-// proposed, and every failure returns a typed Refusal (Interface/Refusal) -
-// the REFUSAL-TO-GUESS is the rule set's other half. One entry point,
-// three guard chains (one per kind), `switch (true)` arms in the frozen
-// order:
-//
-//   1. the request shape (bad-request);
-//   2. the graph availability (graph-unavailable - for rename/connect,
-//      which cannot be resolved without the graph);
-//   3. the graph resolution (unknown-symbol / name-collision /
-//      duplicate-edge / incompatible-edge);
-//   4. the version fence (missing-version - a proposal without a fence is
-//      never created);
-//   5. the staleness (stale-version - the fence contradicts the hook's own
-//      observed version or the file's stat);
-//   6. the replace span (span-beyond-file - checked against the file's
-//      real line count).
-//
-// The version fence rule is the refusal-to-guess at its strictest: the
-// fence is the caller's version when given; when absent, the hook's own
-// observed version for the path is used ONLY if one was actually heard -
-// a version is never invented.
+/**
+ * @module Rules
+ *
+ * THE RESOLUTION RULES: they decide what CAN be proposed, and every failure
+ * returns a typed Refusal (Interface/Refusal) - the REFUSAL-TO-GUESS is the
+ * rule set's other half.
+ *
+ * @remarks
+ * One entry point, three guard chains (one per kind), `switch (true)` arms
+ * in the frozen order:
+ *
+ *   1. the request shape (bad-request);
+ *   2. the graph availability (graph-unavailable - for rename/connect,
+ *      which cannot be resolved without the graph);
+ *   3. the graph resolution (unknown-symbol / name-collision /
+ *      duplicate-edge / incompatible-edge);
+ *   4. the version fence (missing-version - a proposal without a fence is
+ *      never created);
+ *   5. the staleness (stale-version - the fence contradicts the hook's own
+ *      observed version or the file's stat);
+ *   6. the replace span (span-beyond-file - checked against the file's
+ *      real line count).
+ *
+ * The version fence rule is the refusal-to-guess at its strictest: the
+ * fence is the caller's version when given; when absent, the hook's own
+ * observed version for the path is used ONLY if one was actually heard -
+ * a version is never invented.
+ */
 import Graph from "@Function/Graph.js";
 import type { GraphNode } from "@Interface/Graph.js";
 import type Outcome from "@Interface/Outcome.js";
@@ -27,7 +33,9 @@ import type Proposal from "@Interface/Proposal.js";
 import type Refusal from "@Interface/Refusal.js";
 import type State from "@Interface/State.js";
 
-/** The edge-kind compatibility table (the W1 graph's node/edge matrix). */
+/**
+ * The edge-kind compatibility table (the W1 graph's node/edge matrix).
+ */
 const Compatible = (
 	Edge: NonNullable<Proposal["edge"]>,
 	FromKind: string,
@@ -51,14 +59,18 @@ const Compatible = (
 	}
 };
 
-/** Build a refusal (the Refused counter rides in Propose, which owns the
- *  bookkeeping; Rules returns the plain value). */
+/**
+ * Build a refusal (the Refused counter rides in Propose, which owns the
+ * bookkeeping; Rules returns the plain value).
+ */
 const Refuse = (Kind: Refusal["kind"], Reason: string, Detail: string): Outcome => ({
 	status: "refused",
 	refusal: { kind: Kind, reason: Reason, detail: Detail },
 });
 
-/** Build the proposed outcome. */
+/**
+ * Build the proposed outcome.
+ */
 const Propose = (Proposal: Proposal): Outcome => ({ status: "proposed", proposal: Proposal });
 
 export default async (State: State, Kind: Proposal["kind"], Input: unknown): Promise<Outcome> => {

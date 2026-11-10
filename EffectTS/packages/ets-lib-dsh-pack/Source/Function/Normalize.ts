@@ -1,36 +1,48 @@
-// Normalize - fill a parsed pack's defaults and validate its shape, so the
-// merge and the families projection can rely on a total structure. The
-// defaults are the pack schema's documented ones:
-//
-//   family.id        - the key's last segment (`doc/Plan` -> `Plan`);
-//   family.priority  - 99 (a pack without a priority sorts last);
-//   family.threshold - 0.75;
-//   family.note      - "" (the domains without a caveat);
-//   family.familyGlobs - [];
-//   target.kind      - "";
-//   target.prior     - 0.6;
-//   target.reason    - "";
-//   signal.rule      - "rule";
-//   signal.weight    - 1.
-//
-// A structurally invalid pack throws (a family must be a mapping, a signal a
-// mapping with a string pattern, a target a mapping with a string path); the
-// suggester's fail-open listener catches it, warns, and passes the call
-// through unnoted.
+/**
+ * @module Normalize
+ *
+ * Fills a parsed pack's defaults and validates its shape, so the merge and the
+ * families projection can rely on a total structure.
+ *
+ * @remarks
+ * The defaults are the pack schema's documented ones:
+ *
+ * - `family.id` - the key's last segment (`doc/Plan` -> `Plan`);
+ * - `family.priority` - 99 (a pack without a priority sorts last);
+ * - `family.threshold` - 0.75;
+ * - `family.note` - "" (the domains without a caveat);
+ * - `family.familyGlobs` - [];
+ * - `target.kind` - "";
+ * - `target.prior` - 0.6;
+ * - `target.reason` - "";
+ * - `signal.rule` - "rule";
+ * - `signal.weight` - 1.
+ *
+ * A structurally invalid pack throws (a family must be a mapping, a signal a
+ * mapping with a string pattern, a target a mapping with a string path); the
+ * suggester's fail-open listener catches it, warns, and passes the call through
+ * unnoted.
+ */
 import type Family from "../Interface/Family.js";
 import type Pack from "../Interface/Pack.js";
 import type Signal from "../Interface/Signal.js";
 import type Target from "../Interface/Target.js";
 
-/** A string field with a fallback. */
+/**
+ * A string field with a fallback.
+ */
 const Text = (Value: unknown, Fallback: string): string =>
 	typeof Value === "string" ? Value : Fallback;
 
-/** A finite number field with a fallback. */
+/**
+ * A finite number field with a fallback.
+ */
 const Count = (Value: unknown, Fallback: number): number =>
 	typeof Value === "number" && Number.isFinite(Value) ? Value : Fallback;
 
-/** One signal row. */
+/**
+ * One signal row.
+ */
 const Row = (Value: unknown): Signal => {
 	if (Value === null || typeof Value !== "object" || Array.isArray(Value)) {
 		throw new Error("a pack signal must be a mapping");
@@ -47,7 +59,9 @@ const Row = (Value: unknown): Signal => {
 	};
 };
 
-/** One target row. */
+/**
+ * One target row.
+ */
 const Companion = (Value: unknown): Target => {
 	if (Value === null || typeof Value !== "object" || Array.isArray(Value)) {
 		throw new Error("a pack target must be a mapping");
@@ -65,7 +79,9 @@ const Companion = (Value: unknown): Target => {
 	};
 };
 
-/** One family row. */
+/**
+ * One family row.
+ */
 const Entry = (Key: string, Value: unknown): Family => {
 	if (Value === null || typeof Value !== "object" || Array.isArray(Value)) {
 		throw new Error(`pack family ${Key}: expected a mapping`);

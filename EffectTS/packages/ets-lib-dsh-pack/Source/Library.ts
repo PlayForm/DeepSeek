@@ -1,27 +1,33 @@
-// Library - the entry module of the PACKS (@playform/ets-lib-dsh-pack): the
-// pure, dependency-light, harness-free workspace-pack library of the
-// suggester family, as named exports (the harness convention - the packs are
-// NOT a plugin bundle: no cordis patch, no loader contract, publishable on
-// its own).
-//
-// Three halves:
-//
-//   Variable - the built-in pack for this monorepo (the union of the six
-//   suggesters' former embedded packs, keyed by `<domain>/<id>`), the default
-//   signature and the two layer locations.
-//
-//   Function - the machinery: the strict YAML-subset parser, the pack reader,
-//   the normalizer, the merge rules, the cycle-guarded extends chain, the
-//   layered resolver, the process memo, the per-domain families projection
-//   and the workspace locator (the gate whose signature comes from the pack).
-//
-//   Interface - the pack schema (Pack, Family, Signal, Target, Indexer,
-//   Policy, Learning), the locator's answer and the resolution seam.
+/**
+ * @module Library
+ *
+ * Describes the entry module of the PACKS (`@playform/ets-lib-dsh-pack`): the
+ * pure, dependency-light, harness-free workspace-pack library of the suggester
+ * family, as named exports (the harness convention - the packs are NOT a
+ * plugin bundle: no cordis patch, no loader contract, publishable on its own).
+ *
+ * @remarks
+ * Three halves:
+ *
+ * Variable - the built-in pack for this monorepo (the union of the six
+ * suggesters' former embedded packs, keyed by `<domain>/<id>`), the default
+ * signature and the two layer locations.
+ *
+ * Function - the machinery: the strict YAML-subset parser, the pack reader,
+ * the normalizer, the merge rules, the cycle-guarded extends chain, the
+ * layered resolver, the process memo, the per-domain families projection and
+ * the workspace locator (the gate whose signature comes from the pack).
+ *
+ * Interface - the pack schema (Pack, Family, Signal, Target, Indexer, Policy,
+ * Learning), the locator's answer and the resolution seam.
+ */
 import Version from "./Variable/Version.js";
 
-// The compiled package version (Source/Variable/Version, built in by the
-// ESBuild define). This package has NO loader contract and NO Config - the
-// version sits beside the other named exports; it is not a loader key.
+/**
+ * The compiled package version (`Source/Variable/Version`, built in by the
+ * ESBuild define). This package has NO loader contract and NO Config - the
+ * version sits beside the other named exports; it is not a loader key.
+ */
 export { Version };
 
 export { default as Builtin } from "./Variable/Builtin.js";
