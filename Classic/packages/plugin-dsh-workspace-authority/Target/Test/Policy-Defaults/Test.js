@@ -1,1 +1,74 @@
-import t from"node:assert/strict";import{Decide as u}from"../../../../plugin-dsh-factory/Target/Library.js";import{Check as a,Finish as h,LinesWith as r,Make as c,MakeCounter as m,Validate as n,rm as g}from"../Harness.js";const l={read:"auto",index:"auto",record:"auto",suggest:"auto",write:"approve",commit:"approve",spawn:"approve",message:"auto"},i=(o={})=>(g(),c(n({logFile:"/nonexistent/authority.log",enabled:!0,...o}))),f=async()=>{const o=m();a(o,"P1: the authority schema fills the D6 policy defaults",()=>{const e=n({logFile:"/nonexistent/authority.log",enabled:!0});t.deepEqual(e.automation.get(),l,"the composed block carries the defaults")}),a(o,"P1: the built State carries the block on Allow",()=>{const e=i();t.deepEqual(e.State.Allow,l,"the apply maps automation -> Allow")}),a(o,"P1: a policy override lands on the built State",()=>{const e=i({automation:{read:"approve"}});t.deepEqual(e.State.Allow,{...l,read:"approve"},"the override replaces read and keeps the rest")});{const e=c(n({logFile:"/nonexistent/authority.log"}));a(o,"P2: the package has no gated action",()=>{t.equal(u(e.State.Allow,"read"),"auto","the read verdict is automatic"),t.equal(u(e.State.Allow,"record"),"auto","the record verdict is automatic"),t.equal(r(e,"held").length,0,"no held line on the mount"),t.equal(r(e,"policy").length,0,"no policy line on the mount")})}{const e=i(),s=e.Context.workspaceAuthority,d=s.grant({holder:"alice",resource:"/r/a.ts",operations:["read"]}),p=s.authorize("alice","/r/a.ts","read");a(o,"P3: grant records under the shipped defaults and writes no file",()=>{t.equal(d.id,"cap:1","the capability record is produced"),t.equal(p,!0,"the read judgment is served"),t.equal(r(e,"refused").length,0,"no refusal line appears"),t.equal(r(e,"held").length,0,"no held line appears"),t.equal(e.Fs.writes.length,0,"the fake fs recorded zero writes")})}return h(o,"Policy-Defaults")},y=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(y){const o=await f();console.log(`${o} PASS - Policy-Defaults`)}export{f as runTest};
+import assert from "node:assert/strict";
+import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";
+import { Check, Finish, LinesWith, Make, MakeCounter, Validate, rm } from "../Harness.js";
+const Defaults = {
+  read: "auto",
+  index: "auto",
+  record: "auto",
+  suggest: "auto",
+  write: "approve",
+  commit: "approve",
+  spawn: "approve",
+  message: "auto"
+};
+const Setup = (Raw = {}) => {
+  rm();
+  return Make(Validate({ logFile: "/nonexistent/authority.log", enabled: true, ...Raw }));
+};
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    Check(Count, "P1: the authority schema fills the D6 policy defaults", () => {
+      const Config = Validate({ logFile: "/nonexistent/authority.log", enabled: true });
+      assert.deepEqual(
+        Config.automation.get(),
+        Defaults,
+        "the composed block carries the defaults"
+      );
+    });
+    Check(Count, "P1: the built State carries the block on Allow", () => {
+      const Run = Setup();
+      assert.deepEqual(Run.State.Allow, Defaults, "the apply maps automation -> Allow");
+    });
+    Check(Count, "P1: a policy override lands on the built State", () => {
+      const Run = Setup({ automation: { read: "approve" } });
+      assert.deepEqual(
+        Run.State.Allow,
+        { ...Defaults, read: "approve" },
+        "the override replaces read and keeps the rest"
+      );
+    });
+  }
+  {
+    const Run = Make(Validate({ logFile: "/nonexistent/authority.log" }));
+    Check(Count, "P2: the package has no gated action", () => {
+      assert.equal(Decide(Run.State.Allow, "read"), "auto", "the read verdict is automatic");
+      assert.equal(Decide(Run.State.Allow, "record"), "auto", "the record verdict is automatic");
+      assert.equal(LinesWith(Run, "held").length, 0, "no held line on the mount");
+      assert.equal(LinesWith(Run, "policy").length, 0, "no policy line on the mount");
+    });
+  }
+  {
+    const Run = Setup();
+    const Service = Run.Context.workspaceAuthority;
+    const Record = Service.grant({ holder: "alice", resource: "/r/a.ts", operations: ["read"] });
+    const Authorized = Service.authorize("alice", "/r/a.ts", "read");
+    Check(Count, "P3: grant records under the shipped defaults and writes no file", () => {
+      assert.equal(Record.id, "cap:1", "the capability record is produced");
+      assert.equal(Authorized, true, "the read judgment is served");
+      assert.equal(LinesWith(Run, "refused").length, 0, "no refusal line appears");
+      assert.equal(LinesWith(Run, "held").length, 0, "no held line appears");
+      assert.equal(Run.Fs.writes.length, 0, "the fake fs recorded zero writes");
+    });
+  }
+  return Finish(Count, "Policy-Defaults");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Policy-Defaults`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

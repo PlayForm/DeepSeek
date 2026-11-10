@@ -1,1 +1,97 @@
-import e from"node:assert/strict";import{Check as n,Finish as h,Ledger as s,LedgerLines as m,Make as u,MakeCounter as f,Plugin as i,Validate as c,rm as p}from"../Harness.js";const d=(a={})=>(p(),u(c({logFile:s,...a}))),g=async()=>{const a=f();n(a,"A1: the default object carries name, apply, Config and inject",()=>{e.equal(i.name,"plugin-dsh-workspace-authority"),e.equal(typeof i.apply,"function"),e.equal(typeof i.Config,"function"),e.deepEqual(i.inject,["pluginFactory"])});{const t=d({}),o=t.Provided.workspaceAuthority;n(a,"A2: apply returns nothing, the service is still provided",()=>{e.equal(t.Returned,void 0),e.ok(o!==void 0),e.equal(o.name,"workspaceAuthority"),e.equal(o.State.On,!1)}),n(a,"A2: the cold mount logs the byte-exact disabled line",()=>{e.deepEqual(t.Lines,["authority: disabled (enabled=false)"]),e.match(m()[0]??"",/^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] disabled \(enabled=false\)$/)}),n(a,"A2: the cold mount wires nothing and serves nothing",()=>{e.deepEqual(t.RootNames,[]),e.deepEqual(t.Effects,[]),e.deepEqual(o.grant({holder:"a",resource:"/r",operations:["read"]}),void 0),e.equal(o.acquire("a","/r"),void 0),e.equal(o.residence("/r","tmp",1),void 0),e.deepEqual(o.evict(),[])})}{const t=(o,l)=>{p();let r;try{u(c({logFile:s,...o}))}catch(y){r=y}e.ok(r!==void 0,`expected throw: ${l}`),e.equal(r.message,l)};n(a,"A3: the numeric bounds fail loud",()=>{t({defaultTtlMs:0},"authority: defaultTtlMs must be >= 1"),t({maxLeasesPerHolder:0},"authority: maxLeasesPerHolder must be >= 1"),t({maxCapabilitiesPerHolder:0},"authority: maxCapabilitiesPerHolder must be >= 1"),t({revocationGraceMs:-1},"authority: revocationGraceMs must be >= 0")}),n(a,"A3: the policy table fails loud",()=>{t({policy:"nope"},"$.policy expected array but got nope"),t({policy:[{kind:"tmp",disposition:"nuke"}]},"authority: every policy rule needs disposition \u2208 {keep, defer, evict, discard, promote}")})}{const t=d({enabled:!0});n(a,"A4: the enabled mount logs the byte-exact activation line",()=>{e.deepEqual(t.Lines,["authority: activated (ttl=300000, policy=0)"]),e.equal(t.State.On,!0)});const o=d({enabled:!0,policy:[{kind:"tmp",disposition:"evict"}]});n(a,"A4: the activation line carries the policy count",()=>{e.deepEqual(o.Lines,["authority: activated (ttl=300000, policy=1)"])})}return h(a,"Entry-And-Contract")},b=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(b){const a=await g();console.log(`${a} PASS - Entry-And-Contract`)}export{g as runTest};
+import assert from "node:assert/strict";
+import {
+  Check,
+  Finish,
+  Ledger,
+  LedgerLines,
+  Make,
+  MakeCounter,
+  Plugin,
+  Validate,
+  rm
+} from "../Harness.js";
+const Setup = (Raw = {}) => {
+  rm();
+  return Make(Validate({ logFile: Ledger, ...Raw }));
+};
+const runTest = async () => {
+  const Count = MakeCounter();
+  Check(Count, "A1: the default object carries name, apply, Config and inject", () => {
+    assert.equal(Plugin.name, "plugin-dsh-workspace-authority");
+    assert.equal(typeof Plugin.apply, "function");
+    assert.equal(typeof Plugin.Config, "function");
+    assert.deepEqual(Plugin.inject, ["pluginFactory"]);
+  });
+  {
+    const Run = Setup({});
+    const Service = Run.Provided.workspaceAuthority;
+    Check(Count, "A2: apply returns nothing, the service is still provided", () => {
+      assert.equal(Run.Returned, void 0);
+      assert.ok(Service !== void 0);
+      assert.equal(Service.name, "workspaceAuthority");
+      assert.equal(Service.State.On, false);
+    });
+    Check(Count, "A2: the cold mount logs the byte-exact disabled line", () => {
+      assert.deepEqual(Run.Lines, ["authority: disabled (enabled=false)"]);
+      assert.match(
+        LedgerLines()[0] ?? "",
+        /^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] disabled \(enabled=false\)$/
+      );
+    });
+    Check(Count, "A2: the cold mount wires nothing and serves nothing", () => {
+      assert.deepEqual(Run.RootNames, []);
+      assert.deepEqual(Run.Effects, []);
+      assert.deepEqual(Service.grant({ holder: "a", resource: "/r", operations: ["read"] }), void 0);
+      assert.equal(Service.acquire("a", "/r"), void 0);
+      assert.equal(Service.residence("/r", "tmp", 1), void 0);
+      assert.deepEqual(Service.evict(), []);
+    });
+  }
+  {
+    const Fail = (Raw, Message) => {
+      rm();
+      let Thrown;
+      try {
+        Make(Validate({ logFile: Ledger, ...Raw }));
+      } catch (Error) {
+        Thrown = Error;
+      }
+      assert.ok(Thrown !== void 0, `expected throw: ${Message}`);
+      assert.equal(Thrown.message, Message);
+    };
+    Check(Count, "A3: the numeric bounds fail loud", () => {
+      Fail({ defaultTtlMs: 0 }, "authority: defaultTtlMs must be >= 1");
+      Fail({ maxLeasesPerHolder: 0 }, "authority: maxLeasesPerHolder must be >= 1");
+      Fail({ maxCapabilitiesPerHolder: 0 }, "authority: maxCapabilitiesPerHolder must be >= 1");
+      Fail({ revocationGraceMs: -1 }, "authority: revocationGraceMs must be >= 0");
+    });
+    Check(Count, "A3: the policy table fails loud", () => {
+      Fail({ policy: "nope" }, "$.policy expected array but got nope");
+      Fail(
+        { policy: [{ kind: "tmp", disposition: "nuke" }] },
+        "authority: every policy rule needs disposition \u2208 {keep, defer, evict, discard, promote}"
+      );
+    });
+  }
+  {
+    const Run = Setup({ enabled: true });
+    Check(Count, "A4: the enabled mount logs the byte-exact activation line", () => {
+      assert.deepEqual(Run.Lines, ["authority: activated (ttl=300000, policy=0)"]);
+      assert.equal(Run.State.On, true);
+    });
+    const Counted = Setup({ enabled: true, policy: [{ kind: "tmp", disposition: "evict" }] });
+    Check(Count, "A4: the activation line carries the policy count", () => {
+      assert.deepEqual(Counted.Lines, ["authority: activated (ttl=300000, policy=1)"]);
+    });
+  }
+  return Finish(Count, "Entry-And-Contract");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Entry-And-Contract`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

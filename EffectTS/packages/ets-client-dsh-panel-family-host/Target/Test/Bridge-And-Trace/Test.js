@@ -1,1 +1,299 @@
-import e from"node:assert/strict";import{BundleSource as W,Check as s,CheckAsync as u,ClientPlugin as q,Finish as j,Make as l,MakeBus as M,MakeClient as S,MakeCounter as T,MakeEditor as f,MakeEntry as p,MakeSchema as b,Validate as c}from"../Harness.js";const o="hook-dsh-normalize-dash",h="hook-dsh-secret-test",m=b({uid:0,refs:{0:{type:"object",dict:{logFile:{type:"string",meta:{volatile:!0}},normalizeReasoning:{type:"boolean"}}}}}),_=b({uid:0,refs:{0:{type:"object",dict:{token:{type:"string",meta:{role:"secret"}},label:{type:"string"}}}}}),z=b({uid:0,refs:{0:{type:"object",dict:{scopes:{type:"object",dict:{token:{type:"string",meta:{role:"secret"}}}}}}}}),y={logFile:"~/.dsh/playform/ets-hook-dsh-normalize-dash.log",normalizeReasoning:!0},A=()=>{const a=[],i=new Map;return{Calls:a,Remote:{playformFamilyPanel:{editFull:async(t,n)=>(a.push({namespace:t,patch:n}),{ok:!0,value:!0}),trace:{on:(t,n)=>{let r=i.get(t);return r===void 0&&(r=new Set,i.set(t,r)),r.add(n),()=>{r?.delete(n)}},ring:t=>[{trace:"trace-1",kind:"graph/indexed"}].slice(0,t??1)}}},Emit:(t,n)=>{for(const r of i.get(t)??[])r(n)}}},N=async()=>{const a=T();{const i=f([p(o,m)]),t=l(c({enabled:!0}),{configEditor:i.Editor}),n=t.Provided.panelFamilyBridge;s(a,"B1: the host provides panelFamilyBridge.editFull",()=>{e.equal(typeof n,"object"),e.equal(typeof n.editFull,"function")}),await u(a,"B2: a plain patch applies through the config editor",async()=>{e.equal(await n.editFull(o,y),!0),e.deepEqual(i.Writes,[{id:o,patch:y}]),e.deepEqual(t.Warns,[])});const r=f([p(h,_)]),d=l(c({enabled:!0}),{configEditor:r.Editor});await u(a,"B3: a secret namespace is refused with the exact line",async()=>{e.equal(await d.Provided.panelFamilyBridge.editFull(h,{token:"redacted",label:"x"}),!1),e.deepEqual(d.Warns,[`bridge: secret namespace refused for ${h}`]),e.deepEqual(r.Writes,[])});const g=f([p(h,z)]),E=l(c({enabled:!0}),{configEditor:g.Editor});await u(a,"B4: a nested secret field is refused too",async()=>{e.equal(await E.Provided.panelFamilyBridge.editFull(h,{scopes:{token:"redacted"}}),!1),e.deepEqual(E.Warns,[`bridge: secret namespace refused for ${h}`]),e.deepEqual(g.Writes,[])}),await u(a,"B5: an unknown namespace is refused",async()=>{const R=f([p(o,m)]),C=l(c({enabled:!0}),{configEditor:R.Editor});e.equal(await C.Provided.panelFamilyBridge.editFull("hook-dsh-missing",{}),!1),e.deepEqual(C.Warns,["bridge: unknown namespace hook-dsh-missing"]),e.deepEqual(R.Writes,[])});const w=l(c({enabled:!0}));await u(a,"B6: a composition without the editor is refused",async()=>{e.equal(await w.Provided.panelFamilyBridge.editFull(o,{}),!1),e.deepEqual(w.Warns,["bridge: config editor unavailable"])});const v=f([p(o,m)]),F=l(c({enabled:!0}),{configEditor:v.Editor});await u(a,"B7: a non-object patch is refused",async()=>{e.equal(await F.Provided.panelFamilyBridge.editFull(o,"not-a-patch"),!1),e.deepEqual(F.Warns,[`bridge: invalid patch for ${o}`]),e.deepEqual(v.Writes,[])});const k=f([p(o,m)]),B=l(c({enabled:!1}),{configEditor:k.Editor});await u(a,"B8: a disabled package refuses the bridge first",async()=>{e.equal(await B.Provided.panelFamilyBridge.editFull(o,y),!1),e.deepEqual(B.Warns,["bridge: disabled (enabled=false)"]),e.deepEqual(k.Writes,[])});const x={entries:()=>[p(o,m)],edit:async()=>{throw new Error("editor refused")}},P=l(c({enabled:!0}),{configEditor:x});await u(a,"B9: an editor rejection is reported",async()=>{e.equal(await P.Provided.panelFamilyBridge.editFull(o,y),!1),e.deepEqual(P.Warns,[`bridge: write failed for ${o}`])})}{const i=M(),n=l(c({enabled:!0}),{trace:i}).Provided.panelFamilyTrace;s(a,"T1: the forwarder is provided when the bus exists",()=>{e.equal(typeof n,"object"),e.equal(typeof n.on,"function"),e.equal(typeof n.ring,"function")}),s(a,"T2: on forwards a bus event to its listener",()=>{const d=[];n.on("observe/stamp",E=>d.push(E));const g=i.emit("observe/stamp",{path:"src/a.ts"});e.deepEqual(d,[g]),e.equal(d[0].trace,"trace-1"),e.deepEqual(d[0].payload,{path:"src/a.ts"})}),s(a,"T3: ring reads the bus newest first",()=>{i.emit("graph/indexed",{path:"src/b.ts"}),e.deepEqual(n.ring(2).map(d=>d.payload.path),["src/b.ts","src/a.ts"])});const r=l(c({enabled:!0}));s(a,"T4: without the bus no forwarder is provided",()=>{e.equal(r.Provided.panelFamilyTrace,void 0)})}{const i=A(),t=S({remote:i.Remote});q.apply(t.Context),s(a,"C1: the client half requires the Remote gateway",()=>{e.deepEqual(q.inject,["remote"]),e.equal(typeof q.apply,"function"),e.deepEqual(t.Injects.map(r=>r.deps),[["remote.playformFamilyPanel"]])}),t.Open(),s(a,"C2: the client half re-publishes the bridge and the trace",()=>{e.deepEqual(Object.keys(t.Provided).sort(),["panelFamilyBridge","trace"]),e.equal(typeof t.Provided.panelFamilyBridge.editFull,"function"),e.equal(typeof t.Provided.trace.on,"function")}),await u(a,"C3: the forwarded bridge normalizes the gateway answer",async()=>{e.equal(await t.Provided.panelFamilyBridge.editFull(o,y),!0),e.deepEqual(i.Calls,[{namespace:o,patch:y}])}),s(a,"C4: the forwarded trace relays a namespace event",()=>{const r=[];t.Provided.trace.on("graph/indexed",d=>r.push(d)),i.Emit("graph/indexed",{trace:"trace-9",kind:"graph/indexed"}),e.deepEqual(r,[{trace:"trace-9",kind:"graph/indexed"}]),e.deepEqual(t.Provided.trace.ring(1),[{trace:"trace-1",kind:"graph/indexed"}])});const n=S({remote:{}});q.apply(n.Context),n.Open(),s(a,"C5: without the namespace the client half provides only the SSE trace stream",()=>{e.deepEqual(Object.keys(n.Provided),["trace"]),e.equal(n.Provided.trace.live,!1),e.deepEqual(n.Provided.trace.tail(),[])})}return s(a,"K1: the client bundle is a closure factory that executes",()=>{const i=W();e.equal(i.includes("window.__ModuleLoader__.load({"),!0);const t=[],n={__ModuleLoader__:{load:d=>t.push(d)}};new Function("window",i)(n),e.equal(t.length,1),e.equal(t[0].id,"@playform/ets-client-dsh-panel-family-host"),e.equal(typeof t[0].factory,"function");const r=t[0].factory(()=>{throw new Error("the client bundle must not require an external")});e.deepEqual(r.inject,["remote"]),e.equal(typeof r.apply,"function"),e.deepEqual(r.default.inject,["remote"])}),j(a,"Bridge-And-Trace")},I=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(I){const a=await N();console.log(`${a} PASS - Bridge-And-Trace`)}export{N as runTest};
+import assert from "node:assert/strict";
+import {
+  BundleSource,
+  Check,
+  CheckAsync,
+  ClientPlugin,
+  Finish,
+  Make,
+  MakeBus,
+  MakeClient,
+  MakeCounter,
+  MakeEditor,
+  MakeEntry,
+  MakeSchema,
+  Validate
+} from "../Harness.js";
+const NORMALIZE = "hook-dsh-normalize-dash";
+const SECRET = "hook-dsh-secret-test";
+const NormalizeSchema = MakeSchema({
+  uid: 0,
+  refs: {
+    "0": {
+      type: "object",
+      dict: {
+        logFile: { type: "string", meta: { volatile: true } },
+        normalizeReasoning: { type: "boolean" }
+      }
+    }
+  }
+});
+const SecretSchema = MakeSchema({
+  uid: 0,
+  refs: {
+    "0": {
+      type: "object",
+      dict: {
+        token: { type: "string", meta: { role: "secret" } },
+        label: { type: "string" }
+      }
+    }
+  }
+});
+const NestedSecretSchema = MakeSchema({
+  uid: 0,
+  refs: {
+    "0": {
+      type: "object",
+      dict: {
+        scopes: {
+          type: "object",
+          dict: { token: { type: "string", meta: { role: "secret" } } }
+        }
+      }
+    }
+  }
+});
+const PATCH = {
+  logFile: "~/.dsh/playform/ets-hook-dsh-normalize-dash.log",
+  normalizeReasoning: true
+};
+const MakeRemote = () => {
+  const Calls = [];
+  const Listeners = /* @__PURE__ */ new Map();
+  return {
+    Calls,
+    Remote: {
+      playformFamilyPanel: {
+        editFull: async (Namespace, Patch) => {
+          Calls.push({ namespace: Namespace, patch: Patch });
+          return { ok: true, value: true };
+        },
+        trace: {
+          on: (Kind, Listener) => {
+            let Subscribers = Listeners.get(Kind);
+            if (Subscribers === void 0) {
+              Subscribers = /* @__PURE__ */ new Set();
+              Listeners.set(Kind, Subscribers);
+            }
+            Subscribers.add(Listener);
+            return () => {
+              Subscribers?.delete(Listener);
+            };
+          },
+          ring: (Limit) => [{ trace: "trace-1", kind: "graph/indexed" }].slice(0, Limit ?? 1)
+        }
+      }
+    },
+    Emit: (Kind, Envelope) => {
+      for (const Listener of Listeners.get(Kind) ?? []) Listener(Envelope);
+    }
+  };
+};
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Normalize = MakeEditor([MakeEntry(NORMALIZE, NormalizeSchema)]);
+    const Run = Make(Validate({ enabled: true }), { configEditor: Normalize.Editor });
+    const Bridge = Run.Provided["panelFamilyBridge"];
+    Check(Count, "B1: the host provides panelFamilyBridge.editFull", () => {
+      assert.equal(typeof Bridge, "object");
+      assert.equal(typeof Bridge.editFull, "function");
+    });
+    await CheckAsync(Count, "B2: a plain patch applies through the config editor", async () => {
+      assert.equal(await Bridge.editFull(NORMALIZE, PATCH), true);
+      assert.deepEqual(Normalize.Writes, [{ id: NORMALIZE, patch: PATCH }]);
+      assert.deepEqual(Run.Warns, []);
+    });
+    const SecretEditor = MakeEditor([MakeEntry(SECRET, SecretSchema)]);
+    const SecretRun = Make(Validate({ enabled: true }), {
+      configEditor: SecretEditor.Editor
+    });
+    await CheckAsync(Count, "B3: a secret namespace is refused with the exact line", async () => {
+      assert.equal(
+        await SecretRun.Provided["panelFamilyBridge"].editFull(SECRET, {
+          token: "redacted",
+          label: "x"
+        }),
+        false
+      );
+      assert.deepEqual(SecretRun.Warns, [
+        `bridge: secret namespace refused for ${SECRET}`
+      ]);
+      assert.deepEqual(SecretEditor.Writes, []);
+    });
+    const NestedEditor = MakeEditor([MakeEntry(SECRET, NestedSecretSchema)]);
+    const NestedRun = Make(Validate({ enabled: true }), {
+      configEditor: NestedEditor.Editor
+    });
+    await CheckAsync(Count, "B4: a nested secret field is refused too", async () => {
+      assert.equal(
+        await NestedRun.Provided["panelFamilyBridge"].editFull(SECRET, {
+          scopes: { token: "redacted" }
+        }),
+        false
+      );
+      assert.deepEqual(NestedRun.Warns, [
+        `bridge: secret namespace refused for ${SECRET}`
+      ]);
+      assert.deepEqual(NestedEditor.Writes, []);
+    });
+    await CheckAsync(Count, "B5: an unknown namespace is refused", async () => {
+      const Missing = MakeEditor([MakeEntry(NORMALIZE, NormalizeSchema)]);
+      const MissingRun = Make(Validate({ enabled: true }), {
+        configEditor: Missing.Editor
+      });
+      assert.equal(
+        await MissingRun.Provided["panelFamilyBridge"].editFull("hook-dsh-missing", {}),
+        false
+      );
+      assert.deepEqual(MissingRun.Warns, [
+        "bridge: unknown namespace hook-dsh-missing"
+      ]);
+      assert.deepEqual(Missing.Writes, []);
+    });
+    const Bare = Make(Validate({ enabled: true }));
+    await CheckAsync(Count, "B6: a composition without the editor is refused", async () => {
+      assert.equal(await Bare.Provided["panelFamilyBridge"].editFull(NORMALIZE, {}), false);
+      assert.deepEqual(Bare.Warns, ["bridge: config editor unavailable"]);
+    });
+    const InvalidEditor = MakeEditor([MakeEntry(NORMALIZE, NormalizeSchema)]);
+    const InvalidRun = Make(Validate({ enabled: true }), {
+      configEditor: InvalidEditor.Editor
+    });
+    await CheckAsync(Count, "B7: a non-object patch is refused", async () => {
+      assert.equal(
+        await InvalidRun.Provided["panelFamilyBridge"].editFull(NORMALIZE, "not-a-patch"),
+        false
+      );
+      assert.deepEqual(InvalidRun.Warns, [`bridge: invalid patch for ${NORMALIZE}`]);
+      assert.deepEqual(InvalidEditor.Writes, []);
+    });
+    const DisabledEditor = MakeEditor([MakeEntry(NORMALIZE, NormalizeSchema)]);
+    const Disabled = Make(Validate({ enabled: false }), {
+      configEditor: DisabledEditor.Editor
+    });
+    await CheckAsync(Count, "B8: a disabled package refuses the bridge first", async () => {
+      assert.equal(await Disabled.Provided["panelFamilyBridge"].editFull(NORMALIZE, PATCH), false);
+      assert.deepEqual(Disabled.Warns, ["bridge: disabled (enabled=false)"]);
+      assert.deepEqual(DisabledEditor.Writes, []);
+    });
+    const FailingEditor = {
+      entries: () => [MakeEntry(NORMALIZE, NormalizeSchema)],
+      edit: async () => {
+        throw new Error("editor refused");
+      }
+    };
+    const Failing = Make(Validate({ enabled: true }), { configEditor: FailingEditor });
+    await CheckAsync(Count, "B9: an editor rejection is reported", async () => {
+      assert.equal(await Failing.Provided["panelFamilyBridge"].editFull(NORMALIZE, PATCH), false);
+      assert.deepEqual(Failing.Warns, [`bridge: write failed for ${NORMALIZE}`]);
+    });
+  }
+  {
+    const Bus = MakeBus();
+    const Run = Make(Validate({ enabled: true }), { trace: Bus });
+    const Trace = Run.Provided["panelFamilyTrace"];
+    Check(Count, "T1: the forwarder is provided when the bus exists", () => {
+      assert.equal(typeof Trace, "object");
+      assert.equal(typeof Trace.on, "function");
+      assert.equal(typeof Trace.ring, "function");
+    });
+    Check(Count, "T2: on forwards a bus event to its listener", () => {
+      const Received = [];
+      Trace.on("observe/stamp", (Envelope) => Received.push(Envelope));
+      const Emitted = Bus.emit("observe/stamp", { path: "src/a.ts" });
+      assert.deepEqual(Received, [Emitted]);
+      assert.equal(Received[0].trace, "trace-1");
+      assert.deepEqual(Received[0].payload, { path: "src/a.ts" });
+    });
+    Check(Count, "T3: ring reads the bus newest first", () => {
+      Bus.emit("graph/indexed", { path: "src/b.ts" });
+      assert.deepEqual(
+        Trace.ring(2).map((Envelope) => Envelope.payload.path),
+        ["src/b.ts", "src/a.ts"]
+      );
+    });
+    const Bare = Make(Validate({ enabled: true }));
+    Check(Count, "T4: without the bus no forwarder is provided", () => {
+      assert.equal(Bare.Provided["panelFamilyTrace"], void 0);
+    });
+  }
+  {
+    const Remote = MakeRemote();
+    const Run = MakeClient({ remote: Remote.Remote });
+    ClientPlugin.apply(Run.Context);
+    Check(Count, "C1: the client half requires the Remote gateway", () => {
+      assert.deepEqual(ClientPlugin.inject, ["remote"]);
+      assert.equal(typeof ClientPlugin.apply, "function");
+      assert.deepEqual(
+        Run.Injects.map((Entry) => Entry.deps),
+        [["remote.playformFamilyPanel"]]
+      );
+    });
+    Run.Open();
+    Check(Count, "C2: the client half re-publishes the bridge and the trace", () => {
+      assert.deepEqual(Object.keys(Run.Provided).sort(), [
+        "panelFamilyBridge",
+        "trace"
+      ]);
+      assert.equal(typeof Run.Provided["panelFamilyBridge"].editFull, "function");
+      assert.equal(typeof Run.Provided["trace"].on, "function");
+    });
+    await CheckAsync(Count, "C3: the forwarded bridge normalizes the gateway answer", async () => {
+      assert.equal(
+        await Run.Provided["panelFamilyBridge"].editFull(NORMALIZE, PATCH),
+        true
+      );
+      assert.deepEqual(Remote.Calls, [{ namespace: NORMALIZE, patch: PATCH }]);
+    });
+    Check(Count, "C4: the forwarded trace relays a namespace event", () => {
+      const Received = [];
+      Run.Provided["trace"].on(
+        "graph/indexed",
+        (Envelope) => Received.push(Envelope)
+      );
+      Remote.Emit("graph/indexed", { trace: "trace-9", kind: "graph/indexed" });
+      assert.deepEqual(Received, [{ trace: "trace-9", kind: "graph/indexed" }]);
+      assert.deepEqual(Run.Provided["trace"].ring(1), [
+        { trace: "trace-1", kind: "graph/indexed" }
+      ]);
+    });
+    const Bare = MakeClient({ remote: {} });
+    ClientPlugin.apply(Bare.Context);
+    Bare.Open();
+    Check(Count, "C5: without the namespace the client half provides only the SSE trace stream", () => {
+      assert.deepEqual(Object.keys(Bare.Provided), ["trace"]);
+      assert.equal(Bare.Provided["trace"].live, false);
+      assert.deepEqual(Bare.Provided["trace"].tail(), []);
+    });
+  }
+  Check(Count, "K1: the client bundle is a closure factory that executes", () => {
+    const Code = BundleSource();
+    assert.equal(Code.includes("window.__ModuleLoader__.load({"), true);
+    const Rows = [];
+    const Window = {
+      __ModuleLoader__: { load: (Row) => Rows.push(Row) }
+    };
+    new Function("window", Code)(Window);
+    assert.equal(Rows.length, 1);
+    assert.equal(Rows[0].id, "@playform/ets-client-dsh-panel-family-host");
+    assert.equal(typeof Rows[0].factory, "function");
+    const Exports = Rows[0].factory(() => {
+      throw new Error("the client bundle must not require an external");
+    });
+    assert.deepEqual(Exports.inject, ["remote"]);
+    assert.equal(typeof Exports.apply, "function");
+    assert.deepEqual(Exports.default.inject, ["remote"]);
+  });
+  return Finish(Count, "Bridge-And-Trace");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Bridge-And-Trace`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

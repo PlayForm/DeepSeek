@@ -1,1 +1,58 @@
-import o from"node:assert/strict";import{Build as s,Check as a,Finish as i,Ingester as n,MakeCounter as c}from"../Harness.js";const r={read:"auto",index:"auto",record:"auto",suggest:"auto",write:"approve",commit:"approve",spawn:"approve",message:"auto"},l=async()=>{const t=c();return a(t,"P1: the ingester's schema fills the D6 policy defaults",()=>{const e=n.Config({});o.deepEqual(e.policy.get(),r,"the composed block carries the defaults")}),a(t,"P1: the built State carries the block on Config.policy",()=>{const e=s();o.deepEqual(e.Ingester.State.Config.policy,r,"the constructor keeps the block")}),a(t,"P1: a policy override lands on the built State",()=>{const e=s({policy:{write:"auto"}});o.deepEqual(e.Ingester.State.Config.policy,{...r,write:"auto"},"the override replaces write and keeps the rest")}),a(t,"P1: the writer's own action class keeps the approve posture",()=>{const e=s();o.equal(e.Ingester.State.Config.policy.write,"approve","the write waits for the decision"),o.equal(e.Ingester.State.Config.policy.record,"auto","the journal record is automatic")}),i(t,"Policy-Defaults")},p=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(p){const t=await l();console.log(`${t} PASS - Policy-Defaults`)}export{l as runTest};
+import assert from "node:assert/strict";
+import { Build, Check, Finish, Ingester, MakeCounter } from "../Harness.js";
+const Defaults = {
+  read: "auto",
+  index: "auto",
+  record: "auto",
+  suggest: "auto",
+  write: "approve",
+  commit: "approve",
+  spawn: "approve",
+  message: "auto"
+};
+const runTest = async () => {
+  const Count = MakeCounter();
+  Check(Count, "P1: the ingester's schema fills the D6 policy defaults", () => {
+    const Config = Ingester.Config({});
+    assert.deepEqual(Config.policy.get(), Defaults, "the composed block carries the defaults");
+  });
+  Check(Count, "P1: the built State carries the block on Config.policy", () => {
+    const Run = Build();
+    assert.deepEqual(
+      Run.Ingester.State.Config.policy,
+      Defaults,
+      "the constructor keeps the block"
+    );
+  });
+  Check(Count, "P1: a policy override lands on the built State", () => {
+    const Run = Build({ policy: { write: "auto" } });
+    assert.deepEqual(
+      Run.Ingester.State.Config.policy,
+      { ...Defaults, write: "auto" },
+      "the override replaces write and keeps the rest"
+    );
+  });
+  Check(Count, "P1: the writer's own action class keeps the approve posture", () => {
+    const Run = Build();
+    assert.equal(
+      Run.Ingester.State.Config.policy.write,
+      "approve",
+      "the write waits for the decision"
+    );
+    assert.equal(
+      Run.Ingester.State.Config.policy.record,
+      "auto",
+      "the journal record is automatic"
+    );
+  });
+  return Finish(Count, "Policy-Defaults");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Policy-Defaults`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

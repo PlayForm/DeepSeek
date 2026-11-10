@@ -28,7 +28,7 @@
  * and the emitted events stay byte-identical.
  */
 import type { FsTarget, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 import { Context, Effect, Layer } from "effect";
 import { type Over } from "../Function/Write.js";
 declare const Write_base: Context.ServiceClass<Write, "dsh.factory.Write", {

@@ -1,1 +1,208 @@
-import t from"node:assert/strict";import{Build as i,Check as s,CheckAsync as y,Decision as c,Finish as f,Journal as u,MakeCounter as g,Proposal as h,Sha as n}from"../Harness.js";const e="/repo/a.txt",r="/repo/b.txt",v=async()=>{const p=g();{const o=i({},{[e]:"hello world",[r]:"keep"}),a=await o.Ingester.Apply(h("p1",[{path:e,version:n("hello world"),why:"w"}],[{path:e,find:"world",replace:"there",why:"w"}]),c("p1"));await y(p,"A1: the fenced edit applies and reports the new version",async()=>{t.equal(a.applied,1),t.equal(a.conflicts,0),t.equal(a.recovery,0),t.deepEqual(a.perTarget,[{path:e,outcome:"applied",version:n("hello there")}]),t.equal(o.Files[e],"hello there"),t.equal(o.Files[r],"keep")}),s(p,"A1: the applied outcome is journaled with the version detail",()=>{t.deepEqual(u().map(l=>[l.event,l.proposal,l.path,l.detail]),[["applied","p1",e,`version ${n("hello there")}`]])})}{const o=i({},{[e]:"changed since prepare",[r]:"untouched"}),a=await o.Ingester.Apply(h("p1",[{path:e,version:n("the prepared content"),why:"w"},{path:r,version:n("untouched"),why:"w"}],[{path:e,find:"changed",replace:"x",why:"w"},{path:r,find:"untouched",replace:"y",why:"w"}]),c("p1"));s(p,"A2: a changed content is a conflict, not a silent overwrite",()=>{t.deepEqual(a.perTarget,[{path:e,outcome:"conflict"}]),t.equal(a.conflicts,1),t.equal(a.applied,0),t.equal(o.Files[e],"changed since prepare")}),s(p,"A2: stopOnConflict stops at the first conflict (B never resolved)",()=>{t.deepEqual(o.Fs.resolved,[e]),t.equal(u()[0].detail,"content changed since prepare"),t.deepEqual(u().map(l=>l.path),[e])})}{const a=await i({},{[r]:"present"}).Ingester.Apply(h("p1",[{path:e,version:"v",why:"w"}],[{path:e,find:"x",replace:"y",why:"w"}]),c("p1"));s(p,"A3: an absent target conflicts with the byte-exact reason",()=>{t.deepEqual(a.perTarget,[{path:e,outcome:"conflict"}]),t.deepEqual(u().map(l=>[l.event,l.detail]),[["conflict","target absent"]])})}{const a=await i({},{[e]:"current text"}).Ingester.Apply(h("p1",[{path:e,version:n("current text"),why:"w"}],[{path:e,find:"stale match",replace:"new",why:"w"}]),c("p1"));s(p,"A4: an operation that no longer matches conflicts with its count",()=>{t.deepEqual(a.perTarget,[{path:e,outcome:"conflict"}]),t.deepEqual(u().map(d=>d.detail),["1 operation(s) no longer match"])});const w=await i({},{[e]:"current text"}).Ingester.Apply(h("p2",[{path:e,version:n("current text"),why:"w"}],[{path:"/repo/other.txt",find:"x",replace:"y",why:"w"}]),c("p2"));s(p,"A4: a target with no operations of its own conflicts",()=>{t.deepEqual(w.perTarget,[{path:e,outcome:"conflict"}]),t.ok(u().some(d=>d.detail==="no operations for target"))})}{const o=i({},{[e]:"hello"},!0),a=await o.Ingester.Apply(h("p1",[{path:e,version:n("hello"),why:"w"}],[{path:e,find:"hello",replace:"hi",why:"w"}]),c("p1"));s(p,"A5: a fs edit failure is recovery-required with the error detail",()=>{t.deepEqual(a.perTarget,[{path:e,outcome:"recovery-required"}]),t.equal(a.recovery,1),t.ok(u()[0].detail.includes("FS_STALE_VERSION")),t.equal(u()[0].event,"recovery-required"),t.equal(o.Files[e],"hello")})}{const o=i({stopOnConflict:!1},{[e]:"changed",[r]:"good content"}),a=await o.Ingester.Apply(h("p1",[{path:e,version:n("prepared-a"),why:"w"},{path:r,version:n("good content"),why:"w"}],[{path:e,find:"changed",replace:"x",why:"w"},{path:r,find:"good",replace:"better",why:"w"}]),c("p1"));s(p,"A6: with stopOnConflict=false the run continues and reports each target",()=>{t.deepEqual(a.perTarget,[{path:e,outcome:"conflict"},{path:r,outcome:"applied",version:n("better content")}]),t.equal(a.conflicts,1),t.equal(a.applied,1),t.equal(o.Files[r],"better content")})}{const o=i({},{[e]:"one two three"}),a=await o.Ingester.Apply(h("p1",[{path:e,version:n("one two three"),why:"w"}],[{path:e,find:"one",replace:"1",why:"w"},{path:e,find:"two",replace:"2",why:"w"}]),c("p1"));s(p,"A7: chained operations each receive the previous version",()=>{t.deepEqual(o.Fs.edits.map(d=>d.version),[n("one two three"),n("1 two three")]),t.equal(o.Files[e],"1 2 three"),t.equal(a.perTarget[0].version,n("1 2 three"))});const l=i({maxTargets:1},{[e]:"one",[r]:"two"}),w=await l.Ingester.Apply(h("p2",[{path:e,version:n("one"),why:"w"},{path:r,version:n("two"),why:"w"}],[{path:e,find:"one",replace:"ONE",why:"w"},{path:r,find:"two",replace:"TWO",why:"w"}]),c("p2"));s(p,"A7: maxTargets bounds the run to the first targets",()=>{t.deepEqual(w.perTarget,[{path:e,outcome:"applied",version:n("ONE")}]),t.equal(l.Files[r],"two")})}return f(p,"Apply-And-Fences")},q=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(q){const p=await v();console.log(`${p} PASS - Apply-And-Fences`)}export{v as runTest};
+import assert from "node:assert/strict";
+import {
+  Build,
+  Check,
+  CheckAsync,
+  Decision,
+  Finish,
+  Journal,
+  MakeCounter,
+  Proposal,
+  Sha
+} from "../Harness.js";
+const A = "/repo/a.txt";
+const B = "/repo/b.txt";
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Run = Build({}, { [A]: "hello world", [B]: "keep" });
+    const Result = await Run.Ingester.Apply(
+      Proposal("p1", [{ path: A, version: Sha("hello world"), why: "w" }], [
+        { path: A, find: "world", replace: "there", why: "w" }
+      ]),
+      Decision("p1")
+    );
+    await CheckAsync(Count, "A1: the fenced edit applies and reports the new version", async () => {
+      assert.equal(Result.applied, 1);
+      assert.equal(Result.conflicts, 0);
+      assert.equal(Result.recovery, 0);
+      assert.deepEqual(Result.perTarget, [{ path: A, outcome: "applied", version: Sha("hello there") }]);
+      assert.equal(Run.Files[A], "hello there");
+      assert.equal(Run.Files[B], "keep");
+    });
+    Check(Count, "A1: the applied outcome is journaled with the version detail", () => {
+      assert.deepEqual(
+        Journal().map((Line) => [Line.event, Line.proposal, Line.path, Line.detail]),
+        [["applied", "p1", A, `version ${Sha("hello there")}`]]
+      );
+    });
+  }
+  {
+    const Run = Build(
+      {},
+      { [A]: "changed since prepare", [B]: "untouched" }
+    );
+    const Result = await Run.Ingester.Apply(
+      Proposal(
+        "p1",
+        [
+          { path: A, version: Sha("the prepared content"), why: "w" },
+          { path: B, version: Sha("untouched"), why: "w" }
+        ],
+        [
+          { path: A, find: "changed", replace: "x", why: "w" },
+          { path: B, find: "untouched", replace: "y", why: "w" }
+        ]
+      ),
+      Decision("p1")
+    );
+    Check(Count, "A2: a changed content is a conflict, not a silent overwrite", () => {
+      assert.deepEqual(Result.perTarget, [{ path: A, outcome: "conflict" }]);
+      assert.equal(Result.conflicts, 1);
+      assert.equal(Result.applied, 0);
+      assert.equal(Run.Files[A], "changed since prepare");
+    });
+    Check(Count, "A2: stopOnConflict stops at the first conflict (B never resolved)", () => {
+      assert.deepEqual(Run.Fs.resolved, [A]);
+      assert.equal(Journal()[0].detail, "content changed since prepare");
+      assert.deepEqual(Journal().map((Line) => Line.path), [A]);
+    });
+  }
+  {
+    const Run = Build({}, { [B]: "present" });
+    const Result = await Run.Ingester.Apply(
+      Proposal("p1", [{ path: A, version: "v", why: "w" }], [
+        { path: A, find: "x", replace: "y", why: "w" }
+      ]),
+      Decision("p1")
+    );
+    Check(Count, "A3: an absent target conflicts with the byte-exact reason", () => {
+      assert.deepEqual(Result.perTarget, [{ path: A, outcome: "conflict" }]);
+      assert.deepEqual(
+        Journal().map((Line) => [Line.event, Line.detail]),
+        [["conflict", "target absent"]]
+      );
+    });
+  }
+  {
+    const Run = Build({}, { [A]: "current text" });
+    const Result = await Run.Ingester.Apply(
+      Proposal("p1", [{ path: A, version: Sha("current text"), why: "w" }], [
+        { path: A, find: "stale match", replace: "new", why: "w" }
+      ]),
+      Decision("p1")
+    );
+    Check(Count, "A4: an operation that no longer matches conflicts with its count", () => {
+      assert.deepEqual(Result.perTarget, [{ path: A, outcome: "conflict" }]);
+      assert.deepEqual(
+        Journal().map((Line) => Line.detail),
+        ["1 operation(s) no longer match"]
+      );
+    });
+    const NoOps = Build({}, { [A]: "current text" });
+    const R2 = await NoOps.Ingester.Apply(
+      Proposal(
+        "p2",
+        [{ path: A, version: Sha("current text"), why: "w" }],
+        [{ path: "/repo/other.txt", find: "x", replace: "y", why: "w" }]
+      ),
+      Decision("p2")
+    );
+    Check(Count, "A4: a target with no operations of its own conflicts", () => {
+      assert.deepEqual(R2.perTarget, [{ path: A, outcome: "conflict" }]);
+      assert.ok(Journal().some((Line) => Line.detail === "no operations for target"));
+    });
+  }
+  {
+    const Run = Build({}, { [A]: "hello" }, true);
+    const Result = await Run.Ingester.Apply(
+      Proposal("p1", [{ path: A, version: Sha("hello"), why: "w" }], [
+        { path: A, find: "hello", replace: "hi", why: "w" }
+      ]),
+      Decision("p1")
+    );
+    Check(Count, "A5: a fs edit failure is recovery-required with the error detail", () => {
+      assert.deepEqual(Result.perTarget, [{ path: A, outcome: "recovery-required" }]);
+      assert.equal(Result.recovery, 1);
+      assert.ok(Journal()[0].detail.includes("FS_STALE_VERSION"));
+      assert.equal(Journal()[0].event, "recovery-required");
+      assert.equal(Run.Files[A], "hello");
+    });
+  }
+  {
+    const Run = Build(
+      { stopOnConflict: false },
+      { [A]: "changed", [B]: "good content" }
+    );
+    const Result = await Run.Ingester.Apply(
+      Proposal(
+        "p1",
+        [
+          { path: A, version: Sha("prepared-a"), why: "w" },
+          { path: B, version: Sha("good content"), why: "w" }
+        ],
+        [
+          { path: A, find: "changed", replace: "x", why: "w" },
+          { path: B, find: "good", replace: "better", why: "w" }
+        ]
+      ),
+      Decision("p1")
+    );
+    Check(Count, "A6: with stopOnConflict=false the run continues and reports each target", () => {
+      assert.deepEqual(Result.perTarget, [
+        { path: A, outcome: "conflict" },
+        { path: B, outcome: "applied", version: Sha("better content") }
+      ]);
+      assert.equal(Result.conflicts, 1);
+      assert.equal(Result.applied, 1);
+      assert.equal(Run.Files[B], "better content");
+    });
+  }
+  {
+    const Run = Build({}, { [A]: "one two three" });
+    const Result = await Run.Ingester.Apply(
+      Proposal("p1", [{ path: A, version: Sha("one two three"), why: "w" }], [
+        { path: A, find: "one", replace: "1", why: "w" },
+        { path: A, find: "two", replace: "2", why: "w" }
+      ]),
+      Decision("p1")
+    );
+    Check(Count, "A7: chained operations each receive the previous version", () => {
+      assert.deepEqual(
+        Run.Fs.edits.map((E) => E.version),
+        [Sha("one two three"), Sha("1 two three")]
+      );
+      assert.equal(Run.Files[A], "1 2 three");
+      assert.equal(Result.perTarget[0].version, Sha("1 2 three"));
+    });
+    const Bounded = Build({ maxTargets: 1 }, { [A]: "one", [B]: "two" });
+    const R2 = await Bounded.Ingester.Apply(
+      Proposal(
+        "p2",
+        [
+          { path: A, version: Sha("one"), why: "w" },
+          { path: B, version: Sha("two"), why: "w" }
+        ],
+        [
+          { path: A, find: "one", replace: "ONE", why: "w" },
+          { path: B, find: "two", replace: "TWO", why: "w" }
+        ]
+      ),
+      Decision("p2")
+    );
+    Check(Count, "A7: maxTargets bounds the run to the first targets", () => {
+      assert.deepEqual(R2.perTarget, [{ path: A, outcome: "applied", version: Sha("ONE") }]);
+      assert.equal(Bounded.Files[B], "two");
+    });
+  }
+  return Finish(Count, "Apply-And-Fences");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Apply-And-Fences`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

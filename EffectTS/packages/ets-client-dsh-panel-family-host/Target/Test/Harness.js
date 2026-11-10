@@ -1,1 +1,209 @@
-import a from"node:assert/strict";import*as u from"node:fs";import*as y from"node:os";import*as p from"node:path";import l from"../../Target/Library.js";import f from"../../Target/Client.js";const R=f,m=()=>({N:0,F:0}),g=(n,e,r)=>{n.N++;try{r(),console.log(`PASS - ${e}`)}catch(t){n.F++,console.log(`FAIL - ${e}`),console.log(t instanceof Error?t.message:String(t))}},E=async(n,e,r)=>{n.N++;try{await r(),console.log(`PASS - ${e}`)}catch(t){n.F++,console.log(`FAIL - ${e}`),console.log(t instanceof Error?t.message:String(t))}},C=(n,e)=>{if(n.F!==0)throw new Error(`${e}: ${n.F} failed check(s)`);return n.N},k=()=>u.mkdtempSync(p.join(y.tmpdir(),"panel-host-smoke-")),h=(n,e={})=>{const r=[],t=[],i={},o={get:c=>e[c],logger:{info:c=>{r.push(c)},warn:c=>{t.push(c)}},provide:(c,d)=>(i[c]=d??!0,()=>!0),effect:c=>(c(),()=>!0)},s={Context:o,Lines:r,Warns:t,Provided:i,Raw:n,Services:e};return s.Returned=l.apply(o,n),s.Service=i.panelFamilyHost,s},x=n=>l.Config({...n}),P=(n,e,r)=>{const t=p.join(n,e);return u.writeFileSync(t,r,"utf8"),t},b=n=>u.readFileSync(n),N=n=>u.readdirSync(n).sort(),M=(n,e)=>n.Lines.filter(r=>r.includes(e)),$=n=>{const e=[];return{Editor:{entries:()=>n,edit:async(t,i)=>{e.push({id:t?.options?.id,patch:i({},{})})}},Writes:e}},L=(n,e)=>({options:{id:n,name:`@playform/${n}`},fiber:{runtime:{Config:e}}}),q=n=>({toJSON:()=>n}),A=()=>{const n=new Map,e=[];let r=0;return{on:(t,i)=>{let o=n.get(t);return o===void 0&&(o=new Set,n.set(t,o)),o.add(i),()=>{o?.delete(i)}},ring:t=>[...e].reverse().slice(0,t??256),emit:(t,i)=>{r+=1;const o={trace:`trace-${r}`,kind:t,at:r,payload:i};e.push(o);for(const s of n.get(t)??[])s(o);return o}}},j=(n={})=>{const e={};n.remote!==void 0&&(e.remote=n.remote);const r={},t=[],i={get:s=>e[s],provide:(s,c)=>(r[s]=c,()=>!0),inject:(s,c)=>(t.push({deps:s,callback:c}),()=>!0),effect:s=>(s(),()=>!0)},o={Context:i,Provided:r,Injects:t,Services:e};return o.Open=()=>{for(const s of t)s.callback(i)},o},B=()=>u.readFileSync(new URL("../Client.bundle.js",import.meta.url),"utf8"),S=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(S){const n=m();g(n,"selfcheck: a passing assertion counts as PASS",()=>{a.equal(1,1)}),g(n,"selfcheck: a failing assertion counts as FAIL (expected)",()=>{a.equal(1,2)});const e=h(x({enabled:!0,logRoot:k()}));g(n,"selfcheck: the fake ctx registers the plugin's apply-time wiring",()=>{a.equal(e.Returned,void 0),a.ok(e.Service!==void 0),a.equal(typeof e.Service.tail,"function"),a.equal(typeof e.Service.stats,"function"),a.deepEqual(e.Lines,["host: activated (enabled=true)"])}),n.N===3&&n.F===1?console.log("Harness selfcheck OK"):(console.log(`Harness selfcheck BROKEN (N=${n.N}, F=${n.F})`),process.exitCode=1)}export{B as BundleSource,b as Bytes,g as Check,E as CheckAsync,R as ClientPlugin,C as Finish,M as LinesWith,h as Make,A as MakeBus,j as MakeClient,m as MakeCounter,$ as MakeEditor,L as MakeEntry,k as MakeRoot,q as MakeSchema,N as Names,l as Plugin,P as Put,x as Validate};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import ClientPluginModule from "../../Target/Client.js";
+const ClientPlugin = ClientPluginModule;
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const CheckAsync = async (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    await Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) {
+    throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const MakeRoot = () => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "panel-host-smoke-"));
+const Make = (Raw, Services = {}) => {
+  const Lines = [];
+  const Warns = [];
+  const Provided = {};
+  const Context = {
+    get: (Name) => Services[Name],
+    logger: {
+      info: (M) => {
+        Lines.push(M);
+      },
+      warn: (M) => {
+        Warns.push(M);
+      }
+    },
+    provide: (Name, Value) => {
+      Provided[Name] = Value ?? true;
+      return () => true;
+    },
+    // The fiber seam: the real cordis context owns the disposer of whatever
+    // the callback returns; the fixture runs it once and hands back a
+    // no-op teardown (the suite asserts the route registration, not the
+    // fiber).
+    effect: (Callback) => {
+      Callback();
+      return () => true;
+    }
+  };
+  const Run = {
+    Context,
+    Lines,
+    Warns,
+    Provided,
+    Raw,
+    Services
+  };
+  Run.Returned = Plugin.apply(Context, Raw);
+  Run.Service = Provided["panelFamilyHost"];
+  return Run;
+};
+const Validate = (Raw) => Plugin.Config({ ...Raw });
+const Put = (Dir, Name, Content) => {
+  const File = Path.join(Dir, Name);
+  FileSystem.writeFileSync(File, Content, "utf8");
+  return File;
+};
+const Bytes = (File) => FileSystem.readFileSync(File);
+const Names = (Dir) => FileSystem.readdirSync(Dir).sort();
+const LinesWith = (Run, Needle) => Run.Lines.filter((L) => L.includes(Needle));
+const MakeEditor = (Entries) => {
+  const Writes = [];
+  const Editor = {
+    entries: () => Entries,
+    edit: async (Entry, Change) => {
+      Writes.push({ id: Entry?.options?.id, patch: Change({}, {}) });
+    }
+  };
+  return { Editor, Writes };
+};
+const MakeEntry = (Id, Schema) => ({
+  options: { id: Id, name: `@playform/${Id}` },
+  fiber: { runtime: { Config: Schema } }
+});
+const MakeSchema = (Serialized) => ({
+  toJSON: () => Serialized
+});
+const MakeBus = () => {
+  const Listeners = /* @__PURE__ */ new Map();
+  const Ring = [];
+  let Sequence = 0;
+  return {
+    on: (Kind, Listener) => {
+      let Subscribers = Listeners.get(Kind);
+      if (Subscribers === void 0) {
+        Subscribers = /* @__PURE__ */ new Set();
+        Listeners.set(Kind, Subscribers);
+      }
+      Subscribers.add(Listener);
+      return () => {
+        Subscribers?.delete(Listener);
+      };
+    },
+    ring: (Limit) => [...Ring].reverse().slice(0, Limit ?? 256),
+    emit: (Kind, Payload) => {
+      Sequence += 1;
+      const Envelope = {
+        trace: `trace-${Sequence}`,
+        kind: Kind,
+        at: Sequence,
+        payload: Payload
+      };
+      Ring.push(Envelope);
+      for (const Listener of Listeners.get(Kind) ?? []) Listener(Envelope);
+      return Envelope;
+    }
+  };
+};
+const MakeClient = (Options = {}) => {
+  const Services = {};
+  if (Options.remote !== void 0) Services["remote"] = Options.remote;
+  const Provided = {};
+  const Injects = [];
+  const Context = {
+    get: (Name) => Services[Name],
+    provide: (Name, Value) => {
+      Provided[Name] = Value;
+      return () => true;
+    },
+    inject: (Deps, Callback) => {
+      Injects.push({ deps: Deps, callback: Callback });
+      return () => true;
+    },
+    // The client fiber seam: the real client context owns the disposer of
+    // whatever the callback returns; the fixture runs it once and hands
+    // back a no-op teardown.
+    effect: (Callback) => {
+      Callback();
+      return () => true;
+    }
+  };
+  const Run = { Context, Provided, Injects, Services };
+  Run.Open = () => {
+    for (const Entry of Injects) Entry.callback(Context);
+  };
+  return Run;
+};
+const BundleSource = () => FileSystem.readFileSync(new URL("../Client.bundle.js", import.meta.url), "utf8");
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Count = MakeCounter();
+  Check(Count, "selfcheck: a passing assertion counts as PASS", () => {
+    assert.equal(1, 1);
+  });
+  Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
+    assert.equal(1, 2);
+  });
+  const Run = Make(Validate({ enabled: true, logRoot: MakeRoot() }));
+  Check(Count, "selfcheck: the fake ctx registers the plugin's apply-time wiring", () => {
+    assert.equal(Run.Returned, void 0);
+    assert.ok(Run.Service !== void 0);
+    assert.equal(typeof Run.Service.tail, "function");
+    assert.equal(typeof Run.Service.stats, "function");
+    assert.deepEqual(Run.Lines, ["host: activated (enabled=true)"]);
+  });
+  if (Count.N === 3 && Count.F === 1) {
+    console.log("Harness selfcheck OK");
+  } else {
+    console.log(`Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+    process.exitCode = 1;
+  }
+}
+export {
+  BundleSource,
+  Bytes,
+  Check,
+  CheckAsync,
+  ClientPlugin,
+  Finish,
+  LinesWith,
+  Make,
+  MakeBus,
+  MakeClient,
+  MakeCounter,
+  MakeEditor,
+  MakeEntry,
+  MakeRoot,
+  MakeSchema,
+  Names,
+  Plugin,
+  Put,
+  Validate
+};
+//# sourceMappingURL=Harness.js.map

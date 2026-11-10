@@ -1,26 +1,35 @@
-// Detect - the DETERMINISTIC CLASSIFIER (the plan §4.3: pure function, no
-// LLM, no I/O, O(intents x rules) + a map lookup). Given the compiled rules
-// and a call probe (the tool name + the JSON of its arguments), it returns
-// the winning Match or null - the algebra's identity element is silence.
-//
-// The rules are the SYNTHETIC graph intents of the call (Function/Apply
-// builds them from the graph query and prepends them as data), so the
-// classifier never reads a table and never learns where a candidate came
-// from: it sums the evidence and applies the gate.
-//
-// The math is the plan's §3.5: k = sigmoid(sum(weights of matching signals)
-// + bias), bias -0.6 so that a single weak signal does not cross the default
-// threshold.
-//
-// The regexes arrive precompiled: Function/Apply compiles the synthetic rule
-// set once per judged call (one literal `.` pattern per intent), so the hot
-// path never builds a regex per signal.
+/**
+ * @module Detect
+ *
+ * Classifies a call probe deterministically against compiled rules and returns the Match.
+ *
+ * @remarks
+ * The DETERMINISTIC CLASSIFIER (the plan §4.3: pure function, no LLM, no I/O,
+ * O(intents x rules) + a map lookup). Given the compiled rules and a call probe (the
+ * tool name + the JSON of its arguments), it returns the winning Match or null - the
+ * algebra's identity element is silence.
+ *
+ * The rules are the SYNTHETIC graph intents of the call (Function/Apply builds them from
+ * the graph query and prepends them as data), so the classifier never reads a table and
+ * never learns where a candidate came from: it sums the evidence and applies the gate.
+ *
+ * The math is the plan's §3.5: k = sigmoid(sum(weights of matching signals) + bias),
+ * bias -0.6 so that a single weak signal does not cross the default threshold.
+ *
+ * The regexes arrive precompiled: Function/Apply compiles the synthetic rule set once
+ * per judged call (one literal `.` pattern per intent), so the hot path never builds a
+ * regex per signal.
+ */
 import type { CompiledIntent, Intent, Match } from "@Interface/Pack.js";
 
-/** The plan's bias constant (§3.5): keeps a single weak signal below the gate. */
+/**
+ * The plan's bias constant (§3.5): keeps a single weak signal below the gate.
+ */
 const Bias = -0.6;
 
-/** The sigmoid squashes the weighted evidence sum into [0,1]. */
+/**
+ * The sigmoid squashes the weighted evidence sum into [0,1].
+ */
 const Sigmoid = (X: number): number => 1 / (1 + Math.exp(-X));
 
 export default (Rules: CompiledIntent[], Tool: string, Probe: string): Match | null => {

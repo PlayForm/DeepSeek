@@ -25,7 +25,7 @@
  * it never alters the ledger bytes, the logger prefix, or the ordering
  * (logger first, then the file - both inside the span).
  */
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 import { Context, Effect, Layer } from "effect";
 declare const Ledger_base: Context.ServiceClass<Ledger, "dsh.factory.Ledger", {
     /**

@@ -365,15 +365,15 @@
 			"version": "0.2.1",
 			"seed": "1c89e50a5b10b6620bad93e90da591fc8a8f279ed56d67c62d7004d023572e53",
 			"grammar": "spike-star",
-			"order": 12,
+			"order": 8,
 			"arms": 8,
 			"rings": 2,
 			"orbit": 8,
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "63702a27f8b2a87ebdcb970ff70894a3e89f83347a6252d7987899e36303bb8c",
-				"colour": "5f61edb7e32a10c0c599115d4f935fbbf330e57495bf82a937e1d1ef00bbb06f"
+				"mono": "a19379e7e41f7743c12ea7bdae96e878afe9e74a3e03c5cd3367bea90c0bf869",
+				"colour": "f909146e0b074be5ebf8091454e6cee29b812085adeceea496f08030461c79e4"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-graph-suggester.svg",

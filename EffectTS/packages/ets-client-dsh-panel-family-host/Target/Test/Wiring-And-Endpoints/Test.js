@@ -1,1 +1,79 @@
-import e from"node:assert/strict";import{Check as n,CheckAsync as d,Finish as r,LinesWith as c,Make as s,MakeCounter as u,MakeRoot as i,Plugin as l,Validate as o}from"../Harness.js";const p=async()=>{const t=u();{const a=s(o({enabled:!0,logRoot:i()}));n(t,"L1: the default object carries name/apply/Config/inject",()=>{e.equal(l.name,"client-dsh-panel-family-host"),e.equal(typeof l.apply,"function"),e.ok(l.Config),e.deepEqual(l.inject,["webServer"])}),n(t,"L1: apply returns NOTHING and the service is provided",()=>{e.equal(a.Returned,void 0),e.ok(a.Service!==void 0),e.equal(typeof a.Service.tail,"function"),e.equal(typeof a.Service.stats,"function")})}{const a=s(o({logRoot:i()}));n(t,"W1: the cold mount logs the byte-exact disabled line",()=>{e.deepEqual(a.Lines,["host: activated (enabled=false)"])}),await d(t,"W1: a disabled endpoint answers with the refusal, never reads",async()=>{e.deepEqual(await a.Service.tail("hook-dsh-workspace-observe",5),{ok:!1,code:"rejected",message:"the panel-family host is disabled (enabled=false)"}),e.deepEqual(await a.Service.stats(),{ok:!1,code:"rejected",message:"the panel-family host is disabled (enabled=false)"})})}{const a=s(o({enabled:!0,logRoot:i()}));n(t,"W2: the activation line is byte-exact",()=>{e.deepEqual(a.Lines,["host: activated (enabled=true)"])})}n(t,"X1: maxLines below 1 fails loud at load",()=>{e.throws(()=>o({maxLines:0}),/expected number >= 1/)}),n(t,"X1: maxLines above 2000 fails loud at load",()=>{e.throws(()=>o({maxLines:2001}),/expected number <= 2000/)});{const a=s(o({enabled:!0,logRoot:i()}));n(t,"W3: nothing is logged on apply beyond the activation line",()=>{e.deepEqual(c(a,"host:"),a.Lines),e.equal(a.Lines.length,1)})}return r(t,"Wiring-And-Endpoints")},h=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(h){const t=await p();console.log(`${t} PASS - Wiring-And-Endpoints`)}export{p as runTest};
+import assert from "node:assert/strict";
+import {
+  Check,
+  CheckAsync,
+  Finish,
+  LinesWith,
+  Make,
+  MakeCounter,
+  MakeRoot,
+  Plugin,
+  Validate
+} from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Run = Make(Validate({ enabled: true, logRoot: MakeRoot() }));
+    Check(Count, "L1: the default object carries name/apply/Config/inject", () => {
+      assert.equal(Plugin.name, "client-dsh-panel-family-host");
+      assert.equal(typeof Plugin.apply, "function");
+      assert.ok(Plugin.Config);
+      assert.deepEqual(Plugin.inject, ["webServer"]);
+    });
+    Check(Count, "L1: apply returns NOTHING and the service is provided", () => {
+      assert.equal(Run.Returned, void 0);
+      assert.ok(Run.Service !== void 0);
+      assert.equal(typeof Run.Service.tail, "function");
+      assert.equal(typeof Run.Service.stats, "function");
+    });
+  }
+  {
+    const Run = Make(Validate({ logRoot: MakeRoot() }));
+    Check(Count, "W1: the cold mount logs the byte-exact disabled line", () => {
+      assert.deepEqual(Run.Lines, ["host: activated (enabled=false)"]);
+    });
+    await CheckAsync(Count, "W1: a disabled endpoint answers with the refusal, never reads", async () => {
+      assert.deepEqual(await Run.Service.tail("hook-dsh-workspace-observe", 5), {
+        ok: false,
+        code: "rejected",
+        message: "the panel-family host is disabled (enabled=false)"
+      });
+      assert.deepEqual(await Run.Service.stats(), {
+        ok: false,
+        code: "rejected",
+        message: "the panel-family host is disabled (enabled=false)"
+      });
+    });
+  }
+  {
+    const Run = Make(Validate({ enabled: true, logRoot: MakeRoot() }));
+    Check(Count, "W2: the activation line is byte-exact", () => {
+      assert.deepEqual(Run.Lines, ["host: activated (enabled=true)"]);
+    });
+  }
+  {
+    Check(Count, "X1: maxLines below 1 fails loud at load", () => {
+      assert.throws(() => Validate({ maxLines: 0 }), /expected number >= 1/);
+    });
+    Check(Count, "X1: maxLines above 2000 fails loud at load", () => {
+      assert.throws(() => Validate({ maxLines: 2001 }), /expected number <= 2000/);
+    });
+  }
+  {
+    const Run = Make(Validate({ enabled: true, logRoot: MakeRoot() }));
+    Check(Count, "W3: nothing is logged on apply beyond the activation line", () => {
+      assert.deepEqual(LinesWith(Run, "host:"), Run.Lines);
+      assert.equal(Run.Lines.length, 1);
+    });
+  }
+  return Finish(Count, "Wiring-And-Endpoints");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Wiring-And-Endpoints`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

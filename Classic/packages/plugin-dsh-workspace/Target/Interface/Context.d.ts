@@ -1,4 +1,3 @@
-import type { WorkspaceGraph } from "./Graph.js";
 /**
  * @module Context
  *
@@ -18,6 +17,7 @@ import type { WorkspaceGraph } from "./Graph.js";
  * family's distribution law keeps the consumers decoupled through the tools and
  * the events, not through a second service handle.
  */
+import type { WorkspaceGraph } from "@Interface/Graph.js";
 import type Factory from "@playform/plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {

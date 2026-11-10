@@ -1,118 +1,179 @@
-// Execution - the edit suggester's domain types: the pack row (a family and
-// its companion set), the detection, the scored companions, and the gate's
-// verdict. Same algebra, same shapes as the doc suggester (the family's
-// shared pattern), different pack - and the synthetic History family is a
-// pack row like any other.
-//
-// One family = one pack row:
-//   id           - the modification family;
-//   priority     - lower wins when two families match one edit;
-//   threshold    - the family's own gate (destructive: 0.85, the rest 0.75);
-//   signals      - the path rules: a compiled regex on the edited path and the
-//                  evidence weight each match contributes;
-//   targets      - the standard companion set: a path or glob, a prior, and
-//                  the one reason phrase the model reads;
-//   note         - the pack row's one-phrase caveat ("" when the domain has
-//                  none; the note builder prints the standing caution);
-//   familyGlobs  - the pack row's long-tail globs ([] when the domain has
-//                  none).
-//
-// The synthetic `History` family the listener builds from the session's own
-// tool calls is a FULL pack row of the same shape, so the existing
-// Detect/Measure/Score/Decide pipeline judges it exactly like a resolved
-// pack's family.
-//
-// The scored companion (Candidate) is the decision model's row: the score
-// plus the six pickable heuristic values (Interface/Decision), so the note,
-// the decision record and the ledger line all read ONE computation.
+/**
+ * @module Execution
+ *
+ * Declares the edit suggester's domain types: the pack row, the detection, the scored
+ * companions, and the gate's verdict.
+ *
+ * @remarks
+ * Same algebra, same shapes as the doc suggester (the family's shared pattern), different
+ * pack - and the synthetic History family is a pack row like any other.
+ *
+ * One family = one pack row:
+ *
+ * - id - the modification family;
+ * - priority - lower wins when two families match one edit;
+ * - threshold - the family's own gate (destructive: 0.85, the rest 0.75);
+ * - signals - the path rules: a compiled regex on the edited path and the evidence
+ *   weight each match contributes;
+ * - targets - the standard companion set: a path or glob, a prior, and the one reason
+ *   phrase the model reads;
+ * - note - the pack row's one-phrase caveat ("" when the domain has none; the note
+ *   builder prints the standing caution);
+ * - familyGlobs - the pack row's long-tail globs ([] when the domain has none).
+ *
+ * The synthetic `History` family the listener builds from the session's own tool calls
+ * is a FULL pack row of the same shape, so the existing Detect/Measure/Score/Decide
+ * pipeline judges it exactly like a resolved pack's family.
+ *
+ * The scored companion (Candidate) is the decision model's row: the score plus the six
+ * pickable heuristic values (Interface/Decision), so the note, the decision record and
+ * the ledger line all read ONE computation.
+ */
 import type { CompanionDecision } from "./Decision.js";
 
 export interface Signal {
-	/** The rule id this row implements. */
+	/**
+	 * The rule id this row implements.
+	 */
 	rule: string;
 
-	/** The regex source, matched against the edited path. */
+	/**
+	 * The regex source, matched against the edited path.
+	 */
 	pattern: string;
 
-	/** The evidence weight a match contributes. */
+	/**
+	 * The evidence weight a match contributes.
+	 */
 	weight: number;
 }
 
 export interface Target {
-	/** The companion path or glob. */
+	/**
+	 * The companion path or glob.
+	 */
 	path: string;
 
-	/** The companion kind ("manifest", "doc", "config", "test", ...). */
+	/**
+	 * The companion kind ("manifest", "doc", "config", "test", ...).
+	 */
 	kind: string;
 
-	/** The prior: 1.0 canonical, 0.6 family, 0.3 fallback. */
+	/**
+	 * The prior: 1.0 canonical, 0.6 family, 0.3 fallback.
+	 */
 	prior: number;
 
-	/** The one reason phrase the model reads. */
+	/**
+	 * The one reason phrase the model reads.
+	 */
 	reason: string;
 }
 
 export interface Family {
-	/** The family id. */
+	/**
+	 * The family id.
+	 */
 	id: string;
 
-	/** Lower wins when two families match one edit. */
+	/**
+	 * Lower wins when two families match one edit.
+	 */
 	priority: number;
 
-	/** The family's own gate (destructive: 0.85). */
+	/**
+	 * The family's own gate (destructive: 0.85).
+	 */
 	threshold: number;
 
-	/** The one-phrase caveat the pack row carries ("" when the domain has none). */
+	/**
+	 * The one-phrase caveat the pack row carries ("" when the domain has none).
+	 */
 	note: string;
 
-	/** The long-tail family globs ([] when the domain has none). */
+	/**
+	 * The long-tail family globs ([] when the domain has none).
+	 */
 	familyGlobs: string[];
 
-	/** The path rules. */
+	/**
+	 * The path rules.
+	 */
 	signals: Signal[];
 
-	/** The standard companion set. */
+	/**
+	 * The standard companion set.
+	 */
 	targets: Target[];
 }
 
-/** One edited call, reduced to the path and the tool. */
+/**
+ * One edited call, reduced to the path and the tool.
+ */
 export interface EditView {
-	/** The tool name. */
+	/**
+	 * The tool name.
+	 */
 	name: string;
 
-	/** The edited path. */
+	/**
+	 * The edited path.
+	 */
 	path: string;
 }
 
-/** One detection: the winning family and the evidence sum. */
+/**
+ * One detection: the winning family and the evidence sum.
+ */
 export interface Detection {
-	/** The winning family. */
+	/**
+	 * The winning family.
+	 */
 	family: Family;
 
-	/** The sum of matched signal weights. */
+	/**
+	 * The sum of matched signal weights.
+	 */
 	evidence: number;
 }
 
-/** One scored companion (the decision model's row plus the note's fields). */
+/**
+ * One scored companion (the decision model's row plus the note's fields).
+ */
 export interface Candidate extends CompanionDecision {
-	/** The companion kind. */
+	/**
+	 * The companion kind.
+	 */
 	kind: string;
 
-	/** The one reason phrase. */
+	/**
+	 * The one reason phrase.
+	 */
 	reason: string;
 }
 
-/** The gate's verdict. */
+/**
+ * The gate's verdict.
+ */
 export interface Verdict {
-	/** "emit" passes every gate; "suppress" is a cooled/deduped/capped would-be note; "abstain" is below threshold, ambiguous, or fully touched. */
+	/**
+	 * "emit" passes every gate; "suppress" is a cooled/deduped/capped would-be note;
+	 * "abstain" is below threshold, ambiguous, or fully touched.
+	 */
 	action: "emit" | "suppress" | "abstain";
 
-	/** The abstention/suppression reason (the ledger line's middle segment). */
+	/**
+	 * The abstention/suppression reason (the ledger line's middle segment).
+	 */
 	reason: string;
 
-	/** The family's confidence kappa. */
+	/**
+	 * The family's confidence kappa.
+	 */
 	kappa: number;
 
-	/** The ordered, capped companion list (emit only). */
+	/**
+	 * The ordered, capped companion list (emit only).
+	 */
 	candidates: Candidate[];
 }

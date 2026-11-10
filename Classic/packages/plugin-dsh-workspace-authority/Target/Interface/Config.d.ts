@@ -43,7 +43,7 @@ export default interface Config {
     /**
      * The policy table (rules per resource kind).
      */
-    policy: import("@Interface/Policy.js").default[];
+    policy: import("./Policy.js").default[];
     /**
      * The per-action allowlist (D6) - the shared factory block. Keyed
      * `automation` because `policy` is already the residency RULE TABLE

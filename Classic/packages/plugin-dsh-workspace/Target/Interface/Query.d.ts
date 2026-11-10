@@ -1,4 +1,3 @@
-import type { Edge, NodeKind } from "./Graph.js";
 /**
  * @module Query
  *
@@ -10,7 +9,8 @@ import type { Edge, NodeKind } from "./Graph.js";
  * never by offset. Every tool returns exactly one canonical JSON value of one of
  * these shapes (the defineTool rule).
  */
-import type { PacketView } from "./Packet.js";
+import type { Edge, NodeKind } from "@Interface/Graph.js";
+import type { PacketView } from "@Interface/Packet.js";
 /**
  * The compact node row the tools print (id, path, span, kind - plus the
  * fingerprint and the version so staleness is detectable in every answer).

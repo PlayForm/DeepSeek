@@ -1,5 +1,5 @@
-import type PolicyRule from "@Interface/Policy.js";
-import type Residency from "@Interface/Residency.js";
+import type PolicyRule from "../Interface/Policy.js";
+import type Residency from "../Interface/Residency.js";
 export default _default;
 /**
  * @module Policy

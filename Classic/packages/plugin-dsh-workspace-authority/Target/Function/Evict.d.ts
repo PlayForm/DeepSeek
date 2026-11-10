@@ -23,7 +23,7 @@
  * revocation grace - the policy's revocation timing). Every disposition is
  * ledgered: `evicted <resource> (<disposition>)`.
  */
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 export default _default;
 declare function _default(State: State, Resources?: string[]): {
     resource: string;

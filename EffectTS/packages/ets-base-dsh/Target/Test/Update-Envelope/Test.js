@@ -1,1 +1,368 @@
-import a from"node:assert/strict";import{Check as w,CheckAsync as q,Finish as v,MakeCounter as y}from"../Harness.js";import{Activate as D,Update as r}from"../../../Target/Library.js";import{Effect as d}from"effect";const j=async()=>{const u=y();w(u,"Activate + Update: the builders keep their export names (the composer + the effect builder)",()=>{a.equal(D([["mode","anywhere"],["exclude",void 0],["","pinner flavor"]]),"activated (mode=anywhere, pinner flavor)","Activate: the activation-line composer (skip-absent, bare segment)"),a.equal(typeof r,"function","Update: the envelope builder is exported under the same name")});{const g={Paused:(e,t,n)=>`update stage paused for ${e} (consecutive=${t}, limit=${n})`,InFlight:e=>`update stage skipped for ${e} (in-flight)`,Cooldown:e=>`update stage skipped for ${e} (cooldown)`,Failed:(e,t,n)=>`update stage FAILED (${t}) for ${e}; consecutive=${n}`,Dispatched:(e,t,n)=>`update stage dispatched for ${t} (mode=smoke, ncu via /bin/ncu, ${n})`},i=()=>({Count:new Map,Stamp:new Map,Set:new Set,Inflight:new Map,Journal:[],Ledger:[],Refreshed:[],Specification:null,Detached:null}),s=(e={})=>({Count:t=>t.Count,Stamp:t=>t.Stamp,Set:t=>t.Set,Inflight:t=>t.Inflight,Limit:()=>2,Wait:()=>0,UpdateKey:(t,n)=>`update:${n}`,Append:(t,n)=>t.Ledger.push(n),Journal:(t,n,o,l)=>t.Journal.push([n,o,l]),Refresh:(t,n,o,l)=>t.Refreshed.push([n,l]),Stat:async()=>({version:7}),Start:(t,n,o)=>{t.Specification=n,t.Detached=o},Lines:g,DispatchedEvent:"dispatched",DispatchedDetail:()=>"mode=smoke",FailedEvent:"update-failed",Kind:"governor-update",Label:t=>`ncu ${t}`,RejectedDetail:"update stage rejected",Stage:async()=>0,...e}),c=e=>d.runPromise(d.scoped(e));await q(u,"Update: the typed-effect envelope \u2014 Settle's breaker/U\u2082 flow, the three gates, the dispatched order (journal \u2192 line), the never-rejecting done outcome, the contained rejection, the settling detached fallback and the forkIn interruption at dispose",async()=>{{const e=i(),t=await d.runPromise(r(s()).Settle(e,"/x",{},void 0,0));a.equal(t,0,"Settle returns the code it was given"),a.equal(e.Count.get("/x"),0,"Settle resets the breaker on 0"),a.deepEqual(e.Refreshed,[[{},7]],"Settle runs U\u2082 (the stat's version to the module's Refresh)"),a.equal(e.Ledger.length,0,"Settle on 0: no failure line")}{const e=i(),t=await d.runPromise(r(s()).Settle(e,"/x",{},void 0,3));a.equal(t,3,"Settle returns a non-zero code"),a.equal(e.Count.get("/x"),1,"Settle increments the breaker on failure"),a.deepEqual(e.Ledger,["update stage FAILED (3) for /x; consecutive=1"],"Settle appends the module's byte-identical failure line"),a.deepEqual(e.Journal,[["update-failed","/x","3"]],"Settle journals the P5 failure record (event, dir, stringified code)"),a.equal(e.Refreshed.length,1,"Settle still runs U\u2082 after a failure")}{const e=i(),t=await d.runPromise(r(s({Stat:async()=>{throw new Error("stat boom")}})).Settle(e,"/x",{},void 0,5));a.equal(t,5,"a rejected stat is contained (U\u2082 best-effort)"),a.equal(e.Refreshed.length,0,"no Refresh when the stat fails"),a.equal(e.Count.get("/x"),1,"the breaker still increments")}{const e=i();e.Count.set("/x",2),await c(r(s()).Dispatch(e,"/x/pkg",void 0,"/x",null,"/p")),a.deepEqual(e.Ledger,["update stage paused for /x (consecutive=2, limit=2)"],"the breaker gate: the paused line (the raw map read)"),a.equal(e.Specification,null,"the breaker gate: no job started"),a.equal(e.Journal.length,0,"the breaker gate: no journal record")}{const e=i();e.Set.add("/x"),await c(r(s()).Dispatch(e,"/x/pkg",void 0,"/x",null,"/p")),a.deepEqual(e.Ledger,["update stage skipped for /x (in-flight)"],"the in-flight gate: one update run per directory"),a.equal(e.Specification,null,"the in-flight gate: no job started")}{const e=i();e.Stamp.set("/x",Date.now()),await c(r(s({Wait:()=>6e4})).Dispatch(e,"/x/pkg",void 0,"/x",null,"/p")),a.deepEqual(e.Ledger,["update stage skipped for /x (cooldown)"],"the cooldown gate"),a.equal(e.Specification,null,"the cooldown gate: no job started")}{const e=i();await c(r(s()).Dispatch(e,"/x/package.json",void 0,"/x",null,"/p/policy.json")),a.deepEqual(e.Journal,[["dispatched","/x","mode=smoke"]],"the dispatched journal record comes FIRST (the governor-family order)"),a.match(e.Ledger[0]??"",/^update stage dispatched for \/x \(mode=smoke/,"the dispatched ledger line comes after the journal record");const t=e.Specification;a.equal(t.kind,"governor-update","the spec's producer kind"),a.equal(t.label,"ncu /x","the spec's one-line label"),a.equal(e.Inflight.has("update:/x/package.json"),!0,"the P2 registration under the namespaced key");const n=t.run({append:()=>{}});a.equal(typeof n.cancel,"function","the job's cancel aborts the task-owned signal");const o=await n.done;a.deepEqual(o,{status:"completed",detail:"exit code: 0"},"the done outcome maps the exit code"),a.equal(e.Set.has("/x"),!1,"the settlement removed the in-flight marker"),a.equal(e.Inflight.has("update:/x/package.json"),!1,"the settlement removed the P2 registration"),a.equal(e.Count.get("/x"),0,"the settlement reset the breaker"),a.equal(e.Refreshed.length,1,"the settlement ran U\u2082")}{const e=i();await c(r(s({Stage:async(l,p,m,S,k,f,h)=>(await new Promise((x,b)=>{h.addEventListener("abort",()=>b(new Error("aborted"))),setTimeout(x,250)}),0)})).Dispatch(e,"/x/package.json",void 0,"/x",null,"/p"));const n=e.Specification.run({append:()=>{}});n.cancel();const o=await n.done;a.deepEqual(o,{status:"failed",detail:"update stage rejected"},"a bug-level rejection resolves the failed outcome with the module's detail"),a.equal(e.Set.has("/x"),!1,"the containment removed the in-flight marker"),a.equal(e.Inflight.has("update:/x/package.json"),!1,"the containment removed the P2 registration"),a.equal(e.Count.get("/x"),1,"the containment incremented the breaker")}{const e=i();await c(d.gen(function*(){yield r(s({Start:(t,n,o)=>o()})).Dispatch(e,"/x/package.json",void 0,"/x",null,"/p/policy.json");for(let t=0;t<200&&e.Refreshed.length===0;t++)yield d.yieldNow})),a.equal(e.Set.has("/x"),!1,"the detached chain settled (marker removed)"),a.equal(e.Count.get("/x"),0,"the detached chain settled (breaker reset)"),a.equal(e.Refreshed.length,1,"the detached chain ran U\u2082"),a.equal(e.Journal.length,1,"the detached chain's dispatch record")}{const e=i(),t=(o,l,p,m,S,k,f)=>new Promise(h=>{f.addEventListener("abort",()=>h(143))});await c(d.gen(function*(){yield r(s({Stage:t,Start:(o,l,p)=>p()})).Dispatch(e,"/x/package.json",void 0,"/x",null,"/p/policy.json"),yield d.yieldNow,yield d.yieldNow}));const n=e.Inflight.get("update:/x/package.json");for(let o=0;o<100&&!(n&&n.controller.signal.aborted);o++)await new Promise(l=>setImmediate(l));a.ok(n,"the interrupted fiber never settled (the P2 registration stands)"),a.equal(n.controller.signal.aborted,!0,"the scope's dispose interrupted the in-flight fiber and aborted its controller")}})}return v(u,"Update-Envelope")},E=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(E){const u=await j();console.log(`${u} PASS - Update-Envelope`)}export{j as runTest};
+import assert from "node:assert/strict";
+import { Check, CheckAsync, Finish, MakeCounter } from "../Harness.js";
+import { Activate, Update } from "../../../Target/Library.js";
+import { Effect } from "effect";
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Sub = "Activate + Update: the builders keep their export names (the composer + the effect builder)";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(
+          Activate([
+            ["mode", "anywhere"],
+            ["exclude", void 0],
+            ["", "pinner flavor"]
+          ]),
+          "activated (mode=anywhere, pinner flavor)",
+          "Activate: the activation-line composer (skip-absent, bare segment)"
+        );
+        assert.equal(
+          typeof Update,
+          "function",
+          "Update: the envelope builder is exported under the same name"
+        );
+      });
+    }
+  }
+  {
+    const UpdateLines = {
+      Paused: (Dir, Count2, Limit) => `update stage paused for ${Dir} (consecutive=${Count2}, limit=${Limit})`,
+      InFlight: (Dir) => `update stage skipped for ${Dir} (in-flight)`,
+      Cooldown: (Dir) => `update stage skipped for ${Dir} (cooldown)`,
+      Failed: (Dir, Code, Consecutive) => `update stage FAILED (${Code}) for ${Dir}; consecutive=${Consecutive}`,
+      Dispatched: (_State, Dir, PolicyPath) => `update stage dispatched for ${Dir} (mode=smoke, ncu via /bin/ncu, ${PolicyPath})`
+    };
+    const UpdateState = () => ({
+      Count: /* @__PURE__ */ new Map(),
+      Stamp: /* @__PURE__ */ new Map(),
+      Set: /* @__PURE__ */ new Set(),
+      Inflight: /* @__PURE__ */ new Map(),
+      Journal: [],
+      Ledger: [],
+      Refreshed: [],
+      Specification: null,
+      Detached: null
+    });
+    const UpdateDeps = (Over = {}) => ({
+      Count: (State) => State.Count,
+      Stamp: (State) => State.Stamp,
+      Set: (State) => State.Set,
+      Inflight: (State) => State.Inflight,
+      Limit: () => 2,
+      Wait: () => 0,
+      UpdateKey: (_State, Target) => `update:${Target}`,
+      Append: (State, Message) => State.Ledger.push(Message),
+      Journal: (State, Event, Dir, Detail) => State.Journal.push([Event, Dir, Detail]),
+      Refresh: (State, Target, _Actor, Version) => State.Refreshed.push([Target, Version]),
+      Stat: async () => ({ version: 7 }),
+      Start: (State, Specification, Detached) => {
+        State.Specification = Specification;
+        State.Detached = Detached;
+      },
+      Lines: UpdateLines,
+      DispatchedEvent: "dispatched",
+      DispatchedDetail: () => "mode=smoke",
+      FailedEvent: "update-failed",
+      Kind: "governor-update",
+      Label: (Dir) => `ncu ${Dir}`,
+      RejectedDetail: "update stage rejected",
+      Stage: async () => 0,
+      ...Over
+    });
+    const RunScoped = (EffectIn) => Effect.runPromise(Effect.scoped(EffectIn));
+    await CheckAsync(
+      Count,
+      "Update: the typed-effect envelope \u2014 Settle's breaker/U\u2082 flow, the three gates, the dispatched order (journal \u2192 line), the never-rejecting done outcome, the contained rejection, the settling detached fallback and the forkIn interruption at dispose",
+      async () => {
+        {
+          const State = UpdateState();
+          const Code = await Effect.runPromise(
+            Update(UpdateDeps()).Settle(State, "/x", {}, void 0, 0)
+          );
+          assert.equal(Code, 0, "Settle returns the code it was given");
+          assert.equal(State.Count.get("/x"), 0, "Settle resets the breaker on 0");
+          assert.deepEqual(
+            State.Refreshed,
+            [[{}, 7]],
+            "Settle runs U\u2082 (the stat's version to the module's Refresh)"
+          );
+          assert.equal(State.Ledger.length, 0, "Settle on 0: no failure line");
+        }
+        {
+          const State = UpdateState();
+          const Code = await Effect.runPromise(
+            Update(UpdateDeps()).Settle(State, "/x", {}, void 0, 3)
+          );
+          assert.equal(Code, 3, "Settle returns a non-zero code");
+          assert.equal(
+            State.Count.get("/x"),
+            1,
+            "Settle increments the breaker on failure"
+          );
+          assert.deepEqual(
+            State.Ledger,
+            ["update stage FAILED (3) for /x; consecutive=1"],
+            "Settle appends the module's byte-identical failure line"
+          );
+          assert.deepEqual(
+            State.Journal,
+            [["update-failed", "/x", "3"]],
+            "Settle journals the P5 failure record (event, dir, stringified code)"
+          );
+          assert.equal(
+            State.Refreshed.length,
+            1,
+            "Settle still runs U\u2082 after a failure"
+          );
+        }
+        {
+          const State = UpdateState();
+          const Code = await Effect.runPromise(
+            Update(
+              UpdateDeps({
+                Stat: async () => {
+                  throw new Error("stat boom");
+                }
+              })
+            ).Settle(State, "/x", {}, void 0, 5)
+          );
+          assert.equal(Code, 5, "a rejected stat is contained (U\u2082 best-effort)");
+          assert.equal(State.Refreshed.length, 0, "no Refresh when the stat fails");
+          assert.equal(State.Count.get("/x"), 1, "the breaker still increments");
+        }
+        {
+          const State = UpdateState();
+          State.Count.set("/x", 2);
+          await RunScoped(
+            Update(UpdateDeps()).Dispatch(State, "/x/pkg", void 0, "/x", null, "/p")
+          );
+          assert.deepEqual(
+            State.Ledger,
+            ["update stage paused for /x (consecutive=2, limit=2)"],
+            "the breaker gate: the paused line (the raw map read)"
+          );
+          assert.equal(State.Specification, null, "the breaker gate: no job started");
+          assert.equal(
+            State.Journal.length,
+            0,
+            "the breaker gate: no journal record"
+          );
+        }
+        {
+          const State = UpdateState();
+          State.Set.add("/x");
+          await RunScoped(
+            Update(UpdateDeps()).Dispatch(State, "/x/pkg", void 0, "/x", null, "/p")
+          );
+          assert.deepEqual(
+            State.Ledger,
+            ["update stage skipped for /x (in-flight)"],
+            "the in-flight gate: one update run per directory"
+          );
+          assert.equal(State.Specification, null, "the in-flight gate: no job started");
+        }
+        {
+          const State = UpdateState();
+          State.Stamp.set("/x", Date.now());
+          await RunScoped(
+            Update(UpdateDeps({ Wait: () => 6e4 })).Dispatch(
+              State,
+              "/x/pkg",
+              void 0,
+              "/x",
+              null,
+              "/p"
+            )
+          );
+          assert.deepEqual(
+            State.Ledger,
+            ["update stage skipped for /x (cooldown)"],
+            "the cooldown gate"
+          );
+          assert.equal(State.Specification, null, "the cooldown gate: no job started");
+        }
+        {
+          const State = UpdateState();
+          await RunScoped(
+            Update(UpdateDeps()).Dispatch(
+              State,
+              "/x/package.json",
+              void 0,
+              "/x",
+              null,
+              "/p/policy.json"
+            )
+          );
+          assert.deepEqual(
+            State.Journal,
+            [["dispatched", "/x", "mode=smoke"]],
+            "the dispatched journal record comes FIRST (the governor-family order)"
+          );
+          assert.match(
+            State.Ledger[0] ?? "",
+            /^update stage dispatched for \/x \(mode=smoke/,
+            "the dispatched ledger line comes after the journal record"
+          );
+          const Specification = State.Specification;
+          assert.equal(Specification.kind, "governor-update", "the spec's producer kind");
+          assert.equal(Specification.label, "ncu /x", "the spec's one-line label");
+          assert.equal(
+            State.Inflight.has("update:/x/package.json"),
+            true,
+            "the P2 registration under the namespaced key"
+          );
+          const Job = Specification.run({ append: () => {
+          } });
+          assert.equal(
+            typeof Job.cancel,
+            "function",
+            "the job's cancel aborts the task-owned signal"
+          );
+          const Outcome = await Job.done;
+          assert.deepEqual(
+            Outcome,
+            { status: "completed", detail: "exit code: 0" },
+            "the done outcome maps the exit code"
+          );
+          assert.equal(
+            State.Set.has("/x"),
+            false,
+            "the settlement removed the in-flight marker"
+          );
+          assert.equal(
+            State.Inflight.has("update:/x/package.json"),
+            false,
+            "the settlement removed the P2 registration"
+          );
+          assert.equal(State.Count.get("/x"), 0, "the settlement reset the breaker");
+          assert.equal(State.Refreshed.length, 1, "the settlement ran U\u2082");
+        }
+        {
+          const State = UpdateState();
+          const BoomStage = async (_State, _Dir, _Target, _Actor, _Registry, _PolicyPath, Signal) => {
+            await new Promise((Resolve, Reject) => {
+              Signal.addEventListener("abort", () => Reject(new Error("aborted")));
+              setTimeout(Resolve, 250);
+            });
+            return 0;
+          };
+          await RunScoped(
+            Update(UpdateDeps({ Stage: BoomStage })).Dispatch(
+              State,
+              "/x/package.json",
+              void 0,
+              "/x",
+              null,
+              "/p"
+            )
+          );
+          const Job = State.Specification.run({ append: () => {
+          } });
+          Job.cancel();
+          const Outcome = await Job.done;
+          assert.deepEqual(
+            Outcome,
+            { status: "failed", detail: "update stage rejected" },
+            "a bug-level rejection resolves the failed outcome with the module's detail"
+          );
+          assert.equal(
+            State.Set.has("/x"),
+            false,
+            "the containment removed the in-flight marker"
+          );
+          assert.equal(
+            State.Inflight.has("update:/x/package.json"),
+            false,
+            "the containment removed the P2 registration"
+          );
+          assert.equal(
+            State.Count.get("/x"),
+            1,
+            "the containment incremented the breaker"
+          );
+        }
+        {
+          const State = UpdateState();
+          await RunScoped(
+            Effect.gen(function* () {
+              yield Update(
+                UpdateDeps({ Start: (_State, _Specification, Detached) => Detached() })
+              ).Dispatch(
+                State,
+                "/x/package.json",
+                void 0,
+                "/x",
+                null,
+                "/p/policy.json"
+              );
+              for (let Index = 0; Index < 200 && State.Refreshed.length === 0; Index++) {
+                yield Effect.yieldNow;
+              }
+            })
+          );
+          assert.equal(
+            State.Set.has("/x"),
+            false,
+            "the detached chain settled (marker removed)"
+          );
+          assert.equal(
+            State.Count.get("/x"),
+            0,
+            "the detached chain settled (breaker reset)"
+          );
+          assert.equal(State.Refreshed.length, 1, "the detached chain ran U\u2082");
+          assert.equal(State.Journal.length, 1, "the detached chain's dispatch record");
+        }
+        {
+          const State = UpdateState();
+          const HangStage = (_State, _Dir, _Target, _Actor, _Registry, _PolicyPath, Signal) => new Promise((Resolve) => {
+            Signal.addEventListener("abort", () => Resolve(143));
+          });
+          await RunScoped(
+            Effect.gen(function* () {
+              yield Update(
+                UpdateDeps({
+                  Stage: HangStage,
+                  Start: (_State, _Specification, Detached) => Detached()
+                })
+              ).Dispatch(
+                State,
+                "/x/package.json",
+                void 0,
+                "/x",
+                null,
+                "/p/policy.json"
+              );
+              yield Effect.yieldNow;
+              yield Effect.yieldNow;
+            })
+          );
+          const Registration = State.Inflight.get("update:/x/package.json");
+          for (let Index = 0; Index < 100 && !(Registration && Registration.controller.signal.aborted); Index++) {
+            await new Promise((Resolve) => setImmediate(Resolve));
+          }
+          assert.ok(
+            Registration,
+            "the interrupted fiber never settled (the P2 registration stands)"
+          );
+          assert.equal(
+            Registration.controller.signal.aborted,
+            true,
+            "the scope's dispose interrupted the in-flight fiber and aborted its controller"
+          );
+        }
+      }
+    );
+  }
+  return Finish(Count, "Update-Envelope");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Update-Envelope`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

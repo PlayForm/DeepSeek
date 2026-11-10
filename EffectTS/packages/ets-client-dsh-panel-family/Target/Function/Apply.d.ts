@@ -17,7 +17,7 @@
  * A secret field is never writable from the panel (the host redacts it), and
  * a plain field with no bridge exposed is refused with the documented line.
  */
-import type { PanelFormField, PanelFormView } from "@Interface/Form.js";
-import type { PanelSection } from "@Interface/Panel.js";
-import type { PanelPorts } from "@Interface/Ports.js";
+import type { PanelFormField, PanelFormView } from "../Interface/Form.js";
+import type { PanelSection } from "../Interface/Panel.js";
+import type { PanelPorts } from "../Interface/Ports.js";
 export default function Apply(Ports: PanelPorts, Section: PanelSection, View: PanelFormView, Field: PanelFormField, Value: unknown): Promise<boolean>;
