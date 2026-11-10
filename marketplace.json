@@ -890,11 +890,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794291035,
+					"publishTimestamp": 1794295083,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "398bd3ce97ce654910affacedbe2836b8d72a78f",
+						"commit": "75c9ff1adfee76cbfbe3b685c5c9c56c12ae2b76",
 						"path": "EffectTS/packages/ets-hook-dsh-lesson-nudge"
 					},
 					"engines": {}

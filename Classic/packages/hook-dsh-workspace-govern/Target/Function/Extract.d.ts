@@ -13,7 +13,7 @@
  * recursion-prevention fields are NEVER left empty), declared = false (the
  * lenient reading: the contributes obligation evaluates "n/a").
  */
-import type Proposal from "../Interface/Proposal.js";
+import type Proposal from "@Interface/Proposal.js";
 export default _default;
 declare function _default(Exec: {
     name?: string;
