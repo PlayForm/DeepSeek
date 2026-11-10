@@ -1,86 +1,93 @@
-// Pricing - the versioned pricing-catalog service over the ledger's v7
-// valuation tables (the research's sections 3, 5, 6 and 7): the reads a
-// settings view lists - catalogs, the revisions of one catalog, the rate rows
-// of one revision - the one write that publishes a revision, and the preview
-// that re-prices one session's recorded usage under a selected revision.
-//
-// THE READS are plain SELECTs. `catalogs` answers every catalog in creation
-// order; `revisions` answers one catalog's revisions newest first, the order a
-// history reads; `rates` answers one revision's rate rows in card order -
-// provider, model, mode, region, window, then the effective date ascending,
-// then the tier floor - so a rate-card table reads as the book it is. The
-// Revision row is immutable: a correction is a new revision whose
-// ParentRevisionId names the one it corrects, and its rate rows keep the
-// original ValidFrom.
-//
-// THE ONE WRITE is `publish`, and it is one transaction: the Revision row is
-// inserted already 'published' with ParentRevisionId = BaseRevisionId and the
-// caller's reason, every supplied RateRow is inserted against the new
-// revision id, and the COMMIT is what makes the revision visible. A failure
-// anywhere - a duplicate rate, a broken foreign key, an unbound value - rolls
-// the whole thing back, so a failed publish leaves no revision and never a
-// half-written book. The transaction IS the draft state, which is why no row
-// is ever visible with Status 'draft'.
-//
-// THE BASE-REVISION GUARD is the concurrency contract (the research's answer
-// 4, "Backend boundary": save against a base revision, and when someone else
-// has published a newer revision, return a conflict instead of silently
-// overwriting their changes). The catalog's head is its newest published
-// Revision by RevisionId - the insert order is the publish order, and this
-// service never writes a draft - so a base that is not the head means someone
-// else published first. The head is read INSIDE the publish transaction,
-// after BEGIN IMMEDIATE takes the write lock, so two publishes against the
-// same base cannot both pass the check. A null base is the first publish, and
-// it is legal only while the catalog is empty; on a catalog that already
-// carries a revision it is the same conflict. The refusal is an Error whose
-// message starts "plugin-dsh-cost: pricing conflict - " and names the base
-// and the head, so the caller can tell it from a validation failure while the
-// interface shape stays as it is and every validation line stays unchanged.
-//
-// The caller's RateRow.RateRowId and RevisionId are placeholders: the ledger
-// assigns both, and the returned Revision carries the new RevisionId.
-// Nothing observed is touched - Price, Call, Allocation, Touch and every
-// other recorded fact stay as captured (the research's section 3: observed
-// facts are stored once; a pricing catalog is an assumption, and only
-// Revision and RateRow receive rows).
-//
-// THE PREVIEW is the revaluation the research asks for before a publish
-// (section 7: "Preview first; publish a catalog revision second"). It reads
-// the session's calls - provider, model, mode, region, the recorded tier, the
-// token buckets, the instant and the recorded money - resolves a rate row of
-// the selected revision for each call with the capture path's own rules, and
-// prices the same recorded usage again. Nothing is persisted: the preview
-// computes, and the ledger is read-only for it.
-//
-// THE RESOLUTION RULES are the capture path's (Function/Price.ts and the
-// drain's call site), restated here because that engine is bound to the Price
-// table and its configured modifiers while a revision lives in RateRow: the
-// effective interval is half-open (ValidFrom <= at < ValidTo, a NULL ValidTo
-// staying open), an exact Mode, Region or Window match beats a NULL or 'any'
-// generic row, the greatest ValidFrom wins among equals, and a conditional
-// row never resolves as the card. The call's time-of-day window is not
-// recorded on the Call row, so it is re-derived from the call's own instant
-// through the configured price windows - the drain's rule at capture time -
-// and a config whose windows changed since then can select a different window
-// card: that is the one dimension the call row does not preserve.
-//
-// THE ARITHMETIC is the same two primitives: the marginal tier walk over the
-// resolved card's family (each bucket priced per portion at its own tier's
-// rate, the reasoning bucket flat at the resolved row's reasoning rate) and
-// the conditional card (a row whose Note is "condition:at-or-below" or
-// "condition:above", selected by the request's prompt size and priced flat).
-// The family is the same provider, model, valid-from, mode, region and
-// window, so one window's bands are never read into another's walk. The
-// factor layer's modifiers are NOT applied: a revision's rate rows are the
-// whole book it declares, and the catalog carries no modifier column.
-//
-// THE MONEY: one currency per row, six-decimal rounding at the aggregate, and
-// a missing rate stays unpriced. The preview totals one currency - the
-// session's first recorded call's currency, else the configured one - and a
-// call recorded in, or re-priced into, another currency counts as unpriced
-// rather than being added across unlike units; this service converts nothing.
-// Both totals cover the same calls (the ones the revision prices in that
-// currency), so `difference` compares like with like.
+/**
+ * @module Pricing
+ *
+ * The versioned pricing-catalog service over the ledger's v7 valuation
+ * tables (the research's sections 3, 5, 6 and 7): the reads a settings view
+ * lists, the one write that publishes a revision, and the preview that
+ * re-prices one session's recorded usage under a selected revision.
+ *
+ * @remarks
+ * THE READS are plain SELECTs. `catalogs` answers every catalog in creation
+ * order; `revisions` answers one catalog's revisions newest first, the
+ * order a history reads; `rates` answers one revision's rate rows in card
+ * order - provider, model, mode, region, window, then the effective date
+ * ascending, then the tier floor - so a rate-card table reads as the book
+ * it is. The Revision row is immutable: a correction is a new revision
+ * whose ParentRevisionId names the one it corrects, and its rate rows keep
+ * the original ValidFrom.
+ *
+ * THE ONE WRITE is `publish`, and it is one transaction: the Revision row
+ * is inserted already 'published' with ParentRevisionId = BaseRevisionId
+ * and the caller's reason, every supplied RateRow is inserted against the
+ * new revision id, and the COMMIT is what makes the revision visible. A
+ * failure anywhere - a duplicate rate, a broken foreign key, an unbound
+ * value - rolls the whole thing back, so a failed publish leaves no
+ * revision and never a half-written book. The transaction IS the draft
+ * state, which is why no row is ever visible with Status 'draft'.
+ *
+ * THE BASE-REVISION GUARD is the concurrency contract (the research's
+ * answer 4, "Backend boundary": save against a base revision, and when
+ * someone else has published a newer revision, return a conflict instead of
+ * silently overwriting their changes). The catalog's head is its newest
+ * published Revision by RevisionId - the insert order is the publish order,
+ * and this service never writes a draft - so a base that is not the head
+ * means someone else published first. The head is read INSIDE the publish
+ * transaction, after BEGIN IMMEDIATE takes the write lock, so two publishes
+ * against the same base cannot both pass the check. A null base is the
+ * first publish, and it is legal only while the catalog is empty; on a
+ * catalog that already carries a revision it is the same conflict. The
+ * refusal is an Error whose message starts
+ * "plugin-dsh-cost: pricing conflict - " and names the base and the head,
+ * so the caller can tell it from a validation failure while the interface
+ * shape stays as it is and every validation line stays unchanged.
+ *
+ * The caller's RateRow.RateRowId and RevisionId are placeholders: the
+ * ledger assigns both, and the returned Revision carries the new
+ * RevisionId. Nothing observed is touched - Price, Call, Allocation, Touch
+ * and every other recorded fact stay as captured (the research's section 3:
+ * observed facts are stored once; a pricing catalog is an assumption, and
+ * only Revision and RateRow receive rows).
+ *
+ * THE PREVIEW is the revaluation the research asks for before a publish
+ * (section 7: "Preview first; publish a catalog revision second"). It reads
+ * the session's calls - provider, model, mode, region, the recorded tier,
+ * the token buckets, the instant and the recorded money - resolves a rate
+ * row of the selected revision for each call with the capture path's own
+ * rules, and prices the same recorded usage again. Nothing is persisted:
+ * the preview computes, and the ledger is read-only for it.
+ *
+ * THE RESOLUTION RULES are the capture path's (Function/Price.ts and the
+ * drain's call site), restated here because that engine is bound to the
+ * Price table and its configured modifiers while a revision lives in
+ * RateRow: the effective interval is half-open (ValidFrom <= at < ValidTo,
+ * a NULL ValidTo staying open), an exact Mode, Region or Window match beats
+ * a NULL or 'any' generic row, the greatest ValidFrom wins among equals,
+ * and a conditional row never resolves as the card. The call's time-of-day
+ * window is not recorded on the Call row, so it is re-derived from the
+ * call's own instant through the configured price windows - the drain's
+ * rule at capture time - and a config whose windows changed since then can
+ * select a different window card: that is the one dimension the call row
+ * does not preserve.
+ *
+ * THE ARITHMETIC is the same two primitives: the marginal tier walk over
+ * the resolved card's family (each bucket priced per portion at its own
+ * tier's rate, the reasoning bucket flat at the resolved row's reasoning
+ * rate) and the conditional card (a row whose Note is
+ * "condition:at-or-below" or "condition:above", selected by the request's
+ * prompt size and priced flat). The family is the same provider, model,
+ * valid-from, mode, region and window, so one window's bands are never read
+ * into another's walk. The factor layer's modifiers are NOT applied: a
+ * revision's rate rows are the whole book it declares, and the catalog
+ * carries no modifier column.
+ *
+ * THE MONEY: one currency per row, six-decimal rounding at the aggregate,
+ * and a missing rate stays unpriced. The preview totals one currency - the
+ * session's first recorded call's currency, else the configured one - and a
+ * call recorded in, or re-priced into, another currency counts as unpriced
+ * rather than being added across unlike units; this service converts
+ * nothing. Both totals cover the same calls (the ones the revision prices
+ * in that currency), so `difference` compares like with like.
+ */
 import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
 
 import type Catalog from "@Interface/Catalog.js";
@@ -90,8 +97,11 @@ import type PricingService from "@Interface/PricingService.js";
 import type RateRow from "@Interface/RateRow.js";
 import type Revision from "@Interface/Revision.js";
 
-// One rate row as the engine reads it: the resolved row and every row of its
-// family share this shape, so one mapper serves the resolution and the walk.
+/**
+ * One rate row as the engine reads it: the resolved row and every row of
+ * its family share this shape, so one mapper serves the resolution and the
+ * walk.
+ */
 type Rate = {
 	readonly Provider: string;
 	readonly Model: string;
@@ -110,11 +120,16 @@ type Rate = {
 	readonly Note: string | null;
 };
 
-// One recorded call as the preview reads it: the pricing dimensions the
-// capture path resolved (mode, region and the tier it chose), the provider's
-// own buckets, the instant and the money the ledger stored. The recorded Tier
-// is evidence of the capture-time band, never an input: the walk re-derives
-// the band from the buckets, which is exactly what a rate change can move.
+/**
+ * One recorded call as the preview reads it: the pricing dimensions the
+ * capture path resolved (mode, region and the tier it chose), the
+ * provider's own buckets, the instant and the money the ledger stored.
+ *
+ * @remarks
+ * The recorded Tier is evidence of the capture-time band, never an input:
+ * the walk re-derives the band from the buckets, which is exactly what a
+ * rate change can move.
+ */
 type CallRow = {
 	readonly Provider: string;
 	readonly Model: string;
@@ -131,22 +146,32 @@ type CallRow = {
 	readonly Currency: string;
 };
 
-// The conditional markers a card row's Note carries (the research's section
-// 2.3): the row prices a request only when its total prompt size is at or
-// below, or above, the row's own TierFrom threshold. Every other Note is an
-// ordinary annotation.
+/**
+ * The conditional markers a card row's Note carries (the research's
+ * section 2.3): the row prices a request only when its total prompt size is
+ * at or below, or above, the row's own TierFrom threshold. Every other Note
+ * is an ordinary annotation.
+ */
 const AtOrBelow = "condition:at-or-below";
 const Above = "condition:above";
 const Marker = "condition:";
 
+/**
+ * One card row's conditional reading.
+ */
 type Conditional = "at-or-below" | "above" | "invalid" | null;
 
-// One configured window's coverage: a half-open span of UTC hours that starts
-// at the window's first hour and runs for its length - so an end past 24 (or
-// an end before the start) wraps into the next day - and covers nothing when
-// the two hours are equal. This is the drain's own rule, restated because the
-// Call row records no window column and the preview must re-derive the window
-// from the call's instant.
+/**
+ * One configured window's coverage: a half-open span of UTC hours that
+ * starts at the window's first hour and runs for its length - so an end
+ * past 24 (or an end before the start) wraps into the next day - and covers
+ * nothing when the two hours are equal.
+ *
+ * @remarks
+ * This is the drain's own rule, restated because the Call row records no
+ * window column and the preview must re-derive the window from the call's
+ * instant.
+ */
 const Covered = (Hour: number, Start: number, End: number): boolean => {
 	const From = ((Start % 24) + 24) % 24;
 	const Span = End - Start <= 0 ? End - Start + 24 : End - Start;
@@ -162,10 +187,12 @@ const Covered = (Hour: number, Start: number, End: number): boolean => {
 	}
 };
 
-// Which conditional bound a card row's Note declares: null for an ordinary
-// rate row, "invalid" for a "condition:" marker this build does not know -
-// the fail-closed reading, because an unrecognized conditional row must never
-// be priced as a marginal band.
+/**
+ * Which conditional bound a card row's Note declares: null for an ordinary
+ * rate row, "invalid" for a "condition:" marker this build does not know -
+ * the fail-closed reading, because an unrecognized conditional row must
+ * never be priced as a marginal band.
+ */
 const Condition = (Note: string | null): Conditional => {
 	switch (true) {
 		case Note === null:
@@ -181,9 +208,11 @@ const Condition = (Note: string | null): Conditional => {
 	}
 };
 
-// Whether a conditional row's bound covers a request of this prompt size: "at
-// or below" includes the threshold and "above" excludes it, so the two
-// readings tile the axis at the boundary rather than overlapping there.
+/**
+ * Whether a conditional row's bound covers a request of this prompt size:
+ * "at or below" includes the threshold and "above" excludes it, so the two
+ * readings tile the axis at the boundary rather than overlapping there.
+ */
 const Covers = (Row: Rate, Prompt: number): boolean => {
 	switch (Condition(Row.Note)) {
 		case "at-or-below":
@@ -195,9 +224,11 @@ const Covers = (Row: Rate, Prompt: number): boolean => {
 	}
 };
 
-// The conditional card that prices this request: the matching row with the
-// greatest threshold wins, and at an equal threshold the "above" row wins
-// because it is the one that excludes the boundary.
+/**
+ * The conditional card that prices this request: the matching row with the
+ * greatest threshold wins, and at an equal threshold the "above" row wins
+ * because it is the one that excludes the boundary.
+ */
 const Chosen = (Family: readonly Rate[], Prompt: number): Rate | undefined => {
 	let Found: Rate | undefined;
 	for (const Row of Family) {
@@ -223,14 +254,18 @@ const Chosen = (Family: readonly Rate[], Prompt: number): Rate | undefined => {
 	return Found;
 };
 
-// One bucket at a flat rate: the conditional card's arithmetic, which prices
-// the whole request at one row's rates rather than through bands.
+/**
+ * One bucket at a flat rate: the conditional card's arithmetic, which
+ * prices the whole request at one row's rates rather than through bands.
+ */
 const Flat = (Tokens: number, Rate: number | null): number => (Tokens / 1e6) * (Rate ?? 0);
 
-// One bucket's marginal tier walk: the tokens inside each tier's window,
-// priced at that tier's rate and summed. A tier with a NULL TierTo is the
-// open top tier and takes everything above its floor; the walk never prices a
-// token twice, because the windows tile the axis.
+/**
+ * One bucket's marginal tier walk: the tokens inside each tier's window,
+ * priced at that tier's rate and summed. A tier with a NULL TierTo is the
+ * open top tier and takes everything above its floor; the walk never prices
+ * a token twice, because the windows tile the axis.
+ */
 const Walk = (
 	Tokens: number,
 	Tiers: readonly Rate[],
@@ -248,32 +283,47 @@ const Walk = (
 	return Sum;
 };
 
-// The money rounding every aggregate lands on: six decimals, the ledger's
-// precision, so two reads of the same sum agree.
+/**
+ * The money rounding every aggregate lands on: six decimals, the ledger's
+ * precision, so two reads of the same sum agree.
+ */
 const Money = (Value: number): number => Math.round(Value * 1e6) / 1e6;
 
-// The read-only column helpers: the same narrowing the report reads use, so a
-// NULL column stays null and a stored number never becomes a guess.
+/**
+ * The read-only column helpers: the same narrowing the report reads use, so
+ * a NULL column stays null and a stored number never becomes a guess.
+ */
 const Text = (Row: Record<string, SQLOutputValue>, Key: string): string | null => {
 	const Value = Row[Key];
 	return typeof Value === "string" ? Value : null;
 };
 
+/**
+ * One finite number cell of a statement row, or null.
+ */
 const Figure = (Row: Record<string, SQLOutputValue>, Key: string): number | null => {
 	const Value = Row[Key];
 	return typeof Value === "number" && Number.isFinite(Value) ? Value : null;
 };
 
+/**
+ * One number cell read as zero when it is absent or not finite.
+ */
 const Stored = (Row: Record<string, SQLOutputValue>, Key: string): number => Figure(Row, Key) ?? 0;
 
+/**
+ * One catalog row as the contract reads it.
+ */
 const CatalogOf = (Row: Record<string, SQLOutputValue>): Catalog => ({
 	CatalogId: Stored(Row, "CatalogId"),
 	Name: Text(Row, "Name") ?? "",
 });
 
-// One revision as the contract reads it: Status is narrowed fail-closed -
-// anything but the literal 'published' reads as a draft, because only a
-// published revision may be pinned by a valuation.
+/**
+ * One revision as the contract reads it: Status is narrowed fail-closed -
+ * anything but the literal 'published' reads as a draft, because only a
+ * published revision may be pinned by a valuation.
+ */
 const RevisionOf = (Row: Record<string, SQLOutputValue>): Revision => ({
 	RevisionId: Stored(Row, "RevisionId"),
 	CatalogId: Stored(Row, "CatalogId"),
@@ -338,17 +388,22 @@ const CallOf = (Row: Record<string, SQLOutputValue>): CallRow => ({
 	Currency: Text(Row, "Currency") ?? "",
 });
 
-// The twelve statements the service runs: the four reads, the resolution and
-// its family (both against RateRow, the revision's own table), the three
-// integrity checks `publish` and `preview` make, the head read that
-// `publish`'s transaction makes, and the two inserts it holds. The resolution
-// statement mirrors the capture path's Price.Select with ValidFrom in place
-// of EffectiveFrom - the half-open interval, the exact-or-generic mode,
-// region and window, the conditional rows excluded, the floor row of the
-// winning card - and the family statement binds the same provider, model,
-// valid-from, mode, region and window, so a windowed card's bands are read
-// inside that window only. The head statement is one catalog's newest
-// published revision, the row a publish must name as its base.
+/**
+ * The twelve statements the service runs: the four reads, the resolution
+ * and its family (both against RateRow, the revision's own table), the
+ * three integrity checks `publish` and `preview` make, the head read that
+ * `publish`'s transaction makes, and the two inserts it holds.
+ *
+ * @remarks
+ * The resolution statement mirrors the capture path's Price.Select with
+ * ValidFrom in place of EffectiveFrom - the half-open interval, the
+ * exact-or-generic mode, region and window, the conditional rows excluded,
+ * the floor row of the winning card - and the family statement binds the
+ * same provider, model, valid-from, mode, region and window, so a windowed
+ * card's bands are read inside that window only. The head statement is one
+ * catalog's newest published revision, the row a publish must name as its
+ * base.
+ */
 const Query = {
 	Catalogs: `SELECT CatalogId, Name FROM Catalog ORDER BY CatalogId ASC;`,
 

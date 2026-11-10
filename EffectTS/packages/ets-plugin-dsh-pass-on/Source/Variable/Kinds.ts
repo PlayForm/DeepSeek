@@ -1,8 +1,18 @@
-// Kinds - the shipped kind catalog (data, not code). The apply logic lives
-// in Function/Operate and switches on the kind name; unknown kinds are
-// rejected at prepare time.
+/**
+ * @module Kinds
+ *
+ * The shipped kind catalog: data, not code.
+ *
+ * @remarks
+ * The apply logic lives in Function/Operate and switches on the kind name;
+ * unknown kinds are rejected at prepare time.
+ */
+
 import type KindSpec from "@Interface/KindSpec.js";
 
+/**
+ * The default kind table (kind name -> spec).
+ */
 export const DEFAULT_KINDS: Record<string, KindSpec> = {
 	// The version bump: every package.json's version field.
 	"version-bump": { globs: ["**/package.json"], param: "version" },

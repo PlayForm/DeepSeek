@@ -1,53 +1,64 @@
-// Drain - the queue -> SQLite transaction (Documentation/Plans/
-// COST-TRACK-PLUGIN.md sections 1, 14 and 16.1): the session/flush listener's
-// engine. One flush folds one session's queued events into the ledger inside
-// ONE transaction: the session and project dimensions adopted from the session
-// header, the Call row per assistant/message that carries usage (priced at the
-// price row in force at the call's own time, with the cache split's
-// CacheSaving), the Touch rows per tool/call (written the moment their Call
-// row exists, pending until then, each with its Stage and ReadBeforeEdit
-// derived from the file's own prior touches in the session; a search's
-// argument names a scope, so its pending set stays empty until the tool/result
-// arrives and its discovered paths become one read touch each), the
-// ContextMass rows from the surface replay (which now splits the cached prefix
-// from the uncached remainder), the Allocation rows from the attribution model
-// (allocated when the step ends, or at the end of the batch as the safety
-// net), the Verdict row per (session, file) when the session ends, and the
-// session Cursor advanced to the highest sequence folded. The call's own
-// pricing dimensions (section 17.1) - Mode, Region and the resolved tier -
-// are written on the Call row, and the cache split's CacheSaving is measured
-// against the modifier-adjusted rates (section 17.2). The v4 grain rides the
-// same fold: the Edit rows per touch (section 17.3), read from the tool call's
-// own arguments, and the telemetry columns on the Call row (section 17.4),
-// read from the batch's records up to each message. The file versions ride it
-// too (E7, the research's section 4): a read result's rendered text becomes
-// the FileVersion row its read touch binds to, a write's own content becomes
-// the after version row while its touch binds to the version the file held
-// before it, and every touch without confirmable content - a patch, a batch
-// operation, a several-file write, a failed or unreadable result - keeps a
-// NULL VersionId instead of a guess. The hash is the SHA-256 of the exact
-// content, and a row already recorded for the same bytes is reused, so an
-// unchanged file never accumulates versions and a replay never duplicates one.
-// That version evidence is also the revert signal (B6b, the research's section
-// 5): a mutating touch whose written content resolves to a version row
-// recorded earlier than the touch - and not to the version the file held just
-// now - is staged as a revert, because the file went back to an earlier
-// content hash, and its file's verdict records "reverted" rather than
-// "changed"; a touch with no before version or no confirmable after content
-// keeps the signal false instead of guessing. Every insert is INSERT OR IGNORE
-// against the DDL's unique keys (the Verdict is REPLACE), so draining the same
-// events twice writes the same rows and no duplicates. The drain never throws
-// into the parallel dispatch: one failed batch rolls back whole, restores its
-// session's in-memory replay state, logs one line and reports false - the
-// flush handler owns the acknowledgement and decides the retry, so a batch
-// that never committed stays queued. The fold also runs in a replay-only mode
-// (E2, A2 section 1.4): it walks the events exactly as the booking fold does -
-// the surface buffer, the pending touch sets, the awaiting calls, the per-file
-// histories, the per-file versions, the per-file restoration flags, the read
-// targets and the folded set all advance - but it writes no row, advances no
-// cursor and never touches the capture queue, so a partially processed session
-// can rebuild the state a continuous run would hold before it books the events
-// past its cursor.
+/**
+ * @module Drain
+ *
+ * The queue -> SQLite transaction (Documentation/Plans/COST-TRACK-PLUGIN.md
+ * sections 1, 14 and 16.1): the session/flush listener's engine. One flush
+ * folds one session's queued events into the ledger inside ONE transaction.
+ *
+ * @remarks
+ * The fold writes the session and project dimensions adopted from the
+ * session header, the Call row per assistant/message that carries usage
+ * (priced at the price row in force at the call's own time, with the cache
+ * split's CacheSaving), the Touch rows per tool/call (written the moment
+ * their Call row exists, pending until then, each with its Stage and
+ * ReadBeforeEdit derived from the file's own prior touches in the session; a
+ * search's argument names a scope, so its pending set stays empty until the
+ * tool/result arrives and its discovered paths become one read touch each),
+ * the ContextMass rows from the surface replay (which now splits the cached
+ * prefix from the uncached remainder), the Allocation rows from the
+ * attribution model (allocated when the step ends, or at the end of the
+ * batch as the safety net), the Verdict row per (session, file) when the
+ * session ends, and the session Cursor advanced to the highest sequence
+ * folded. The call's own pricing dimensions (section 17.1) - Mode, Region
+ * and the resolved tier - are written on the Call row, and the cache split's
+ * CacheSaving is measured against the modifier-adjusted rates (section
+ * 17.2). The v4 grain rides the same fold: the Edit rows per touch (section
+ * 17.3), read from the tool call's own arguments, and the telemetry columns
+ * on the Call row (section 17.4), read from the batch's records up to each
+ * message.
+ *
+ * The file versions ride it too (E7, the research's section 4): a read
+ * result's rendered text becomes the FileVersion row its read touch binds
+ * to, a write's own content becomes the after version row while its touch
+ * binds to the version the file held before it, and every touch without
+ * confirmable content - a patch, a batch operation, a several-file write, a
+ * failed or unreadable result - keeps a NULL VersionId instead of a guess.
+ * The hash is the SHA-256 of the exact content, and a row already recorded
+ * for the same bytes is reused, so an unchanged file never accumulates
+ * versions and a replay never duplicates one. That version evidence is also
+ * the revert signal (B6b, the research's section 5): a mutating touch whose
+ * written content resolves to a version row recorded earlier than the touch
+ * - and not to the version the file held just now - is staged as a revert,
+ * because the file went back to an earlier content hash, and its file's
+ * verdict records "reverted" rather than "changed"; a touch with no before
+ * version or no confirmable after content keeps the signal false instead of
+ * guessing.
+ *
+ * Every insert is INSERT OR IGNORE against the DDL's unique keys (the
+ * Verdict is REPLACE), so draining the same events twice writes the same
+ * rows and no duplicates. The drain never throws into the parallel dispatch:
+ * one failed batch rolls back whole, restores its session's in-memory replay
+ * state, logs one line and reports false - the flush handler owns the
+ * acknowledgement and decides the retry, so a batch that never committed
+ * stays queued. The fold also runs in a replay-only mode (E2, A2 section
+ * 1.4): it walks the events exactly as the booking fold does - the surface
+ * buffer, the pending touch sets, the awaiting calls, the per-file
+ * histories, the per-file versions, the per-file restoration flags, the
+ * read targets and the folded set all advance - but it writes no row,
+ * advances no cursor and never touches the capture queue, so a partially
+ * processed session can rebuild the state a continuous run would hold before
+ * it books the events past its cursor.
+ */
 import { createHash } from "node:crypto";
 import { basename } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
@@ -65,6 +76,9 @@ import StageOf from "./Stage.js";
 import Telemetry from "./Telemetry.js";
 import Touch, { Content, Rendered, Search } from "./Touch.js";
 
+/**
+ * One raw session-log event: the fields the fold reads.
+ */
 type EventRecord = {
 	type?: unknown;
 	data?: unknown;
@@ -73,6 +87,9 @@ type EventRecord = {
 	id?: unknown;
 };
 
+/**
+ * One priced call.
+ */
 type Costed = {
 	Input: number;
 	Output: number;
@@ -83,13 +100,20 @@ type Costed = {
 	Currency: string;
 };
 
-// One parsed file interaction, exactly what the arguments parser returns.
+/**
+ * One parsed file interaction, exactly what the arguments parser returns.
+ */
 type TouchRow = { Path: string; Kind: "read" | "write" | "edit" | "delete" | "search" };
 
-// One tool/call's touches, waiting for the Call row they attach to. A
-// search-family call's set is deferred: it stays empty until the tool/result
-// that completes the call supplies the discovered files, so Resolved marks
-// whether the set is final and CallId pairs the call with its result.
+/**
+ * One tool/call's touches, waiting for the Call row they attach to.
+ *
+ * @remarks
+ * A search-family call's set is deferred: it stays empty until the
+ * tool/result that completes the call supplies the discovered files, so
+ * Resolved marks whether the set is final and CallId pairs the call with
+ * its result.
+ */
 type PendingCall = {
 	CallKey: string;
 	CallId: string;
@@ -101,14 +125,21 @@ type PendingCall = {
 	Touched: readonly TouchRow[];
 };
 
-// One read call waiting for its result (E7): the file the call's arguments
-// named and the key its touch row carries, so the result's rendered text binds
-// to the exact file that produced it - the result names the call, never the
-// file. Only a call that reads exactly one file is remembered, because one
-// result body is one file's content.
+/**
+ * One read call waiting for its result (E7): the file the call's arguments
+ * named and the key its touch row carries, so the result's rendered text
+ * binds to the exact file that produced it - the result names the call,
+ * never the file.
+ *
+ * @remarks
+ * Only a call that reads exactly one file is remembered, because one result
+ * body is one file's content.
+ */
 type Reading = { CallKey: string; Path: string };
 
-// One priced call, waiting for the step's touches to be complete.
+/**
+ * One priced call, waiting for the step's touches to be complete.
+ */
 type AwaitedCall = {
 	CallId: number;
 	Turn: number;
@@ -122,14 +153,17 @@ type AwaitedCall = {
 	CachedSurface: number;
 };
 
-// One session's in-memory replay state, copied before a fold and put back
-// when the transaction rolls back: the surface buffer every later call's mass
-// is replayed over, the pending touch sets, the awaiting calls, the per-file
-// ordered touch kinds, the per-file version each fold has observed (so a
-// later touch binds to the version the file actually held), the restoration
-// flag of each file's latest mutating touch (so the session's verdict is
-// written from the same evidence its stages were), the read calls still
-// waiting for their result, and the calls this drain has already folded.
+/**
+ * One session's in-memory replay state, copied before a fold and put back
+ * when the transaction rolls back: the surface buffer every later call's
+ * mass is replayed over, the pending touch sets, the awaiting calls, the
+ * per-file ordered touch kinds, the per-file version each fold has observed
+ * (so a later touch binds to the version the file actually held), the
+ * restoration flag of each file's latest mutating touch (so the session's
+ * verdict is written from the same evidence its stages were), the read calls
+ * still waiting for their result, and the calls this drain has already
+ * folded.
+ */
 type ReplayState = {
 	Surfaces: unknown[];
 	Histories: Map<string, string[]>;
@@ -141,20 +175,29 @@ type ReplayState = {
 	Folded: number[];
 };
 
-// The fold's mode: Replay rebuilds one session's in-memory replay state from
-// an already-booked prefix and books nothing - no row, no cursor advance, no
-// capture-queue acknowledgement. Every caller that omits it books, which is
-// the live flush and the whole of the backfill's booking pass.
+/**
+ * The fold's mode: Replay rebuilds one session's in-memory replay state from
+ * an already-booked prefix and books nothing - no row, no cursor advance, no
+ * capture-queue acknowledgement.
+ *
+ * @remarks
+ * Every caller that omits it books, which is the live flush and the whole
+ * of the backfill's booking pass.
+ */
 type FoldMode = { Replay?: boolean };
 
-// The mutating kinds: the touches whose stage the classifier reads as an
-// edit (section 16.1) and whose presence makes a file's verdict "changed".
+/**
+ * The mutating kinds: the touches whose stage the classifier reads as an
+ * edit (section 16.1) and whose presence makes a file's verdict "changed".
+ */
 const WriteKind = (Kind: string): boolean =>
 	Kind === "write" || Kind === "edit" || Kind === "delete" || Kind === "move";
 
-// The call a tool/result event belongs to: the tool-role message's own source
-// callId (the shape the live log records), else its toolCallId, else the
-// event's own callId - "" when the record carries none.
+/**
+ * The call a tool/result event belongs to: the tool-role message's own
+ * source callId (the shape the live log records), else its toolCallId, else
+ * the event's own callId - "" when the record carries none.
+ */
 const OriginOf = (Data: Record<string, unknown>): string => {
 	const Message = Data["message"];
 	const Named =
@@ -170,9 +213,14 @@ const OriginOf = (Data: Record<string, unknown>): string => {
 	return typeof Candidate === "string" ? Candidate : "";
 };
 
-// Whether a tool result reports a failure: the log's own error code on the
-// result record (the field the telemetry reads). A failed read returns an
-// error message, never the file's text, so it is never a version.
+/**
+ * Whether a tool result reports a failure: the log's own error code on the
+ * result record (the field the telemetry reads).
+ *
+ * @remarks
+ * A failed read returns an error message, never the file's text, so it is
+ * never a version.
+ */
 const Failed = (Data: Record<string, unknown>): boolean => {
 	const Failure = Data["error"];
 	if (Failure === null || typeof Failure !== "object") {
@@ -182,9 +230,11 @@ const Failed = (Data: Record<string, unknown>): boolean => {
 	return typeof Code === "string" && Code.length > 0;
 };
 
-// The cache split's saving (section 2.2 and section 11's ring C): the reads
-// the cache made cheaper, minus the cache-write premium when the provider
-// charges one - zero when the price row carries no cache rates.
+/**
+ * The cache split's saving (section 2.2 and section 11's ring C): the reads
+ * the cache made cheaper, minus the cache-write premium when the provider
+ * charges one - zero when the price row carries no cache rates.
+ */
 const Saving = (
 	CacheRead: number,
 	CacheWrite: number,
@@ -199,26 +249,35 @@ const Saving = (
 	return Read - Write;
 };
 
-// One file version's content evidence (E7, the research's section 4): the
-// SHA-256 of the exact content the touch saw, its UTF-8 encoded byte length -
-// never a JavaScript string length, which undercounts every non-ASCII
-// character - and its line count, counted the edit grain's way (a non-empty
-// body is its newline count plus one, so one line reads as one line and an
-// empty body as none). The digest is content-addressed: the same bytes always
-// produce the same hash, so a version row is reusable rather than repeatable.
+/**
+ * One file version's content evidence (E7, the research's section 4): the
+ * SHA-256 of the exact content the touch saw, its UTF-8 encoded byte
+ * length - never a JavaScript string length, which undercounts every
+ * non-ASCII character - and its line count, counted the edit grain's way
+ * (a non-empty body is its newline count plus one, so one line reads as one
+ * line and an empty body as none).
+ *
+ * @remarks
+ * The digest is content-addressed: the same bytes always produce the same
+ * hash, so a version row is reusable rather than repeatable.
+ */
 const Fingerprint = (Body: string): { Hash: string; Bytes: number; Lines: number } => ({
 	Hash: createHash("sha256").update(Body, "utf8").digest("hex"),
 	Bytes: Buffer.byteLength(Body, "utf8"),
 	Lines: Body.length > 0 ? Body.split("\n").length : 0,
 });
 
-// One file's verdict at session end (section 14): a file whose last
-// write-kind touch is a revert is "reverted", a file with any write-kind
-// touch is "changed", a file with only read-kind touches is "read". The
-// restoration flag is the same evidence the touch's stage was classified
-// with (B6b), so a session that returns a file to an earlier content hash
-// records "reverted" rather than "changed" - and a file with no version
-// evidence keeps "changed", never a guess.
+/**
+ * One file's verdict at session end (section 14): a file whose last
+ * write-kind touch is a revert is "reverted", a file with any write-kind
+ * touch is "changed", a file with only read-kind touches is "read".
+ *
+ * @remarks
+ * The restoration flag is the same evidence the touch's stage was
+ * classified with (B6b), so a session that returns a file to an earlier
+ * content hash records "reverted" rather than "changed" - and a file with
+ * no version evidence keeps "changed", never a guess.
+ */
 const VerdictOf = (Kinds: readonly string[], Restored: boolean): string => {
 	const Last = Kinds.reduce((Found, Kind, Index) => (WriteKind(Kind) ? Index : Found), -1);
 	switch (true) {
@@ -232,8 +291,10 @@ const VerdictOf = (Kinds: readonly string[], Restored: boolean): string => {
 	}
 };
 
-// The session identity: the subject's own id first, then the session header
-// record in the batch.
+/**
+ * The session identity: the subject's own id first, then the session
+ * header record in the batch.
+ */
 const Identify = (Session: unknown, Records: readonly EventRecord[]): string | undefined => {
 	const Subject = Session as { id?: unknown } | undefined;
 	if (typeof Subject?.id === "string" && Subject.id.length > 0) {

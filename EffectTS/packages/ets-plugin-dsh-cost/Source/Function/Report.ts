@@ -1,24 +1,33 @@
-// Report - the read queries (Documentation/Plans/COST-TRACK-PLUGIN.md
-// sections 3 and 16): one SELECT per report scope over the ledger's
-// pre-aggregated views - FileCost for the file rows, ClientCost for the
-// client rows, SessionCost joined through the Session and Project dimensions
-// for the project rows, and the model rows grouped from Allocation and Call
-// per provider, model, mode and region (section 17.1, the pricing
-// dimensions on the Call row) - plus the v2 analytics reads: Lifetime over
-// the FileLifetime view (the cost of one file across every session that
-// ever touched it, section 10) and Stages grouped from Touch (the semantic
-// pipeline's stage spend, section 16.1). The factor read (section 17.1)
-// groups CallFactor joined to Factor: one row per (Key, Value) with the
-// call count and the summed call cost, so a classification factor is a
-// slice, not a schema change. The v4 edit-grain read (section 17.3) groups
-// Edit through Touch to File: one row per file with the lines added and
-// removed, the hunk count and the summed cost. Each returns plain rows whose
-// cost columns
-// are rounded to six decimals, so a report, an export and a re-derivation
-// land the same numbers at the same precision. The FileCost view carries no
-// token column, so file rows report Tokens zero.
+/**
+ * @module Report
+ *
+ * The read queries (Documentation/Plans/COST-TRACK-PLUGIN.md sections 3
+ * and 16): one SELECT per report scope over the ledger's pre-aggregated
+ * views.
+ *
+ * @remarks
+ * FileCost answers the file rows, ClientCost the client rows, SessionCost
+ * joined through the Session and Project dimensions the project rows, and
+ * the model rows are grouped from Allocation and Call per provider, model,
+ * mode and region (section 17.1, the pricing dimensions on the Call row) -
+ * plus the v2 analytics reads: Lifetime over the FileLifetime view (the
+ * cost of one file across every session that ever touched it, section 10)
+ * and Stages grouped from Touch (the semantic pipeline's stage spend,
+ * section 16.1). The factor read (section 17.1) groups CallFactor joined to
+ * Factor: one row per (Key, Value) with the call count and the summed call
+ * cost, so a classification factor is a slice, not a schema change. The v4
+ * edit-grain read (section 17.3) groups Edit through Touch to File: one row
+ * per file with the lines added and removed, the hunk count and the summed
+ * cost. Each returns plain rows whose cost columns are rounded to six
+ * decimals, so a report, an export and a re-derivation land the same
+ * numbers at the same precision. The FileCost view carries no token column,
+ * so file rows report Tokens zero.
+ */
 import type { DatabaseSync } from "node:sqlite";
 
+/**
+ * One report row of one scope.
+ */
 type Row = {
 	Scope: "file" | "project" | "client" | "model" | "session";
 	Key: string;
@@ -29,6 +38,9 @@ type Row = {
 	Tokens: number;
 };
 
+/**
+ * One file's lifetime cost row.
+ */
 type LifetimeRow = {
 	Path: string;
 	Sessions: number;
@@ -37,6 +49,9 @@ type LifetimeRow = {
 	Cost: number;
 };
 
+/**
+ * One stage's spend row.
+ */
 type StageRow = {
 	Stage: string;
 	Touches: number;
@@ -44,6 +59,9 @@ type StageRow = {
 	Cost: number;
 };
 
+/**
+ * One classification factor's slice row.
+ */
 type FactorRow = {
 	Key: string;
 	Value: string;
@@ -51,6 +69,9 @@ type FactorRow = {
 	Cost: number;
 };
 
+/**
+ * One file's edit-grain row.
+ */
 type EditRow = {
 	Path: string;
 	LinesAdded: number;
@@ -59,13 +80,18 @@ type EditRow = {
 	Cost: number;
 };
 
-// One money column: a non-finite or absent sum is zero, never guessed, and
-// the rounding is to the sixth decimal.
+/**
+ * One money column: a non-finite or absent sum is zero, never guessed, and
+ * the rounding is to the sixth decimal.
+ */
 const Round = (Value: unknown): number => {
 	const One = typeof Value === "number" && Number.isFinite(Value) ? Value : 0;
 	return Math.round(One * 1e6) / 1e6;
 };
 
+/**
+ * One statement row narrowed into the report row shape.
+ */
 const Row = (Scope: Row["Scope"], Raw: Record<string, unknown>): Row => ({
 	Scope,
 	Key: typeof Raw["Key"] === "string" ? Raw["Key"] : "",
@@ -76,6 +102,9 @@ const Row = (Scope: Row["Scope"], Raw: Record<string, unknown>): Row => ({
 	Tokens: typeof Raw["Tokens"] === "number" ? Raw["Tokens"] : 0,
 });
 
+/**
+ * One statement run and narrowed into the scope's rows.
+ */
 const Mapped = (
 	Database: DatabaseSync,
 	Scope: Row["Scope"],

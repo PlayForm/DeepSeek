@@ -1,6 +1,14 @@
-// Digest - the content-derived id and fence (plan section 2): sha256 over
-// the targets (path + version) and the operations (find + replace). The
-// ingester applies only the proposal whose digest still matches.
+/**
+ * @module Digest
+ *
+ * The content-derived id and fence: sha256 over the targets and the
+ * operations.
+ *
+ * @remarks
+ * Plan section 2: the digest hashes the targets (path + version) and the
+ * operations (find + replace). The ingester applies only the proposal whose
+ * digest still matches.
+ */
 import { createHash as Hash } from "node:crypto";
 
 import type Operation from "../Interface/Operation.js";

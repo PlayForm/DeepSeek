@@ -1,43 +1,63 @@
-// Judge - the deterministic acceptance rules between the model's reply and the
-// corpus. This module is the reason the review can run unattended: the model
-// proposes, the judge disposes, and every refusal names the rule that refused
-// it so the ledger and the report can say WHY.
-//
-// THE RULES ARE MECHANICAL ON PURPOSE. Every one of them is a rule the Hermes
-// review states in prose (`_DO_NOT_CAPTURE_BLOCK`, the class-level naming rule,
-// read-before-write) and that a prompt alone cannot enforce: a model that
-// ignores an instruction produces a plausible artifact, and a plausible
-// artifact in the corpus is worse than no artifact. Each rule below is a
-// shape the corpus must never contain, expressed as a test.
-//
-// WHAT THE JUDGE DOES NOT DO: it never edits an operation into acceptability.
-// A refused operation is reported, not repaired - a repaired write is a write
-// nobody proposed.
+/**
+ * @module Judge
+ *
+ * The deterministic acceptance rules between the model's reply and the corpus.
+ *
+ * @remarks
+ * This module is the reason the review can run unattended: the model
+ * proposes, the judge disposes, and every refusal names the rule that refused
+ * it so the ledger and the report can say WHY.
+ *
+ * THE RULES ARE MECHANICAL ON PURPOSE. Every one of them is a rule the Hermes
+ * review states in prose (`_DO_NOT_CAPTURE_BLOCK`, the class-level naming rule,
+ * read-before-write) and that a prompt alone cannot enforce: a model that
+ * ignores an instruction produces a plausible artifact, and a plausible
+ * artifact in the corpus is worse than no artifact. Each rule below is a
+ * shape the corpus must never contain, expressed as a test.
+ *
+ * WHAT THE JUDGE DOES NOT DO: it never edits an operation into acceptability.
+ * A refused operation is reported, not repaired - a repaired write is a write
+ * nobody proposed.
+ */
 import type { Corpus } from "@Interface/Corpus.js";
 import type { Op, Proposal, Verdict } from "@Interface/Proposal.js";
 
-/** The class-level name: kebab-case, starting with a letter. */
+/**
+ * The class-level name: kebab-case, starting with a letter.
+ */
 const Name = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
 
-/** Session-artifact shapes: a year, an issue/PR number, a work-in-progress word. */
+/**
+ * Session-artifact shapes: a year, an issue/PR number, a work-in-progress word.
+ */
 const Artifact = /((?:19|20)\d{2})|(#\d+)|^(?:fix|debug|audit|hotfix|temp|tmp|wip|test)(?:-|$)/;
 
-/** The support-file path: one of the three kinds, one file deep. */
+/**
+ * The support-file path: one of the three kinds, one file deep.
+ */
 const Support =
 	/^(?:references|templates|scripts)\/[a-z0-9][a-z0-9._-]*\.(?:md|ts|js|sh|json|ya?ml)$/;
 
-/** Incident narration dressed as a rule. */
+/**
+ * Incident narration dressed as a rule.
+ */
 const Narrative = /(UPDATE:)|(\bthis session\b)|(^#{1,6}\s*\d{4}-\d{2}-\d{2})/im;
 
-/** A negative claim about a tool or the environment. */
+/**
+ * A negative claim about a tool or the environment.
+ */
 const Negative =
 	/(does not work|is broken|not installed|command not found|is unavailable|no longer works)/i;
 
-/** The FIX a negative claim must carry to be a rule instead of a constraint. */
+/**
+ * The FIX a negative claim must carry to be a rule instead of a constraint.
+ */
 const Fix =
 	/(install|npm i |pnpm add|cargo install|export |environment variable|config(?:ure|uration)?\b)/i;
 
-/** The frontmatter a SKILL.md body must carry, with this operation's name. */
+/**
+ * The frontmatter a SKILL.md body must carry, with this operation's name.
+ */
 const Frontmatter = (Body: string, OpName: string): boolean => {
 	switch (true) {
 		case !Body.startsWith("---"):
@@ -58,7 +78,9 @@ const Frontmatter = (Body: string, OpName: string): boolean => {
 	);
 };
 
-/** One operation's verdict: `""` when accepted, else the rule id. */
+/**
+ * One operation's verdict: `""` when accepted, else the rule id.
+ */
 const Rule = (Op: Op, Corpus: Corpus): string => {
 	const Exists = Corpus.exists(Op.name);
 	switch (true) {

@@ -1,56 +1,68 @@
-// Contributions - the engine's second, file-scoped read family: for one file
-// path, the conversations that contributed to that file's cost, each with the
-// money it allocated to the file and its share of the file's whole lifetime
-// total, and - the deeper level - one conversation's calls that allocated to
-// that same file, each with its own money, tokens, stage and touch evidence.
-// This is the product question the ledger exists to answer (the file, then
-// its conversations, then their calls and models), so each read is one
-// statement and no envelope: the report reads stay untouched, and a path or a
-// session the ledger does not record answers an empty array rather than a
-// throw.
-//
-// THE CONVERSATION READ resolves the file by its exact path (File.Path, which
-// the ledger keys per project, so every FileId carrying that path is in
-// scope), aggregates the allocation money per CallId first - a call with
-// several allocation rows for the file cannot fan its money out - then groups
-// those calls by SessionId for the distinct call count, the direct and
-// amortized sums and the first and last call times, joins Session for the
-// title, and carries the file's lifetime total (the same pre-aggregated money
-// over every session) so the caller can divide one group by it. The models
-// are the distinct `Provider/Model` ids of the group's calls, handed over as
-// one JSON array.
-//
-// THE CALL READ is the same file scope and the same per-call money, narrowed
-// to one conversation: CallScope pins the session, CallMoney collapses the
-// file's Allocation rows to one money row per call, TouchRow collapses the
-// file's Touch rows to one stage and one touched flag per call, and the two
-// meet on CallId in one FROM clause - the money never joins Touch, so a call
-// that touched the file more than once cannot multiply its allocation, and
-// the LEFT JOIN keeps a call that only carried the file (no touch row) in the
-// answer with `Touched` false and a null stage. The order is the
-// conversation's own grain: turn, step, then the call id.
-//
-// Every statement reads only; the caller owns the open handle, so this module
-// sees the open ledger and never a path it resolves itself. The twin's read
-// service has not been ported yet, so these are the Functions the future
-// service (and the file-to-conversation command) call directly, exactly as
-// Function/Report and Function/Assess are called.
+/**
+ * @module Contributions
+ *
+ * The engine's second, file-scoped read family: for one file path, the
+ * conversations that contributed to that file's cost, and one
+ * conversation's calls that allocated to that same file.
+ *
+ * @remarks
+ * Each read carries the money it allocated to the file and its share of the
+ * file's whole lifetime total; the deeper level carries each call's own
+ * money, tokens, stage and touch evidence. This is the product question the
+ * ledger exists to answer (the file, then its conversations, then their
+ * calls and models), so each read is one statement and no envelope: the
+ * report reads stay untouched, and a path or a session the ledger does not
+ * record answers an empty array rather than a throw.
+ *
+ * THE CONVERSATION READ resolves the file by its exact path (File.Path,
+ * which the ledger keys per project, so every FileId carrying that path is
+ * in scope), aggregates the allocation money per CallId first - a call with
+ * several allocation rows for the file cannot fan its money out - then
+ * groups those calls by SessionId for the distinct call count, the direct
+ * and amortized sums and the first and last call times, joins Session for
+ * the title, and carries the file's lifetime total (the same pre-aggregated
+ * money over every session) so the caller can divide one group by it. The
+ * models are the distinct `Provider/Model` ids of the group's calls, handed
+ * over as one JSON array.
+ *
+ * THE CALL READ is the same file scope and the same per-call money,
+ * narrowed to one conversation: CallScope pins the session, CallMoney
+ * collapses the file's Allocation rows to one money row per call, TouchRow
+ * collapses the file's Touch rows to one stage and one touched flag per
+ * call, and the two meet on CallId in one FROM clause - the money never
+ * joins Touch, so a call that touched the file more than once cannot
+ * multiply its allocation, and the LEFT JOIN keeps a call that only carried
+ * the file (no touch row) in the answer with `Touched` false and a null
+ * stage. The order is the conversation's own grain: turn, step, then the
+ * call id.
+ *
+ * Every statement reads only; the caller owns the open handle, so this
+ * module sees the open ledger and never a path it resolves itself. The
+ * twin's read service has not been ported yet, so these are the Functions
+ * the future service (and the file-to-conversation command) call directly,
+ * exactly as Function/Report and Function/Assess are called.
+ */
 import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
 
 import type ContributionRow from "@Interface/ContributionRow.js";
 import type FileCallRow from "@Interface/FileCallRow.js";
 
-// The two read-only statements: FileScope pins the path, CallMoney collapses
-// the Allocation rows to one money row per call, Lifetime sums that same
-// money across every session, SessionRow groups it by the call's session, and
-// FileCalls joins that same per-call money to the call row and to the
-// per-call touch. TouchRow is the same collapse on the touch side: the touch
-// count is the evidence flag and the stage is the call's own stage word - the
-// greatest name when one call recorded more than one touch of the file, so
-// the row stays one per call and never fans out. The model list is a
-// correlated subquery over the group's calls, so the fan-out the statements
-// avoid in money never returns in the string. The conversation sort is the
-// unrounded total, descending, with the session id as the tiebreak.
+/**
+ * The two read-only statements: FileScope pins the path, CallMoney
+ * collapses the Allocation rows to one money row per call, Lifetime sums
+ * that same money across every session, SessionRow groups it by the call's
+ * session, and FileCalls joins that same per-call money to the call row and
+ * to the per-call touch.
+ *
+ * @remarks
+ * TouchRow is the same collapse on the touch side: the touch count is the
+ * evidence flag and the stage is the call's own stage word - the greatest
+ * name when one call recorded more than one touch of the file, so the row
+ * stays one per call and never fans out. The model list is a correlated
+ * subquery over the group's calls, so the fan-out the statements avoid in
+ * money never returns in the string. The conversation sort is the unrounded
+ * total, descending, with the session id as the tiebreak.
+ */
 const Query = {
 	Contributions: `WITH FileScope AS (
     SELECT File.FileId AS FileId
@@ -159,30 +171,42 @@ LEFT JOIN TouchRow ON TouchRow.CallId = CallMoney.CallId
 ORDER BY CallScope.Turn ASC, CallScope.Step ASC, CallScope.CallId ASC;`,
 } as const;
 
-// The row readers both statements share: every statement of this module hands
-// over the same SQLite value shapes, so the helpers are defined once and read
-// the same way whichever grain the caller asked for.
+/**
+ * The row readers both statements share: every statement of this module
+ * hands over the same SQLite value shapes, so the helpers are defined once
+ * and read the same way whichever grain the caller asked for.
+ */
 const Text = (Row: Record<string, SQLOutputValue>, Key: string): string | null => {
 	const Value = Row[Key];
 	return typeof Value === "string" ? Value : null;
 };
 
+/**
+ * One finite number cell of a statement row, or null.
+ */
 const Figure = (Row: Record<string, SQLOutputValue>, Key: string): number | null => {
 	const Value = Row[Key];
 	return typeof Value === "number" && Number.isFinite(Value) ? Value : null;
 };
 
+/**
+ * One number cell read as zero when it is absent or not finite.
+ */
 const Stored = (Row: Record<string, SQLOutputValue>, Key: string): number => Figure(Row, Key) ?? 0;
 
-// One money column: the rounding is to the sixth decimal, the precision every
-// report read lands on, so a contribution row agrees with the file row of the
-// report reads and with the report of the same sum, and a call row agrees
-// with the conversation row above it.
+/**
+ * One money column: the rounding is to the sixth decimal, the precision
+ * every report read lands on, so a contribution row agrees with the file
+ * row of the report reads and with the report of the same sum, and a call
+ * row agrees with the conversation row above it.
+ */
 const Round = (Value: number): number => Math.round(Value * 1e6) / 1e6;
 
-// The model ids the statement hands over as one JSON array (the provider and
-// model pair is the id), never split from a comma-joined list, because a
-// model id may itself carry punctuation the aggregate does not escape.
+/**
+ * The model ids the statement hands over as one JSON array (the provider
+ * and model pair is the id), never split from a comma-joined list, because
+ * a model id may itself carry punctuation the aggregate does not escape.
+ */
 const ModelList = (Raw: SQLOutputValue | undefined): readonly string[] => {
 	if (typeof Raw !== "string") {
 		return [];

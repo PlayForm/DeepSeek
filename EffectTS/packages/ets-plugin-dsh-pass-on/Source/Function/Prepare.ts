@@ -1,8 +1,14 @@
-// Prepare - the pass-on's orchestration (plan section 3): resolve the
-// targets, synthesize the operations, render the preview, compute the
-// digest. READ-ONLY: nothing is written. If the proposal is empty or
-// ambiguous (unknown kind, no effective operations), the pass-on returns no
-// batch - not an empty one.
+/**
+ * @module Prepare
+ *
+ * The pass-on's orchestration: resolve the targets, synthesize the
+ * operations, render the preview, compute the digest.
+ *
+ * @remarks
+ * Plan section 3. READ-ONLY: nothing is written. If the proposal is empty or
+ * ambiguous (unknown kind, no effective operations), the pass-on returns no
+ * batch - not an empty one.
+ */
 import { createHash as Hash } from "node:crypto";
 import { readFileSync as Read } from "node:fs";
 

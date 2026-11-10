@@ -22,8 +22,8 @@
  * "recovery" (the row's behavior was applied). The policy lookup lives in
  * `Function/Policy`, the table in `Function/Recovery` - Check stays pure.
  */
-import type { Obligations } from "@Interface/Check.js";
-import type Proposal from "@Interface/Proposal.js";
-import type State from "@Interface/State.js";
+import type { Obligations } from "../Interface/Check.js";
+import type Proposal from "../Interface/Proposal.js";
+import type State from "../Interface/State.js";
 export default _default;
 declare function _default(State: State, Proposal_: Proposal): Obligations;

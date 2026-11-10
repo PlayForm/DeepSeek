@@ -1,26 +1,34 @@
-// Blocks - the review prompt's byte-stable text, one block per rule family.
-//
-// THE PROVENANCE OF EVERY SENTENCE: these blocks are the Hermes background
-// review's prompts (`agent/background_review.py`: `_LESSON_LAYER_BLOCK`,
-// `_SKILL_REVIEW_PROMPT`, `_DO_NOT_CAPTURE_BLOCK`, `_COMBINED_REVIEW_PROMPT`,
-// `_MEMORY_ROUTING_BLOCK`) translated onto THIS harness's corpus vocabulary.
-// The translation is not cosmetic - three Hermes rules have a different owner
-// here and say so:
-//
-//   * "the skill is a package" - here the package is specified by
-//     `~/.dsh/skills/STANDARD.md` (the four questions, the body section
-//     order, the single-owner corpus map), so the block names the standard
-//     instead of restating it;
-//   * "memory has two stores" - here the two stores are the SKILL CORPUS and
-//     the WORKING AGREEMENT (`~/.dsh/AGENTS.md`), and the routing rule is the
-//     same one: a fact goes to ONE store, never both;
-//   * "the curator consolidates" - here the deterministic transitions are this
-//     service's `Curate`, so the reviewer is told to NOTE overlap and never to
-//     archive for tidiness.
-//
-// WHY THE TEXT IS CONSTANT AND NOT GENERATED: the prompt is the contract the
-// judge enforces. A generated prompt drifts from the judge silently; a
-// constant one can be diffed, and the smokes assert its exact bytes.
+/**
+ * @module Blocks
+ *
+ * The review prompt's byte-stable text, one block per rule family.
+ *
+ * @remarks
+ * THE PROVENANCE OF EVERY SENTENCE: these blocks are the Hermes background
+ * review's prompts (`agent/background_review.py`: `_LESSON_LAYER_BLOCK`,
+ * `_SKILL_REVIEW_PROMPT`, `_DO_NOT_CAPTURE_BLOCK`, `_COMBINED_REVIEW_PROMPT`,
+ * `_MEMORY_ROUTING_BLOCK`) translated onto THIS harness's corpus vocabulary.
+ * The translation is not cosmetic - three Hermes rules have a different owner
+ * here and say so:
+ *
+ * - "the skill is a package" - here the package is specified by
+ *   `~/.dsh/skills/STANDARD.md` (the four questions, the body section
+ *   order, the single-owner corpus map), so the block names the standard
+ *   instead of restating it;
+ * - "memory has two stores" - here the two stores are the SKILL CORPUS and
+ *   the WORKING AGREEMENT (`~/.dsh/AGENTS.md`), and the routing rule is the
+ *   same one: a fact goes to ONE store, never both;
+ * - "the curator consolidates" - here the deterministic transitions are this
+ *   service's `Curate`, so the reviewer is told to NOTE overlap and never to
+ *   archive for tidiness.
+ *
+ * WHY THE TEXT IS CONSTANT AND NOT GENERATED: the prompt is the contract the
+ * judge enforces. A generated prompt drifts from the judge silently; a
+ * constant one can be diffed, and the smokes assert its exact bytes.
+ */
+/**
+ * The task framing and the "be active" instruction.
+ */
 export const Header = [
 	"Review the conversation above and update the lesson corpus.",
 	"",
@@ -31,6 +39,9 @@ export const Header = [
 	"missed learning opportunity, not a neutral outcome.",
 ].join("\n");
 
+/**
+ * What a skill is, before any rule about changing one.
+ */
 export const Shape = [
 	"What a skill IS: the instructions for doing a class of task the most",
 	"efficient and correct way, to THIS user's specifications - the procedure,",
@@ -69,6 +80,9 @@ export const Shape = [
 	"    do not append 'UPDATE: actually...' underneath it.",
 ].join("\n");
 
+/**
+ * What counts as a reason to act.
+ */
 export const Signals = [
 	"Signals to look for (any one of these warrants an operation):",
 	"",
@@ -86,6 +100,9 @@ export const Signals = [
 	"    wrong, missing a step, or outdated. Patch it NOW.",
 ].join("\n");
 
+/**
+ * Which operation to prefer (the judge's duplicate rules assume it).
+ */
 export const Order = [
 	"Preference order - prefer the earliest operation that fits, but do pick one",
 	"when a signal above fired:",
@@ -110,6 +127,9 @@ export const Order = [
 	"     task, it is wrong - fall back to (1), (2) or (3).",
 ].join("\n");
 
+/**
+ * What the write must carry (the judge refuses otherwise).
+ */
 export const Fence = [
 	"Read before write (the judge enforces it): a `patch` must carry the COMPLETE",
 	"new SKILL.md, and the file must already exist; a `support` operation must",
@@ -118,6 +138,9 @@ export const Fence = [
 	"something you have not been shown is refused, not repaired.",
 ].join("\n");
 
+/**
+ * Which of the two stores a lesson belongs in.
+ */
 export const Routing = [
 	"Two stores - pick the right one for each lesson, and put it in ONE:",
 	"",
@@ -134,6 +157,9 @@ export const Routing = [
 	"operation, and proposing it as an agreement is a routing error.",
 ].join("\n");
 
+/**
+ * What must not be captured.
+ */
 export const Never = [
 	"Do NOT capture as skills (these become persistent self-imposed constraints",
 	"that bite you later when the environment changes):",
@@ -163,6 +189,9 @@ export const Never = [
 	"troubleshooting skill - never 'this tool does not work' as a constraint.",
 ].join("\n");
 
+/**
+ * The exact JSON contract, LAST, so it is the most recent instruction the model reads.
+ */
 export const Reply = [
 	"Reply with ONE JSON object and nothing else - no prose before it, no fence",
 	"after it:",

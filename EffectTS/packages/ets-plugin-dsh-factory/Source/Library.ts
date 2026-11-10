@@ -1,79 +1,83 @@
-// Library - the entry module of the FACTORY (@playform/ets-plugin-dsh-factory),
-// the FIRST class/service plugin in the governance family
-// (docs/user/develop/framework/service.md). Loader contract: the class form -
-// `export default class PluginFactory extends Service` with
-// `super(Context, "pluginFactory")`, registered immediately on construction
-// and removed with its owning fiber; `static inject = ["fs"]` because the
-// factory's primitives call ctx.fs (the governed-file read and the
-// version-guarded write). The ONLY named exports are the TYPE re-exports
-// (State/Options/Gate/Transform/Output - the consumer contract, P0-1): every
-// other module is a nameless default export composed Rust-style, and each
-// service method is a thin delegate.
-//
-// THE EFFECT-TS RE-IMPLEMENTATION (register #13, the factory round): the
-// harness shell STAYS a cordis `Service` class - the loader contract is not
-// an Effect concept - but behind it the machinery becomes
-// `Context.Service`s provided by `Layer`s and composed into ONE runtime that
-// the constructor materializes (Source/Service/Runtime.ts:
-// `Layer.mergeAll(Ledger, Journal, Write, Govern)` →
-// `Effect.scoped(Layer.build(...))`). Each public method delegates into that
-// runtime at one of the four boundary types of the plan (1.4):
-//
-//   * SYNC methods (Append/Journal/Refresh - the plain-fs exemption, the
-//     queue-offer bridge): `Effect.runSync(Effect.provide(Tag.use(...),
-//     runtime))` - sync in, sync out, byte-identical behavior;
-//   * PROMISE seams (Write/GuardedWrite/Continue/Govern): `Effect.runPromise
-//     (Effect.provide(...))` - NO RunOptions are passed, so the caller's
-//     abort signal is never mapped onto the fiber: it rides the write SEAM
-//     only (forwarded to `writeText` end to end, exactly like the Classic
-//     promise chain). A fiber interruption would replace the seam's own
-//     rejection with Effect's "All fibers interrupted without error" and
-//     break the abort path's byte parity (see Write);
-//   * the fs/observed registration (Wire) stays the sync listener shape the
-//     harness requires; the Attach lifecycle effects stay the ctx.effect
-//     seams - those two are Function-owned (Wire/Attach), untouched;
-//   * the plugin lifecycle: the runtime holds no scoped resources (all four
-//     layers are `Layer.succeed` closures that read the shell's instance
-//     state at call time), so the loader's removal needs no extra disposal.
-//
-// THE SERVICE SURFACE (ctx.pluginFactory - every signature documented in
-// README.md / SCHEME.md, byte-identical names and parameters):
-//
-//   Append(state, message)                 - the ledger (logger + appendFileSync, never throws)
-//   Match(path, list)                      - the exclusion segment match
-//   Discover(dir) / Parse(path)            - the auxiliary plain-fs discovery (the exemption)
-//   ResolvePolicy(state, dir, found, chain, opts?) - the union keep-list discovery (P3 chain-keys included)
-//   Gate(state, target, observation, actor, opts)  - the g1 gate set (logs nothing)
-//   Write(state, target, content, over?)   - the ONE shared write executor (intent/policy/observe/stash/transform)
-//   GuardedWrite(state, target, content, version, signal?) - the GUARDED ALIAS of Write (P4 fence + Stash)
-//   Refresh(state, target, actor, version) - the P₃/U₂ re-emit (same actor)
-//   Continue(state, target, actor, dir, found, version, transform) - the detached contained continuation
-//   State(ctx, config, {module, fields, policyFileName?}) - the State builder
-//   Wire(ctx, state, observe)              - the fs/observed registration
-//   Attach(ctx, {state, name})             - the P1 jobs + P2 inflight + P5 storage effects
-//   Journal(state, event, path, detail)    - the P5 storage writer (best-effort)
-//   Schema(shared?, module?)               - the Schemastery schema factory
-//   UpdateKey(target)                      - the namespaced Inflight key for update stages
-//   Seam(state, name)                      - the probe-once optional-service accessor
-//   RegisterGovern(basename, name, run)    - the direct-govern step registration (the modules call it at apply)
-//   Govern(target, selection, actor, version): Promise<void> - the direct-govern entry (the raw-write tool's post-write call; the SEQUENTIAL FOLD, v0.2.1, the #14 parallel marker opt-in)
-//
-// THE DIRECT-GOVERN REGISTRY (`GovernSteps`, the SharedJournal pattern at the
-// instance level): basename → the ordered steps `{ name, run }` the modules
-// registered at apply (Function/Govern). The run closures capture their own
-// State, so every ledger string stays the MODULE'S own, byte-identical.
-// `Govern` resolves the steps for the target's basename, filters them by the
-// selection (`true`/"all" = all; an array or a single name = the named steps;
-// unknown names ignored; false/absent = none; the #14 marker form
-// `{ steps, parallel }` = the inner selection with the fold's concurrency
-// switched - sequential by default), and runs each contained.
-//
-// The MODULE LEDGER STRINGS stay in the modules (the factory never owns
-// them): the transform's messages, the activation proof, the observe-path
-// lines. The factory's own composed strings are parameterized machinery
-// (the unreadable-policy line, the suppressed-error lines prefixed with
-// State.Module) and stay byte-identical when the module keeps its historical
-// name.
+/**
+ * @module Library
+ *
+ * The entry module of the FACTORY (@playform/ets-plugin-dsh-factory), the FIRST class/service
+ * plugin in the governance family (docs/user/develop/framework/service.md).
+ *
+ * @remarks
+ * Loader contract: the class form - `export default class PluginFactory extends Service` with
+ * `super(Context, "pluginFactory")`, registered immediately on construction and removed with its
+ * owning fiber; `static inject = ["fs"]` because the factory's primitives call ctx.fs (the
+ * governed-file read and the version-guarded write). The ONLY named exports are the TYPE
+ * re-exports (State/Options/Gate/Transform/Output - the consumer contract, P0-1): every other
+ * module is a nameless default export composed Rust-style, and each service method is a thin
+ * delegate.
+ *
+ * THE EFFECT-TS RE-IMPLEMENTATION (register #13, the factory round): the harness shell STAYS a
+ * cordis `Service` class - the loader contract is not an Effect concept - but behind it the
+ * machinery becomes `Context.Service`s provided by `Layer`s and composed into ONE runtime that
+ * the constructor materializes (Source/Service/Runtime.ts:
+ * `Layer.mergeAll(Ledger, Journal, Write, Govern)` then `Effect.scoped(Layer.build(...))`). Each
+ * public method delegates into that runtime at one of the four boundary types of the plan (1.4):
+ *
+ * - SYNC methods (Append/Journal/Refresh - the plain-fs exemption, the queue-offer bridge):
+ *   `Effect.runSync(Effect.provide(Tag.use(...), runtime))` - sync in, sync out, byte-identical
+ *   behavior;
+ * - PROMISE seams (Write/GuardedWrite/Continue/Govern): `Effect.runPromise(Effect.provide(...))`
+ *   - NO RunOptions are passed, so the caller's abort signal is never mapped onto the fiber: it
+ *   rides the write SEAM only (forwarded to `writeText` end to end, exactly like the Classic
+ *   promise chain). A fiber interruption would replace the seam's own rejection with Effect's
+ *   "All fibers interrupted without error" and break the abort path's byte parity (see Write);
+ * - the fs/observed registration (Wire) stays the sync listener shape the harness requires; the
+ *   Attach lifecycle effects stay the ctx.effect seams - those two are Function-owned
+ *   (Wire/Attach), untouched;
+ * - the plugin lifecycle: the runtime holds no scoped resources (all four layers are
+ *   `Layer.succeed` closures that read the shell's instance state at call time), so the loader's
+ *   removal needs no extra disposal.
+ *
+ * THE SERVICE SURFACE (ctx.pluginFactory - every signature documented in README.md / SCHEME.md,
+ * byte-identical names and parameters):
+ *
+ * - `Append(state, message)` - the ledger (logger + appendFileSync, never throws);
+ * - `Match(path, list)` - the exclusion segment match;
+ * - `Discover(dir)` / `Parse(path)` - the auxiliary plain-fs discovery (the exemption);
+ * - `ResolvePolicy(state, dir, found, chain, opts?)` - the union keep-list discovery (P3
+ *   chain-keys included);
+ * - `Gate(state, target, observation, actor, opts)` - the g1 gate set (logs nothing);
+ * - `Write(state, target, content, over?)` - the ONE shared write executor
+ *   (intent/policy/observe/stash/transform);
+ * - `GuardedWrite(state, target, content, version, signal?)` - the GUARDED ALIAS of Write (P4
+ *   fence + Stash);
+ * - `Refresh(state, target, actor, version)` - the P3/U2 re-emit (same actor);
+ * - `Continue(state, target, actor, dir, found, version, transform)` - the detached contained
+ *   continuation;
+ * - `State(ctx, config, {module, fields, policyFileName?})` - the State builder;
+ * - `Wire(ctx, state, observe)` - the fs/observed registration;
+ * - `Attach(ctx, {state, name})` - the P1 jobs + P2 inflight + P5 storage effects;
+ * - `Journal(state, event, path, detail)` - the P5 storage writer (best-effort);
+ * - `Schema(shared?, module?)` - the Schemastery schema factory;
+ * - `UpdateKey(target)` - the namespaced Inflight key for update stages;
+ * - `Seam(state, name)` - the probe-once optional-service accessor;
+ * - `RegisterGovern(basename, name, run)` - the direct-govern step registration (the modules
+ *   call it at apply);
+ * - `Govern(target, selection, actor, version): Promise<void>` - the direct-govern entry (the
+ *   raw-write tool's post-write call; the SEQUENTIAL FOLD, v0.2.1, the #14 parallel marker
+ *   opt-in).
+ *
+ * THE DIRECT-GOVERN REGISTRY (`GovernSteps`, the SharedJournal pattern at the instance level):
+ * basename to the ordered steps `{ name, run }` the modules registered at apply
+ * (Function/Govern). The run closures capture their own State, so every ledger string stays the
+ * MODULE'S own, byte-identical. `Govern` resolves the steps for the target's basename, filters
+ * them by the selection (`true`/"all" = all; an array or a single name = the named steps; unknown
+ * names ignored; false/absent = none; the #14 marker form `{ steps, parallel }` = the inner
+ * selection with the fold's concurrency switched - sequential by default), and runs each
+ * contained.
+ *
+ * The MODULE LEDGER STRINGS stay in the modules (the factory never owns them): the transform's
+ * messages, the activation proof, the observe-path lines. The factory's own composed strings are
+ * parameterized machinery (the unreadable-policy line, the suppressed-error lines prefixed with
+ * State.Module) and stay byte-identical when the module keeps its historical name.
+ */
 import { Service, type Context } from "@deepseek-ai/cordis";
 import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
 import {
@@ -114,42 +118,53 @@ import type Allowlist from "./Interface/Allowlist.js";
 import type Trace from "./Interface/Trace.js";
 import Version from "./Variable/Version.js";
 
-// The NAMED TYPE exports (P0-1): the four structural contracts + the output
-// shape, re-exported from the entry so consumers can `import type { State,
-// Options, Gate, Transform, Output } from "@playform/ets-plugin-dsh-factory"`
-// instead of deriving them through `Parameters<Factory["..."]>[0]` - and
-// instead of mirroring the shapes locally (the pre-fix structural mirrors).
-// The declarations ship RELATIVE specifiers (the deterministic build emits
-// ./Interface/*.js), so a consumer's tsconfig paths never re-map them.
+/**
+ * The NAMED TYPE exports (P0-1): the four structural contracts + the output
+ * shape, re-exported from the entry so consumers can
+ * `import type { State, Options, Gate, Transform, Output } from
+ * "@playform/ets-plugin-dsh-factory"` instead of deriving them through
+ * `Parameters<Factory["..."]>[0]` - and instead of mirroring the shapes
+ * locally (the pre-fix structural mirrors). The declarations ship RELATIVE
+ * specifiers (the deterministic build emits ./Interface/*.js), so a
+ * consumer's tsconfig paths never re-map them.
+ */
 export type { State } from "@playform/ets-base-dsh";
 export type { Options } from "@playform/ets-base-dsh";
 export type { Gate } from "@playform/ets-base-dsh";
 export type { Transform } from "@playform/ets-base-dsh";
 export type { Output } from "@playform/ets-base-dsh";
 export type { Journal } from "@playform/ets-base-dsh";
-// The policy block's shape (D6): the eight action classes and their verdict
-// union. The builder is the `Policy` named export below, the lookup is
-// `Decide` - the type cannot share the builder's name (TS2323), so the shape
-// ships as `Allowlist`.
+/**
+ * The policy block's shape (D6): the eight action classes and their verdict
+ * union. The builder is the `Policy` named export below, the lookup is
+ * `Decide` - the type cannot share the builder's name (TS2323), so the shape
+ * ships as `Allowlist`.
+ */
 export type { default as Allowlist } from "./Interface/Allowlist.js";
-// The `ctx.trace` service view (D5): the emit/on Adapter plus the factory's
-// flush/ring/dispose seams.
+/**
+ * The `ctx.trace` service view (D5): the emit/on Adapter plus the factory's
+ * flush/ring/dispose seams.
+ */
 export type { default as Trace } from "./Interface/Trace.js";
 
-// The compiled package version (Source/Variable/Version, built in by the
-// ESBuild define) - NOT a loader key: the contract's names are unchanged
-// (the class form's default export with static inject/Config), and Version
-// sits beside the other named exports, not on the class.
+/**
+ * The compiled package version (Source/Variable/Version, built in by the
+ * ESBuild define) - NOT a loader key: the contract's names are unchanged
+ * (the class form's default export with static inject/Config), and Version
+ * sits beside the other named exports, not on the class.
+ */
 export { Version };
 
-// The standalone SCHEMA helper (v0.1.1, P1): the module-level composition of
-// the shared block + the module's own fields - `Schema(shared?, module?)`,
-// exactly the instance method's delegate (Function/Schema never reads
-// `this`). The loader needs `Config` at MODULE-EVALUATION time, before any
-// context (and therefore any service instance) exists, so a consumer cannot
-// literally `export const Config = factory.Schema(...)` - this named export
-// is the module-load use. `shared: false` emits the MINIMAL block (only the
-// universal log/logFile volatile cells) for non-manifest modules.
+/**
+ * The standalone SCHEMA helper (v0.1.1, P1): the module-level composition of
+ * the shared block + the module's own fields - `Schema(shared?, module?)`,
+ * exactly the instance method's delegate (Function/Schema never reads
+ * `this`). The loader needs `Config` at MODULE-EVALUATION time, before any
+ * context (and therefore any service instance) exists, so a consumer cannot
+ * literally `export const Config = factory.Schema(...)` - this named export
+ * is the module-load use. `shared: false` emits the MINIMAL block (only the
+ * universal log/logFile volatile cells) for non-manifest modules.
+ */
 export function Schema(
 	Shared:
 		| {
@@ -166,29 +181,35 @@ export function Schema(
 	return SchemaFn(Shared, Module);
 }
 
-// The POLICY-BLOCK builder (D6): the module-level composition of the shared
-// per-action allowlist - `policy: Policy()` inside a consumer's own schema.
-// Exactly the module-load use `Schema` has (the loader needs the composed
-// `Config` at module-evaluation time), and exactly as `this`-free: Function/
-// Policy never reads a service. The block is volatile as one object; the D6
-// defaults are read/index/record/suggest/message = "auto", write/commit/spawn
-// = "approve".
+/**
+ * The POLICY-BLOCK builder (D6): the module-level composition of the shared
+ * per-action allowlist - `policy: Policy()` inside a consumer's own schema.
+ * Exactly the module-load use `Schema` has (the loader needs the composed
+ * `Config` at module-evaluation time), and exactly as `this`-free: Function/
+ * Policy never reads a service. The block is volatile as one object; the D6
+ * defaults are read/index/record/suggest/message = "auto", write/commit/spawn
+ * = "approve".
+ */
 export function Policy(): ReturnType<typeof PolicyFn> {
 	return PolicyFn();
 }
 
-// The POLICY VERDICT lookup (D6): the action names are the block's keys, so
-// `Decide(policy, "spawn")` answers "auto" | "approve". A missing key falls
-// back to that action's D6 default (never a blanket "auto"), and a malformed
-// value is treated as missing - the helper never throws.
+/**
+ * The POLICY VERDICT lookup (D6): the action names are the block's keys, so
+ * `Decide(policy, "spawn")` answers "auto" | "approve". A missing key falls
+ * back to that action's D6 default (never a blanket "auto"), and a malformed
+ * value is treated as missing - the helper never throws.
+ */
 export function Decide(Policy: Allowlist, Action: keyof Allowlist): "auto" | "approve" {
 	return DecideFn(Policy, Action);
 }
 
-// The service: class form, injected on fs, registered as `pluginFactory`.
-// Behind the shell, the constructor materializes the Effect runtime (the
-// four-service Layer graph); every machinery method delegates into it at a
-// boundary.
+/**
+ * The service: class form, injected on fs, registered as `pluginFactory`.
+ * Behind the shell, the constructor materializes the Effect runtime (the
+ * four-service Layer graph); every machinery method delegates into it at a
+ * boundary.
+ */
 export default class PluginFactory extends Service {
 	static inject = ["fs"];
 
@@ -229,18 +250,24 @@ export default class PluginFactory extends Service {
 		this.Runtime = materialize(this);
 	}
 
-	/** The materialized Effect runtime (see the constructor). */
+	/**
+	 * The materialized Effect runtime (see the constructor).
+	 */
 	private readonly Runtime: FactoryRuntime;
 
-	/** THE TRACE BUS (D5): the family's ONE bus, provided as `ctx.trace` in the
-	 *  constructor. The vocabulary and the detached loop live in
-	 *  @playform/ets-lib-dsh-trace; this instance is the service body
-	 *  (Function/Trace) and the smoke surface (`ring`/`flush`). */
+	/**
+	 * THE TRACE BUS (D5): the family's ONE bus, provided as `ctx.trace` in
+	 * the constructor. The vocabulary and the detached loop live in
+	 * @playform/ets-lib-dsh-trace; this instance is the service body
+	 * (Function/Trace) and the smoke surface (`ring`/`flush`).
+	 */
 	Trace!: Trace;
 
-	/** The ledger: logger + appendFileSync, never throws. The
-	 *  LedgerService wraps the byte-identical machinery in the
-	 *  `dsh.ledger.append` span; the sync boundary is `Effect.runSync`. */
+	/**
+	 * The ledger: logger + appendFileSync, never throws. The
+	 * LedgerService wraps the byte-identical machinery in the
+	 * `dsh.ledger.append` span; the sync boundary is `Effect.runSync`.
+	 */
 	Append(State: Shape, Message: string): void {
 		Effect.runSync(
 			Effect.provide(
@@ -250,22 +277,30 @@ export default class PluginFactory extends Service {
 		);
 	}
 
-	/** The exclusion-first segment match. */
+	/**
+	 * The exclusion-first segment match.
+	 */
 	Match(Path: string, List: string[] | null | undefined): boolean {
 		return Match(Path, List);
 	}
 
-	/** The auxiliary registry walk-up (plain-fs, the exemption). */
+	/**
+	 * The auxiliary registry walk-up (plain-fs, the exemption).
+	 */
 	Discover(Dir: string): string | null {
 		return Discover(Dir);
 	}
 
-	/** The auxiliary JSON read - null on any failure (the exemption). */
+	/**
+	 * The auxiliary JSON read - null on any failure (the exemption).
+	 */
 	Parse(Path: string): unknown {
 		return Parse(Path);
 	}
 
-	/** The union keep-list discovery (P3 chain-keys union included). */
+	/**
+	 * The union keep-list discovery (P3 chain-keys union included).
+	 */
 	ResolvePolicy(
 		State: Shape,
 		Dir: string,
@@ -276,7 +311,9 @@ export default class PluginFactory extends Service {
 		return Resolve(State, Dir, Found, Chain, Options);
 	}
 
-	/** The g1 gate set - returns the pass decision, logs nothing. */
+	/**
+	 * The g1 gate set - returns the pass decision, logs nothing.
+	 */
 	Gate(
 		State: Shape,
 		Target: FsTarget,
@@ -287,20 +324,22 @@ export default class PluginFactory extends Service {
 		return Gate(State, Target, Observation, Actor, Options);
 	}
 
-	/** The ONE shared write executor (the WriteService): resolve stays
-	 *  caller-side; the `Over` bundle adds the intent (explicit intent skips
-	 *  the fs/write-intent waterfall, the default `{ waterfall: true }` runs
-	 *  it), the sandbox posture ("standing" = the built-in's no-escalation
-	 *  replica, "p4" = the per-call fence, or an explicit policy), the
-	 *  root-context fs/observed emit (default true), the Stash
-	 *  pre-registration and the caller's content transform. Logs nothing -
-	 *  the caller composes its own ledger line from the outcome. The caller's
-	 *  abort signal is forwarded to the write SEAM only (end to end, exactly
-	 *  like the Classic promise chain) - it is NOT mapped onto the fiber: a
-	 *  fiber interruption would replace the seam's own error with
-	 *  Effect's "All fibers interrupted without error" and break the byte
-	 *  parity of the abort path (the Classic executor propagates the seam's
-	 *  rejection verbatim - the dash smoke asserts "aborted before write"). */
+	/**
+	 * The ONE shared write executor (the WriteService): resolve stays
+	 * caller-side; the `Over` bundle adds the intent (explicit intent skips
+	 * the fs/write-intent waterfall, the default `{ waterfall: true }` runs
+	 * it), the sandbox posture ("standing" = the built-in's no-escalation
+	 * replica, "p4" = the per-call fence, or an explicit policy), the
+	 * root-context fs/observed emit (default true), the Stash
+	 * pre-registration and the caller's content transform. Logs nothing -
+	 * the caller composes its own ledger line from the outcome. The caller's
+	 * abort signal is forwarded to the write SEAM only (end to end, exactly
+	 * like the Classic promise chain) - it is NOT mapped onto the fiber: a
+	 * fiber interruption would replace the seam's own error with
+	 * Effect's "All fibers interrupted without error" and break the byte
+	 * parity of the abort path (the Classic executor propagates the seam's
+	 * rejection verbatim - the dash smoke asserts "aborted before write").
+	 */
 	Write(
 		State: Shape,
 		Target: FsTarget,
@@ -315,10 +354,12 @@ export default class PluginFactory extends Service {
 		);
 	}
 
-	/** The guarded write - the GUARDED ALIAS of Write (SCHEME.md §2.7): the
-	 *  explicit replaceIfVersion intent (waterfall skipped), the P4 sandbox
-	 *  fence, the Stash pre-registration; the re-emit stays delegated to
-	 *  Refresh (observe: false - the same-actor U₂ semantics). */
+	/**
+	 * The guarded write - the GUARDED ALIAS of Write (SCHEME.md §2.7): the
+	 * explicit replaceIfVersion intent (waterfall skipped), the P4 sandbox
+	 * fence, the Stash pre-registration; the re-emit stays delegated to
+	 * Refresh (observe: false - the same-actor U₂ semantics).
+	 */
 	GuardedWrite(
 		State: Shape,
 		Target: FsTarget,
@@ -335,9 +376,11 @@ export default class PluginFactory extends Service {
 		});
 	}
 
-	/** The P₃/U₂ refresh: register the version, re-emit with the same actor.
-	 *  The `dsh.refresh` span wraps the best-effort machinery (Function/
-	 *  Refresh contains internally - the sync boundary never throws). */
+	/**
+	 * The P₃/U₂ refresh: register the version, re-emit with the same actor.
+	 * The `dsh.refresh` span wraps the best-effort machinery (Function/
+	 * Refresh contains internally - the sync boundary never throws).
+	 */
 	Refresh(State: Shape, Target: FsTarget, Actor: object | undefined, Version: FsVersion): void {
 		Effect.runSync(
 			Effect.sync(() => RefreshFn(State, Target, Actor, Version)).pipe(
@@ -346,10 +389,12 @@ export default class PluginFactory extends Service {
 		);
 	}
 
-	/** The detached contained continuation (the module supplies the transform).
-	 *  The effect body (Function/Continue) never fails - the Classic
-	 *  whole-body containment - so the promise boundary can never reject on
-	 *  behalf of the listener either. */
+	/**
+	 * The detached contained continuation (the module supplies the transform).
+	 * The effect body (Function/Continue) never fails - the Classic
+	 * whole-body containment - so the promise boundary can never reject on
+	 * behalf of the listener either.
+	 */
 	Continue(
 		State: Shape,
 		Target: FsTarget,
@@ -367,7 +412,9 @@ export default class PluginFactory extends Service {
 		);
 	}
 
-	/** The State builder: cell unwrap + shared fields + module extras. */
+	/**
+	 * The State builder: cell unwrap + shared fields + module extras.
+	 */
 	State<Extra extends object = Record<string, unknown>>(
 		Context: Context,
 		Config: unknown,
@@ -375,7 +422,9 @@ export default class PluginFactory extends Service {
 	): Shape & Extra {
 		return Build<Extra>(Context, Config, Setup);
 	}
-	/** The fs/observed registration (the module supplies its observe). */
+	/**
+	 * The fs/observed registration (the module supplies its observe).
+	 */
 	Wire(
 		Context: Context,
 		State: Shape,
@@ -384,23 +433,27 @@ export default class PluginFactory extends Service {
 		Wire(Context, State, Observe);
 	}
 
-	/** The lifecycle effects: P1 jobs controller, P2 inflight disposal, P5 storage. */
+	/**
+	 * The lifecycle effects: P1 jobs controller, P2 inflight disposal, P5 storage.
+	 */
 	Attach(Context: Context, Module: { state: Shape; name: string }): void {
 		AttachEffects(Context, Module);
 	}
 
-	/** The P5 storage-domain writer (best-effort, never throws). The
-	 *  JournalService routes through the three stages - the SHARED journal
-	 *  sink when one is bound (Function/Open - the live single-open-domain
-	 *  finding: the harness's storageDomain enforces ONE open per domain
-	 *  name, so the first module whose Open succeeds binds the first Open's
-	 *  put here (the journalDomain option names each module's domain; the
-	 *  shared default is package_governance), and every module's records - all
-	 *  consumers hold this same service instance - land in the one shared
-	 *  table; without it, the later modules' Opens fail `already-open` and
-	 *  their records silently never land. A module may pass its own
-	 *  `journalDomain` (the Function/State setup option) so its Open opens its
-	 *  own domain instead of contending for the shared one. */
+	/**
+	 * The P5 storage-domain writer (best-effort, never throws). The
+	 * JournalService routes through the three stages - the SHARED journal
+	 * sink when one is bound (Function/Open - the live single-open-domain
+	 * finding: the harness's storageDomain enforces ONE open per domain
+	 * name, so the first module whose Open succeeds binds the first Open's
+	 * put here (the journalDomain option names each module's domain; the
+	 * shared default is package_governance), and every module's records - all
+	 * consumers hold this same service instance - land in the one shared
+	 * table; without it, the later modules' Opens fail `already-open` and
+	 * their records silently never land. A module may pass its own
+	 * `journalDomain` (the Function/State setup option) so its Open opens its
+	 * own domain instead of contending for the shared one.
+	 */
 	Journal(State: Shape, Event: string, Path: string, Detail: string, At?: number): void {
 		Effect.runSync(
 			Effect.provide(
@@ -410,35 +463,43 @@ export default class PluginFactory extends Service {
 		);
 	}
 
-	/** The SHARED P5 journal sink (see Journal): bound by the first
-	 *  successful Function/Open (per service instance - each test context
-	 *  gets a fresh factory, so the smokes stay per-scenario). The PRE-BIND
-	 *  stage is `PendingJournal` (below): records journaled before the first
-	 *  successful open buffer there, and the successful Open drains them
-	 *  through the sink it just bound - closing the boot-window race. */
+	/**
+	 * The SHARED P5 journal sink (see Journal): bound by the first
+	 * successful Function/Open (per service instance - each test context
+	 * gets a fresh factory, so the smokes stay per-scenario). The PRE-BIND
+	 * stage is `PendingJournal` (below): records journaled before the first
+	 * successful open buffer there, and the successful Open drains them
+	 * through the sink it just bound - closing the boot-window race.
+	 */
 	SharedJournal?: (Event: string, Path: string, Detail: string, At?: number) => void;
 
-	/** The SHARED P5 journal sinks, keyed by domain (see Journal): every
-	 *  successful Function/Open registers its Sink under the State's
-	 *  JournalDomain (the default is package_governance), so a record routed
-	 *  with a custom JournalDomain lands in its own module's domain instead
-	 *  of contending for the legacy shared slot. */
+	/**
+	 * The SHARED P5 journal sinks, keyed by domain (see Journal): every
+	 * successful Function/Open registers its Sink under the State's
+	 * JournalDomain (the default is package_governance), so a record routed
+	 * with a custom JournalDomain lands in its own module's domain instead
+	 * of contending for the legacy shared slot.
+	 */
 	SharedJournals?: Map<
 		string,
 		(Event: string, Path: string, Detail: string, At?: number) => void
 	>;
 
-	/** The PRE-BIND journal buffer (P5, the boot-window race): the factory-
-	 *  level queue holding records journaled before ANY open has succeeded
-	 *  (each module's apply journals its `activated` record before its own
-	 *  Attach's Open completes - only the FIRST module's open wins; the other
-	 *  modules' per-State queues never drain, so their records must live
-	 *  here). Capped at 256 like the per-State pre-open queue (Function/
-	 *  State); `undefined` once the first successful Function/Open has
-	 *  drained it and bound `SharedJournal` (the pre-bind stage is over). */
+	/**
+	 * The PRE-BIND journal buffer (P5, the boot-window race): the factory-
+	 * level queue holding records journaled before ANY open has succeeded
+	 * (each module's apply journals its `activated` record before its own
+	 * Attach's Open completes - only the FIRST module's open wins; the other
+	 * modules' per-State queues never drain, so their records must live
+	 * here). Capped at 256 like the per-State pre-open queue (Function/
+	 * State); `undefined` once the first successful Function/Open has
+	 * drained it and bound `SharedJournal` (the pre-bind stage is over).
+	 */
 	PendingJournal?: { event: string; path: string; detail: string; at: number }[] | undefined;
 
-	/** The Schemastery schema factory (shared volatile fields + module fields). */
+	/**
+	 * The Schemastery schema factory (shared volatile fields + module fields).
+	 */
 	Schema(
 		Shared?: {
 			log?: boolean;
@@ -453,35 +514,43 @@ export default class PluginFactory extends Service {
 		return SchemaFn(Shared, Module);
 	}
 
-	/** The namespaced State.Inflight key for UPDATE-STAGE controllers
-	 *  (v0.1.1, P2 - the cargo collision lesson, factory-side): the chain
-	 *  pass (Continue) registers under the PLAIN `String(targetKey)`; an
-	 *  update stage MUST register its run controller under this namespaced
-	 *  key (`update:<targetKey>`), or the chain pass's settlement could
-	 *  silently delete the running update's controller. */
+	/**
+	 * The namespaced State.Inflight key for UPDATE-STAGE controllers
+	 * (v0.1.1, P2 - the cargo collision lesson, factory-side): the chain
+	 * pass (Continue) registers under the PLAIN `String(targetKey)`; an
+	 * update stage MUST register its run controller under this namespaced
+	 * key (`update:<targetKey>`), or the chain pass's settlement could
+	 * silently delete the running update's controller.
+	 */
 	UpdateKey(Target: FsTarget): string {
 		return UpdateKey(Target);
 	}
 
-	/** The probe-once optional-service accessor (never the dead accessor). */
+	/**
+	 * The probe-once optional-service accessor (never the dead accessor).
+	 */
 	Seam(State: Shape, Name: string): unknown {
 		return SeamFn(State, Name);
 	}
 
-	/** The direct-govern registry (the SharedJournal pattern, instance-level):
-	 *  basename → the ordered steps `{ name, run }` the governance modules
-	 *  registered at apply (Function/Govern). The run closures capture their
-	 *  own State, so the chain pass, the update stage and every ledger string
-	 *  stay the MODULE'S own, byte-identical. Empty until the first module
-	 *  registers - a raw-write `govern` call against an empty registry is a
-	 *  contained no-op. */
+	/**
+	 * The direct-govern registry (the SharedJournal pattern, instance-level):
+	 * basename → the ordered steps `{ name, run }` the governance modules
+	 * registered at apply (Function/Govern). The run closures capture their
+	 * own State, so the chain pass, the update stage and every ledger string
+	 * stay the MODULE'S own, byte-identical. Empty until the first module
+	 * registers - a raw-write `govern` call against an empty registry is a
+	 * contained no-op.
+	 */
 	GovernSteps: GovernRegistry;
 
-	/** Register a direct-govern step for one basename (the modules call this
-	 *  at apply). Re-registering the same name for the same basename replaces
-	 *  the step in place (keeping its registered position - an HMR reload
-	 *  rebinds the closure without duplicating the step); a new name appends
-	 *  after the registered ones. */
+	/**
+	 * Register a direct-govern step for one basename (the modules call this
+	 * at apply). Re-registering the same name for the same basename replaces
+	 * the step in place (keeping its registered position - an HMR reload
+	 * rebinds the closure without duplicating the step); a new name appends
+	 * after the registered ones.
+	 */
 	RegisterGovern(
 		Basename: string,
 		Name: string,
@@ -503,24 +572,26 @@ export default class PluginFactory extends Service {
 		}
 	}
 
-	/** The direct-govern entry (the raw-write tool's post-write call):
-	 *  resolve the registered steps for the target's basename, filter by the
-	 *  selection (`true`/"all" = every registered step; an array or a single
-	 *  name = only the named steps; the #14 marker form `{ steps, parallel }`
-	 *  = the inner selection with the fold's concurrency switched; unknown
-	 *  names ignored; false/absent = none), and run each in REGISTERED order -
-	 *  contained, one exit per step (the family's silence invariant: never
-	 *  throws, never affects the caller). The SEQUENTIAL FOLD (v0.2.1, the
-	 *  default): the steps run one at a time (`Effect.forEach` with
-	 *  concurrency 1), so every step's chain (its guarded write + its ledger
-	 *  line) completes before the next step reads the file - the
-	 *  version-guarded `replaceIfVersion` writes can never race, and a
-	 *  multi-step selection (e.g. canonicalize + update) is deterministic.
-	 *  The #14 PARALLEL MARKER (opt-in `{ steps, parallel: true }`) switches
-	 *  the fold to `Effect.all` with unbounded concurrency - disjoint targets
-	 *  only; same-file steps race. The raw-write exec awaits this call: the
-	 *  tool's result returns after the fold completes. Best-effort by design;
-	 *  see Function/Govern. */
+	/**
+	 * The direct-govern entry (the raw-write tool's post-write call):
+	 * resolve the registered steps for the target's basename, filter by the
+	 * selection (`true`/"all" = every registered step; an array or a single
+	 * name = only the named steps; the #14 marker form `{ steps, parallel }`
+	 * = the inner selection with the fold's concurrency switched; unknown
+	 * names ignored; false/absent = none), and run each in REGISTERED order -
+	 * contained, one exit per step (the family's silence invariant: never
+	 * throws, never affects the caller). The SEQUENTIAL FOLD (v0.2.1, the
+	 * default): the steps run one at a time (`Effect.forEach` with
+	 * concurrency 1), so every step's chain (its guarded write + its ledger
+	 * line) completes before the next step reads the file - the
+	 * version-guarded `replaceIfVersion` writes can never race, and a
+	 * multi-step selection (e.g. canonicalize + update) is deterministic.
+	 * The #14 PARALLEL MARKER (opt-in `{ steps, parallel: true }`) switches
+	 * the fold to `Effect.all` with unbounded concurrency - disjoint targets
+	 * only; same-file steps race. The raw-write exec awaits this call: the
+	 * tool's result returns after the fold completes. Best-effort by design;
+	 * see Function/Govern.
+	 */
 	async Govern(
 		Target: FsTarget,
 		Selection: GovernSelection,

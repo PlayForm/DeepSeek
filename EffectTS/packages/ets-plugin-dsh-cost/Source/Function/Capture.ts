@@ -1,23 +1,34 @@
-// Capture - the synchronous event recorder (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 1): the session/event listener's only duty.
-// Push stores one event in its session's queue when the capture gates allow
-// (capture.sessions for every session; capture.subagents additionally
-// required once the session's origin is known to be "subagent", learned from
-// the session header record or the session subject) and never throws, never
-// awaits and never touches I/O. The queue is acknowledged only AFTER the
-// flush commits (E1, A2 section 1.3): Peek returns a session's pending batch
-// without removing it, Acknowledge removes exactly the acknowledged prefix,
-// and Take - the whole-batch form the backfill walk still uses - stays beside
-// them. Size reports the queued count, and the per-session bound keeps a
-// queue whose drain keeps failing from growing without limit.
+/**
+ * @module Capture
+ *
+ * The synchronous event recorder (Documentation/Plans/COST-TRACK-PLUGIN.md
+ * section 1): the session/event listener's only duty.
+ *
+ * @remarks
+ * Push stores one event in its session's queue when the capture gates allow
+ * (capture.sessions for every session; capture.subagents additionally
+ * required once the session's origin is known to be "subagent", learned
+ * from the session header record or the session subject) and never throws,
+ * never awaits and never touches I/O. The queue is acknowledged only AFTER
+ * the flush commits (E1, A2 section 1.3): Peek returns a session's pending
+ * batch without removing it, Acknowledge removes exactly the acknowledged
+ * prefix, and Take - the whole-batch form the backfill walk still uses -
+ * stays beside them. Size reports the queued count, and the per-session
+ * bound keeps a queue whose drain keeps failing from growing without limit.
+ */
 import type Config from "../Interface/Config.js";
 
-// The per-session ceiling: past it the oldest pending events are dropped, so
-// a batch that never commits costs a bounded amount of memory. A live flush
-// keeps the queue far below it, and the bound sits above any plausible single
-// session log the backfill walk pushes in one go. The dropped prefix is not
-// lost accounting - the durable session log remains the recovery source, and
-// the drain's cursor keeps a replayed prefix from being booked twice.
+/**
+ * The per-session ceiling: past it the oldest pending events are dropped,
+ * so a batch that never commits costs a bounded amount of memory.
+ *
+ * @remarks
+ * A live flush keeps the queue far below it, and the bound sits above any
+ * plausible single session log the backfill walk pushes in one go. The
+ * dropped prefix is not lost accounting - the durable session log remains
+ * the recovery source, and the drain's cursor keeps a replayed prefix from
+ * being booked twice.
+ */
 const Limit = 65_536;
 
 export default (

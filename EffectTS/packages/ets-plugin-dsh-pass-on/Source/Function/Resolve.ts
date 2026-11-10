@@ -1,7 +1,14 @@
-// Resolve - the target resolution (plan section 3): the intent's targets if
-// given (validated to exist under the root), otherwise the kind's globs
-// walked from the root. The walk is bounded (maxTargets, and a depth cap so
-// a runaway tree cannot hang the prepare).
+/**
+ * @module Resolve
+ *
+ * The target resolution: the intent's targets if given, otherwise the kind's
+ * globs walked from the root.
+ *
+ * @remarks
+ * Plan section 3. Explicit targets are validated to exist under the root. The
+ * walk is bounded (maxTargets, and a depth cap so a runaway tree cannot hang
+ * the prepare).
+ */
 import { existsSync as Exists, readdirSync as Read, statSync as Stat } from "node:fs";
 import { join as Join, relative as Relative, resolve as Resolve } from "node:path";
 
@@ -10,7 +17,9 @@ import Match from "./Match.js";
 
 const MAX_DEPTH = 8;
 
-/** Walk the root, collecting files matching any glob, bounded. */
+/**
+ * Walk the root, collecting files matching any glob, bounded.
+ */
 const Walk = (Root: string, Patterns: RegExp[], Limit: number): string[] => {
 	const Found: string[] = [];
 	const Visit = (Dir: string, Depth: number): void => {

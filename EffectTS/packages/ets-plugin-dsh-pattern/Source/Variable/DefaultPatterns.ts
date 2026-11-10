@@ -1,9 +1,15 @@
-// DefaultPatterns - the cold-start catalog (PATTERN-GRAPH-PLUGIN.md section
-// 3: "the cold start is the static repo map plus the family's conventions,
-// not an empty registry"). The shipped patterns are the conventions any
-// repository of this family shares; confidence 0.5, not seeded by evidence.
-// The learner's offline mining replaces these with session-derived patterns
-// at the same ids (Put is idempotent by id).
+/**
+ * @module DefaultPatterns
+ *
+ * The cold-start catalog: the shipped patterns any repository of this family
+ * shares.
+ *
+ * @remarks
+ * PATTERN-GRAPH-PLUGIN.md section 3: "the cold start is the static repo map
+ * plus the family's conventions, not an empty registry". Confidence 0.5, not
+ * seeded by evidence. The learner's offline mining replaces these with
+ * session-derived patterns at the same ids (Put is idempotent by id).
+ */
 import type Pattern from "@Interface/Pattern.js";
 
 export default [

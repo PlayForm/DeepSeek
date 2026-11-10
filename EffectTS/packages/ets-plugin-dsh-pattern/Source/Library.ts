@@ -1,47 +1,52 @@
-// Library - the entry module of the PATTERN service
-// (@playform/ets-plugin-dsh-pattern), the service plugin of the pattern-graph
-// family (PATTERN-GRAPH-PLUGIN.md section 4: "the core owns the service and
-// the storage"). Loader contract: the CLASS form, mirroring the factory -
-// `export default class PatternService extends Service` with
-// `super(Context, "pattern")`, registered immediately on construction. The
-// ONLY named export is the Config schema (the loader validates it at load;
-// also attached as a static for the class-form reading) - every other
-// module is a nameless default export and each service method is a thin
-// delegate to one Function module.
-//
-// THE SERVICE SURFACE (ctx.pattern):
-//
-//   Configure(options)        - apply validated config knobs (volatile cells)
-//   Put(pattern)              - idempotent upsert by id (memory; Save flushes)
-//   Get(id)                   - one pattern or undefined
-//   List()                    - every pattern, sorted by id
-//   Match(context)            - the ranked match; the EMPTY result is the
-//                               abstention (below threshold or ambiguous)
-//   Record(id, outcome)       - the confidence update + the ledger line, and
-//                               the persist of the changed pattern
-//   Decay(now?)               - the half-life sweep, and the persist of every
-//                               pattern it moved
-//   Save()                    - the full snapshot flush (awaitable)
-//   Flush()                   - await the pending store work (the smoke seam)
-//
-// THE STORE (the PoC-posture fix, completion spec wave 3): the KV domain
-// (Function/Open, config `domain`, version 1) is the PRIMARY store; the JSON
-// snapshot (Function/Snapshot) is the FALLBACK, engaged ONLY when the harness
-// provides no storage facility (the probe below) or when the open fails. A
-// present facility whose open fails is LOUD: one best-effort ledger line
-// `storage open failed: <reason>`, then the JSON fallback loads. Load on
-// open, save on every mutation (Record/Decay), and the explicit Save/Flush
-// seams. The match/record/decay behaviour and every ledger string are
-// unchanged.
-//
-// The cold start seeds the static catalog (Variable/DefaultPatterns) - the
-// registry is never empty (PATTERN-GRAPH-PLUGIN.md section 3). The store's
-// restore runs detached at construction and REPLACES the catalog only when
-// the store is valid and non-empty; a failure keeps the catalog. The KV
-// domain restores as a PER-RECORD overlay (a stored record replaces the
-// catalog entry with the same id; a catalog entry the domain never received
-// stays), the JSON fallback as a FULL snapshot (it replaces the catalog,
-// exactly as the PoC did).
+/**
+ * @module Library
+ *
+ * The entry module of the PATTERN service (@playform/ets-plugin-dsh-pattern):
+ * the service plugin of the pattern-graph family.
+ *
+ * @remarks
+ * PATTERN-GRAPH-PLUGIN.md section 4: "the core owns the service and the
+ * storage". Loader contract: the CLASS form, mirroring the factory -
+ * `export default class PatternService extends Service` with
+ * `super(Context, "pattern")`, registered immediately on construction. The
+ * ONLY named export is the Config schema (the loader validates it at load;
+ * also attached as a static for the class-form reading) - every other module
+ * is a nameless default export and each service method is a thin delegate to
+ * one Function module.
+ *
+ * THE SERVICE SURFACE (ctx.pattern):
+ * - Configure(options) - apply validated config knobs (volatile cells)
+ * - Put(pattern) - idempotent upsert by id (memory; Save flushes)
+ * - Get(id) - one pattern or undefined
+ * - List() - every pattern, sorted by id
+ * - Match(context) - the ranked match; the EMPTY result is the abstention
+ *   (below threshold or ambiguous)
+ * - Record(id, outcome) - the confidence update plus the ledger line, and
+ *   the persist of the changed pattern
+ * - Decay(now?) - the half-life sweep, and the persist of every pattern it
+ *   moved
+ * - Save() - the full snapshot flush (awaitable)
+ * - Flush() - await the pending store work (the smoke seam)
+ *
+ * THE STORE (the PoC-posture fix, completion spec wave 3): the KV domain
+ * (Function/Open, config `domain`, version 1) is the PRIMARY store; the JSON
+ * snapshot (Function/Snapshot) is the FALLBACK, engaged ONLY when the harness
+ * provides no storage facility (the probe below) or when the open fails. A
+ * present facility whose open fails is LOUD: one best-effort ledger line
+ * `storage open failed: <reason>`, then the JSON fallback loads. Load on
+ * open, save on every mutation (Record/Decay), and the explicit Save/Flush
+ * seams. The match/record/decay behaviour and every ledger string are
+ * unchanged.
+ *
+ * The cold start seeds the static catalog (Variable/DefaultPatterns) - the
+ * registry is never empty (PATTERN-GRAPH-PLUGIN.md section 3). The store's
+ * restore runs detached at construction and REPLACES the catalog only when
+ * the store is valid and non-empty; a failure keeps the catalog. The KV
+ * domain restores as a PER-RECORD overlay (a stored record replaces the
+ * catalog entry with the same id; a catalog entry the domain never received
+ * stays), the JSON fallback as a FULL snapshot (it replaces the catalog,
+ * exactly as the PoC did).
+ */
 import { Service, type Context } from "@deepseek-ai/cordis";
 
 import { Decay as DecayConfidence } from "./Function/Confidence.js";
@@ -61,37 +66,53 @@ import Definition from "./Variable/Config.js";
 import DefaultPatterns from "./Variable/DefaultPatterns.js";
 import Version from "./Variable/Version.js";
 
-/** The neutral ledger line builder (module-owned strings, byte-stable). */
+/**
+ * The neutral ledger line builder (module-owned strings, byte-stable).
+ */
 const Line = (Message: string, State: { logFile: string }): string =>
 	`pattern: ${Message} (logFile ${State.logFile})`;
 
-// The compiled package version (Source/Variable/Version, built in by the
-// ESBuild define) - NOT a loader key: the contract's names are unchanged
-// (the class form's default export with static inject/Config), and Version
-// is a standalone named export, not on the class.
+/**
+ * The compiled package version (Source/Variable/Version, built in by the
+ * ESBuild define) - NOT a loader key: the contract's names are unchanged
+ * (the class form's default export with static inject/Config), and Version
+ * is a standalone named export, not on the class.
+ */
 export { Version };
 
 export default class PatternService extends Service {
 	static inject: string[] = [];
 
-	/** The loader-contract Config (validated at load; knobs via Configure). */
+	/**
+	 * The loader-contract Config (validated at load; knobs via Configure).
+	 */
 	static Config = Definition;
 
-	/** The knobs, from the constructor defaults plus the loader's validated
-	 *  config; Configure applies hot overrides. */
+	/**
+	 * The knobs, from the constructor defaults plus the loader's validated
+	 * config; Configure applies hot overrides.
+	 */
 	private Knobs: Configuration;
 
-	/** The in-memory registry (Function/Registry). */
+	/**
+	 * The in-memory registry (Function/Registry).
+	 */
 	private Store: Registry;
 
-	/** The ledger sink (best-effort, never throws). */
+	/**
+	 * The ledger sink (best-effort, never throws).
+	 */
 	private Ledger: (Message: string) => void;
 
-	/** The open KV domain (undefined in the JSON fallback). */
+	/**
+	 * The open KV domain (undefined in the JSON fallback).
+	 */
 	private Handle: Handle | undefined;
 
-	/** The store chain: the open/recovery and every mutation write, in order.
-	 *  Flush and Save await it, so the smokes need no sleep. */
+	/**
+	 * The store chain: the open/recovery and every mutation write, in order.
+	 * Flush and Save await it, so the smokes need no sleep.
+	 */
 	private Pending: Promise<void> = Promise.resolve();
 
 	constructor(Context: Context, Raw?: unknown) {
@@ -146,7 +167,9 @@ export default class PatternService extends Service {
 		}
 	}
 
-	/** Apply the validated config knobs (called by the host on load/volatile). */
+	/**
+	 * Apply the validated config knobs (called by the host on load/volatile).
+	 */
 	Configure(Options: Partial<Configuration>): void {
 		this.Knobs = { ...this.Knobs, ...Options };
 	}
@@ -193,15 +216,19 @@ export default class PatternService extends Service {
 		this.Persist(Changed);
 	}
 
-	/** Await the pending store work (the open/recovery and the mutation
-	 *  writes). The flush seam the smokes use: every assertion after a
-	 *  mutation is deterministic without a sleep. */
+	/**
+	 * Await the pending store work (the open/recovery and the mutation
+	 * writes). The flush seam the smokes use: every assertion after a
+	 * mutation is deterministic without a sleep.
+	 */
 	async Flush(): Promise<void> {
 		await this.Pending;
 	}
 
-	/** The full snapshot flush: the KV domain when it is open (every pattern
-	 *  plus the meta timestamp), the JSON file in the fallback. */
+	/**
+	 * The full snapshot flush: the KV domain when it is open (every pattern
+	 * plus the meta timestamp), the JSON file in the fallback.
+	 */
 	async Save(): Promise<void> {
 		await this.Pending;
 		const Patterns = this.Store.List();
@@ -234,8 +261,10 @@ export default class PatternService extends Service {
 		}
 	}
 
-	/** Open the KV domain and recover the registry from it (the primary
-	 *  store). A failed open is loud and degrades to the JSON fallback. */
+	/**
+	 * Open the KV domain and recover the registry from it (the primary
+	 * store). A failed open is loud and degrades to the JSON fallback.
+	 */
 	private Connect(Facility: unknown): void {
 		this.Pending = this.Pending.then(async () => {
 			try {
@@ -274,8 +303,10 @@ export default class PatternService extends Service {
 		});
 	}
 
-	/** The JSON fallback's load (Function/Snapshot): a stale or unreadable
-	 *  file is a silent miss - the catalog stays. */
+	/**
+	 * The JSON fallback's load (Function/Snapshot): a stale or unreadable
+	 * file is a silent miss - the catalog stays.
+	 */
 	private async RestoreJson(): Promise<void> {
 		const Snapshot_ = await Load(this.Knobs.storagePath);
 		switch (true) {
@@ -287,9 +318,11 @@ export default class PatternService extends Service {
 		}
 	}
 
-	/** Persist the mutated patterns on the primary store (best-effort, on the
-	 *  chain, so the open always lands first). The JSON fallback is written
-	 *  only by the explicit Save - the PoC's behaviour, unchanged. */
+	/**
+	 * Persist the mutated patterns on the primary store (best-effort, on the
+	 * chain, so the open always lands first). The JSON fallback is written
+	 * only by the explicit Save - the PoC's behaviour, unchanged.
+	 */
 	private Persist(Patterns: Pattern[]): void {
 		switch (true) {
 			case Patterns.length === 0:

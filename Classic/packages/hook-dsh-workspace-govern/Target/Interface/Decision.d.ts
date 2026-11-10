@@ -21,7 +21,7 @@ export default interface Decision {
     /**
      * The per-obligation outcomes: satisfied | denied | n/a | recovery.
      */
-    obligations: import("@Interface/Check.js").Obligations;
+    obligations: import("./Check.js").Obligations;
     /**
      * The proposal the decision evaluated (echoed for the ring).
      */

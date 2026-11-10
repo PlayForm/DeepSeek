@@ -1,29 +1,36 @@
-// Overpass - the ets-plugin-dsh-normalize-file's THIN DELEGATE over the ETS
-// base's tool-results arm factory (@playform/ets-base-dsh/Overpass/
-// ToolResults). The generic machinery lives in the base; this file supplies
-// only what makes it THE NORMALIZE-FILE:
-//
-//   * the file transform - the six-fold Rewrite chain (dashes to the
-//     configured replacement, then quotes, ellipsis, spaces, invisible
-//     removal, fullwidth), read per call from the volatile-refreshed State;
-//   * the file ledger line - byte-identical with the Classic tree's line:
-//     `overpass: normalized N char(s) in tool result <name> <callId>`;
-//   * the file ledger sink - State.Factory.Append / State.Factory.Journal;
-//   * the file module identity - State.Module (the Classic identity,
-//     `plugin-dsh-normalize-file`), prefixed by the factory's Append;
-//   * the schema-default exemption list, exported here because the module's
-//     `normalize-overpass scopes` command reports it (Function/Command).
-//
-// The default export is the listener itself (the factory's return), so
-// Function/Apply's `{ prepend: true }` registration and the import path stay
-// untouched.
+/**
+ * @module Overpass
+ *
+ * The plugin's THIN DELEGATE over the ETS base's tool-results arm factory.
+ *
+ * @remarks
+ * The generic machinery lives in the base
+ * (@playform/ets-base-dsh/Overpass/ToolResults); this file supplies only what
+ * makes it THE NORMALIZE-FILE:
+ * - the file transform - the six-fold Rewrite chain (dashes to the configured
+ *   replacement, then quotes, ellipsis, spaces, invisible removal, fullwidth),
+ *   read per call from the volatile-refreshed State;
+ * - the file ledger line - byte-identical with the Classic tree's line:
+ *   `overpass: normalized N char(s) in tool result <name> <callId>`;
+ * - the file ledger sink - State.Factory.Append / State.Factory.Journal;
+ * - the file module identity - State.Module (the Classic identity,
+ *   `plugin-dsh-normalize-file`), prefixed by the factory's Append;
+ * - the schema-default exemption list, exported here because the module's
+ *   `normalize-overpass scopes` command reports it (Function/Command).
+ *
+ * The default export is the listener itself (the factory's return), so
+ * Function/Apply's `{ prepend: true }` registration and the import path stay
+ * untouched.
+ */
 import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
 import type State from "@Interface/State.js";
 import { ToolResults } from "@playform/ets-base-dsh";
 
 import { Rewrite } from "./Normalize.js";
 
-/** The schema-default scopes (the fallback for a hand-built config). */
+/**
+ * The schema-default scopes (the fallback for a hand-built config).
+ */
 export const DefaultScopes = {
 	conversation: true,
 	reasoning: true,
@@ -33,7 +40,9 @@ export const DefaultScopes = {
 	batch: false,
 };
 
-/** The schema-default exemption list (the fallback for a hand-built config). */
+/**
+ * The schema-default exemption list (the fallback for a hand-built config).
+ */
 export const DefaultExempt = [
 	"read",
 	"edit",

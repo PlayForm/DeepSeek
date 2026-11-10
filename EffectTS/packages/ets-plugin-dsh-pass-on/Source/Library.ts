@@ -1,31 +1,34 @@
-// Library - the entry module of the PASS-ON (@playform/ets-plugin-dsh-pass-on,
-// ctx.passOn), the prepare direction of the batch flow
-// (Documentation/Plans/PASS-ON-AND-INGESTER.md). Class form (the factory's
-// precedent): `export default class PassOn extends Service` with
-// `super(Context, "passOn")`, registered immediately on construction and
-// removed with its owning fiber.
-//
-// THE SERVICE SURFACE (ctx.passOn):
-//
-//   Prepare(intent, origin?) - the batch proposal: resolve targets,
-//                              synthesize the operations, render the bounded
-//                              preview, compute the digest; then EMIT the
-//                              canonical proposal on `batch/proposed` (the
-//                              decision hook records it) and DELIVER it into
-//                              the harness inbox (the board splices it).
-//                              Returns null when the proposal is empty or
-//                              ambiguous - never an empty batch.
-//   Get(id)                  - fetch a prepared proposal (the decision's read).
-//
-// THE REAL BATCH-CONTRACT WIRING (the plan's deferred caller side): the
-// internal proposal is converted to the canonical contract
-// (Function/Batch), emitted on the bus and delivered into the agent-team
-// inbox (Function/Deliver) - the same channel plugin-dsh-batchstate
-// consumes, so a proposal actually reaches the board.
-//
-// THE READ-ONLY LAW: the pass-on never writes a file. It computes; the
-// decision decides; the ingester applies. The only disk writes are the
-// plugin's own ledger lines (one log per module, the family convention).
+/**
+ * @module Library
+ *
+ * The entry module of the PASS-ON (@playform/ets-plugin-dsh-pass-on,
+ * ctx.passOn): the prepare direction of the batch flow.
+ *
+ * @remarks
+ * Documentation/Plans/PASS-ON-AND-INGESTER.md. Class form (the factory's
+ * precedent): `export default class PassOn extends Service` with
+ * `super(Context, "passOn")`, registered immediately on construction and
+ * removed with its owning fiber.
+ *
+ * THE SERVICE SURFACE (ctx.passOn):
+ * - Prepare(intent, origin?) - the batch proposal: resolve targets,
+ *   synthesize the operations, render the bounded preview, compute the
+ *   digest; then EMIT the canonical proposal on `batch/proposed` (the decision
+ *   hook records it) and DELIVER it into the harness inbox (the board splices
+ *   it). Returns null when the proposal is empty or ambiguous - never an empty
+ *   batch.
+ * - Get(id) - fetch a prepared proposal (the decision's read).
+ *
+ * THE REAL BATCH-CONTRACT WIRING (the plan's deferred caller side): the
+ * internal proposal is converted to the canonical contract (Function/Batch),
+ * emitted on the bus and delivered into the agent-team inbox
+ * (Function/Deliver) - the same channel plugin-dsh-batchstate consumes, so a
+ * proposal actually reaches the board.
+ *
+ * THE READ-ONLY LAW: the pass-on never writes a file. It computes; the
+ * decision decides; the ingester applies. The only disk writes are the
+ * plugin's own ledger lines (one log per module, the family convention).
+ */
 import { homedir as Home } from "node:os";
 
 import { Service, type Context } from "@deepseek-ai/cordis";
@@ -72,9 +75,11 @@ export default class PassOn extends Service {
 		};
 	}
 
-	/** Prepare a batch proposal from an intent (READ-ONLY: no file writes;
-	 *  null when empty or ambiguous), then publish it: the canonical contract
-	 *  goes on `batch/proposed` and into the harness inbox. */
+	/**
+	 * Prepare a batch proposal from an intent (READ-ONLY: no file writes;
+	 * null when empty or ambiguous), then publish it: the canonical contract
+	 * goes on `batch/proposed` and into the harness inbox.
+	 */
 	Prepare(Intent: Intent, Origin?: string): Proposal | null {
 		const Proposal = PrepareFn(this.State, Intent);
 		JournalFn(
@@ -96,7 +101,9 @@ export default class PassOn extends Service {
 		return Proposal;
 	}
 
-	/** Fetch a prepared proposal by id (null when unknown or expired). */
+	/**
+	 * Fetch a prepared proposal by id (null when unknown or expired).
+	 */
 	Get(Id: string): Proposal | null {
 		const Proposal = this.State.Proposals.get(Id);
 		if (Proposal === undefined) {
@@ -108,9 +115,11 @@ export default class PassOn extends Service {
 		return Proposal;
 	}
 
-	/** The bus emission (structural: the `batch/proposed` event is declared by
-	 *  the decision hook's package, which this package does not import - the
-	 *  self-contained rule; a context without an emitter is a silent no-op). */
+	/**
+	 * The bus emission (structural: the `batch/proposed` event is declared by
+	 * the decision hook's package, which this package does not import - the
+	 * self-contained rule; a context without an emitter is a silent no-op).
+	 */
 	private Publish(Batch: Batch): void {
 		const Emit = (
 			this.State.Context as unknown as {
@@ -125,8 +134,10 @@ export default class PassOn extends Service {
 	}
 }
 
-// The compiled package version (Source/Variable/Version, built in by the
-// ESBuild define) - NOT a loader key: the contract's names are unchanged
-// (the class form's default export with static inject/Config), and Version
-// is a standalone named export, not on the class.
+/**
+ * The compiled package version (Source/Variable/Version, built in by the
+ * ESBuild define) - NOT a loader key: the contract's names are unchanged
+ * (the class form's default export with static inject/Config), and Version
+ * is a standalone named export, not on the class.
+ */
 export { Version };

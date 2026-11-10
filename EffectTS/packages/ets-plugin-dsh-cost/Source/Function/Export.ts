@@ -1,13 +1,20 @@
-// Export - the client-facing bundle (Documentation/Plans/COST-TRACK-PLUGIN.md
-// section 8): csv (RFC 4180 quoting with CRLF records, one header row, one
-// row per Day, Project, File and Model), json (the re-derivable bundle - the
-// meta block, the projects, the files, the calls, the allocations and the
-// rollups, with ISO-8601 UTC timestamps) and markdown (a one-page invoice per
-// client: the totals, the per-project table, the top-10 files and the model
-// mix). The destination is the given path - a directory, or an exact file
-// path when its extension matches the format - and defaults to the configured
-// export directory or the project root. The money columns round to six
-// decimals, the same precision the reports use.
+/**
+ * @module Export
+ *
+ * The client-facing bundle (Documentation/Plans/COST-TRACK-PLUGIN.md
+ * section 8): csv, json and markdown.
+ *
+ * @remarks
+ * csv is RFC 4180 quoting with CRLF records, one header row, one row per
+ * Day, Project, File and Model; json is the re-derivable bundle - the meta
+ * block, the projects, the files, the calls, the allocations and the
+ * rollups, with ISO-8601 UTC timestamps; markdown is a one-page invoice per
+ * client: the totals, the per-project table, the top-10 files and the model
+ * mix. The destination is the given path - a directory, or an exact file
+ * path when its extension matches the format - and defaults to the
+ * configured export directory or the project root. The money columns round
+ * to six decimals, the same precision the reports use.
+ */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, extname, join, resolve } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
@@ -15,9 +22,14 @@ import type { DatabaseSync } from "node:sqlite";
 import type Config from "../Interface/Config.js";
 import Version from "../Variable/Version.js";
 
+/**
+ * One statement row of untyped cells.
+ */
 type Row = Record<string, unknown>;
 
-// The money columns, by name: every other column passes through untouched.
+/**
+ * The money columns, by name: every other column passes through untouched.
+ */
 const Money = new Set([
 	"DirectCost",
 	"AmortizedCost",
@@ -45,13 +57,19 @@ const Clean = (Raw: Row): Row => {
 	return Next;
 };
 
-// One RFC 4180 cell: a field that carries a comma, a quote or a line break is
-// quoted, and every quote inside it is doubled.
+/**
+ * One RFC 4180 cell: a field that carries a comma, a quote or a line break
+ * is quoted, and every quote inside it is doubled.
+ */
 const Cell = (Value: unknown): string => {
 	const Text = Value === null || Value === undefined ? "" : String(Value);
 	return Text.search(/[",\r\n]/) >= 0 ? `"${Text.replaceAll('"', '""')}"` : Text;
 };
 
+/**
+ * One csv document: the head row and one record row per entry, CRLF
+ * separated.
+ */
 const Csv = (Head: readonly string[], Rows: readonly Row[]): string => {
 	const Lines = [
 		Head.join(","),
@@ -60,7 +78,9 @@ const Csv = (Head: readonly string[], Rows: readonly Row[]): string => {
 	return `${Lines.join("\r\n")}\r\n`;
 };
 
-// One markdown table: the head row, the separator row, one row per record.
+/**
+ * One markdown table: the head row, the separator row, one row per record.
+ */
 const Table = (Title: string, Head: readonly string[], Rows: readonly Row[]): string[] => {
 	const Lines = [
 		`### ${Title}`,
@@ -151,7 +171,9 @@ const Invoice = (
 	return Lines;
 };
 
-// The bundle: one format, one text, and the row count the result reports.
+/**
+ * The bundle: one format, one text, and the row count the result reports.
+ */
 const Bundle = (
 	Database: DatabaseSync,
 	Config: Config,
@@ -233,9 +255,11 @@ const Bundle = (
 	}
 };
 
-// The destination: the given path wins; a path whose extension matches the
-// format is the exact file, anything else is a directory; the default is the
-// configured export directory, then the project root.
+/**
+ * The destination: the given path wins; a path whose extension matches the
+ * format is the exact file, anything else is a directory; the default is
+ * the configured export directory, then the project root.
+ */
 const Target = (Format: string, Destination: string | undefined, Config: Config): string => {
 	const Given =
 		Destination !== undefined && Destination.length > 0 ? Destination : Config.export.directory;

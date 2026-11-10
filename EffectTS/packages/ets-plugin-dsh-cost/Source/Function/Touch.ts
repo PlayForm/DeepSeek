@@ -1,29 +1,45 @@
-// Touch - the tool/call and tool/result parser (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 1, Temporary/Cost-Research/Backlog.md E4): one
-// tool/call event's name and arguments string become the file interactions the
-// call performs, resolved against the session's working directory and
-// normalized POSIX - and, for a search-family tool, one tool/result event's
-// discovered paths become one read touch each. A search's argument is a scope
-// (a directory, a glob or a query), never a file, so it yields no touch of its
-// own: the files it found are the result's. A tool the ledger does not map, a
-// malformed or alien arguments string, and an absent or unreadable result
-// yield no touches; the parser never throws.
-//
-// The same file answers the two questions a content version needs (Backlog
-// E7, the research's section 4): Content is the whole new text a write's
-// arguments carry - exactly what the tool writes, so the file's after content
-// - and Rendered is the text a tool result returned, which is the content the
-// model actually received. Both are undefined when the call or the result
-// does not carry the file's own content, so no caller hashes a request, an
-// error message or a listing as though it were a file.
+/**
+ * @module Touch
+ *
+ * The tool/call and tool/result parser (Documentation/Plans/
+ * COST-TRACK-PLUGIN.md section 1, Temporary/Cost-Research/Backlog.md E4):
+ * one tool/call event's name and arguments string become the file
+ * interactions the call performs, resolved against the session's working
+ * directory and normalized POSIX - and, for a search-family tool, one
+ * tool/result event's discovered paths become one read touch each.
+ *
+ * @remarks
+ * A search's argument is a scope (a directory, a glob or a query), never a
+ * file, so it yields no touch of its own: the files it found are the
+ * result's. A tool the ledger does not map, a malformed or alien arguments
+ * string, and an absent or unreadable result yield no touches; the parser
+ * never throws.
+ *
+ * The same file answers the two questions a content version needs (Backlog
+ * E7, the research's section 4): Content is the whole new text a write's
+ * arguments carry - exactly what the tool writes, so the file's after
+ * content - and Rendered is the text a tool result returned, which is the
+ * content the model actually received. Both are undefined when the call or
+ * the result does not carry the file's own content, so no caller hashes a
+ * request, an error message or a listing as though it were a file.
+ */
 import { resolve } from "node:path";
 
+/**
+ * One file interaction's kind.
+ */
 type Kind = "read" | "write" | "edit" | "delete" | "search";
 
+/**
+ * One parsed file interaction.
+ */
 type Touched = { Path: string; Kind: Kind };
 
-// The tool vocabulary the ledger maps, one kind each; every other tool is
-// ignored (a tool call the ledger cannot attribute to files touches nothing).
+/**
+ * The tool vocabulary the ledger maps, one kind each; every other tool is
+ * ignored (a tool call the ledger cannot attribute to files touches
+ * nothing).
+ */
 const KindOf = (Tool: string): Kind | undefined => {
 	switch (true) {
 		case Tool === "read":
@@ -45,18 +61,22 @@ const KindOf = (Tool: string): Kind | undefined => {
 	}
 };
 
-// The search family: the tools whose argument names a scope and whose files
-// are the result's. The classification is KindOf's own, so a tool the
-// vocabulary gains as a search is discovered without a second list.
+/**
+ * The search family: the tools whose argument names a scope and whose
+ * files are the result's. The classification is KindOf's own, so a tool
+ * the vocabulary gains as a search is discovered without a second list.
+ */
 export const Search = (Tool: string): boolean => KindOf(Tool) === "search";
 
-// The content a tool call's arguments carry as the file's whole new text: a
-// write's own "content" field is exactly what the tool writes, so it is the
-// one argument a version may hash as the file's after content. Every other
-// tool's arguments carry a request rather than a result - an edit's two
-// fragments, a patch body, a batch's operation table - so they yield
-// undefined, and so does a malformed, alien or non-string content: a caller
-// records no version rather than hashing what it cannot confirm.
+/**
+ * The content a tool call's arguments carry as the file's whole new text: a
+ * write's own "content" field is exactly what the tool writes, so it is the
+ * one argument a version may hash as the file's after content. Every other
+ * tool's arguments carry a request rather than a result - an edit's two
+ * fragments, a patch body, a batch's operation table - so they yield
+ * undefined, and so does a malformed, alien or non-string content: a caller
+ * records no version rather than hashing what it cannot confirm.
+ */
 export const Content = (Tool: string, Arguments: string): string | undefined => {
 	switch (true) {
 		case Tool !== "write":
@@ -76,8 +96,10 @@ export const Content = (Tool: string, Arguments: string): string | undefined => 
 	return typeof Value === "string" ? Value : undefined;
 };
 
-// The argument keys that carry file paths: the single-path keys in priority
-// order, then the plural files key.
+/**
+ * The argument keys that carry file paths: the single-path keys in
+ * priority order, then the plural files key.
+ */
 const Paths = (Args: Record<string, unknown>): string[] => {
 	const Found: string[] = [];
 	for (const Key of ["file_path", "path", "target"] as const) {
@@ -108,8 +130,11 @@ const Paths = (Args: Record<string, unknown>): string[] => {
 	return Found;
 };
 
-// One non-empty string field of an unknown object, or undefined when the value
-// is absent, alien or empty - the guard every result read goes through.
+/**
+ * One non-empty string field of an unknown object, or undefined when the
+ * value is absent, alien or empty - the guard every result read goes
+ * through.
+ */
 const StringOf = (Source: unknown, Key: string): string | undefined => {
 	if (Source === null || typeof Source !== "object") {
 		return undefined;
@@ -118,12 +143,17 @@ const StringOf = (Source: unknown, Key: string): string | undefined => {
 	return typeof Value === "string" && Value.length > 0 ? Value : undefined;
 };
 
-// The paths the harness's structured result carries (read from a live session
-// log's tool/result events): a glob records { shape: "paths", paths, ... }
-// with one entry per matched path, and a grep records { shape: "matches",
-// files: [{ path, matches }, ...], ... } with one entry per matching file.
-// undefined means the result carries no shape this parser knows, so the
-// rendered text is the fallback - never a guess.
+/**
+ * The paths the harness's structured result carries (read from a live
+ * session log's tool/result events): a glob records
+ * { shape: "paths", paths, ... } with one entry per matched path, and a
+ * grep records { shape: "matches", files: [{ path, matches }, ...], ... }
+ * with one entry per matching file.
+ *
+ * @remarks
+ * undefined means the result carries no shape this parser knows, so the
+ * rendered text is the fallback - never a guess.
+ */
 const Structured = (Result: unknown): readonly string[] | undefined => {
 	if (Result === null || typeof Result !== "object") {
 		return undefined;
@@ -163,9 +193,11 @@ const Structured = (Result: unknown): readonly string[] | undefined => {
 	}
 };
 
-// The result's model-facing text: the text blocks of the tool-role message the
-// tool/result event carries (data.message.content[].text), else a plain
-// string.
+/**
+ * The result's model-facing text: the text blocks of the tool-role message
+ * the tool/result event carries (data.message.content[].text), else a
+ * plain string.
+ */
 const Text = (Result: unknown): string => {
 	if (typeof Result === "string") {
 		return Result;
@@ -194,21 +226,26 @@ const Text = (Result: unknown): string => {
 	return Parts.join("\n");
 };
 
-// The rendered text a tool result returned, or undefined when the result
-// carries none: the text blocks of the tool-role message are exactly the
-// content the model received, so an absent or empty body is unreadable
-// evidence rather than an empty file.
+/**
+ * The rendered text a tool result returned, or undefined when the result
+ * carries none: the text blocks of the tool-role message are exactly the
+ * content the model received, so an absent or empty body is unreadable
+ * evidence rather than an empty file.
+ */
 export const Rendered = (Result: unknown): string | undefined => {
 	const Body = Text(Result);
 	return Body.length > 0 ? Body : undefined;
 };
 
-// The file paths a search result's TEXT names: a glob lists one matched path
-// per line, a grep groups its matches by file with the file's path on its own
-// line (a dialect that prefixes each match with "path:<line>: " is read the
-// same way). The "Found <n> matches" header, a match line ("Line <n>: ..."),
-// the "No files found" empty result and the spill note ("(Showing 100 of
-// ...)") are not paths, and a line that reads as prose is never taken as one.
+/**
+ * The file paths a search result's TEXT names: a glob lists one matched
+ * path per line, a grep groups its matches by file with the file's path on
+ * its own line (a dialect that prefixes each match with "path:<line>: " is
+ * read the same way). The "Found <n> matches" header, a match line
+ * ("Line <n>: ..."), the "No files found" empty result and the spill note
+ * ("(Showing 100 of ...)") are not paths, and a line that reads as prose is
+ * never taken as one.
+ */
 const Listed = (Body: string): readonly string[] => {
 	const Found: string[] = [];
 	for (const Raw of Body.split("\n")) {
@@ -237,15 +274,19 @@ const Listed = (Body: string): readonly string[] => {
 	return Found;
 };
 
-// The files one search result discovered: the structured payload first (the
-// exact paths, spaces included), the rendered text as the fallback. A path
-// ending in "/" names a directory - a scope, not a file - and is never a
-// touch.
+/**
+ * The files one search result discovered: the structured payload first (the
+ * exact paths, spaces included), the rendered text as the fallback. A path
+ * ending in "/" names a directory - a scope, not a file - and is never a
+ * touch.
+ */
 const Discovered = (Result: unknown): readonly string[] =>
 	(Structured(Result) ?? Listed(Text(Result))).filter((Path) => !Path.endsWith("/"));
 
-// The discovered files as read touches: resolved against the session's working
-// directory and listed once each, in the result's order.
+/**
+ * The discovered files as read touches: resolved against the session's
+ * working directory and listed once each, in the result's order.
+ */
 const Reads = (Files: readonly string[], Cwd: string): readonly Touched[] => {
 	const Seen = new Set<string>();
 	const Found: Touched[] = [];

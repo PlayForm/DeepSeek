@@ -1,15 +1,24 @@
-// Forecast - the projection the plan asks to stay a query, not a stored
-// guess (Documentation/Plans/COST-TRACK-PLUGIN.md section 17.5): over the
-// Rollup's daily rate per (Scope, Key) across the last window of days -
-// anchored at each key's own latest day, so an old ledger still projects -
-// the mean, the median, the mean of the last seven days, and the projection
-// to a thirty-day period as the mean times thirty with the confidence band
-// from the daily minimum and maximum times thirty. A history of fewer than
-// two days projects with no spread (minimum and maximum both at the
-// projection). The forecast never writes a row; the caller labels it an
-// estimate in every export.
+/**
+ * @module Forecast
+ *
+ * The projection the plan asks to stay a query, not a stored guess
+ * (Documentation/Plans/COST-TRACK-PLUGIN.md section 17.5).
+ *
+ * @remarks
+ * Over the Rollup's daily rate per (Scope, Key) across the last window of
+ * days - anchored at each key's own latest day, so an old ledger still
+ * projects - the mean, the median, the mean of the last seven days, and the
+ * projection to a thirty-day period as the mean times thirty with the
+ * confidence band from the daily minimum and maximum times thirty. A
+ * history of fewer than two days projects with no spread (minimum and
+ * maximum both at the projection). The forecast never writes a row; the
+ * caller labels it an estimate in every export.
+ */
 import type { DatabaseSync } from "node:sqlite";
 
+/**
+ * One (scope, key) projection row.
+ */
 type Row = {
 	Scope: string;
 	Key: string;
@@ -21,19 +30,30 @@ type Row = {
 	Maximum: number;
 };
 
+/**
+ * One key's daily rates, keyed by the day's UTC midnight.
+ */
 type Series = { Scope: string; Key: string; Rates: Map<number, number> };
 
-// One UTC day in milliseconds.
+/**
+ * One UTC day in milliseconds.
+ */
 const Day = 86400000;
 
-// The projection's period, in days.
+/**
+ * The projection's period, in days.
+ */
 const Period = 30;
 
-// The last-seven tail, in days.
+/**
+ * The last-seven tail, in days.
+ */
 const Tail = 7;
 
-// One ISO day stamp: "YYYY-MM-DD" to UTC midnight in milliseconds; a
-// malformed day is outside every window.
+/**
+ * One ISO day stamp: "YYYY-MM-DD" to UTC midnight in milliseconds; a
+ * malformed day is outside every window.
+ */
 const StampOf = (Text: string): number => {
 	const Parts = /^(\d{4})-(\d{2})-(\d{2})$/.exec(Text);
 	if (Parts === null) {
@@ -42,12 +62,16 @@ const StampOf = (Text: string): number => {
 	return Date.UTC(Number(Parts[1]), Number(Parts[2]) - 1, Number(Parts[3]));
 };
 
-// One money column, rounded to the sixth decimal - the reading precision of
-// every other report row.
+/**
+ * One money column, rounded to the sixth decimal - the reading precision of
+ * every other report row.
+ */
 const Round = (Value: number): number => Math.round(Value * 1e6) / 1e6;
 
-// One series' daily rates over its own window, anchored at the latest day
-// the key itself reached.
+/**
+ * One series' daily rates over its own window, anchored at the latest day
+ * the key itself reached.
+ */
 const Windowed = (Held: Series, Window: number): readonly number[] => {
 	const Stamps = [...Held.Rates.keys()].sort((One, Other) => One - Other);
 	const Latest = Stamps[Stamps.length - 1];
@@ -68,8 +92,10 @@ const Windowed = (Held: Series, Window: number): readonly number[] => {
 	return Rates;
 };
 
-// One series' median: the middle value, or the mean of the two middle values
-// when the day count is even.
+/**
+ * One series' median: the middle value, or the mean of the two middle
+ * values when the day count is even.
+ */
 const MedianOf = (Rates: readonly number[]): number => {
 	const Ordered = [...Rates].sort((One, Other) => One - Other);
 	const Middle = Math.floor(Ordered.length / 2);

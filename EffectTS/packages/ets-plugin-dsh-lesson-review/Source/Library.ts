@@ -1,50 +1,56 @@
-// Library - the entry module of the LESSON-REVIEW service
-// (@playform/ets-plugin-dsh-lesson-review), the self-improvement review of the
-// family. Loader contract: the CLASS form, mirroring the pattern service -
-// `export default class LessonService extends Service` with
-// `super(Context, "lesson")`, registered immediately on construction. The ONLY
-// named export is the Config schema (the loader validates it at load; also
-// attached as a static for the class-form reading) - every other module is a
-// nameless default export and each service method is a thin delegate.
-//
-// THE SERVICE SURFACE (ctx.lesson):
-//
-//   Configure(options)        - apply validated config knobs (volatile cells)
-//   Tick(agent)               - advance the nudge counter; { due, count }
-//   Reset(agent)              - clear one agent's counter
-//   Digest(messages)          - the bounded digest (Function/Digest)
-//   Prompt(focus?)            - the byte-stable review prompt
-//   Parse(reply)              - the strict reply parse (Function/Parse)
-//   Judge(proposal)           - the deterministic acceptance rules
-//   Snapshot(agent)           - the live-session projection (Function/Snapshot)
-//   Review(input)             - ONE review: digest -> llm -> parse -> judge ->
-//                               apply/queue -> report -> ledger
-//   Curate(now?)              - the deterministic staleness/archive pass
-//   Status()                  - counts (total/active/stale/archived/pinned/pending)
-//   Pin(name) / Unpin(name)   - the lifecycle exemption
-//   Restore(name)             - move an archived skill back and reactivate it
-//   Archive(name)             - archive one skill now (the manual pass)
-//   Pending()                 - the queued proposals awaiting acceptance
-//   Accept(name)              - land one queued proposal
-//   Save() / Flush()          - the store flush (the smoke seam)
-//
-// THE REVIEW NEVER TOUCHES THE LIVE TURN. It runs from the true idle phase
-// (the caller's `agent.runMaintenance`), it receives a SNAPSHOT rather than
-// reading the session, and its model call is ONE hand-built `ctx.llm.stream`
-// request that carries no agent-loop marker - so the harness cannot mistake it
-// for a loop request, and its cost is one bounded digest plus one reply.
-//
-// THE REVIEW PROPOSES BY DEFAULT. `policy.write` is the shipped `approve`, so
-// an accepted operation is QUEUED (`~/.dsh/lesson/pending.jsonl`) and lands
-// only through `Accept`. `policy.write: auto` is the opt-in that lets a run
-// land its own operations, and even then the judge's rules and the exact-file
-// fence still apply. Agreement operations are ALWAYS queued: the service never
-// writes the user's `AGENTS.md`.
-//
-// EVERY DEGRADATION IS LOUD AND NON-FATAL: no `llm` service, no model route, a
-// disabled service, an unparseable reply, a failed model call - each returns
-// an outcome class and writes one ledger line, and none of them throws into the
-// caller's maintenance task.
+/**
+ * @module Library
+ *
+ * The entry module of the LESSON-REVIEW service (@playform/ets-plugin-dsh-lesson-review), the
+ * self-improvement review of the family.
+ *
+ * @remarks
+ * Loader contract: the CLASS form, mirroring the pattern service -
+ * `export default class LessonService extends Service` with
+ * `super(Context, "lesson")`, registered immediately on construction. The ONLY
+ * named export is the Config schema (the loader validates it at load; also
+ * attached as a static for the class-form reading) - every other module is a
+ * nameless default export and each service method is a thin delegate.
+ *
+ * THE SERVICE SURFACE (ctx.lesson):
+ *
+ * - `Configure(options)` - apply validated config knobs (volatile cells);
+ * - `Tick(agent)` - advance the nudge counter; `{ due, count }`;
+ * - `Reset(agent)` - clear one agent's counter;
+ * - `Digest(messages)` - the bounded digest (Function/Digest);
+ * - `Prompt(focus?)` - the byte-stable review prompt;
+ * - `Parse(reply)` - the strict reply parse (Function/Parse);
+ * - `Judge(proposal)` - the deterministic acceptance rules;
+ * - `Snapshot(agent)` - the live-session projection (Function/Snapshot);
+ * - `Review(input)` - ONE review: digest -> llm -> parse -> judge ->
+ *   apply/queue -> report -> ledger;
+ * - `Curate(now?)` - the deterministic staleness/archive pass;
+ * - `Status()` - counts (total/active/stale/archived/pinned/pending);
+ * - `Pin(name)` / `Unpin(name)` - the lifecycle exemption;
+ * - `Restore(name)` - move an archived skill back and reactivate it;
+ * - `Archive(name)` - archive one skill now (the manual pass);
+ * - `Pending()` - the queued proposals awaiting acceptance;
+ * - `Accept(name)` - land one queued proposal;
+ * - `Save()` / `Flush()` - the store flush (the smoke seam).
+ *
+ * THE REVIEW NEVER TOUCHES THE LIVE TURN. It runs from the true idle phase
+ * (the caller's `agent.runMaintenance`), it receives a SNAPSHOT rather than
+ * reading the session, and its model call is ONE hand-built `ctx.llm.stream`
+ * request that carries no agent-loop marker - so the harness cannot mistake it
+ * for a loop request, and its cost is one bounded digest plus one reply.
+ *
+ * THE REVIEW PROPOSES BY DEFAULT. `policy.write` is the shipped `approve`, so
+ * an accepted operation is QUEUED (`~/.dsh/lesson/pending.jsonl`) and lands
+ * only through `Accept`. `policy.write: auto` is the opt-in that lets a run
+ * land its own operations, and even then the judge's rules and the exact-file
+ * fence still apply. Agreement operations are ALWAYS queued: the service never
+ * writes the user's `AGENTS.md`.
+ *
+ * EVERY DEGRADATION IS LOUD AND NON-FATAL: no `llm` service, no model route, a
+ * disabled service, an unparseable reply, a failed model call - each returns
+ * an outcome class and writes one ledger line, and none of them throws into the
+ * caller's maintenance task.
+ */
 import { existsSync, readFileSync } from "node:fs";
 import {
 	appendFile as Append,
@@ -75,29 +81,45 @@ import type { ReviewInput, ReviewMessage, ReviewResult } from "./Interface/Revie
 import Definition from "./Variable/Config.js";
 import Version from "./Variable/Version.js";
 
-/** Expand a leading `~` (the family's path convention for every knob). */
+/**
+ * Expand a leading `~` (the family's path convention for every knob).
+ */
 const Expand = (Path: string): string =>
 	Path.startsWith("~") ? Join(OS.homedir(), Path.slice(1)) : Path;
 
-/** The nudge verdict. */
+/**
+ * The nudge verdict.
+ */
 export interface Tick {
-	/** Whether a review is due now. */
+	/**
+	 * Whether a review is due now.
+	 */
 	due: boolean;
 
-	/** The counter's value after this tick. */
+	/**
+	 * The counter's value after this tick.
+	 */
 	count: number;
 }
 
-/** One queued proposal (the pending queue's row). */
+/**
+ * One queued proposal (the pending queue's row).
+ */
 export interface Queued {
-	/** Epoch ms when it was queued. */
+	/**
+	 * Epoch ms when it was queued.
+	 */
 	at: number;
 
-	/** The operation. */
+	/**
+	 * The operation.
+	 */
 	op: Op;
 }
 
-/** The corpus-wide counts. */
+/**
+ * The corpus-wide counts.
+ */
 export interface Status {
 	total: number;
 	active: number;
@@ -107,32 +129,48 @@ export interface Status {
 	pending: number;
 }
 
-/** The neutral ledger line builder (module-owned strings, byte-stable). */
+/**
+ * The neutral ledger line builder (module-owned strings, byte-stable).
+ */
 const Line = (Message: string, State: { logFile: string }): string =>
 	`lesson: ${Message} (logFile ${State.logFile})`;
 
 export default class LessonService extends Service {
 	static inject: string[] = [];
 
-	/** The loader-contract Config (validated at load; knobs via Configure). */
+	/**
+	 * The loader-contract Config (validated at load; knobs via Configure).
+	 */
 	static Config = Definition;
 
-	/** The knobs: constructor defaults plus the loader's validated config. */
+	/**
+	 * The knobs: constructor defaults plus the loader's validated config.
+	 */
 	private Knobs: Configuration;
 
-	/** The usage store (Function/Usage). */
+	/**
+	 * The usage store (Function/Usage).
+	 */
 	private Usage: Usage;
 
-	/** The ledger sink (best-effort, never throws). */
+	/**
+	 * The ledger sink (best-effort, never throws).
+	 */
 	private Ledger: (Message: string) => void;
 
-	/** The per-agent nudge counters (the agent object is the key). */
+	/**
+	 * The per-agent nudge counters (the agent object is the key).
+	 */
 	private Counters: Map<unknown, number> = new Map();
 
-	/** The store chain: the load and every write, in order. */
+	/**
+	 * The store chain: the load and every write, in order.
+	 */
 	private Chain: Promise<void> = Promise.resolve();
 
-	/** The harness context (the optional `llm` probe). */
+	/**
+	 * The harness context (the optional `llm` probe).
+	 */
 	private Context: Context;
 
 	constructor(Context_: Context, Raw?: unknown) {
@@ -174,12 +212,16 @@ export default class LessonService extends Service {
 		});
 	}
 
-	/** Apply the validated config knobs (called by the host on load/volatile). */
+	/**
+	 * Apply the validated config knobs (called by the host on load/volatile).
+	 */
 	Configure(Options: Partial<Configuration>): void {
 		this.Knobs = { ...this.Knobs, ...Options };
 	}
 
-	/** Advance one agent's nudge counter; `due` is true on the interval. */
+	/**
+	 * Advance one agent's nudge counter; `due` is true on the interval.
+	 */
 	Tick(Agent: unknown): Tick {
 		switch (true) {
 			case !this.Knobs.enabled:
@@ -201,17 +243,23 @@ export default class LessonService extends Service {
 		}
 	}
 
-	/** Clear one agent's counter (a new session, or a manual reset). */
+	/**
+	 * Clear one agent's counter (a new session, or a manual reset).
+	 */
 	Reset(Agent: unknown): void {
 		this.Counters.delete(Agent);
 	}
 
-	/** The bounded digest of one conversation snapshot. */
+	/**
+	 * The bounded digest of one conversation snapshot.
+	 */
 	Digest(Messages: readonly ReviewMessage[]): DigestResult {
 		return Digest(Messages, this.Knobs.digestTail, this.Knobs.maxInputChars);
 	}
 
-	/** The review prompt (a `promptFile` override wins over the shipped text). */
+	/**
+	 * The review prompt (a `promptFile` override wins over the shipped text).
+	 */
 	Prompt(Focus?: string): string {
 		const Override = this.Knobs.promptFile.trim();
 		switch (true) {
@@ -232,22 +280,30 @@ export default class LessonService extends Service {
 		}
 	}
 
-	/** The strict reply parse. */
+	/**
+	 * The strict reply parse.
+	 */
 	Parse(Reply: string): ParseResult {
 		return Parse(Reply, this.Knobs.maxProposals);
 	}
 
-	/** The deterministic acceptance rules, over the live corpus. */
+	/**
+	 * The deterministic acceptance rules, over the live corpus.
+	 */
 	Judge(Proposal_: Proposal) {
 		return Judge(Proposal_, this.Corpus());
 	}
 
-	/** The live-session projection (the integration seam; never throws). */
+	/**
+	 * The live-session projection (the integration seam; never throws).
+	 */
 	Snapshot(Agent: unknown): ReviewMessage[] {
 		return Snapshot(Agent);
 	}
 
-	/** One review. Never throws; every degradation is an outcome class. */
+	/**
+	 * One review. Never throws; every degradation is an outcome class.
+	 */
 	async Review(Input: ReviewInput): Promise<ReviewResult> {
 		const Started = Date.now();
 		const Result: ReviewResult = {
@@ -388,7 +444,9 @@ export default class LessonService extends Service {
 		return Result;
 	}
 
-	/** The deterministic lifecycle pass; archives move whole directories. */
+	/**
+	 * The deterministic lifecycle pass; archives move whole directories.
+	 */
 	async Curate(Now: number = Date.now()): Promise<Curation> {
 		switch (true) {
 			case !this.Knobs.enabled:
@@ -427,7 +485,9 @@ export default class LessonService extends Service {
 		return Curation;
 	}
 
-	/** The corpus-wide counts. */
+	/**
+	 * The corpus-wide counts.
+	 */
 	Status(): Status {
 		const All = this.Usage.All();
 		return {
@@ -440,7 +500,9 @@ export default class LessonService extends Service {
 		};
 	}
 
-	/** Pin one entry: no transitions, no review writes. */
+	/**
+	 * Pin one entry: no transitions, no review writes.
+	 */
 	Pin(Name: string): boolean {
 		const Entry_ = this.Usage.Get(Name) ?? Fresh(Name, Date.now(), "user");
 		Entry_.pinned = true;
@@ -449,7 +511,9 @@ export default class LessonService extends Service {
 		return true;
 	}
 
-	/** Unpin one entry. */
+	/**
+	 * Unpin one entry.
+	 */
 	Unpin(Name: string): boolean {
 		const Entry_ = this.Usage.Get(Name);
 		switch (true) {
@@ -463,7 +527,9 @@ export default class LessonService extends Service {
 		}
 	}
 
-	/** Move one archived skill back and reactivate its record. */
+	/**
+	 * Move one archived skill back and reactivate its record.
+	 */
 	async Restore(Name: string): Promise<boolean> {
 		const Source = Join(Expand(this.Knobs.archiveRoot), Name);
 		const Target = Join(Expand(this.Knobs.skillsRoot), Name);
@@ -483,7 +549,9 @@ export default class LessonService extends Service {
 		return true;
 	}
 
-	/** Archive one skill now (the manual pass, no model involved). */
+	/**
+	 * Archive one skill now (the manual pass, no model involved).
+	 */
 	async Archive(Name: string): Promise<boolean> {
 		const Moved = await Apply({ op: "archive", name: Name }, this.Knobs);
 		switch (true) {
@@ -502,12 +570,16 @@ export default class LessonService extends Service {
 		}
 	}
 
-	/** The queued proposals, oldest first. */
+	/**
+	 * The queued proposals, oldest first.
+	 */
 	Pending(): Queued[] {
 		return this.ReadPending();
 	}
 
-	/** Land one queued proposal by name (the acceptance seam). */
+	/**
+	 * Land one queued proposal by name (the acceptance seam).
+	 */
 	async Accept(Name: string): Promise<boolean> {
 		const Queue = this.ReadPending();
 		const Index = Queue.findIndex((Row) => Row.op.name === Name);
@@ -534,12 +606,16 @@ export default class LessonService extends Service {
 		}
 	}
 
-	/** Await the store chain (the smoke seam). */
+	/**
+	 * Await the store chain (the smoke seam).
+	 */
 	async Flush(): Promise<void> {
 		await this.Chain;
 	}
 
-	/** Persist the usage store on the chain. */
+	/**
+	 * Persist the usage store on the chain.
+	 */
 	async Save(): Promise<void> {
 		this.Chain = this.Chain.then(async () => {
 			try {
@@ -555,7 +631,9 @@ export default class LessonService extends Service {
 	// Internals
 	// ------------------------------------------------------------------
 
-	/** The judge's read-only corpus view (the store plus one directory probe). */
+	/**
+	 * The judge's read-only corpus view (the store plus one directory probe).
+	 */
 	private Corpus(): Corpus {
 		const Root = Expand(this.Knobs.skillsRoot);
 		return {
@@ -575,7 +653,9 @@ export default class LessonService extends Service {
 		};
 	}
 
-	/** The review route: the knobs win, then the agent's own options. */
+	/**
+	 * The review route: the knobs win, then the agent's own options.
+	 */
 	private Route(Agent: unknown): { provider: string; model: string } | undefined {
 		const Options = (Agent as { options?: Record<string, unknown> } | undefined)?.options ?? {};
 		const Provider =
@@ -587,7 +667,9 @@ export default class LessonService extends Service {
 		return Provider === "" || Model === "" ? undefined : { provider: Provider, model: Model };
 	}
 
-	/** Queue one operation (one JSON line, appended). */
+	/**
+	 * Queue one operation (one JSON line, appended).
+	 */
 	private async Enqueue(Op: Op, Now: number): Promise<void> {
 		const Row: Queued = { at: Now, op: Op };
 		try {
@@ -599,7 +681,9 @@ export default class LessonService extends Service {
 		}
 	}
 
-	/** Read the pending queue (a malformed line is skipped, never fatal). */
+	/**
+	 * Read the pending queue (a malformed line is skipped, never fatal).
+	 */
 	private ReadPending(): Queued[] {
 		let Text: string;
 		try {
@@ -631,7 +715,9 @@ export default class LessonService extends Service {
 		return Rows;
 	}
 
-	/** Rewrite the pending queue (the acceptance path). */
+	/**
+	 * Rewrite the pending queue (the acceptance path).
+	 */
 	private async WritePending(Rows: readonly Queued[]): Promise<void> {
 		try {
 			await Mkdir(Dirname(Expand(this.Knobs.pendingPath)), { recursive: true });
@@ -644,7 +730,9 @@ export default class LessonService extends Service {
 		}
 	}
 
-	/** Write the run report (best-effort). */
+	/**
+	 * Write the run report (best-effort).
+	 */
 	private async Record(
 		Input: ReviewInput,
 		Result: ReviewResult,
@@ -670,7 +758,9 @@ export default class LessonService extends Service {
 		return Report(Expand(this.Knobs.reportsRoot), Report_);
 	}
 
-	/** Finish a review that never reached the model (or failed on the way). */
+	/**
+	 * Finish a review that never reached the model (or failed on the way).
+	 */
 	private async Settle(
 		Input: ReviewInput,
 		Result: ReviewResult,
@@ -695,9 +785,11 @@ export default class LessonService extends Service {
 	}
 }
 
-// The compiled package version (Source/Variable/Version, built in by the
-// ESBuild define) - NOT a loader key: the contract's names are unchanged
-// (the class form's default export with static inject/Config), and Version
-// is a standalone named export, not on the class. It replaces the previous
-// hardcoded bundle-version mirror.
+/**
+ * The compiled package version (Source/Variable/Version, built in by the
+ * ESBuild define) - NOT a loader key: the contract's names are unchanged
+ * (the class form's default export with static inject/Config), and Version
+ * is a standalone named export, not on the class. It replaces the previous
+ * hardcoded bundle-version mirror.
+ */
 export { Version };

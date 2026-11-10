@@ -96,8 +96,10 @@ interface Commands {
 	}): unknown;
 }
 
-// One money column of a rendered report row: four decimals, the reading
-// precision of a command result (the rows themselves carry six).
+/**
+ * One money column of a rendered report row: four decimals, the reading
+ * precision of a command result (the rows themselves carry six).
+ */
 const Money = (Value: number): string => Value.toFixed(4);
 
 export default (Context: Context, Options: Config): void => {

@@ -1,25 +1,34 @@
-// Config - the plugin's Schemastery Config schema (a Variable: one constant
-// built once at load). Cordis validates the exported schema while the plugin
-// loads and fills every default, so invalid configuration fails LOUD at load
-// instead of silently falling back per-field, and `apply` receives a
-// validated plain config object. The shape this schema produces is
-// Interface/Config.ts.
-//
-// The required price-row columns use `.required()` so a malformed row fails
-// at load (schemastery's "missing required value"); the three optional rates
-// stay optional - an absent rate is an unpriced bucket (charged at zero), not
-// an error. The shipped `prices` default is the three-row price book; each
-// row's own `effectiveFrom`/`currency` defaults fill in at validation. The
-// factor layer's arrays (section 17): `modifiers` ships the four mode
-// multipliers and `priceWindows` the time-of-day windows (empty by default).
-//
-// This is one of the modules in the tree with a runtime import of
-// @deepseek-ai/schemastery (the schema must be a real schemastery instance -
-// the loader consumes it through the Standard Schema `~standard` interface).
+/**
+ * @module Config
+ *
+ * The plugin's Schemastery Config schema (a Variable: one constant built
+ * once at load).
+ *
+ * @remarks
+ * Cordis validates the exported schema while the plugin loads and fills
+ * every default, so invalid configuration fails LOUD at load instead of
+ * silently falling back per-field, and `apply` receives a validated plain
+ * config object. The shape this schema produces is Interface/Config.ts.
+ *
+ * The required price-row columns use `.required()` so a malformed row fails
+ * at load (schemastery's "missing required value"); the three optional rates
+ * stay optional - an absent rate is an unpriced bucket (charged at zero),
+ * not an error. The shipped `prices` default is the three-row price book;
+ * each row's own `effectiveFrom`/`currency` defaults fill in at validation.
+ * The factor layer's arrays (section 17): `modifiers` ships the four mode
+ * multipliers and `priceWindows` the time-of-day windows (empty by
+ * default).
+ *
+ * This is one of the modules in the tree with a runtime import of
+ * @deepseek-ai/schemastery (the schema must be a real schemastery instance -
+ * the loader consumes it through the Standard Schema `~standard` interface).
+ */
 import Schema from "@deepseek-ai/schemastery";
 
-// One price row's schema: the rate columns are per million tokens, in the
-// row's own currency.
+/**
+ * One price row's schema: the rate columns are per million tokens, in the
+ * row's own currency.
+ */
 const Rate = () =>
 	Schema.object({
 		provider: Schema.string()
@@ -45,10 +54,12 @@ const Rate = () =>
 		currency: Schema.string().default("USD").description("Currency of this row's rates."),
 	});
 
-// One modifier row's schema (section 17.2): an effective-dated multiplier
-// for one pricing mode, optionally scoped to one model. The multiplier
-// scales the priced total; a model-specific row beats a provider-wide one
-// of the same kind.
+/**
+ * One modifier row's schema (section 17.2): an effective-dated multiplier
+ * for one pricing mode, optionally scoped to one model. The multiplier
+ * scales the priced total; a model-specific row beats a provider-wide one
+ * of the same kind.
+ */
 const Modifier = () =>
 	Schema.object({
 		provider: Schema.string()
@@ -74,8 +85,10 @@ const Modifier = () =>
 		),
 	});
 
-// One time-of-day window's schema: the label a price row's Window column
-// resolves against and the UTC hours it covers.
+/**
+ * One time-of-day window's schema: the label a price row's Window column
+ * resolves against and the UTC hours it covers.
+ */
 const PriceWindow = () =>
 	Schema.object({
 		label: Schema.string()
@@ -91,6 +104,9 @@ const PriceWindow = () =>
 			.description("UTC hour the window ends at; a value past 24 wraps into the next day."),
 	});
 
+/**
+ * The plugin's Config schema, built once at load.
+ */
 export default Schema.object({
 	enabled: Schema.boolean()
 		.default(true)

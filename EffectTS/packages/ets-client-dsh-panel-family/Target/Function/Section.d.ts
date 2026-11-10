@@ -1,5 +1,5 @@
-import type { PanelSection } from "../Interface/Panel.js";
-import type { PanelPorts } from "../Interface/Ports.js";
+import type { PanelSection } from "@Interface/Panel.js";
+import type { PanelPorts } from "@Interface/Ports.js";
 import { createElement } from "react";
 export default function Section(props: {
     section: PanelSection;

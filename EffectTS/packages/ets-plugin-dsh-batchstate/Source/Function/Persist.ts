@@ -39,7 +39,6 @@ import type Handle from "@Interface/Handle.js";
 import type State from "@Interface/State.js";
 import { Expand } from "@playform/ets-base-dsh";
 
-/** The meta key of the idle-queue record in the `queue` table. */
 /**
  * The meta key of the idle-queue record in the `queue` table.
  */
