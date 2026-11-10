@@ -48,7 +48,9 @@ the file and line. Do not propose changes. Report in the given table.
 the failed artifacts.
 
 **Typical spec:** the template in `task-routing`'s `references/ladder-and-specs.md`, plus the
-file-write and git laws from `code-authoring`.
+file-write, git, and naming laws from `code-authoring`; the naming law writes acronyms in capitals
+(`Llm` is `LLM`, `Amd` is `AMD`), keeps product names in their official spelling (`GitHub`,
+`vLLM`), and spells words in full.
 
 ## PLANNER
 

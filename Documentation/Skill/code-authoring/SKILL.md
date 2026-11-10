@@ -3,14 +3,15 @@ name: code-authoring
 description:
     "Authoring discipline for every file operation and code write in this repository: the
     write/raw-write/edit tool API, byte integrity, git checks-only with the staged gcommit, and the
-    atomized style (one definition per file, nameless default exports, full-word PascalCase names,
-    inlined single-use bindings, switch (true) guards)."
+    atomized style (one definition per file, nameless default exports, full-word PascalCase names
+    with acronyms in capitals and product names in their official spelling, inlined single-use
+    bindings, switch (true) guards)."
 whenToUse:
     Before every file modification and code-writing task, including docs, scripts, and manifests;
     also when a write may hold a deliberate unicode glyph, a bulk transformation is proposed, or a
     commit is requested.
-version: 3.0.0
-updated: 2026-10-28
+version: 3.1.0
+updated: 2026-11-10
 ---
 
 # Code Authoring
@@ -144,14 +145,24 @@ The second half is the writing style; it exists so any definition can be borrowe
 
 15. **The names.**
 
-    Names are PascalCase, one word, action-oriented, present tense, singular, full words.
+    Names are PascalCase, one word, action-oriented, present tense, singular, spelled in full.
 
-    `Configuration`, not `Config`; `Environment`, not `Env`.
+    `Configuration`, not `Config`; `Environment`, not `Env`; `Identifier`, not `Id`.
 
-    Genuine acronyms stay (DSH, ETS, CCR, JSON, URL).
+    An acronym is written in capitals in every position, including inside a PascalCase name:
+    `LLMProvider`, not `LlmProvider`; `APIRoute`, not `ApiRoute`; `JSONSchema`, not `JsonSchema`;
+    `HTTPClient`, not `HttpClient`; `URLType`, not `UrlType`; `GPUSelection`, not `GpuSelection`.
 
-    Documented exceptions: the loader's `Config` export, machine-read contract names, and the
-    `State`/`Set`/`Count` domain vocabulary.
+    A product or project name keeps the official spelling that its vendor chose: `GitHub`, not
+    `Github`; `vLLM`, not `Vllm`; `ROCm`, not `Rocm`; `macOS`, not `Macos`; `Node.js`, not `Nodejs`;
+    `JavaScript`, not `Javascript`; `TypeScript`, not `Typescript`; `PostHog`, not `Posthog`; and
+    `npm`, not `NPM`.
+
+    A token that a reader would pronounce as an ordinary capitalized word is a flattened acronym,
+    and the name that carries it is wrong.
+
+    Documented exceptions: the loader's `Config` export, machine-read contract names, upstream API
+    names, and the `State`/`Set`/`Count` domain vocabulary.
 
 16. **The inlining.**
 

@@ -59,7 +59,11 @@ section without opening another file.
 3. **The laws.**
 
     The owner skill is loaded for each law about to be touched: `code-authoring` (file writes, byte
-    integrity, git), `task-routing` (models and effort).
+    integrity, naming, git), `task-routing` (models and effort).
+
+    Names follow the `code-authoring` law: an acronym is written in capitals in every position, so
+    `Llm` is `LLM` and `Amd` is `AMD`; a product name keeps its official spelling, so `GitHub` and
+    `vLLM` are never flattened; and a word is spelled in full.
 
     Plugin work adds `plugin-system` and `plugin-development`; suite work adds `smoke-writing`; site
     work adds `site-authoring`.

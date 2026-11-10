@@ -59,7 +59,7 @@ Named exports anywhere else are a finding.
 
 So is a non-contract named export at the entry.
 
-## 3. Names: PascalCase, one word, action-oriented, present tense, singular, full words
+## 3. Names: PascalCase, one word, action-oriented, present tense, singular, full words, acronyms in capitals
 
 | Property        | Write            | Not                                    |
 | --------------- | ---------------- | -------------------------------------- |
@@ -88,10 +88,37 @@ Gov -> Governor           Id -> Identifier             Spec -> Specification
 Util -> Utility
 ```
 
-Genuine acronyms stay: DSH, ETS, CCR, JSON, HTML, URL, HTTP, UI, TTL, NPM, SVG, FS.
+### The acronym and proper-noun law
 
-The distinction: an acronym names a thing (a protocol, a format, a product); a word-abbreviation
-shortens a word.
+An acronym is written in capitals in every position, including inside a PascalCase name:
+`LLMProvider`, `APIRoute`, `JSONSchema`, `HTTPClient`, `URLType`, and `GPUSelection`. A token such
+as `Llm`, `Api`, `Json`, `Http`, `Url`, `Ui`, `Gpu`, or `Amd` is a misspelling even when the rest
+of the name is right, because the acronym has been flattened into a word.
+
+The acronym table (the canonical replacements):
+
+```text
+Llm -> LLM      Amd -> AMD      Api -> API      Cli -> CLI      Sdk -> SDK
+Json -> JSON    Http -> HTTP    Url -> URL      Ui -> UI        Html -> HTML
+Css -> CSS      Sql -> SQL      Gpu -> GPU      Cpu -> CPU      Npu -> NPU
+Ai -> AI        Os -> OS        Mcp -> MCP      Tts -> TTS      Asr -> ASR
+Pdf -> PDF      Docx -> DOCX    Xlsx -> XLSX    Pptx -> PPTX    Utf -> UTF
+Ascii -> ASCII  Rgb -> RGB      Npm -> npm      Rocm -> ROCm    Vllm -> vLLM
+```
+
+A product or project name keeps the official spelling that its vendor chose: `GitHub`,
+`JavaScript`, `TypeScript`, `Node.js`, `macOS`, `vLLM`, `ROCm`, `PostHog`, `DeepSeek`,
+`Cloudflare Workers AI`, `pnpm`, and `npm`. A flattened variant such as `Github`, `Javascript`,
+`Nodejs`, `Macos`, `Vllm`, `Rocm`, `Posthog`, or `NPM` is a misspelling.
+
+The test is whether the token would be read as an ordinary capitalized word: `Llm` and `Amd` can be
+read as words, and that is exactly why they are wrong.
+
+Genuine acronyms stay, and they stay in capitals: DSH, ETS, CCR, JSON, HTML, URL, HTTP, UI, TTL,
+SVG, FS, API, CLI, SDK, GPU, CPU, NPU, LLM, AMD, MCP, SQL, ASCII, UTF, PDF, DOCX, XLSX, PPTX.
+
+The distinction: an acronym names a thing (a protocol, a format, a product) and is written in
+capitals, while a word-abbreviation shortens a word and is written in full.
 
 Documented exceptions:
 
@@ -163,7 +190,7 @@ For every changed file:
 
 - [ ] One meaning-bearing definition per leaf; no `utils`/`types` grab bags.
 - [ ] Anonymous default export outside the entry; contract names only at the entry.
-- [ ] Names pass the six properties or cite a documented exception.
+- [ ] Names pass the six properties and the acronym and proper-noun law, or cite a documented exception.
 - [ ] Every binding is reused, invariant, or inlined.
 - [ ] Guard chains of three or more are `switch (true)`.
 - [ ] Depth correlates with specificity; grouped folders have barrels.

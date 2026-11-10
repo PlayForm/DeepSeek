@@ -57,6 +57,10 @@ A lost update is more expensive than a queue.
 
     A terminal content operation is never used (`code-authoring`).
 
+    Names follow the same law: an acronym is written in capitals in every position, so `Llm` is
+    `LLM` and `Amd` is `AMD`; a product name keeps its official spelling, so `GitHub` and `vLLM` are
+    never flattened; and a word is spelled in full.
+
 3. **The arbiter.**
 
     The relevant arbiter runs after each touched file:
