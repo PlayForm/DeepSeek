@@ -1,35 +1,41 @@
-// Library - the entry module of the FEEDBACK member
-// (@playform/plugin-dsh-feedback, ctx.feedback), the fourth orchestration member
-// (Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md). Class form (the factory's
-// precedent): `export default class Feedback extends Service` with
-// `super(Context, "feedback")`, registered immediately on construction and
-// removed with its owning fiber; `static inject` declares nothing beyond the
-// plugin's own needs (the feedback member is a NON-MANIFEST module - no fs/
-// observed machinery, no waterfall listeners).
-//
-// THE SERVICE SURFACE (ctx.feedback - every signature documented in
-// README.md / SCHEME.md):
-//
-//   Record(block)                 - store a block in the session's record + journal it
-//   Push(block, parentSession)    - the mechanical transfer hop through the parentage
-//   Delta(session, agentId, text) - the parent's append (never an edit)
-//   Read(session, agentId, reader)- the recipient's OPTIONAL read (never forced)
-//   Summary(session)              - the council view: the aggregate signals
-//   Outcome(session, agentId, proposal, outcome, detail)
-//                                 - the batch outcome's journal + summary record
-//                                   (the caller-side orchestration integration)
-//
-// THE HONESTY POLICY (plan section 6): the honest content is NEVER sanitized
-// or filtered - the parents append deltas, NEVER rewrite the agents'
-// signals. The read is ALWAYS the recipient's choice. The user's override
-// wins.
-//
-// THE TRANSFER MECHANISM (plan section 4.1): the block travels as TEXT
-// through the inbox machinery - a child's completion report carries the
-// block, the parent's session/event listener sees the splice and records it
-// WITHOUT reading it into the conversation; each session boundary adds one
-// hop to the TRANSFERRED chain. The queue integration (end-phase) can also
-// call Push directly.
+/**
+ * @module Library
+ *
+ * The entry module of the FEEDBACK member (@playform/plugin-dsh-feedback,
+ * ctx.feedback), the fourth orchestration member
+ * (Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md).
+ *
+ * @remarks
+ * Class form (the factory's precedent): `export default class Feedback extends
+ * Service` with `super(Context, "feedback")`, registered immediately on
+ * construction and removed with its owning fiber; `static inject` declares
+ * nothing beyond the plugin's own needs (the feedback member is a NON-MANIFEST
+ * module - no fs/observed machinery, no waterfall listeners).
+ *
+ * THE SERVICE SURFACE (ctx.feedback - every signature documented in README.md
+ * / SCHEME.md):
+ *
+ * - Record(block) - store a block in the session's record + journal it
+ * - Push(block, parentSession) - the mechanical transfer hop through the
+ *   parentage
+ * - Delta(session, agentId, text) - the parent's append (never an edit)
+ * - Read(session, agentId, reader) - the recipient's OPTIONAL read (never
+ *   forced)
+ * - Summary(session) - the council view: the aggregate signals
+ * - Outcome(session, agentId, proposal, outcome, detail) - the batch outcome's
+ *   journal + summary record (the caller-side orchestration integration)
+ *
+ * THE HONESTY POLICY (plan section 6): the honest content is NEVER sanitized
+ * or filtered - the parents append deltas, NEVER rewrite the agents' signals.
+ * The read is ALWAYS the recipient's choice. The user's override wins.
+ *
+ * THE TRANSFER MECHANISM (plan section 4.1): the block travels as TEXT through
+ * the inbox machinery - a child's completion report carries the block, the
+ * parent's session/event listener sees the splice and records it WITHOUT
+ * reading it into the conversation; each session boundary adds one hop to the
+ * TRANSFERRED chain. The queue integration (end-phase) can also call Push
+ * directly.
+ */
 import { homedir as Home } from "node:os";
 
 import { Service, type Context } from "@deepseek-ai/cordis";
@@ -119,36 +125,48 @@ export default class Feedback extends Service {
 		});
 	}
 
-	/** Store a block (the agent's own completion footer) in its session's
-	 *  record and journal the event. */
+	/**
+	 * Store a block (the agent's own completion footer) in its session's
+	 * record and journal the event.
+	 */
 	Record(Block: FeedbackBlock): void {
 		RecordFn(this.State, Block);
 	}
 
-	/** The mechanical transfer hop: forward the block to the parent session's
-	 *  record, one hop added to the TRANSFERRED chain. */
+	/**
+	 * The mechanical transfer hop: forward the block to the parent session's
+	 * record, one hop added to the TRANSFERRED chain.
+	 */
 	Push(Block: FeedbackBlock, ParentSession: string): void {
 		PushFn(this.State, Block, ParentSession);
 	}
 
-	/** The parent's append: add a delta observation to a stored block. */
+	/**
+	 * The parent's append: add a delta observation to a stored block.
+	 */
 	Delta(Session: string, AgentId: string, Text: string): FeedbackBlock | null {
 		return Delta(this.State, Session, AgentId, Text);
 	}
 
-	/** The recipient's optional read: record `read-at <reader>` on a block. */
+	/**
+	 * The recipient's optional read: record `read-at <reader>` on a block.
+	 */
 	Read(Session: string, AgentId: string, Reader: string): FeedbackBlock | null {
 		return ReadFn(this.State, Session, AgentId, Reader);
 	}
 
-	/** The council view: the session's aggregate signals. */
+	/**
+	 * The council view: the session's aggregate signals.
+	 */
 	Summary(Session: string): Summary {
 		return SummaryFn(this.State, Session);
 	}
 
-	/** Record one batch outcome (applied / rejected / denied / expired) into
-	 *  the session's journal and summary - the caller-side orchestration
-	 *  integration the plan defers (the ingester is the outcome's owner). */
+	/**
+	 * Record one batch outcome (applied / rejected / denied / expired) into
+	 * the session's journal and summary - the caller-side orchestration
+	 * integration the plan defers (the ingester is the outcome's owner).
+	 */
 	Outcome(
 		Session: string,
 		AgentId: string,
@@ -159,8 +177,10 @@ export default class Feedback extends Service {
 		return OutcomeFn(this.State, Session, AgentId, Proposal, Outcome_, Detail);
 	}
 
-	/** Render one block in the transfer format (the queue integration's
-	 *  footer builder). */
+	/**
+	 * Render one block in the transfer format (the queue integration's footer
+	 * builder).
+	 */
 	Render(Block: FeedbackBlock): string {
 		return Render(Block, this.State.Config.maxBlockBytes);
 	}
@@ -168,8 +188,10 @@ export default class Feedback extends Service {
 
 export { BLOCK as BlockMarker };
 
-// The compiled package version (Source/Variable/Version, built in by the
-// ESBuild define) - NOT a loader key: the contract's names are unchanged
-// (the class form's default export with static inject/Config), and Version
-// sits beside the other named exports, not on the class.
+/**
+ * The compiled package version (Source/Variable/Version, built in by the
+ * ESBuild define) - NOT a loader key: the contract's names are unchanged (the
+ * class form's default export with static inject/Config), and Version sits
+ * beside the other named exports, not on the class.
+ */
 export { Version };

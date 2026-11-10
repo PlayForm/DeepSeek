@@ -14,9 +14,9 @@
  * `name` export (hook-dsh-workspace-monitor); the ledger prefix is the
  * module's OWN contract string.
  */
-import type CheckSet from "@Interface/CheckSet.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type WatchEntry from "@Interface/WatchEntry.js";
+import type CheckSet from "./CheckSet.js";
+import type FactoryHandle from "./Factory.js";
+import type WatchEntry from "./WatchEntry.js";
 import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
 interface Extra {
     /**

@@ -1,40 +1,49 @@
-// Guard - the tools/pre-execute listener (Function/Guard): the intercept
-// (ORCHESTRATION-PLUGINS.md section 3). Registered as a WATERFALL on the
-// plugin's own context (the guard judges only the dispatches the terminal
-// surface delivers; root registration is NOT used - a pre-execute
-// transform is scoped, unlike the observation listeners).
-//
-// THE DISCIPLINE:
-//   * fail-open: ANY error in the guard body means the dispatch passes
-//     UNCHANGED (the guard must never break a legitimate tool call - the
-//     whole judged path is one try/catch, and the catch calls next());
-//   * the deny arm is the ONE listener that deliberately omits next():
-//     the refusal REPLACES the dispatch (the command must never execute -
-//     the plan's "the agent's correct path is simply the only executable
-//     one");
-//   * denials surface ONCE (the refusal is the returned decision) and are
-//     ledgered for the user's audit - NEVER punished (no second refusal,
-//     no escalation);
-//   * a command the guard cannot read (no command string found in the
-//     dispatch) passes unchanged - the guard never guesses.
-//
-// THE EXCLUDE: a dispatch whose working directory matches the configured
-// exclusion list (the factory's segment match) skips the guard entirely -
-// the paths the user declared out of the guard's jurisdiction.
+/**
+ * @module Guard
+ *
+ * The tools/pre-execute listener (Function/Guard): the intercept
+ * (ORCHESTRATION-PLUGINS.md section 3). Registered as a WATERFALL on the
+ * plugin's own context (the guard judges only the dispatches the terminal
+ * surface delivers; root registration is NOT used - a pre-execute transform is
+ * scoped, unlike the observation listeners).
+ *
+ * @remarks
+ * THE DISCIPLINE:
+ *
+ * - fail-open: ANY error in the guard body means the dispatch passes UNCHANGED
+ *   (the guard must never break a legitimate tool call - the whole judged path
+ *   is one try/catch, and the catch calls next());
+ * - the deny arm is the ONE listener that deliberately omits next(): the
+ *   refusal REPLACES the dispatch (the command must never execute - the plan's
+ *   "the agent's correct path is simply the only executable one");
+ * - denials surface ONCE (the refusal is the returned decision) and are
+ *   ledgered for the user's audit - NEVER punished (no second refusal, no
+ *   escalation);
+ * - a command the guard cannot read (no command string found in the dispatch)
+ *   passes unchanged - the guard never guesses.
+ *
+ * THE EXCLUDE: a dispatch whose working directory matches the configured
+ * exclusion list (the factory's segment match) skips the guard entirely - the
+ * paths the user declared out of the guard's jurisdiction.
+ */
 import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
 import Decide from "@Function/Decide.js";
 import type Decision from "@Interface/Decision.js";
 import type State from "@Interface/State.js";
 
-/** The refusal line (module-owned, byte-stable): surfaces ONCE, never
- *  punishes - it states the rule and the allowed path, nothing more. */
+/**
+ * The refusal line (module-owned, byte-stable): surfaces ONCE, never punishes
+ * - it states the rule and the allowed path, nothing more.
+ */
 const Refusal = (Sub: string, Reason: string): string =>
 	`gitguard: refused "git ${Sub}" (${Reason}) - git is read-only in this session (the checks-only law). Allowed: git status, log, diff, show, rev-parse, ls-files, fetch.`;
 
-/** The command string extraction: the dispatch shapes are probed
- *  defensively (a string payload, or an object carrying the command under
- *  `command` / `exec.command` / `input.command` / `cmd`). No match =
- *  undefined - the guard passes, it never guesses. */
+/**
+ * The command string extraction: the dispatch shapes are probed defensively
+ * (a string payload, or an object carrying the command under `command` /
+ * `exec.command` / `input.command` / `cmd`). No match = undefined - the guard
+ * passes, it never guesses.
+ */
 const Command = (Payload: unknown): string | undefined => {
 	switch (true) {
 		case typeof Payload === "string":
@@ -66,8 +75,10 @@ const Command = (Payload: unknown): string | undefined => {
 	}
 };
 
-/** The dispatch's working directory, for the exclusion match (best-effort:
- *  `cwd` / `exec.cwd` / `workingDirectory`). */
+/**
+ * The dispatch's working directory, for the exclusion match (best-effort:
+ * `cwd` / `exec.cwd` / `workingDirectory`).
+ */
 const Directory = (Payload: unknown): string | undefined => {
 	const Object = Payload as
 		{ cwd?: unknown; exec?: { cwd?: unknown }; workingDirectory?: unknown } | null | undefined;

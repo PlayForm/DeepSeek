@@ -12,6 +12,6 @@
  * package declares its own copy - the self-contained rule): `[BATCH DECISION
  * - ` on its own line, the JSON body starting on the next line.
  */
-import type { BatchDecision } from "../Interface/Batch.js";
+import type { BatchDecision } from "@Interface/Batch.js";
 export default _default;
 declare function _default(Decision: BatchDecision): string;

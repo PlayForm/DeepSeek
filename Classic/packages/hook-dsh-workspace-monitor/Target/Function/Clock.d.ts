@@ -11,6 +11,6 @@
  * defensive: a throwing override degrades to the real clock, never a throw
  * into a listener.
  */
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 export default _default;
 declare function _default(Agent: State): number;

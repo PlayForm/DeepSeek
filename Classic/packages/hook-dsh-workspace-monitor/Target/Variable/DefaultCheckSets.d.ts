@@ -23,6 +23,6 @@
  * stays with the live-containers monitor (its G2 wrapper is the one
  * execution path, "one wrapper, two callers" would be violated otherwise).
  */
-import type CheckSet from "@Interface/CheckSet.js";
+import type CheckSet from "../Interface/CheckSet.js";
 declare const DEFAULT_CHECK_SETS: Record<string, CheckSet>;
 export default DEFAULT_CHECK_SETS;

@@ -10,7 +10,7 @@
  * Documentation/Plans/Workspace-Family/MONITOR.md (the distribution law: the
  * hook's own Config) and the live-containers monitor precedent.
  */
-import type CheckSet from "@Interface/CheckSet.js";
+import type CheckSet from "./CheckSet.js";
 import type { Allowlist } from "@playform/plugin-dsh-factory";
 export default interface Config {
     /**

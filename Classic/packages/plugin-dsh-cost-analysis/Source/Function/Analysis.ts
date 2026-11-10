@@ -1,36 +1,50 @@
-// Analysis - the five metric families (Documentation/Plans/
-// COST-TRACK-PLUGIN.md sections 11, 12 and 16.2-16.4), the REAL queries now:
-// every family is one SELECT over the ledger the cost plugin wrote, the
-// plugin never writes, and each Reading is one key of the asked scope with
-// its metric rows. Every method honours the scope (file, project, client,
-// model, session) and the optional key filter, narrows to the configured day
-// window, orders the readings by their headline value descending, and
-// returns an empty array for a closed database, an unknown scope, an empty
-// key filter or a family switched off in Config.metrics.
+/**
+ * @module Analysis
+ *
+ * The five metric families (Documentation/Plans/COST-TRACK-PLUGIN.md sections
+ * 11, 12 and 16.2-16.4), the REAL queries now.
+ *
+ * @remarks
+ * Every family is one SELECT over the ledger the cost plugin wrote, the plugin
+ * never writes, and each Reading is one key of the asked scope with its metric
+ * rows. Every method honours the scope (file, project, client, model, session)
+ * and the optional key filter, narrows to the configured day window, orders the
+ * readings by their headline value descending, and returns an empty array for a
+ * closed database, an unknown scope, an empty key filter or a family switched
+ * off in Config.metrics.
+ */
 import type { DatabaseSync } from "node:sqlite";
 
 import type Config from "../Interface/Config.js";
 import type Metric from "../Interface/Metric.js";
 import type Reading from "../Interface/Reading.js";
 
-// One query row, every cell unknown until a guard reads it.
+/**
+ * One query row, every cell unknown until a guard reads it.
+ */
 type Row = Record<string, unknown>;
 
-// The two query bases: the money base (Allocation joined to its Call) and
-// the hunk base (Edit joined through its Touch to its Call).
+/**
+ * The two query bases: the money base (Allocation joined to its Call) and the
+ * hunk base (Edit joined through its Touch to its Call).
+ */
 const Money = "FROM Allocation JOIN Call ON Call.CallId = Allocation.CallId";
 const Hunks =
 	"FROM Edit JOIN Touch ON Touch.TouchId = Edit.TouchId JOIN Call ON Call.CallId = Touch.CallId";
 
-// The scope joins above the Call: the session, project and client
-// dimensions hang off the call's session.
+/**
+ * The scope joins above the Call: the session, project and client dimensions
+ * hang off the call's session.
+ */
 const ProjectJoin =
 	"JOIN Session ON Session.SessionId = Call.SessionId JOIN Project ON Project.ProjectId = Session.ProjectId";
 const ClientJoin = `${ProjectJoin} JOIN Client ON Client.ClientId = Project.ClientId`;
 
-// The scope's anchor: the key expression the readings group by and the join
-// chain that makes it available over the asked base. An unknown scope
-// anchors nowhere, which is every family's empty result.
+/**
+ * The scope's anchor: the key expression the readings group by and the join
+ * chain that makes it available over the asked base. An unknown scope anchors
+ * nowhere, which is every family's empty result.
+ */
 const Of = (Scope: string, Base: string): { Key: string; From: string } | undefined => {
 	switch (true) {
 		case Scope === "file":
@@ -51,18 +65,24 @@ const Of = (Scope: string, Base: string): { Key: string; From: string } | undefi
 	}
 };
 
-// The number a row carries, zero when the cell is absent or not finite.
+/**
+ * The number a row carries, zero when the cell is absent or not finite.
+ */
 const Num = (One: Row, Field: string): number => {
 	const Value = Number(One[Field]);
 	return Number.isFinite(Value) ? Value : 0;
 };
 
-// The ratio, zero when the denominator is zero - never Infinity, never NaN.
+/**
+ * The ratio, zero when the denominator is zero - never Infinity, never NaN.
+ */
 const Ratio = (Numerator: number, Denominator: number): number =>
 	Denominator === 0 ? 0 : Numerator / Denominator;
 
-// The SELECT of one family: the key expression and the aggregates over the
-// anchor, narrowed by the window and the optional key filter.
+/**
+ * The SELECT of one family: the key expression and the aggregates over the
+ * anchor, narrowed by the window and the optional key filter.
+ */
 const Select = (
 	Database: DatabaseSync,
 	Anchor: { Key: string; From: string },
@@ -79,9 +99,11 @@ const Select = (
 	).all(...Params) as readonly Row[];
 };
 
-// The readings of one family from its raw rows: one reading per row with a
-// real string key, the family's metrics built per row, all ordered by the
-// headline (first) metric's value descending.
+/**
+ * The readings of one family from its raw rows: one reading per row with a
+ * real string key, the family's metrics built per row, all ordered by the
+ * headline (first) metric's value descending.
+ */
 const Gather = (
 	Scope: string,
 	Found: readonly Row[],
@@ -98,14 +120,18 @@ const Gather = (
 	return Out.sort((Left, Right) => (Right.Rows[0]?.Value ?? 0) - (Left.Rows[0]?.Value ?? 0));
 };
 
-// The WHERE and the params of the day window: the readings narrow to the
-// window counted back from now, and a non-positive window reads everything.
+/**
+ * The WHERE and the params of the day window: the readings narrow to the
+ * window counted back from now, and a non-positive window reads everything.
+ */
 const Window = (Start: number | null): { Clause: readonly string[]; Values: readonly number[] } =>
 	Start === null ? { Clause: [], Values: [] } : { Clause: ["Call.At >= ?"], Values: [Start] };
 
-// Credit - Ring C (section 11): per key, the cache saving the surface
-// produced, each call weighted by the share of its surface the key's file
-// occupied, and that sum over the key's total allocated cost.
+/**
+ * Credit - Ring C (section 11): per key, the cache saving the surface
+ * produced, each call weighted by the share of its surface the key's file
+ * occupied, and that sum over the key's total allocated cost.
+ */
 const CreditRows = (
 	Database: DatabaseSync,
 	Scope: string,
@@ -148,13 +174,15 @@ const CreditRows = (
 	});
 };
 
-// Effectiveness - cost per added line on changed files (section 16.4): per
-// key, the allocated cost over the lines its changed edits added, where a key
-// counts only when one of its files carries a changed Verdict in the window
-// (section 14) - a read-only file yields no row. A line added and later
-// removed still counts until content lineage exists, so the metric is named
-// for the added lines on changed files rather than for lines that survived
-// (Backlog A2, the research's section 5).
+/**
+ * Effectiveness - cost per added line on changed files (section 16.4): per
+ * key, the allocated cost over the lines its changed edits added, where a key
+ * counts only when one of its files carries a changed Verdict in the window
+ * (section 14) - a read-only file yields no row. A line added and later
+ * removed still counts until content lineage exists, so the metric is named
+ * for the added lines on changed files rather than for lines that survived
+ * (Backlog A2, the research's section 5).
+ */
 const EffectivenessRows = (
 	Database: DatabaseSync,
 	Scope: string,
@@ -227,9 +255,11 @@ const EffectivenessRows = (
 	});
 };
 
-// Lines - the churn (sections 16.2 and 17.3): per key, the lines its hunks
-// added and removed, the hunk count, and the allocated cost over the added
-// lines.
+/**
+ * Lines - the churn (sections 16.2 and 17.3): per key, the lines its hunks
+ * added and removed, the hunk count, and the allocated cost over the added
+ * lines.
+ */
 const LinesRows = (
 	Database: DatabaseSync,
 	Scope: string,
@@ -302,9 +332,11 @@ const LinesRows = (
 	});
 };
 
-// Overhead - the exploration share (section 12): per key, the money whose
-// allocation names no file (the CASE keeps the query portable where a FILTER
-// clause is not), over the key's total allocated cost.
+/**
+ * Overhead - the exploration share (section 12): per key, the money whose
+ * allocation names no file (the CASE keeps the query portable where a FILTER
+ * clause is not), over the key's total allocated cost.
+ */
 const OverheadRows = (
 	Database: DatabaseSync,
 	Scope: string,
@@ -347,10 +379,12 @@ const OverheadRows = (
 	});
 };
 
-// Cache - the cache efficiency (section 16.4): per key, the share of its
-// surface-weighted input tokens the prompt cache served - the cached tokens
-// over the cached plus uncached input, each call weighted by the share of
-// its surface the key's file occupied.
+/**
+ * Cache - the cache efficiency (section 16.4): per key, the share of its
+ * surface-weighted input tokens the prompt cache served - the cached tokens
+ * over the cached plus uncached input, each call weighted by the share of its
+ * surface the key's file occupied.
+ */
 const CacheRows = (
 	Database: DatabaseSync,
 	Scope: string,
