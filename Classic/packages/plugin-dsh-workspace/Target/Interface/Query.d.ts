@@ -1,7 +1,20 @@
 import type { Edge, NodeKind } from "./Graph.js";
+/**
+ * @module Query
+ *
+ * The four navigation operations' canonical result shapes.
+ *
+ * @remarks
+ * WORKSPACE-FAMILY-V4-1.md section 3.4: compact tables plus the ids, no full
+ * file bodies unless a specific span is asked for; pagination is by CURSOR,
+ * never by offset. Every tool returns exactly one canonical JSON value of one of
+ * these shapes (the defineTool rule).
+ */
 import type { PacketView } from "./Packet.js";
-/** The compact node row the tools print (id, path, span, kind - plus the
- * fingerprint and the version so staleness is detectable in every answer). */
+/**
+ * The compact node row the tools print (id, path, span, kind - plus the
+ * fingerprint and the version so staleness is detectable in every answer).
+ */
 export interface NodeRow {
     id: string;
     kind: NodeKind;
@@ -12,8 +25,10 @@ export interface NodeRow {
     fingerprint: string;
     version: string;
 }
-/** The workspace_map result: the top-level modules, the file count, the
- * entry points, the hot symbols. */
+/**
+ * The workspace_map result: the top-level modules, the file count, the
+ * entry points, the hot symbols.
+ */
 export interface MapResult {
     indexRevision: string;
     modules: {
@@ -27,19 +42,25 @@ export interface MapResult {
     truncated: boolean;
     cursor?: string;
 }
-/** The workspace_find result: the matching nodes with id, path, span, kind. */
+/**
+ * The workspace_find result: the matching nodes with id, path, span, kind.
+ */
 export interface FindResult {
     indexRevision: string;
     nodes: NodeRow[];
     truncated: boolean;
     cursor?: string;
 }
-/** The workspace_expand result: the neighbors (references, calls, imports,
- * tests) around the focus node. */
+/**
+ * The workspace_expand result: the neighbors (references, calls, imports,
+ * tests) around the focus node.
+ */
 export interface ExpandResult {
     indexRevision: string;
-    /** The focus node - absent when the id does not resolve (an honest miss,
-     * never a fabricated row). */
+    /**
+     * The focus node - absent when the id does not resolve (an honest miss,
+     * never a fabricated row).
+     */
     node?: NodeRow;
     nodes: NodeRow[];
     edges: {
@@ -50,8 +71,10 @@ export interface ExpandResult {
     }[];
     truncated: boolean;
 }
-/** The workspace_context result: the orientation packet plus its token
- * estimate (the budget the packet used, so the caller sees the cost). */
+/**
+ * The workspace_context result: the orientation packet plus its token
+ * estimate (the budget the packet used, so the caller sees the cost).
+ */
 export interface ContextResult {
     indexRevision: string;
     packet: PacketView;

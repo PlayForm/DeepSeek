@@ -5587,11 +5587,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794198166,
+					"publishTimestamp": 1794284740,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "d24ac032f7b52eb2d0e1db708d4c647bbbc6ef4b",
+						"commit": "1e6e412c2624872c5db23f1d51d890ce089ecd30",
 						"path": "Classic/packages/plugin-dsh-boot"
 					},
 					"engines": {}

@@ -1,1 +1,99 @@
-import o from"node:assert/strict";import{Check as a,Finish as m,Ledger as d,Make as p,MakeCounter as S,Rm as b}from"../Harness.js";const h=async()=>{const e=S();{b();let s="-";const n=p({log:!0,logFile:d,replacement:{get:()=>s},normalizeReasoning:!0,normalizeToolArguments:!1}),i=()=>n.Lines.filter(t=>t.includes("activated (")).length;a(e,"P10: the refresh listener is registered",()=>{o.ok(n.Listeners["loader/volatile-update"]!==void 0)}),a(e,"P10: exactly one activation line after the mount",()=>{o.ok(i()===1)}),a(e,"P10: the mount-time replacement is the default",()=>{o.ok(n.State.Replacement==="-")});const l=n.State;s="-*-",n.Listeners["loader/volatile-update"]([["replacement"]]),a(e,"P10: the volatile dispatch refreshed State.Replacement in place",()=>{o.ok(n.State.Replacement==="-*-")}),a(e,"P10: the State object identity is preserved (no rebuild)",()=>{o.ok(l===n.State)}),a(e,"P10: still exactly one activation line (NO remount, no re-apply)",()=>{o.ok(i()===1)});const c=n.Listeners["llm/stream"],r=[];for await(const t of c(Object.freeze({model:"x",messages:[]}),()=>(async function*(){yield{type:"text-delta",index:0,text:"a \u2014 b"}})()))r.push(t);a(e,"P10: the NEXT stream normalizes with the NEW replacement without remount",()=>{o.ok(r[0].text==="a -*- b")}),a(e,"P10: the flipped stream still writes its normal count line",()=>{o.ok(n.Lines.some(u=>u.includes("normalized 1 dash char(s) in one stream")))}),a(e,"P10: the flipped stream added NO activation line",()=>{o.ok(i()===1)})}return m(e,"Volatile-Live-Flip")},f=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(f){const e=await h();console.log(`${e} PASS - Volatile-Live-Flip`)}export{h as runTest};
+import assert from "node:assert/strict";
+import { Check, Finish, Ledger, Make, MakeCounter, Rm } from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    Rm();
+    let FlipValue = "-";
+    const RawV = {
+      log: true,
+      logFile: Ledger,
+      replacement: { get: () => FlipValue },
+      normalizeReasoning: true,
+      normalizeToolArguments: false
+    };
+    const RunV = Make(RawV);
+    const Activations = () => RunV.Lines.filter((L) => L.includes("activated (")).length;
+    {
+      const Sub = "P10: the refresh listener is registered";
+      Check(Count, Sub, () => {
+        assert.ok(RunV.Listeners["loader/volatile-update"] !== void 0);
+      });
+    }
+    {
+      const Sub = "P10: exactly one activation line after the mount";
+      Check(Count, Sub, () => {
+        assert.ok(Activations() === 1);
+      });
+    }
+    {
+      const Sub = "P10: the mount-time replacement is the default";
+      Check(Count, Sub, () => {
+        assert.ok(RunV.State.Replacement === "-");
+      });
+    }
+    const StateRefV = RunV.State;
+    FlipValue = "-*-";
+    RunV.Listeners["loader/volatile-update"]([["replacement"]]);
+    {
+      const Sub = "P10: the volatile dispatch refreshed State.Replacement in place";
+      Check(Count, Sub, () => {
+        assert.ok(RunV.State.Replacement === "-*-");
+      });
+    }
+    {
+      const Sub = "P10: the State object identity is preserved (no rebuild)";
+      Check(Count, Sub, () => {
+        assert.ok(StateRefV === RunV.State);
+      });
+    }
+    {
+      const Sub = "P10: still exactly one activation line (NO remount, no re-apply)";
+      Check(Count, Sub, () => {
+        assert.ok(Activations() === 1);
+      });
+    }
+    const ListenerV = RunV.Listeners["llm/stream"];
+    const OutV = [];
+    for await (const ChunkV of ListenerV(
+      Object.freeze({ model: "x", messages: [] }),
+      () => (async function* () {
+        yield { type: "text-delta", index: 0, text: "a \u2014 b" };
+      })()
+    )) {
+      OutV.push(ChunkV);
+    }
+    {
+      const Sub = "P10: the NEXT stream normalizes with the NEW replacement without remount";
+      Check(Count, Sub, () => {
+        assert.ok(OutV[0].text === "a -*- b");
+      });
+    }
+    {
+      const Sub = "P10: the flipped stream still writes its normal count line";
+      Check(Count, Sub, () => {
+        assert.ok(
+          RunV.Lines.some(
+            (L) => L.includes("normalized 1 dash char(s) in one stream")
+          )
+        );
+      });
+    }
+    {
+      const Sub = "P10: the flipped stream added NO activation line";
+      Check(Count, Sub, () => {
+        assert.ok(Activations() === 1);
+      });
+    }
+  }
+  return Finish(Count, "Volatile-Live-Flip");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Volatile-Live-Flip`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

@@ -1,5 +1,3 @@
-import type State from "@Interface/State.js";
-
 /**
  * @module Duplicate
  *
@@ -21,6 +19,7 @@ import type State from "@Interface/State.js";
  * can never skip a first sighting. The guard lives on the fs/observed listener
  * only: the service's explicit `invalidate` calls are never coalesced.
  */
+import type State from "@Interface/State.js";
 
 // The coalescing window in milliseconds: a repeat inside the window that
 // carries the same version is dropped.

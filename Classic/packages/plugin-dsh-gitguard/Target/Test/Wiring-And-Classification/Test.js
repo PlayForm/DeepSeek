@@ -1,1 +1,130 @@
-import e from"node:assert/strict";import{Check as i,Finish as m,Ledger as s,Make as c,MakeCounter as p,Plugin as r,rm as g,Validate as d}from"../Harness.js";const l=(a={})=>(g(),c(d({logFile:s,enabled:!0,...a}))),y=async()=>{const a=p();{const t=l();i(a,"L1: the default object carries name/apply/Config/inject",()=>{e.equal(r.name,"plugin-dsh-gitguard"),e.equal(typeof r.apply,"function"),e.ok(r.Config),e.deepEqual(r.inject,["pluginFactory"])}),i(a,"L1: apply returns NOTHING and the state probe exists",()=>{e.equal(t.Returned,void 0),e.ok(t.State!==void 0),e.equal(t.State.On,!0),e.equal(t.State.Allow.length,7),e.equal(t.State.Deny.length,23)})}{g();const t=c(d({logFile:s}));i(a,"W1: the cold mount logs the byte-exact disabled line",()=>{e.deepEqual(t.Lines,["gitguard: disabled (enabled=false)"])}),i(a,"W1: a disabled mount wires NOTHING - no listener anywhere",()=>{e.deepEqual(t.RootNames,[]),e.equal(t.CtxListeners["tools/pre-execute"],void 0)})}{const t=l();i(a,"W2: the activation line is byte-exact",()=>{e.deepEqual(t.Lines,["gitguard: activated (strict=false, denyPatterns=23, allowPatterns=7)"])}),i(a,"W2: tools/pre-execute sits on the plugin context, never the root",()=>{e.equal(typeof t.CtxListeners["tools/pre-execute"],"function"),e.equal(t.Listeners["tools/pre-execute"],void 0),e.notEqual(t.Root,t.Context)})}{const t=l(),n=(await import("../../Function/Decide.js")).default;i(a,"F1: the read-only checks are allowed",()=>{for(const o of["git status","git log --oneline","git diff HEAD","git show","git rev-parse HEAD","git ls-files","git fetch origin"])e.equal(n(t.State,o).verdict,"allow",o)}),i(a,"F1: every default deny-listed mutation is denied",()=>{for(const o of t.State.Deny){const u=n(t.State,`git ${o} x`);e.equal(u.verdict,"deny",o),e.equal(u.subcommand,o,o),e.equal(u.reason,`deny-list: git ${o}`,o)}}),i(a,"F1: non-git commands are allowed (not judged)",()=>{e.deepEqual(n(t.State,"ls -la"),{verdict:"allow",reason:"not a git command"}),e.deepEqual(n(t.State,"pnpm --dir x run prepublishOnly"),{verdict:"allow",reason:"not a git command"})}),i(a,"F1: env prefixes and flags are skipped; bare git is not denied",()=>{e.equal(n(t.State,"GIT_EDITOR=vim git commit -m y").verdict,"deny"),e.equal(n(t.State,"git --no-pager log").verdict,"allow"),e.equal(n(t.State,"git").verdict,"allow"),e.equal(n(t.State,"git --version").verdict,"allow")})}{const t=l({allowPatterns:["push"]}),n=(await import("../../Function/Decide.js")).default;i(a,"F2: a compound is judged by its worst segment",()=>{e.equal(n(t.State,"cd repo && git add -A").verdict,"deny"),e.equal(n(t.State,"git status; git commit -m x").subcommand,"commit")}),i(a,"F2: the allow-list wins over the deny-list",()=>{e.deepEqual(n(t.State,"git push origin main"),{verdict:"allow",reason:"not deny-listed"})})}{const t=l({strict:!0,allowPatterns:["status"]}),n=(await import("../../Function/Decide.js")).default;i(a,"F3: strict denies every git command, allow-list included",()=>{e.deepEqual(n(t.State,"git status"),{verdict:"deny",reason:"strict mode denies every git command (status)",subcommand:"status"}),e.deepEqual(n(t.State,"ls -la"),{verdict:"allow",reason:"not a git command"})})}return i(a,"X1: a non-array denyPatterns fails loud at load",()=>{e.throws(()=>d({logFile:s,enabled:!0,denyPatterns:"add"}),Error)}),i(a,"X1: a non-string member fails loud at load",()=>{e.throws(()=>d({logFile:s,enabled:!0,allowPatterns:[1]}),Error)}),m(a,"Wiring-And-Classification")},f=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(f){const a=await y();console.log(`${a} PASS - Wiring-And-Classification`)}export{y as runTest};
+import assert from "node:assert/strict";
+import {
+  Check,
+  Finish,
+  Ledger,
+  Make,
+  MakeCounter,
+  Plugin,
+  rm,
+  Validate
+} from "../Harness.js";
+const Setup = (Config = {}) => {
+  rm();
+  return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));
+};
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Run = Setup();
+    Check(Count, "L1: the default object carries name/apply/Config/inject", () => {
+      assert.equal(Plugin.name, "plugin-dsh-gitguard");
+      assert.equal(typeof Plugin.apply, "function");
+      assert.ok(Plugin.Config);
+      assert.deepEqual(Plugin.inject, ["pluginFactory"]);
+    });
+    Check(Count, "L1: apply returns NOTHING and the state probe exists", () => {
+      assert.equal(Run.Returned, void 0);
+      assert.ok(Run.State !== void 0);
+      assert.equal(Run.State.On, true);
+      assert.equal(Run.State.Allow.length, 7);
+      assert.equal(Run.State.Deny.length, 23);
+    });
+  }
+  {
+    rm();
+    const Run = Make(Validate({ logFile: Ledger }));
+    Check(Count, "W1: the cold mount logs the byte-exact disabled line", () => {
+      assert.deepEqual(Run.Lines, ["gitguard: disabled (enabled=false)"]);
+    });
+    Check(Count, "W1: a disabled mount wires NOTHING - no listener anywhere", () => {
+      assert.deepEqual(Run.RootNames, []);
+      assert.equal(Run.CtxListeners["tools/pre-execute"], void 0);
+    });
+  }
+  {
+    const Run = Setup();
+    Check(Count, "W2: the activation line is byte-exact", () => {
+      assert.deepEqual(Run.Lines, ["gitguard: activated (strict=false, denyPatterns=23, allowPatterns=7)"]);
+    });
+    Check(Count, "W2: tools/pre-execute sits on the plugin context, never the root", () => {
+      assert.equal(typeof Run.CtxListeners["tools/pre-execute"], "function");
+      assert.equal(Run.Listeners["tools/pre-execute"], void 0);
+      assert.notEqual(Run.Root, Run.Context);
+    });
+  }
+  {
+    const Run = Setup();
+    const Decide = (await import("../../Function/Decide.js")).default;
+    Check(Count, "F1: the read-only checks are allowed", () => {
+      for (const Command of ["git status", "git log --oneline", "git diff HEAD", "git show", "git rev-parse HEAD", "git ls-files", "git fetch origin"]) {
+        assert.equal(Decide(Run.State, Command).verdict, "allow", Command);
+      }
+    });
+    Check(Count, "F1: every default deny-listed mutation is denied", () => {
+      for (const Sub of Run.State.Deny) {
+        const Decision = Decide(Run.State, `git ${Sub} x`);
+        assert.equal(Decision.verdict, "deny", Sub);
+        assert.equal(Decision.subcommand, Sub, Sub);
+        assert.equal(Decision.reason, `deny-list: git ${Sub}`, Sub);
+      }
+    });
+    Check(Count, "F1: non-git commands are allowed (not judged)", () => {
+      assert.deepEqual(Decide(Run.State, "ls -la"), { verdict: "allow", reason: "not a git command" });
+      assert.deepEqual(Decide(Run.State, "pnpm --dir x run prepublishOnly"), {
+        verdict: "allow",
+        reason: "not a git command"
+      });
+    });
+    Check(Count, "F1: env prefixes and flags are skipped; bare git is not denied", () => {
+      assert.equal(Decide(Run.State, "GIT_EDITOR=vim git commit -m y").verdict, "deny");
+      assert.equal(Decide(Run.State, "git --no-pager log").verdict, "allow");
+      assert.equal(Decide(Run.State, "git").verdict, "allow");
+      assert.equal(Decide(Run.State, "git --version").verdict, "allow");
+    });
+  }
+  {
+    const Run = Setup({ allowPatterns: ["push"] });
+    const Decide = (await import("../../Function/Decide.js")).default;
+    Check(Count, "F2: a compound is judged by its worst segment", () => {
+      assert.equal(Decide(Run.State, "cd repo && git add -A").verdict, "deny");
+      assert.equal(Decide(Run.State, "git status; git commit -m x").subcommand, "commit");
+    });
+    Check(Count, "F2: the allow-list wins over the deny-list", () => {
+      assert.deepEqual(Decide(Run.State, "git push origin main"), {
+        verdict: "allow",
+        reason: "not deny-listed"
+      });
+    });
+  }
+  {
+    const Run = Setup({ strict: true, allowPatterns: ["status"] });
+    const Decide = (await import("../../Function/Decide.js")).default;
+    Check(Count, "F3: strict denies every git command, allow-list included", () => {
+      assert.deepEqual(Decide(Run.State, "git status"), {
+        verdict: "deny",
+        reason: "strict mode denies every git command (status)",
+        subcommand: "status"
+      });
+      assert.deepEqual(Decide(Run.State, "ls -la"), { verdict: "allow", reason: "not a git command" });
+    });
+  }
+  {
+    Check(Count, "X1: a non-array denyPatterns fails loud at load", () => {
+      assert.throws(() => Validate({ logFile: Ledger, enabled: true, denyPatterns: "add" }), Error);
+    });
+    Check(Count, "X1: a non-string member fails loud at load", () => {
+      assert.throws(() => Validate({ logFile: Ledger, enabled: true, allowPatterns: [1] }), Error);
+    });
+  }
+  return Finish(Count, "Wiring-And-Classification");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Wiring-And-Classification`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

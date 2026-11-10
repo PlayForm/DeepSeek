@@ -1,1 +1,190 @@
-import c from"node:assert/strict";import{rmSync as x}from"node:fs";import S from"../../../plugin-dsh-factory/Target/Library.js";import R from"../../Target/Library.js";const $=()=>({N:0,F:0}),g=(e,r,s)=>{e.N++;try{s(),console.log(`PASS - ${r}`)}catch(t){e.F++,console.log(`FAIL - ${r}`),console.log(t instanceof Error?t.message:String(t))}},_=async(e,r,s)=>{e.N++;try{await s(),console.log(`PASS - ${r}`)}catch(t){e.F++,console.log(`FAIL - ${r}`),console.log(t instanceof Error?t.message:String(t))}},z=(e,r)=>{if(e.F!==0)throw new Error(`${r}: ${e.F} failed check(s)`);return e.N},F="/tmp/normalize-dash-smoke-ledger.log",D=()=>{try{x(F)}catch{}},p=new S({reflect:{provide:()=>{}}}),{apply:N,Config:b}=R,A=e=>b({...e}),C=e=>{const r={},s={},t=[],y=[],d=[],h=[],u=[],m=[],f=[],k=new Map,l={pluginFactory:p,on:(n,o,a)=>(r[n]=o,s[n]=a,()=>!0),get:n=>{switch(n){case"pluginFactory":return p;case"commands":return{register:o=>(d.push(o),()=>!0)};default:throw new Error(`unknown service: ${n}`)}},logger:{info:n=>{t.push(n)}},tools:{register:n=>(y.push(n),()=>!0)},fs:{sandboxMode:void 0,resolve:async(n,o)=>(h.push({path:n,signal:o?.signal}),{targetKey:`key:${n}`,displayPath:n}),writeText:async(n,o,a,i,v)=>{if(i?.aborted)throw new Error("aborted before write");u.push({target:n,content:o,intent:a,signal:i,policy:v});const w=k.get(n.targetKey)??null;return k.set(n.targetKey,o),{operation:w===null?"create":"update",version:`v${u.length}`,before:w,after:o}}},waterfall:async(n,o,a,i)=>(m.push({name:n,target:o}),i()),emit:(n,o,a,i)=>{f.push({name:n,target:o,observation:a,actor:i})},get root(){return l}};return N(l,e),{Context:l,Listeners:r,ListenerOptions:s,Lines:t,Registered:y,CommandsRegistered:d,Resolved:h,Writes:u,Intents:m,Observations:f,State:l.__hookDshNormalizeDashState}},E=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(E){const e=$();g(e,"selfcheck: a passing assertion counts as PASS",()=>{c.equal(1,1)}),g(e,"selfcheck: a failing assertion counts as FAIL (expected)",()=>{c.equal(1,2)});const r=C(A({logFile:F}));g(e,"selfcheck: the fake ctx registers the apply-time listeners",()=>{c.ok(typeof r.Listeners["llm/stream"]=="function"),c.ok(r.State.Factory===p),c.equal(r.State.Module,"hook-dsh-normalize-dash")}),e.N===3&&e.F===1?console.log("Harness selfcheck OK"):(console.log(`Harness selfcheck BROKEN (N=${e.N}, F=${e.F})`),process.exitCode=1)}export{g as Check,_ as CheckAsync,z as Finish,p as Furnace,F as Ledger,C as Make,$ as MakeCounter,D as Rm,A as Validate};
+import assert from "node:assert/strict";
+import { rmSync } from "node:fs";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+import NormalizeDash from "../../Target/Library.js";
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const CheckAsync = async (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    await Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) {
+    throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const Ledger = "/tmp/normalize-dash-smoke-ledger.log";
+const Rm = () => {
+  try {
+    rmSync(Ledger);
+  } catch {
+  }
+};
+const Furnace = new FactoryClass({
+  reflect: { provide: () => void 0 }
+});
+const { apply, Config: Schema } = NormalizeDash;
+const Validate = (Raw) => Schema({ ...Raw });
+const Make = (Raw) => {
+  const Listeners = {}, ListenerOptions = {}, Lines = [];
+  const Registered = [], CommandsRegistered = [], Resolved = [], Writes = [], Intents = [], Observations = [];
+  const Files = /* @__PURE__ */ new Map();
+  const Context = {
+    // The service accessor (typed via Interface/Factory's augmentation): the
+    // REAL factory instance, guaranteed present by `inject: ["pluginFactory"]`.
+    pluginFactory: Furnace,
+    on: (Name, Listener, Options) => {
+      Listeners[Name] = Listener;
+      ListenerOptions[Name] = Options;
+      return () => true;
+    },
+    get: (Name) => {
+      switch (Name) {
+        case "pluginFactory":
+          return Furnace;
+        // The human-command registry seam (the `normalize-overpass`
+        // registration): records every registered definition.
+        case "commands":
+          return {
+            register: (Definition) => {
+              CommandsRegistered.push(Definition);
+              return () => true;
+            }
+          };
+        default:
+          throw new Error(`unknown service: ${Name}`);
+      }
+    },
+    logger: {
+      info: (M) => {
+        Lines.push(M);
+      }
+    },
+    // The tool registry seam: records every registered definition.
+    tools: {
+      register: (Definition) => {
+        Registered.push(Definition);
+        return () => true;
+      }
+    },
+    // The fs seam: resolve manufactures a stable target; writeText records
+    // the call, honors the abort signal like a real backend, and reports
+    // create/update from its own in-memory prior state.
+    fs: {
+      sandboxMode: void 0,
+      resolve: async (Path, Opts) => {
+        Resolved.push({ path: Path, signal: Opts?.signal });
+        return { targetKey: `key:${Path}`, displayPath: Path };
+      },
+      writeText: async (Target, Content, Intent, Signal, Policy) => {
+        if (Signal?.aborted) throw new Error("aborted before write");
+        Writes.push({
+          target: Target,
+          content: Content,
+          intent: Intent,
+          signal: Signal,
+          policy: Policy
+        });
+        const Before = Files.get(Target.targetKey) ?? null;
+        Files.set(Target.targetKey, Content);
+        return {
+          operation: Before === null ? "create" : "update",
+          version: `v${Writes.length}`,
+          before: Before,
+          after: Content
+        };
+      }
+    },
+    // The fs/write-intent waterfall: next() delegates to the unconditional
+    // default (no observation policy in the smoke harness).
+    waterfall: async (Name, Target, _Actor, Next) => {
+      Intents.push({ name: Name, target: Target });
+      return Next();
+    },
+    // The fs/observed emit: a synchronous recorder (the governance hooks'
+    // trigger - the raw-write must fire it exactly like the built-in write).
+    emit: (Name, Target, Observation, Actor) => {
+      Observations.push({
+        name: Name,
+        target: Target,
+        observation: Observation,
+        actor: Actor
+      });
+    },
+    // The ROOT seam: cordis plugin contexts inherit `root` - the shared write
+    // executor's fs/observed emit goes through ctx.root (the built-in write's
+    // own posture: its ctx IS the root, and a listener hears root emissions
+    // from its own scope too). The fake ctx is its own root, so
+    // ctx.root.emit captures into Observations (a harness seam, not an
+    // assertion change - Run 8's emit assertions are untouched).
+    get root() {
+      return Context;
+    }
+  };
+  apply(Context, Raw);
+  return {
+    Context,
+    Listeners,
+    ListenerOptions,
+    Lines,
+    Registered,
+    CommandsRegistered,
+    Resolved,
+    Writes,
+    Intents,
+    Observations,
+    State: Context.__hookDshNormalizeDashState
+  };
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Count = MakeCounter();
+  Check(Count, "selfcheck: a passing assertion counts as PASS", () => {
+    assert.equal(1, 1);
+  });
+  Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
+    assert.equal(1, 2);
+  });
+  const Seamed = Make(Validate({ logFile: Ledger }));
+  Check(Count, "selfcheck: the fake ctx registers the apply-time listeners", () => {
+    assert.ok(typeof Seamed.Listeners["llm/stream"] === "function");
+    assert.ok(Seamed.State.Factory === Furnace);
+    assert.equal(Seamed.State.Module, "hook-dsh-normalize-dash");
+  });
+  if (Count.N === 3 && Count.F === 1) {
+    console.log("Harness selfcheck OK");
+  } else {
+    console.log(`Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+    process.exitCode = 1;
+  }
+}
+export {
+  Check,
+  CheckAsync,
+  Finish,
+  Furnace,
+  Ledger,
+  Make,
+  MakeCounter,
+  Rm,
+  Validate
+};
+//# sourceMappingURL=Harness.js.map

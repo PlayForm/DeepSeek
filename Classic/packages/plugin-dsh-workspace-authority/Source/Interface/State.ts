@@ -1,4 +1,3 @@
-import type Capability from "@Interface/Capability.js";
 /**
  * @module State
  *
@@ -15,6 +14,7 @@ import type Capability from "@Interface/Capability.js";
  * `name` export (plugin-dsh-workspace-authority); the ledger prefix is the
  * module's OWN contract string.
  */
+import type Capability from "@Interface/Capability.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type Lease from "@Interface/Lease.js";
 import type PolicyRule from "@Interface/Policy.js";

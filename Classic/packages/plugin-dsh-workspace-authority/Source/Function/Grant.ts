@@ -1,10 +1,6 @@
-// Grant - the capability grant path (Function/Grant): validate, enforce the
-// per-holder ceiling, stamp the record, ledger. The capability is the
-// WHAT record: the holder, the resource, the permitted operations, the
-// expiration, the delegation rule - never a weight, never a priority (the
-// license/weight conflation is a logged pitfall). A grant when disabled is
-// refused honestly ("the authority is disabled"), never faked.
 import type Capability from "@Interface/Capability.js";
+import type State from "@Interface/State.js";
+
 /**
  * @module Grant
  *
@@ -16,8 +12,6 @@ import type Capability from "@Interface/Capability.js";
  * priority (the license/weight conflation is a logged pitfall). A grant when
  * disabled is refused honestly ("the authority is disabled"), never faked.
  */
-import type State from "@Interface/State.js";
-
 export default (
 	State: State,
 	Spec: {

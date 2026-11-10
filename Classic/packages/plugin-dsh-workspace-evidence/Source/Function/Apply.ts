@@ -1,4 +1,3 @@
-import type { Context } from "@deepseek-ai/cordis";
 /**
  * @module Apply
  *
@@ -24,6 +23,7 @@ import type { Context } from "@deepseek-ai/cordis";
  * kills event delivery). The test probe is the
  * `ctx.__pluginDshWorkspaceEvidenceState` attachment.
  */
+import type { Context } from "@deepseek-ai/cordis";
 import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
 import ServiceClass from "@Function/Service.js";
 import Storage from "@Function/Storage.js";

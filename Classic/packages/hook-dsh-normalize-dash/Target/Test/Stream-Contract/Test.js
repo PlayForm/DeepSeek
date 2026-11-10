@@ -1,2 +1,248 @@
-import t from"node:assert/strict";import{existsSync as g,readFileSync as x}from"node:fs";import{Check as n,Finish as w,Ledger as r,Make as b,MakeCounter as T,Rm as y,Validate as m}from"../Harness.js";const I=async()=>{const e=T();y();{const l=b(m({logFile:r})),c=l.Listeners["llm/stream"],s=[{type:"block-start",index:0,blockType:"text"},{type:"text-delta",index:0,text:"a \u2014 b \u2013 c \u2011 d \u2015 e"},{type:"tool-call-delta",index:1,id:"call_1",name:"write",argumentsDelta:'{"path":"a\u2014b"}'},{type:"reasoning-delta",index:2,text:"\u2014x\u2013"},{type:"block-end",index:0,block:{type:"text",text:"\u2014kept \u2013gone"}},{type:"block-end",index:2,block:{type:"reasoning",text:"\u2014y"}},{type:"block-end",index:3,block:{type:"reasoning",text:"",thinking:"\u2014z"}},{type:"usage",usage:{input:1,output:2}},{type:"finish",reason:"stop"}];let d=0,p=!1,h=!0;const f=()=>(d+=1,h=p,(async function*(){yield*s})()),k=Object.freeze(Object.freeze({model:"x",messages:[]})),z=c(k,f);n(e,"next() called exactly once, synchronously (before iteration)",()=>{t.ok(d===1)}),n(e,"next() was called BEFORE any upstream iteration",()=>{t.ok(h===!1)}),n(e,"deep-frozen options untouched (still frozen)",()=>{t.ok(Object.isFrozen(k))});const a=[];for await(const o of z)p=!0,a.push(o);n(e,"chunk order/count preserved (1 in, 1 out)",()=>{t.ok(a.length===s.length)}),n(e,"chunk type sequence identical to upstream",()=>{t.ok(a.map(u=>u.type).join(",")===s.map(u=>u.type).join(","))}),n(e,"block-start passthrough BY IDENTITY",()=>{t.ok(a[0]===s[0])}),n(e,"tool-call-delta passthrough BY IDENTITY (argumentsDelta raw JSON untouched)",()=>{t.ok(a[2]===s[2])}),n(e,"argumentsDelta dash still verbatim",()=>{t.ok(a[2].argumentsDelta.includes("\u2014"))}),n(e,"usage passthrough BY IDENTITY",()=>{t.ok(a[7]===s[7])}),n(e,"finish passthrough BY IDENTITY",()=>{t.ok(a[8]===s[8])}),n(e,"text-delta normalized (em/en/U+2011/U+2015 \u2192 '-')",()=>{t.ok(a[1].text==="a - b - c - d - e")}),n(e,"rewritten text-delta is a new object, index preserved",()=>{t.ok(a[1]!==s[1]&&a[1].index===0)}),n(e,"reasoning-delta normalized when reasoning=on",()=>{t.ok(a[3].text==="-x-")}),n(e,"block-end TextBlock.text normalized",()=>{t.ok(a[4].block.text==="-kept -gone")}),n(e,"block-end ReasoningBlock.text normalized (rc.2 field)",()=>{t.ok(a[5].block.text==="-y")}),n(e,"block-end runtime `thinking` field normalized (defensive)",()=>{t.ok(a[6].block.thinking==="-z")}),n(e,"rewritten block-end is a new object",()=>{t.ok(a[5]!==s[5])}),await new Promise(o=>setTimeout(o,10));const S=g(r)?x(r,"utf8"):"";n(e,"count ledger line written after the 10-replacement stream (N>0)",()=>{t.ok(S.includes("normalized 10 dash char(s) in one stream"))}),n(e,"exactly ONE count line for the stream",()=>{t.ok(S.split(`
-`).filter(u=>u.includes("normalized")).length===1)}),n(e,"logger line 'hook-dsh-normalize-dash: normalized 10 dash char(s) in one stream' (4 delta + 2 reasoning + 3 block-end + 1 thinking)",()=>{t.ok(l.Lines.filter(u=>u.includes("normalized")).length===1&&l.Lines[1]==="hook-dsh-normalize-dash: normalized 10 dash char(s) in one stream")})}{y();const c=b(m({normalizeReasoning:!1,logFile:r})).Listeners["llm/stream"],i=[];for await(const s of c(Object.freeze({}),()=>(async function*(){yield{type:"reasoning-delta",index:0,text:"\u2014"},yield{type:"text-delta",index:0,text:"plain - text"}})()))i.push(s);n(e,"reasoning-delta passthrough (identity) when normalizeReasoning=off",()=>{t.ok(i[0]&&i[0].text==="\u2014")}),n(e,"stream completed with both chunks",()=>{t.ok(i.length===2)}),n(e,"stream completed",()=>{t.ok(i[1]===void 0||typeof i[1]=="object")}),await new Promise(s=>setTimeout(s,10)),n(e,"NO count line when nothing replaced (N=0)",()=>{t.ok(!g(r)||!x(r,"utf8").includes("normalized"))})}{const c=b(m({logFile:r})).Listeners["llm/stream"],i={type:"text-delta",index:0,text:"plain"},s=[];for await(const d of c(Object.freeze({}),()=>(async function*(){yield i})()))s.push(d);n(e,"unchanged text-delta passes through BY IDENTITY (count 0)",()=>{t.ok(s[0]===i)})}return w(e,"Stream-Contract")},N=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(N){const e=await I();console.log(`${e} PASS - Stream-Contract`)}export{I as runTest};
+import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+import { Check, Finish, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  Rm();
+  {
+    const Run1 = Make(Validate({ logFile: Ledger }));
+    const Listener = Run1.Listeners["llm/stream"];
+    const DASHES = "a \u2014 b \u2013 c \u2011 d \u2015 e";
+    const Chunks = [
+      { type: "block-start", index: 0, blockType: "text" },
+      { type: "text-delta", index: 0, text: DASHES },
+      {
+        type: "tool-call-delta",
+        index: 1,
+        id: "call_1",
+        name: "write",
+        argumentsDelta: '{"path":"a\u2014b"}'
+      },
+      { type: "reasoning-delta", index: 2, text: "\u2014x\u2013" },
+      { type: "block-end", index: 0, block: { type: "text", text: "\u2014kept \u2013gone" } },
+      { type: "block-end", index: 2, block: { type: "reasoning", text: "\u2014y" } },
+      {
+        type: "block-end",
+        index: 3,
+        block: { type: "reasoning", text: "", thinking: "\u2014z" }
+      },
+      { type: "usage", usage: { input: 1, output: 2 } },
+      { type: "finish", reason: "stop" }
+    ];
+    let NextCalls = 0;
+    let Iterated = false;
+    let IteratedAtNext = true;
+    const Next = () => {
+      NextCalls += 1;
+      IteratedAtNext = Iterated;
+      return (async function* () {
+        yield* Chunks;
+      })();
+    };
+    const Request = Object.freeze(Object.freeze({ model: "x", messages: [] }));
+    const Wrapped = Listener(Request, Next);
+    {
+      const Sub = "next() called exactly once, synchronously (before iteration)";
+      Check(Count, Sub, () => {
+        assert.ok(NextCalls === 1);
+      });
+    }
+    {
+      const Sub = "next() was called BEFORE any upstream iteration";
+      Check(Count, Sub, () => {
+        assert.ok(IteratedAtNext === false);
+      });
+    }
+    {
+      const Sub = "deep-frozen options untouched (still frozen)";
+      Check(Count, Sub, () => {
+        assert.ok(Object.isFrozen(Request));
+      });
+    }
+    const Out = [];
+    for await (const Chunk of Wrapped) {
+      Iterated = true;
+      Out.push(Chunk);
+    }
+    {
+      const Sub = "chunk order/count preserved (1 in, 1 out)";
+      Check(Count, Sub, () => {
+        assert.ok(Out.length === Chunks.length);
+      });
+    }
+    {
+      const Sub = "chunk type sequence identical to upstream";
+      Check(Count, Sub, () => {
+        assert.ok(
+          Out.map((C) => C.type).join(",") === Chunks.map((C) => C.type).join(",")
+        );
+      });
+    }
+    {
+      const Sub = "block-start passthrough BY IDENTITY";
+      Check(Count, Sub, () => {
+        assert.ok(Out[0] === Chunks[0]);
+      });
+    }
+    {
+      const Sub = "tool-call-delta passthrough BY IDENTITY (argumentsDelta raw JSON untouched)";
+      Check(Count, Sub, () => {
+        assert.ok(Out[2] === Chunks[2]);
+      });
+    }
+    {
+      const Sub = "argumentsDelta dash still verbatim";
+      Check(Count, Sub, () => {
+        assert.ok(Out[2].argumentsDelta.includes("\u2014"));
+      });
+    }
+    {
+      const Sub = "usage passthrough BY IDENTITY";
+      Check(Count, Sub, () => {
+        assert.ok(Out[7] === Chunks[7]);
+      });
+    }
+    {
+      const Sub = "finish passthrough BY IDENTITY";
+      Check(Count, Sub, () => {
+        assert.ok(Out[8] === Chunks[8]);
+      });
+    }
+    {
+      const Sub = "text-delta normalized (em/en/U+2011/U+2015 \u2192 '-')";
+      Check(Count, Sub, () => {
+        assert.ok(Out[1].text === "a - b - c - d - e");
+      });
+    }
+    {
+      const Sub = "rewritten text-delta is a new object, index preserved";
+      Check(Count, Sub, () => {
+        assert.ok(Out[1] !== Chunks[1] && Out[1].index === 0);
+      });
+    }
+    {
+      const Sub = "reasoning-delta normalized when reasoning=on";
+      Check(Count, Sub, () => {
+        assert.ok(Out[3].text === "-x-");
+      });
+    }
+    {
+      const Sub = "block-end TextBlock.text normalized";
+      Check(Count, Sub, () => {
+        assert.ok(Out[4].block.text === "-kept -gone");
+      });
+    }
+    {
+      const Sub = "block-end ReasoningBlock.text normalized (rc.2 field)";
+      Check(Count, Sub, () => {
+        assert.ok(Out[5].block.text === "-y");
+      });
+    }
+    {
+      const Sub = "block-end runtime `thinking` field normalized (defensive)";
+      Check(Count, Sub, () => {
+        assert.ok(Out[6].block.thinking === "-z");
+      });
+    }
+    {
+      const Sub = "rewritten block-end is a new object";
+      Check(Count, Sub, () => {
+        assert.ok(Out[5] !== Chunks[5]);
+      });
+    }
+    await new Promise((R) => setTimeout(R, 10));
+    const Log1 = existsSync(Ledger) ? readFileSync(Ledger, "utf8") : "";
+    {
+      const Sub = "count ledger line written after the 10-replacement stream (N>0)";
+      Check(Count, Sub, () => {
+        assert.ok(Log1.includes("normalized 10 dash char(s) in one stream"));
+      });
+    }
+    {
+      const Sub = "exactly ONE count line for the stream";
+      Check(Count, Sub, () => {
+        assert.ok(Log1.split("\n").filter((L) => L.includes("normalized")).length === 1);
+      });
+    }
+    {
+      const Sub = "logger line 'hook-dsh-normalize-dash: normalized 10 dash char(s) in one stream' (4 delta + 2 reasoning + 3 block-end + 1 thinking)";
+      Check(Count, Sub, () => {
+        assert.ok(
+          Run1.Lines.filter((L) => L.includes("normalized")).length === 1 && Run1.Lines[1] === "hook-dsh-normalize-dash: normalized 10 dash char(s) in one stream"
+        );
+      });
+    }
+  }
+  {
+    Rm();
+    const Run2 = Make(Validate({ normalizeReasoning: false, logFile: Ledger }));
+    const L2 = Run2.Listeners["llm/stream"];
+    const Out2 = [];
+    for await (const C of L2(
+      Object.freeze({}),
+      () => (async function* () {
+        yield { type: "reasoning-delta", index: 0, text: "\u2014" };
+        yield { type: "text-delta", index: 0, text: "plain - text" };
+      })()
+    )) {
+      Out2.push(C);
+    }
+    {
+      const Sub = "reasoning-delta passthrough (identity) when normalizeReasoning=off";
+      Check(Count, Sub, () => {
+        assert.ok(Out2[0] && Out2[0].text === "\u2014");
+      });
+    }
+    {
+      const Sub = "stream completed with both chunks";
+      Check(Count, Sub, () => {
+        assert.ok(Out2.length === 2);
+      });
+    }
+    {
+      const Sub = "stream completed";
+      Check(Count, Sub, () => {
+        assert.ok(Out2[1] === void 0 || typeof Out2[1] === "object");
+      });
+    }
+    await new Promise((R) => setTimeout(R, 10));
+    {
+      const Sub = "NO count line when nothing replaced (N=0)";
+      Check(Count, Sub, () => {
+        assert.ok(
+          !existsSync(Ledger) || !readFileSync(Ledger, "utf8").includes("normalized")
+        );
+      });
+    }
+  }
+  {
+    const Run5 = Make(Validate({ logFile: Ledger }));
+    const L5 = Run5.Listeners["llm/stream"];
+    const Keep = { type: "text-delta", index: 0, text: "plain" };
+    const Out5 = [];
+    for await (const C of L5(
+      Object.freeze({}),
+      () => (async function* () {
+        yield Keep;
+      })()
+    )) {
+      Out5.push(C);
+    }
+    {
+      const Sub = "unchanged text-delta passes through BY IDENTITY (count 0)";
+      Check(Count, Sub, () => {
+        assert.ok(Out5[0] === Keep);
+      });
+    }
+  }
+  return Finish(Count, "Stream-Contract");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Stream-Contract`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

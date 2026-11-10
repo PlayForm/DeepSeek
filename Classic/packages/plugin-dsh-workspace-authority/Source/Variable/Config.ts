@@ -1,4 +1,3 @@
-import Schema from "@deepseek-ai/schemastery";
 /**
  * @module Config
  *
@@ -25,6 +24,7 @@ import Schema from "@deepseek-ai/schemastery";
  * `enabled` defaults to FALSE - the IDLE-forever posture: the service registers
  * and reads honestly, but grants and leases nothing until enabled.
  */
+import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-authority.log";

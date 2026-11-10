@@ -1,11 +1,17 @@
-// ToolFind - the `workspace_find` tool (V4-1 §3.4): a name (EXACT) or a
-// pattern (a case-insensitive SUBSTRING over the node id and the node name -
-// the graph's frozen contract, Function/Find.ts; never a glob), a kind and a
-// limit in, the matching nodes with id, path, span, kind out - a compact
-// table plus the ids. Pagination is by CURSOR (the id of the last node of the
-// previous page), never by offset. The disabled plugin no-ops to a clear
-// refusal (the IDLE-forever posture).
 import { defineTool } from "@deepseek-ai/dsh-tools";
+/**
+ * @module ToolFind
+ *
+ * The `workspace_find` tool: a name or a pattern, a kind and a limit in, the
+ * matching nodes with id, path, span, kind out.
+ *
+ * @remarks
+ * V4-1 §3.4. `name` is EXACT; `pattern` is a case-insensitive SUBSTRING over
+ * the node id and the node name - the graph's frozen contract, Function/Find.ts;
+ * never a glob. Pagination is by CURSOR (the id of the last node of the previous
+ * page), never by offset. The disabled plugin no-ops to a clear refusal (the
+ * IDLE-forever posture).
+ */
 import { Find } from "@Function/Query.js";
 import type { NodeKind } from "@Interface/Graph.js";
 import type State from "@Interface/State.js";

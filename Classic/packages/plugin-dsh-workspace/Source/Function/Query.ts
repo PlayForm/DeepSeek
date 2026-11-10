@@ -1,5 +1,4 @@
 import Packet, { Row } from "@Function/Packet.js";
-
 /**
  * @module Query
  *

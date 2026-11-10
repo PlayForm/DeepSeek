@@ -1,1 +1,154 @@
-import o from"node:assert/strict";import{Check as s,Finish as A,MakeCounter as L,Ledger as R,Make as D}from"../Harness.js";const N=async()=>{const e=L(),n={conversation:!0,reasoning:!0,toolInput:!1,toolResults:!1,files:!0,batch:!1},a=(t,c)=>D({log:!0,logFile:R,normalizeReasoning:c?.reasoning??!0,normalizeToolArguments:c?.toolArgs??!1,scopes:{get:()=>t}}),i=async(t,c)=>{const b=[];for await(const z of t.Listeners["llm/stream"](Object.freeze({model:"x",messages:[]}),()=>(async function*(){yield*c})()))b.push(z);return b},r={type:"text-delta",index:0,text:"a \u201C b"},u={type:"reasoning-delta",index:0,text:"\u201Cx"},f={type:"block-end",index:0,block:{type:"text",text:"\u201Ckept"}},l={type:"tool-call-delta",index:1,id:"call_s",name:"bash",argumentsDelta:'{"a":"\u201C"}'},p=a({...n,conversation:!1}),y=await i(p,[r]);s(e,"scopes.conversation off: text-delta passes by identity",()=>{o.ok(y[0]===r,"scopes.conversation off: text-delta passes by identity")}),s(e,"scopes.conversation off: no count line",()=>{o.ok(p.Lines.every(c=>!c.includes("normalized")),"scopes.conversation off: no count line")});const g=a({...n,reasoning:!1}),m=await i(g,[u]);s(e,"scopes.reasoning off: reasoning-delta passes by identity",()=>{o.ok(m[0]===u,"scopes.reasoning off: reasoning-delta passes by identity")});const v=a({...n,conversation:!1}),h=await i(v,[f]);s(e,"scopes.conversation off: text block passes by identity",()=>{o.ok(h[0].block===f.block,"scopes.conversation off: text block passes by identity")});const k=a({...n},{toolArgs:!0}),x=await i(k,[l]);s(e,"effective toolInput (deprecated field on, scope off): still normalizes (curly -> straight inside the JSON)",()=>{o.ok(x[0].argumentsDelta==='{"a":"""}',"effective toolInput (deprecated field on, scope off): still normalizes (curly -> straight inside the JSON)")});const O=a({...n},{toolArgs:!1}),C=await i(O,[l]);s(e,"toolInput both off: passes by identity",()=>{o.ok(C[0]===l,"toolInput both off: passes by identity")});const w=a({...n,toolInput:!0}),I=await i(w,[l]);s(e,"effective toolInput (scope on, deprecated field off): normalizes (curly -> straight inside the JSON)",()=>{o.ok(I[0].argumentsDelta==='{"a":"""}',"effective toolInput (scope on, deprecated field off): normalizes (curly -> straight inside the JSON)")});const d={...n},S=a(d);d.conversation=!1,S.Listeners["loader/volatile-update"]([["scopes","conversation"]]);const T=await i(S,[r]);return s(e,"volatile scope flip: conversation off applies to the NEXT stream without remount",()=>{o.ok(T[0]===r,"volatile scope flip: conversation off applies to the NEXT stream without remount")}),A(e,"Scopes")},E=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(E){const e=await N();console.log(`${e} PASS - Scopes`)}export{N as runTest};
+import assert from "node:assert/strict";
+import { Check, Finish, MakeCounter, Ledger, Make } from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  const SCOPES_DEFAULT = {
+    conversation: true,
+    reasoning: true,
+    toolInput: false,
+    toolResults: false,
+    files: true,
+    batch: false
+  };
+  const RunS = (Scopes, Flags) => Make({
+    log: true,
+    logFile: Ledger,
+    normalizeReasoning: Flags?.reasoning ?? true,
+    normalizeToolArguments: Flags?.toolArgs ?? false,
+    scopes: { get: () => Scopes }
+  });
+  const DriveS = async (Run, Chunks) => {
+    const Out = [];
+    for await (const C of Run.Listeners["llm/stream"](
+      Object.freeze({ model: "x", messages: [] }),
+      () => (async function* () {
+        yield* Chunks;
+      })()
+    ))
+      Out.push(C);
+    return Out;
+  };
+  const TextChunkS = { type: "text-delta", index: 0, text: "a \u201C b" };
+  const ReasonChunkS = { type: "reasoning-delta", index: 0, text: "\u201Cx" };
+  const TextBlockChunkS = {
+    type: "block-end",
+    index: 0,
+    block: { type: "text", text: "\u201Ckept" }
+  };
+  const ArgsChunkS = {
+    type: "tool-call-delta",
+    index: 1,
+    id: "call_s",
+    name: "bash",
+    argumentsDelta: '{"a":"\u201C"}'
+  };
+  const S1 = RunS({ ...SCOPES_DEFAULT, conversation: false });
+  const OutS1 = await DriveS(S1, [TextChunkS]);
+  {
+    const Sub = "scopes.conversation off: text-delta passes by identity";
+    {
+      Check(Count, Sub, () => {
+        assert.ok(OutS1[0] === TextChunkS, "scopes.conversation off: text-delta passes by identity");
+      });
+    }
+  }
+  {
+    const Sub = "scopes.conversation off: no count line";
+    {
+      Check(Count, Sub, () => {
+        assert.ok(
+          S1.Lines.every((L) => !L.includes("normalized")),
+          "scopes.conversation off: no count line"
+        );
+      });
+    }
+  }
+  const S2 = RunS({ ...SCOPES_DEFAULT, reasoning: false });
+  const OutS2 = await DriveS(S2, [ReasonChunkS]);
+  {
+    const Sub = "scopes.reasoning off: reasoning-delta passes by identity";
+    {
+      Check(Count, Sub, () => {
+        assert.ok(
+          OutS2[0] === ReasonChunkS,
+          "scopes.reasoning off: reasoning-delta passes by identity"
+        );
+      });
+    }
+  }
+  const S3 = RunS({ ...SCOPES_DEFAULT, conversation: false });
+  const OutS3 = await DriveS(S3, [TextBlockChunkS]);
+  {
+    const Sub = "scopes.conversation off: text block passes by identity";
+    {
+      Check(Count, Sub, () => {
+        assert.ok(
+          OutS3[0].block === TextBlockChunkS.block,
+          "scopes.conversation off: text block passes by identity"
+        );
+      });
+    }
+  }
+  const S4 = RunS({ ...SCOPES_DEFAULT }, { toolArgs: true });
+  const OutS4 = await DriveS(S4, [ArgsChunkS]);
+  {
+    const Sub = "effective toolInput (deprecated field on, scope off): still normalizes (curly -> straight inside the JSON)";
+    {
+      Check(Count, Sub, () => {
+        assert.ok(
+          OutS4[0].argumentsDelta === '{"a":"""}',
+          "effective toolInput (deprecated field on, scope off): still normalizes (curly -> straight inside the JSON)"
+        );
+      });
+    }
+  }
+  const S4b = RunS({ ...SCOPES_DEFAULT }, { toolArgs: false });
+  const OutS4b = await DriveS(S4b, [ArgsChunkS]);
+  {
+    const Sub = "toolInput both off: passes by identity";
+    {
+      Check(Count, Sub, () => {
+        assert.ok(OutS4b[0] === ArgsChunkS, "toolInput both off: passes by identity");
+      });
+    }
+  }
+  const S4c = RunS({ ...SCOPES_DEFAULT, toolInput: true });
+  const OutS4c = await DriveS(S4c, [ArgsChunkS]);
+  {
+    const Sub = "effective toolInput (scope on, deprecated field off): normalizes (curly -> straight inside the JSON)";
+    {
+      Check(Count, Sub, () => {
+        assert.ok(
+          OutS4c[0].argumentsDelta === '{"a":"""}',
+          "effective toolInput (scope on, deprecated field off): normalizes (curly -> straight inside the JSON)"
+        );
+      });
+    }
+  }
+  const LiveScopes = { ...SCOPES_DEFAULT };
+  const S5 = RunS(LiveScopes);
+  LiveScopes.conversation = false;
+  S5.Listeners["loader/volatile-update"]([["scopes", "conversation"]]);
+  const OutS5 = await DriveS(S5, [TextChunkS]);
+  {
+    const Sub = "volatile scope flip: conversation off applies to the NEXT stream without remount";
+    {
+      Check(Count, Sub, () => {
+        assert.ok(
+          OutS5[0] === TextChunkS,
+          "volatile scope flip: conversation off applies to the NEXT stream without remount"
+        );
+      });
+    }
+  }
+  return Finish(Count, "Scopes");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Scopes`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map
