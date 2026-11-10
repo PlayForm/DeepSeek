@@ -1,92 +1,99 @@
-// Apply - the plugin entry function: the State build (the factory's cell
-// unwrap + the volatile refresh), the durable activation proof, the knowledge
-// load, and the FOUR listeners of the suggester's surfaces (plan section 4.2):
-//
-//   1. tools/post-execute (waterfall, plain registration - AFTER the ccr's
-//      {prepend:true} listener and the normalize family, since plain
-//      registration order guarantees it): next() first, then the workspace
-//      root, the HISTORY candidates (the files touched right after this one in
-//      this workspace) as ONE synthetic family, the EXPLICIT pack when one
-//      exists, Detect, Score's gate, and ONE additionalContexts note prepended
-//      to the downstream decision - never a content replacement;
-//   2. agent/pre-step (plain): the per-turn reset (the ring, the cooldown
-//      counters, the dedupe set) when a user message enters, plus the user
-//      text capture for the R12 context bonus;
-//   3. system-prompt/assemble (waterfall, after next()): the optional sticky
-//      section (config sectionMode "sticky"), TTL-rebuilt;
-//   4. tools/change (emit): the sticky section-cache invalidation only.
-//
-// THE HISTORY IS A PROJECTION UNIT, NOT A LISTENER FOLD: `session/event` is
-// the durable, all-agent seam, and the supported plugin-facing form of it is
-// `ctx.sessionProjections` - the registry subscribes to `session/event` ONCE
-// and passes every committed event through every registered unit's `apply`
-// (Function/Unit is the unit, Function/Register installs it through the
-// optional `ctx.inject(['sessionProjections'], ...)` form). The hook therefore
-// holds no subscription of its own and folds nothing in a listener: it reads
-// the per-session state at detection time through `stateOf(session, key)`
-// (Function/History). The judged call's own `tool/call` is committed BEFORE
-// dispatch - it is the call's STARTED record, the one recovery reports as
-// `TOOL_OUTCOME_UNKNOWN` when no result follows - so the anchor's prior
-// touches, and the anchor itself, are already folded when this listener runs
-// and NO post-execute append is needed (an append would fold the current call
-// twice and inflate every later co-touch count).
-//
-// THE CANDIDATES COME FROM THE AGENT'S OWN PREVIOUS TOOL CALLS: the unit folds
-// every committed `tool/call` that names a path (reads included) through the
-// pack library's `Fold`, and the listener runs `Adjacent(touches, anchor)`,
-// where the anchor is the call's own path argument (or the directory of its
-// path-shaped target, or the session cwd), and names the files that were
-// touched right after a similar call in this workspace. The literal built-in
-// pack is NOT a candidate source; the pack survives only as an EXPLICIT
-// override (`<repo>/.dsh/pack.yml` or the user layer), resolved with
-// `builtin: false`. A workspace with no history and no pack abstains
-// (`abstained no-history`).
-//
-// THE WATERFALL DISCIPLINE: `next()` is ALWAYS awaited first; pass-through
-// returns the downstream decision unchanged; FAIL-OPEN: every listener body
-// is one try/catch - on any error a logger.warn records it and the downstream
-// decision is returned UNCHANGED. A note never fails a waterfall.
-//
-// THE WORKSPACE GATE + THE EXISTENCE FILTER: the root is the PACK-INDEPENDENT
-// repo root (the nearest ancestor carrying `.git` or `package.json`, from the
-// call path plus the session cwd). A call outside any workspace has no
-// history to mine here and abstains (`abstained foreign-workspace`); a
-// candidate absent from all three bases is dropped BEFORE the score
-// (`abstained no-companions` when the winner's whole candidate set is gone).
-// The pack's families come from the RESOLVED pack per call
-// (Families(pack, "search")), so an explicit repo pack overrides the search
-// families without a restart; the sticky section resolves the same way.
-//
-// THE NOTE NEVER TOUCHES CONTENT: it is a separate message, so it survives
-// the ccr and cannot be mistaken for file content (plan section 4.6). The
-// learning signals (write/edit/raw-write) are observed for the follow/ignore
-// rules (plan 6.2), never noted - a note after the edit is too late (plan
-// section 3.3).
-//
-// NOT factory machinery, deliberately: no fs/observed Wire, no Attach, no
-// factory Schema - the suggester owns its schema (Variable/Config) and its
-// strings. The function returns NOTHING; test probes (the end-phase) read
-// the state through the `ctx.__hookDshSearchSuggesterState` attachment.
-//
-// THE P2 GRAPH PROJECTION (the re-spec): the candidate scoring reads the
-// optional `ctx.workspaceGraph` through a lazily built projection
-// (Function/Projection, the shape in Interface/Projection.ts - NOT the
-// session-projection seam, which lives in Interface/Session.ts) - a present
-// graph proves the candidate (node exists,
-// kind expected, depth, recency), an absent or empty graph falls back to the
-// documented neutral literal 0.5. The projection is cached and rebuilt on
-// `tools/change` while `refreshOnBoot` holds; the sticky section renders the
-// projected index (Function/Projected) instead of the plain candidate list
-// when the graph proves any candidate. No ledger string is added by the
-// projection: the note and the section are the evidence.
-//
-// THE P3 OFFLINE SEED and THE P4 DISMISS TOOL: at load the knowledge is
-// seeded from the EXPLICIT pack's canonical candidates plus the projection
-// (Function/Seed; no LLM, no session history) unless `learn`/`seed` are off -
-// a repo without an explicit pack seeds nothing; the `suggestion_dismiss`
-// tool (Function/Dismiss) is registered through the loader's tool API when
-// the host exposes `ctx.tools` - the batch-decision precedent, a guarded
-// registration so a bare mount still applies.
+/**
+ * @module Apply
+ *
+ * The plugin entry function: the State build (the factory's cell unwrap plus
+ * the volatile refresh), the durable activation proof, the knowledge load, and
+ * the FOUR listeners of the suggester's surfaces (plan section 4.2).
+ *
+ * @remarks
+ * The listeners:
+ *
+ *   1. tools/post-execute (waterfall, plain registration - AFTER the ccr's
+ *      {prepend:true} listener and the normalize family, since plain
+ *      registration order guarantees it): next() first, then the workspace
+ *      root, the HISTORY candidates (the files touched right after this one in
+ *      this workspace) as ONE synthetic family, the EXPLICIT pack when one
+ *      exists, Detect, Score's gate, and ONE additionalContexts note prepended
+ *      to the downstream decision - never a content replacement;
+ *   2. agent/pre-step (plain): the per-turn reset (the ring, the cooldown
+ *      counters, the dedupe set) when a user message enters, plus the user
+ *      text capture for the R12 context bonus;
+ *   3. system-prompt/assemble (waterfall, after next()): the optional sticky
+ *      section (config sectionMode "sticky"), TTL-rebuilt;
+ *   4. tools/change (emit): the sticky section-cache invalidation only.
+ *
+ * THE HISTORY IS A PROJECTION UNIT, NOT A LISTENER FOLD: `session/event` is
+ * the durable, all-agent seam, and the supported plugin-facing form of it is
+ * `ctx.sessionProjections` - the registry subscribes to `session/event` ONCE
+ * and passes every committed event through every registered unit's `apply`
+ * (Function/Unit is the unit, Function/Register installs it through the
+ * optional `ctx.inject(['sessionProjections'], ...)` form). The hook therefore
+ * holds no subscription of its own and folds nothing in a listener: it reads
+ * the per-session state at detection time through `stateOf(session, key)`
+ * (Function/History). The judged call's own `tool/call` is committed BEFORE
+ * dispatch - it is the call's STARTED record, the one recovery reports as
+ * `TOOL_OUTCOME_UNKNOWN` when no result follows - so the anchor's prior
+ * touches, and the anchor itself, are already folded when this listener runs
+ * and NO post-execute append is needed (an append would fold the current call
+ * twice and inflate every later co-touch count).
+ *
+ * THE CANDIDATES COME FROM THE AGENT'S OWN PREVIOUS TOOL CALLS: the unit folds
+ * every committed `tool/call` that names a path (reads included) through the
+ * pack library's `Fold`, and the listener runs `Adjacent(touches, anchor)`,
+ * where the anchor is the call's own path argument (or the directory of its
+ * path-shaped target, or the session cwd), and names the files that were
+ * touched right after a similar call in this workspace. The literal built-in
+ * pack is NOT a candidate source; the pack survives only as an EXPLICIT
+ * override (`<repo>/.dsh/pack.yml` or the user layer), resolved with
+ * `builtin: false`. A workspace with no history and no pack abstains
+ * (`abstained no-history`).
+ *
+ * THE WATERFALL DISCIPLINE: `next()` is ALWAYS awaited first; pass-through
+ * returns the downstream decision unchanged; FAIL-OPEN: every listener body
+ * is one try/catch - on any error a logger.warn records it and the downstream
+ * decision is returned UNCHANGED. A note never fails a waterfall.
+ *
+ * THE WORKSPACE GATE + THE EXISTENCE FILTER: the root is the PACK-INDEPENDENT
+ * repo root (the nearest ancestor carrying `.git` or `package.json`, from the
+ * call path plus the session cwd). A call outside any workspace has no
+ * history to mine here and abstains (`abstained foreign-workspace`); a
+ * candidate absent from all three bases is dropped BEFORE the score
+ * (`abstained no-companions` when the winner's whole candidate set is gone).
+ * The pack's families come from the RESOLVED pack per call
+ * (Families(pack, "search")), so an explicit repo pack overrides the search
+ * families without a restart; the sticky section resolves the same way.
+ *
+ * THE NOTE NEVER TOUCHES CONTENT: it is a separate message, so it survives
+ * the ccr and cannot be mistaken for file content (plan section 4.6). The
+ * learning signals (write/edit/raw-write) are observed for the follow/ignore
+ * rules (plan 6.2), never noted - a note after the edit is too late (plan
+ * section 3.3).
+ *
+ * NOT factory machinery, deliberately: no fs/observed Wire, no Attach, no
+ * factory Schema - the suggester owns its schema (Variable/Config) and its
+ * strings. The function returns NOTHING; test probes (the end-phase) read
+ * the state through the `ctx.__hookDshSearchSuggesterState` attachment.
+ *
+ * THE P2 GRAPH PROJECTION (the re-spec): the candidate scoring reads the
+ * optional `ctx.workspaceGraph` through a lazily built projection
+ * (Function/Projection, the shape in Interface/Projection.ts - NOT the
+ * session-projection seam, which lives in Interface/Session.ts) - a present
+ * graph proves the candidate (node exists,
+ * kind expected, depth, recency), an absent or empty graph falls back to the
+ * documented neutral literal 0.5. The projection is cached and rebuilt on
+ * `tools/change` while `refreshOnBoot` holds; the sticky section renders the
+ * projected index (Function/Projected) instead of the plain candidate list
+ * when the graph proves any candidate. No ledger string is added by the
+ * projection: the note and the section are the evidence.
+ *
+ * THE P3 OFFLINE SEED and THE P4 DISMISS TOOL: at load the knowledge is
+ * seeded from the EXPLICIT pack's canonical candidates plus the projection
+ * (Function/Seed; no LLM, no session history) unless `learn`/`seed` are off -
+ * a repo without an explicit pack seeds nothing; the `suggestion_dismiss`
+ * tool (Function/Dismiss) is registered through the loader's tool API when
+ * the host exposes `ctx.tools` - the batch-decision precedent, a guarded
+ * registration so a bare mount still applies.
+ */
 import { dirname } from "node:path";
 
 import type { Context } from "@deepseek-ai/cordis";
@@ -115,15 +122,21 @@ import Ring, { type RingState } from "./Ring.js";
 import Score, { NoteKey } from "./Score.js";
 import Seed from "./Seed.js";
 
-/** The learning-only tools: observed for the follow/ignore rules, never noted. */
+/**
+ * The learning-only tools: observed for the follow/ignore rules, never noted.
+ */
 const Learning = ["write", "edit", "raw-write"];
 
-/** The synthetic family's id (the history source's ledger name). The
- *  detection-time read is imported as `ReadHistory`, because this module owns
- *  the family id under the plain name. */
+/**
+ * The synthetic family's id (the history source's ledger name). The
+ * detection-time read is imported as `ReadHistory`, because this module owns
+ * the family id under the plain name.
+ */
 const History = "History";
 
-/** The call view of one judged call (plan section 3.3): the classified text. */
+/**
+ * The call view of one judged call (plan section 3.3): the classified text.
+ */
 const View = (Exec: ToolExecution): CallView => {
 	const Args = (Exec.arguments ?? {}) as Record<string, unknown>;
 	switch (true) {
@@ -207,7 +220,9 @@ const Session = (Context: Context, Exec: ToolExecution): string | undefined => {
 	}
 };
 
-/** The user text of the step: the last user message's text content, lowercased. */
+/**
+ * The user text of the step: the last user message's text content, lowercased.
+ */
 const UserText = (Payload: unknown): string => {
 	const Step = Payload as { messages?: { role?: string; content?: unknown }[] } | undefined;
 	const Message = Array.isArray(Step?.messages)
@@ -229,11 +244,16 @@ const UserText = (Payload: unknown): string => {
 	return "";
 };
 
-/** The enabled pack, filtered to the config's intent kinds (order kept). */
+/**
+ * The enabled pack, filtered to the config's intent kinds (order kept).
+ */
 const Enabled = (State: State, List: Intent[]) =>
 	List.filter((Intent) => State.Intents.includes(Intent.id));
 
-/** The learning verdict for an open note whose window has closed untouched (plan 6.2). */
+/**
+ * The learning verdict for an open note whose window has closed untouched
+ * (plan 6.2).
+ */
 const LearnTail = (Context: Context, State: State, Rings: RingState): void => {
 	if (!State.Learn || Rings.pending === undefined) {
 		return;
@@ -247,7 +267,9 @@ const LearnTail = (Context: Context, State: State, Rings: RingState): void => {
 	}
 };
 
-/** The ledger append helper (the factory's Append, with the state bound). */
+/**
+ * The ledger append helper (the factory's Append, with the state bound).
+ */
 const FactoryAppend = (Context: Context, State: State, Message: string): void => {
 	try {
 		State.Factory.Append(State, Message);
@@ -262,7 +284,9 @@ const FactoryAppend = (Context: Context, State: State, Message: string): void =>
 	}
 };
 
-/** Prepend the note to the downstream decision's additionalContexts. */
+/**
+ * Prepend the note to the downstream decision's additionalContexts.
+ */
 const Attach = (Downstream: PostToolDecision, Note: UserMessage): PostToolDecision => {
 	if (Downstream.kind === "block") {
 		return {

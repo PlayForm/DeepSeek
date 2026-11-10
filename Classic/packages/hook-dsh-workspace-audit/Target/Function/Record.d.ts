@@ -19,7 +19,7 @@
  *   `__ring` in the `ring` table. Every put is `void .catch(() => {})` - a
  *   storage failure can never reach the listener's synchronous path.
  */
-import type Line from "@Interface/Line.js";
-import type State from "@Interface/State.js";
+import type Line from "../Interface/Line.js";
+import type State from "../Interface/State.js";
 export default _default;
 declare function _default(State: State, Entry: Line): void;

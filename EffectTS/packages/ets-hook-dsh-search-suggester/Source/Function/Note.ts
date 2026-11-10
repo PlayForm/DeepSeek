@@ -1,25 +1,32 @@
-// Note - the additionalContexts notice builder (the tool-coach precedent,
-// plan section 4.6). Builds the labeled UserMessage the post-execute listener
-// prepends to the downstream decision's additionalContexts.
-//
-// THE SOURCE LABEL IS LOAD-BEARING: an unlabeled context would render as a
-// user prompt in derived history. The label is
-// `{ kind: 'search-suggester', form: 'notice', summary }` - the
-// merge-extensible MessageSource vocabulary (this module declares the
-// suggester's own kind in its own module), with the `notice` form's required
-// one-line `summary` (`<intent> <kappa>`, bound to the harness's 120-char
-// summary limit).
-//
-// The message factory mirrors the @deepseek-ai/dsh-llm `createUserMessage`
-// contract LOCALLY (identified, deep-frozen, random UUID) - the suggester
-// bundles the same helper instead of importing it, so the built Target
-// carries no runtime import of the harness's own packages.
+/**
+ * @module Note
+ *
+ * The additionalContexts notice builder (the tool-coach precedent, plan
+ * section 4.6). Builds the labeled UserMessage the post-execute listener
+ * prepends to the downstream decision's additionalContexts.
+ *
+ * @remarks
+ * THE SOURCE LABEL IS LOAD-BEARING: an unlabeled context would render as a
+ * user prompt in derived history. The label is
+ * `{ kind: 'search-suggester', form: 'notice', summary }` - the
+ * merge-extensible MessageSource vocabulary (this module declares the
+ * suggester's own kind in its own module), with the `notice` form's required
+ * one-line `summary` (`<intent> <kappa>`, bound to the harness's 120-char
+ * summary limit).
+ *
+ * The message factory mirrors the @deepseek-ai/dsh-llm `createUserMessage`
+ * contract LOCALLY (identified, deep-frozen, random UUID) - the suggester
+ * bundles the same helper instead of importing it, so the built Target
+ * carries no runtime import of the harness's own packages.
+ */
 import { randomUUID } from "node:crypto";
 
 import type { MessageSource, UserMessage } from "@deepseek-ai/dsh-llm";
 
-// The suggester's own source kind, declared in the suggester's own module
-// (the MessageSourceMap vocabulary is merge-extensible by design).
+/**
+ * The suggester's own source kind, declared in the suggester's own module
+ * (the MessageSourceMap vocabulary is merge-extensible by design).
+ */
 declare module "@deepseek-ai/dsh-llm" {
 	interface MessageSourceMap {
 		"search-suggester": {
@@ -30,10 +37,14 @@ declare module "@deepseek-ai/dsh-llm" {
 	}
 }
 
-/** The harness's bound for a notice summary (dsh-llm CONTEXT_SUMMARY_MAX_CHARS). */
+/**
+ * The harness's bound for a notice summary (dsh-llm CONTEXT_SUMMARY_MAX_CHARS).
+ */
 const SummaryMax = 120;
 
-/** Deep-freeze a value in place (the dsh-llm message contract). */
+/**
+ * Deep-freeze a value in place (the dsh-llm message contract).
+ */
 const DeepFreeze = <T>(Value: T): T => {
 	if (Value && typeof Value === "object") {
 		for (const Key of Object.keys(Value as object)) {
@@ -44,7 +55,9 @@ const DeepFreeze = <T>(Value: T): T => {
 	return Value;
 };
 
-/** Bind a notice summary to the harness's 120-char limit (ellipsized). */
+/**
+ * Bind a notice summary to the harness's 120-char limit (ellipsized).
+ */
 export const BoundSummary = (Summary: string): string => {
 	if (Summary.length <= SummaryMax) {
 		return Summary;

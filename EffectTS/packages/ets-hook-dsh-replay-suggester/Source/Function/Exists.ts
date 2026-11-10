@@ -1,47 +1,58 @@
-// Exists - the BASE-AWARE companion existence filter: does a pack target
-// exist under any of the call's three path bases? The embedded packs are this
-// repo's conventions as DATA, and they mix three bases:
-//
-//   * repo-relative    (`CHANGELOG.md` and any other repo-relative path);
-//   * package-relative (`SCHEME.md`, `README.md`, `cordis.patch.yml`,
-//     `Source/Test/...`, `Source/Function/Apply.ts`);
-//   * sibling-relative (`*/package.json`, `*/Source/Function/Apply.ts`).
-//
-// A single-root filter silently dropped the most relevant companions (the
-// package's own SCHEME.md and patch row), so the filter computes three bases
-// from the RESOLVED call path:
-//
-//   * RepoRoot - the workspace root resolved by the pack library's `Root`
-//     (the nearest ancestor carrying `.git` or `package.json`), never a
-//     pack signature;
-//   * PackageRoot - the nearest ancestor of the call path that contains
-//     package.json, at or below RepoRoot;
-//   * PackageParent - PackageRoot's parent directory.
-//
-// The rules (the filter only DROPS a target, it never rewrites one):
-//   * a literal path (no `*`) -> exists under RepoRoot, PackageRoot or
-//     PackageParent; a directory target passes by the same check;
-//   * a `*/<rest>` glob -> at least one immediate subdirectory of
-//     PackageParent or of RepoRoot contains `<rest>`;
-//   * any other glob -> its literal prefix directory exists under a base;
-//   * a target carrying a `<...>` placeholder (`Source/Test/<Suite>/Test.ts`)
-//     is illustrative and always kept.
-//
-// THE RECALLED-HISTORY CHECK (this package only): the Repeat intent's targets
-// come from a history RECORD, not from the workspace - Function/Apply does not
-// run them through this BASE-AWARE filter (their bases are the record's own),
-// but it does call `IsFile`, the regular-file predicate this module owns: the
-// recall store is cross-session by design, so only a path that exists as a
-// regular file may be named. The workspace gate still runs on the call path.
-// This module stays base-aware for any future static target an explicit pack
-// may carry.
 import { existsSync, readdirSync, statSync } from "node:fs";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 
-/** An illustrative target placeholder (`Source/Test/<Suite>/Test.ts`). */
+/**
+ * @module Exists
+ *
+ * The BASE-AWARE companion existence filter: does a pack target exist under
+ * any of the call's three path bases?
+ *
+ * @remarks
+ * The embedded packs are this repo's conventions as DATA, and they mix three
+ * bases:
+ * - repo-relative (`CHANGELOG.md` and any other repo-relative path);
+ * - package-relative (`SCHEME.md`, `README.md`, `cordis.patch.yml`,
+ *   `Source/Test/...`, `Source/Function/Apply.ts`);
+ * - sibling-relative (a `*` segment before `/package.json`, a `*` segment
+ *   before `/Source/Function/Apply.ts`).
+ *
+ * A single-root filter silently dropped the most relevant companions (the
+ * package's own SCHEME.md and patch row), so the filter computes three bases
+ * from the RESOLVED call path:
+ * - RepoRoot - the workspace root resolved by the pack library's `Root` (the
+ *   nearest ancestor carrying `.git` or `package.json`), never a pack
+ *   signature;
+ * - PackageRoot - the nearest ancestor of the call path that contains
+ *   package.json, at or below RepoRoot;
+ * - PackageParent - PackageRoot's parent directory.
+ *
+ * The rules (the filter only DROPS a target, it never rewrites one):
+ * - a literal path (no `*`) -> exists under RepoRoot, PackageRoot or
+ *   PackageParent; a directory target passes by the same check;
+ * - a `*` then `/<rest>` glob -> at least one immediate subdirectory of
+ *   PackageParent or of RepoRoot contains `<rest>`;
+ * - any other glob -> its literal prefix directory exists under a base;
+ * - a target carrying a `<...>` placeholder (`Source/Test/<Suite>/Test.ts`)
+ *   is illustrative and always kept.
+ *
+ * THE RECALLED-HISTORY CHECK (this package only): the Repeat intent's targets
+ * come from a history RECORD, not from the workspace - Function/Apply does not
+ * run them through this BASE-AWARE filter (their bases are the record's own),
+ * but it does call `IsFile`, the regular-file predicate this module owns: the
+ * recall store is cross-session by design, so only a path that exists as a
+ * regular file may be named. The workspace gate still runs on the call path.
+ * This module stays base-aware for any future static target an explicit pack
+ * may carry.
+ */
+
+/**
+ * An illustrative target placeholder (`Source/Test/<Suite>/Test.ts`).
+ */
 const Placeholder = /<[^>]+>/;
 
-/** The nearest existing ancestor of a path (the path itself when it exists). */
+/**
+ * The nearest existing ancestor of a path (the path itself when it exists).
+ */
 const Anchor = (Start: string): string => {
 	let Current = Start;
 	while (!existsSync(Current)) {
@@ -54,7 +65,9 @@ const Anchor = (Start: string): string => {
 	return Current;
 };
 
-/** The directory the upward walk starts from. */
+/**
+ * The directory the upward walk starts from.
+ */
 const Begin = (Resolved: string): string => {
 	const Stat = statSync(Resolved, { throwIfNoEntry: false });
 	if (Stat === undefined) {
@@ -63,7 +76,9 @@ const Begin = (Resolved: string): string => {
 	return Stat.isDirectory() ? Resolved : dirname(Resolved);
 };
 
-/** The nearest ancestor of the resolved call path carrying package.json. */
+/**
+ * The nearest ancestor of the resolved call path carrying package.json.
+ */
 const Package = (Resolved: string, Root: string): string | undefined => {
 	let Current = Begin(Resolved);
 	while (true) {
@@ -81,17 +96,23 @@ const Package = (Resolved: string, Root: string): string | undefined => {
 	}
 };
 
-/** The bases a target may hang off, in the check order. */
+/**
+ * The bases a target may hang off, in the check order.
+ */
 const Bases = (Root: string, PackageRoot: string | undefined): string[] =>
 	PackageRoot === undefined ? [Root] : [Root, PackageRoot, dirname(PackageRoot)];
 
-/** Whether a literal path exists under any base. */
+/**
+ * Whether a literal path exists under any base.
+ */
 const Literal = (Companion: string, Paths: string[]): boolean =>
 	isAbsolute(Companion)
 		? existsSync(Companion)
 		: Paths.some((Base) => existsSync(join(Base, Companion)));
 
-/** Whether an immediate subdirectory of a root contains the rest. */
+/**
+ * Whether an immediate subdirectory of a root contains the rest.
+ */
 const Sibling = (Rest: string, Roots: string[]): boolean =>
 	Roots.some((Root) => {
 		try {
@@ -103,7 +124,9 @@ const Sibling = (Rest: string, Roots: string[]): boolean =>
 		}
 	});
 
-/** Whether a general glob's literal prefix directory exists under a base. */
+/**
+ * Whether a general glob's literal prefix directory exists under a base.
+ */
 const Prefix = (Companion: string, Paths: string[]): boolean => {
 	const Head = Companion.slice(0, Companion.indexOf("*"));
 	const Directory = Head.endsWith("/") ? Head.slice(0, -1) : dirname(Head);

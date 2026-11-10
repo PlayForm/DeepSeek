@@ -1,15 +1,21 @@
-// Service - the `workspaceMerge` service (Function/Service): extends the
-// cordis Service base and is REGISTERED FROM APPLY (the loader contract
-// for the object-form plugin). Declaration merging below gives the typed
-// accessor.
-//
-// The methods are thin delegates (one Function module each):
-//
-//   preview(batch)     - the gates + digest, no write;
-//   commit(batch)      - the gates + the per-file commits;
-//   batch(id)          - one recorded batch or undefined;
-//   batches()          - all recorded batches;
-//   statistics()       - the honest counts.
+/**
+ * @module Service
+ *
+ * The `workspaceMerge` service: extends the cordis Service base and is
+ * registered from apply.
+ *
+ * @remarks
+ * REGISTERED FROM APPLY (the loader contract for the object-form plugin).
+ * Declaration merging below gives the typed accessor.
+ *
+ * The methods are thin delegates (one Function module each):
+ *
+ *   preview(batch)     - the gates + digest, no write;
+ *   commit(batch)      - the gates + the per-file commits;
+ *   batch(id)          - one recorded batch or undefined;
+ *   batches()          - all recorded batches;
+ *   statistics()       - the honest counts.
+ */
 import { Service, type Context } from "@deepseek-ai/cordis";
 import CommitFn from "@Function/Commit.js";
 import PreviewFn from "@Function/Preview.js";

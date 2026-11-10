@@ -1,30 +1,36 @@
-// Reconcile - THE RECONCILIATION (the completion spec's wave 2c re-spec for
-// this package, Documentation/Plans/Completion-Spec/03-SUGGESTERS.md): on a
-// judged call in a package, compare the package's SMOKE CLAIMS with the tree
-// it actually has.
-//
-// THE THREE EVIDENCE SETS:
-//   * the CLAIMS   - each `Source/Test/<Folder>/README.md`'s
-//                    `## Expected count` (Function/Counts, the aggregate
-//                    runner's own parse);
-//   * the TREE     - the folders that actually exist, each folder's `Test.ts`,
-//                    and the aggregate runner's roster (Function/Roster: the
-//                    built `Target/Test/<Folder>/Test.js` folders);
-//   * the INDEX    - when the workspace graph is present, its `Test` nodes for
-//                    the package (Function/Nodes; an unpopulated graph simply
-//                    contributes nothing).
-//
-// THE DRIFTS (each names ONE file and the two counts; the note text is
-// Function/Reconciled):
-//   1. `no "## Expected count"`            - a folder with no claim;
-//   2. `the README count has no Test.ts`   - a claim whose suite is gone;
-//   3. `not in the aggregate runner's roster` - a suite the runner never runs;
-//   4. `the graph's Test node has no file` - an index claim the tree dropped.
-//
-// READ-ONLY BY CONSTRUCTION: this module reads with node:fs (never ctx.fs -
-// the hook's purity contract) and returns a description; it never writes,
-// never fixes, and never throws (a package without a smoke tree answers
-// `undefined` - the documented silence).
+/**
+ * @module Reconcile
+ *
+ * THE RECONCILIATION (the completion spec's wave 2c re-spec for this package,
+ * Documentation/Plans/Completion-Spec/03-SUGGESTERS.md): on a judged call in a
+ * package, compare the package's SMOKE CLAIMS with the tree it actually has.
+ *
+ * @remarks
+ * THE THREE EVIDENCE SETS:
+ *
+ *   - the CLAIMS   - each `Source/Test/<Folder>/README.md`'s
+ *                    `## Expected count` (Function/Counts, the aggregate
+ *                    runner's own parse);
+ *   - the TREE     - the folders that actually exist, each folder's `Test.ts`,
+ *                    and the aggregate runner's roster (Function/Roster: the
+ *                    built `Target/Test/<Folder>/Test.js` folders);
+ *   - the INDEX    - when the workspace graph is present, its `Test` nodes for
+ *                    the package (Function/Nodes; an unpopulated graph simply
+ *                    contributes nothing).
+ *
+ * THE DRIFTS (each names ONE file and the two counts; the note text is
+ * Function/Reconciled):
+ *
+ *   1. `no "## Expected count"`            - a folder with no claim;
+ *   2. `the README count has no Test.ts`   - a claim whose suite is gone;
+ *   3. `not in the aggregate runner's roster` - a suite the runner never runs;
+ *   4. `the graph's Test node has no file` - an index claim the tree dropped.
+ *
+ * READ-ONLY BY CONSTRUCTION: this module reads with node:fs (never ctx.fs -
+ * the hook's purity contract) and returns a description; it never writes,
+ * never fixes, and never throws (a package without a smoke tree answers
+ * `undefined` - the documented silence).
+ */
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { basename, isAbsolute, join, relative, sep } from "node:path";
 
@@ -44,7 +50,9 @@ const Display = (Root: string, Path: string): string => {
 	return (Shown.length === 0 ? basename(Path) : Shown).split(sep).join("/");
 };
 
-/** The declared count of one folder's README, or undefined (no claim). */
+/**
+ * The declared count of one folder's README, or undefined (no claim).
+ */
 const Declared = (Readme: string): number | undefined => {
 	try {
 		return Counts(readFileSync(Readme, "utf8"));
@@ -54,13 +62,19 @@ const Declared = (Readme: string): number | undefined => {
 };
 
 export default (
-	/** The package root (already resolved by Function/Package). */
+	/**
+	 * The package root (already resolved by Function/Package).
+	 */
 	PackageRoot: string,
 
-	/** The resolved workspace root (the display base). */
+	/**
+	 * The resolved workspace root (the display base).
+	 */
 	Root: string,
 
-	/** The graph's Test node paths for the package (empty when absent). */
+	/**
+	 * The graph's Test node paths for the package (empty when absent).
+	 */
 	Nodes: string[],
 ): Reconciliation | undefined => {
 	const TestRoot = join(PackageRoot, "Source", "Test");

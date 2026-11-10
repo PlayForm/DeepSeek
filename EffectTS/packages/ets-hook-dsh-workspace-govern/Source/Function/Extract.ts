@@ -1,14 +1,23 @@
-// Extract - the proposal extraction (Function/Extract): from one tool
-// execution to the proposal record the gate evaluates. When the operate
-// family attached its record (arguments.proposal) the record is used as-is
-// (validated field by field, never guessed); otherwise a MINIMAL proposal is
-// synthesized from the call itself - kind = tool name, target = the first of
-// the path-ish argument keys, holder = the agent identity, operation /
-// parent / category from the call's identifiers (the recursion-prevention
-// fields are NEVER left empty), declared = false (the lenient reading: the
-// contributes obligation evaluates "n/a").
+/**
+ * @module Extract
+ *
+ * The proposal extraction: from one tool execution to the proposal record
+ * the gate evaluates.
+ *
+ * @remarks
+ * When the operate family attached its record (arguments.proposal) the
+ * record is used as-is (validated field by field, never guessed); otherwise
+ * a MINIMAL proposal is synthesized from the call itself - kind = tool
+ * name, target = the first of the path-ish argument keys, holder = the
+ * agent identity, operation / parent / category from the call's identifiers
+ * (the recursion-prevention fields are NEVER left empty), declared = false
+ * (the lenient reading: the contributes obligation evaluates "n/a").
+ */
 import type Proposal from "@Interface/Proposal.js";
 
+/**
+ * The argument keys tried in order for a path-ish target.
+ */
 const TARGET_KEYS = ["path", "target", "file", "filePath", "notePath"];
 
 export default (Exec: {

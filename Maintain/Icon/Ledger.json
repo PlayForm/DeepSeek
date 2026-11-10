@@ -618,15 +618,15 @@
 			"version": "0.2.1",
 			"seed": "0c84ac0fe7a6e8b422055ce673b564b804ab9eec270fb3302afb171a77f2f2ea",
 			"grammar": "spike-star",
-			"order": 12,
+			"order": 8,
 			"arms": 8,
 			"rings": 1,
 			"orbit": 8,
 			"rim": "diamond",
 			"mode": "traced",
 			"hash": {
-				"mono": "6525f145b58c799051efe927bfc9d06c187b045592b8243e016c7ac12e96db39",
-				"colour": "5f63e5a45128d71c359fcfa2ed4d3f8f224042751754ef135c8c152d7e1d0f6d"
+				"mono": "acf5977aff868d42c6e2052d637e15268e42087c4d5fc77135ef5b8f0a583f82",
+				"colour": "7a1ede631d24d493db279d63422d37fa1d6143710259e8daf7fd833f5f1bad9b"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-replay-suggester.svg",

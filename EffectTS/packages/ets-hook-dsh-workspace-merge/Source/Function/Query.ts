@@ -1,13 +1,26 @@
-// Query - the read side of the merge hook (Function/Query): one batch
-// record, all batch records (newest last), and the honest statistics.
+/**
+ * @module Query
+ *
+ * The read side of the merge hook: one batch record, all batch records
+ * (newest last), and the honest statistics.
+ */
 import type Record from "@Interface/Record.js";
 import type State from "@Interface/State.js";
 import type Statistics from "@Interface/Statistics.js";
 
+/**
+ * One batch record by ID, or undefined.
+ */
 export const One = (State: State, Id: string): Record | undefined => State.Batches.get(Id);
 
+/**
+ * All batch records (newest last).
+ */
 export const All = (State: State): Record[] => [...State.Batches.values()];
 
+/**
+ * The honest statistics over every persisted reply.
+ */
 export const Statistics = (State: State): Statistics => {
 	const Counts = { applied: 0, conflicts: 0, rejected: 0, recovery: 0 };
 	for (const Entry of State.Batches.values()) {

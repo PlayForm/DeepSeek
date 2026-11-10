@@ -6,8 +6,8 @@
  * @remarks
  * Pure reads over the in-memory structures.
  */
-import type Line from "@Interface/Line.js";
-import type State from "@Interface/State.js";
+import type Line from "../Interface/Line.js";
+import type State from "../Interface/State.js";
 /**
  * One operation's audit chain, in recording order.
  */

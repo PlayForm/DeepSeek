@@ -16,8 +16,8 @@
  * - statistics() - { operations, lines, sequence }.
  */
 import { Service, type Context } from "@deepseek-ai/cordis";
-import type Line from "@Interface/Line.js";
-import type State from "@Interface/State.js";
+import type Line from "../Interface/Line.js";
+import type State from "../Interface/State.js";
 export default class WorkspaceAudit extends Service {
     /**
      * The apply-built state the methods read and write.
