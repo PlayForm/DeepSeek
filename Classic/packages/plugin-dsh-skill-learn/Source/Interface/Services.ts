@@ -271,7 +271,7 @@ export interface SkillsSlice {
  * written to fit it. `StreamRequest` below is the narrower view the plugin
  * itself sends, so nothing in this package ever builds an opaque array.
  */
-export interface LlmRequest {
+export interface LLMRequest {
 	readonly provider: string;
 	readonly model: string;
 	readonly system?: string;
@@ -286,7 +286,7 @@ export interface LlmRequest {
  * `Message` so `Function/Plan` and `Function/Confirm` are checked against the
  * blocks they actually build.
  */
-export interface StreamRequest extends LlmRequest {
+export interface StreamRequest extends LLMRequest {
 	/**
 	 * The one-shot system prompt; the loop's own requests leave it unset.
 	 */
@@ -307,7 +307,7 @@ export interface StreamFrame {
 	readonly text?: string;
 }
 
-export interface LlmSlice {
+export interface LLMSlice {
 	/**
 	 * The one-shot streaming call (`dsh-llm/lib/types/index.d.ts:433`). The
 	 * parameter is the runtime's OWN request rather than the review's narrower
@@ -315,7 +315,7 @@ export interface LlmSlice {
 	 * against a shape nobody offers; a review passes a `StreamRequest`, which is
 	 * that same shape with the six fields it sets.
 	 */
-	stream(request: LlmRequest): AsyncIterable<StreamFrame>;
+	stream(request: LLMRequest): AsyncIterable<StreamFrame>;
 }
 
 export interface WorkingDirectorySlice {
@@ -365,7 +365,7 @@ export default interface Services {
 	/**
 	 * Probed: absent is the `no-llm` outcome, never a throw.
 	 */
-	readonly llm?: LlmSlice;
+	readonly llm?: LLMSlice;
 
 	/**
 	 * Probed: absent falls back to the configured corpus root.

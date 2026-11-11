@@ -345,10 +345,10 @@ export default class LessonService extends Service {
 			default:
 				break;
 		}
-		const Llm = this.Context.get?.("llm") as
+		const LLM = this.Context.get?.("llm") as
 			{ stream?: (Options: unknown) => AsyncIterable<unknown> } | undefined;
 		switch (true) {
-			case Llm === undefined || typeof Llm.stream !== "function":
+			case LLM === undefined || typeof LLM.stream !== "function":
 				return this.Settle(Input, Result, "unavailable", "no llm service", Started);
 			default:
 				break;

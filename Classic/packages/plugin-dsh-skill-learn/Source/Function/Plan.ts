@@ -1,5 +1,5 @@
 import type { Route } from "@Function/Route.js";
-import type { LlmSlice } from "@Interface/Services.js";
+import type { LLMSlice } from "@Interface/Services.js";
 
 /**
  * @module Plan
@@ -73,14 +73,14 @@ const Index = (Lines: ReadonlyArray<string>): string =>
 		? "Skill index: (the catalog is empty)"
 		: ["Skill index:", ...Lines].join("\n");
 
-export default async (Llm: LlmSlice, Options: PlanOptions): Promise<string> => {
+export default async (LLM: LLMSlice, Options: PlanOptions): Promise<string> => {
 	// The digest, then the index, then the phase marker, as one user message
 	// (plan section 4.1). An empty part is dropped rather than sent as a blank line.
 	const User = [Options.digest, Index(Options.index), Marker]
 		.filter((Part) => Part !== "")
 		.join("\n\n");
 	let Reply = "";
-	const Stream = Llm.stream({
+	const Stream = LLM.stream({
 		provider: Options.route.provider,
 		model: Options.route.model,
 		system: Options.system,
