@@ -117,7 +117,7 @@ export const runTest = async (): Promise<number> => {
 			assert.deepEqual(Run.State.Allowlist, ["version-bump"]);
 			assert.equal(Run.State.MaxAutoTargets, 5);
 			assert.equal(Run.State.MinConfidence, 0.8);
-			assert.equal(Run.State.PendingTtlMs, 3_600_000);
+			assert.equal(Run.State.PendingTTLMs, 3_600_000);
 			assert.equal(Run.State.Ledger, Ledger);
 			assert.equal(Run.State.Module, "hook-dsh-batch-decision");
 		});

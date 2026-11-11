@@ -37,10 +37,10 @@ inside a maintenance task of a caller.
 ## Fixtures
 
 The fixtures are the shared Harness with the real built class, the fake ctx, and the temp HOME, plus
-its `FakeLlm`, which answers with the reply split across two `text-delta` frames and records the
+its `FakeLLM`, which answers with the reply split across two `text-delta` frames and records the
 request.
 
-`FakeLlm(..., { fail: true })` throws synchronously out of `stream`, which is the provider-exploded
+`FakeLLM(..., { fail: true })` throws synchronously out of `stream`, which is the provider-exploded
 path.
 
 `Apply` is imported directly for the fence checks, with a literal `{ skillsRoot, archiveRoot }`,

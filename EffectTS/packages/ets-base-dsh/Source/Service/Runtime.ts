@@ -176,7 +176,7 @@ let Loading: Promise<OtelBundle | null> | undefined;
 const loadOtel = (): Promise<OtelBundle | null> =>
 	(Loading ??= (async (): Promise<OtelBundle | null> => {
 		try {
-			const [Otel, Exporter, Sdk] = await Promise.all([
+			const [Otel, Exporter, SDK] = await Promise.all([
 				import("@effect/opentelemetry/NodeSdk"),
 				import("@opentelemetry/exporter-trace-otlp-http"),
 				import("@opentelemetry/sdk-trace-base"),
@@ -184,7 +184,7 @@ const loadOtel = (): Promise<OtelBundle | null> =>
 			return {
 				NodeSdk: Otel,
 				OTLPTraceExporter: Exporter.OTLPTraceExporter,
-				BatchSpanProcessor: Sdk.BatchSpanProcessor,
+				BatchSpanProcessor: SDK.BatchSpanProcessor,
 			};
 		} catch {
 			return null;

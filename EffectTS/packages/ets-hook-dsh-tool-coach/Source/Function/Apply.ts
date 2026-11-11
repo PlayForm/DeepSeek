@@ -212,7 +212,7 @@ export default (Context: Context, Options: Config): void => {
 			Notes: "notes",
 			FetchLive: "fetchLive",
 			MaximumSectionTools: "maxSectionTools",
-			SectionTtl: "sectionTtl",
+			SectionTTL: "sectionTtl",
 		},
 	});
 	State.Factory = Factory;
@@ -533,7 +533,7 @@ export default (Context: Context, Options: Config): void => {
 				// tools/change listener clears it for the other rebuild path).
 				const Stale =
 					!AgentState.sectionCache ||
-					AgentState.calls - AgentState.sectionCache.built >= State.SectionTtl;
+					AgentState.calls - AgentState.sectionCache.built >= State.SectionTTL;
 				if (Stale) {
 					const Rebuilt = AgentState.sectionCache !== undefined;
 					const Live = Catalog();
@@ -549,7 +549,7 @@ export default (Context: Context, Options: Config): void => {
 						),
 					};
 					if (Rebuilt) {
-						Factory.Append(State, `section rebuilt (ttl ${State.SectionTtl})`);
+						Factory.Append(State, `section rebuilt (ttl ${State.SectionTTL})`);
 					}
 				}
 				const Text = AgentState.sectionCache?.text ?? "";

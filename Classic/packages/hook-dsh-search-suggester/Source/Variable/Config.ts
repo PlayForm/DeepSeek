@@ -56,10 +56,10 @@ const DefaultLearnWindow = 2;
 const DefaultPersistPath = "~/.dsh/search-suggester/knowledge.json";
 const DefaultIndexPath = "~/.dsh/search-suggester/index.json";
 const DefaultRefreshOnBoot = true;
-const DefaultDismissTtl = 86400;
+const DefaultDismissTTL = 86400;
 const DefaultSeed = true;
 const DefaultSectionMode = "off";
-const DefaultSectionTtl = 20;
+const DefaultSectionTTL = 20;
 
 export default Compose(false, {
 	// Ledger file - the search suggester's ledger, SEPARATE from the family's logs (one log
@@ -106,7 +106,7 @@ export default Compose(false, {
 	// The dismissal TTL in seconds (volatile): the `suggestion_dismiss` tool records
 	// `until = now + dismissTtl`; at or after it the dismissal is forgotten and the
 	// suggestion may return.
-	dismissTtl: Schema.number().default(DefaultDismissTtl).volatile(),
+	dismissTtl: Schema.number().default(DefaultDismissTTL).volatile(),
 	// The offline seed switch (volatile): at load the knowledge is seeded from an EXPLICIT
 	// pack's canonical candidates plus the graph projection (Function/Seed); a repo without
 	// an explicit pack seeds nothing, and false keeps the deterministic cold start.
@@ -114,5 +114,5 @@ export default Compose(false, {
 	// The second surface (volatile): "off" (the default) or "sticky".
 	sectionMode: Schema.string().default(DefaultSectionMode).volatile(),
 	// The sticky section's TTL in judged calls (volatile).
-	sectionTtl: Schema.number().default(DefaultSectionTtl).volatile(),
+	sectionTtl: Schema.number().default(DefaultSectionTTL).volatile(),
 });

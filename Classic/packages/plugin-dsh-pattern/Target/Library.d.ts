@@ -87,7 +87,7 @@ export default class PatternService extends Service {
      * The JSON fallback's load (Function/Snapshot): a stale or unreadable
      * file is a silent miss - the catalog stays.
      */
-    private RestoreJson;
+    private RestoreJSON;
     /**
      * Persist the mutated patterns on the primary store (best-effort, on the
      * chain, so the open always lands first). The JSON fallback is written

@@ -26,10 +26,10 @@ const Resolve = (Specifier, Context, Next) => {
       return Next(Specifier, Context);
   }
 };
-const Load = (Url, Context, Next) => {
+const Load = (Address, Context, Next) => {
   switch (true) {
-    case (Url.endsWith("/Source/Variable/Locale-en.json") || Url.endsWith("/Source/Variable/Locale-zh.json")): {
-      const Text = FileSystem.readFileSync(new URL(Url).pathname, "utf8");
+    case (Address.endsWith("/Source/Variable/Locale-en.json") || Address.endsWith("/Source/Variable/Locale-zh.json")): {
+      const Text = FileSystem.readFileSync(new URL(Address).pathname, "utf8");
       return {
         format: "module",
         shortCircuit: true,
@@ -37,7 +37,7 @@ const Load = (Url, Context, Next) => {
       };
     }
     default:
-      return Next(Url, Context);
+      return Next(Address, Context);
   }
 };
 Module.registerHooks({ resolve: Resolve, load: Load });

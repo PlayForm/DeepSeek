@@ -291,7 +291,7 @@ export default class SkillLearnService extends Service {
     /**
      * The model service, or undefined when it is absent, which is the `no-llm` class.
      */
-    private Llm;
+    private LLM;
     /**
      * Where the catalog is listed from: the agent's working directory, else the corpus root.
      */

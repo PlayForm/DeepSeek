@@ -35,7 +35,7 @@ import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
  *   volatile).
  * - `PreviewMaximum` - the hard preview character cap (config
  *   `previewMaxChars`, volatile).
- * - `Ttl` - store TTL in seconds (config `ttlSeconds`).
+ * - `TTL` - store TTL in seconds (config `ttlSeconds`).
  * - `Budget` - the LRU budget in bytes (config `storeBudgetBytes`).
  * - `JournalPath` - the optional JSONL journal path (config `journalPath`;
  *   "" = memory-only).
@@ -104,7 +104,7 @@ export default interface State extends Shared {
 	/**
 	 * Store TTL in seconds (config `ttlSeconds`).
 	 */
-	Ttl: number;
+	TTL: number;
 
 	/**
 	 * The LRU budget in bytes (config `storeBudgetBytes`).

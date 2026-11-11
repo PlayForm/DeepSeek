@@ -32,9 +32,9 @@ import type { Intent, Knowledge } from "./Execution.js";
  *   Learn / LearnWindow - the learner's switch and window (volatile);
  *   PersistPath / IndexPath / RefreshOnBoot - the memory paths (structural;
  *                 IndexPath is retired by the P2 re-spec);
- *   DismissTtl / Seed - the dismissal TTL and the offline seed switch
+ *   DismissTTL / Seed - the dismissal TTL and the offline seed switch
  *                 (volatile; the seed's source is the EXPLICIT pack);
- *   SectionMode / SectionTtl - the second surface (volatile);
+ *   SectionMode / SectionTTL - the second surface (volatile);
  *   Pack        - EMPTY at apply: the candidates come from the session history,
  *                 and only an EXPLICIT repo/user pack is compiled (per call, in
  *                 Function/Apply). The literal built-in pack is NEVER a
@@ -124,7 +124,7 @@ export default interface State extends Shared {
     /**
      * The dismissal TTL in seconds (config `dismissTtl`, volatile).
      */
-    DismissTtl: number;
+    DismissTTL: number;
     /**
      * The offline seed switch (config `seed`, volatile; the source is the
      * explicit pack).
@@ -137,7 +137,7 @@ export default interface State extends Shared {
     /**
      * The sticky section TTL (config `sectionTtl`, volatile).
      */
-    SectionTtl: number;
+    SectionTTL: number;
     /**
      * The explicit pack's families; EMPTY at apply (the built-in pack is
      * retired).

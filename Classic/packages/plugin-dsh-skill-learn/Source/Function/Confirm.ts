@@ -1,5 +1,5 @@
 import type { Route } from "@Function/Route.js";
-import type { LlmSlice } from "@Interface/Services.js";
+import type { LLMSlice } from "@Interface/Services.js";
 
 /**
  * @module Confirm
@@ -104,7 +104,7 @@ const Render = (View: View): string => {
 	return [`File: ${View.name}`, Delimiter, View.body, Delimiter].join("\n");
 };
 
-export default async (Llm: LlmSlice, Options: ConfirmOptions): Promise<string> => {
+export default async (LLM: LLMSlice, Options: ConfirmOptions): Promise<string> => {
 	const User = [
 		Options.digest,
 		Index(Options.index),
@@ -114,7 +114,7 @@ export default async (Llm: LlmSlice, Options: ConfirmOptions): Promise<string> =
 		.filter((Part) => Part !== "")
 		.join("\n\n");
 	let Reply = "";
-	const Stream = Llm.stream({
+	const Stream = LLM.stream({
 		provider: Options.route.provider,
 		model: Options.route.model,
 		system: Options.system,

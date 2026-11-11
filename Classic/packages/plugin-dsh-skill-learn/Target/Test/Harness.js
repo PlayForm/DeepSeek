@@ -243,7 +243,7 @@ const FakeSkills = (Options = {}) => {
   }
   return Skills_;
 };
-const FakeLlm = (Reply, Options = {}) => {
+const FakeLLM = (Reply, Options = {}) => {
   const Calls = [];
   const Split = (Text_) => [
     { type: "text-delta", text: Text_.slice(0, 12) },
@@ -366,7 +366,7 @@ const Seed = (Fs_, Name, Body) => {
 const Make = (Options = {}) => {
   const Fs_ = FakeFs(Options.fs ?? {});
   const Skills_ = FakeSkills(Options.skills ?? {});
-  const Llm_ = FakeLlm(Options.reply ?? "", Options.llm ?? {});
+  const LLM_ = FakeLLM(Options.reply ?? "", Options.llm ?? {});
   const Logger_ = FakeLogger();
   const Working = {
     ensure: async (_Agent) => Path.join(Home, "work")
@@ -378,7 +378,7 @@ const Make = (Options = {}) => {
       case Name === "skills":
         return Skills_;
       case Name === "llm":
-        return Llm_;
+        return LLM_;
       case Name === "logger":
         return Logger_;
       case Name === "workingDirectory":
@@ -387,7 +387,7 @@ const Make = (Options = {}) => {
         return void 0;
     }
   };
-  return { fs: Fs_, skills: Skills_, llm: Llm_, logger: Logger_, workingDirectory: Working, get };
+  return { fs: Fs_, skills: Skills_, llm: LLM_, logger: Logger_, workingDirectory: Working, get };
 };
 export {
   Call,
@@ -397,7 +397,7 @@ export {
   Exists,
   FakeAgent,
   FakeFs,
-  FakeLlm,
+  FakeLLM,
   FakeLogger,
   FakeSkills,
   Finish,

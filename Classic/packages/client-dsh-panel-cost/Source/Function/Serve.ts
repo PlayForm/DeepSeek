@@ -831,14 +831,14 @@ export default function Serve(ctx: Context): void {
 			Server.register({
 				path: Path,
 				handler: (req, res) => {
-					const Url = new URL(req.url ?? "/", "http://localhost");
-					const SessionId = Url.searchParams.get("session") ?? "";
-					const File = Url.searchParams.get("file") ?? "";
-					const Conversation = Url.searchParams.get("conversation") ?? "";
-					const History = Url.searchParams.get("history") ?? "";
-					const Rows = Applied(Url.searchParams.get("rows"));
-					const Basis = Url.searchParams.get("basis");
-					const RevisionRaw = Url.searchParams.get("revision");
+					const Address = new URL(req.url ?? "/", "http://localhost");
+					const SessionId = Address.searchParams.get("session") ?? "";
+					const File = Address.searchParams.get("file") ?? "";
+					const Conversation = Address.searchParams.get("conversation") ?? "";
+					const History = Address.searchParams.get("history") ?? "";
+					const Rows = Applied(Address.searchParams.get("rows"));
+					const Basis = Address.searchParams.get("basis");
+					const RevisionRaw = Address.searchParams.get("revision");
 					const Revision = RevisionOf(RevisionRaw);
 					const Engine = ctx.get("cost");
 					switch (true) {
@@ -907,8 +907,8 @@ export default function Serve(ctx: Context): void {
 			Server.register({
 				path: RatePath,
 				handler: (req, res) => {
-					const Url = new URL(req.url ?? "/", "http://localhost");
-					const Revision = RevisionOf(Url.searchParams.get("revision"));
+					const Address = new URL(req.url ?? "/", "http://localhost");
+					const Revision = RevisionOf(Address.searchParams.get("revision"));
 					switch (true) {
 						case Revision === null:
 							Answer(

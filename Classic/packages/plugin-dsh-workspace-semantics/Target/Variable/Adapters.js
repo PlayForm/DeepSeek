@@ -1,1 +1,1 @@
-import r from"../Function/Json.js";import o from"../Function/Markdown.js";import a from"../Function/Package.js";import t from"../Function/Yaml.js";var i={json:r,yaml:t,markdown:o,package:a};export{i as default};
+import r from"../Function/JSON.js";import o from"../Function/Markdown.js";import a from"../Function/Package.js";import t from"../Function/Yaml.js";var i={json:r,yaml:t,markdown:o,package:a};export{i as default};

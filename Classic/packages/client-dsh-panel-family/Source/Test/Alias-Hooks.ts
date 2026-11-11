@@ -92,11 +92,11 @@ const Resolve = (Specifier: string, Context: any, Next: any): any => {
  * Serve the dictionaries as modules: `export default <parsed JSON>` - the
  * bytes on disk are untouched; only the module wrapping changes.
  */
-const Load = (Url: string, Context: any, Next: any): any => {
+const Load = (Address: string, Context: any, Next: any): any => {
 	switch (true) {
-		case Url.endsWith("/Source/Variable/Locale-en.json") ||
-			Url.endsWith("/Source/Variable/Locale-zh.json"): {
-			const Text = FileSystem.readFileSync(new URL(Url).pathname, "utf8");
+		case Address.endsWith("/Source/Variable/Locale-en.json") ||
+			Address.endsWith("/Source/Variable/Locale-zh.json"): {
+			const Text = FileSystem.readFileSync(new URL(Address).pathname, "utf8");
 			return {
 				format: "module",
 				shortCircuit: true,
@@ -104,7 +104,7 @@ const Load = (Url: string, Context: any, Next: any): any => {
 			};
 		}
 		default:
-			return Next(Url, Context);
+			return Next(Address, Context);
 	}
 };
 

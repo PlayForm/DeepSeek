@@ -79,8 +79,8 @@ export default class WorkspaceAuthority extends Service {
 	/**
 	 * Acquire a lease (for how long).
 	 */
-	acquire(Holder: string, Resource: string, Kind?: string, TtlMs?: number): Lease | undefined {
-		return Acquire(this.State, Holder, Resource, Kind ?? "unknown", TtlMs);
+	acquire(Holder: string, Resource: string, Kind?: string, TTLMs?: number): Lease | undefined {
+		return Acquire(this.State, Holder, Resource, Kind ?? "unknown", TTLMs);
 	}
 
 	/**

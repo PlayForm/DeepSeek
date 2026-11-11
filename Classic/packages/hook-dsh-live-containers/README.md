@@ -181,7 +181,7 @@ Skip lines log only when the reason changes - the ledger stays quiet on steady s
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-live-containers run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-live-containers/Target/Test/<Folder>/Test.js`
     - Wiring-And-Defaults - 42 checks
-    - Recompute-And-Ttl - 17 checks
+    - Recompute-And-TTL - 17 checks
     - Render-And-Frames - 23 checks
     - Volatile-And-Failsafes - 23 checks
     - Jobs-And-Detach - 27 checks

@@ -346,7 +346,7 @@ export default class LessonService extends Service {
 		const Instruction = this.Prompt(Input.Focus);
 		let Reply = "";
 		try {
-			const Stream = Llm.stream({
+			const Stream = LLM.stream({
 				provider: Route.provider,
 				model: Route.model,
 				messages: [

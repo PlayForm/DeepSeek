@@ -95,7 +95,7 @@ export default (State: State, Name: string, IsError: boolean, Content: ContentBl
 		size: Size,
 		content: JSON.parse(Serialized) as ContentBlock[],
 		createdAt: Date.now(),
-		ttlAt: Date.now() + State.Ttl * 1000,
+		ttlAt: Date.now() + State.TTL * 1000,
 		lastAccessed: Date.now(),
 	});
 

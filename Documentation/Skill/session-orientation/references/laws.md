@@ -65,8 +65,8 @@ Owner: `plugin-system`. Short form: the strings are the contract.
 
 ## 6. The naming law
 
-An acronym is written in capitals in every position, including inside a PascalCase name, so `Llm`
-is `LLM`, `LlmProvider` is `LLMProvider`, and `Amd` is `AMD`.
+An acronym is written in capitals in every position, including inside a PascalCase name, so `Llm` is
+`LLM`, `LlmProvider` is `LLMProvider`, and `Amd` is `AMD`.
 
 A product or project name keeps the official spelling that its vendor chose: `GitHub`, `vLLM`,
 `ROCm`, `macOS`, `Node.js`, `JavaScript`, `TypeScript`, `PostHog`, `pnpm`, and `npm`.

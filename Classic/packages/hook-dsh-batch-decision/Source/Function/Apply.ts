@@ -104,7 +104,7 @@ export default (Context: Context, Options: Config): void => {
 			Allowlist: "allowlist",
 			MaxAutoTargets: "maxAutoTargets",
 			MinConfidence: "minConfidence",
-			PendingTtlMs: "pendingTtlMs",
+			PendingTTLMs: "pendingTtlMs",
 			Allow: "policy",
 		},
 	});

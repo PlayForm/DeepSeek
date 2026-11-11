@@ -348,7 +348,7 @@ The fourteen folders and their PASS counts (203 checks total, per tree):
 | `Wiring-And-Defaults`    | 42   | the four listeners, the defaults, the IDLE-forever posture, fail-loud validation                                       |
 | `Render-And-Frames`      | 23   | the substitution engine, the fixed frame, unknown tokens, per-kind views                                               |
 | `Volatile-And-Failsafes` | 23   | the volatile flips without remount, the budget collapse, the fail-open paths                                           |
-| `Recompute-And-Ttl`      | 17   | the trigger matrix, the TTL caches, the `tools/change` invalidation                                                    |
+| `Recompute-And-TTL`      | 17   | the trigger matrix, the TTL caches, the `tools/change` invalidation                                                    |
 | `Jobs-And-Detach`        | 27   | the wave-2 J-series: the transform, the re-dispatch spec, the dedup, the await marker                                  |
 | `Boards-And-Plants`      | 17   | the wave-2 B-series: the boards, the lease, the reports                                                                |
 | `Failsafes-Engine`       | 10   | the wave-2 F-series: the hang, the meta-budget, the off posture                                                        |
@@ -531,7 +531,7 @@ The config flag is the consent surface, and this paragraph is the disclosure.
 
 | Series            | Folder                                                                               | Checks            |
 | ----------------- | ------------------------------------------------------------------------------------ | ----------------- |
-| R/D (phase 1)     | Wiring-And-Defaults / Render-And-Frames / Volatile-And-Failsafes / Recompute-And-Ttl | 42 / 23 / 23 / 17 |
+| R/D (phase 1)     | Wiring-And-Defaults / Render-And-Frames / Volatile-And-Failsafes / Recompute-And-TTL | 42 / 23 / 23 / 17 |
 | J (jobs/detach)   | Jobs-And-Detach                                                                      | 27                |
 | B (boards)        | Boards-And-Plants                                                                    | 17                |
 | F (failsafes)     | Failsafes-Engine                                                                     | 10                |

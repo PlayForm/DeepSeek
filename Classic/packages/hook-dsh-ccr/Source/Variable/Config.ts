@@ -72,11 +72,11 @@ const DefaultMultiplierError = 8;
 const DefaultMultiplierGrep = 2;
 const DefaultMultiplierPaths = 2;
 const DefaultMultiplierFile = 1;
-const DefaultMultiplierJson = 1;
+const DefaultMultiplierJSON = 1;
 const DefaultMultiplierWeb = 2;
 const DefaultMultiplierFallback = 1;
 const DefaultPreviewMaxChars = 240;
-const DefaultTtlSeconds = 3600;
+const DefaultTTLSeconds = 3600;
 const DefaultStoreBudgetBytes = 268435456;
 const DefaultJournalPath = "";
 const DefaultContextEngine = false;
@@ -118,14 +118,14 @@ export default Compose(false, {
 		grep: Schema.number().default(DefaultMultiplierGrep),
 		paths: Schema.number().default(DefaultMultiplierPaths),
 		file: Schema.number().default(DefaultMultiplierFile),
-		json: Schema.number().default(DefaultMultiplierJson),
+		json: Schema.number().default(DefaultMultiplierJSON),
 		web: Schema.number().default(DefaultMultiplierWeb),
 		default: Schema.number().default(DefaultMultiplierFallback),
 	}).volatile(),
 	// Hard character cap on every preview line (volatile: hot-editable).
 	previewMaxChars: Schema.number().default(DefaultPreviewMaxChars).volatile(),
 	// Store TTL in seconds (Aphrodite's ccr_ttl_seconds).
-	ttlSeconds: Schema.number().default(DefaultTtlSeconds),
+	ttlSeconds: Schema.number().default(DefaultTTLSeconds),
 	// The LRU budget in bytes (Aphrodite's inline store, 256 MiB).
 	storeBudgetBytes: Schema.number().default(DefaultStoreBudgetBytes),
 	// Optional JSONL disk journal; empty (the default) = memory-only

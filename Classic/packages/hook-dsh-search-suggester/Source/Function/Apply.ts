@@ -317,10 +317,10 @@ export default (Context: Context, Options: Config): void => {
 			PersistPath: "persistPath",
 			IndexPath: "indexPath",
 			RefreshOnBoot: "refreshOnBoot",
-			DismissTtl: "dismissTtl",
+			DismissTTL: "dismissTtl",
 			Seed: "seed",
 			SectionMode: "sectionMode",
-			SectionTtl: "sectionTtl",
+			SectionTTL: "sectionTtl",
 		},
 	});
 	State.Factory = Factory;
@@ -666,7 +666,7 @@ export default (Context: Context, Options: Config): void => {
 				}
 				const Stale =
 					Rings.sectionBuilt === undefined ||
-					Rings.calls - Rings.sectionBuilt >= State.SectionTtl;
+					Rings.calls - Rings.sectionBuilt >= State.SectionTTL;
 				if (Stale) {
 					// The P2 re-spec: the section renders the PROJECTED INDEX
 					// (the top graph paths for the family) when the graph
@@ -688,7 +688,7 @@ export default (Context: Context, Options: Config): void => {
 						State.MaxNoteChars,
 					);
 					Rings.sectionBuilt = Rings.calls;
-					FactoryAppend(Context, State, `section rebuilt (ttl ${State.SectionTtl})`);
+					FactoryAppend(Context, State, `section rebuilt (ttl ${State.SectionTTL})`);
 				}
 				return {
 					...Downstream,

@@ -1,4 +1,4 @@
-# Recompute-And-Ttl
+# Recompute-And-TTL
 
 What this test verifies.
 

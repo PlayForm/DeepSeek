@@ -164,7 +164,7 @@ export default class PatternService extends Service {
 				break;
 			default:
 				// The FALLBACK: no facility - the JSON snapshot is the store.
-				this.Pending = this.Pending.then(() => this.RestoreJson());
+				this.Pending = this.Pending.then(() => this.RestoreJSON());
 		}
 	}
 
@@ -299,7 +299,7 @@ export default class PatternService extends Service {
 				this.Handle = Handle;
 			} catch (Cause) {
 				this.Ledger(`storage open failed: ${(Cause as Error)?.message ?? String(Cause)}`);
-				await this.RestoreJson();
+				await this.RestoreJSON();
 			}
 		});
 	}
@@ -308,7 +308,7 @@ export default class PatternService extends Service {
 	 * The JSON fallback's load (Function/Snapshot): a stale or unreadable
 	 * file is a silent miss - the catalog stays.
 	 */
-	private async RestoreJson(): Promise<void> {
+	private async RestoreJSON(): Promise<void> {
 		const Snapshot_ = await Load(this.Knobs.storagePath);
 		switch (true) {
 			case Snapshot_ !== null && Snapshot_.patterns.length > 0:

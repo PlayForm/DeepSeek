@@ -91,7 +91,7 @@ export default (Context: Context, Options: Config): void => {
 		module: "authority",
 		fields: {
 			On: "enabled",
-			DefaultTtlMs: "defaultTtlMs",
+			DefaultTTLMs: "defaultTtlMs",
 			MaxLeases: "maxLeasesPerHolder",
 			MaxCapabilities: "maxCapabilitiesPerHolder",
 			RevocationGraceMs: "revocationGraceMs",
@@ -119,7 +119,7 @@ export default (Context: Context, Options: Config): void => {
 			Factory.Append(
 				State,
 				Activate([
-					["ttl", String(State.DefaultTtlMs)],
+					["ttl", String(State.DefaultTTLMs)],
 					["policy", String(State.PolicyRules.length)],
 				]),
 			);

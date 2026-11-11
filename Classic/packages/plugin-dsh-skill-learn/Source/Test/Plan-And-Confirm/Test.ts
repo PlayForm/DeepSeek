@@ -16,7 +16,7 @@ import {
 	CheckAsync,
 	CorpusView,
 	FakeAgent,
-	FakeLlm,
+	FakeLLM,
 	FakeSkills,
 	Finish,
 	Knobs,
@@ -85,8 +85,8 @@ export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
 	await CheckAsync(Count, "C1: the phase-1 request is one user message: digest, index, marker", async () => {
-		const Llm = FakeLlm('{"views":[],"operations":[]}');
-		await Plan(Llm, {
+		const LLM = FakeLLM('{"views":[],"operations":[]}');
+		await Plan(LLM, {
 			route: Route_,
 			system: Prompt(1),
 			digest: "DIGEST",
@@ -94,17 +94,17 @@ export const runTest = async (): Promise<number> => {
 			maxTokens: 4000,
 			signal: new AbortController().signal,
 		});
-		assert.equal(Llm.Calls.length, 1, "exactly one call");
+		assert.equal(LLM.Calls.length, 1, "exactly one call");
 		assert.deepEqual(
-			Sent(Llm.Calls[0]).split("\n"),
+			Sent(LLM.Calls[0]).split("\n"),
 			["DIGEST", "", "Skill index:", "- a: one", "- b: two", "", First],
 			"the digest, then the index, then the phase marker",
 		);
 	});
 
 	await CheckAsync(Count, "C2: the phase-1 request carries the index and no body", async () => {
-		const Llm = FakeLlm('{"views":[],"operations":[]}');
-		await Plan(Llm, {
+		const LLM = FakeLLM('{"views":[],"operations":[]}');
+		await Plan(LLM, {
 			route: Route_,
 			system: Prompt(1),
 			digest: "DIGEST",
@@ -112,10 +112,10 @@ export const runTest = async (): Promise<number> => {
 			maxTokens: 4000,
 			signal: new AbortController().signal,
 		});
-		const Text_ = Sent(Llm.Calls[0]);
+		const Text_ = Sent(LLM.Calls[0]);
 		assert.equal(Text_.includes("File: "), false, "a body can only arrive in phase 2");
 		assert.equal(Text_.includes("```"), false, "no fenced body in the plan request");
-		const Empty = FakeLlm('{"views":[],"operations":[]}');
+		const Empty = FakeLLM('{"views":[],"operations":[]}');
 		await Plan(Empty, {
 			route: Route_,
 			system: Prompt(1),
@@ -150,8 +150,8 @@ export const runTest = async (): Promise<number> => {
 	});
 
 	await CheckAsync(Count, "C4: the request carries exactly the six documented fields", async () => {
-		const Llm = FakeLlm('{"views":[],"operations":[]}');
-		await Plan(Llm, {
+		const LLM = FakeLLM('{"views":[],"operations":[]}');
+		await Plan(LLM, {
 			route: Route_,
 			system: Prompt(1),
 			digest: "DIGEST",
@@ -159,7 +159,7 @@ export const runTest = async (): Promise<number> => {
 			maxTokens: 4000,
 			signal: new AbortController().signal,
 		});
-		const Request = Llm.Calls[0];
+		const Request = LLM.Calls[0];
 		assert.deepEqual(
 			Object.keys(Request ?? {}).sort(),
 			["maxTokens", "messages", "model", "provider", "signal", "system"],
@@ -189,7 +189,7 @@ export const runTest = async (): Promise<number> => {
 	});
 
 	await CheckAsync(Count, "C6: the reply is read from `text-delta` frames only", async () => {
-		const Llm = FakeLlm("", {
+		const LLM = FakeLLM("", {
 			frames: [
 				{ type: "reasoning-delta", text: "REASON" },
 				{ type: "text-delta", text: '{"operations"' },
@@ -199,7 +199,7 @@ export const runTest = async (): Promise<number> => {
 				{ type: "finish", text: "FINISH" },
 			],
 		});
-		const Reply = await Plan(Llm, {
+		const Reply = await Plan(LLM, {
 			route: Route_,
 			system: Prompt(1),
 			digest: "DIGEST",
@@ -211,8 +211,8 @@ export const runTest = async (): Promise<number> => {
 	});
 
 	await CheckAsync(Count, "C7: the phase-2 request carries every body it was handed", async () => {
-		const Llm = FakeLlm('{"operations":[]}');
-		await Confirm(Llm, {
+		const LLM = FakeLLM('{"operations":[]}');
+		await Confirm(LLM, {
 			route: Route_,
 			system: Prompt(2),
 			digest: "DIGEST",
@@ -225,7 +225,7 @@ export const runTest = async (): Promise<number> => {
 			signal: new AbortController().signal,
 		});
 		assert.deepEqual(
-			Sent(Llm.Calls[0]).split("\n"),
+			Sent(LLM.Calls[0]).split("\n"),
 			[
 				"DIGEST",
 				"",
@@ -250,8 +250,8 @@ export const runTest = async (): Promise<number> => {
 
 	await CheckAsync(Count, "C8: the fence is one backtick longer than the longest run in the body", async () => {
 		const Body_ = "line\n```js\ncode\n```\nend";
-		const Llm = FakeLlm('{"operations":[]}');
-		await Confirm(Llm, {
+		const LLM = FakeLLM('{"operations":[]}');
+		await Confirm(LLM, {
 			route: Route_,
 			system: Prompt(2),
 			digest: "DIGEST",
@@ -260,7 +260,7 @@ export const runTest = async (): Promise<number> => {
 			maxTokens: 4000,
 			signal: new AbortController().signal,
 		});
-		const Lines = Sent(Llm.Calls[0]).split("\n");
+		const Lines = Sent(LLM.Calls[0]).split("\n");
 		const Start = Lines.indexOf("````");
 		assert.equal(Start >= 0, true, "a body with a triple-backtick fence takes a four-backtick delimiter");
 		assert.deepEqual(
@@ -272,8 +272,8 @@ export const runTest = async (): Promise<number> => {
 	});
 
 	await CheckAsync(Count, "C9: the digest and the index precede the bodies, and the marker is last", async () => {
-		const Llm = FakeLlm('{"operations":[]}');
-		await Confirm(Llm, {
+		const LLM = FakeLLM('{"operations":[]}');
+		await Confirm(LLM, {
 			route: Route_,
 			system: Prompt(2),
 			digest: "DIGEST",
@@ -282,7 +282,7 @@ export const runTest = async (): Promise<number> => {
 			maxTokens: 4000,
 			signal: new AbortController().signal,
 		});
-		const Lines = Sent(Llm.Calls[0]).split("\n");
+		const Lines = Sent(LLM.Calls[0]).split("\n");
 		assert.equal(Lines[0], "DIGEST", "the digest is first");
 		assert.equal(Lines[2], "Skill index:", "then the index");
 		assert.equal(Lines.indexOf("File: alpha") > Lines.indexOf("Skill index:"), true, "then the bodies");

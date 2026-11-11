@@ -100,10 +100,10 @@ const Row = (Scope: Row["Scope"], Raw: Record<string, unknown>): Row => ({
 const Mapped = (
 	Database: DatabaseSync,
 	Scope: Row["Scope"],
-	Sql: string,
+	SQL: string,
 	Argument?: string,
 ): readonly Row[] => {
-	const Statement = Database.prepare(Sql);
+	const Statement = Database.prepare(SQL);
 
 	// The filter placeholder is written twice (the IS NULL probe and the
 	// match), so the argument is bound to both; an absent argument binds null.

@@ -6,7 +6,7 @@
  * @remarks
  *
  * The names are the config `adapters` vocabulary; each entry is the adapter
- * module (Function/Json, Function/Yaml, Function/Markdown, Function/Package).
+ * module (Function/JSON, Function/Yaml, Function/Markdown, Function/Package).
  * The TypeScript adapter is NOT in the catalog: it is the default registration
  * and always registers first.
  *

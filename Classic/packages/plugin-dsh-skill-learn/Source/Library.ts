@@ -35,7 +35,7 @@ import type Message from "./Interface/Message.js";
 import type { Operation } from "./Interface/Operation.js";
 import type UsageRecord from "./Interface/Record.js";
 import type { ReviewInput, ReviewRefusal, ReviewResult, ReviewRule } from "./Interface/Review.js";
-import type { LlmSlice, SkillsSlice, WorkingDirectorySlice } from "./Interface/Services.js";
+import type { LLMSlice, SkillsSlice, WorkingDirectorySlice } from "./Interface/Services.js";
 import type { LoadedSkill } from "./Interface/Skill.js";
 import type { Outcome, Trigger } from "./Interface/Trigger.js";
 import Definition from "./Variable/Configuration.js";
@@ -842,8 +842,8 @@ export default class SkillLearnService extends Service {
 		const Digest_ = this.Digest(Derived.messages);
 		Draft.digest = Digest_;
 		// 10. The llm probe. Absent is `no-llm`, never a throw (plan section 3.2).
-		const Llm = this.Llm();
-		if (Llm === undefined) {
+		const LLM = this.LLM();
+		if (LLM === undefined) {
 			return this.Finish(Draft, "no-llm", "");
 		}
 		// 11. The route: the knobs win, then the agent's own options.
@@ -859,7 +859,7 @@ export default class SkillLearnService extends Service {
 		// 13. Phase 1, one hand-built stream call.
 		let Reply: string;
 		try {
-			Reply = await Plan(Llm, {
+			Reply = await Plan(LLM, {
 				route: Route_,
 				system: this.Prompt(1),
 				digest: Digest_.text,
@@ -938,7 +938,7 @@ export default class SkillLearnService extends Service {
 			}
 			let Confirmation: string;
 			try {
-				Confirmation = await Confirm(Llm, {
+				Confirmation = await Confirm(LLM, {
 					route: Route_,
 					system: this.Prompt(2),
 					digest: Digest_.text,
@@ -1143,7 +1143,7 @@ export default class SkillLearnService extends Service {
 	/**
 	 * The model service, or undefined when it is absent, which is the `no-llm` class.
 	 */
-	private Llm(): LlmSlice | undefined {
+	private LLM(): LLMSlice | undefined {
 		const Given = this.Context.get("llm");
 		return typeof Given?.stream === "function" ? Given : undefined;
 	}

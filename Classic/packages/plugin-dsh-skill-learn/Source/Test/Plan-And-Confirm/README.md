@@ -56,7 +56,7 @@ phase 2 carries whatever it is given, and the judge refuses a patch target that 
 
 ## Fixtures
 
-The fixtures are the shared Harness: `FakeLlm` (the reply split across two `text-delta` frames, the
+The fixtures are the shared Harness: `FakeLLM` (the reply split across two `text-delta` frames, the
 recorded request, and a programmable frame list), `FakeSkills` (the rows and the loaded bodies),
 `FakeAgent` (the route), and the real built `Target/Function/{Plan,Confirm,Prompt,Catalog,Route}.js`
 leaves.

@@ -97,7 +97,7 @@ export default (
 				);
 			}
 			const At = Math.floor(Date.now() / 1000);
-			const Until = At + State.DismissTtl;
+			const Until = At + State.DismissTTL;
 			Dismiss(State.Knowledge, Intent, Path, Until, At);
 			Save(State.Knowledge, State.PersistPath);
 			Append(`dismissed ${Intent} ${Path ?? "*"}`);

@@ -65,7 +65,7 @@ export default interface State extends Shared {
 	 * Assemblies between section rebuilds under refresh "ttl" (config `ttlCalls`,
 	 * volatile).
 	 */
-	TtlCalls: number;
+	TTLCalls: number;
 
 	/**
 	 * The frame dashes (config `separator`, volatile).

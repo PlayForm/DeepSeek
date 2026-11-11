@@ -107,7 +107,7 @@ export default (Context: Context, Options: Config): void => {
 			Failures: "compressFailures",
 			Multipliers: "multipliers",
 			PreviewMaximum: "previewMaxChars",
-			Ttl: "ttlSeconds",
+			TTL: "ttlSeconds",
 			Budget: "storeBudgetBytes",
 			JournalPath: "journalPath",
 			Engine: "contextEngine",

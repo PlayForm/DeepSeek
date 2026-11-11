@@ -20,13 +20,13 @@ import type CatalogService from "@Interface/Catalog.js";
  * policy's rung". Silence is the contract; a catalog failure never surfaces.
  */
 export default async (Context: unknown, Provider: string): Promise<string[] | undefined> => {
-	const Llm = (Context as { get?: (Name: string) => unknown } | undefined)?.get?.("llm") as
+	const LLM = (Context as { get?: (Name: string) => unknown } | undefined)?.get?.("llm") as
 		CatalogService | undefined;
-	if (Llm === undefined || typeof Llm.listModels !== "function") {
+	if (LLM === undefined || typeof LLM.listModels !== "function") {
 		return undefined;
 	}
 	try {
-		const Models = await Llm.listModels(Provider);
+		const Models = await LLM.listModels(Provider);
 		return Models.map((Model) => Model?.id).filter(
 			(Id): Id is string => typeof Id === "string",
 		);

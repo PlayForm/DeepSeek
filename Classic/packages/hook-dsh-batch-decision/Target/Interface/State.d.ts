@@ -48,7 +48,7 @@ export default interface State extends Shared {
     /**
      * How long a pending proposal is kept before it drops from the map.
      */
-    PendingTtlMs: number;
+    PendingTTLMs: number;
     /**
      * The per-action allowlist (config `policy`, volatile) - the D6 OUTER gate in front of
      * `AutoApprove`. Named `Allow` because the factory's shared State already owns `Policy` (the
@@ -61,7 +61,7 @@ export default interface State extends Shared {
      */
     Factory: Factory;
     /**
-     * The pending proposals by id (bounded by `PendingTtlMs`).
+     * The pending proposals by id (bounded by `PendingTTLMs`).
      */
     Pending: Map<string, PendingProposal>;
     /**

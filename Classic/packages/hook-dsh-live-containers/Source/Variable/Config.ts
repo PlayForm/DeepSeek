@@ -52,7 +52,7 @@ const DefaultLogFile = "~/.dsh/playform/hook-dsh-live-containers.log";
 const DefaultEnabled = false;
 const DefaultSectionName = "live-containers";
 const DefaultRefresh = "request";
-const DefaultTtlCalls = 8;
+const DefaultTTLCalls = 8;
 const DefaultSeparator = "---";
 const DefaultSectionBudgetBytes = 4096;
 const DefaultBlockEnabled = true;
@@ -137,7 +137,7 @@ export default Compose(false, {
 	// tool-coach's sectionTtl pattern). The design's 8 (not the research
 	// draft's 1): the TTL exists for KV-cache friendliness, and 8 is the
 	// design's recommended cadence for always-differing blocks.
-	ttlCalls: Schema.number().default(DefaultTtlCalls).volatile(),
+	ttlCalls: Schema.number().default(DefaultTTLCalls).volatile(),
 	// The frame dashes; the fixed frame becomes `--- LIVE CONTAINER <id> ...`
 	// with the default.
 	separator: Schema.string().default(DefaultSeparator).volatile(),
@@ -156,7 +156,7 @@ export default Compose(false, {
 			trigger: Schema.union(["request", "event", "ttl", "manual"]).default(
 				DefaultBlockTrigger,
 			),
-			ttlCalls: Schema.number().default(DefaultTtlCalls),
+			ttlCalls: Schema.number().default(DefaultTTLCalls),
 			scope: Schema.union([
 				"always",
 				"when-agents-active",

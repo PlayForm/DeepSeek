@@ -4,7 +4,7 @@ import type Span from "@Interface/Span.js";
 import type SymbolNode from "@Interface/SymbolNode.js";
 
 /**
- * @module Json
+ * @module JSON
  *
  * The JSON adapter: the file's keys are its symbols and a repeating string
  * VALUE is a reference to that key.

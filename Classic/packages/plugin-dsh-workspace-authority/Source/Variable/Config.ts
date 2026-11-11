@@ -31,7 +31,7 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-authority.log";
 const DefaultEnabled = false;
 // The default lease TTL (ms).
-const DefaultTtlMs = 300_000;
+const DefaultTTLMs = 300_000;
 // The lease ceiling per holder.
 const DefaultMaxLeasesPerHolder = 8;
 // The capability ceiling per holder.
@@ -48,7 +48,7 @@ const DefaultPolicy: never[] = [];
 export default Compose(false, {
 	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
-	defaultTtlMs: Schema.number().default(DefaultTtlMs).volatile(),
+	defaultTtlMs: Schema.number().default(DefaultTTLMs).volatile(),
 	maxLeasesPerHolder: Schema.number().default(DefaultMaxLeasesPerHolder).volatile(),
 	maxCapabilitiesPerHolder: Schema.number().default(DefaultMaxCapabilitiesPerHolder).volatile(),
 	revocationGraceMs: Schema.number().default(DefaultRevocationGraceMs).volatile(),

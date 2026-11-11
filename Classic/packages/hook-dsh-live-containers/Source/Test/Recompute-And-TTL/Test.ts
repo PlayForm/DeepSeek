@@ -201,14 +201,14 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(LinesWith(Run6, "block rendered n (").length, 1);
 		});
 	}
-	return Finish(Count, "Recompute-And-Ttl");
+	return Finish(Count, "Recompute-And-TTL");
 };
 
-// Standalone entry: `node Target/Test/Recompute-And-Ttl/Test.js`.
+// Standalone entry: `node Target/Test/Recompute-And-TTL/Test.js`.
 const InvokedDirectly =
 	process.argv[1] !== undefined &&
 	import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
 if (InvokedDirectly) {
 	const Pass = await runTest();
-	console.log(`${Pass} PASS - Recompute-And-Ttl`);
+	console.log(`${Pass} PASS - Recompute-And-TTL`);
 }

@@ -52,7 +52,7 @@ const Pattern = (Id: string, Confidence: number, UpdatedAt: number): any => ({
 /**
  * Write the JSON fallback snapshot (the degraded-store fixtures).
  */
-const SeedJson = (Patterns: any[]): void => {
+const SeedJSON = (Patterns: any[]): void => {
 	FileSystem.mkdirSync(Path.dirname(SnapshotPath()), { recursive: true });
 	FileSystem.writeFileSync(
 		SnapshotPath(),
@@ -207,7 +207,7 @@ export const runTest = async (): Promise<number> => {
 			]);
 		});
 		await CheckAsync(Count, "D4: without a facility the JSON snapshot restores the registry", async () => {
-			SeedJson([Pattern("only-one", 0.75, 0), Pattern("only-two", 0.25, 0)]);
+			SeedJSON([Pattern("only-one", 0.75, 0), Pattern("only-two", 0.25, 0)]);
 			const Fallback = Make({ storagePath: SnapshotPath() });
 			// The JSON load runs on the same store chain: the flush seam waits
 			// for it, so no sleep is needed.
@@ -227,7 +227,7 @@ export const runTest = async (): Promise<number> => {
 	// Group D5: the domain-version failure mode.
 	{
 		FileSystem.rmSync(SnapshotPath(), { force: true });
-		SeedJson([Pattern("from-file", 0.5, 0)]);
+		SeedJSON([Pattern("from-file", 0.5, 0)]);
 		const Store = FakeStorage({ version: 2 });
 		const Run = Mount({}, Store);
 		await Run.Service.Flush();

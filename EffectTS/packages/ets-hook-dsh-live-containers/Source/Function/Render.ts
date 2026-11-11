@@ -157,7 +157,7 @@ const Stale = (Agent: State, Block: BlockSpecification, Scope: AgentState): bool
 		case "request":
 			switch (Agent.Refresh) {
 				case "ttl":
-					return !Cache || Scope.calls - Cache.built >= Agent.TtlCalls;
+					return !Cache || Scope.calls - Cache.built >= Agent.TTLCalls;
 				default:
 					return true;
 			}
@@ -297,7 +297,7 @@ export default (Agent: State, Scope: AgentState, Label: string, Append: Log): st
 			const Rebuilt = Scope.sectionCache !== undefined;
 			Scope.sectionCache = { built: Scope.calls, text: Text };
 			if (Rebuilt) {
-				Append(`section rebuilt (ttl ${Agent.TtlCalls})`);
+				Append(`section rebuilt (ttl ${Agent.TTLCalls})`);
 			}
 			return Text;
 		}
@@ -320,7 +320,7 @@ export const Cached = (Agent: State, Scope: AgentState): string | null => {
 	}
 	const Cache = Scope.sectionCache;
 	switch (true) {
-		case !Cache || Scope.calls - Cache.built >= Agent.TtlCalls:
+		case !Cache || Scope.calls - Cache.built >= Agent.TTLCalls:
 			return null;
 		default: {
 			for (const Block of Agent.Blocks ?? []) {

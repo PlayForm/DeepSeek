@@ -201,8 +201,8 @@ const Bundle = (
 			};
 		}
 		case Format === "json": {
-			const Dump = (Sql: string): readonly Row[] =>
-				(Database.prepare(Sql).all() as Row[]).map(Clean);
+			const Dump = (SQL: string): readonly Row[] =>
+				(Database.prepare(SQL).all() as Row[]).map(Clean);
 			const Bundle_ = {
 				meta: {
 					exportedAt: new Date().toISOString(),

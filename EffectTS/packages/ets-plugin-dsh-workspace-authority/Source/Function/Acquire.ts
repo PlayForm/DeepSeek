@@ -20,7 +20,7 @@ export default (
 	Holder: string,
 	Resource: string,
 	Kind: string,
-	TtlMs?: number | undefined,
+	TTLMs?: number | undefined,
 ): Lease | undefined => {
 	switch (true) {
 		case !State.On:
@@ -61,15 +61,15 @@ export default (
 		promoted: false,
 		disposition: "none",
 	});
-	const Ttl =
-		typeof TtlMs === "number" && TtlMs > 0 ? TtlMs : (Rule?.ttlMs ?? State.DefaultTtlMs);
+	const TTL =
+		typeof TTLMs === "number" && TTLMs > 0 ? TTLMs : (Rule?.ttlMs ?? State.DefaultTTLMs);
 	State.Sequence += 1;
 	const Record: Lease = {
 		id: `lease:${State.Sequence}`,
 		holder: Holder,
 		resource: Resource,
 		acquiredAt: Now,
-		expiresAt: Now + Ttl,
+		expiresAt: Now + TTL,
 		closed: false,
 	};
 	State.Leases.set(Record.id, Record);

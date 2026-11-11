@@ -32,7 +32,7 @@ export declare const ExpiredDecision: (State_: State, Entry: PendingProposal) =>
  */
 export declare const Decide: (State_: State, Decision: BatchDecision) => PendingProposal | undefined;
 /**
- * Sweep the pending map: drop entries older than PendingTtlMs.
+ * Sweep the pending map: drop entries older than PendingTTLMs.
  */
 export declare const Sweep: (State_: State) => number;
 /**

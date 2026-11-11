@@ -62,13 +62,13 @@ export const Decide = (State_: State, Decision: BatchDecision): PendingProposal 
 };
 
 /**
- * Sweep the pending map: drop entries older than PendingTtlMs.
+ * Sweep the pending map: drop entries older than PendingTTLMs.
  */
 export const Sweep = (State_: State): number => {
 	const At = Now(State_);
 	let Dropped = 0;
 	for (const [Id, Entry] of State_.Pending) {
-		if (At - Entry.proposedAt > State_.PendingTtlMs) {
+		if (At - Entry.proposedAt > State_.PendingTTLMs) {
 			State_.Pending.delete(Id);
 			Dropped += 1;
 		}

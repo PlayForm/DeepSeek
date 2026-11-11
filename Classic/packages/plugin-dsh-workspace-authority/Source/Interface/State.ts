@@ -31,7 +31,7 @@ interface Extra {
 	/**
 	 * Config `defaultTtlMs` - the default lease TTL (volatile).
 	 */
-	DefaultTtlMs: number;
+	DefaultTTLMs: number;
 
 	/**
 	 * Config `maxLeasesPerHolder` - the lease ceiling (volatile).

@@ -198,7 +198,7 @@ Skip lines log only when the reason changes, so the ledger stays quiet on steady
   `pnpm --config.verify-deps-before-run=false --dir EffectTS/packages/ets-hook-dsh-live-containers run prepublishOnly`
 - Smokes: `node EffectTS/packages/ets-hook-dsh-live-containers/Target/Test/<Folder>/Test.js`
     - Wiring-And-Defaults - 42 checks
-    - Recompute-And-Ttl - 17 checks
+    - Recompute-And-TTL - 17 checks
     - Render-And-Frames - 23 checks
     - Volatile-And-Failsafes - 23 checks
     - Jobs-And-Detach - 27 checks

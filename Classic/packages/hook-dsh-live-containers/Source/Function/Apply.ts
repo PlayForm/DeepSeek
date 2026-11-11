@@ -509,7 +509,7 @@ export default (Context: Context, Options: Config): void => {
 			On: "enabled",
 			SectionName: "sectionName",
 			Refresh: "refresh",
-			TtlCalls: "ttlCalls",
+			TTLCalls: "ttlCalls",
 			Separator: "separator",
 			Budget: "sectionBudgetBytes",
 			Blocks: "blocks",

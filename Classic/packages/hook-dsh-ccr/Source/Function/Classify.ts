@@ -68,7 +68,7 @@ export default (Name: string, IsError: boolean, Content: ContentBlock[]): string
 	}
 	// The shape fallback (the gate already let the name through).
 	switch (true) {
-		case isJson(Text(Content)):
+		case isJSON(Text(Content)):
 			return "json";
 		default:
 			return "default";
@@ -80,7 +80,7 @@ export default (Name: string, IsError: boolean, Content: ContentBlock[]): string
  * array (scalars and strings stay `default` - a JSON-looking string is
  * usually terminal or file output).
  */
-const isJson = (Text: string): boolean => {
+const isJSON = (Text: string): boolean => {
 	switch (true) {
 		case Text.length === 0:
 			return false;

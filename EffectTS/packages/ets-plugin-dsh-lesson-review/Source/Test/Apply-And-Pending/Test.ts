@@ -6,7 +6,7 @@ import Apply from "../../../Target/Function/Apply.js";
 import {
 	CheckAsync,
 	Exists,
-	FakeLlm,
+	FakeLLM,
 	Finish,
 	Home,
 	Make,
@@ -89,9 +89,9 @@ export const runTest = async (): Promise<number> => {
 	};
 
 	await Case("A1: the shipped posture PROPOSES - nothing lands, the queue grows", async () => {
-		const Llm = FakeLlm(Reply("loader-flag"));
+		const LLM = FakeLLM(Reply("loader-flag"));
 		const Run = Make({}, (Context: any) => {
-			Context.llm = Llm;
+			Context.llm = LLM;
 		});
 		const Result = await Run.Service.Review({ Agent, Messages: Snapshot, Session: "s-1" });
 		assert.equal(Result.outcome, "proposed", "a review proposes by default");
@@ -103,9 +103,9 @@ export const runTest = async (): Promise<number> => {
 	});
 
 	await Case("A2: Accept lands a queued proposal and empties its row", async () => {
-		const Llm = FakeLlm(Reply("accept-me"));
+		const LLM = FakeLLM(Reply("accept-me"));
 		const Run = Make({}, (Context: any) => {
-			Context.llm = Llm;
+			Context.llm = LLM;
 		});
 		await Run.Service.Review({ Agent, Messages: Snapshot });
 		assert.equal(Run.Service.Pending().length, 1, "queued");
@@ -116,9 +116,9 @@ export const runTest = async (): Promise<number> => {
 	});
 
 	await Case("A3: write:auto lands the accepted operation itself", async () => {
-		const Llm = FakeLlm(Reply("auto-landed"));
+		const LLM = FakeLLM(Reply("auto-landed"));
 		const Run = Make({ policy: { write: "auto" } }, (Context: any) => {
-			Context.llm = Llm;
+			Context.llm = LLM;
 		});
 		const Result = await Run.Service.Review({ Agent, Messages: Snapshot });
 		assert.equal(Result.outcome, "applied", "the review applied its own operation");
@@ -128,13 +128,13 @@ export const runTest = async (): Promise<number> => {
 	});
 
 	await Case("A4: an agreement operation is ALWAYS queued, even under write:auto", async () => {
-		const Llm = FakeLlm(
+		const LLM = FakeLLM(
 			JSON.stringify({
 				ops: [{ op: "agreement", name: "terse-answers", body: "Answer in one sentence." }],
 			}),
 		);
 		const Run = Make({ policy: { write: "auto" } }, (Context: any) => {
-			Context.llm = Llm;
+			Context.llm = LLM;
 		});
 		const Result = await Run.Service.Review({ Agent, Messages: Snapshot });
 		assert.deepEqual(Result.proposed, ["terse-answers"], "the agreement is a proposal");
@@ -164,7 +164,7 @@ export const runTest = async (): Promise<number> => {
 
 	await Case("A8: no model route is `unavailable`", async () => {
 		const Run = Make({}, (Context: any) => {
-			Context.llm = FakeLlm(Reply("never-reached"));
+			Context.llm = FakeLLM(Reply("never-reached"));
 		});
 		const Result = await Run.Service.Review({ Agent: {}, Messages: Snapshot });
 		assert.equal(Result.outcome, "unavailable", "no route, no call");
@@ -173,7 +173,7 @@ export const runTest = async (): Promise<number> => {
 
 	await Case("A9: a provider failure is `failed`, with the cause", async () => {
 		const Run = Make({}, (Context: any) => {
-			Context.llm = FakeLlm("", { fail: true });
+			Context.llm = FakeLLM("", { fail: true });
 		});
 		const Result = await Run.Service.Review({ Agent, Messages: Snapshot });
 		assert.equal(Result.outcome, "failed", "the failure is classified");
@@ -182,7 +182,7 @@ export const runTest = async (): Promise<number> => {
 
 	await Case("A10: an unparseable reply is `failed`, not an empty proposal", async () => {
 		const Run = Make({}, (Context: any) => {
-			Context.llm = FakeLlm("I could not find anything worth saving today.");
+			Context.llm = FakeLLM("I could not find anything worth saving today.");
 		});
 		const Result = await Run.Service.Review({ Agent, Messages: Snapshot });
 		assert.equal(Result.outcome, "failed", "a broken reply is a failed review");
@@ -191,7 +191,7 @@ export const runTest = async (): Promise<number> => {
 
 	await Case("A11: `Nothing to save.` is `nothing`, with no queue and no write", async () => {
 		const Run = Make({}, (Context: any) => {
-			Context.llm = FakeLlm('{ "note": "Nothing to save.", "ops": [] }');
+			Context.llm = FakeLLM('{ "note": "Nothing to save.", "ops": [] }');
 		});
 		const Result = await Run.Service.Review({ Agent, Messages: Snapshot });
 		assert.equal(Result.outcome, "nothing", "an explicit empty answer");
@@ -200,13 +200,13 @@ export const runTest = async (): Promise<number> => {
 	});
 
 	await Case("A12: the request carries the digest, the prompt and the agent's route", async () => {
-		const Llm = FakeLlm(Reply("routed"));
+		const LLM = FakeLLM(Reply("routed"));
 		const Run = Make({}, (Context: any) => {
-			Context.llm = Llm;
+			Context.llm = LLM;
 		});
 		await Run.Service.Review({ Agent, Messages: Snapshot });
-		assert.equal(Llm.Calls.length, 1, "exactly one model call");
-		const Request = Llm.Calls[0];
+		assert.equal(LLM.Calls.length, 1, "exactly one model call");
+		const Request = LLM.Calls[0];
 		assert.equal(Request.provider, "fake-provider", "the agent's provider");
 		assert.equal(Request.model, "fake-model", "the agent's model");
 		const Sent = Request.messages?.[0]?.content?.[0]?.text ?? "";
@@ -216,19 +216,19 @@ export const runTest = async (): Promise<number> => {
 	});
 
 	await Case("A13: the knobs override the route when they name one", async () => {
-		const Llm = FakeLlm(Reply("knob-routed"));
+		const LLM = FakeLLM(Reply("knob-routed"));
 		const Run = Make({ provider: "knob-provider", model: "knob-model" }, (Context: any) => {
-			Context.llm = Llm;
+			Context.llm = LLM;
 		});
 		await Run.Service.Review({ Agent, Messages: Snapshot });
-		assert.equal(Llm.Calls[0]?.provider, "knob-provider", "the knob wins over the agent");
-		assert.equal(Llm.Calls[0]?.model, "knob-model", "both fields");
+		assert.equal(LLM.Calls[0]?.provider, "knob-provider", "the knob wins over the agent");
+		assert.equal(LLM.Calls[0]?.model, "knob-model", "both fields");
 	});
 
 	await Case("A14: the proposed-review ledger lines are byte-exact", async () => {
-		const Llm = FakeLlm(Reply("ledger-line"));
+		const LLM = FakeLLM(Reply("ledger-line"));
 		const Run = Make({}, (Context: any) => {
-			Context.llm = Llm;
+			Context.llm = LLM;
 		});
 		await Run.Service.Review({ Agent, Messages: Snapshot });
 		assert.deepEqual(

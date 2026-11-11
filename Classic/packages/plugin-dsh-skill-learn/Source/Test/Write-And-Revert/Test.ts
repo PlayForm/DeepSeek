@@ -17,7 +17,7 @@ import {
 	CorpusView,
 	FakeAgent,
 	FakeFs,
-	FakeLlm,
+	FakeLLM,
 	FakeSkills,
 	Finish,
 	Home,
@@ -440,7 +440,7 @@ export const runTest = async (): Promise<number> => {
 				Say("user", "remember the loader reads it before config"),
 			],
 		});
-		const Llm = FakeLlm("", {
+		const LLM = FakeLLM("", {
 			replies: [
 				JSON.stringify({
 					views: ["loader-flag"],
@@ -476,7 +476,7 @@ export const runTest = async (): Promise<number> => {
 			digestAssistantChars: 200,
 		});
 		const Index_ = await Catalog(Skills, {});
-		const Planned = await Plan(Llm, {
+		const Planned = await Plan(LLM, {
 			route: Route_,
 			system: Prompt(1),
 			digest: Digested.text,
@@ -495,7 +495,7 @@ export const runTest = async (): Promise<number> => {
 			const Loaded = await Skills.get(Name);
 			if (Loaded !== undefined) Carried.set(Name, Loaded.content);
 		}
-		const Confirmed = await Confirm(Llm, {
+		const Confirmed = await Confirm(LLM, {
 			route: Route_,
 			system: Prompt(2),
 			digest: Digested.text,
@@ -551,7 +551,7 @@ export const runTest = async (): Promise<number> => {
 		assert.equal(Derived.toolCalls, 1, "one recorded tool call");
 		assert.equal(Digested.kept, 3, "the tail grew past the tool result");
 		assert.equal(Digested.collapsed, 1, "one older turn collapsed");
-		assert.equal(Llm.Calls.length, 2, "two calls, no third");
+		assert.equal(LLM.Calls.length, 2, "two calls, no third");
 		assert.deepEqual(Applied, ["patch loader-flag"], "the recorded operation landed");
 		assert.deepEqual(Refused, [], "nothing was refused");
 		assert.equal(

@@ -24,7 +24,7 @@ const Pattern = (Id, Confidence, UpdatedAt) => ({
   allowlist: false,
   updatedAt: UpdatedAt
 });
-const SeedJson = (Patterns) => {
+const SeedJSON = (Patterns) => {
   FileSystem.mkdirSync(Path.dirname(SnapshotPath()), { recursive: true });
   FileSystem.writeFileSync(
     SnapshotPath(),
@@ -161,7 +161,7 @@ const runTest = async () => {
       ]);
     });
     await CheckAsync(Count, "D4: without a facility the JSON snapshot restores the registry", async () => {
-      SeedJson([Pattern("only-one", 0.75, 0), Pattern("only-two", 0.25, 0)]);
+      SeedJSON([Pattern("only-one", 0.75, 0), Pattern("only-two", 0.25, 0)]);
       const Fallback = Make({ storagePath: SnapshotPath() });
       await Fallback.Service.Flush();
       assert.deepEqual(Fallback.Service.List().map((One) => One.id), [
@@ -177,7 +177,7 @@ const runTest = async () => {
   }
   {
     FileSystem.rmSync(SnapshotPath(), { force: true });
-    SeedJson([Pattern("from-file", 0.5, 0)]);
+    SeedJSON([Pattern("from-file", 0.5, 0)]);
     const Store = FakeStorage({ version: 2 });
     const Run = Mount({}, Store);
     await Run.Service.Flush();

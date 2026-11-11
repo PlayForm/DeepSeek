@@ -76,7 +76,7 @@ const Make = (Knobs = {}, Attach) => {
   Run.Service = new LessonService(Context, Knobs);
   return Run;
 };
-const FakeLlm = (Reply, Options = {}) => {
+const FakeLLM = (Reply, Options = {}) => {
   const Calls = [];
   return {
     Calls,
@@ -142,7 +142,7 @@ export {
   Check,
   CheckAsync,
   Exists,
-  FakeLlm,
+  FakeLLM,
   Finish,
   Home,
   LessonService,

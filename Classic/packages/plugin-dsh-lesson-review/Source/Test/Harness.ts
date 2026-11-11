@@ -23,7 +23,7 @@ import LessonService from "../../Target/Library.js";
  * `<Home>/.dsh/skills` and asserts against the real filesystem - no path is stubbed, and the
  * user's real home is never touched.
  *
- * THE LLM IS A FAKE SERVICE, not a stubbed module: `FakeLlm` answers with the reply split into
+ * THE LLM IS A FAKE SERVICE, not a stubbed module: `FakeLLM` answers with the reply split into
  * two `text-delta` frames (the streaming shape the service reads) and records the request it was
  * handed, so a scenario can assert the digest + prompt that went out as well as the operations
  * that came back. The absent-llm path is simply a ctx without one.
@@ -159,7 +159,7 @@ export const Make = (
 /**
  * One request the fake llm was handed.
  */
-export interface LlmRequest {
+export interface LLMRequest {
 	provider?: string;
 	model?: string;
 	messages?: { role?: string; content?: { type?: string; text?: string }[] }[];
@@ -172,14 +172,14 @@ export interface LlmRequest {
  * every request recorded. `fail` throws synchronously out of `stream` (the
  * provider-exploded path); `silent` yields no frames at all (an empty reply).
  */
-export const FakeLlm = (
+export const FakeLLM = (
 	Reply: string,
 	Options: { fail?: boolean; silent?: boolean } = {},
 ): any => {
-	const Calls: LlmRequest[] = [];
+	const Calls: LLMRequest[] = [];
 	return {
 		Calls,
-		stream: (Request: LlmRequest) => {
+		stream: (Request: LLMRequest) => {
 			Calls.push(Request);
 			switch (true) {
 				case Options.fail === true:

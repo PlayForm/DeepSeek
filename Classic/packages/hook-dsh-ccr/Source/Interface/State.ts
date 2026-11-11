@@ -33,7 +33,7 @@ import type { State as Shared } from "@playform/plugin-dsh-factory";
  *   Failures       - compress failing results too (config `compressFailures`);
  *   Multipliers    - the per-type gate multipliers (config `multipliers`, volatile);
  *   PreviewMaximum     - the hard preview character cap (config `previewMaxChars`, volatile);
- *   Ttl            - store TTL in seconds (config `ttlSeconds`);
+ *   TTL            - store TTL in seconds (config `ttlSeconds`);
  *   Budget         - the LRU budget in bytes (config `storeBudgetBytes`);
  *   JournalPath    - the optional JSONL journal path (config `journalPath`; "" = memory-only);
  *   Engine         - phase-4 context engine flag (config `contextEngine`,
@@ -100,7 +100,7 @@ export default interface State extends Shared {
 	/**
 	 * Store TTL in seconds (config `ttlSeconds`).
 	 */
-	Ttl: number;
+	TTL: number;
 
 	/**
 	 * The LRU budget in bytes (config `storeBudgetBytes`).

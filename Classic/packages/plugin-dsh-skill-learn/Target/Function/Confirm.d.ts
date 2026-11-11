@@ -1,5 +1,5 @@
 import type { Route } from "./Route.js";
-import type { LlmSlice } from "../Interface/Services.js";
+import type { LLMSlice } from "../Interface/Services.js";
 /**
  * @module Confirm
  *
@@ -67,4 +67,4 @@ export interface ConfirmOptions {
     readonly signal: AbortSignal;
 }
 export default _default;
-declare function _default(Llm: LlmSlice, Options: ConfirmOptions): Promise<string>;
+declare function _default(LLM: LLMSlice, Options: ConfirmOptions): Promise<string>;

@@ -49,7 +49,9 @@ A skill that restates another skill's rules fails the single-owner rule (section
 | `manual-authoring`      | The content pass: facts from both trees, the exact strings, the bands, the copy, the dossier | The design pass (manual-design), the package pages (site-authoring)                   |
 | `manual-design`         | The design pass: the accent budget, geometry and weight, states, the slice loop, the log     | The facts and bands (manual-authoring), the lane laws (site-authoring)                |
 
-Names follow the `code-authoring` law: an acronym is written in capitals in every position, so `Llm` is `LLM` and `Amd` is `AMD`; a product name keeps its official spelling, so `GitHub` and `vLLM` are never flattened; and a word is spelled in full.
+Names follow the `code-authoring` law: an acronym is written in capitals in every position, so `Llm`
+is `LLM` and `Amd` is `AMD`; a product name keeps its official spelling, so `GitHub` and `vLLM` are
+never flattened; and a word is spelled in full.
 
 ## 3. The SKILL.md specification
 
@@ -198,7 +200,8 @@ Point to the owner or the source file (a manifest, a smoke README,
 
     Every file is written with the `write`/`edit` tool API.
 
-    A terminal content operation is never used (see `code-authoring`), and names follow that skill's acronym law.
+    A terminal content operation is never used (see `code-authoring`), and names follow that skill's
+    acronym law.
 
 5. **The verification.**
 

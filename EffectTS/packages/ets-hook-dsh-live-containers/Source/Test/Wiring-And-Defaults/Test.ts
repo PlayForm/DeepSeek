@@ -140,7 +140,7 @@ export const runTest = async (): Promise<number> => {
 		Check(Count, "state unwraps the defaults (On=false, refresh=request, ttlCalls=8)", () => {
 			assert.equal(Run1.State.On, false);
 			assert.equal(Run1.State.Refresh, "request");
-			assert.equal(Run1.State.TtlCalls, 8);
+			assert.equal(Run1.State.TTLCalls, 8);
 			assert.equal(Run1.State.Separator, "---");
 			assert.equal(Run1.State.Budget, 4096);
 		});

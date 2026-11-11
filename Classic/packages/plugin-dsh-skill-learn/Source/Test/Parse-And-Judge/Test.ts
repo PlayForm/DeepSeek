@@ -81,7 +81,7 @@ const Verdict = (
 /**
  * An operation built from data: the one rule that exists for a caller that skipped the parse.
  */
-const Data = (Json: string): Operation => JSON.parse(Json);
+const Data = (Text: string): Operation => JSON.parse(Text);
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();

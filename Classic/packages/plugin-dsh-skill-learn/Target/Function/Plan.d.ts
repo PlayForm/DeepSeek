@@ -1,5 +1,5 @@
 import type { Route } from "./Route.js";
-import type { LlmSlice } from "../Interface/Services.js";
+import type { LLMSlice } from "../Interface/Services.js";
 /**
  * @module Plan
  *
@@ -56,4 +56,4 @@ export interface PlanOptions {
     readonly signal: AbortSignal;
 }
 export default _default;
-declare function _default(Llm: LlmSlice, Options: PlanOptions): Promise<string>;
+declare function _default(LLM: LLMSlice, Options: PlanOptions): Promise<string>;

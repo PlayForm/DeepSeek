@@ -13,4 +13,4 @@ export default _default;
  * per-kind `ttlMs` override when one matches the resource kind, else the
  * config default), ledger.
  */
-declare function _default(State: State, Holder: string, Resource: string, Kind: string, TtlMs?: number | undefined): Lease | undefined;
+declare function _default(State: State, Holder: string, Resource: string, Kind: string, TTLMs?: number | undefined): Lease | undefined;

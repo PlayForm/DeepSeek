@@ -1,5 +1,5 @@
 import * as FileSystem from "node:fs";
-import * as Os from "node:os";
+import * as OS from "node:os";
 
 import type HistoryStore from "@Interface/History.js";
 import type { ReplayRecord } from "@Interface/History.js";
@@ -31,7 +31,7 @@ import type { ReplayRecord } from "@Interface/History.js";
  * Expand a `~`-prefixed path (the store lives under ~/.dsh).
  */
 const Expand = (Path: string): string =>
-	Path.startsWith("~") ? Os.homedir() + Path.slice(1) : Path;
+	Path.startsWith("~") ? OS.homedir() + Path.slice(1) : Path;
 
 /**
  * Whether a parsed value is a plausible record.

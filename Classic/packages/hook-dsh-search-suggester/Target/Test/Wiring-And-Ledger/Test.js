@@ -100,7 +100,7 @@ const runTest = async () => {
       assert.equal(Run.State.Learn, true);
       assert.equal(Run.State.LearnWindow, 2);
       assert.equal(Run.State.SectionMode, "off");
-      assert.equal(Run.State.SectionTtl, 20);
+      assert.equal(Run.State.SectionTTL, 20);
       assert.deepEqual(Run.State.EmitOn, ["grep", "glob", "read", "bash"]);
       assert.deepEqual(Run.State.Intents, [
         "Version",

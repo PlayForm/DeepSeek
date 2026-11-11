@@ -93,7 +93,7 @@ export default interface State extends Shared {
     /**
      * Judged calls between tier-2 rebuilds (config `sectionTtl`, volatile).
      */
-    SectionTtl: number;
+    SectionTTL: number;
     /**
      * The injected factory service itself (the ledger) - set once in Apply.
      */

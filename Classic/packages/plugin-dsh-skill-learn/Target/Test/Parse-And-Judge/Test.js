@@ -29,7 +29,7 @@ const Verdict = (Operation_, Configuration_, Seed = {}) => {
   if (Answer !== null) return { rule: Answer.rule, detail: Answer.detail };
   return { rule: "accepted", detail: "" };
 };
-const Data = (Json) => JSON.parse(Json);
+const Data = (Text) => JSON.parse(Text);
 const runTest = async () => {
   const Count = MakeCounter();
   const Configuration_ = Knobs();

@@ -18,7 +18,7 @@ import type {
 	FsTarget,
 	FsWriteIntent,
 	FsWriteOutcome,
-	LlmSlice,
+	LLMSlice,
 	LoggerSlice,
 	SkillsSlice,
 	StreamFrame,
@@ -39,7 +39,7 @@ import type { LoadedSkill, SkillRow } from "../../Target/Interface/Skill.js";
  * the seams that service will be handed. The sibling package's harness
  * constructs its service
  * (`Classic/packages/plugin-dsh-lesson-review/Source/Test/Harness.ts:32-38`);
- * this one exports the same helper names (`Make`, `FakeLlm`, `Seed`, `Exists`,
+ * this one exports the same helper names (`Make`, `FakeLLM`, `Seed`, `Exists`,
  * `Read`, `Messages`, `Check`, `CheckAsync`, `Finish`, `MakeCounter`, `Home`,
  * `Settle`) so a reader of both packages sees one pattern, and adds the fakes a
  * leaf needs (`FakeFs`, `FakeSkills`, `FakeAgent`, `FakeLogger`, `CorpusView`).
@@ -535,7 +535,7 @@ export const FakeSkills = (Options: FakeSkillsOptions = {}): FakeSkills => {
 /**
  * The programmable parts of the fake model.
  */
-export interface FakeLlmOptions {
+export interface FakeLLMOptions {
 	/**
 	 * Throw synchronously out of `stream`: the provider-exploded arm.
 	 */
@@ -560,11 +560,11 @@ export interface FakeLlmOptions {
 /**
  * The fake model: the reply split across two `text-delta` frames, and every request recorded.
  */
-export interface FakeLlm extends LlmSlice {
+export interface FakeLLM extends LLMSlice {
 	readonly Calls: StreamRequest[];
 }
 
-export const FakeLlm = (Reply: string, Options: FakeLlmOptions = {}): FakeLlm => {
+export const FakeLLM = (Reply: string, Options: FakeLLMOptions = {}): FakeLLM => {
 	const Calls: StreamRequest[] = [];
 	const Split = (Text_: string): readonly StreamFrame[] => [
 		{ type: "text-delta", text: Text_.slice(0, 12) },
@@ -806,7 +806,7 @@ export interface MakeOptions {
 	readonly fs?: FakeFsOptions;
 	readonly skills?: FakeSkillsOptions;
 	readonly reply?: string;
-	readonly llm?: FakeLlmOptions;
+	readonly llm?: FakeLLMOptions;
 }
 
 /**
@@ -815,7 +815,7 @@ export interface MakeOptions {
 export interface FakeContext {
 	readonly fs: FakeFs;
 	readonly skills: FakeSkills;
-	readonly llm: FakeLlm;
+	readonly llm: FakeLLM;
 	readonly logger: FakeLogger;
 	readonly workingDirectory: { readonly ensure: (Agent_: Agent) => Promise<string> };
 	readonly get: (Name: string) => unknown;
@@ -829,7 +829,7 @@ export interface FakeContext {
 export const Make = (Options: MakeOptions = {}): FakeContext => {
 	const Fs_ = FakeFs(Options.fs ?? {});
 	const Skills_ = FakeSkills(Options.skills ?? {});
-	const Llm_ = FakeLlm(Options.reply ?? "", Options.llm ?? {});
+	const LLM_ = FakeLLM(Options.reply ?? "", Options.llm ?? {});
 	const Logger_ = FakeLogger();
 	const Working = {
 		ensure: async (_Agent: Agent): Promise<string> => Path.join(Home, "work"),
@@ -841,7 +841,7 @@ export const Make = (Options: MakeOptions = {}): FakeContext => {
 			case Name === "skills":
 				return Skills_;
 			case Name === "llm":
-				return Llm_;
+				return LLM_;
 			case Name === "logger":
 				return Logger_;
 			case Name === "workingDirectory":
@@ -850,5 +850,5 @@ export const Make = (Options: MakeOptions = {}): FakeContext => {
 				return undefined;
 		}
 	};
-	return { fs: Fs_, skills: Skills_, llm: Llm_, logger: Logger_, workingDirectory: Working, get };
+	return { fs: Fs_, skills: Skills_, llm: LLM_, logger: Logger_, workingDirectory: Working, get };
 };
