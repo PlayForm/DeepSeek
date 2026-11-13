@@ -17,3 +17,5 @@
         name: "@playform/plugin-dsh-cost-analysis"
         config:
             enabled: true
+            log: false
+            logFile: ~/.dsh/cost/analysis.log

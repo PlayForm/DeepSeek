@@ -115,14 +115,16 @@ The host services themselves are complete and smoke-covered.
 
 ## The configuration
 
-| Field      | Type    | Default                            | Meaning                                 |
-| ---------- | ------- | ---------------------------------- | --------------------------------------- |
-| `enabled`  | boolean | `false`                            | a disabled package refuses every method |
-| `logRoot`  | string  | `~/.dsh`                           | family ledger root                      |
-| `maxLines` | number  | `200` (1..2000)                    | the cap on any `tail()`                 |
-| `ccrLog`   | string  | `~/.dsh/playform/hook-dsh-ccr.log` | the ccr log for `stats()`               |
+| Field      | Type    | Default                            | Meaning                                                |
+| ---------- | ------- | ---------------------------------- | ------------------------------------------------------ |
+| `enabled`  | boolean | `true`                             | ships enabled; a disabled package refuses every method |
+| `logRoot`  | string  | `~/.dsh`                           | family ledger root                                     |
+| `maxLines` | number  | `200` (1..2000)                    | the cap on any `tail()`                                |
+| `ccrLog`   | string  | `~/.dsh/playform/hook-dsh-ccr.log` | the ccr log for `stats()`                              |
 
-All knobs are volatile.
+All knobs are volatile. The Config base leads the field list - `enabled` first - and the package
+writes no ledger file of its own (its lines go through the logger), so the base's `log`/`logFile`
+cells are absent by design and `logRoot` is the READ root of the family ledgers.
 
 ## The ledger (byte-exact)
 

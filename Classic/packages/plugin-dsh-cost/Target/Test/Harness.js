@@ -35,7 +35,19 @@ const Make = (Raw, Fs) => {
   const Commands = { Registered: [] };
   Commands.register = (Definition) => void Commands.Registered.push(Definition);
   const Factory = {
-    State: (Context2, _Config, Setup) => ({ Context: Context2, Module: Setup?.module ?? "plugin-dsh-cost", Stash: /* @__PURE__ */ new Map(), Inflight: /* @__PURE__ */ new Map() }),
+    State: (Context2, _Config, Setup) => {
+      const State = {
+        Context: Context2,
+        Module: Setup?.module ?? "plugin-dsh-cost",
+        Stash: /* @__PURE__ */ new Map(),
+        Inflight: /* @__PURE__ */ new Map()
+      };
+      for (const [Key, Field] of Object.entries(Setup?.fields ?? {})) {
+        const Value = Raw[Field];
+        State[Key] = typeof Value?.get === "function" ? Value.get() : Value;
+      }
+      return State;
+    },
     Append: (_State, Message) => void Lines.push(Message),
     Write: async (State, Target, Content, Over) => {
       const Outcome = await State.Context.fs.writeText(Target, Content, Over?.intent, Over?.signal);

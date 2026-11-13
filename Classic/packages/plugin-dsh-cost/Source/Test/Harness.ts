@@ -77,7 +77,26 @@ export const Make = (Raw: Record<string, unknown>, Fs?: unknown): any => {
 	const Commands: any = { Registered: [] as unknown[] };
 	Commands.register = (Definition: unknown) => void Commands.Registered.push(Definition);
 	const Factory = {
-		State: (Context: unknown, _Config: unknown, Setup: any) => ({ Context, Module: Setup?.module ?? "plugin-dsh-cost", Stash: new Map(), Inflight: new Map() }),
+		State: (Context: unknown, _Config: unknown, Setup: any) => {
+			// The setup map, honored like the real factory's builder: every
+			// mapped field is copied from the (cell-unwrapped) validated
+			// config onto the State, so Apply's call-time reads (`State.On`)
+			// see the plain values.
+			const State: any = {
+				Context,
+				Module: Setup?.module ?? "plugin-dsh-cost",
+				Stash: new Map(),
+				Inflight: new Map(),
+			};
+			for (const [Key, Field] of Object.entries(Setup?.fields ?? {})) {
+				const Value = (Raw as Record<string, unknown>)[Field as string];
+				State[Key] =
+					typeof (Value as { get?: unknown } | null)?.get === "function"
+						? (Value as { get: () => unknown }).get()
+						: Value;
+			}
+			return State;
+		},
 		Append: (_State: unknown, Message: string) => void Lines.push(Message),
 		Write: async (State: any, Target: any, Content: string, Over: any) => {
 			const Outcome = await State.Context.fs.writeText(Target, Content, Over?.intent, Over?.signal);

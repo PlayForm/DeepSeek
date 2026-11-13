@@ -7,16 +7,18 @@
  * @remarks
  *
  * Every field is defaulted by the schema, so all of them are always present
- * after validation.
+ * after validation. The Config base leads the field list - `enabled`, then
+ * `log`, then `logFile` - and the domain fields follow in their existing
+ * order.
  */
 export default interface Config {
     readonly enabled: boolean;
+    readonly log: boolean;
+    readonly logFile: string;
     readonly databasePath: string;
     readonly client: string;
     readonly window: number;
     readonly metrics: Metrics;
-    readonly log: boolean;
-    readonly logFile: string;
 }
 /**
  * The five metric families the analysis command can render (sections 11, 12

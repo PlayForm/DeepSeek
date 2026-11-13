@@ -33,6 +33,10 @@ import { Home } from "@playform/lib-dsh-core";
  * convention, so a log file on by default would be this plugin's own invention
  * writing to the user's home (Reuse-Host.md:14).
  *
+ * THE CONFIG BASE leads the field list - `enabled`, then `log`, then `logFile`
+ * - the base every cost-and-panel package carries; the domain fields follow in
+ * their existing order, unchanged in name and default.
+ *
  * This is one of the modules in the tree with a runtime import of
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance -
  * the loader consumes it through the Standard Schema `~standard` interface).
@@ -197,6 +201,14 @@ export default Schema.object({
 		.default(true)
 		.volatile()
 		.description("Master switch: when false the plugin records nothing."),
+	log: Schema.boolean()
+		.default(DefaultLog)
+		.volatile()
+		.description("Write the plugin's own diagnostic log file."),
+	logFile: Schema.string()
+		.default(Home(["cost", "cost.log"]))
+		.volatile()
+		.description("Path of the diagnostic log; a leading tilde expands to the home directory."),
 	databasePath: Schema.string()
 		.default(DefaultDatabasePath)
 		.description("SQLite ledger file; a leading tilde expands to the home directory."),
@@ -265,11 +277,4 @@ export default Schema.object({
 		.description(
 			"The time-of-day windows a price row's Window column resolves against; empty means every call is any-window.",
 		),
-	log: Schema.boolean()
-		.default(DefaultLog)
-		.volatile()
-		.description("Write the plugin's own diagnostic log file."),
-	logFile: Schema.string()
-		.default(Home(["cost", "cost.log"]))
-		.description("Path of the diagnostic log; a leading tilde expands to the home directory."),
 });

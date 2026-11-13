@@ -34,12 +34,19 @@ const Make = (Raw) => {
   const Commands = { Registered: [] };
   Commands.register = (Definition) => void Commands.Registered.push(Definition);
   const Factory = {
-    State: (Context2, _Config, Setup) => ({
-      Context: Context2,
-      Module: Setup?.module ?? "plugin-dsh-cost-analysis",
-      Stash: /* @__PURE__ */ new Map(),
-      Inflight: /* @__PURE__ */ new Map()
-    }),
+    State: (Context2, _Config, Setup) => {
+      const State = {
+        Context: Context2,
+        Module: Setup?.module ?? "plugin-dsh-cost-analysis",
+        Stash: /* @__PURE__ */ new Map(),
+        Inflight: /* @__PURE__ */ new Map()
+      };
+      for (const [Key, Field] of Object.entries(Setup?.fields ?? {})) {
+        const Value = Raw[Field];
+        State[Key] = typeof Value?.get === "function" ? Value.get() : Value;
+      }
+      return State;
+    },
     Append: (_State, Message) => void Lines.push(Message)
   };
   let Context;
@@ -77,8 +84,22 @@ if (InvokedDirectly) {
     assert.equal(typeof Run.Context.commands.register, "function");
     assert.equal(typeof Run.Factory.Append, "function");
   });
-  console.log(Count.N === 2 && Count.F === 1 ? "Harness selfcheck OK" : `Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
-  if (Count.N !== 2 || Count.F !== 1) process.exitCode = 1;
+  const OffRun = Make(Validate({ enabled: false }));
+  Plugin.apply(OffRun.Context, OffRun.Raw);
+  const OffCommand = OffRun.Commands.Registered[0];
+  Check(Count, "selfcheck: the disabled mount appends the disabled line and refuses", () => {
+    assert.ok(
+      OffRun.Lines.includes("disabled (enabled=false)"),
+      "the activation proof names the disabled posture"
+    );
+    assert.ok(OffCommand !== void 0, "the command still registers");
+    assert.deepEqual(OffCommand.handler({}), {
+      kind: "error",
+      text: "plugin-dsh-cost-analysis: disabled (enabled=false)"
+    });
+  });
+  console.log(Count.N === 3 && Count.F === 1 ? "Harness selfcheck OK" : `Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+  if (Count.N !== 3 || Count.F !== 1) process.exitCode = 1;
 }
 export {
   Check,

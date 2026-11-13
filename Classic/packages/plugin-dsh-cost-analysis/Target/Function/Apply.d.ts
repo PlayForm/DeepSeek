@@ -24,6 +24,11 @@ import type Config from "../Interface/Config.js";
  * A ledger file that does not exist is a setup state and not a crash: the open
  * failure is recorded, the plugin still loads, and the command says so when it
  * is invoked.
+ *
+ * THE LIVE POSTURE (the family Config base): the State maps `On` to `enabled`,
+ * the command registers unconditionally of the flag, and the flag is read at
+ * CALL time - a disabled mount answers the disabled line, and the activation
+ * proof appends `disabled (enabled=false)` instead of the activated one.
  */
 /**
  * The factory vocabulary and the command registry, published on this module's

@@ -134,6 +134,42 @@ export const runTest = async (): Promise<number> => {
 				Opened.Close();
 			}
 		});
+
+		// The live posture (the Config base): a disabled mount registers the
+		// listeners but reads the flag at call time - the events pass through
+		// with zero ledger lines, and the activation proof is the disabled
+		// line instead of the activated one.
+		const Off = Validate({
+			enabled: false,
+			databasePath: join(Home, "off.db"),
+			prices: [{ provider: "p", model: "m", input: 1, output: 2 }],
+		});
+		const OffRun = Make(Off);
+		Plugin.apply(OffRun.Context, Off);
+		for (const Event of Events) {
+			OffRun.Listeners["session/event"]({ id: "off", cwd: Home }, Event);
+		}
+		OffRun.Listeners["session/flush"]({ id: "off", cwd: Home });
+		Check(Count, "T5: the disabled mount passes through with zero ledger lines", () => {
+			assert.ok(
+				OffRun.Lines.includes("disabled (enabled=false)"),
+				"the activation proof names the disabled posture",
+			);
+			assert.equal(
+				OffRun.Lines.some((One: string) => One.startsWith("activated - ")),
+				false,
+				"no activated line rides the disabled mount",
+			);
+			const Opened = Open(Off);
+			try {
+				const Calls = Opened.Database.prepare("SELECT COUNT(*) AS Count FROM Call").get() as {
+					Count: number;
+				};
+				assert.equal(Calls.Count, 0, "the disabled mount folds nothing into the ledger");
+			} finally {
+				Opened.Close();
+			}
+		});
 	} finally {
 		await rm(Home, { recursive: true, force: true });
 	}

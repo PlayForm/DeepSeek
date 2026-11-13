@@ -1,7 +1,8 @@
 import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     /**
-     * The enabled switch of the endpoint (ships disabled).
+     * The enabled switch of the endpoint (ships enabled; a disabled endpoint
+     * refuses every method).
      */
     enabled: Schema<boolean, boolean, "volatile-defined">;
     /**
@@ -18,7 +19,8 @@ declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     ccrLog: Schema<string, string, "volatile-defined">;
 }>>, Schemastery.ObjectT<NoInfer<{
     /**
-     * The enabled switch of the endpoint (ships disabled).
+     * The enabled switch of the endpoint (ships enabled; a disabled endpoint
+     * refuses every method).
      */
     enabled: Schema<boolean, boolean, "volatile-defined">;
     /**

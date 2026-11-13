@@ -52,6 +52,8 @@ export declare const name = "plugin-dsh-cost";
  */
 export declare const Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
     enabled: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
+    log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
+    logFile: import("@deepseek-ai/schemastery").default<string, string, "volatile-defined">;
     databasePath: import("@deepseek-ai/schemastery").default<string, string, "defined">;
     currency: import("@deepseek-ai/schemastery").default<string, string, "defined">;
     client: import("@deepseek-ai/schemastery").default<string, string, "defined">;
@@ -134,10 +136,10 @@ export declare const Config: import("@deepseek-ai/schemastery").default<Schemast
         startUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
         endUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
     }>>[], "defined">;
-    log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
-    logFile: import("@deepseek-ai/schemastery").default<string, string, "defined">;
 }>>, Schemastery.ObjectT<NoInfer<{
     enabled: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
+    log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
+    logFile: import("@deepseek-ai/schemastery").default<string, string, "volatile-defined">;
     databasePath: import("@deepseek-ai/schemastery").default<string, string, "defined">;
     currency: import("@deepseek-ai/schemastery").default<string, string, "defined">;
     client: import("@deepseek-ai/schemastery").default<string, string, "defined">;
@@ -220,8 +222,6 @@ export declare const Config: import("@deepseek-ai/schemastery").default<Schemast
         startUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
         endUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
     }>>[], "defined">;
-    log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
-    logFile: import("@deepseek-ai/schemastery").default<string, string, "defined">;
 }>>, "plain">;
 /**
  * The compiled package version (Source/Variable/Version, built in by the
@@ -252,6 +252,8 @@ declare const _default: {
     apply: (Context: import("@deepseek-ai/cordis").Context, Options: import("./Interface/Config.js").default) => void;
     Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
         enabled: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
+        log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
+        logFile: import("@deepseek-ai/schemastery").default<string, string, "volatile-defined">;
         databasePath: import("@deepseek-ai/schemastery").default<string, string, "defined">;
         currency: import("@deepseek-ai/schemastery").default<string, string, "defined">;
         client: import("@deepseek-ai/schemastery").default<string, string, "defined">;
@@ -334,10 +336,10 @@ declare const _default: {
             startUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
             endUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
         }>>[], "defined">;
-        log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
-        logFile: import("@deepseek-ai/schemastery").default<string, string, "defined">;
     }>>, Schemastery.ObjectT<NoInfer<{
         enabled: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
+        log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
+        logFile: import("@deepseek-ai/schemastery").default<string, string, "volatile-defined">;
         databasePath: import("@deepseek-ai/schemastery").default<string, string, "defined">;
         currency: import("@deepseek-ai/schemastery").default<string, string, "defined">;
         client: import("@deepseek-ai/schemastery").default<string, string, "defined">;
@@ -420,8 +422,6 @@ declare const _default: {
             startUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
             endUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
         }>>[], "defined">;
-        log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
-        logFile: import("@deepseek-ai/schemastery").default<string, string, "defined">;
     }>>, "plain">;
     inject: string[];
 };

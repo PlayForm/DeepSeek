@@ -9,8 +9,9 @@
  */
 export default interface Config {
     /**
-     * The live view ships disabled (the family's idle posture; the profile
-     * wiring pass enables it).
+     * The live view ships enabled (the Config base's master switch; the
+     * package is a pure browser module and writes no ledger file, so the
+     * base's `log`/`logFile` cells are absent by design).
      */
     enabled: boolean;
     /**

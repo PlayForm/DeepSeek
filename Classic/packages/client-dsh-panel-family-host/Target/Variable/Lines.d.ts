@@ -29,7 +29,7 @@ declare const _default: {
      */
     readonly unavailable: () => string;
     /**
-     * The bridge's refusal when the package ships disabled.
+     * The bridge's refusal when the package is disabled.
      */
     readonly disabled: () => string;
     /**

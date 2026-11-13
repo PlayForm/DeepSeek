@@ -24,6 +24,10 @@ import Schema from "@deepseek-ai/schemastery";
  * Home - the harness home precedence (explicit path > $DSH_HOME > ~/.dsh)
  * resolves the ledger and the log beside the harness's own storages, not under
  * a fixed tilde path (Temporary/Harness-Wave/Plan.md section 1.1).
+ *
+ * THE CONFIG BASE leads the field list - `enabled`, then `log`, then `logFile`
+ * - the base every cost-and-panel package carries; the domain fields follow in
+ * their existing order, unchanged in name and default.
  */
 /**
  * Named defaults (the shipped convention): every .default literal is hoisted
@@ -39,6 +43,8 @@ export declare const DefaultRenderLimit = 20;
 export declare const DefaultLog = false;
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     enabled: Schema<boolean, boolean, "volatile-defined">;
+    log: Schema<boolean, boolean, "volatile-defined">;
+    logFile: Schema<string, string, "volatile-defined">;
     databasePath: Schema<string, string, "defined">;
     client: Schema<string, string, "volatile-defined">;
     window: Schema<number, number, "volatile-defined">;
@@ -55,10 +61,10 @@ declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
         overhead: Schema<boolean, boolean, "volatile-defined">;
         cache: Schema<boolean, boolean, "volatile-defined">;
     }>>, "plain">;
-    log: Schema<boolean, boolean, "volatile-defined">;
-    logFile: Schema<string, string, "defined">;
 }>>, Schemastery.ObjectT<NoInfer<{
     enabled: Schema<boolean, boolean, "volatile-defined">;
+    log: Schema<boolean, boolean, "volatile-defined">;
+    logFile: Schema<string, string, "volatile-defined">;
     databasePath: Schema<string, string, "defined">;
     client: Schema<string, string, "volatile-defined">;
     window: Schema<number, number, "volatile-defined">;
@@ -75,7 +81,5 @@ declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
         overhead: Schema<boolean, boolean, "volatile-defined">;
         cache: Schema<boolean, boolean, "volatile-defined">;
     }>>, "plain">;
-    log: Schema<boolean, boolean, "volatile-defined">;
-    logFile: Schema<string, string, "defined">;
 }>>, "plain">;
 export default _default;

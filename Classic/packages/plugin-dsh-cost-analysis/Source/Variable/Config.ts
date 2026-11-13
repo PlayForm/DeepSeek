@@ -26,6 +26,10 @@ import { Home } from "@playform/lib-dsh-core";
  * Home - the harness home precedence (explicit path > $DSH_HOME > ~/.dsh)
  * resolves the ledger and the log beside the harness's own storages, not under
  * a fixed tilde path (Temporary/Harness-Wave/Plan.md section 1.1).
+ *
+ * THE CONFIG BASE leads the field list - `enabled`, then `log`, then `logFile`
+ * - the base every cost-and-panel package carries; the domain fields follow in
+ * their existing order, unchanged in name and default.
  */
 /**
  * Named defaults (the shipped convention): every .default literal is hoisted
@@ -45,6 +49,14 @@ export default Schema.object({
 		.default(true)
 		.volatile()
 		.description("Master switch: when false the analysis command answers nothing."),
+	log: Schema.boolean()
+		.default(DefaultLog)
+		.volatile()
+		.description("Write the plugin's own diagnostic log file."),
+	logFile: Schema.string()
+		.default(Home(["cost", "analysis.log"]))
+		.volatile()
+		.description("Path of the diagnostic log; a leading tilde expands to the home directory."),
 	databasePath: Schema.string()
 		.default(DefaultDatabasePath)
 		.description(
@@ -80,11 +92,4 @@ export default Schema.object({
 			.volatile()
 			.description("Include the per-file cache-efficiency metric."),
 	}).description("Which metric families the analysis command renders."),
-	log: Schema.boolean()
-		.default(DefaultLog)
-		.volatile()
-		.description("Write the plugin's own diagnostic log file."),
-	logFile: Schema.string()
-		.default(Home(["cost", "analysis.log"]))
-		.description("Path of the diagnostic log; a leading tilde expands to the home directory."),
 });

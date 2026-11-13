@@ -9,13 +9,23 @@
  * The shape follows `Variable/Config.ts`. The optional price rates stay
  * optional (an absent rate is an unpriced bucket, charged at zero); every
  * defaulted column is always present. The factor layer's arrays (section 17)
- * carry the modifier rows and the time-of-day windows.
+ * carry the modifier rows and the time-of-day windows. The Config base leads
+ * the field list - `enabled`, then `log`, then `logFile` - and the domain
+ * fields follow in their existing order.
  */
 export default interface Config {
     /**
      * Whether the plugin captures and prices anything at all.
      */
     readonly enabled: boolean;
+    /**
+     * Whether the plugin logs its lines.
+     */
+    readonly log: boolean;
+    /**
+     * The log file path.
+     */
+    readonly logFile: string;
     /**
      * The ledger database path, tilde-expanded at its open site.
      */
@@ -56,14 +66,6 @@ export default interface Config {
      * The time-of-day windows a price row's Window column resolves against.
      */
     readonly priceWindows: readonly PriceWindow[];
-    /**
-     * Whether the plugin logs its lines.
-     */
-    readonly log: boolean;
-    /**
-     * The log file path.
-     */
-    readonly logFile: string;
 }
 /**
  * The capture gates: every session, subagent sessions only with their own

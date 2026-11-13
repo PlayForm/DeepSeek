@@ -18,7 +18,7 @@ import Version from "@Variable/Version.js";
  * manifest-facing consumers.
  *
  * The export surface is `name`, `apply`, `Config`, `inject` and the default object
- * `{ name, inject, Config, apply }`.
+ * `{ name, apply, Config, inject }`.
  */
 export const name = "client-dsh-panel-cost";
 
@@ -35,4 +35,4 @@ export function apply(ctx: Context): void {
 	Serve(ctx);
 }
 
-export default { name, inject, Config, apply };
+export default { name, apply, Config, inject };

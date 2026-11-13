@@ -14,8 +14,12 @@ import Schema from "@deepseek-ai/schemastery";
 /**
  * The named defaults: one spelling per value, so a caller that needs the fallback (the tail's
  * own line budget, a test fixture) imports the constant instead of restating the literal.
+ * The Config base leads the field list - `enabled` first, the base every cost-and-panel
+ * package carries; the package writes no ledger file of its own (its lines go through the
+ * logger), so the base's `log`/`logFile` cells are absent by design and `logRoot` is the
+ * READ root of the family ledgers, not this package's own ledger path.
  */
-const DefaultEnabled = false;
+const DefaultEnabled = true;
 const DefaultLogRoot = "~/.dsh";
 const DefaultMaxLines = 200;
 const DefaultMinLines = 1;
@@ -24,7 +28,8 @@ const DefaultCcrLog = "~/.dsh/playform/hook-dsh-ccr.log";
 
 export default Schema.object({
 	/**
-	 * The enabled switch of the endpoint (ships disabled).
+	 * The enabled switch of the endpoint (ships enabled; a disabled endpoint
+	 * refuses every method).
 	 */
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	/**

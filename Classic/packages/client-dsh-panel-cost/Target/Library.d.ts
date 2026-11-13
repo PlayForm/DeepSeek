@@ -16,7 +16,7 @@ import Version from "./Variable/Version.js";
  * manifest-facing consumers.
  *
  * The export surface is `name`, `apply`, `Config`, `inject` and the default object
- * `{ name, inject, Config, apply }`.
+ * `{ name, apply, Config, inject }`.
  */
 export declare const name = "client-dsh-panel-cost";
 /**
@@ -29,7 +29,7 @@ export { Config, Version };
 export declare function apply(ctx: Context): void;
 declare const _default: {
     name: string;
-    inject: string[];
+    apply: typeof apply;
     Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
         enabled: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
         tabOrder: import("@deepseek-ai/schemastery").default<number, number, "volatile-defined">;
@@ -41,6 +41,6 @@ declare const _default: {
         rows: import("@deepseek-ai/schemastery").default<number, number, "volatile-defined">;
         locale: import("@deepseek-ai/schemastery").default<"en" | "zh", "en" | "zh", "volatile-defined">;
     }>>, "plain">;
-    apply: typeof apply;
+    inject: string[];
 };
 export default _default;

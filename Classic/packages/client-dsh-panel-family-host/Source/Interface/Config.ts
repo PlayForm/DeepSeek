@@ -6,8 +6,9 @@
  */
 export default interface Config {
 	/**
-	 * The endpoint ships disabled: the idle posture matches the family's other rows and the
-	 * profile wiring pass enables it.
+	 * The endpoint ships enabled (the Config base's master switch); a disabled
+	 * package answers every method with the refusal instead of passing
+	 * silently.
 	 */
 	enabled: boolean;
 

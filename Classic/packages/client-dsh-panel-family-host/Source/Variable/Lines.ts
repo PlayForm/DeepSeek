@@ -33,7 +33,7 @@ export default {
 	unavailable: (): string => "bridge: config editor unavailable",
 
 	/**
-	 * The bridge's refusal when the package ships disabled.
+	 * The bridge's refusal when the package is disabled.
 	 */
 	disabled: (): string => "bridge: disabled (enabled=false)",
 

@@ -44,6 +44,12 @@ import Rollup from "./Rollup.js";
  * ledger effect. The plugin stays silent - no tool, no prompt section, no
  * model-visible message; the commands render their text OUTSIDE model history.
  *
+ * THE LIVE POSTURE (the family Config base): the State maps `On` to `enabled`,
+ * the two listeners register with the ledger effect unconditionally of the
+ * flag, and the flag is read at CALL time - a disabled mount passes through
+ * with zero ledger lines, and the activation proof appends
+ * `disabled (enabled=false)` instead of the activated line.
+ *
  * The human surface (Documentation/Plans/COST-TRACK-PLUGIN.md section 5): the
  * registry's name law allows no spaces in a command name, so ONE command owns
  * the grammar and the verb is its first word - "report [scope] [range]",
@@ -109,10 +115,13 @@ export default (Context: Context, Options: Config): void => {
 	const Factory = Context.pluginFactory;
 
 	// The State: the factory's shared shape plus the ledger path, copied from
-	// the (cell-unwrapped) validated config by the setup map.
-	const State = Factory.State<{ Path: string }>(Context, Options, {
+	// the (cell-unwrapped) validated config by the setup map. `On` is the
+	// Config base's master switch; every mapped field is volatile in the
+	// schema, so the factory's P10 loader/volatile-update listener refreshes
+	// them IN PLACE.
+	const State = Factory.State<{ On: boolean; Path: string }>(Context, Options, {
 		module: "plugin-dsh-cost",
-		fields: { Path: "databasePath" },
+		fields: { On: "enabled", Path: "databasePath" },
 	});
 
 	// The ledger: the effect opens the SQLite file (fail loud on an
@@ -202,9 +211,19 @@ export default (Context: Context, Options: Config): void => {
 				);
 			};
 			OffEvent = Context.on("session/event", (Subject, Event): void => {
+				// The call-time enabled check (the live posture): a disabled
+				// mount passes through with zero ledger lines.
+				if (State.On === false) {
+					return;
+				}
 				Queue.Push(Subject, Event);
 			});
 			OffFlush = Context.on("session/flush", (Subject): void => {
+				// The call-time enabled check (the live posture): a disabled
+				// mount folds nothing.
+				if (State.On === false) {
+					return;
+				}
 				try {
 					const SessionId = (Subject as { id?: unknown } | undefined)?.id;
 					if (typeof SessionId !== "string") {
@@ -260,8 +279,11 @@ export default (Context: Context, Options: Config): void => {
 	}
 
 	// Durable activation proof - "did it activate" must be answerable from the
-	// ledger alone (the module prefix is the factory's Append layer).
-	if (Ledger !== undefined) {
+	// ledger alone (the module prefix is the factory's Append layer). The
+	// disabled posture appends the disabled line instead of the activated one.
+	if (State.On === false) {
+		Factory.Append(State, "disabled (enabled=false)");
+	} else if (Ledger !== undefined) {
 		Factory.Append(State, `activated - ${process.cwd()}`);
 	}
 

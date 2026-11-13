@@ -28,7 +28,7 @@ const runTest = async () => {
     });
   }
   {
-    const Run = Make(Validate({ logRoot: MakeRoot() }));
+    const Run = Make(Validate({ enabled: false, logRoot: MakeRoot() }));
     Check(Count, "W1: the cold mount logs the byte-exact disabled line", () => {
       assert.deepEqual(Run.Lines, ["host: activated (enabled=false)"]);
     });

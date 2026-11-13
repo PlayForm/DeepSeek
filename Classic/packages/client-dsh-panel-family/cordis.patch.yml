@@ -12,14 +12,14 @@
 #
 # New entries are declared with `insert:`; activated when the profile's
 # package.json lists the package in dsh.profile.bundles AND the app restarts
-# (bundle layers compose at host boot). The PoC ships the row DISABLED
-# (the PoC brief's mandatory anatomy: `enabled: false`); the end-phase wiring
-# pass flips the row per the plan (which wants the panel live by default).
+# (bundle layers compose at host boot). The row ships ENABLED (the plan wants
+# the panel live by default, R-UI-1); a disabled row keeps the mounted surfaces
+# and the pure client half passes through.
 - insert:
       - id: client-dsh-panel-family
         name: "@playform/client-dsh-panel-family"
         config:
-            enabled: false
+            enabled: true
             tabOrder: 20
             overlayMaxWidth: 720
             locale: en

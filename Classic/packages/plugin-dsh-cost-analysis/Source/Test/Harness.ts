@@ -80,12 +80,26 @@ export const Make = (Raw: Record<string, unknown>): any => {
 	const Commands: any = { Registered: [] as unknown[] };
 	Commands.register = (Definition: unknown) => void Commands.Registered.push(Definition);
 	const Factory = {
-		State: (Context: unknown, _Config: unknown, Setup: any) => ({
-			Context,
-			Module: Setup?.module ?? "plugin-dsh-cost-analysis",
-			Stash: new Map(),
-			Inflight: new Map(),
-		}),
+		State: (Context: unknown, _Config: unknown, Setup: any) => {
+			// The setup map, honored like the real factory's builder: every
+			// mapped field is copied from the (cell-unwrapped) validated
+			// config onto the State, so Apply's call-time reads (`State.On`)
+			// see the plain values.
+			const State: any = {
+				Context,
+				Module: Setup?.module ?? "plugin-dsh-cost-analysis",
+				Stash: new Map(),
+				Inflight: new Map(),
+			};
+			for (const [Key, Field] of Object.entries(Setup?.fields ?? {})) {
+				const Value = (Raw as Record<string, unknown>)[Field as string];
+				State[Key] =
+					typeof (Value as { get?: unknown } | null)?.get === "function"
+						? (Value as { get: () => unknown }).get()
+						: Value;
+			}
+			return State;
+		},
 		Append: (_State: unknown, Message: string) => void Lines.push(Message),
 	};
 	let Context: any;
@@ -132,6 +146,23 @@ if (InvokedDirectly) {
 		assert.equal(typeof Run.Context.commands.register, "function");
 		assert.equal(typeof Run.Factory.Append, "function");
 	});
-	console.log(Count.N === 2 && Count.F === 1 ? "Harness selfcheck OK" : `Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
-	if (Count.N !== 2 || Count.F !== 1) process.exitCode = 1;
+	// The live posture (the Config base): a disabled mount registers the
+	// command but reads the flag at call time - the command answers the
+	// disabled line and the activation proof is the disabled line.
+	const OffRun = Make(Validate({ enabled: false }));
+	Plugin.apply(OffRun.Context, OffRun.Raw);
+	const OffCommand = OffRun.Commands.Registered[0] as any;
+	Check(Count, "selfcheck: the disabled mount appends the disabled line and refuses", () => {
+		assert.ok(
+			OffRun.Lines.includes("disabled (enabled=false)"),
+			"the activation proof names the disabled posture",
+		);
+		assert.ok(OffCommand !== undefined, "the command still registers");
+		assert.deepEqual(OffCommand.handler({}), {
+			kind: "error",
+			text: "plugin-dsh-cost-analysis: disabled (enabled=false)",
+		});
+	});
+	console.log(Count.N === 3 && Count.F === 1 ? "Harness selfcheck OK" : `Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+	if (Count.N !== 3 || Count.F !== 1) process.exitCode = 1;
 }

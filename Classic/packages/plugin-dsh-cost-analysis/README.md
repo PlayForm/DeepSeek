@@ -25,12 +25,15 @@ rows. When the ledger file does not exist the command says so and the plugin sti
 
 ## Config
 
+The Config base leads the field list - `enabled`, then `log`, then `logFile` - and the domain fields
+follow in their existing order.
+
 | Field        | Default                    | Meaning                                  |
 | ------------ | -------------------------- | ---------------------------------------- |
 | enabled      | `true`                     | Master switch.                           |
+| log          | `false`                    | Write the diagnostic log.                |
+| logFile      | `~/.dsh/cost/analysis.log` | Where the diagnostic log goes.           |
 | databasePath | `~/.dsh/cost/ledger.db`    | The ledger file, opened read-only.       |
 | client       | `""`                       | Client filter; empty means every client. |
 | window       | `30`                       | The day window the readings cover.       |
 | metrics      | all five `true`            | Which metric families render.            |
-| log          | `true`                     | Write the diagnostic log.                |
-| logFile      | `~/.dsh/cost/analysis.log` | Where the diagnostic log goes.           |

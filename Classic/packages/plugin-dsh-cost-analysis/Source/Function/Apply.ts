@@ -30,6 +30,11 @@ import Open from "./Open.js";
  * A ledger file that does not exist is a setup state and not a crash: the open
  * failure is recorded, the plugin still loads, and the command says so when it
  * is invoked.
+ *
+ * THE LIVE POSTURE (the family Config base): the State maps `On` to `enabled`,
+ * the command registers unconditionally of the flag, and the flag is read at
+ * CALL time - a disabled mount answers the disabled line, and the activation
+ * proof appends `disabled (enabled=false)` instead of the activated one.
  */
 /**
  * The factory vocabulary and the command registry, published on this module's
@@ -79,10 +84,11 @@ export default (Context: Context, Options: Config): void => {
 	const Factory = Context.pluginFactory;
 
 	// The State: the factory's shared shape plus the ledger path, copied
-	// from the (cell-unwrapped) validated config by the setup map.
-	const State = Factory.State<{ Path: string }>(Context, Options, {
+	// from the (cell-unwrapped) validated config by the setup map. `On` is
+	// the Config base's master switch.
+	const State = Factory.State<{ On: boolean; Path: string }>(Context, Options, {
 		module: "plugin-dsh-cost-analysis",
-		fields: { Path: "databasePath" },
+		fields: { On: "enabled", Path: "databasePath" },
 	});
 
 	// The ledger: the effect opens the SQLite file READ-ONLY (an open
@@ -105,7 +111,11 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from
 	// the factory's ledger alone (the module prefix is the Append layer).
-	if (Ledger !== undefined) {
+	// The disabled posture appends the disabled line instead of the
+	// activated one; the not-opened ledger keeps its own line.
+	if (State.On === false) {
+		Factory.Append(State, "disabled (enabled=false)");
+	} else if (Ledger !== undefined) {
 		Factory.Append(State, `activated read-only over ${Options.databasePath}`);
 	} else if (Failure !== undefined) {
 		Factory.Append(State, `ledger not opened - ${Failure}`);
@@ -132,6 +142,14 @@ export default (Context: Context, Options: Config): void => {
 				description:
 					"Cost analysis (read-only): the contribution and efficiency metrics over the ledger the cost plugin wrote",
 				handler: (Invocation): CommandResult => {
+					// The call-time enabled check (the live posture): a
+					// disabled mount answers the disabled line.
+					if (State.On === false) {
+						return {
+							kind: "error",
+							text: "plugin-dsh-cost-analysis: disabled (enabled=false)",
+						};
+					}
 					const Raw =
 						typeof Invocation?.rawInput === "string" ? Invocation.rawInput.trim() : "";
 					const Words = Raw.length === 0 ? [] : Raw.split(/\s+/);

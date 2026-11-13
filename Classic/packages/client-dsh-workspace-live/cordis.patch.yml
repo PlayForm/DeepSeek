@@ -15,13 +15,14 @@
 #
 # New entries are declared with `insert:`; activated when the profile's
 # package.json lists the package in dsh.profile.bundles AND the app restarts.
-# The PoC ships the row DISABLED (the PoC brief's mandatory anatomy:
-# `enabled: false`), matching the family's idle posture.
+# The row ships ENABLED (the Config base's master switch, default true); the
+# package is a pure browser module and writes no ledger file, so the base's
+# `log`/`logFile` cells are absent by design.
 - insert:
       - id: client-dsh-workspace-live
         name: "@playform/client-dsh-workspace-live"
         config:
-            enabled: false
+            enabled: true
             tabOrder: 25
             maxEvents: 50
             maxRepresentations: 100

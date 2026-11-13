@@ -77,12 +77,14 @@ The trace source needs no sibling import: the client context gives the bus struc
 
 | Field                | Type    | Default | Meaning                                              |
 | -------------------- | ------- | ------- | ---------------------------------------------------- |
-| `enabled`            | boolean | `false` | the family's idle posture                            |
+| `enabled`            | boolean | `true`  | ships enabled; the Config base's master switch       |
 | `tabOrder`           | number  | `25`    | tab order in `conversation.view`                     |
 | `maxEvents`          | number  | `50`    | the recent-event tail bound AND the trace tail bound |
 | `maxRepresentations` | number  | `100`   | the presented-entity bound                           |
 
-All knobs are volatile.
+All knobs are volatile. The Config base leads the field list - `enabled` first - and the package is
+a pure browser module that writes no ledger file, so the base's `log`/`logFile` cells are absent by
+design.
 
 ## The ledger
 

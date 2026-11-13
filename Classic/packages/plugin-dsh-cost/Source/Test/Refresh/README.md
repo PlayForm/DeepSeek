@@ -18,12 +18,17 @@ the wall clock, because a backfilled session must land on the day it happened.
   priced money.
 - Check: "T5: a day with no calls writes nothing" - a 2020 timestamp returns zero rows and invents no
   aggregate.
+- Check: "T5: the disabled mount passes through with zero ledger lines" - with `enabled: false` the
+  registered listeners read the flag at call time, the activation proof is the disabled line, and the
+  ledger folds nothing.
 
 ## Fixtures
 
 - A fresh OS tmpdir ledger opened through `Open`, the fake harness ctx, and one synthetic session
   replayed through `Drain` (one priced call with a write touch) whose five events share one UTC day.
+- A second live apply run over its own tmpdir ledger (the wiring probe) and a third apply run with
+  `enabled: false` over its own ledger (the disabled-posture probe).
 
 ## Expected count
 
-4 PASS.
+5 PASS.

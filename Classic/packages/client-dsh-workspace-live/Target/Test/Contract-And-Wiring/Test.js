@@ -32,7 +32,7 @@ const runTest = () => {
         maxEvents: Cell("maxEvents"),
         maxRepresentations: Cell("maxRepresentations")
       },
-      { enabled: false, tabOrder: 25, maxEvents: 50, maxRepresentations: 100 }
+      { enabled: true, tabOrder: 25, maxEvents: 50, maxRepresentations: 100 }
     );
   });
   Check(Count, "W3: maxEvents outside its bounds fails loud at load", () => {

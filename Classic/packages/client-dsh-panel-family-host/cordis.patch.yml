@@ -14,13 +14,14 @@
 #
 # New entries are declared with `insert:`; activated when the profile's
 # package.json lists the package in dsh.profile.bundles AND the app restarts.
-# The PoC ships the row DISABLED (the PoC brief's mandatory anatomy:
-# `enabled: false`); the end-phase wiring pass decides the final posture.
+# The row ships ENABLED (the Config base's master switch, default true); a
+# disabled package answers every method with the refusal instead of passing
+# silently.
 - insert:
       - id: client-dsh-panel-family-host
         name: "@playform/client-dsh-panel-family-host"
         config:
-            enabled: false
+            enabled: true
             logRoot: ~/.dsh
             maxLines: 200
             ccrLog: ~/.dsh/playform/hook-dsh-ccr.log

@@ -116,7 +116,9 @@ annotation and retries, never forces it.
 
 ## The configuration
 
-`enabled` and `log` are on; the ledger sits at `~/.dsh/cost/ledger.db` and the log at
+The Config base leads the schema - `enabled`, then `log`, then `logFile` - and the domain fields
+follow in their existing order. `enabled` is on and `log` is off (the plugin's own diagnostic log
+writes only when asked); the ledger sits at `~/.dsh/cost/ledger.db` and the log file at
 `~/.dsh/cost/cost.log`; `currency` is `USD` and `client` is `default`; `capture` sessions and
 subagents are on with backfill off; `attribution` uses direct `bytes` and amortized `context`;
 `annotate` is off (marker `dsh-cost`); `export` is `csv`; `prices` holds the three shipped rows per

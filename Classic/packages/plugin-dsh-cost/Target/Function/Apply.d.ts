@@ -29,6 +29,12 @@ import type Config from "../Interface/Config.js";
  * ledger effect. The plugin stays silent - no tool, no prompt section, no
  * model-visible message; the commands render their text OUTSIDE model history.
  *
+ * THE LIVE POSTURE (the family Config base): the State maps `On` to `enabled`,
+ * the two listeners register with the ledger effect unconditionally of the
+ * flag, and the flag is read at CALL time - a disabled mount passes through
+ * with zero ledger lines, and the activation proof appends
+ * `disabled (enabled=false)` instead of the activated line.
+ *
  * The human surface (Documentation/Plans/COST-TRACK-PLUGIN.md section 5): the
  * registry's name law allows no spaces in a command name, so ONE command owns
  * the grammar and the verb is its first word - "report [scope] [range]",
