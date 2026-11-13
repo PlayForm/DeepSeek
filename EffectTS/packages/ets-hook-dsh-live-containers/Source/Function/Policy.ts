@@ -75,19 +75,18 @@ export const IsDetachableTool = (Tool: string, Detach: DetachConfig): boolean =>
  */
 export const IsInteractive = (Command: string): boolean => {
 	const Text = Command.trim();
-	if (/(^|\||;|&&)\s*read\s/.test(Text)) {
-		return true;
+	switch (true) {
+		case /(^|\||;|&&)\s*read\s/.test(Text):
+			return true;
+		case /(^|\||;|&&)\s*ssh\b/.test(Text):
+			return true;
+		case /(^|\||;|&&)\s*vim?\b/.test(Text):
+			return true;
+		case /(^|\||;|&&)\s*less\b/.test(Text):
+			return true;
+		default:
+			return false;
 	}
-	if (/(^|\||;|&&)\s*ssh\b/.test(Text)) {
-		return true;
-	}
-	if (/(^|\||;|&&)\s*vim?\b/.test(Text)) {
-		return true;
-	}
-	if (/(^|\||;|&&)\s*less\b/.test(Text)) {
-		return true;
-	}
-	return false;
 };
 
 /**

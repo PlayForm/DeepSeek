@@ -54,28 +54,28 @@ export const Gate = (
 	Text: string,
 	FirstOfTurn: boolean,
 ): boolean => {
-	if (Agent.Suggester === "off") {
-		return false;
-	}
-	if (!FirstOfTurn) {
-		return false;
-	}
-	if (Text.length < Agent.SuggestGateMinChars) {
-		return false;
+	switch (true) {
+		case Agent.Suggester === "off":
+			return false;
+		case !FirstOfTurn:
+			return false;
+		case Text.length < Agent.SuggestGateMinChars:
+			return false;
+		default:
 	}
 	const Lower = Text.toLowerCase();
-	if (SKIP_WORDS.some((Word) => Lower.includes(Word))) {
-		return false;
-	}
 	const Ticks = Agent.SuggesterTicks.get(AgentID);
 	const Hour = Ticks?.ticks.filter((At) => Clock(Agent) - At < 3600000) ?? [];
-	if (Hour.length >= Agent.MaximumSuggestionsPerHour) {
-		return false;
+	switch (true) {
+		case SKIP_WORDS.some((Word) => Lower.includes(Word)):
+			return false;
+		case Hour.length >= Agent.MaximumSuggestionsPerHour:
+			return false;
+		case Ticks?.lastTurn === (Agent.TurnCounts.get(AgentID) ?? 0):
+			return false;
+		default:
+			return true;
 	}
-	if (Ticks?.lastTurn === (Agent.TurnCounts.get(AgentID) ?? 0)) {
-		return false;
-	}
-	return true;
 };
 
 /** The request excerpt (I6 section 2): "redact" sends the first 200 chars

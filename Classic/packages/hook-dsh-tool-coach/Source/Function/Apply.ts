@@ -91,35 +91,29 @@ const IsDefaultRows = (Rows: CoachRow[]): boolean =>
 const Validate = (Options: unknown): void => {
 	const Raw = (Options ?? {}) as Record<string, unknown>;
 	const Numeric = (Key: string): number => Number(Cell(Raw[Key]));
-	const Fail = (Message: string): never => {
+	const Fail: (Message: string) => never = (Message) => {
 		throw new Error(`hook-dsh-tool-coach: ${Message}`);
 	};
-	if (!(Numeric("threshold") >= 1)) {
-		Fail("threshold must be >= 1");
-	}
-	if (!(Numeric("window") >= Numeric("threshold"))) {
-		Fail("window must be >= threshold");
-	}
-	if (!(Numeric("cooldown") >= 1)) {
-		Fail("cooldown must be >= 1");
-	}
-	if (!(Numeric("escalateThreshold") >= Numeric("threshold"))) {
-		Fail("escalateThreshold must be >= threshold");
-	}
-	if (!(Numeric("cleanWindow") >= 1)) {
-		Fail("cleanWindow must be >= 1");
-	}
-	if (!(Numeric("enforceThreshold") >= 1)) {
-		Fail("enforceThreshold must be >= 1");
-	}
-	if (!["off", "write", "all"].includes(String(Cell(Raw["enforce"])))) {
-		Fail('enforce must be one of "off" | "write" | "all"');
-	}
-	if (!(Numeric("maxSectionTools") >= 1 && Numeric("maxSectionTools") <= 24)) {
-		Fail("maxSectionTools must be between 1 and 24");
-	}
-	if (!(Numeric("sectionTtl") >= 1)) {
-		Fail("sectionTtl must be >= 1");
+	switch (true) {
+		case !(Numeric("threshold") >= 1):
+			Fail("threshold must be >= 1");
+		case !(Numeric("window") >= Numeric("threshold")):
+			Fail("window must be >= threshold");
+		case !(Numeric("cooldown") >= 1):
+			Fail("cooldown must be >= 1");
+		case !(Numeric("escalateThreshold") >= Numeric("threshold")):
+			Fail("escalateThreshold must be >= threshold");
+		case !(Numeric("cleanWindow") >= 1):
+			Fail("cleanWindow must be >= 1");
+		case !(Numeric("enforceThreshold") >= 1):
+			Fail("enforceThreshold must be >= 1");
+		case !["off", "write", "all"].includes(String(Cell(Raw["enforce"]))):
+			Fail('enforce must be one of "off" | "write" | "all"');
+		case !(Numeric("maxSectionTools") >= 1 && Numeric("maxSectionTools") <= 24):
+			Fail("maxSectionTools must be between 1 and 24");
+		case !(Numeric("sectionTtl") >= 1):
+			Fail("sectionTtl must be >= 1");
+		default:
 	}
 	const Judge = Cell(Raw["judgeTools"]);
 	if (!Array.isArray(Judge) || Judge.length === 0) {

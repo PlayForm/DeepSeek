@@ -50,18 +50,19 @@ const Deniable = (Enforce: "off" | "write" | "all"): Set<CoachClass> => {
  * enforce threshold not reached).
  */
 export default (State: AgentState, Match: Match, Config: EnforceConfig): boolean => {
-	if (Config.enforce === "off") {
-		return false;
+	switch (true) {
+		case Config.enforce === "off":
+			return false;
+		case !Deniable(Config.enforce).has(Match.class):
+			return false;
+		case State.classStrikes[Match.class] < Config.enforceThreshold:
+			return false;
+		default: {
+			// The deny resets the note counters (it IS an intervention).
+			State.sinceNote = 0;
+			State.strikesSinceNote = 0;
+			State.classStrikes = { write: 0, read: 0, search: 0, discovery: 0, control: 0 };
+			return true;
+		}
 	}
-	if (!Deniable(Config.enforce).has(Match.class)) {
-		return false;
-	}
-	if (State.classStrikes[Match.class] < Config.enforceThreshold) {
-		return false;
-	}
-	// The deny resets the note counters (it IS an intervention).
-	State.sinceNote = 0;
-	State.strikesSinceNote = 0;
-	State.classStrikes = { write: 0, read: 0, search: 0, discovery: 0, control: 0 };
-	return true;
 };

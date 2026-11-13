@@ -115,31 +115,26 @@ const Cell = (Value: unknown): unknown =>
 const Validate = (Options: unknown): void => {
 	const Raw = (Options ?? {}) as Record<string, unknown>;
 	const Numeric = (Key: string): number => Number(Cell(Raw[Key]));
-	const Fail = (Message: string): never => {
+	const Fail: (Message: string) => never = (Message) => {
 		throw new Error(`hook-dsh-live-containers: ${Message}`);
 	};
-	if (
-		typeof Cell(Raw["sectionName"]) !== "string" ||
-		String(Cell(Raw["sectionName"])).length === 0
-	) {
-		Fail("sectionName must be a non-empty string");
-	}
-	if (!["request", "ttl"].includes(String(Cell(Raw["refresh"])))) {
-		Fail('refresh must be one of "request" | "ttl"');
-	}
-	if (!(Numeric("ttlCalls") >= 1)) {
-		Fail("ttlCalls must be >= 1");
-	}
-	if (typeof Cell(Raw["separator"]) !== "string" || String(Cell(Raw["separator"])).length === 0) {
-		Fail("separator must be a non-empty string");
-	}
-	if (!(Numeric("sectionBudgetBytes") >= 1)) {
-		Fail("sectionBudgetBytes must be >= 1");
+	switch (true) {
+		case typeof Cell(Raw["sectionName"]) !== "string" ||
+			String(Cell(Raw["sectionName"])).length === 0:
+			Fail("sectionName must be a non-empty string");
+		case !["request", "ttl"].includes(String(Cell(Raw["refresh"]))):
+			Fail('refresh must be one of "request" | "ttl"');
+		case !(Numeric("ttlCalls") >= 1):
+			Fail("ttlCalls must be >= 1");
+		case typeof Cell(Raw["separator"]) !== "string" || String(Cell(Raw["separator"])).length === 0:
+			Fail("separator must be a non-empty string");
+		case !(Numeric("sectionBudgetBytes") >= 1):
+			Fail("sectionBudgetBytes must be >= 1");
+		default:
 	}
 	const Blocks = Cell(Raw["blocks"]);
 	if (!Array.isArray(Blocks)) {
 		Fail("blocks must be an array of block specs");
-		return;
 	}
 	const Seen = new Set<string>();
 	for (const Block of Blocks as BlockSpecification[]) {
@@ -224,28 +219,24 @@ const Validate = (Options: unknown): void => {
 			Fail("plant.boardsPerAgent must be >= 1");
 		}
 	}
-	if (!["off", "on"].includes(String(Cell(Raw["failsafes"])))) {
-		Fail('failsafes must be one of "off" | "on"');
-	}
-	if (!["warn-only", "kill"].includes(String(Cell(Raw["hangAction"])))) {
-		Fail('hangAction must be one of "warn-only" | "kill"');
-	}
-	if (!(Num2(Cell(Raw["failsafesPerTurn"])) >= 1)) {
-		Fail("failsafesPerTurn must be >= 1");
-	}
-	if (!["off", "section", "plant"].includes(String(Cell(Raw["suggester"])))) {
-		Fail('suggester must be one of "off" | "section" | "plant"');
-	}
-	if (!["redact", "verbatim"].includes(String(Cell(Raw["suggesterPrivacy"])))) {
-		Fail('suggesterPrivacy must be one of "redact" | "verbatim"');
-	}
-	if (!(Num2(Cell(Raw["completionCapBytes"])) >= 512)) {
-		Fail("completionCapBytes must be >= 512");
-	}
-	// WAVE-3 validation (appended only; the phase-1 and wave-2 checks above
-	// are untouched). Every knob fails loud, never silently defaults.
-	if (!["off", "on"].includes(String(Cell(Raw["monitors"])))) {
-		Fail('monitors must be one of "off" | "on"');
+	switch (true) {
+		case !["off", "on"].includes(String(Cell(Raw["failsafes"]))):
+			Fail('failsafes must be one of "off" | "on"');
+		case !["warn-only", "kill"].includes(String(Cell(Raw["hangAction"]))):
+			Fail('hangAction must be one of "warn-only" | "kill"');
+		case !(Num2(Cell(Raw["failsafesPerTurn"])) >= 1):
+			Fail("failsafesPerTurn must be >= 1");
+		case !["off", "section", "plant"].includes(String(Cell(Raw["suggester"]))):
+			Fail('suggester must be one of "off" | "section" | "plant"');
+		case !["redact", "verbatim"].includes(String(Cell(Raw["suggesterPrivacy"]))):
+			Fail('suggesterPrivacy must be one of "redact" | "verbatim"');
+		case !(Num2(Cell(Raw["completionCapBytes"])) >= 512):
+			Fail("completionCapBytes must be >= 512");
+		// WAVE-3 validation (appended only; the phase-1 and wave-2 checks above
+		// are untouched). Every knob fails loud, never silently defaults.
+		case !["off", "on"].includes(String(Cell(Raw["monitors"]))):
+			Fail('monitors must be one of "off" | "on"');
+		default:
 	}
 	const Watchlist = Cell(Raw["watchlist"]);
 	if (!Array.isArray(Watchlist)) {
@@ -255,7 +246,6 @@ const Validate = (Options: unknown): void => {
 		const Record = Entry as { glob?: unknown; checks?: unknown } | null;
 		if (Record === null || typeof Record.glob !== "string" || Record.glob.length === 0) {
 			Fail("every watchlist entry needs a non-empty glob string");
-			continue;
 		}
 		if (
 			!Array.isArray(Record.checks) ||
@@ -268,7 +258,6 @@ const Validate = (Options: unknown): void => {
 	for (const [ID, Specification] of Object.entries(CheckSets)) {
 		if (Specification === null || typeof Specification !== "object") {
 			Fail(`checksets.${ID} must be an object`);
-			continue;
 		}
 		const S = Specification as {
 			command?: unknown;
@@ -325,40 +314,31 @@ const Validate = (Options: unknown): void => {
 	// without them is invalid).
 	const MonitorNumber = (Value: unknown): number =>
 		typeof Value === "number" && Number.isFinite(Value) ? Value : -1;
-	if (!(MonitorNumber(MonitorCell["debounceMs"]) >= 1)) {
-		Fail("monitor.debounceMs must be >= 1");
-	}
-	if (!(MonitorNumber(MonitorCell["maxMonitors"]) >= 1)) {
-		Fail("monitor.maxMonitors must be >= 1");
-	}
-	if (!(MonitorNumber(MonitorCell["maxMonitorJobs"]) >= 1)) {
-		Fail("monitor.maxMonitorJobs must be >= 1");
-	}
-	if (!(MonitorNumber(MonitorCell["retireMs"]) >= 1)) {
-		Fail("monitor.retireMs must be >= 1");
-	}
-	if (!(MonitorNumber(MonitorCell["staleMs"]) >= 1)) {
-		Fail("monitor.staleMs must be >= 1");
-	}
-	if (!(MonitorNumber(MonitorCell["slowCheckIntervalMs"]) >= 0)) {
-		Fail("monitor.slowCheckIntervalMs must be >= 0");
-	}
-	if (!(MonitorNumber(MonitorCell["bandCapBytes"]) >= 256)) {
-		Fail("monitor.bandCapBytes must be >= 256");
-	}
-	if (
-		!(MonitorNumber(MonitorCell["checkTimeoutMs"]) >= 1000) ||
-		!(MonitorNumber(MonitorCell["checkTimeoutMs"]) <= 120000)
-	) {
-		Fail(
-			"monitor.checkTimeoutMs must be >= 1000 and <= 120000 (the inline deadline - the composition contract, like detach.liveTimeoutMs)",
-		);
-	}
-	if (!(MonitorNumber(MonitorCell["linkageAlertVersions"]) >= 0)) {
-		Fail("monitor.linkageAlertVersions must be >= 0");
-	}
-	if (!(MonitorNumber(MonitorCell["dedupWindowMs"]) >= 0)) {
-		Fail("monitor.dedupWindowMs must be >= 0");
+	switch (true) {
+		case !(MonitorNumber(MonitorCell["debounceMs"]) >= 1):
+			Fail("monitor.debounceMs must be >= 1");
+		case !(MonitorNumber(MonitorCell["maxMonitors"]) >= 1):
+			Fail("monitor.maxMonitors must be >= 1");
+		case !(MonitorNumber(MonitorCell["maxMonitorJobs"]) >= 1):
+			Fail("monitor.maxMonitorJobs must be >= 1");
+		case !(MonitorNumber(MonitorCell["retireMs"]) >= 1):
+			Fail("monitor.retireMs must be >= 1");
+		case !(MonitorNumber(MonitorCell["staleMs"]) >= 1):
+			Fail("monitor.staleMs must be >= 1");
+		case !(MonitorNumber(MonitorCell["slowCheckIntervalMs"]) >= 0):
+			Fail("monitor.slowCheckIntervalMs must be >= 0");
+		case !(MonitorNumber(MonitorCell["bandCapBytes"]) >= 256):
+			Fail("monitor.bandCapBytes must be >= 256");
+		case !(MonitorNumber(MonitorCell["checkTimeoutMs"]) >= 1000) ||
+			!(MonitorNumber(MonitorCell["checkTimeoutMs"]) <= 120000):
+			Fail(
+				"monitor.checkTimeoutMs must be >= 1000 and <= 120000 (the inline deadline - the composition contract, like detach.liveTimeoutMs)",
+			);
+		case !(MonitorNumber(MonitorCell["linkageAlertVersions"]) >= 0):
+			Fail("monitor.linkageAlertVersions must be >= 0");
+		case !(MonitorNumber(MonitorCell["dedupWindowMs"]) >= 0):
+			Fail("monitor.dedupWindowMs must be >= 0");
+		default:
 	}
 };
 

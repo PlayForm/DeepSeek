@@ -51,25 +51,35 @@ const Cell = (Value: unknown): unknown =>
  * Cell unwrap - volatile fields arrive as `{ get }` cells.
  */
 const Validate = (Options: Config): void => {
-	const Fail = (Message: string): never => {
+	const Fail: (Message: string) => never = (Message) => {
 		throw new Error(`plugin-dsh-workspace: ${Message}`);
 	};
 	const Raw = Options as unknown as Record<string, unknown>;
 	const Numeric = (Value: unknown): number =>
 		typeof Value === "number" && Number.isFinite(Value) ? Value : -1;
-	if (!(Numeric(Cell(Raw["mapDepth"])) >= 1)) Fail("mapDepth must be >= 1");
-	if (!(Numeric(Cell(Raw["mapMaxModules"])) >= 1)) Fail("mapMaxModules must be >= 1");
-	if (!(Numeric(Cell(Raw["findLimit"])) >= 1)) Fail("findLimit must be >= 1");
-	if (!(Numeric(Cell(Raw["findLimitMax"])) >= Numeric(Cell(Raw["findLimit"]))))
-		Fail("findLimitMax must be >= findLimit");
-	if (!(Numeric(Cell(Raw["expandDepth"])) >= 1) || Numeric(Cell(Raw["expandDepth"])) > 3)
-		Fail("expandDepth must be >= 1 and <= 3 (the graph contract caps depth at 3)");
-	if (!(Numeric(Cell(Raw["expandMaxNeighbors"])) >= 1)) Fail("expandMaxNeighbors must be >= 1");
-	if (!(Numeric(Cell(Raw["packetTokenBudget"])) >= 1)) Fail("packetTokenBudget must be >= 1");
-	if (!(Numeric(Cell(Raw["packetTokenMax"])) >= Numeric(Cell(Raw["packetTokenBudget"]))))
-		Fail("packetTokenMax must be >= packetTokenBudget");
-	if (!(Numeric(Cell(Raw["tokenCharsPerToken"])) >= 1)) Fail("tokenCharsPerToken must be >= 1");
-	if (!Array.isArray(Cell(Raw["kinds"]))) Fail("kinds must be an array of node kinds");
+	switch (true) {
+		case !(Numeric(Cell(Raw["mapDepth"])) >= 1):
+			Fail("mapDepth must be >= 1");
+		case !(Numeric(Cell(Raw["mapMaxModules"])) >= 1):
+			Fail("mapMaxModules must be >= 1");
+		case !(Numeric(Cell(Raw["findLimit"])) >= 1):
+			Fail("findLimit must be >= 1");
+		case !(Numeric(Cell(Raw["findLimitMax"])) >= Numeric(Cell(Raw["findLimit"]))):
+			Fail("findLimitMax must be >= findLimit");
+		case !(Numeric(Cell(Raw["expandDepth"])) >= 1) || Numeric(Cell(Raw["expandDepth"])) > 3:
+			Fail("expandDepth must be >= 1 and <= 3 (the graph contract caps depth at 3)");
+		case !(Numeric(Cell(Raw["expandMaxNeighbors"])) >= 1):
+			Fail("expandMaxNeighbors must be >= 1");
+		case !(Numeric(Cell(Raw["packetTokenBudget"])) >= 1):
+			Fail("packetTokenBudget must be >= 1");
+		case !(Numeric(Cell(Raw["packetTokenMax"])) >= Numeric(Cell(Raw["packetTokenBudget"]))):
+			Fail("packetTokenMax must be >= packetTokenBudget");
+		case !(Numeric(Cell(Raw["tokenCharsPerToken"])) >= 1):
+			Fail("tokenCharsPerToken must be >= 1");
+		case !Array.isArray(Cell(Raw["kinds"])):
+			Fail("kinds must be an array of node kinds");
+		default:
+	}
 	for (const Kind of (Cell(Raw["kinds"]) as NodeKind[]) ?? []) {
 		if (!["File", "Symbol", "Block", "Test", "DocSection"].includes(Kind)) {
 			Fail(`kinds contains an unknown node kind: ${String(Kind)}`);

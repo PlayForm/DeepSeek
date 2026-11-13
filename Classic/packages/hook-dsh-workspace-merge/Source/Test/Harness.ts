@@ -169,14 +169,14 @@ export const FakeFs = (Files: Record<string, { version: string; text: string }> 
 			throw new Error(Fs.faults.write);
 		}
 		const File = Fs.files[Target.displayPath];
-		if (File === undefined) {
-			throw new Error(`unresolved target ${Target.displayPath}`);
-		}
-		if (Intent?.kind !== "replaceIfVersion") {
-			throw new Error(`unexpected intent ${String(Intent?.kind)}`);
-		}
-		if (Intent.version !== File.version) {
-			throw new Error(`version mismatch for ${Target.displayPath}`);
+		switch (true) {
+			case File === undefined:
+				throw new Error(`unresolved target ${Target.displayPath}`);
+			case Intent?.kind !== "replaceIfVersion":
+				throw new Error(`unexpected intent ${String(Intent?.kind)}`);
+			case Intent.version !== File.version:
+				throw new Error(`version mismatch for ${Target.displayPath}`);
+			default:
 		}
 		File.version = `v${Number(String(File.version).slice(1)) + 1}`;
 		File.text = Fs.faults.tamper ?? Content;

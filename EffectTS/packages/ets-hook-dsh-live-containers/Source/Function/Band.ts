@@ -72,16 +72,16 @@ const RANK: Record<ResultState, number> = {
  */
 const OutcomePart = (Result: CheckResult): string => {
 	const Recovered = Result.provenance === "recovered" ? " (recovered)" : "";
-	if (Result.infra === "sandbox") {
-		return `check denied (sandbox) (x)${Recovered}`;
+	switch (true) {
+		case Result.infra === "sandbox":
+			return `check denied (sandbox) (x)${Recovered}`;
+		case Result.infra !== null:
+			return `check failed (infrastructure) (x)${Recovered}`;
+		case Result.exit !== null && Result.exit !== 0:
+			return `problem (!)${Recovered}`;
+		default:
+			return `clean (${CLEAN})${Recovered}`;
 	}
-	if (Result.infra !== null) {
-		return `check failed (infrastructure) (x)${Recovered}`;
-	}
-	if (Result.exit !== null && Result.exit !== 0) {
-		return `problem (!)${Recovered}`;
-	}
-	return `clean (${CLEAN})${Recovered}`;
 };
 
 /**
@@ -135,22 +135,22 @@ export const ResultLine = (
 	const Fresh = Result.checkedVersion === (Entry.lastVersion ?? "");
 	const Recovered = Result.provenance === "recovered";
 	const TimeStale = Recovered && Result.ranAt < Now - State.Monitor.staleMs;
-	if (Recovered && TimeStale) {
-		return { text: `~ STALE (not re-checked this session) | ${Facts}`, state: "stale" };
+	switch (true) {
+		case Recovered && TimeStale:
+			return { text: `~ STALE (not re-checked this session) | ${Facts}`, state: "stale" };
+		case !Fresh:
+			return {
+				text: `~ STALE (file changed after check) | ${Outcome} | ${Facts} | now v${VersionDisplay(Entry.lastVersion ?? "")}`,
+				state: "stale",
+			};
+		case Recovered:
+			return {
+				text: `${Outcome} | ${Facts} | not re-checked this session`,
+				state: StateOf(Result),
+			};
+		default:
+			return { text: `${Outcome} | ${Facts}`, state: StateOf(Result) };
 	}
-	if (!Fresh) {
-		return {
-			text: `~ STALE (file changed after check) | ${Outcome} | ${Facts} | now v${VersionDisplay(Entry.lastVersion ?? "")}`,
-			state: "stale",
-		};
-	}
-	if (Recovered) {
-		return {
-			text: `${Outcome} | ${Facts} | not re-checked this session`,
-			state: StateOf(Result),
-		};
-	}
-	return { text: `${Outcome} | ${Facts}`, state: StateOf(Result) };
 };
 
 /**
@@ -411,14 +411,14 @@ export const Stanza = (Separator: string, SummaryLine: string, Frames: string[])
  * `[live-report] monitored` fold: the file's outcome text, `clean (∄)` etc.).
  */
 export const OutcomeText = (Result: CheckResult): string => {
-	if (Result.infra === "sandbox") {
-		return "check denied (sandbox) (x)";
+	switch (true) {
+		case Result.infra === "sandbox":
+			return "check denied (sandbox) (x)";
+		case Result.infra !== null:
+			return "check failed (infrastructure) (x)";
+		case Result.exit !== null && Result.exit !== 0:
+			return "problem (!)";
+		default:
+			return `clean (${CLEAN})`;
 	}
-	if (Result.infra !== null) {
-		return "check failed (infrastructure) (x)";
-	}
-	if (Result.exit !== null && Result.exit !== 0) {
-		return "problem (!)";
-	}
-	return `clean (${CLEAN})`;
 };

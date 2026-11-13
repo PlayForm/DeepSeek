@@ -62,18 +62,21 @@ export type Verdict =
 	  };
 
 export default (State: State, Name: string, IsError: boolean, Content: ContentBlock[]): Verdict => {
-	// 1. Empty content - nothing to compress, nothing to retrieve.
-	if (Content.length === 0) return { action: "pass" };
-
-	// 2. The exemption list - byte-identical pass-through, always.
-	if (State.Exempt.includes(Name)) return { action: "pass" };
-
-	// 3. Failures pass through unless compressFailures.
-	if (IsError && !State.Failures) return { action: "pass" };
-
-	// 4. The target allow-list.
-	if (!State.Targets.includes(Name)) return { action: "pass" };
-
+	switch (true) {
+		// 1. Empty content - nothing to compress, nothing to retrieve.
+		case Content.length === 0:
+			return { action: "pass" };
+		// 2. The exemption list - byte-identical pass-through, always.
+		case State.Exempt.includes(Name):
+			return { action: "pass" };
+		// 3. Failures pass through unless compressFailures.
+		case IsError && !State.Failures:
+			return { action: "pass" };
+		// 4. The target allow-list.
+		case !State.Targets.includes(Name):
+			return { action: "pass" };
+		default:
+	}
 	// The classified type (an error result classifies as `error`, the ×8 tier).
 	const Type = Classify(Name, IsError, Content);
 

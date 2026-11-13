@@ -819,60 +819,61 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 	// It reads the summary the fetch already folded and the valuation block
 	// the same envelope carried, so the page adds no request; a top-file
 	// click reuses the Files drill-down the footer band offers.
-	if (Pane === "overview")
-		return Shell(
-			[
-				createElement(OverviewPage, {
-					key: "overview",
-					Summary: Snapshot.summary,
-					Valuation: Valuation ?? null,
-					Turns: Snapshot.turns.length,
-					Steps: Snapshot.steps,
-					OnOpenFile: OpenFile,
-					t,
-				}),
-			],
-			Footer,
-		);
-
-	// The Pricing pane: the settings surface in the same scroll region and
-	// under the same toolbar, so the page band and the valuation control stay
-	// reachable while the rate book is open. The pane reads its own catalogs,
-	// revisions and rate rows, holds the draft locally and publishes through
-	// the one route; the callback pins the new revision, which is what
-	// revalues the recorded views above.
-	if (Pane === "pricing")
-		return Shell(
-			[
-				createElement(PricingSettings, {
-					key: "pricing",
-					sessionId: SessionId,
-					rows: Rows,
-					onPublished: Adopt,
-					t,
-				}),
-			],
-			Footer,
-		);
-
-	// The Contributions pane: the file-to-conversation-to-call question in the
-	// same scroll region and under the same toolbar. The pane owns its path,
-	// its two reads and its expansion state; the view hands it the path the
-	// Files filter already holds - so a filtered Files table is a starting
-	// point for the question - and the session's currency, so both panes
-	// format money the same way.
-	if (Pane === "contributions")
-		return Shell(
-			[
-				createElement(ContributionsPage, {
-					key: "contributions",
-					path: FileFilter.Path,
-					currency: Currency,
-					t,
-				}),
-			],
-			Footer,
-		);
+	switch (true) {
+		case Pane === "overview":
+			return Shell(
+				[
+					createElement(OverviewPage, {
+						key: "overview",
+						Summary: Snapshot.summary,
+						Valuation: Valuation ?? null,
+						Turns: Snapshot.turns.length,
+						Steps: Snapshot.steps,
+						OnOpenFile: OpenFile,
+						t,
+					}),
+				],
+				Footer,
+			);
+		// The Pricing pane: the settings surface in the same scroll region and
+		// under the same toolbar, so the page band and the valuation control stay
+		// reachable while the rate book is open. The pane reads its own catalogs,
+		// revisions and rate rows, holds the draft locally and publishes through
+		// the one route; the callback pins the new revision, which is what
+		// revalues the recorded views above.
+		case Pane === "pricing":
+			return Shell(
+				[
+					createElement(PricingSettings, {
+						key: "pricing",
+						sessionId: SessionId,
+						rows: Rows,
+						onPublished: Adopt,
+						t,
+					}),
+				],
+				Footer,
+			);
+		// The Contributions pane: the file-to-conversation-to-call question in the
+		// same scroll region and under the same toolbar. The pane owns its path,
+		// its two reads and its expansion state; the view hands it the path the
+		// Files filter already holds - so a filtered Files table is a starting
+		// point for the question - and the session's currency, so both panes
+		// format money the same way.
+		case Pane === "contributions":
+			return Shell(
+				[
+					createElement(ContributionsPage, {
+						key: "contributions",
+						path: FileFilter.Path,
+						currency: Currency,
+						t,
+					}),
+				],
+				Footer,
+			);
+		default:
+	}
 	if (Pane === "files") {
 		const Shown = FileFilters.Apply(Files, FileFilter);
 		const Stages = FileFilters.StagesOf(Files);
