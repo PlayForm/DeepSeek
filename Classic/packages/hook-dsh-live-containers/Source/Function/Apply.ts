@@ -126,7 +126,8 @@ const Validate = (Options: unknown): void => {
 			Fail('refresh must be one of "request" | "ttl"');
 		case !(Numeric("ttlCalls") >= 1):
 			Fail("ttlCalls must be >= 1");
-		case typeof Cell(Raw["separator"]) !== "string" || String(Cell(Raw["separator"])).length === 0:
+		case typeof Cell(Raw["separator"]) !== "string" ||
+			String(Cell(Raw["separator"])).length === 0:
 			Fail("separator must be a non-empty string");
 		case !(Numeric("sectionBudgetBytes") >= 1):
 			Fail("sectionBudgetBytes must be >= 1");
@@ -622,9 +623,9 @@ export default (Context: Context, Options: Config): void => {
 			WorkingDirectory: Raw["workingDirectory"] as NonNullable<
 				State["Wave"]
 			>["WorkingDirectory"],
-			Subagent: Raw["subagent"] as NonNullable<State["Wave"]>["Subagent"],
-			Agents: Raw["agents"] as NonNullable<State["Wave"]>["Agents"],
-			SandboxPolicy: Raw["sandboxPolicy"] as NonNullable<State["Wave"]>["SandboxPolicy"],
+			Subagent: Context.get?.("subagent") as NonNullable<State["Wave"]>["Subagent"],
+			Agents: Context.get?.("agents") as NonNullable<State["Wave"]>["Agents"],
+			SandboxPolicy: Context.get?.("sandboxPolicy") as NonNullable<State["Wave"]>["SandboxPolicy"],
 		};
 	})();
 
