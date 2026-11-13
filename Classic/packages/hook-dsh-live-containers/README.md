@@ -55,11 +55,11 @@ The wave-3 monitors put files (halted processes) into operational mode: for `wat
 plugin runs the file's check set between turns and renders one band per file in the live section -
 honest to the byte, additive information, never a gate.
 
-The plugin ships DISABLED - the IDLE-forever posture: the bundle entry declares `enabled: false`
-only, it never appears in the profile's bundles, and it enables only by an explicit ACTIVATE (you
-edit the profile and restart).
+The plugin ships ENABLED - the live disabled posture: the bundle entry declares `enabled: true`,
+`log: true` and the ledger path, and a profile turns the plugin off with `enabled: false`.
 
-A cold mount logs `disabled (enabled=false)` and every listener no-ops to a passthrough.
+A disabled mount logs `disabled (enabled=false)` and every listener no-ops to a passthrough, reading
+the flag at call time.
 
 ## The surfaces
 
@@ -74,16 +74,17 @@ A cold mount logs `disabled (enabled=false)` and every listener no-ops to a pass
 | tool     | `live_monitor` / `live_monitor_check`        | enroll/inspect a monitor; on-demand check                                                                                  |
 | config   | `SCHEME.md`                                  | the full Schemastery schema (see the table below)                                                                          |
 
-Ship posture: DISABLED by default (`enabled: false`); the wave-2 knobs are volatile cells and the
-wave-3 SEVEREXT/COMPREHENSIVE knobs are accepted and inert.
+Ship posture: ENABLED by default (`enabled: true`; off = the `disabled (enabled=false)` line and the
+full passthrough); the wave-2 knobs are volatile cells and the wave-3 SEVEREXT/COMPREHENSIVE knobs
+are accepted and inert.
 
 ## The configuration
 
 | Field                   | Type    | Default                                        | Meaning                                                                          |
 | ----------------------- | ------- | ---------------------------------------------- | -------------------------------------------------------------------------------- |
+| `enabled`               | boolean | `true`                                         | volatile - the master switch (off = the disabled line, the full passthrough)     |
 | `log`                   | boolean | `true`                                         | volatile - the shared factory log switch                                         |
 | `logFile`               | string  | `~/.dsh/playform/hook-dsh-live-containers.log` | volatile - the ledger file                                                       |
-| `enabled`               | boolean | `false`                                        | volatile - the IDLE-forever switch                                               |
 | `sectionName`           | string  | `live-containers`                              | volatile - the appended section's name                                           |
 | `refresh`               | union   | `request`                                      | volatile - `request \| ttl`; ttl is the KV-cache-friendly cadence                |
 | `ttlCalls`              | number  | `8`                                            | volatile - assemblies the section text is held for                               |
@@ -180,7 +181,7 @@ Skip lines log only when the reason changes - the ledger stays quiet on steady s
 - Build:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-live-containers run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-live-containers/Target/Test/<Folder>/Test.js`
-    - Wiring-And-Defaults - 42 checks
+    - Wiring-And-Defaults - 44 checks
     - Recompute-And-TTL - 17 checks
     - Render-And-Frames - 23 checks
     - Volatile-And-Failsafes - 23 checks

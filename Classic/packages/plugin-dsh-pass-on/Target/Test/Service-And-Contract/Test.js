@@ -50,6 +50,14 @@ const runTest = async () => {
     Check(Count, "C4: the disabled refusal is journaled with the kind", () => {
       assert.equal(LedgerWith('"note":"rejected version-bump"').length, 1);
     });
+    Check(Count, "C4: the disabled mount journaled the byte-exact disabled note", () => {
+      assert.equal(LedgerWith('"event":"disabled"').length, 1, "one disabled line");
+      assert.equal(
+        LedgerWith('"note":"disabled (enabled=false)"').length,
+        1,
+        "the byte-exact note"
+      );
+    });
   }
   {
     rm();

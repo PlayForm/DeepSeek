@@ -47,6 +47,24 @@ export const runTest = async (): Promise<number> => {
 
 	// Group P1: the schema and the State mapping.
 	{
+		Check(Count, "P1: the queue's schema ships the Config base (enabled, log, logFile)", () => {
+			const Config = Validate({});
+			assert.equal(Config.enabled.get(), true, "enabled defaults to true");
+			assert.equal(Config.log.get(), true, "log defaults to true");
+			assert.equal(
+				Config.logFile.get(),
+				"~/.dsh/playform/plugin-dsh-queue.log",
+				"the ledger path default",
+			);
+		});
+		Check(Count, "P1: the base keys sit first, and they are enabled, log, logFile", () => {
+			const Config = Validate({});
+			assert.deepEqual(
+				Object.keys(Config).slice(0, 3).sort(),
+				["enabled", "log", "logFile"],
+				"the base keys are the first three",
+			);
+		});
 		Check(Count, "P1: the queue's schema fills the D6 policy defaults", () => {
 			const Config = Validate({ logFile: Ledger, enabled: true });
 			assert.deepEqual(Config.policy.get(), Defaults, "the composed block carries the defaults");

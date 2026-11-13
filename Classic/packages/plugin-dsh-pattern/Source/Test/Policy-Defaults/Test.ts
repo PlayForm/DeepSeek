@@ -29,6 +29,29 @@ const Defaults = {
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
+	Check(Count, "P1: the schema ships the Config base (enabled, log, logFile)", () => {
+		const Config = (PatternService as any).Config({});
+		assert.equal(Config.enabled.get(), true, "enabled defaults to true");
+		assert.equal(Config.log.get(), true, "log defaults to true");
+		assert.equal(
+			Config.logFile.get(),
+			"~/.dsh/playform/plugin-dsh-pattern.log",
+			"the ledger path default",
+		);
+	});
+
+	Check(Count, "P1: the base keys sit first, and they are enabled, log, logFile", () => {
+		const Config = (PatternService as any).Config({});
+		// The first three keys are exactly the base (the composed minimal
+		// block puts its shared cells first; the module's own list below
+		// carries enabled, log, logFile in that order).
+		assert.deepEqual(
+			Object.keys(Config).slice(0, 3).sort(),
+			["enabled", "log", "logFile"],
+			"the base keys are the first three",
+		);
+	});
+
 	Check(Count, "P1: the service's schema fills the D6 policy defaults", () => {
 		const Config = (PatternService as any).Config({});
 		assert.deepEqual(Config.policy.get(), Defaults, "the composed block carries the defaults");

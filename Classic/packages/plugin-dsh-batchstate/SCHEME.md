@@ -27,7 +27,7 @@ The batch-state plugin is the cooperative batch's live state board
 
 | Field          | Type    | Default                                     | Meaning                                              |
 | -------------- | ------- | ------------------------------------------- | ---------------------------------------------------- |
-| `enabled`      | boolean | `false`                                     | The master switch (the IDLE-forever posture).        |
+| `enabled`      | boolean | `true`                                      | The master switch (the LIVE DISABLED posture).       |
 | `log`          | boolean | `true`                                      | Ledger enabled - write the durable log file.         |
 | `logFile`      | string  | `~/.dsh/playform/plugin-dsh-batchstate.log` | The ledger file (one log per module).                |
 | `batch`        | string  | `default`                                   | The batch key (multi-batch isolation).               |

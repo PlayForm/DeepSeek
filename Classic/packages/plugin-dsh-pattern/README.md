@@ -74,6 +74,7 @@ The lines are prefixed `pattern: ` and go to `logFile` (byte-stable):
 
 ```text
 pattern: activated (seeded N patterns) (logFile ...)
+pattern: disabled (enabled=false) (logFile ...)
 pattern: recorded <accepted|rejected|applied|failed> on <id> (confidence X.XX)
 pattern: saved N patterns to <store> (logFile ...)
 pattern: restored N patterns from snapshot (logFile ...)
@@ -82,19 +83,19 @@ pattern: storage open failed: <reason> (logFile ...)
 
 ## The configuration
 
-| Field                                                              | Default                                  | Notes                                                  |
-| ------------------------------------------------------------------ | ---------------------------------------- | ------------------------------------------------------ |
-| `enabled`                                                          | `false`                                  | ships disabled (idle-forever posture)                  |
-| `log`                                                              | `true`                                   | the ledger switch (the factory's shared volatile cell) |
-| `logFile`                                                          | `~/.dsh/playform/plugin-dsh-pattern.log` | the service's own ledger                               |
-| `domain`                                                           | `pattern`                                | the KV domain (the primary store)                      |
-| `storagePath`                                                      | `~/.dsh/pattern/registry.json`           | the JSON snapshot (the fallback store)                 |
-| `matchThreshold`                                                   | `0.35`                                   | below this the match abstains                          |
-| `maxMatches`                                                       | `3`                                      | top-N per Match                                        |
-| `ambiguityEpsilon`                                                 | `0.02`                                   | the equal-match abstention window                      |
-| `decayHalfLifeDays`                                                | `14`                                     | the stale-pattern decay                                |
-| `acceptBonus` / `rejectPenalty` / `appliedBonus` / `failedPenalty` | `0.1 / 0.2 / 0.15 / 0.25`                | the Record deltas                                      |
-| `policy.*`                                                         | D6 defaults                              | the per-action allowlist (the shared factory block)    |
+| Field                                                              | Default                                  | Notes                                                                 |
+| ------------------------------------------------------------------ | ---------------------------------------- | --------------------------------------------------------------------- |
+| `enabled`                                                          | `true`                                   | ships enabled; off logs `disabled (enabled=false)` and Match abstains |
+| `log`                                                              | `true`                                   | the ledger switch (the factory's shared volatile cell)                |
+| `logFile`                                                          | `~/.dsh/playform/plugin-dsh-pattern.log` | the service's own ledger                                              |
+| `domain`                                                           | `pattern`                                | the KV domain (the primary store)                                     |
+| `storagePath`                                                      | `~/.dsh/pattern/registry.json`           | the JSON snapshot (the fallback store)                                |
+| `matchThreshold`                                                   | `0.35`                                   | below this the match abstains                                         |
+| `maxMatches`                                                       | `3`                                      | top-N per Match                                                       |
+| `ambiguityEpsilon`                                                 | `0.02`                                   | the equal-match abstention window                                     |
+| `decayHalfLifeDays`                                                | `14`                                     | the stale-pattern decay                                               |
+| `acceptBonus` / `rejectPenalty` / `appliedBonus` / `failedPenalty` | `0.1 / 0.2 / 0.15 / 0.25`                | the Record deltas                                                     |
+| `policy.*`                                                         | D6 defaults                              | the per-action allowlist (the shared factory block)                   |
 
 Every field is a volatile cell, so a hot edit lands on the next service call.
 
@@ -135,7 +136,7 @@ tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 | `Service-And-Match`         | the loader contract, the registry, the match arithmetic, abstention                    | 13    |
 | `Record-And-Decay-And-Save` | the learner, the decay, the JSON fallback's save and restore                           | 10    |
 | `Storage-Domain`            | the KV domain (primary), the round-trip, the reopen, the fallback, the version failure | 14    |
-| `Policy-Defaults`           | the D6 block's defaults and the registry's read/record posture                         | 4     |
+| `Policy-Defaults`           | the D6 block's defaults and the registry's read/record posture                         | 6     |
 
 ## The plan
 

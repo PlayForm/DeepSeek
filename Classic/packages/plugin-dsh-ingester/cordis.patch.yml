@@ -14,6 +14,15 @@
 # Config (validated before construction), and registers itself as `ingester`
 # via `super(ctx, "ingester")`.
 #
+# THE LIVE DISABLED POSTURE: the service and both bus listeners register on
+# every mount - a disabled member (`enabled: false`) reads the switch at CALL
+# time and passes every call through with ZERO ledger lines (the listeners
+# drop the payload silently; the Apply surface's documented disabled answer is
+# `null` - no write, no journal line, no claim taken). The base trio (enabled
+# true, log true, logFile ~/.dsh/playform/plugin-dsh-ingester.log) lives in
+# Variable/Config.ts; the class form keeps the cells plain (a config edit
+# reloads the plugin).
+#
 # THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
 # shared factory block. The ingester is the batch flow's WRITER, so `write` is
 # its own action class - and it stays the shipped `approve`: the decision's
@@ -26,6 +35,8 @@
         name: "@playform/plugin-dsh-ingester"
         config:
             enabled: true
+            log: true
+            logFile: ~/.dsh/playform/plugin-dsh-ingester.log
             policy:
                 read: auto
                 index: auto

@@ -99,22 +99,53 @@ export default class BatchState extends Service {
 		return Compile.Schedule(this.State);
 	}
 
+	// THE CALL-TIME MASTER SWITCH (the LIVE DISABLED posture): every MUTATING
+	// service method reads the volatile `On` cell at the moment of the call (a
+	// flip acts on the very next call with no remount); a disabled board
+	// no-ops the write with ZERO ledger lines. The READ methods stay open - a
+	// disabled board reads honestly from whatever state it holds, and they
+	// append nothing.
+	/**
+	 * The disabled write: a no-op with zero ledger lines.
+	 */
+	private Off(): boolean {
+		return !this.State.On;
+	}
+
 	/**
 	 * The arbiter truth update (the build/smokes state the Gates block renders for every lane).
 	 */
 	setGate(Name: string, State_: string, Owner = ""): void {
+		switch (this.Off()) {
+			case true:
+				return;
+			default:
+				break;
+		}
 		Gate(this.State, Name, State_, Owner);
 	}
 
 	/** The CURRENT ACTIVITY update (the LIVE task - the agents report their phase changes; the
 	 * parent sets the task at the activation). */
 	setTask(Agent: string, Task_: string): void {
+		switch (this.Off()) {
+			case true:
+				return;
+			default:
+				break;
+		}
 		Task(this.State, Agent, Task_);
 	}
 
 	/** The state transition (idle -> active -> completed -> failed -> interrupted; the queue
 	 * movements). */
 	setStatus(Agent: string, Status_: string): void {
+		switch (this.Off()) {
+			case true:
+				return;
+			default:
+				break;
+		}
 		Status(this.State, Agent, Status_);
 	}
 
@@ -122,12 +153,24 @@ export default class BatchState extends Service {
 	 * The scope registry update (the surfaces the member owns).
 	 */
 	setScope(Agent: string, Surfaces_: string[]): void {
+		switch (this.Off()) {
+			case true:
+				return;
+			default:
+				break;
+		}
 		Surfaces(this.State, Agent, Surfaces_);
 	}
 
 	/** The idle-queue append (the plugin holds the idle queue; the parent reviews + confirms; the
 	 * plugin proposes the next pair). */
 	queue(Agent: string): void {
+		switch (this.Off()) {
+			case true:
+				return;
+			default:
+				break;
+		}
 		Queue(this.State, Agent);
 	}
 
@@ -135,6 +178,12 @@ export default class BatchState extends Service {
 	 * The whole-batch reset.
 	 */
 	clear(): void {
+		switch (this.Off()) {
+			case true:
+				return;
+			default:
+				break;
+		}
 		Clear(this.State);
 	}
 }

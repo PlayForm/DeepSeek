@@ -16,14 +16,16 @@
 # app is restarted (bundle layers compose at host boot). A file: dependency
 # alone is NOT activation.
 #
-# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
-# else - the plugin never appears in the profile's bundles and enables only
-# by an explicit ACTIVATE (the user edits the profile and restarts). On a
-# cold mount the apply logs `disabled (enabled=false)` and every listener
-# no-ops to a passthrough (each checks State.On first). The schema defaults
-# are the truth; the full default surface (machinesPerAgent 2, opsPerCommit
+# THE LIVE DISABLED POSTURE: every listener, the batch_edit tool and the root
+# observer register on every mount - a disabled mount logs the byte-exact
+# `disabled (enabled=false)` line instead of the activation proof, and every
+# surface reads the volatile On cell at CALL time (each checks State.On first,
+# so a flip lands on the very next call with no remount and a disabled surface
+# passes through with zero ledger lines). The schema defaults
+# are the truth; the full default surface (enabled true, log true, logFile
+# ~/.dsh/playform/plugin-dsh-batch-edit.log, machinesPerAgent 2, opsPerCommit
 # 64, deadlineMs 120000, strictMode false, interceptBash false,
-# monitorChecksets [], logFile ~/.dsh/playform/plugin-dsh-batch-edit.log) lives in
+# monitorChecksets []) lives in
 # Variable/Config.ts. EVERY knob is volatile (hot-editable without
 # remounting).
 #
@@ -40,7 +42,9 @@
       - id: plugin-dsh-batch-edit
         name: "@playform/plugin-dsh-batch-edit"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ~/.dsh/playform/plugin-dsh-batch-edit.log
             policy:
                 read: auto
                 index: auto

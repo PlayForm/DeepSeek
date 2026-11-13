@@ -42,6 +42,7 @@ import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
  */
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-tool-coach.log";
 const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultJudgeTools = ["bash", "pwsh"];
 const DefaultDenyTools: string[] = [];
 const DefaultThreshold = 3;
@@ -53,8 +54,19 @@ const DefaultEnforce = "off";
 const DefaultEnforceThreshold = 4;
 
 export default Compose(false, {
-	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	// The MASTER SWITCH (volatile: a flip is read at the next judged call
+	// with no remount): false = the mount appends `disabled (enabled=false)`
+	// to the ledger while every listener stays registered and passes through
+	// silently. Distinct from the shared `log` cell, which governs only the
+	// durable ledger file.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile; overrides the
+	// minimal shared block's empty default).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	// Ledger file - the hook-dsh-tool-coach ledger (one log per module) -
+	// volatile: hot-editable without remounting (overrides the minimal shared
+	// block's empty default).
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	judgeTools: Schema.array(Schema.string()).default(DefaultJudgeTools).volatile(),
 	denyTools: Schema.array(Schema.string()).default(DefaultDenyTools).volatile(),
 	threshold: Schema.number().default(DefaultThreshold).volatile(),

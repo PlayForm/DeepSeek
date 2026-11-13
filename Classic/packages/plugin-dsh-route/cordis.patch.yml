@@ -14,10 +14,9 @@
 # app is restarted (bundle layers compose at host boot). A file: dependency
 # alone is NOT activation.
 #
-# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
-# else - the plugin never appears in the profile's bundles and enables only
-# by an explicit ACTIVATE (the user edits the profile and restarts). On a
-# cold mount the State build logs `disabled (enabled=false)` and both
+# THE SHIPPED POSTURE: this entry ships with enabled: true, log: true and the
+# ledger path - a profile turns it off with `enabled: false`. On a cold
+# disabled mount the State build logs `disabled (enabled=false)` and both
 # launch-path listeners no-op to a passthrough (they check State.On first).
 # The launch seam is TWO halves of one hint: `tools/pre-execute` injects the
 # route into the `subagent` tool's launch and appends the byte-stable
@@ -46,7 +45,9 @@
       - id: plugin-dsh-route
         name: "@playform/plugin-dsh-route"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ~/.dsh/playform/plugin-dsh-route.log
             automation:
                 read: auto
                 index: auto

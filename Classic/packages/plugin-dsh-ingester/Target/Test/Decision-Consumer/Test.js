@@ -123,6 +123,23 @@ const runTest = async () => {
       assert.equal(Run.Files["/repo/a.txt"], "one");
     });
   }
+  {
+    const Run = Build({ enabled: false }, { "/repo/a.txt": "one" });
+    Fire(Run, "batch/proposed", Fenced());
+    Fire(Run, "batch/decision", Decision("p1"));
+    await Run.Ingester.WhenIdle();
+    Check(Count, "D8: a disabled member drops both payloads with zero ledger lines", () => {
+      assert.equal(Run.Ingester.Proposals().length, 0);
+      assert.deepEqual(Journal(), []);
+      assert.equal(Run.Files["/repo/a.txt"], "one");
+    });
+    const Result = await Run.Ingester.Apply(Fenced(), Decision("p1"));
+    Check(Count, "D8: the disabled Apply answers null with no write and no journal line", () => {
+      assert.equal(Result, null);
+      assert.deepEqual(Journal(), []);
+      assert.equal(Run.Files["/repo/a.txt"], "one");
+    });
+  }
   return Finish(Count, "Decision-Consumer");
 };
 const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

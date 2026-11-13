@@ -30,6 +30,9 @@ review ran inside `runMaintenance` with the snapshot of the service and the main
   the first gate inside the body.
 - "L9: the activation line is byte-exact".
 - "L10: two agents keep separate caps".
+- "L11: the schema ships the base defaults (enabled, log, logFile)".
+- "L12: the base keys sit first, and they are enabled, log, logFile".
+- "L13: a live flip ON nudges again without a remount".
 
 ## Fixtures
 
@@ -55,4 +58,4 @@ so the assertions are on the whole line.
 
 ## Expected count
 
-10 PASS.
+13 PASS.

@@ -13,6 +13,16 @@
 # declares a static Config (validated before construction) and registers
 # itself as `feedback` via `super(ctx, "feedback")`.
 #
+# THE LIVE DISABLED POSTURE: the service and the session/event listener
+# register on every mount - a disabled member (`enabled: false`) passes every
+# call through with ZERO ledger lines (Push and Outcome no-op, the listener
+# records nothing, the in-memory Record keeps its documented store without a
+# journal line), and the read methods stay honest. The schema defaults are
+# the truth; the base trio (enabled true, log true, logFile
+# ~/.dsh/playform/plugin-dsh-feedback.log) plus the knobs live in
+# Variable/Config.ts. The class form has no factory State, so the cells are
+# plain values (a config edit reloads the plugin).
+#
 # THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
 # shared factory block. The member is a PASSIVE collector - `record` and
 # `suggest` are automatic; the write/commit/spawn verdicts are declared for
@@ -24,6 +34,8 @@
         name: "@playform/plugin-dsh-feedback"
         config:
             enabled: true
+            log: true
+            logFile: ~/.dsh/playform/plugin-dsh-feedback.log
             policy:
                 read: auto
                 index: auto

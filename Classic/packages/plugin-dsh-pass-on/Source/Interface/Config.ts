@@ -9,9 +9,16 @@ import type KindSpec from "./KindSpec.js";
  */
 export default interface Config {
 	/**
-	 * The pass-on's on/off switch (the schema's `enabled`, default false).
+	 * The pass-on's on/off switch (the schema's `enabled`, default true;
+	 * false journals `disabled (enabled=false)` and Prepare refuses at call
+	 * time).
 	 */
 	enabled: boolean;
+
+	/**
+	 * Ledger enabled - write the durable journal (one log per module).
+	 */
+	log: boolean;
 
 	/**
 	 * The durable journal (one log per module).

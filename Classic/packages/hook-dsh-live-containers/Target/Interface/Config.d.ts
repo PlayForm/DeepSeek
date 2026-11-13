@@ -15,10 +15,10 @@ import type { BlockSpecification } from "./Execution.js";
  * to apply as stable `{ get }` references and the factory's State builder
  * unwraps them + refreshes them in place on loader/volatile), so every knob
  * - including the whole block table - flips live without remounting. The
- * factory's shared `log` cell (added by the `Compose(false, ...)` wrapper)
- * governs the DURABLE ledger file only; the plugin's own `enabled` cell is
- * the master switch (the IDLE-forever posture: false is the shipped
- * default).
+ * Config base sits first (enabled, log, logFile): the plugin's own `enabled`
+ * cell is the master switch (a disabled mount logs
+ * `disabled (enabled=false)` and every listener passes through), and the
+ * `log` cell governs the DURABLE ledger file only.
  */
 /**
  * The detach policy knobs (design section 2.3, volatile).
@@ -216,6 +216,11 @@ export interface CheckSetOption {
 }
 export default interface Config {
     /**
+     * Master switch - every listener no-ops to a passthrough when false; a
+     * disabled mount logs `disabled (enabled=false)` (volatile).
+     */
+    enabled: boolean;
+    /**
      * Ledger enabled - write the durable log file (the shared `log` cell).
      */
     log: boolean;
@@ -223,10 +228,6 @@ export default interface Config {
      * Ledger file - the plugin's own ledger, separate from the family's logs (volatile).
      */
     logFile: string;
-    /**
-     * Master switch - every listener no-ops to a passthrough when false (volatile).
-     */
-    enabled: boolean;
     /**
      * The appended section's name (volatile).
      */

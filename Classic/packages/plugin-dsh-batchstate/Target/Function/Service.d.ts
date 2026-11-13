@@ -66,6 +66,10 @@ export default class BatchState extends Service {
      * when no queue service is mounted). */
     getQueue(): string;
     /**
+     * The disabled write: a no-op with zero ledger lines.
+     */
+    private Off;
+    /**
      * The arbiter truth update (the build/smokes state the Gates block renders for every lane).
      */
     setGate(Name: string, State_: string, Owner?: string): void;

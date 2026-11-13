@@ -83,6 +83,10 @@ literal find/replace, and turns the preview array into `{ entries, changes, skip
   `delivered` journal line
   (`{ at, event: "delivered", proposal, digest, targets, note: "inbox <agent|none>" }`).
 - `Get(id)` - the stored proposal, or `null` when unknown/expired.
+- The disabled mount journals ONE line
+  (`{ at, event: "disabled", proposal: null, digest: null, targets: 0, note: "disabled (enabled=false)" }`)
+  and keeps the service registered: `Prepare` reads `enabled` at call time and refuses, so the
+  mount-time effect of the flag is only that line.
 
 ## 5. The write-trust boundary
 

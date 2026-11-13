@@ -61,7 +61,8 @@ The session and the agent come from the `origin` of the proposal.
 
 | Field           | Default                                   | Meaning                                                         |
 | --------------- | ----------------------------------------- | --------------------------------------------------------------- |
-| `enabled`       | `true`                                    | Master switch (the patch entry ships `enabled: true`).          |
+| `enabled`       | `true`                                    | Master switch (the live disabled posture).                      |
+| `log`           | `true`                                    | The durable ledger toggle (the Journal gate reads it).          |
 | `logFile`       | `~/.dsh/playform/plugin-dsh-feedback.log` | The durable journal (one log per module).                       |
 | `maxBlockBytes` | `4096`                                    | Cap per block's text fields (the marker records a cap).         |
 | `maxChain`      | `8`                                       | Maximum TRANSFERRED hops before a block is dropped (journaled). |
@@ -111,7 +112,14 @@ type-check.
 | `Record-And-Transfer`   | the constructor wiring, the record, the Push hop, the transfer format | 14    |
 | `Read-Summary-Listener` | the delta, the optional read, the summary, the passive pickup         | 15    |
 | `Batch-Outcome`         | the batch outcome's journal line, the summary ring, the refusals      | 7     |
-| `Policy-Defaults`       | the D6 block's defaults and the passive-collector posture             | 4     |
+| `Policy-Defaults`       | the base trio, the D6 block's defaults, the passive-collector posture | 5     |
+
+## The live disabled posture
+
+The service and the `session/event` listener register on every mount. A disabled member
+(`enabled: false`) passes every call through with ZERO ledger lines: `Push` and `Outcome` no-op, the
+listener records nothing, and the in-memory `Record` keeps its documented store without a journal
+line. The read methods stay honest.
 
 ## The honesty policy
 

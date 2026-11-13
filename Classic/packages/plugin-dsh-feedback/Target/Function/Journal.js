@@ -1,2 +1,2 @@
-import{appendFileSync as n,mkdirSync as o}from"node:fs";import{dirname as i}from"node:path";import{Expand as p}from"@playform/lib-dsh-core";var d=(r,a,e)=>{try{const t=p(r.Ledger);o(i(t),{recursive:!0}),n(t,`${JSON.stringify({at:Date.now(),event:a,session:e.session,agentId:e.agentId,block:e})}
-`)}catch{}};export{d as default};
+import{appendFileSync as n,mkdirSync as o}from"node:fs";import{dirname as s}from"node:path";import{Expand as i}from"@playform/lib-dsh-core";var p=(e,a,t)=>{switch(!0){case e.Config.log===!1:case!e.Config.enabled:return;default:break}try{const r=i(e.Ledger);o(s(r),{recursive:!0}),n(r,`${JSON.stringify({at:Date.now(),event:a,session:t.session,agentId:t.agentId,block:t})}
+`)}catch{}};export{p as default};

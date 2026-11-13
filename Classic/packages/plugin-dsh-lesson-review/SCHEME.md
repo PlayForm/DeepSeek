@@ -75,7 +75,8 @@ that it is reviewing.
 
 | Key                  | Default                                        | Effect                                    |
 | -------------------- | ---------------------------------------------- | ----------------------------------------- |
-| `enabled`            | `false`                                        | the switch (schema; patch row)            |
+| `enabled`            | `true`                                         | the switch (schema; patch row)            |
+| `log`                | `true`                                         | the ledger toggle (the sink reads it)     |
 | `logFile`            | `~/.dsh/playform/plugin-dsh-lesson-review.log` | the ledger                                |
 | `domain`             | `lesson`                                       | the usage-store unit name                 |
 | `storagePath`        | `~/.dsh/lesson/usage.json`                     | the usage sidecar                         |

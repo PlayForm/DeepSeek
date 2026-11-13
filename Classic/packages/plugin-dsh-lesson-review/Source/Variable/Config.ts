@@ -13,10 +13,13 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * service hooks no fs/observed machinery). Every knob is a volatile cell so
  * a hot edit lands on the next service call without a remount. The service
  * class reads these through Configure; the defaults here are the truth.
- * `enabled` defaults to FALSE - the idle-forever posture: the patch row and
- * the README ship the service disabled; a cold mount logs `disabled
- * (enabled=false)` and Tick never comes due while the service stays
- * resolvable, so the nudge hook never hard-fails on a missing service.
+ * `enabled` defaults to TRUE - the LIVE DISABLED posture: the service
+ * registers on every mount (the store load and every manual lifecycle seam
+ * stay live), a disabled mount logs `disabled (enabled=false)` instead of the
+ * activation proof, and the review pipeline (Tick, Review, Curate) reads the
+ * volatile cell at CALL time, so a disabled service answers with its
+ * documented disabled outcomes and never comes due, while the nudge hook
+ * never hard-fails on a missing service.
  *
  * THE THREE BUDGETS are deliberately separate, because they bound different
  * costs: `intervalTurns` bounds how OFTEN a review may run, `digestTail` +
@@ -24,7 +27,8 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * it RECEIVES. A review that blows any of the three is a configuration
  * defect, not a runtime surprise.
  */
-const DefaultEnabled = false;
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-lesson-review.log";
 const DefaultDomain = "lesson";
 const DefaultStoragePath = "~/.dsh/lesson/usage.json";
@@ -48,7 +52,17 @@ const DefaultModel = "";
 const DefaultMaxTokens = 4000;
 
 export default Compose(false, {
+	// The MASTER SWITCH (volatile: a flip is read at the next Tick/Review/
+	// Curate): false = the mount writes `disabled (enabled=false)` to the
+	// ledger while the review pipeline answers with its documented disabled
+	// outcomes. Distinct from the shared `log` cell, which governs only the
+	// ledger output.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the ledger lines (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	// Ledger file - the service's SEPARATE ledger, one log per module -
+	// volatile: hot-editable without remounting (overrides the minimal
+	// shared block's empty default).
 	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	domain: Schema.string().default(DefaultDomain).volatile(),
 	storagePath: Schema.string().default(DefaultStoragePath).volatile(),

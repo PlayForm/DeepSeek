@@ -128,14 +128,17 @@ The ledger file defaults to `~/.dsh/playform/plugin-dsh-batch-edit.log` (one log
 
 ## The configuration
 
-The plugin ships **disabled** (`enabled: false`, the IDLE-forever posture), and it enables only by
-an explicit ACTIVATE in the profile.
+The plugin mounts with every surface registered (the **live disabled posture**): a disabled mount
+(`enabled: false`) writes only the `disabled (enabled=false)` ledger line, and every surface reads
+the volatile `enabled` cell at call time - the `batch_edit` tool refuses loudly
+(`plugin-dsh-batch-edit is disabled (enabled=false)`) and a disabled listener passes through with
+zero ledger lines.
 
 Every knob is volatile (hot-editable without remounting):
 
 | Field              | Default                                     | Meaning                                                                  |
 | ------------------ | ------------------------------------------- | ------------------------------------------------------------------------ |
-| `enabled`          | `false`                                     | The master switch                                                        |
+| `enabled`          | `true`                                      | The master switch                                                        |
 | `log`              | `true`                                      | The ledger switch (the factory's shared volatile cell)                   |
 | `logFile`          | `~/.dsh/playform/plugin-dsh-batch-edit.log` | The module ledger                                                        |
 | `machinesPerAgent` | `2`                                         | Open machines per agent                                                  |

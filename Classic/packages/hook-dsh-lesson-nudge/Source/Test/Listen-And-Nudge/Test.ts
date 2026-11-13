@@ -10,6 +10,7 @@ import {
 	MakeCounter,
 	Settle,
 	Status,
+	Validate,
 } from "../Harness.js";
 
 /**
@@ -154,6 +155,42 @@ export const runTest = async (): Promise<number> => {
 		await Settle();
 		assert.equal(Left.Tasks.length, 1, "the first agent reviewed");
 		assert.equal(Right.Tasks.length, 1, "and the second had its own budget");
+	});
+
+	Check(Count, "L11: the schema ships the base defaults (enabled, log, logFile)", () => {
+		const Raw = Validate({});
+		assert.ok(Raw.enabled.get() === true, "enabled defaults to true");
+		assert.ok(Raw.log.get() === true, "log defaults to true");
+		assert.ok(
+			Raw.logFile.get() === "~/.dsh/playform/hook-dsh-lesson-nudge.log",
+			"the ledger path default",
+		);
+	});
+
+	Check(Count, "L12: the base keys sit first, and they are enabled, log, logFile", () => {
+		const Raw = Validate({});
+		// The first three keys are exactly the base (the composed minimal
+		// block puts its shared cells first; the module's own list below
+		// carries enabled, log, logFile in that order).
+		assert.deepEqual(
+			Object.keys(Raw).slice(0, 3).sort(),
+			["enabled", "log", "logFile"],
+			"the base keys are the first three",
+		);
+	});
+
+	await CheckAsync(Count, "L13: a live flip ON nudges again without a remount", async () => {
+		const Lesson = FakeLesson({ due: true });
+		const Agent = FakeAgent("session-9");
+		const Run = Make({ enabled: false }, (Context: any) => {
+			Context.lesson = Lesson;
+		});
+		Status(Run, { agent: Agent, status: "idle" });
+		assert.equal(Lesson.Calls.tick.length, 0, "still disabled");
+		Run.State.On = true;
+		Status(Run, { agent: Agent, status: "idle" });
+		await Settle();
+		assert.equal(Lesson.Calls.tick.length, 1, "the flip acts on the next transition");
 	});
 
 	return Finish(Count, "Listen-And-Nudge");

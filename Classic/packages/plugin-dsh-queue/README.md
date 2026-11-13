@@ -92,16 +92,16 @@ The plugin registers the `dshQueue` service:
 
 ## The configuration (all volatile)
 
-| Field                              | Default                                         | Meaning                                                            |
-| ---------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------ |
-| `enabled`                          | `false`                                         | Master switch (ships disabled).                                    |
-| `log` / `logFile`                  | `true` / `~/.dsh/playform/plugin-dsh-queue.log` | The plugin's own ledger.                                           |
-| `capacity.main` / `capacity.child` | 10 / 2                                          | The user's capacity model.                                         |
-| `autoDispatch`                     | `true`                                          | Freed slots trigger the next assignment.                           |
-| `routedDispatch`                   | `true`                                          | Consult `dshRoute` at dispatch when present.                       |
-| `autoSpawn`                        | `false`                                         | **Actually start the subagent** (the approval posture; see below). |
-| `spawnProvider`                    | `spawn`                                         | The harness subagent backend name selected at spawn.               |
-| `policy.*`                         | see below                                       | The D6 per-action allowlist (the OUTER gate).                      |
+| Field                              | Default                                         | Meaning                                                                                                 |
+| ---------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `enabled`                          | `true`                                          | Master switch (off logs `disabled (enabled=false)`; the tools answer the documented disabled payloads). |
+| `log` / `logFile`                  | `true` / `~/.dsh/playform/plugin-dsh-queue.log` | The plugin's own ledger.                                                                                |
+| `capacity.main` / `capacity.child` | 10 / 2                                          | The user's capacity model.                                                                              |
+| `autoDispatch`                     | `true`                                          | Freed slots trigger the next assignment.                                                                |
+| `routedDispatch`                   | `true`                                          | Consult `dshRoute` at dispatch when present.                                                            |
+| `autoSpawn`                        | `false`                                         | **Actually start the subagent** (the approval posture; see below).                                      |
+| `spawnProvider`                    | `spawn`                                         | The harness subagent backend name selected at spawn.                                                    |
+| `policy.*`                         | see below                                       | The D6 per-action allowlist (the OUTER gate).                                                           |
 
 ### `autoSpawn` (the approval posture)
 

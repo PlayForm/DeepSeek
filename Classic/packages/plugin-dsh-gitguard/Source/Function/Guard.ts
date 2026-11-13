@@ -104,6 +104,16 @@ export default async (
 	Next: () => Promise<PreToolDecision>,
 ): Promise<PreToolDecision> => {
 	try {
+		// THE CALL-TIME MASTER SWITCH (the LIVE DISABLED posture): the volatile
+		// On cell is read at the moment of the call, so a flip acts on the very
+		// next dispatch - a disabled guard passes through with ZERO ledger
+		// lines (the waterfall discipline: next() first, the decision returned
+		// unchanged).
+		switch (true) {
+			case !State.On:
+				return await Next();
+			default:
+		}
 		const Dir = Directory(Payload);
 		switch (true) {
 			case Dir !== undefined && State.Factory.Match(Dir, State.List):

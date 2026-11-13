@@ -30,6 +30,16 @@ const Defaults = {
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
+	Check(Count, "P1: the base trio - enabled, log and logFile fill the documented defaults", () => {
+		const Config = Validate({});
+		assert.equal(Config.enabled, true, "the live posture is the shipped default");
+		assert.equal(Config.log, true, "the ledger toggle default");
+		assert.equal(
+			Config.logFile,
+			"~/.dsh/playform/plugin-dsh-feedback.log",
+			"the ledger path default",
+		);
+	});
 	Check(Count, "P1: the member's schema fills the D6 policy defaults", () => {
 		const Config = Validate({ logFile: Ledger });
 		assert.deepEqual(Config.policy.get(), Defaults, "the composed block carries the defaults");

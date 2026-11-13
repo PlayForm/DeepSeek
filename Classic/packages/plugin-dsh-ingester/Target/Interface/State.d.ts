@@ -26,7 +26,7 @@ export default interface State {
      */
     Ledger: string;
     /**
-     * Ledger enabled - write the durable log file.
+     * The master switch (config `enabled`) - false = zero ledger lines.
      */
     Enabled: boolean;
     /**

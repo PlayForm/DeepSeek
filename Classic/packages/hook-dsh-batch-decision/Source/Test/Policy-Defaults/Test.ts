@@ -63,6 +63,14 @@ export const runTest = async (): Promise<number> => {
 
 	// Group P1: the schema and the State mapping.
 	{
+		Check(Count, "P1: the base trio - enabled, log and logFile fill the documented defaults", () => {
+			const Raw: any = Validate({ logFile: Ledger });
+			const Get = (Value: any): any =>
+				typeof Value?.get === "function" ? Value.get() : Value;
+			assert.equal(Get(Raw.enabled), true, "the live posture is the shipped default");
+			assert.equal(Get(Raw.log), true, "the ledger toggle default");
+			assert.equal(Get(Raw.logFile), Ledger, "the ledger path default");
+		});
 		Check(Count, "P1: the hook's schema fills the D6 policy defaults", () => {
 			const Config = Validate({ logFile: Ledger });
 			assert.deepEqual(Config.policy.get(), Defaults, "the composed block carries the defaults");

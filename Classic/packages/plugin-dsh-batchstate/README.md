@@ -74,7 +74,7 @@ state board (Documentation/Plans/BATCH-STATE-PLUGIN.md).
   `Factory`, `Proposal`, `Decision`, `Gate`, `Entry`, `File`, `Handle`).
 - `Source/Variable/Config.ts` - the Schemastery schema (every knob a volatile cell).
 - `Configuration/` - the ESBuild configuration.
-- `cordis.patch.yml` - the bundle patch row (`enabled: false`).
+- `cordis.patch.yml` - the bundle patch row (`enabled: true`).
 
 ## The inbox contract (the cross-package wire)
 
@@ -95,9 +95,12 @@ The board parses the FIRST block out of any inbox text, while ordinary messages 
 
 ## The posture
 
-The plugin ships DISABLED (the IDLE-forever posture): it never appears in the profile's bundles and
-enables only by an explicit ACTIVATE, and a cold mount logs `disabled (enabled=false)`, registers
-the service (it reads honestly from the empty state), and wires nothing.
+The plugin mounts with every surface registered (the LIVE DISABLED posture): the service, the store
+probe (the storage-domain effect or the JSON fallback recovery) and the inbox splice listeners come
+up on every mount. A disabled mount (`enabled: false`) logs only the byte-exact
+`disabled (enabled=false)` ledger line instead of the activation proof, and every surface reads the
+volatile `enabled` cell at call time: a disabled write or splice passes through with zero ledger
+lines (the read methods stay honest).
 
 ## The policy block (D6)
 
@@ -130,24 +133,24 @@ sh Source/Run.sh              # the dev twin (Build only)
 | Folder                | What it proves                                                                                           | Count |
 | --------------------- | -------------------------------------------------------------------------------------------------------- | ----- |
 | `State-And-Compile`   | the write API, the events, the ring cap, the compiled blocks                                             | 14    |
-| `Wiring-And-Recovery` | the loader contract, the cold mount, the recovery, the fs purity                                         | 13    |
+| `Wiring-And-Recovery` | the loader contract, the base trio, the disabled cold mount, the recovery, the fs purity                 | 16    |
 | `Inbox-Splice`        | the inbox splice, the Gates block, the queue projection, the restart                                     | 22    |
 | `Storage-Domain`      | the KV domain (primary), the per-mutation round-trip, the reopen, the JSON fallback, the version failure | 15    |
 | `Policy-Defaults`     | the D6 block's defaults and the recorder posture                                                         | 4     |
 
 ## The configuration
 
-| Field          | Default                                     | Meaning                                  |
-| -------------- | ------------------------------------------- | ---------------------------------------- |
-| `enabled`      | `false`                                     | the master switch (IDLE-forever posture) |
-| `log`          | `true`                                      | the ledger switch (shared cell)          |
-| `logFile`      | `~/.dsh/playform/plugin-dsh-batchstate.log` | the ledger                               |
-| `batch`        | `default`                                   | the active batch id                      |
-| `domain`       | `batch_state`                               | the primary KV domain                    |
-| `stateFile`    | `~/.dsh/batch-state.json`                   | the JSON fallback state file             |
-| `maxRecent`    | `8`                                         | the recent-activity ring bound           |
-| `maxProposals` | `16`                                        | the proposal list bound                  |
-| `policy.*`     | D6 defaults                                 | the per-action allowlist (see above)     |
+| Field          | Default                                     | Meaning                                   |
+| -------------- | ------------------------------------------- | ----------------------------------------- |
+| `enabled`      | `true`                                      | the master switch (live disabled posture) |
+| `log`          | `true`                                      | the ledger switch (shared cell)           |
+| `logFile`      | `~/.dsh/playform/plugin-dsh-batchstate.log` | the ledger                                |
+| `batch`        | `default`                                   | the active batch id                       |
+| `domain`       | `batch_state`                               | the primary KV domain                     |
+| `stateFile`    | `~/.dsh/batch-state.json`                   | the JSON fallback state file              |
+| `maxRecent`    | `8`                                         | the recent-activity ring bound            |
+| `maxProposals` | `16`                                        | the proposal list bound                   |
+| `policy.*`     | D6 defaults                                 | the per-action allowlist (see above)      |
 
 Every field is a volatile cell.
 

@@ -11,17 +11,19 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  */
 export default interface Config {
     /**
-     * The durable ledger file (one log per module).
+     * The master switch - the LIVE DISABLED posture: every surface registers
+     * on every mount and reads this volatile cell at call time; false writes
+     * only the `disabled (enabled=false)` ledger line at mount.
      */
-    logFile: string;
+    enabled: boolean;
     /**
-     * Ledger enabled - write the durable log file.
+     * The durable ledger toggle (the factory's shared cell).
      */
     log: boolean;
     /**
-     * The master switch - the IDLE-forever posture: false by default.
+     * The durable ledger file (one log per module).
      */
-    enabled: boolean;
+    logFile: string;
     /**
      * The batch key (multi-batch isolation).
      */

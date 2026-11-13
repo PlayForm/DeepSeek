@@ -12,6 +12,23 @@ const Defaults = {
 };
 const runTest = async () => {
   const Count = MakeCounter();
+  Check(Count, "P1: the pass-on's schema ships the Config base (enabled, log, logFile)", () => {
+    const Config = Validate();
+    assert.equal(Config.enabled, true, "enabled defaults to true");
+    assert.equal(Config.log, true, "log defaults to true");
+    assert.equal(
+      Config.logFile,
+      "~/.dsh/playform/plugin-dsh-pass-on.log",
+      "the ledger path default"
+    );
+  });
+  Check(Count, "P1: the base keys sit first, in the enabled, log, logFile order", () => {
+    assert.deepEqual(
+      Object.keys(Validate()).slice(0, 3),
+      ["enabled", "log", "logFile"],
+      "the base order"
+    );
+  });
   Check(Count, "P1: the pass-on's schema fills the D6 policy defaults", () => {
     const Config = Validate();
     assert.deepEqual(Config.policy.get(), Defaults, "the composed block carries the defaults");

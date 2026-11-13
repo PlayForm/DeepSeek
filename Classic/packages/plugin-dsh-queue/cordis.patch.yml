@@ -15,11 +15,11 @@
 # app is restarted (bundle layers compose at host boot). A file: dependency
 # alone is NOT activation.
 #
-# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
-# else - the plugin never appears in the profile's bundles and enables only
-# by an explicit ACTIVATE (the user edits the profile and restarts). On a
-# cold mount the State build logs `disabled (enabled=false)` and the tools
-# and the service no-op. The schema defaults are the truth: the user's
+# THE SHIPPED POSTURE: this entry ships with enabled: true, log: true and the
+# ledger path - a profile turns it off with `enabled: false`. On a cold
+# disabled mount the State build logs `disabled (enabled=false)` and the tools
+# and the service answer the documented disabled payloads while every
+# registration stays mounted. The schema defaults are the truth: the user's
 # capacity model (main 10, child 2), auto-dispatch on a freed slot, routed
 # dispatch when the routing enforcer is present, and the SPAWN OFF
 # (`autoSpawn: false` - the approval posture: a spawn is a privileged action,
@@ -40,7 +40,9 @@
       - id: plugin-dsh-queue
         name: "@playform/plugin-dsh-queue"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ~/.dsh/playform/plugin-dsh-queue.log
             policy:
                 read: auto
                 index: auto

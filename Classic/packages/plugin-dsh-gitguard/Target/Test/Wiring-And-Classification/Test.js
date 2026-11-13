@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import {
   Check,
+  CheckAsync,
   Finish,
   Ledger,
   Make,
@@ -30,16 +31,32 @@ const runTest = async () => {
       assert.equal(Run.State.Allow.length, 7);
       assert.equal(Run.State.Deny.length, 23);
     });
+    Check(Count, "L1: the base trio - enabled, log and logFile fill the documented defaults", () => {
+      const Raw = Validate({});
+      const Get = (Value) => typeof Value?.get === "function" ? Value.get() : Value;
+      assert.equal(Get(Raw.enabled), true, "the live posture is the shipped default");
+      assert.equal(Get(Raw.log), true, "the ledger toggle default");
+      assert.equal(
+        Get(Raw.logFile),
+        "~/.dsh/playform/plugin-dsh-gitguard.log",
+        "the ledger path default"
+      );
+    });
   }
   {
     rm();
-    const Run = Make(Validate({ logFile: Ledger }));
-    Check(Count, "W1: the cold mount logs the byte-exact disabled line", () => {
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }));
+    Check(Count, "W1: the disabled mount logs the byte-exact disabled line", () => {
       assert.deepEqual(Run.Lines, ["gitguard: disabled (enabled=false)"]);
     });
-    Check(Count, "W1: a disabled mount wires NOTHING - no listener anywhere", () => {
+    Check(Count, "W1: the disabled mount still registers the listener (the unconditional posture)", () => {
       assert.deepEqual(Run.RootNames, []);
-      assert.equal(Run.CtxListeners["tools/pre-execute"], void 0);
+      assert.equal(typeof Run.CtxListeners["tools/pre-execute"], "function");
+    });
+    await CheckAsync(Count, "W1: the disabled guard passes through with zero ledger lines", async () => {
+      const Decision = await Run.CtxListeners["tools/pre-execute"]("git commit -m x", async () => "down");
+      assert.equal(Decision, "down");
+      assert.equal(Run.Lines.length, 1, "nothing logged while disabled");
     });
   }
   {

@@ -86,6 +86,14 @@ carries the reason, and zero writes happen.
 `stopOnConflict`, true by default, stops the loop at the first failed target, and otherwise the loop
 continues and each remaining target gets its own honest outcome.
 
+## 3a. The live disabled posture
+
+The service and both bus listeners register on every mount. A disabled member (`enabled: false`)
+reads the switch at call time and passes every call through with ZERO ledger lines: the listeners
+drop the payload silently, and the `Apply` surface's documented disabled answer is `null` (no write,
+no journal line, no claim taken). The `log` cell is the durable-ledger toggle the Journal gate
+reads; the class form keeps both cells plain (a config edit reloads the plugin).
+
 ## 4. The output
 
 `Result` (Interface/Result.ts) is `{ proposal, perTarget[], applied, conflicts, recovery }`, which

@@ -61,7 +61,8 @@ per agent.
 
 | Key                    | Default  | Effect                                     |
 | ---------------------- | -------- | ------------------------------------------ |
-| `enabled`              | `false`  | the switch (schema default; the patch row) |
+| `enabled`              | `true`   | the switch (schema default; the patch row) |
+| `log`                  | `true`   | the durable ledger switch                  |
 | `logFile`              | see §1   | the ledger path                            |
 | `maxReviewsPerSession` | `3`      | the per-agent runaway guard                |
 | `policy`               | D6 block | the shared per-action allowlist            |

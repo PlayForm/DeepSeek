@@ -23,7 +23,9 @@ import type State from "@Interface/State.js";
  * - id + approve=false - deny by user
  *
  * Unknown or already-decided ids log and no-op. The tool result is one
- * canonical JSON object; the renderer is pure.
+ * canonical JSON object; the renderer is pure. The disabled plugin no-ops to
+ * a clear refusal (the call-time `On` check - the LIVE DISABLED posture:
+ * the registration is unconditional, the check is at call time).
  */
 export default (Context_: Context, State_: State, Append: (Message: string) => void) => {
 	const Summarize = (Proposal: {
@@ -58,6 +60,16 @@ export default (Context_: Context, State_: State, Append: (Message: string) => v
 			render: (_args, value) => [{ type: "text", text: value.detail }],
 		},
 		async execute(args) {
+			// THE CALL-TIME MASTER SWITCH (the LIVE DISABLED posture): the
+			// volatile On cell is read at the moment of the call, so a flip
+			// acts on the very next invocation. A disabled tool no-ops to the
+			// clear refusal (the workspace family's tool precedent) with ZERO
+			// ledger lines - the sweep and the listing below never run.
+			if (!State_.On) {
+				throw new Error(
+					"batch_decision: the hook-dsh-batch-decision plugin is disabled (enabled=false)",
+				);
+			}
 			// List path (also the expired-sweep entry point). The sweep scans
 			// every UNDECIDED entry - Pending() already filters expired ones
 			// out of the listing, so iterating it would never touch them.

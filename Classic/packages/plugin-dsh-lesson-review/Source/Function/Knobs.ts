@@ -15,13 +15,11 @@ import type Configuration from "@Interface/Config.js";
  * the nudge, and a reversed stale/archive pair archives entries the moment
  * they go stale.
  *
- * THE TWO POSTURES: `enabled` is TRUE in these defaults while the SCHEMA
- * (Variable/Config) defaults it to FALSE. They are different by design - a
- * BARE construction (`new LessonService(ctx)` - the smokes' fixture) is an
- * inert-but-live service: Tick answers and Status reports, so every
- * assertion is byte-exact; the LOADED plugin gets the schema's validated
- * config (the loader always passes it), which is the documented
- * idle-forever posture (disabled, the bundle patch row).
+ * THE POSTURES AGREE: `enabled` is TRUE in these defaults and the SCHEMA
+ * (Variable/Config) defaults it to TRUE too - a BARE construction
+ * (`new LessonService(ctx)` - the smokes' fixture) and a LOADED plugin both
+ * mount LIVE (the disabled posture is the explicit `enabled: false` mount,
+ * asserted with the flag named in the smokes).
  */
 /**
  * The usage-domain name rule (the library's UNIT_NAME_RE).
@@ -47,6 +45,7 @@ const Number_ = (Value: unknown, Fallback: number): number => {
 export default (Raw: unknown): Configuration => {
 	const Defaults: Configuration = {
 		enabled: true,
+		log: true,
 		logFile: "~/.dsh/playform/plugin-dsh-lesson-review.log",
 		domain: "lesson",
 		storagePath: "~/.dsh/lesson/usage.json",

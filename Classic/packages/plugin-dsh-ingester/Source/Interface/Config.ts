@@ -6,7 +6,16 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  * The schema's runtime shape (Variable/Config.ts produces it).
  */
 export default interface Config {
+	/**
+	 * The master switch (the LIVE DISABLED posture: the registration stays
+	 * in place; a disabled call passes through with zero ledger lines).
+	 */
 	enabled: boolean;
+
+	/**
+	 * The durable ledger toggle (the Journal gate reads it).
+	 */
+	log: boolean;
 
 	/**
 	 * The durable journal (one log per module).

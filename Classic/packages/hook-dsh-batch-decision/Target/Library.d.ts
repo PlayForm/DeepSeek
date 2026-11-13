@@ -26,9 +26,11 @@ import Version from "./Variable/Version.js";
  * are declared structurally (Source/Interface/Siblings.ts) and resolved via `Context.get` at
  * use time - never injected. The workflow ledger is the module's own log file.
  *
- * THE IDLE-FOREVER POSTURE: the plugin ships DISABLED (schema default and patch entry), never
- * appears in the profile's bundles, and enables only by an explicit ACTIVATE; a cold mount logs
- * `disabled (enabled=false)` and every listener no-ops to a passthrough.
+ * THE LIVE DISABLED POSTURE: every listener, the batch_decision tool and every effect register
+ * unconditionally on every mount; a disabled mount (`enabled: false`) logs the byte-exact
+ * `disabled (enabled=false)` line instead of the activation proof, and every registered surface
+ * reads the volatile `On` cell at CALL time, so a disabled surface passes through with zero
+ * ledger lines and a flip acts on the very next call.
  */
 export declare const name = "hook-dsh-batch-decision";
 /**

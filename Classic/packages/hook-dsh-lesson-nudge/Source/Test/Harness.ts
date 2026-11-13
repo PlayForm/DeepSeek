@@ -162,8 +162,8 @@ export const FakeAgent = (Id = "session-1"): any => {
 /**
  * The fake ctx + the REAL built apply: the listener capture, the logger, the
  * probe-once `get`, and the factory. The knobs default to the TEST posture
- * (`enabled: true`), because the schema's disabled default is the LOADED
- * posture and every scenario here is about behaviour once enabled.
+ * (`enabled: true`, matching the schema default), because every scenario here
+ * is about behaviour once enabled.
  */
 export const Make = (
 	Knobs: Record<string, unknown> = {},
@@ -192,6 +192,7 @@ export const Make = (
 	Attach?.(Context, Run);
 	apply(Context, {
 		enabled: true,
+		log: true,
 		logFile: "~/.dsh/playform/hook-dsh-lesson-nudge.log",
 		maxReviewsPerSession: 3,
 		policy: {
@@ -220,6 +221,14 @@ export const Status = (Run: any, Payload: { agent?: unknown; status?: string }):
 		}
 	}
 };
+
+/**
+ * The real-config shape the loader hands to apply: volatile fields arrive as
+ * `{ get }` cells. Build one via the REAL schema (the cast is fixture-only
+ * scaffolding).
+ */
+export const Validate = (Raw: Record<string, unknown>): any =>
+	(Config as unknown as (Raw: Record<string, unknown>) => any)({ ...Raw });
 
 // Standalone entry: `node Target/Test/Harness.js --selfcheck`.
 const InvokedDirectly =

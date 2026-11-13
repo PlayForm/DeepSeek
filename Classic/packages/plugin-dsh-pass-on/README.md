@@ -74,6 +74,7 @@ The ingester applies only the proposal whose digest and versions still match.
 | Field             | Default                                  | Meaning                                                 |
 | ----------------- | ---------------------------------------- | ------------------------------------------------------- |
 | `enabled`         | `true`                                   | Master switch (the patch entry ships `enabled: true`).  |
+| `log`             | `true`                                   | The durable journal switch.                             |
 | `logFile`         | `~/.dsh/playform/plugin-dsh-pass-on.log` | The durable journal (one log per module).               |
 | `root`            | `process.cwd()`                          | The workspace root the globs resolve against.           |
 | `maxTargets`      | `20`                                     | Maximum targets in one proposal.                        |
@@ -117,6 +118,12 @@ One JSONL log (`logFile`, default `~/.dsh/playform/plugin-dsh-pass-on.log`): eac
 {"at":<epoch ms>,"event":"prepared","proposal":<id|null>,"digest":<digest|null>,"targets":<n>,"note":<note>}
 ```
 
+The events are `prepared`, `delivered`, `rejected` (the note names the kind), and the disabled
+mount's `disabled` line, whose note is the byte-exact `disabled (enabled=false)`.
+
+A disabled mount keeps the service registered - `Prepare` reads `enabled` at call time and refuses;
+the mount-time effect of the flag is only that one line.
+
 ## The build and the tests
 
 The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
@@ -124,10 +131,10 @@ tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
 | Folder                 | What it proves                                                       | Count |
 | ---------------------- | -------------------------------------------------------------------- | ----- |
-| `Service-And-Contract` | the class-form contract, the disabled posture, the silence invariant | 8     |
+| `Service-And-Contract` | the class-form contract, the disabled posture, the silence invariant | 9     |
 | `Prepare-And-Ledger`   | the prepare paths, the digest, the preview, the read-only law        | 17    |
 | `Batch-Proposal`       | the canonical conversion, the bus emission, the inbox delivery       | 9     |
-| `Policy-Defaults`      | the D6 block's defaults and the read-only posture                    | 4     |
+| `Policy-Defaults`      | the D6 block's defaults and the read-only posture                    | 6     |
 
 ## The plan
 

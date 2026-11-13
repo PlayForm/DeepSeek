@@ -85,13 +85,13 @@ live names `passOn`, `ingester`.
 The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
 tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
-| Folder                | What it proves                                                     | Count |
-| --------------------- | ------------------------------------------------------------------ | ----- |
-| `Policy-And-Contract` | the loader contract, the policy gates, the fs purity               | 22    |
-| `Gate-Tool-Handoff`   | the recorder, the expiry gate, the tool paths, the ingester seam   | 19    |
-| `Inbox-Handoff`       | the decision written into the inbox, the return address, the seams | 7     |
-| `Batch-Chain`         | the whole chain end to end (all five packages in one process)      | 9     |
-| `Policy-Defaults`     | the D6 block's defaults, the held auto-approval, the precedence    | 7     |
+| Folder                | What it proves                                                                          | Count |
+| --------------------- | --------------------------------------------------------------------------------------- | ----- |
+| `Policy-And-Contract` | the loader contract, the policy gates, the fs purity                                    | 22    |
+| `Gate-Tool-Handoff`   | the recorder, the expiry gate, the tool paths, the ingester seam                        | 19    |
+| `Inbox-Handoff`       | the decision written into the inbox, the return address, the seams                      | 7     |
+| `Batch-Chain`         | the whole chain end to end (all five packages in one process)                           | 9     |
+| `Policy-Defaults`     | the base trio defaults, the D6 block's defaults, the held auto-approval, the precedence | 8     |
 
 ## The ledger
 
@@ -113,7 +113,8 @@ inbox <id>: no live agent
 
 | Field            | Default                                       | Notes                                       |
 | ---------------- | --------------------------------------------- | ------------------------------------------- |
-| `enabled`        | `false`                                       | ships disabled (idle-forever posture)       |
+| `enabled`        | `true`                                        | the master switch (live disabled posture)   |
+| `log`            | `true`                                        | the durable ledger toggle                   |
 | `logFile`        | `~/.dsh/playform/hook-dsh-batch-decision.log` | the workflow ledger                         |
 | `autoApprove`    | `off`                                         | the second explicit flip; off = user only   |
 | `allowlist`      | `[]`                                          | intent classes eligible for policy approval |
@@ -123,6 +124,14 @@ inbox <id>: no live agent
 | `policy.*`       | D6 defaults                                   | the per-action allowlist (the outer gate)   |
 
 Every field is a volatile cell: a hot edit lands on the next decision.
+
+## The live disabled posture
+
+Every surface registers unconditionally on every mount. A disabled mount (`enabled: false`) writes
+only the byte-exact `disabled (enabled=false)` ledger line instead of the activation proof, and
+every registered surface reads the volatile `enabled` cell at call time: a disabled surface passes
+through with zero ledger lines, and the `batch_decision` tool answers with the clear refusal
+`batch_decision: the hook-dsh-batch-decision plugin is disabled (enabled=false)`.
 
 ## The plan
 

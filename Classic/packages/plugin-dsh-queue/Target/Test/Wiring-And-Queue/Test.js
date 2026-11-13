@@ -33,7 +33,7 @@ const runTest = async () => {
   }
   {
     rm();
-    const Run = Make(Validate({ logFile: Ledger }));
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }));
     Check(Count, "W1: the cold mount logs the byte-exact disabled line", () => {
       assert.deepEqual(Run.Lines, ["plugin-dsh-queue: disabled (enabled=false)"]);
     });

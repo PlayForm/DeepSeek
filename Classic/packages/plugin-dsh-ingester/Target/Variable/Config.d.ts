@@ -1,6 +1,7 @@
 import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     enabled: Schema<boolean, boolean, "defined">;
+    log: Schema<boolean, boolean, "defined">;
     logFile: Schema<string, string, "defined">;
     maxTargets: Schema<number, number, "defined">;
     stopOnConflict: Schema<boolean, boolean, "defined">;
@@ -26,6 +27,7 @@ declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     }>>>, "volatile">;
 }>>, Schemastery.ObjectT<NoInfer<{
     enabled: Schema<boolean, boolean, "defined">;
+    log: Schema<boolean, boolean, "defined">;
     logFile: Schema<string, string, "defined">;
     maxTargets: Schema<number, number, "defined">;
     stopOnConflict: Schema<boolean, boolean, "defined">;

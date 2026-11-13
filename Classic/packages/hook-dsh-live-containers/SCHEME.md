@@ -77,8 +77,9 @@ the patternTable precedent of the tool-coach shows.
 
 | Field                | Type                 | Default                                        | Meaning                                                                                         |
 | -------------------- | -------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `enabled`            | boolean              | `true`                                         | the MASTER switch - the live disabled posture; a disabled mount logs `disabled (enabled=false)` |
+| `log`                | boolean              | `true`                                         | the DURABLE ledger switch                                                                       |
 | `logFile`            | string               | `~/.dsh/playform/hook-dsh-live-containers.log` | the module's OWN ledger, one log per module                                                     |
-| `enabled`            | boolean              | `false`                                        | the MASTER switch - the IDLE-forever posture; the bundle entry ships `enabled: false` only      |
 | `sectionName`        | string               | `live-containers`                              | the appended section's name (non-empty, fail-loud)                                              |
 | `refresh`            | `'request' \| 'ttl'` | `request`                                      | the section's recompute policy; `ttl` caches the whole body                                     |
 | `ttlCalls`           | number               | `8`                                            | assemblies between section rebuilds when `refresh: 'ttl'` (>= 1; the KV-cache-friendly cadence) |
@@ -331,11 +332,11 @@ Target, the tmpdir ledger, the FAKE CLOCK that the plugin reads time through onl
 advance the clock and never sleep), and the selfcheck backstop at
 `node Target/Test/Harness.js --selfcheck`.
 
-The fourteen folders and their PASS counts give 203 checks in total per tree:
+The fourteen folders and their PASS counts give 205 checks in total per tree:
 
 | Folder                   | PASS | Covers                                                                                                                 |
 | ------------------------ | ---- | ---------------------------------------------------------------------------------------------------------------------- |
-| `Wiring-And-Defaults`    | 42   | the four listeners, the defaults, the IDLE-forever posture, fail-loud validation                                       |
+| `Wiring-And-Defaults`    | 44   | the four listeners, the defaults, the live disabled posture, fail-loud validation                                      |
 | `Render-And-Frames`      | 23   | the substitution engine, the fixed frame, unknown tokens, per-kind views                                               |
 | `Volatile-And-Failsafes` | 23   | the volatile flips without remount, the budget collapse, the fail-open paths                                           |
 | `Recompute-And-TTL`      | 17   | the trigger matrix, the TTL caches, the `tools/change` invalidation                                                    |
@@ -363,8 +364,8 @@ No per-agent counter attribution, because the scope key is opaque, and no exact 
 because plugins cannot see them.
 
 No `{{live:...}}` in-body marker in logged messages, because no plugin seam exists and the follow-up
-is harness-side, and no profile activation, because of the IDLE-forever posture where the plugin
-ships disabled and enables only by an explicit ACTIVATE.
+is harness-side; the plugin ships ENABLED (the live disabled posture - a profile turns it off with
+`enabled: false`).
 
 ## 11. The EffectTS twin
 
@@ -543,7 +544,7 @@ the shipped catalog `Variable/DefaultCheckSets`.
 Board gains ONE behavior edit, which is the monitor settle skip guard, and the monitors plantType
 branch.
 
-### 13.1 The IDLE-forever posture and the second flip
+### 13.1 The live disabled posture and the second flip
 
 `monitors: "off"` is the default EVEN when the plugin is enabled, and with monitors off the section
 body is byte-identical with the wave-2 behavior, with no stanza and no listener work.

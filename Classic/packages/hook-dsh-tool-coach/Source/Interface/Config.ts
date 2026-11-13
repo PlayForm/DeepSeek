@@ -16,11 +16,18 @@ import type { CoachNotes, CoachRow } from "@Interface/Execution.js";
  * stable `{ get }` references and the factory's State builder unwraps them +
  * refreshes them in place on loader/volatile), so every knob - including
  * fetchLive, maxSectionTools and sectionTtl - flips live without remounting.
- * The factory's shared `log` cell (added by the Compose(false, ...) wrapper)
- * governs the DURABLE ledger file only; the coach's own `enabled` cell is the
- * master switch for the coaching itself.
+ * The Config base sits first (enabled, log, logFile): the coach's own
+ * `enabled` cell is the master switch for the coaching itself, and the
+ * `log` cell (also composed by the Compose(false, ...) wrapper) governs the
+ * DURABLE ledger file only.
  */
 export default interface Config {
+	/**
+	 * Master switch - every listener no-ops to a passthrough when false; a
+	 * disabled mount logs `disabled (enabled=false)` (volatile).
+	 */
+	enabled: boolean;
+
 	/**
 	 * Ledger enabled - write the durable log file (the shared `log` cell).
 	 */
@@ -30,11 +37,6 @@ export default interface Config {
 	 * Ledger file - the coach's own ledger, separate from the family's logs (volatile).
 	 */
 	logFile: string;
-
-	/**
-	 * Master switch - every listener no-ops to a passthrough when false (volatile).
-	 */
-	enabled: boolean;
 
 	/**
 	 * The terminal tools that are judged; dedicated tools are never judged (volatile).

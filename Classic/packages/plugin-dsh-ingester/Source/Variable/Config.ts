@@ -16,8 +16,14 @@ import { Policy } from "@playform/plugin-dsh-factory";
  * this schema as a static `Config` (validated before construction). The
  * ingester is THE ONLY WRITER of the batch flow (plan section 4) - its knobs
  * bound the write path.
+ *
+ * `enabled` defaults to TRUE - the LIVE DISABLED posture: the service and both
+ * bus listeners register on every mount; a disabled member passes every call
+ * through with ZERO ledger lines (the listeners drop the payload silently and
+ * the Apply path returns null without a journal line).
  */
 const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-ingester.log";
 const DefaultMaxTargets = 20;
 const DefaultStopOnConflict = true;
@@ -27,7 +33,12 @@ export default Schema.object({
 	// The class form has no factory State to hot-refresh, so these stay plain
 	// values: a volatile cell would reach the service as a `{ get() }` object
 	// and `Config.enabled` would read as truthy forever.
+	// The MASTER SWITCH (the LIVE DISABLED posture - read at call time by the
+	// listeners and the Apply gate): false = zero ledger lines while the
+	// registration stays in place.
 	enabled: Schema.boolean().default(DefaultEnabled),
+	// The durable ledger toggle (the Journal gate reads it).
+	log: Schema.boolean().default(DefaultLog),
 	logFile: Schema.string().default(DefaultLogFile),
 	maxTargets: Schema.number().default(DefaultMaxTargets),
 	// The plan's honest-failure rule: a conflict stops at that target. The

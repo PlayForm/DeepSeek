@@ -50,6 +50,12 @@ import Version from "./Variable/Version.js";
  *
  * inject: ["fs"] - the governed filesystem service is the write path; the
  * plugin registers NO fs/observed listener and never reads policy files.
+ *
+ * THE LIVE DISABLED POSTURE: the service and both bus listeners register on
+ * every mount; a disabled member (`enabled: false`) reads the switch at CALL
+ * time and passes every call through with ZERO ledger lines - the listeners
+ * drop the payload silently and the Apply surface's documented disabled answer
+ * is `null` (no write, no journal line, no claim taken).
  */
 export default class Ingester extends Service {
 	static inject = ["fs"];

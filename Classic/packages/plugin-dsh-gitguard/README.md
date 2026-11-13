@@ -38,13 +38,15 @@ terminal/exec tool surface (Documentation/Plugins/ORCHESTRATION-PLUGINS.md secti
 - `Source/Interface/` holds the types (`State`, `Config`, `Decision`, `Factory`).
 - `Source/Variable/Config.ts` holds the Schemastery schema, where every knob is a volatile cell.
 - `Configuration/` holds the ESBuild configuration.
-- `cordis.patch.yml` holds the bundle patch row (`enabled: false`).
+- `cordis.patch.yml` holds the bundle patch row (`enabled: true`).
 
 ## The posture
 
-The plugin ships DISABLED in the IDLE-forever posture, so it never appears in the bundles of the
-profile and enables only through an explicit ACTIVATE, and a cold mount logs
-`disabled (enabled=false)` and wires nothing.
+The plugin mounts with every surface registered (the LIVE DISABLED posture): the tools/pre-execute
+listener comes up on every mount. A disabled mount (`enabled: false`) logs only the byte-exact
+`disabled (enabled=false)` ledger line instead of the activation proof, and the guard reads the
+volatile `enabled` cell at call time, so a disabled guard passes every dispatch through with zero
+ledger lines.
 
 ## The policy block (D6)
 
@@ -69,13 +71,13 @@ resolved pack overrides the defaults per action, which is the next refinement.
 
 ## The configuration
 
-| Field      | Default                                   | Meaning                                      |
-| ---------- | ----------------------------------------- | -------------------------------------------- |
-| `enabled`  | `false`                                   | the master switch (the IDLE-forever posture) |
-| `log`      | `true`                                    | the ledger switch (shared cell)              |
-| `logFile`  | `~/.dsh/playform/plugin-dsh-gitguard.log` | the ledger                                   |
-| `strict`   | `false`                                   | the strict classification mode               |
-| `policy.*` | D6 defaults                               | the per-action allowlist (see below)         |
+| Field      | Default                                   | Meaning                                       |
+| ---------- | ----------------------------------------- | --------------------------------------------- |
+| `enabled`  | `true`                                    | the master switch (the live disabled posture) |
+| `log`      | `true`                                    | the ledger switch (shared cell)               |
+| `logFile`  | `~/.dsh/playform/plugin-dsh-gitguard.log` | the ledger                                    |
+| `strict`   | `false`                                   | the strict classification mode                |
+| `policy.*` | D6 defaults                               | the per-action allowlist (see below)          |
 
 Every field is a volatile cell.
 

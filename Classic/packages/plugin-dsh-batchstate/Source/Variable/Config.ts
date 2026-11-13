@@ -24,15 +24,18 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * the mapped State fields IN PLACE, so a flip (enabled, batch, stateFile, maxRecent) takes effect
  * on the next write or read.
  *
- * `enabled` defaults to FALSE - the IDLE-forever posture: the plugin ships disabled, never appears
- * in the profile's bundles, and enables only by an explicit ACTIVATE.
+ * `enabled` defaults to TRUE - the LIVE DISABLED posture: the service, the store probe and the
+ * inbox splice register unconditionally on every mount, a disabled mount writes only the byte-exact
+ * `disabled (enabled=false)` ledger line instead of the activation proof, and every surface reads
+ * the volatile cell at CALL time.
  *
  * This is one of the modules in the tree with a runtime import of @deepseek-ai/schemastery (the
  * schema must be a real schemastery instance - the loader consumes it through the Standard Schema
  * `~standard` interface).
  */
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-batchstate.log";
-const DefaultEnabled = false;
 const DefaultBatch = "default";
 const DefaultDomain = "batch_state";
 const DefaultStateFile = "~/.dsh/batch-state.json";
@@ -43,8 +46,17 @@ const DefaultMaxProposals = 16;
  * The plugin's Config schema: composed by the factory's helper, every knob volatile.
  */
 export default Compose(false, {
-	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	// The MASTER SWITCH (volatile: a flip is read at the next call): false =
+	// the mount writes `disabled (enabled=false)` to the ledger while every
+	// registered surface passes through silently. Distinct from the shared
+	// `log` cell, which governs only the durable ledger file.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	// Ledger file - the plugin's SEPARATE ledger, one log per module -
+	// volatile: hot-editable without remounting (overrides the minimal
+	// shared block's empty default).
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// The batch key: ONE state store serves every batch, isolated by this
 	// key (the plan's multi-batch support, section 7.3).
 	batch: Schema.string().default(DefaultBatch).volatile(),

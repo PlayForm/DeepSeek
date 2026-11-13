@@ -26,7 +26,7 @@ The git guard is the tools/pre-execute DENY-LIST on the terminal/exec tool surfa
 
 | Field           | Type     | Default                                             | Meaning                                                               |
 | --------------- | -------- | --------------------------------------------------- | --------------------------------------------------------------------- |
-| `enabled`       | boolean  | `false`                                             | The master switch (the IDLE-forever posture).                         |
+| `enabled`       | boolean  | `true`                                              | The master switch (the LIVE DISABLED posture).                        |
 | `log`           | boolean  | `true`                                              | Ledger enabled - write the durable log file.                          |
 | `logFile`       | string   | `~/.dsh/playform/plugin-dsh-gitguard.log`           | The ledger file (one log per module).                                 |
 | `denyPatterns`  | string[] | the 23 mutation subcommands                         | The refused git subcommands (REPLACES the default list, not merge).   |
@@ -64,7 +64,9 @@ The guard chain, in order:
 
 1. **The disabled guard.**
 
-    The guard is disabled, so the verdict is allow and the cold mount passes everything.
+    The guard is disabled (`State.On` false, read at call time), so the listener passes the dispatch
+    through with zero ledger lines and the mount logged `disabled (enabled=false)` instead of the
+    activation proof (the LIVE DISABLED posture: the registration is unconditional).
 
 2. **The non-git command.**
 

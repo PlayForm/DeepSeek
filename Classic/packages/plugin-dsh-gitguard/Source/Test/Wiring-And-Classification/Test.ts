@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import {
 	Check,
+	CheckAsync,
 	Finish,
 	Ledger,
 	Make,
@@ -18,8 +19,9 @@ import {
  * @remarks
  *
  * The test covers the loader contract (the default object carries
- * name/apply/Config/inject, apply returns nothing), the IDLE-forever cold
- * mount, the activation proof, the tools/pre-execute registration on the
+ * name/apply/Config/inject, apply returns nothing), the base trio
+ * defaults, the disabled cold mount (enabled: false, explicit - the shipped
+ * default is the live posture), the activation proof, the tools/pre-execute registration on the
  * plugin context (never the root), the classification table (allow, deny,
  * strict, the allow-list win, compounds, env prefixes, flags, bare git), and
  * the fail-loud validation.
@@ -51,18 +53,36 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Run.State.Allow.length, 7);
 			assert.equal(Run.State.Deny.length, 23);
 		});
+		Check(Count, "L1: the base trio - enabled, log and logFile fill the documented defaults", () => {
+			const Raw: any = Validate({});
+			const Get = (Value: any): any =>
+				typeof Value?.get === "function" ? Value.get() : Value;
+			assert.equal(Get(Raw.enabled), true, "the live posture is the shipped default");
+			assert.equal(Get(Raw.log), true, "the ledger toggle default");
+			assert.equal(
+				Get(Raw.logFile),
+				"~/.dsh/playform/plugin-dsh-gitguard.log",
+				"the ledger path default",
+			);
+		});
 	}
 
-	// Group W1: the cold mount (the IDLE-forever posture).
+	// Group W1: the disabled cold mount (the shipped default is the live
+	// posture, so the disabled mount is asserted with the flag explicit).
 	{
 		rm();
-		const Run = Make(Validate({ logFile: Ledger }));
-		Check(Count, "W1: the cold mount logs the byte-exact disabled line", () => {
+		const Run = Make(Validate({ logFile: Ledger, enabled: false }));
+		Check(Count, "W1: the disabled mount logs the byte-exact disabled line", () => {
 			assert.deepEqual(Run.Lines, ["gitguard: disabled (enabled=false)"]);
 		});
-		Check(Count, "W1: a disabled mount wires NOTHING - no listener anywhere", () => {
+		Check(Count, "W1: the disabled mount still registers the listener (the unconditional posture)", () => {
 			assert.deepEqual(Run.RootNames, []);
-			assert.equal(Run.CtxListeners["tools/pre-execute"], undefined);
+			assert.equal(typeof Run.CtxListeners["tools/pre-execute"], "function");
+		});
+		await CheckAsync(Count, "W1: the disabled guard passes through with zero ledger lines", async () => {
+			const Decision = await Run.CtxListeners["tools/pre-execute"]("git commit -m x", async () => "down");
+			assert.equal(Decision, "down");
+			assert.equal(Run.Lines.length, 1, "nothing logged while disabled");
 		});
 	}
 

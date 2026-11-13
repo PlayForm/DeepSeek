@@ -621,6 +621,20 @@ export default (Context: Context, Options: Config): void => {
 	State.MonitorOverflowLast = 0;
 	State.Wave = (() => {
 		const Raw = Context as unknown as Record<string, unknown>;
+		// The optional siblings: a live context resolves them through `get` (a
+		// plain property read would trip the inject guard), while a hand-built
+		// harness context carries them as plain properties.
+		const Read = (Name: string): unknown => {
+			const Resolved = (Context as { get?: (Key: string) => unknown }).get?.(Name);
+			if (Resolved !== undefined) {
+				return Resolved;
+			}
+			try {
+				return Raw[Name];
+			} catch {
+				return undefined;
+			}
+		};
 		return {
 			Jobs: Raw["jobs"] as NonNullable<State["Wave"]>["Jobs"],
 			Shell: Raw["shell"] as NonNullable<State["Wave"]>["Shell"],
@@ -628,11 +642,9 @@ export default (Context: Context, Options: Config): void => {
 			WorkingDirectory: Raw["workingDirectory"] as NonNullable<
 				State["Wave"]
 			>["WorkingDirectory"],
-			Subagent: Context.get?.("subagent") as NonNullable<State["Wave"]>["Subagent"],
-			Agents: Context.get?.("agents") as NonNullable<State["Wave"]>["Agents"],
-			SandboxPolicy: Context.get?.("sandboxPolicy") as NonNullable<
-				State["Wave"]
-			>["SandboxPolicy"],
+			Subagent: Read("subagent") as NonNullable<State["Wave"]>["Subagent"],
+			Agents: Read("agents") as NonNullable<State["Wave"]>["Agents"],
+			SandboxPolicy: Read("sandboxPolicy") as NonNullable<State["Wave"]>["SandboxPolicy"],
 		};
 	})();
 

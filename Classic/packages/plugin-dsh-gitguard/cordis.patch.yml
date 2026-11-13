@@ -15,12 +15,14 @@
 # app is restarted (bundle layers compose at host boot). A file: dependency
 # alone is NOT activation.
 #
-# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and
-# NOTHING else - the plugin never appears in the profile's bundles and
-# enables only by an explicit ACTIVATE (the user edits the profile and
-# restarts). On a cold mount the Apply logs `disabled (enabled=false)` and
-# wires NOTHING - no listener, no ledger. The schema defaults are the
-# truth: the full default deny list (the 23 mutation subcommands), the
+# THE LIVE DISABLED POSTURE: the tools/pre-execute listener registers on
+# EVERY mount - a disabled mount logs the byte-exact `disabled (enabled=false)`
+# line instead of the activation proof, and the guard reads the volatile On
+# cell at CALL time, so a disabled guard passes every dispatch through with
+# zero ledger lines (a flip lands on the next dispatch, with no remount). The
+# schema defaults are the
+# truth: enabled true, log true, the full default deny list (the 23 mutation
+# subcommands), the
 # allow list (the read-only checks + fetch), strict false (deny-list mode),
 # exclude empty. EVERY knob is volatile (hot-editable without remounting).
 #
@@ -34,7 +36,9 @@
       - id: plugin-dsh-gitguard
         name: "@playform/plugin-dsh-gitguard"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ~/.dsh/playform/plugin-dsh-gitguard.log
             policy:
                 read: auto
                 index: auto

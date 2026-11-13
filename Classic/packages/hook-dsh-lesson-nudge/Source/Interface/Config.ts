@@ -15,9 +15,16 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  */
 export default interface Config {
 	/**
-	 * Master switch (default FALSE in the schema - the idle-forever posture).
+	 * Master switch (default TRUE in the schema - the shipped posture; a
+	 * profile turns it off, which registers everything and writes only the
+	 * `disabled (enabled=false)` ledger line).
 	 */
 	enabled: boolean;
+
+	/**
+	 * Ledger enabled - write the durable log file.
+	 */
+	log: boolean;
 
 	/**
 	 * The hook's own ledger file.

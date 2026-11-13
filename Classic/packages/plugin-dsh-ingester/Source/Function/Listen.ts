@@ -29,6 +29,15 @@ export default (State: State): void => {
 	const On = State.Context.on as unknown as Listen;
 	On("batch/proposed", (Payload: unknown) => {
 		try {
+			// THE CALL-TIME MASTER SWITCH (the LIVE DISABLED posture): the
+			// volatile switch is read at the moment of the call - a disabled
+			// member drops the payload with ZERO ledger lines.
+			switch (true) {
+				case !State.Config.enabled:
+					return;
+				default:
+					break;
+			}
 			Record(State, Payload);
 		} catch {
 			/* fail-open */
@@ -36,6 +45,14 @@ export default (State: State): void => {
 	});
 	On("batch/decision", (Payload: unknown) => {
 		try {
+			// The same call-time gate: a disabled member applies nothing and
+			// journals nothing.
+			switch (true) {
+				case !State.Config.enabled:
+					return;
+				default:
+					break;
+			}
 			void Consume(State, Payload);
 		} catch {
 			/* fail-open */

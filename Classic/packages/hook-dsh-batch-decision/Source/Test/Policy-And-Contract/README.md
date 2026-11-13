@@ -1,6 +1,7 @@
 # Policy-And-Contract - the loader contract and the policy tests
 
-The suite covers the loader contract, the IDLE-forever cold mount, the byte-exact
+The suite covers the loader contract, the disabled cold mount (explicit `enabled: false` - the
+shipped default is the live posture), the byte-exact
 activation line, the shape of the listener and tool registration, the fail-loud
 validation, every gate of the conservative auto-approve policy, and the fs purity
 invariant.

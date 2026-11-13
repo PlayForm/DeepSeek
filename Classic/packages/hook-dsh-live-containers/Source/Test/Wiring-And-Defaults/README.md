@@ -23,10 +23,12 @@ every later folder, so it has its own folder.
         - logFile, enabled, sectionName, refresh, ttlCalls, separator,
           sectionBudgetBytes, and blocks are `{ get }` callable cells.
     - Sub: "config defaults: the shipped posture"
-        - enabled=false (the IDLE-forever posture), logFile=
+        - enabled=true (the shipped posture; a disabled mount passes
+          `enabled: false`), log=true, logFile=
           ~/.dsh/playform/hook-dsh-live-containers.log, sectionName=live-containers,
           refresh="request", ttlCalls=8, separator="---",
           sectionBudgetBytes=4096.
+        - the base keys sit first (enabled, log, logFile).
         - blocks = the 14-entry catalog in shipped order; exactly todo-list,
           command-runner, and session-stats enabled.
 - Group: the apply-time wiring and the activation.
@@ -52,7 +54,8 @@ every later folder, so it has its own folder.
 
 The harness world: the fake ctx (on/get/logger capture plus the root seam)
 with the REAL `@playform/plugin-dsh-factory` instance from its built Target,
-and one `Make(Validate({ logFile: Ledger }))` against the ledger in the harness
+and one `Make(Validate({ logFile: Ledger, enabled: false }))` (the disabled
+cold mount - the schema default is enabled) against the ledger in the harness
 tmpdir.
 
 Each validation refusal constructs a throwaway mount through the same
@@ -81,4 +84,4 @@ The ledger file lives in a fresh mkdtemp directory for each process.
 
 ## Expected count
 
-42 PASS.
+44 PASS.

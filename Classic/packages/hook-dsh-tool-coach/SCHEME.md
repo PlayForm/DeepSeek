@@ -94,10 +94,11 @@ composed output never gains an unfilled placeholder.
 
 ## 5. Config (Variable/Config.ts - the plan's §3.4 schema verbatim; every cell volatile)
 
-`log`/`logFile` (the shared minimal block; the DURABLE ledger), `enabled` (the MASTER switch,
-distinct from `log`), `judgeTools ['bash','pwsh']`, `threshold 3`, `window 8`, `cooldown 10`,
-`escalateThreshold 6`, `cleanWindow 12`, `enforce 'off'`, `enforceThreshold 4`,
-`exemptPatterns DEFAULT_EXEMPTS`, `patternTable DEFAULT_PATTERNS`,
+The Config base sits first: `enabled` (the MASTER switch, distinct from `log` - a disabled mount
+logs `disabled (enabled=false)` and every listener passes through), then `log`/`logFile` (the
+DURABLE ledger switch and path). Then the domain knobs: `judgeTools ['bash','pwsh']`, `threshold 3`,
+`window 8`, `cooldown 10`, `escalateThreshold 6`, `cleanWindow 12`, `enforce 'off'`,
+`enforceThreshold 4`, `exemptPatterns DEFAULT_EXEMPTS`, `patternTable DEFAULT_PATTERNS`,
 `notes {first, persistent, denied}` (volatile object, plain leaves - the schemastery nesting rule),
 `fetchLive true`, `maxSectionTools 5`, `sectionTtl 20`.
 

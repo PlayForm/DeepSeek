@@ -93,7 +93,8 @@ and each line is
 
 | Field            | Default                                   | Meaning                                                            |
 | ---------------- | ----------------------------------------- | ------------------------------------------------------------------ |
-| `enabled`        | `true`                                    | Master switch (the patch entry ships `enabled: true`).             |
+| `enabled`        | `true`                                    | Master switch (the live disabled posture).                         |
+| `log`            | `true`                                    | The durable ledger toggle (the Journal gate reads it).             |
 | `logFile`        | `~/.dsh/playform/plugin-dsh-ingester.log` | The durable journal (one log per module).                          |
 | `maxTargets`     | `20`                                      | Maximum targets in one apply run.                                  |
 | `stopOnConflict` | `true`                                    | Stop at the first conflict instead of continuing.                  |
@@ -122,6 +123,13 @@ next refinement.
 
 `Source/Test/Policy-Defaults` arbitrates the defaults in the smoke suite.
 
+## The live disabled posture
+
+The service and both bus listeners register on every mount. A disabled member (`enabled: false`)
+reads the switch at call time and passes every call through with ZERO ledger lines: the listeners
+drop the payload silently, and the `Apply` surface's documented disabled answer is `null` (no write,
+no journal line, no claim taken).
+
 ## The build and the tests
 
 The build is `pnpm prepublishOnly` from Source/prepublishOnly.sh, which runs the plugin build with
@@ -132,7 +140,7 @@ type-check.
 | -------------------- | ----------------------------------------------------------------- | ----- |
 | `Loader-And-Journal` | the class contract, the pre-apply validation, the rejection lines | 10    |
 | `Apply-And-Fences`   | the version fence, the honest failure modes, the journal          | 11    |
-| `Decision-Consumer`  | the bus consumer, the one-apply claim, the feedback outcome       | 8     |
+| `Decision-Consumer`  | the bus consumer, the one-apply claim, the feedback outcome       | 10    |
 | `Policy-Defaults`    | the D6 block's defaults and the writer's `approve` posture        | 4     |
 
 ## The plan

@@ -10,10 +10,13 @@
 # package in dsh.profile.bundles AND the app is restarted; a file:
 # dependency alone is NOT activation.
 #
-# SHIPS DISABLED (the idle-forever posture): enabled: false is the schema
-# default and the patch row; a cold mount logs `disabled (enabled=false)`
-# and Match returns the empty result (the abstention) - the service stays
-# resolvable so consumers never hard-fail.
+# THE SHIPPED POSTURE: this entry ships with enabled: true (installing the
+# service yields an enabled service), log: true and the ledger path - a
+# profile turns it off with `enabled: false`; a cold mount then logs
+# `disabled (enabled=false)` and Match returns the empty result (the
+# abstention) - the service stays resolvable so consumers never hard-fail.
+# The schema defaults are the truth; the full default surface lives in
+# Variable/Config.ts.
 #
 # THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
 # shared factory block. The service matches, records and decays (read/record/
@@ -25,7 +28,9 @@
       - id: plugin-dsh-pattern
         name: "@playform/plugin-dsh-pattern"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ~/.dsh/playform/plugin-dsh-pattern.log
             policy:
                 read: auto
                 index: auto

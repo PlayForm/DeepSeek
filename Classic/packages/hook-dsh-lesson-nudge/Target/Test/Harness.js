@@ -103,6 +103,7 @@ const Make = (Knobs = {}, Attach) => {
   Attach?.(Context, Run);
   apply(Context, {
     enabled: true,
+    log: true,
     logFile: "~/.dsh/playform/hook-dsh-lesson-nudge.log",
     maxReviewsPerSession: 3,
     policy: {
@@ -127,6 +128,7 @@ const Status = (Run, Payload) => {
     }
   }
 };
+const Validate = (Raw) => Config({ ...Raw });
 const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
 if (InvokedDirectly) {
   const Count = MakeCounter();
@@ -169,6 +171,7 @@ export {
   MakeCounter,
   Settle,
   Status,
+  Validate,
   apply,
   inject,
   name

@@ -12,12 +12,16 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * only the universal log/logFile volatile cells; the hook hooks no fs/observed machinery). Every
  * knob is a volatile cell so a hot edit lands on the next decision without a remount.
  *
- * `enabled` defaults to FALSE - the idle-forever posture: the plugin ships disabled, never
- * appears in the profile's bundles, and enables only by an explicit ACTIVATE. `autoApprove`
- * defaults to "off" - the second explicit flip after the plugin's own enable (the conservative
+ * `enabled` defaults to TRUE - the LIVE DISABLED posture: every listener, the tool and every
+ * effect registers unconditionally on every mount (a disabled mount writes only the byte-exact
+ * `disabled (enabled=false)` ledger line instead of the activation proof), and every registered
+ * surface reads the volatile `On` cell at CALL time, so a flip lands on the next decision with no
+ * remount. `autoApprove`
+ * defaults to "off" - the second explicit flip (the conservative
  * policy, PASS-ON-AND-INGESTER.md section 5: the write path is never auto-approved by default).
  */
-const DefaultEnabled = false;
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-batch-decision.log";
 const DefaultAutoApprove = "off";
 const DefaultAllowlist: string[] = [];
@@ -27,6 +31,8 @@ const DefaultPendingTTLMs = 3600000;
 
 export default Compose(false, {
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
 	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	autoApprove: Schema.union(["off", "on"]).default(DefaultAutoApprove).volatile(),
 	allowlist: Schema.array(Schema.string()).default(DefaultAllowlist).volatile(),

@@ -22,12 +22,14 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * VOLATILE CELLS: every knob is `.volatile()` - a capacity or policy edit
  * lands on the next dispatch without a remount.
  *
- * `enabled` defaults to FALSE - the IDLE-forever posture: the plugin ships
- * disabled, never appears in the profile's bundles, and enables only by an
- * explicit ACTIVATE.
+ * `enabled` defaults to TRUE - the shipped posture is ON, and a profile turns
+ * it off with `enabled: false` (the LIVE disabled posture: a cold mount logs
+ * `disabled (enabled=false)` and the tools and the service answer the
+ * documented disabled payloads while every registration stays mounted).
  */
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-queue.log";
-const DefaultEnabled = false;
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultCapacityMain = 10;
 const DefaultCapacityChild = 2;
 const DefaultAutoDispatch = true;
@@ -36,8 +38,18 @@ const DefaultAutoSpawn = false;
 const DefaultSpawnProvider = "spawn";
 
 export default Compose(false, {
-	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	// The MASTER SWITCH (volatile: a flip is read at the next dispatch or
+	// tool call with no remount): false = the mount appends
+	// `disabled (enabled=false)` to the ledger while the service and the
+	// tools stay registered and answer the documented disabled payloads.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile; overrides the
+	// minimal shared block's empty default).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	// Ledger file - the plugin-dsh-queue ledger (one log per module) -
+	// volatile: hot-editable without remounting (overrides the minimal shared
+	// block's empty default).
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// The user's capacity model is the law (SUBAGENT-QUEUE-PLUGIN.md section
 	// 2.2): the MAIN conversation holds up to 10 subagents (the pool's
 	// reserved slots, including the IDLE-held lanes); EVERY spawned agent's

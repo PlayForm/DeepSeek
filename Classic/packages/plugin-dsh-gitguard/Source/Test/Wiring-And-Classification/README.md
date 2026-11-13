@@ -9,9 +9,13 @@ placement, the classification table, and the fail-loud validation.
   `plugin-dsh-gitguard`, apply, Config, and inject `["pluginFactory"]`, apply
   returns NOTHING, and the `__pluginDshGitguardState` probe exists with the
   default deny list of 23 entries and allow list of 7 entries.
-- W1: the IDLE-FOREVER cold mount - the byte-exact `disabled (enabled=false)`
-  line appears and no listener is registered anywhere, because the guard
-  wires nothing when it is disabled.
+- L1: the base trio fills the documented defaults (enabled true, log true,
+  the ledger path).
+- W1: the disabled cold mount (explicit `enabled: false` - the shipped
+  default is the live posture) - the byte-exact `disabled (enabled=false)`
+  line appears, the `tools/pre-execute` listener still registers (the
+  unconditional posture), and the disabled guard passes a dispatch through
+  with zero ledger lines.
 - W2: the activation wiring - the byte-exact
   `activated (strict=false, denyPatterns=23, allowPatterns=7)` line appears,
   and `tools/pre-execute` is registered on the plugin context and never on the
@@ -45,4 +49,4 @@ factory instance, and the classification runs through the built
 
 ## Expected count
 
-15 PASS.
+17 PASS.

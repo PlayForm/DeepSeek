@@ -11,10 +11,15 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  */
 export default interface Config {
     /**
-     * The IDLE-forever posture: the plugin ships disabled and enables only by
-     * an explicit ACTIVATE.
+     * The MASTER SWITCH (the LIVE DISABLED posture): every surface registers
+     * on every mount and reads this volatile cell at call time; false writes
+     * only the `disabled (enabled=false)` ledger line at mount.
      */
     enabled: boolean;
+    /**
+     * The durable ledger toggle (the factory's shared cell).
+     */
+    log: boolean;
     /**
      * The ledger file (one log per module, the family strings contract).
      */

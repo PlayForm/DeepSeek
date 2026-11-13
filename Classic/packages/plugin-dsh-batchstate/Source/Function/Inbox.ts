@@ -53,8 +53,19 @@ const Text = (Message: Message | undefined): string =>
 
 /**
  * Project one inbox message onto the board (the one splice path).
+ *
+ * THE CALL-TIME MASTER SWITCH (the LIVE DISABLED posture): both listeners
+ * call this, so the gate sits here - the volatile `On` cell is read at the
+ * moment of the call (a flip acts on the very next splice with no remount),
+ * and a disabled board passes the message through with ZERO ledger lines.
  */
 const Handle = (State: State, Message: Message | undefined, Origin: string): void => {
+	switch (true) {
+		case !State.On:
+			return;
+		default:
+			break;
+	}
 	const Body = Text(Message);
 	switch (true) {
 		case Body.length === 0:

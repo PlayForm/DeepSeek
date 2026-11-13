@@ -15,6 +15,11 @@ It also pins the precedence: policy approve beats an enabled knob, while a knob 
 ## Scenario
 
 - Group P1: the schema and the State mapping.
+    - Check: "P1: the queue's schema ships the Config base (enabled, log,
+      logFile)" - `enabled` and `log` default to `true` and `logFile` to the
+      module's ledger path.
+    - Check: "P1: the base keys sit first, and they are enabled, log, logFile"
+      - the validated config's first three keys are exactly the base.
     - Check: "P1: the queue's schema fills the D6 policy defaults" - the
       composed `policy` cell deep-equals the D6 defaults
       (read/index/record/suggest/message = auto, write/commit/spawn =
@@ -55,4 +60,4 @@ and the unchanged `dispatched <id> -> <agent>`.
 
 ## Expected count
 
-7 PASS.
+9 PASS.

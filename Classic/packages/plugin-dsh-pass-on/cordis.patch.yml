@@ -12,6 +12,12 @@
 # static Config (validated before construction) and registers itself as
 # `passOn` via `super(ctx, "passOn")`.
 #
+# THE SHIPPED POSTURE: this entry ships with enabled: true, log: true and the
+# ledger path - a profile turns it off with `enabled: false`; a disabled mount
+# journals the byte-exact `disabled (enabled=false)` note and the service
+# stays registered - `Prepare` refuses at call time. The schema defaults are
+# the truth; the full default surface lives in Variable/Config.ts.
+#
 # THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
 # shared factory block. The pass-on is READ-ONLY - read/suggest are automatic;
 # the write/commit/spawn verdicts are declared for family uniformity and stay
@@ -23,6 +29,8 @@
         name: "@playform/plugin-dsh-pass-on"
         config:
             enabled: true
+            log: true
+            logFile: ~/.dsh/playform/plugin-dsh-pass-on.log
             policy:
                 read: auto
                 index: auto

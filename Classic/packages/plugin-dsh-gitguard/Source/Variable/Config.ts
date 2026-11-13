@@ -27,9 +27,11 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * PLACE, so a flip (enabled, strict, the deny/allow lists, exclude) takes
  * effect on the next dispatch.
  *
- * `enabled` defaults to FALSE - the IDLE-forever posture: the plugin ships
- * disabled, never appears in the profile's bundles, and enables only by an
- * explicit ACTIVATE.
+ * `enabled` defaults to TRUE - the LIVE DISABLED posture: the tools/pre-execute
+ * listener registers unconditionally on every mount, a disabled mount writes
+ * only the byte-exact `disabled (enabled=false)` ledger line instead of the
+ * activation proof, and the guard reads the volatile `On` cell at CALL time,
+ * so a flip lands on the next dispatch with no remount.
  *
  * This is one of the modules in the tree with a runtime import of
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance -
@@ -72,14 +74,24 @@ const DEFAULT_DENY = [
  */
 const DEFAULT_ALLOW = ["status", "log", "diff", "show", "rev-parse", "ls-files", "fetch"];
 
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-gitguard.log";
-const DefaultEnabled = false;
 const DefaultStrict = false;
 const DefaultExclude: string[] = [];
 
 export default Compose(false, {
-	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	// The MASTER SWITCH (volatile: a flip is read at the next dispatch):
+	// false = the mount writes `disabled (enabled=false)` to the ledger while
+	// the guard passes every dispatch through silently. Distinct from the
+	// shared `log` cell, which governs only the durable ledger file.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	// Ledger file - the plugin's SEPARATE ledger, one log per module -
+	// volatile: hot-editable without remounting (overrides the minimal
+	// shared block's empty default).
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// The deny-list: the git subcommands that are always refused. Setting
 	// the field REPLACES the default list (not merge).
 	denyPatterns: Schema.array(Schema.string()).default(DEFAULT_DENY).volatile(),

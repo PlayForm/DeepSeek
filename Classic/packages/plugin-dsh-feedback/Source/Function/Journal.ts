@@ -20,6 +20,18 @@ import type State from "../Interface/State.js";
  * agent id are read from the block itself.
  */
 export default (State: State, Event: Event, Block: FeedbackBlock): void => {
+	switch (true) {
+		// THE LEDGER GATES (the base cells, read at call time): `log` is the
+		// durable-ledger toggle; `enabled` is the master switch (the LIVE
+		// DISABLED posture - a disabled surface passes through with ZERO
+		// ledger lines while the in-memory record continues, the documented
+		// disabled answer of the class form).
+		case State.Config.log === false:
+		case !State.Config.enabled:
+			return;
+		default:
+			break;
+	}
 	try {
 		const Ledger = Expand(State.Ledger);
 		Make(Parent(Ledger), { recursive: true });

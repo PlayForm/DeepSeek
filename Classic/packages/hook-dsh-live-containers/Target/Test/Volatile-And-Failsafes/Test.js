@@ -212,7 +212,7 @@ const runTest = async () => {
   }
   rm();
   {
-    const Run6 = Make(Validate({ logFile: Ledger }));
+    const Run6 = Make(Validate({ logFile: Ledger, enabled: false }));
     Run6.State.Now = () => ClockBox.Now;
     const Base = { sections: [{ name: "base", text: "BASE" }], contexts: [], tools: [], variables: {} };
     const Out = await AssembleBase(Run6, Base);

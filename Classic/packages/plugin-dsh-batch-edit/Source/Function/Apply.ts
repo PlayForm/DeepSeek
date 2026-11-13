@@ -25,9 +25,12 @@ import Tools from "./Tools.js";
  *   observer - a SYNCHRONOUS cell flipper, no awaits, no I/O (the event-loop
  *   hazard mitigation).
  * - L2: tools/pre-execute (waterfall, next() FIRST, fail-open): the ADVISORY
- *   bash intercept (config interceptBash, OFF by default in v1) - it tags the
- *   exec and records the attempt, NEVER denies (the control layer comes later
- *   as its own plugin).
+ *   bash intercept (config interceptBash, OFF by default in v1). Registered
+ *   UNCONDITIONALLY on every mount (the LIVE DISABLED posture); the call-time
+ *   gates read the volatile State.On and State.Intercept cells, so a disabled
+ *   plugin or an off intercept passes through untouched with zero ledger
+ *   lines. It tags the exec and records the attempt, NEVER denies (the control
+ *   layer comes later as its own plugin).
  * - L8: agent/pre-step (waterfall, next() FIRST, fail-open): the turn boundary
  *   seam (the deadline scan and the settle fold - the inline commit path leaves
  *   nothing in flight, so v1 is a pass-through that holds the seam for the
@@ -190,41 +193,45 @@ export default (Context: Context, Options: Config): void => {
 	// L2: tools/pre-execute (the advisory bash intercept). next() FIRST;
 
 	// the downstream decision passes through UNCHANGED in every branch
-	// (advisory, never denies); fail-open.
+	// (advisory, never denies); fail-open. THE REGISTRATION IS
+	// UNCONDITIONAL (the LIVE DISABLED posture): the listener mounts on
+	// every mount, and the call-time gates read the volatile cells - a
+	// disabled plugin (State.On) or an off intercept (State.Intercept)
+	// passes the downstream decision through untouched with ZERO ledger
+	// lines, so a hot interceptBash flip lands on the very next call
+	// without a remount.
 	// ------------------------------------------------------------------
-	if (State.Intercept) {
-		Context.on(
-			"tools/pre-execute",
-			async (
-				Exec: ToolExecution,
-				Next: () => Promise<PreToolDecision>,
-			): Promise<PreToolDecision> => {
-				const Downstream = await Next();
-				try {
-					if (!State.On) {
-						return Downstream;
-					}
-					const Offer = Intercept(State, Exec);
-					if (Offer !== undefined) {
-						(Exec as { batchEditOffer?: string }).batchEditOffer = Offer;
-						Append(
-							`advisory intercept ${String(Exec.name ?? (Exec as { tool?: unknown }).tool ?? "")} on a held file`,
-						);
-					}
-					return Downstream;
-				} catch (Error) {
-					try {
-						Context.logger?.warn(
-							`plugin-dsh-batch-edit: ${String(Error)}; the intercept passes through`,
-						);
-					} catch {
-						/* logger optional */
-					}
+	Context.on(
+		"tools/pre-execute",
+		async (
+			Exec: ToolExecution,
+			Next: () => Promise<PreToolDecision>,
+		): Promise<PreToolDecision> => {
+			const Downstream = await Next();
+			try {
+				if (!State.On || State.Intercept === false) {
 					return Downstream;
 				}
-			},
-		);
-	}
+				const Offer = Intercept(State, Exec);
+				if (Offer !== undefined) {
+					(Exec as { batchEditOffer?: string }).batchEditOffer = Offer;
+					Append(
+						`advisory intercept ${String(Exec.name ?? (Exec as { tool?: unknown }).tool ?? "")} on a held file`,
+					);
+				}
+				return Downstream;
+			} catch (Error) {
+				try {
+					Context.logger?.warn(
+						`plugin-dsh-batch-edit: ${String(Error)}; the intercept passes through`,
+					);
+				} catch {
+					/* logger optional */
+				}
+				return Downstream;
+			}
+		},
+	);
 
 	// ------------------------------------------------------------------
 	// L8: agent/pre-step (the turn boundary seam). next() FIRST;

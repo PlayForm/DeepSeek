@@ -85,25 +85,25 @@ Every knob is **volatile**, hot-edited without remounting, and a flip lands on t
 
 ## The configuration
 
-| Field               | Type    | Default                                     | Meaning                                                     |
-| ------------------- | ------- | ------------------------------------------- | ----------------------------------------------------------- |
-| `log`               | boolean | `true`                                      | volatile - the shared factory log switch                    |
-| `logFile`           | string  | `~/.dsh/playform/hook-dsh-tool-coach.log`   | volatile - the ledger file                                  |
-| `enabled`           | boolean | `true`                                      | volatile - the coach switch                                 |
-| `judgeTools`        | array   | `["bash", "pwsh"]`                          | volatile - the terminal tools that are judged               |
-| `threshold`         | number  | `3`                                         | volatile - tier-1 strikes within the window                 |
-| `window`            | number  | `8`                                         | volatile - the sliding judged-call window                   |
-| `cooldown`          | number  | `10`                                        | volatile - judged calls between tier-1 notes                |
-| `escalateThreshold` | number  | `6`                                         | volatile - offenses since the last note that turn tier 2 on |
-| `cleanWindow`       | number  | `12`                                        | volatile - clean calls that turn tier 2 off                 |
-| `enforce`           | union   | `off`                                       | volatile - `off` / `write` / `all`, the tier-3 deny scope   |
-| `enforceThreshold`  | number  | `4`                                         | volatile - strikes since the last note that deny            |
-| `exemptPatterns`    | array   | `DEFAULT_EXEMPTS`                           | volatile - the exempt command heads                         |
-| `patternTable`      | array   | `DEFAULT_PATTERNS`                          | volatile - `{ pattern, class, tool, note? }` rows           |
-| `notes`             | object  | `first` / `persistent` / `denied` templates | volatile - the three model-facing note texts                |
-| `fetchLive`         | boolean | `true`                                      | volatile - fetch tool data from the live registry           |
-| `maxSectionTools`   | number  | `5`                                         | volatile - the tier-2 tool-table row cap                    |
-| `sectionTtl`        | number  | `20`                                        | volatile - judged calls between tier-2 section rebuilds     |
+| Field               | Type    | Default                                     | Meaning                                                                                          |
+| ------------------- | ------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `enabled`           | boolean | `true`                                      | volatile - the coach switch (off logs `disabled (enabled=false)`; every listener passes through) |
+| `log`               | boolean | `true`                                      | volatile - the shared factory log switch                                                         |
+| `logFile`           | string  | `~/.dsh/playform/hook-dsh-tool-coach.log`   | volatile - the ledger file                                                                       |
+| `judgeTools`        | array   | `["bash", "pwsh"]`                          | volatile - the terminal tools that are judged                                                    |
+| `threshold`         | number  | `3`                                         | volatile - tier-1 strikes within the window                                                      |
+| `window`            | number  | `8`                                         | volatile - the sliding judged-call window                                                        |
+| `cooldown`          | number  | `10`                                        | volatile - judged calls between tier-1 notes                                                     |
+| `escalateThreshold` | number  | `6`                                         | volatile - offenses since the last note that turn tier 2 on                                      |
+| `cleanWindow`       | number  | `12`                                        | volatile - clean calls that turn tier 2 off                                                      |
+| `enforce`           | union   | `off`                                       | volatile - `off` / `write` / `all`, the tier-3 deny scope                                        |
+| `enforceThreshold`  | number  | `4`                                         | volatile - strikes since the last note that deny                                                 |
+| `exemptPatterns`    | array   | `DEFAULT_EXEMPTS`                           | volatile - the exempt command heads                                                              |
+| `patternTable`      | array   | `DEFAULT_PATTERNS`                          | volatile - `{ pattern, class, tool, note? }` rows                                                |
+| `notes`             | object  | `first` / `persistent` / `denied` templates | volatile - the three model-facing note texts                                                     |
+| `fetchLive`         | boolean | `true`                                      | volatile - fetch tool data from the live registry                                                |
+| `maxSectionTools`   | number  | `5`                                         | volatile - the tier-2 tool-table row cap                                                         |
+| `sectionTtl`        | number  | `20`                                        | volatile - judged calls between tier-2 section rebuilds                                          |
 
 ## The ledger
 
@@ -130,8 +130,8 @@ schema fetch failed -> static fallback
 - Build:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-tool-coach run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-tool-coach/Target/Test/<Folder>/Test.js` - the six folders
-  sum to the 129-check baseline exactly
-    - Wiring-And-Defaults - 36 checks
+  sum to the 132-check baseline exactly
+    - Wiring-And-Defaults - 39 checks
     - Passthrough-And-Guards - 6 checks
     - Notes-And-Cooldown - 16 checks
     - Persistent-Section - 16 checks

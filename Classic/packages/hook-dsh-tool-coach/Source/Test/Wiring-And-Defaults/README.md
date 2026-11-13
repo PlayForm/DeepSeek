@@ -22,6 +22,11 @@ The assertions are moved verbatim from `Classic/smokes/tool-coach-smoke.mjs` Run
     - Sub: "config defaults: the ladder numbers, the enforce posture, the table defaults"
         - threshold=3, window=8, cooldown=10, escalateThreshold=6, cleanWindow=12, enforce="off", enforceThreshold=4, maxSectionTools=5, sectionTtl=20, fetchLive=true
         - judgeTools=["bash","pwsh"], notes = the four verbatim templates, patternTable = DEFAULT_PATTERNS, exemptPatterns = DEFAULT_EXEMPTS
+- Group: the Config base (enabled, log, logFile).
+    - Sub: "the schema defaults: enabled=true, log=true, logFile = the coach's
+      ledger path" (validated with no overrides)
+    - Sub: "the base keys sit first, and they are enabled, log, logFile" (the
+      validated config's first three keys are exactly the base)
 - Group: the apply-time wiring and the activation.
     - Sub: "apply returns NOTHING (the loader contract)"
     - Sub: "all FIVE coaching listeners are registered" (tools/post-execute, tools/pre-execute, agent/pre-step, system-prompt/assemble, tools/change)
@@ -58,4 +63,4 @@ The ledger file lives in a fresh per-process mkdtemp directory.
 
 ## Expected count
 
-36 PASS.
+39 PASS.

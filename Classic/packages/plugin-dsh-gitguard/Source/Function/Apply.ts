@@ -17,9 +17,12 @@ import { Activate } from "@playform/lib-dsh-core";
  *
  * The contract is ORCHESTRATION-PLUGINS.md section 3.
  *
- * THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default and
- * the bundle patch row). A cold mount logs `disabled (enabled=false)` and wires
- * NOTHING - no listener, no ledger.
+ * THE LIVE DISABLED POSTURE: `enabled` defaults to true. Every surface
+ * registers on every mount - the tools/pre-execute listener comes up on a
+ * disabled mount too - and a disabled mount logs only the byte-exact
+ * `disabled (enabled=false)` line instead of the activation proof. The guard
+ * reads the volatile `On` cell at CALL time, so a disabled guard passes every
+ * dispatch through with zero ledger lines.
  *
  * The function returns NOTHING (the loader contract: a returned value silently
  * kills event delivery). The test probe is the `ctx.__pluginDshGitguardState`
@@ -75,20 +78,23 @@ export default (Context: Context, Options: Config): void => {
 	State.Factory = Factory;
 	switch (true) {
 		case !State.On:
-			// The cold mount: honest in the ledger, wired to nothing.
+			// The disabled mount: the byte-exact line, and the mount CONTINUES -
+			// the tools/pre-execute listener registers exactly as on an enabled
+			// mount (the LIVE DISABLED posture); the guard reads the volatile On
+			// cell at call time and passes through with zero ledger lines.
 			Factory.Append(State, "disabled (enabled=false)");
-			return;
+			break;
 		default:
+			// The activation proof (the module's own composed line).
+			Factory.Append(
+				State,
+				Activate([
+					["strict", String(State.Strict)],
+					["denyPatterns", String(State.Deny.length)],
+					["allowPatterns", String(State.Allow.length)],
+				]),
+			);
 	}
-	// The activation proof (the module's own composed line).
-	Factory.Append(
-		State,
-		Activate([
-			["strict", String(State.Strict)],
-			["denyPatterns", String(State.Deny.length)],
-			["allowPatterns", String(State.Allow.length)],
-		]),
-	);
 
 	// The tools/pre-execute registration: the intercept (the plan's
 	// trigger surface - the same pre-execute hook the family's mutation

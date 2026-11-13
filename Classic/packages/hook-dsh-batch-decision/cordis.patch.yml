@@ -13,14 +13,15 @@
 # package in dsh.profile.bundles AND the app is restarted; a file:
 # dependency alone is NOT activation.
 #
-# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
-# else - the plugin never appears in the profile's bundles and enables only
-# by an explicit ACTIVATE. On a cold mount the State build logs
-# `disabled (enabled=false)` and every listener no-ops to a passthrough.
-# The SECOND explicit flip is autoApprove: "off" by default - the write
-# path is never auto-approved by default (the conservative policy). Every
-# knob is volatile (hot-editable without remounting): enabled, log/logFile,
-# autoApprove, allowlist, maxAutoTargets, minConfidence, pendingTtlMs.
+# THE LIVE DISABLED POSTURE: every listener, the batch_decision tool and
+# every effect register on every mount - a disabled mount writes only the
+# byte-exact `disabled (enabled=false)` ledger line instead of the activation
+# proof, and every surface reads the volatile On cell at CALL time (a flip
+# lands on the very next call, with no remount). The SECOND explicit flip is
+# autoApprove: "off" by default - the write path is never auto-approved by
+# default (the conservative policy). Every knob is volatile (hot-editable
+# without remounting): enabled, log/logFile, autoApprove, allowlist,
+# maxAutoTargets, minConfidence, pendingTtlMs.
 #
 # THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist is the
 # OUTER gate in front of autoApprove - `commit: approve` holds the policy
@@ -34,7 +35,9 @@
       - id: hook-dsh-batch-decision
         name: "@playform/hook-dsh-batch-decision"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ~/.dsh/playform/hook-dsh-batch-decision.log
             policy:
                 read: auto
                 index: auto

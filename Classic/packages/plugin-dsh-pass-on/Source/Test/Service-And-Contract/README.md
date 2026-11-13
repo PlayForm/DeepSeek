@@ -12,7 +12,9 @@ This folder covers the class-form loader contract and the disabled posture: the 
   `ctx.reflect.provide` immediately, and the instance's name is `passOn`.
 - C3: `Get` returns null for an unknown id, never a throw.
 - C4: a disabled service prepares nothing; the journal still records the
-  refusal with the kind (`"note":"rejected version-bump"`).
+  refusal with the kind (`"note":"rejected version-bump"`), and the disabled
+  mount journaled the byte-exact `disabled (enabled=false)` note (`"event":
+  "disabled"`).
 - C5: the validated config lands on the state verbatim; the module identity
   is `plugin-dsh-pass-on`; the ledger is the config's logFile.
 - C6: the tilde ledger default expands to the home directory.
@@ -28,8 +30,9 @@ It uses no fake clock, because the expiry is tested by mutating the stored propo
 ## Expected journal strings (byte-exact, JSON lines)
 
 `{"at":<epoch>,"event":"prepared","proposal":<id>,"digest":<digest>,"targets":1,"note":"prepared 1 targets"}`,
-`{"at":<epoch>,"event":"prepared","proposal":null,"digest":null,"targets":0,"note":"rejected <kind>"}`.
+`{"at":<epoch>,"event":"prepared","proposal":null,"digest":null,"targets":0,"note":"rejected <kind>"}`,
+`{"at":<epoch>,"event":"disabled","proposal":null,"digest":null,"targets":0,"note":"disabled (enabled=false)"}`.
 
 ## Expected count
 
-8 PASS.
+9 PASS.

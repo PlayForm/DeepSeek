@@ -40,6 +40,8 @@ export default (
 ): Shape | null => {
 	switch (true) {
 		case !State.Config.enabled:
+		// The durable-ledger toggle (the base cell): off = no journal line.
+		case State.Config.log === false:
 			return null;
 		case typeof Proposal !== "string" || Proposal.length === 0:
 			return null;

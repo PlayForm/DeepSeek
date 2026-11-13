@@ -22,6 +22,8 @@ off still requires the user on its own.
 ## Scenario
 
 - Group P1: the schema and the State mapping.
+    - Check: "P1: the base trio - enabled, log and logFile fill the documented
+      defaults" - enabled true (the live posture), log true, the ledger path.
     - Check: "P1: the hook's schema fills the D6 policy defaults" - the
       composed `policy` cell deep-equals the D6 defaults
       (read/index/record/suggest/message = auto, write/commit/spawn =
@@ -66,4 +68,4 @@ explicitly.
 
 ## Expected count
 
-7 PASS.
+8 PASS.

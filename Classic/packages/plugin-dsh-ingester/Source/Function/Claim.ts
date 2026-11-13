@@ -42,6 +42,15 @@ export default (State: State, Proposal: Proposal, Decision: Decision): Promise<R
 		default:
 			break;
 	}
+	switch (true) {
+		// THE CALL-TIME MASTER SWITCH (the LIVE DISABLED posture): the
+		// documented disabled answer of the Apply surface is `null` - no write,
+		// no journal line, no claim taken.
+		case !State.Config.enabled:
+			return Promise.resolve(null);
+		default:
+			break;
+	}
 	const Run = ApplyFn(State, Proposal, Decision)
 		.then((Result) => {
 			OutcomeFn(State, Proposal, Decision, Result);

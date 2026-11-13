@@ -44,6 +44,11 @@ line:
 
 The journal is append-only and best-effort, because a ledger failure never breaks the service.
 
+The Journal gate reads the two base cells at call time: `log` off writes no line, and `enabled`
+false (the LIVE DISABLED posture) leaves the registered surfaces in place while every call passes
+through with zero ledger lines - the in-memory Record keeps its documented store without a journal
+line.
+
 It is the diagnostic log of the plugin itself, appended with a plain `appendFileSync`, which is the
 documented exemption of the factory: the governed-write path does not apply to the own log of a
 plugin.

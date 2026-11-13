@@ -14,6 +14,11 @@ It also pins the documented family posture for the actions the pass-on never tak
 
 ## Scenario
 
+- Check: "P1: the pass-on's schema ships the Config base (enabled, log,
+  logFile)" - `enabled` and `log` default to `true` and `logFile` to the
+  module's journal path.
+- Check: "P1: the base keys sit first, in the enabled, log, logFile order" -
+  the validated config's first three keys are exactly the base, in order.
 - Check: "P1: the pass-on's schema fills the D6 policy defaults" - the
   composed `policy` deep-equals the D6 defaults (read/index/record/suggest/
   message = auto, write/commit/spawn = approve).
@@ -35,4 +40,4 @@ This folder adds none, because the block and its mapping log nothing and the def
 
 ## Expected count
 
-4 PASS.
+6 PASS.

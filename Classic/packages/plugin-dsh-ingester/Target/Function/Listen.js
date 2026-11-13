@@ -1,1 +1,1 @@
-import e from"./Consume.js";import r from"./Record.js";var s=n=>{const t=n.Context.on;t("batch/proposed",o=>{try{r(n,o)}catch{}}),t("batch/decision",o=>{try{e(n,o)}catch{}})};export{s as default};
+import o from"./Consume.js";import r from"./Record.js";var s=n=>{const t=n.Context.on;t("batch/proposed",e=>{try{if(!0===!n.Config.enabled)return;r(n,e)}catch{}}),t("batch/decision",e=>{try{if(!0===!n.Config.enabled)return;o(n,e)}catch{}})};export{s as default};

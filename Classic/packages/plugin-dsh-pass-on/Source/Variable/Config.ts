@@ -21,9 +21,13 @@ import { DEFAULT_KINDS } from "@Variable/Kinds.js";
  *
  * `enabled` defaults to true once the plugin is ACTIVATED: the pass-on is
  * READ-ONLY - it never writes a file (plan section 3), so its idle risk is
- * nil; the write path lives entirely in the ingester.
+ * nil; the write path lives entirely in the ingester. `log` is the durable
+ * journal switch (the Config base's second cell). A disabled mount journals
+ * `disabled (enabled=false)` and the service stays registered - `Prepare`
+ * refuses at call time (the live disabled posture).
  */
 const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-pass-on.log";
 const DefaultMaxTargets = 20;
 const DefaultMaxPreviewBytes = 2048;
@@ -34,7 +38,11 @@ const DefaultExpiresSeconds = 3600;
  * static `Config`.
  */
 export default Schema.object({
+	// The MASTER SWITCH: false = the mount journals `disabled (enabled=false)`
+	// and Prepare refuses at call time; the service stays registered.
 	enabled: Schema.boolean().default(DefaultEnabled),
+	// Ledger enabled - write the durable journal (one log per module).
+	log: Schema.boolean().default(DefaultLog),
 	logFile: Schema.string().default(DefaultLogFile),
 	root: Schema.string().default(process.cwd()),
 	maxTargets: Schema.number().default(DefaultMaxTargets),

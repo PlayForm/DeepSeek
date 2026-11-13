@@ -32,8 +32,8 @@ import {
  * on steady state.
  *
  * The fail-open negatives: a render failure skips the block and the assembly still resolves, a
- * throwing clock degrades, and a malformed pre-step payload never throws. The cold-mount
- * IDLE-forever posture is full passthrough with zero noise.
+ * throwing clock degrades, and a malformed pre-step payload never throws. The cold-mount live
+ * disabled posture is full passthrough with zero noise.
  */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -234,10 +234,11 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Run5.Warns.length, 0);
 		});
 	}
-	// Group: the IDLE-forever cold mount (the disabled posture, behaviorally).
+	// Group: the live disabled cold mount (the disabled posture,
+	// behaviorally).
 	rm();
 	{
-		const Run6 = Make(Validate({ logFile: Ledger }));
+		const Run6 = Make(Validate({ logFile: Ledger, enabled: false }));
 		Run6.State.Now = () => ClockBox.Now;
 		const Base = { sections: [{ name: "base", text: "BASE" }], contexts: [], tools: [], variables: {} };
 		const Out = await AssembleBase(Run6, Base);

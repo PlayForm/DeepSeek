@@ -16,6 +16,8 @@ export default _default;
  * - id + approve=false - deny by user
  *
  * Unknown or already-decided ids log and no-op. The tool result is one
- * canonical JSON object; the renderer is pure.
+ * canonical JSON object; the renderer is pure. The disabled plugin no-ops to
+ * a clear refusal (the call-time `On` check - the LIVE DISABLED posture:
+ * the registration is unconditional, the check is at call time).
  */
 declare function _default(Context_: Context, State_: State, Append: (Message: string) => void): import("@deepseek-ai/dsh-tools").ToolDefinition;

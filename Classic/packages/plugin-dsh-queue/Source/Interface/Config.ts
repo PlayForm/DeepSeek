@@ -10,7 +10,9 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  */
 export default interface Config {
 	/**
-	 * Master switch. Shipped false (the IDLE-forever posture).
+	 * Master switch. Shipped true (the live disabled posture: off logs
+	 * `disabled (enabled=false)` and the tools answer the documented
+	 * disabled payloads while every registration stays mounted).
 	 */
 	enabled: boolean;
 

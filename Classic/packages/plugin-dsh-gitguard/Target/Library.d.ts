@@ -32,6 +32,12 @@ import Version from "./Variable/Version.js";
  * The plugin is the OBJECT form (name/apply/Config/inject); it registers NO
  * service (a plugin with no service is a valid archetype) and NO fs/observed
  * listener.
+ *
+ * THE LIVE DISABLED POSTURE: the tools/pre-execute listener registers
+ * unconditionally on every mount; a disabled mount (`enabled: false`) logs the
+ * byte-exact `disabled (enabled=false)` line instead of the activation proof,
+ * and the guard reads the volatile `On` cell at CALL time, so a disabled guard
+ * passes every dispatch through with zero ledger lines.
  */
 export declare const name = "plugin-dsh-gitguard";
 /**

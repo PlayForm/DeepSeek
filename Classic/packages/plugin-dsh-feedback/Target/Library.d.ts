@@ -48,6 +48,7 @@ export default class Feedback extends Service {
     static inject: string[];
     static Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
         enabled: import("@deepseek-ai/schemastery").default<boolean, boolean, "defined">;
+        log: import("@deepseek-ai/schemastery").default<boolean, boolean, "defined">;
         logFile: import("@deepseek-ai/schemastery").default<string, string, "defined">;
         maxBlockBytes: import("@deepseek-ai/schemastery").default<number, number, "defined">;
         maxChain: import("@deepseek-ai/schemastery").default<number, number, "defined">;
@@ -75,6 +76,7 @@ export default class Feedback extends Service {
         }>>>, "volatile">;
     }>>, Schemastery.ObjectT<NoInfer<{
         enabled: import("@deepseek-ai/schemastery").default<boolean, boolean, "defined">;
+        log: import("@deepseek-ai/schemastery").default<boolean, boolean, "defined">;
         logFile: import("@deepseek-ai/schemastery").default<string, string, "defined">;
         maxBlockBytes: import("@deepseek-ai/schemastery").default<number, number, "defined">;
         maxChain: import("@deepseek-ai/schemastery").default<number, number, "defined">;

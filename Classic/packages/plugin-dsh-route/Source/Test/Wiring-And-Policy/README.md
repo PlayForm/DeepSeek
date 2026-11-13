@@ -1,13 +1,15 @@
 # Wiring-And-Policy - the wiring and the policy
 
-This folder covers the loader contract (apply returns nothing, the default object carries name/apply/Config/inject), the IDLE-forever cold mount, the durable activation proof, the `dshRoute` service registered on construction, the single launch-path listener, the fail-loud policy validation, the shipped default policy, and the no-fs / no-timer posture.
+This folder covers the loader contract (apply returns nothing, the default object carries name/apply/Config/inject), the schema's Config base, the live disabled cold mount, the durable activation proof, the `dshRoute` service registered on construction, the single launch-path listener, the fail-loud policy validation, the shipped default policy, and the no-fs / no-timer posture.
 
 ## Scenarios
 
-- W1: the default object carries name/apply/Config/inject; apply returns
-  nothing; the service is provided on a cold mount; the disabled mount keeps
-  the passthrough listener and logs the byte-exact disabled line; the
-  disabled service still exposes the policy view and the classifier.
+- W1: the schema ships the Config base (`enabled`/`log` default `true`,
+  `logFile` the module's ledger path) with the base keys first; the default
+  object carries name/apply/Config/inject; apply returns nothing; the
+  disabled mount (`enabled: false`) keeps the passthrough listener and logs
+  the byte-exact disabled line; the disabled service still exposes the policy
+  view and the classifier.
 - W2: the single launch-path listener sits on the plugin ctx (no root
   registrations); the activation line is byte-exact; the plugin touches no
   files and sets no timers (no fs, no effects).
@@ -24,4 +26,4 @@ This folder covers the loader contract (apply returns nothing, the default objec
 
 ## Expected count
 
-12 PASS.
+14 PASS.

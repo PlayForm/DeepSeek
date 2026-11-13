@@ -13,12 +13,13 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * hooks no fs/observed machinery). Every knob is a volatile cell so a hot edit
  * lands on the next service call without a remount. The service class reads
  * these through Configure; the defaults here are the truth. `enabled` defaults
- * to FALSE - the idle-forever posture: the patch row and the README ship the
- * service disabled; a cold mount logs `disabled (enabled=false)` and Match
- * returns the empty result (the abstention) while the service stays
- * resolvable.
+ * to TRUE - the shipped posture is ON, and a profile turns it off with
+ * `enabled: false` (the LIVE disabled posture: a cold mount logs
+ * `disabled (enabled=false)` and Match returns the empty result - the
+ * abstention - while the service stays resolvable).
  */
-const DefaultEnabled = false;
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-pattern.log";
 const DefaultDomain = "pattern";
 const DefaultStoragePath = "~/.dsh/pattern/registry.json";
@@ -32,7 +33,16 @@ const DefaultAppliedBonus = 0.15;
 const DefaultFailedPenalty = 0.25;
 
 export default Compose(false, {
+	// The MASTER SWITCH (volatile: a flip is read at the next service call
+	// with no remount): false = the mount logs `disabled (enabled=false)`
+	// while the service stays resolvable and Match abstains silently.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile; overrides the
+	// minimal shared block's empty default).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	// Ledger file - the plugin-dsh-pattern ledger (one log per module) -
+	// volatile: hot-editable without remounting (overrides the minimal shared
+	// block's empty default).
 	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// The storage-domain name: the KV domain is the PRIMARY store (the JSON
 	// snapshot below is the fallback). A lowercase unit name (the library's

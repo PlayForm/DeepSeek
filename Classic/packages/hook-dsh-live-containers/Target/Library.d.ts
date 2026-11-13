@@ -47,10 +47,10 @@ import Version from "./Variable/Version.js";
  * agent/pre-step and tools/post-execute observers - exact token counts are
  * NOT available to plugins, the gauge variables say so.
  *
- * THE IDLE-FOREVER POSTURE: the plugin ships DISABLED (schema default and
- * patch entry), never appears in the profile's bundles, and enables only by
- * an explicit ACTIVATE; a cold mount logs `disabled (enabled=false)` and
- * every listener no-ops to a passthrough.
+ * THE LIVE DISABLED POSTURE: the plugin ships ENABLED (schema default and
+ * patch entry); a profile turns it off with `enabled: false`, which logs
+ * `disabled (enabled=false)` on the cold mount and leaves every listener
+ * registered, no-opping to a passthrough with the flag read at call time.
  *
  * FULLY CONTRACT-AWARE: every listener awaits `next()` FIRST and is fail-open
  * (never throws into a waterfall). The plugin is a NON-MANIFEST module (no

@@ -65,10 +65,13 @@ A review that writes to it unasked is worse than no review, so:
 `createdBy: agent` entries are in its jurisdiction, a zero-use entry keeps a grace floor, and an
 archive is a rename into `.archive/` with its own undo through `Restore`.
 
-## Ships disabled
+## The live disabled posture
 
-`enabled: false` is the schema default and the patch row, which is the idle-forever posture of the
-family.
+`enabled: true` is the schema default and the patch row (the LIVE DISABLED posture of the family:
+the registration is unconditional). A disabled mount (`enabled: false`) logs the byte-exact
+`disabled (enabled=false)` line instead of the activation proof, and the review pipeline reads the
+volatile cell at call time: Tick never comes due with zero ledger lines, Curate returns the empty
+curation, and Review answers `unavailable (disabled)`.
 
 The service stays resolvable while it is disabled, so the nudge hook never hard-fails on it.
 

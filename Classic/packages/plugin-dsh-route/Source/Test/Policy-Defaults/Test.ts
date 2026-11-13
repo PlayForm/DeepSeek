@@ -30,6 +30,26 @@ const Defaults = {
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
+	Check(Count, "P1: the router's schema ships the Config base (enabled, log, logFile)", () => {
+		const Config = Validate({});
+		assert.equal(Config.enabled.get(), true, "enabled defaults to true");
+		assert.equal(Config.log.get(), true, "log defaults to true");
+		assert.equal(
+			Config.logFile.get(),
+			"~/.dsh/playform/plugin-dsh-route.log",
+			"the ledger path default",
+		);
+	});
+
+	Check(Count, "P1: the base keys sit first, and they are enabled, log, logFile", () => {
+		const Config = Validate({});
+		assert.deepEqual(
+			Object.keys(Config).slice(0, 3).sort(),
+			["enabled", "log", "logFile"],
+			"the base keys are the first three",
+		);
+	});
+
 	Check(Count, "P1: the router's schema fills the D6 policy defaults on automation", () => {
 		const Config = Validate({});
 		assert.deepEqual(Config.automation.get(), Defaults, "the composed block carries the defaults");

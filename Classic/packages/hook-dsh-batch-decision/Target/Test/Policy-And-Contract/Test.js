@@ -48,7 +48,7 @@ const runTest = async () => {
   }
   {
     rm();
-    const Run = Make(Validate({ logFile: Ledger }));
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }));
     Check(Count, "P2: a disabled mount logs the byte-exact disabled line", () => {
       assert.deepEqual(Run.Lines, ["hook-dsh-batch-decision: disabled (enabled=false)"]);
     });

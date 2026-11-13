@@ -13,9 +13,15 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  */
 export default interface Config {
 	/**
-	 * Master switch (default TRUE here, FALSE in the schema - see Knobs).
+	 * Master switch (the LIVE DISABLED posture: the registration stays in
+	 * place; the review pipeline reads this volatile cell at call time).
 	 */
 	enabled: boolean;
+
+	/**
+	 * The durable ledger toggle (the Ledger sink reads it).
+	 */
+	log: boolean;
 
 	/**
 	 * The service's own ledger file, one log per module.

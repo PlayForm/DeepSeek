@@ -13,9 +13,16 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  */
 export default interface Config {
 	/**
-	 * Master switch (default true - a registry is inert without callers).
+	 * Master switch (default true in the schema - the shipped posture; a
+	 * profile turns it off, which logs `disabled (enabled=false)` and leaves
+	 * Match abstaining while the service stays resolvable).
 	 */
 	enabled: boolean;
+
+	/**
+	 * Ledger enabled - write the durable log file.
+	 */
+	log: boolean;
 
 	/**
 	 * The service's own ledger file, one log per module.

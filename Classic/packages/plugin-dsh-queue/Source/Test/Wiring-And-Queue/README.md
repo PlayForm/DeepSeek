@@ -8,7 +8,7 @@ This folder covers the loader contract, the cold mount, the activation proof, th
   `plugin-dsh-queue`, apply, Config, inject `["pluginFactory", "tools"]`;
   apply returns NOTHING and the `__pluginDshQueueState` probe exists with
   the factory module name.
-- W1: the IDLE-forever cold mount - the byte-exact
+- W1: the live disabled cold mount (`enabled: false`) - the byte-exact
   `disabled (enabled=false)` line, no listener registered on any context,
   and the service and tools still register while the tools refuse with the
   byte-exact `queue disabled (enabled=false)` payload.

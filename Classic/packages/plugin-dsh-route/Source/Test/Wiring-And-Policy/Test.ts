@@ -14,7 +14,7 @@ import {
  *
  * @remarks
  *
- * Covers the loader contract (apply returns nothing), the IDLE-forever cold mount, the durable
+ * Covers the loader contract (apply returns nothing), the live disabled cold mount, the durable
  * activation proof, the dshRoute service registered on construction, the single launch-path
  * listener, the fail-loud policy validation, the shipped default policy, and the no-fs /
  * no-timer posture.
@@ -33,7 +33,25 @@ export const runTest = async (): Promise<number> => {
 	// Group W1: the loader contract and the cold mount.
 	{
 		const Loader = await import("../../../Target/Library.js");
-		const Run = Make(Validate({}));
+		const Run = Make(Validate({ enabled: false }));
+		Check(Count, "W1: the schema ships the Config base (enabled, log, logFile)", () => {
+			const Raw = Validate({});
+			assert.equal(Raw.enabled.get(), true, "enabled defaults to true");
+			assert.equal(Raw.log.get(), true, "log defaults to true");
+			assert.equal(
+				Raw.logFile.get(),
+				"~/.dsh/playform/plugin-dsh-route.log",
+				"the ledger path default",
+			);
+		});
+		Check(Count, "W1: the base keys sit first, and they are enabled, log, logFile", () => {
+			const Raw = Validate({});
+			assert.deepEqual(
+				Object.keys(Raw).slice(0, 3).sort(),
+				["enabled", "log", "logFile"],
+				"the base keys are the first three",
+			);
+		});
 		Check(Count, "W1: the default object carries name/apply/Config/inject", () => {
 			assert.equal(Loader.default.name, "plugin-dsh-route");
 			assert.equal(Loader.default.apply, Loader.apply);

@@ -97,8 +97,9 @@ not a new activation fact.
 - The launch path is BOTH halves of the seam: the `subagent` tool's `tools/pre-execute` waterfall
   and the child's `agent/pre-step` waterfall. The plan's shared probe (the agent-loop's role mapping
   vs parent-inheritance) stays open, and the resolver/classifier are point-agnostic.
-- The shipped `enabled` default is `false` (the IDLE-forever posture, like the live-containers
-  hook), and the patch row ships `enabled: false`.
+- The shipped `enabled` default is `true` (the live disabled posture: a disabled mount logs
+  `disabled (enabled=false)` and both listeners pass through, reading the flag at call time), and
+  the patch row ships `enabled: true`, `log: true` and the ledger path.
 - The keyword scan order is planner -> coder -> explorer, so a later scan never downgrades an
   earlier match; "fix the docs" classifies as coding.
 - The escalation marker is detected on the LAUNCH spec (the re-dispatch prompt carries the failed

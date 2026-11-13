@@ -19,7 +19,7 @@ import type { MachineRecord } from "./Process.js";
  */
 export default interface State extends FactoryState {
 	/**
-	 * The enable flip (config `enabled`; the IDLE-forever posture).
+	 * The enable flip (config `enabled`; the LIVE DISABLED posture).
 	 */
 	On: boolean;
 

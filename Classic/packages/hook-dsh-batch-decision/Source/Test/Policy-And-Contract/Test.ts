@@ -22,7 +22,8 @@ import {
  * @remarks
  *
  * Covers the default object carrying name/apply/Config/inject, apply returning nothing, the
- * IDLE-forever cold mount logging the byte-exact disabled line, the enabled mount logging the
+ * disabled cold mount (enabled: false, explicit - the shipped default is the live posture) logging
+ * the byte-exact disabled line, the enabled mount logging the
  * byte-exact activation line, the fail-loud validation, the listener registration shape, and the
  * conservative auto-approve policy's every gate (the first-batch rule).
  */
@@ -71,10 +72,11 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group P2: the IDLE-forever cold mount.
+	// Group P2: the disabled cold mount (the shipped default is the live
+	// posture, so the disabled mount is asserted with the flag explicit).
 	{
 		rm();
-		const Run = Make(Validate({ logFile: Ledger }));
+		const Run = Make(Validate({ logFile: Ledger, enabled: false }));
 		Check(Count, "P2: a disabled mount logs the byte-exact disabled line", () => {
 			assert.deepEqual(Run.Lines, ["hook-dsh-batch-decision: disabled (enabled=false)"]);
 		});

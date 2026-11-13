@@ -59,14 +59,16 @@ Each listener body has one `try/catch` block.
 The hook detaches the maintenance task from the emit, so the listener returns immediately and a
 rejected review cannot become an unhandled rejection.
 
-## Ships disabled
+## Ships enabled
 
-The schema default and the patch row set `enabled: false`, which is the idle-forever posture of the
-family.
+The schema default and the patch row set `enabled: true`; a profile turns the hook off with
+`enabled: false`.
 
-A cold mount logs `disabled (enabled=false)`, and the listener stays inert.
+A disabled mount still registers the listener and logs `disabled (enabled=false)` instead of the
+activation proof.
 
-The next status transition makes a change to the cell take effect.
+The next status transition makes a change to the cell take effect, so a flip acts in both directions
+without a remount.
 
 ## Wiring
 

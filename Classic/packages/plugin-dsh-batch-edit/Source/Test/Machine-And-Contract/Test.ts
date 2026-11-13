@@ -21,8 +21,10 @@ import {
  *
  * @remarks
  *
- * The test covers the loader contract, the IDLE-forever cold mount, the
- * byte-exact activation line, the fail-loud validation, the machine
+ * The test covers the loader contract, the base trio defaults (enabled, log,
+ * logFile), the disabled cold mount (enabled: false, explicit - the shipped
+ * default is the live posture), the byte-exact activation line, the fail-loud
+ * validation, the machine
  * lifecycle (open / insert / remove / state / close) with their byte-exact
  * ledger lines, the grammar parsers, the miss listing, and the
  * machinesPerAgent cap.
@@ -60,12 +62,25 @@ export const runTest = async (): Promise<number> => {
 		Check(Count, "M1: apply returns NOTHING (a returned value kills event delivery)", () => {
 			assert.equal(Run.Returned, undefined);
 		});
+		Check(Count, "M1: the base trio - enabled, log and logFile fill the documented defaults", () => {
+			const Raw: any = Validate({});
+			const Get = (Value: any): any =>
+				typeof Value?.get === "function" ? Value.get() : Value;
+			assert.equal(Get(Raw.enabled), true, "the live posture is the shipped default");
+			assert.equal(Get(Raw.log), true, "the ledger toggle default");
+			assert.equal(
+				Get(Raw.logFile),
+				"~/.dsh/playform/plugin-dsh-batch-edit.log",
+				"the ledger path default",
+			);
+		});
 	}
 
-	// Group M2: the IDLE-forever cold mount.
+	// Group M2: the disabled cold mount (the shipped default is the live
+	// posture, so the disabled mount is asserted with the flag explicit).
 	{
 		rm();
-		const Run = Make(Validate({ logFile: Ledger }));
+		const Run = Make(Validate({ logFile: Ledger, enabled: false }));
 		Check(Count, "M2: a cold mount logs the byte-exact disabled line", () => {
 			assert.deepEqual(Run.Lines, ["plugin-dsh-batch-edit: disabled (enabled=false)"]);
 		});
@@ -78,6 +93,13 @@ export const runTest = async (): Promise<number> => {
 				() => Run.Tool.execute({ action: "open" }, Exec()),
 				/plugin-dsh-batch-edit is disabled \(enabled=false\)/,
 			);
+		});
+		Check(Count, "M2: the disabled mount still registers every ctx listener (the unconditional posture)", () => {
+			assert.deepEqual(Object.keys(Run.CtxListeners), [
+				"loader/volatile-update",
+				"tools/pre-execute",
+				"agent/pre-step",
+			]);
 		});
 	}
 
@@ -93,8 +115,20 @@ export const runTest = async (): Promise<number> => {
 			assert.deepEqual(Object.keys(Run.RootListeners), ["fs/observed"]);
 			assert.notEqual(Run.Root, Run.Context);
 		});
-		Check(Count, "M3: the pre-step listener sits on the ctx; no pre-execute listener while intercept is off", () => {
-			assert.deepEqual(Object.keys(Run.CtxListeners), ["loader/volatile-update", "agent/pre-step"]);
+		Check(Count, "M3: the pre-step and pre-execute listeners sit on the ctx (the intercept registers unconditionally; its call-time gates are On and interceptBash)", () => {
+			assert.deepEqual(Object.keys(Run.CtxListeners), [
+				"loader/volatile-update",
+				"tools/pre-execute",
+				"agent/pre-step",
+			]);
+		});
+		await CheckAsync(Count, "M3: the intercept is inert while interceptBash is off (the call-time scope gate)", async () => {
+			const Before = Run.Lines.length;
+			const Exec_: any = { name: "bash", args: { command: "cat a.txt" }, agent: { id: "agent-a" } };
+			const Decision = await Run.CtxListeners["tools/pre-execute"](Exec_, async () => ({ kind: "allow" as const }));
+			assert.deepEqual(Decision, { kind: "allow" });
+			assert.equal(Exec_.batchEditOffer, undefined);
+			assert.equal(Run.Lines.length, Before);
 		});
 		Check(Count, "M3: the State probe carries the contract fields", () => {
 			assert.equal(Run.State.On, true);

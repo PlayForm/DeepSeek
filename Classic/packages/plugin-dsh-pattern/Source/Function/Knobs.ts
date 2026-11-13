@@ -13,13 +13,13 @@ import type Configuration from "@Interface/Config.js";
  * `domain` knob is fail-loud checked at load: a bad domain name must throw at
  * load, never at the detached storage open.
  *
- * THE TWO POSTURES: `enabled` is TRUE in these defaults while the SCHEMA
- * (Variable/Config) defaults it to FALSE. They are different by design - a
- * BARE construction (`new PatternService(ctx)` - the smokes' fixture) is an
- * inert-but-live registry: the catalog is seeded and Match answers, so every
- * existing assertion stays byte-exact; the LOADED plugin gets the schema's
- * validated config (the loader always passes it), which is the documented
- * idle-forever posture (disabled, the bundle patch row).
+ * THE TWO POSTURES: `enabled` is TRUE in these defaults and the SCHEMA
+ * (Variable/Config) now defaults it to TRUE too - the shipped posture is ON.
+ * They stay separate constants so a BARE construction (`new
+ * PatternService(ctx)` - the smokes' fixture) and the LOADED plugin share the
+ * same posture; a profile turns the service off with `enabled: false`, which
+ * logs `disabled (enabled=false)` and leaves Match abstaining while the
+ * service stays resolvable (the live disabled posture).
  */
 /**
  * The storage-domain name rule (the library's UNIT_NAME_RE).
@@ -37,6 +37,7 @@ const Cell = (Value: unknown): unknown =>
 export default (Raw: unknown): Configuration => {
 	const Defaults: Configuration = {
 		enabled: true,
+		log: true,
 		logFile: "~/.dsh/playform/plugin-dsh-pattern.log",
 		domain: "pattern",
 		storagePath: "~/.dsh/pattern/registry.json",

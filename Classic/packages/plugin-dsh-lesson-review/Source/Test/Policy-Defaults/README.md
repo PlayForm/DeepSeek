@@ -19,8 +19,9 @@ silent no-op.
 - "P2: a bare construction carries the D6 block in the knobs".
 - "P3: a partial policy override merges over the defaults".
 - "P4: the shipped posture is PROPOSE (write stays approve)".
-- "P5: the schema's own defaults are the idle-forever posture" - disabled, ten
-  turns, fourteen/thirty days, consolidation off.
+- "P5: the schema's own defaults carry the base trio and the knobs" - enabled
+  true (the live posture), log true, the ledger path, ten turns,
+  fourteen/thirty days, consolidation off.
 - "P6: a reversed stale/archive pair throws AT LOAD".
 - "P7: a bad domain name throws AT LOAD".
 - "P8: a non-finite numeric knob falls back to its default" - `NaN` and a string

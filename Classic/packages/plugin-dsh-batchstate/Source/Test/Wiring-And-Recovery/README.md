@@ -1,11 +1,12 @@
 # Wiring-And-Recovery - the wiring and the recovery tests
 
-This folder covers the loader contract, the cold mount, the activation proof, the service registration, the fail-loud validation, the state-file recovery, and the purity guarantee.
+This folder covers the loader contract, the base trio defaults, the disabled cold mount, the activation proof, the service registration, the fail-loud validation, the state-file recovery, and the purity guarantee.
 
 ## Scenarios
 
 - L1: the loader contract, where the default object carries name `plugin-dsh-batchstate`, apply, Config, and inject `["pluginFactory"]`, apply returns NOTHING, and the `__pluginDshBatchstateState` probe exists with the factory module name.
-- W1: the IDLE-forever cold mount logs the byte-exact `disabled (enabled=false)` line, and the service still registers and reads the empty state honestly.
+- L1: the base trio fills the documented defaults (enabled true, log true, the ledger path).
+- W1: an explicit disabled cold mount logs the byte-exact `disabled (enabled=false)` line followed by the recovery line (the mount continues - the unconditional posture), the service and both inbox listeners still register, the service reads the empty state honestly, and a disabled write no-ops with zero ledger lines (the call-time gate).
 - W2: the activation wiring logs the byte-exact `activated (batch=default, stateFile=<path>)` line followed by the recovery line, and the nine-method service surface sits on the provided instance.
 - X1: the fail-loud validation throws `batchstate: ...` at load for `maxRecent` 0, an empty `stateFile`, and an empty `batch`.
 - R1: the recovery restores the members (with their statuses and scopes) from a seeded state file, keeps only the queue ids that still have a member record (`recovered (2 members, queue 1)`), and honestly downgrades a recovered active member to `interrupted` with a finishedAt stamp.
@@ -24,4 +25,4 @@ The fixtures use the shared Harness with the `Seed` helper (the JSON state file 
 
 ## Expected count
 
-13 PASS.
+16 PASS.

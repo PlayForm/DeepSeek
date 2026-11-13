@@ -10,10 +10,15 @@
 # dsh.profile.bundles AND the app is restarted; a file: dependency alone is NOT
 # activation.
 #
-# SHIPS DISABLED (the idle-forever posture): enabled: false is the schema
-# default and the patch row; a cold mount logs `disabled (enabled=false)` and the
-# service stays resolvable (Tick never comes due, Review answers `unavailable`),
-# so the nudge hook never hard-fails on a missing service.
+# THE LIVE DISABLED POSTURE: the service registers on every mount - the
+# store load, the manual lifecycle seams and the review pipeline all come up.
+# A disabled mount (`enabled: false`) logs the byte-exact
+# `disabled (enabled=false)` line instead of the activation proof, and the
+# review pipeline reads the volatile cell at CALL time (Tick never comes due
+# with zero ledger lines, Curate returns the empty curation, Review answers
+# `unavailable`), so the nudge hook never hard-fails on a missing service.
+# The base trio is enabled: true, log: true, logFile
+# ~/.dsh/playform/plugin-dsh-lesson-review.log.
 #
 # THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
 # shared factory block. The service READS the corpus, RECORDS usage and SUGGESTS
@@ -26,7 +31,9 @@
       - id: plugin-dsh-lesson-review
         name: "@playform/plugin-dsh-lesson-review"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ~/.dsh/playform/plugin-dsh-lesson-review.log
             intervalTurns: 10
             staleAfterDays: 14
             archiveAfterDays: 30

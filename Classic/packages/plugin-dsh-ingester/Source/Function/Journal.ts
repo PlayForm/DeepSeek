@@ -23,6 +23,15 @@ export default (
 	Path: string,
 	Detail: string,
 ): void => {
+	switch (true) {
+		// THE LEDGER TOGGLE (the base cell, read at call time): `log` off
+		// writes no line (the disabled master switch is gated upstream - the
+		// listeners and the Claim gate never reach the journal).
+		case State.Config.log === false:
+			return;
+		default:
+			break;
+	}
 	try {
 		const Ledger = Expand(State.Ledger);
 		Make(Parent(Ledger), { recursive: true });

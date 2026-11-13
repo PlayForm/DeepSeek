@@ -16,6 +16,9 @@ documented posture of the family for the actions that the member never takes.
 
 ## Scenario
 
+- Check: "P1: the base trio - enabled, log and logFile fill the documented
+  defaults" - enabled true (the live posture), log true, and the ledger path
+  default, as plain values (the class form).
 - Check: "P1: the member's schema fills the D6 policy defaults" - the
   composed `policy` deep-equals the D6 defaults (read/index/record/suggest/
   message = auto, write/commit/spawn = approve).
@@ -39,4 +42,4 @@ the checks assert as an object.
 
 ## Expected count
 
-4 PASS.
+5 PASS.

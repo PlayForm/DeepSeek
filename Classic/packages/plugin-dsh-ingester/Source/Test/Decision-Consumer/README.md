@@ -21,6 +21,9 @@ proposal, and `batch/decision` applies it through the existing content fence, on
   proposal.
 - D7: malformed proposals and decisions are ignored without a throw and
   without a journal line.
+- D8: the disabled member (the LIVE DISABLED posture) - both bus payloads
+  drop with zero ledger lines and no file change, and the disabled `Apply`
+  answers `null` with no write and no journal line.
 
 ## Fixtures
 
@@ -37,4 +40,4 @@ decision`, `rejected` / `decision denied the proposal`.
 
 ## Expected count
 
-8 PASS.
+10 PASS.

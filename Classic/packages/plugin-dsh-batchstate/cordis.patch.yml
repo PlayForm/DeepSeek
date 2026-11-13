@@ -17,15 +17,16 @@
 # app is restarted (bundle layers compose at host boot). A file: dependency
 # alone is NOT activation.
 #
-# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and
-# NOTHING else - the plugin never appears in the profile's bundles and
-# enables only by an explicit ACTIVATE (the user edits the profile and
-# restarts). On a cold mount the Apply logs `disabled (enabled=false)`,
-# registers the service (it reads honestly from the empty state) and wires
-# NOTHING - no listener, no event, no state file. The schema defaults are
-# the truth; the full default surface (batch default, stateFile
-# ~/.dsh/batch-state.json, maxRecent 8) lives in the Variable/Config.ts
-# schema. EVERY knob is volatile (hot-editable without remounting).
+# THE LIVE DISABLED POSTURE: the service, the store probe (the storage
+# domain effect or the JSON fallback recovery) and the inbox splice listeners
+# register on EVERY mount - a disabled mount writes only the byte-exact
+# `disabled (enabled=false)` ledger line instead of the activation proof, and
+# every surface reads the volatile On cell at CALL time, so a disabled write
+# or splice passes through with zero ledger lines. The schema defaults are
+# the truth; the full default surface (enabled true, log true, batch default,
+# stateFile ~/.dsh/batch-state.json, maxRecent 8) lives in the
+# Variable/Config.ts schema. EVERY knob is volatile (hot-editable without
+# remounting).
 #
 # THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
 # shared factory block. The board is a RECORDER/projection - read/record/
@@ -37,7 +38,9 @@
       - id: plugin-dsh-batchstate
         name: "@playform/plugin-dsh-batchstate"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ~/.dsh/playform/plugin-dsh-batchstate.log
             policy:
                 read: auto
                 index: auto

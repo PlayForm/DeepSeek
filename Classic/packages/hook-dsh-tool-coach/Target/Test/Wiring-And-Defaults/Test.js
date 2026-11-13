@@ -37,6 +37,25 @@ const runTest = async () => {
     });
   }
   {
+    const Base = Validate({});
+    Check(Count, "config default enabled=true", () => {
+      assert.equal(Base.enabled.get(), true);
+    });
+    Check(Count, "config default log=true", () => {
+      assert.equal(Base.log.get(), true);
+    });
+    Check(Count, "config default logFile = the coach's ledger path", () => {
+      assert.equal(Base.logFile.get(), "~/.dsh/playform/hook-dsh-tool-coach.log");
+    });
+    Check(Count, "the base keys sit first, and they are enabled, log, logFile", () => {
+      assert.deepEqual(
+        Object.keys(Base).slice(0, 3).sort(),
+        ["enabled", "log", "logFile"],
+        "the base keys are the first three"
+      );
+    });
+  }
+  {
     Check(Count, "config default threshold=3", () => {
       assert.equal(Raw1.threshold.get(), 3);
     });

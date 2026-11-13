@@ -12,7 +12,7 @@ of the built State object is preserved); the skip-reason ledger lines are
 byte-exact and stay quiet on steady state; the fail-open negatives hold (a
 render failure skips the block and logs `render failed <id> -> skipped` while
 the assembly still resolves; a clock that throws degrades to the real clock; a
-malformed pre-step payload never throws); and the cold-mount IDLE-forever
+malformed pre-step payload never throws); and the cold-mount live disabled
 posture is proven by behavior (full passthrough, the byte-exact
 `disabled (enabled=false)` line, zero warnings). The per-scope labels
 ({{sessionId}}) are stable per scope object and distinct across scopes.
@@ -46,7 +46,8 @@ posture is proven by behavior (full passthrough, the byte-exact
       throws into the assembly.
     - Sub: a malformed pre-step payload (messages not an array) returns the
       downstream result unchanged with zero warnings.
-- Group: the IDLE-forever cold mount (enabled=false).
+- Group: the live disabled cold mount (enabled=false, explicit - the schema
+  default is enabled).
     - Sub: the assemble listener passes the downstream assembly through by
       identity; the byte-exact disabled line is the ONLY info line; the
       post-execute observer passes the decision through; the tools/change

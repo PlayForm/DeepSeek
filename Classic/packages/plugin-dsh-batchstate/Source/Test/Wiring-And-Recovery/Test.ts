@@ -17,7 +17,8 @@ import {
 /**
  * @module Test
  *
- * The wiring and the recovery: the loader contract, the IDLE-forever cold mount, the activation
+ * The wiring and the recovery: the loader contract, the base trio defaults, the disabled cold mount
+ * (enabled: false, explicit - the shipped default is the live posture), the activation
  * proof, the service registered from apply, the fail-loud validation, the state file recovery and
  * the zero context-fs guarantee.
  *
@@ -53,19 +54,48 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Run.State.Module, "batchstate");
 			assert.equal(Run.State.On, true);
 		});
+		Check(Count, "L1: the base trio - enabled, log and logFile fill the documented defaults", () => {
+			const Raw: any = Validate({ stateFile: StateFile });
+			const Get = (Value: any): any =>
+				typeof Value?.get === "function" ? Value.get() : Value;
+			assert.equal(Get(Raw.enabled), true, "the live posture is the shipped default");
+			assert.equal(Get(Raw.log), true, "the ledger toggle default");
+			assert.equal(
+				Get(Raw.logFile),
+				"~/.dsh/playform/plugin-dsh-batchstate.log",
+				"the ledger path default",
+			);
+		});
 	}
 
-	// Group W1: the cold mount (the IDLE-forever posture).
+	// Group W1: the disabled cold mount (the shipped default is the live
+	// posture, so the disabled mount is asserted with the flag explicit).
 	{
 		rm();
-		const Run = Make(Validate({ logFile: Ledger, stateFile: StateFile }));
-		Check(Count, "W1: the cold mount logs the byte-exact disabled line", () => {
-			assert.deepEqual(Run.Lines, ["batchstate: disabled (enabled=false)"]);
+		const Run = Make(Validate({ logFile: Ledger, enabled: false, stateFile: StateFile }));
+		Check(Count, "W1: the disabled mount logs the byte-exact disabled line", () => {
+			assert.deepEqual(Run.Lines, [
+				"batchstate: disabled (enabled=false)",
+				"batchstate: recovered (0 members, queue 0)",
+			]);
+		});
+		Check(Count, "W1: the disabled mount still registers everything (the unconditional posture)", () => {
+			assert.ok(Run.Provided["batchstate"] !== undefined);
+			assert.ok(Run.CtxListeners["session/event"] !== undefined);
+			assert.ok(Run.CtxListeners["agent/inbox/inserted"] !== undefined);
 		});
 		Check(Count, "W1: the service still registers and reads the empty state", () => {
 			assert.ok(Run.Provided["batchstate"] !== undefined);
 			assert.equal(Run.Context.batchstate.getState().running.length, 0);
 			assert.equal(Run.Context.batchstate.getContext("a").startsWith("[BATCH STATE - default - live]"), true);
+		});
+		Check(Count, "W1: a disabled write no-ops with zero ledger lines (the call-time gate)", () => {
+			const Before = Run.Lines.length;
+			Run.Context.batchstate.setTask("a", "T1");
+			Run.Context.batchstate.queue("a");
+			Run.Context.batchstate.clear();
+			assert.equal(Run.Lines.length, Before, "nothing logged while disabled");
+			assert.equal(Run.State.Members.size, 0, "no member was written");
 		});
 	}
 

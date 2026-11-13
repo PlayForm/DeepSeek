@@ -67,6 +67,11 @@ decision with `id` plus `approve=true|false`, and hands an approved decision to 
 
 It returns one canonical JSON result and it is a pure renderer.
 
+The disabled plugin no-ops to a clear refusal: the tool reads the volatile `On` cell at call time
+and a disabled invocation throws
+`batch_decision: the hook-dsh-batch-decision plugin is disabled (enabled=false)` with zero ledger
+lines (the LIVE DISABLED posture: the registration is unconditional, the check is at call time).
+
 ## The sibling seams
 
 The hook probes the declared seam names (`batchPassOn`, `batchIngester`, `approval`) FIRST and then

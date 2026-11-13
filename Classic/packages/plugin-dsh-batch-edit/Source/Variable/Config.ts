@@ -27,16 +27,20 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * opsPerCommit, deadlineMs, strictMode, interceptBash, monitorChecksets) lands
  * on the next tool call without a remount.
  *
- * `enabled` defaults to FALSE - the IDLE-forever posture: the plugin ships
- * disabled, never appears in the profile's bundles, and enables only by an
- * explicit ACTIVATE.
+ * `enabled` defaults to TRUE - the LIVE DISABLED posture: every listener, the
+ * tool and the root observer register unconditionally on every mount (a
+ * disabled mount writes only the byte-exact `disabled (enabled=false)` ledger
+ * line instead of the activation proof), and every registered surface reads
+ * the volatile `On` cell at CALL time, so a flip lands on the next tool call
+ * without a remount.
  *
  * The runtime import of @deepseek-ai/schemastery (the schema must be a real
  * schemastery instance - the loader consumes it through the Standard Schema
  * `~standard` interface).
  */
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-batch-edit.log";
-const DefaultEnabled = false;
 const DefaultMachinesPerAgent = 2;
 const DefaultOpsPerCommit = 64;
 const DefaultDeadlineMs = 120000;
@@ -45,8 +49,17 @@ const DefaultInterceptBash = false;
 const DefaultMonitorChecksets: string[] = [];
 
 export default Compose(false, {
-	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	// The MASTER SWITCH (volatile: a flip is read on the next call): false =
+	// the mount writes `disabled (enabled=false)` to the ledger while every
+	// registered surface passes through silently. Distinct from the shared
+	// `log` cell, which governs only the durable ledger file.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	// Ledger file - the plugin's SEPARATE ledger, one log per module -
+	// volatile: hot-editable without remounting (overrides the minimal
+	// shared block's empty default).
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// The per-agent machine capacity (the planted-board lease semantics).
 	machinesPerAgent: Schema.number().default(DefaultMachinesPerAgent).volatile(),
 	// The op-line cap per commit; larger batches use the opfile path (the

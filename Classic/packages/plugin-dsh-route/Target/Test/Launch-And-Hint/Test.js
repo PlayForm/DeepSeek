@@ -141,7 +141,7 @@ const runTest = async () => {
     });
   }
   {
-    const Run = Make(Validate({}));
+    const Run = Make(Validate({ enabled: false }));
     const { Out } = await FireStep(Run, Step(Child(Coder, 1)), [Prompt("Build the parser")]);
     Check(Count, "H8: a disabled mount leaves the step untouched and unlogged", () => {
       assert.equal(Out.messages.length, 1);

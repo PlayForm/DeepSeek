@@ -11,10 +11,13 @@
 # dsh.profile.bundles AND the app is restarted; a file: dependency alone is NOT
 # activation.
 #
-# SHIPS DISABLED (the idle-forever posture): enabled: false is the schema
-# default and the patch row; a cold mount logs `disabled (enabled=false)` and
-# the listener stays registered but inert (the volatile-cell hot-flip pattern -
-# flipping enabled: true lands on the next status transition without a remount).
+# THE SHIPPED POSTURE: this entry ships with enabled: true (installing the
+# hook yields an enabled hook), log: true and the ledger path - a profile
+# turns it off with `enabled: false`. On a disabled mount the State build logs
+# `disabled (enabled=false)` and the listener stays registered but inert (the
+# volatile-cell hot-flip pattern - flipping enabled: true lands on the next
+# status transition without a remount). The schema defaults are the truth; the
+# full default surface lives in Variable/Config.ts.
 #
 # maxReviewsPerSession is the RUN-away guard, not the cadence: the cadence is
 # the service's `intervalTurns`. A profile that sets the service's interval to 1
@@ -23,7 +26,9 @@
       - id: hook-dsh-lesson-nudge
         name: "@playform/hook-dsh-lesson-nudge"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ~/.dsh/playform/hook-dsh-lesson-nudge.log
             maxReviewsPerSession: 3
             policy:
                 read: auto

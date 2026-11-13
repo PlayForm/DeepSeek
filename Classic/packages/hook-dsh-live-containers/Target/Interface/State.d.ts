@@ -216,7 +216,8 @@ export default interface State extends Shared {
      */
     Wave: WaveContext | undefined;
     /** The monitor flip (config `monitors`, volatile) - the second explicit
-     * flip after the plugin's own enable (the IDLE-forever posture). */
+     * flip after the plugin's own enable ("off" even when the plugin is
+     * enabled). */
     MonitorOn: "off" | "on";
     /**
      * The monitor knobs (config `monitor`, volatile).

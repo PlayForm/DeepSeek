@@ -31,6 +31,12 @@ const runTest = async () => {
     Check(Count, "L2: the schema fills the defaults and validates types", () => {
       const Config = Ingester.Config({});
       assert.equal(Config.enabled, true);
+      assert.equal(Config.log, true);
+      assert.equal(
+        Config.logFile,
+        "~/.dsh/playform/plugin-dsh-ingester.log",
+        "the base trio default"
+      );
       assert.equal(Config.maxTargets, 20);
       assert.equal(Config.stopOnConflict, true);
       assert.throws(() => Ingester.Config({ maxTargets: "many" }));

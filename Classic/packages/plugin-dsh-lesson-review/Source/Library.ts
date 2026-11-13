@@ -80,6 +80,14 @@ import Version from "./Variable/Version.js";
  * route, a disabled service, an unparseable reply, a failed model call -
  * each returns an outcome class and writes one ledger line, and none of
  * them throws into the caller's maintenance task.
+ *
+ * THE LIVE DISABLED POSTURE: the service registers on every mount - the
+ * store load, the manual lifecycle seams and the review pipeline all come up.
+ * A disabled mount (`enabled: false`) logs the byte-exact
+ * `disabled (enabled=false)` line instead of the activation proof, and the
+ * review pipeline reads the volatile cell at CALL time: Tick never comes due
+ * with zero ledger lines, Curate returns the empty curation, and Review
+ * answers its documented `unavailable (disabled)` outcome class.
  */
 /**
  * Expand a leading `~` (the family's path convention for every knob).
@@ -202,6 +210,15 @@ export default class LessonService extends Service {
 		this.Knobs = Knobs(Raw);
 		this.Usage = new Usage(Expand(this.Knobs.storagePath));
 		this.Ledger = (Message: string): void => {
+			switch (true) {
+				// THE LEDGER TOGGLE (the base cell, read at call time): `log`
+				// off silences the ledger lines (the store, the pending queue
+				// and the reports keep their behavior).
+				case this.Knobs.log === false:
+					return;
+				default:
+					break;
+			}
 			try {
 				Context_.logger?.info(Line(Message, this.Knobs));
 			} catch {

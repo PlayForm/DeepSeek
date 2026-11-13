@@ -33,9 +33,15 @@ const runTest = async () => {
     assert.equal(Run.Service.Knobs.policy.write, "approve", "a review never writes unasked");
     assert.equal(Run.Service.Knobs.policy.suggest, "auto", "but it may always suggest");
   });
-  Check(Count, "P5: the schema's own defaults are the idle-forever posture", () => {
+  Check(Count, "P5: the schema's own defaults carry the base trio and the knobs", () => {
     const Config = LessonService.Config({});
-    assert.equal(Config.enabled.get(), false, "a loaded plugin ships disabled");
+    assert.equal(Config.enabled.get(), true, "the live posture is the shipped default");
+    assert.equal(Config.log.get(), true, "the ledger toggle default");
+    assert.equal(
+      Config.logFile.get(),
+      "~/.dsh/playform/plugin-dsh-lesson-review.log",
+      "the ledger path default"
+    );
     assert.equal(Config.intervalTurns.get(), 10, "the nudge interval is ten turns");
     assert.equal(Config.staleAfterDays.get(), 14, "the stale line is fourteen days");
     assert.equal(Config.archiveAfterDays.get(), 30, "the archive line is thirty");

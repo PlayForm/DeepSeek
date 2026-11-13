@@ -29,9 +29,11 @@ import { Activate } from "@playform/lib-dsh-core";
  *
  * The contract is BATCH-STATE-PLUGIN.md sections 2 and 7.
  *
- * THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default and the bundle patch
- * row). A cold mount logs `disabled (enabled=false)`, registers the service (it reads honestly
- * from the empty state), and wires NOTHING - no listener, no event, no store.
+ * THE LIVE DISABLED POSTURE: `enabled` defaults to true. Every surface registers on every mount -
+ * the service, the store probe (the domain effect or the JSON fallback recovery) and the inbox
+ * splice listeners - and a disabled mount logs only the byte-exact `disabled (enabled=false)` line
+ * instead of the activation proof. Every registered surface reads the volatile `On` cell at CALL
+ * time, so a disabled write or splice passes through with zero ledger lines.
  *
  * The function returns NOTHING (the loader contract: a returned value silently kills event
  * delivery). The test probe is the `ctx.__pluginDshBatchstateState` attachment.
@@ -130,19 +132,23 @@ export default (Context: Context, Options: Config): void => {
 	new ServiceClass(Context, State);
 	switch (true) {
 		case !State.On:
-			// The cold mount: honest in the ledger, wired to nothing.
+			// The disabled mount: the byte-exact line, and the mount CONTINUES -
+			// the service, the store probe (the domain effect or the JSON
+			// fallback recovery) and the inbox splice register exactly as on an
+			// enabled mount (the LIVE DISABLED posture); only the ledger line
+			// differs.
 			Factory.Append(State, "disabled (enabled=false)");
-			return;
+			break;
 		default:
+			// The activation proof (the module's own composed line).
+			Factory.Append(
+				State,
+				Activate([
+					["batch", State.Batch],
+					["stateFile", State.StateFile],
+				]),
+			);
 	}
-	// The activation proof (the module's own composed line).
-	Factory.Append(
-		State,
-		Activate([
-			["batch", State.Batch],
-			["stateFile", State.StateFile],
-		]),
-	);
 
 	// THE STORE PROBE (the family's P5-style optional facility): the storage
 	// hub's domain form first, then the provided storageDomain service.
