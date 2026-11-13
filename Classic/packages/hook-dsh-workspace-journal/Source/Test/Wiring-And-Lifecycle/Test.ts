@@ -103,6 +103,12 @@ export const runTest = async (): Promise<number> => {
 		const Run = Make(Validate({ logFile: Ledger, enabled: false }));
 		Flip(Run.Raw.enabled, true);
 		Run.CtxListeners["loader/volatile-update"](["enabled"]);
+		// The Harness Boot law: the mount-time boot recovery pass is a one-shot
+		// microtask that fires against the state as it stood at mount, so it
+		// must be flushed (the same boundary the enabled-path suite's Setup
+		// awaits) BEFORE the flipped-on call - otherwise the pass fires mid
+		// open against the batch the flip just journaled.
+		await Boot();
 		await CheckAsync(Count, "W1: a volatile flip to enabled journals on the very next call, no remount", async () => {
 			assert.equal(Run.State.On, true);
 			const Opened = await Run.Context.workspaceJournal.open(

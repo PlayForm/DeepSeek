@@ -79,6 +79,7 @@ const runTest = async () => {
     const Run = Make(Validate({ logFile: Ledger, enabled: false }));
     Flip(Run.Raw.enabled, true);
     Run.CtxListeners["loader/volatile-update"](["enabled"]);
+    await Boot();
     await CheckAsync(Count, "W1: a volatile flip to enabled journals on the very next call, no remount", async () => {
       assert.equal(Run.State.On, true);
       const Opened = await Run.Context.workspaceJournal.open(

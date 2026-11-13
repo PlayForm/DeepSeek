@@ -48,16 +48,16 @@ This is a factory flavor and a sibling of the package governor on the same `fs/o
 
 ## The configuration
 
-| Field              | Type     | Default                                                                           | Meaning                                                                           |
-| ------------------ | -------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Field              | Type     | Default                                                                           | Meaning                                                                                                                                                                              |
+| ------------------ | -------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `enabled`          | boolean  | `true`                                                                            | The master switch - off appends `disabled (enabled=false)` instead of the activation proof; every surface stays registered and reads it at call time (a flip acts on the next call). |
-| `log`              | boolean  | `true`                                                                            | Ledger enabled - write the durable log file (volatile).                           |
-| `logFile`          | string   | `~/.dsh/playform/hook-dsh-package-pinner.log`                                     | The ledger file - separate from the governor's (volatile).                        |
-| `updateCooldownMs` | number   | `3000`                                                                            | Family-parity cooldown field - the pinner never reads it (no update stage).       |
-| `mutationTools`    | string[] | `["write", "edit", "str_replace_editor", "raw-write"]`                            | Actor tool names whose `fs/observed` events trigger pinning (volatile).           |
-| `policyFile`       | string   | `""`                                                                              | Global policy file; empty means discovery (`Function/Resolve`).                   |
-| `exclude`          | string[] | `["node_modules", ".git", ".dsh", ".pnpm", ".store", "DeepSeek Harness.app"]`     | Excluded path segments (anywhere mode, exclusion-first) - the module's fence.     |
-| `sections`         | string[] | `["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"]` | Dependency sections the pinner may rewrite.                                       |
+| `log`              | boolean  | `true`                                                                            | Ledger enabled - write the durable log file (volatile).                                                                                                                              |
+| `logFile`          | string   | `~/.dsh/playform/hook-dsh-package-pinner.log`                                     | The ledger file - separate from the governor's (volatile).                                                                                                                           |
+| `updateCooldownMs` | number   | `3000`                                                                            | Family-parity cooldown field - the pinner never reads it (no update stage).                                                                                                          |
+| `mutationTools`    | string[] | `["write", "edit", "str_replace_editor", "raw-write"]`                            | Actor tool names whose `fs/observed` events trigger pinning (volatile).                                                                                                              |
+| `policyFile`       | string   | `""`                                                                              | Global policy file; empty means discovery (`Function/Resolve`).                                                                                                                      |
+| `exclude`          | string[] | `["node_modules", ".git", ".dsh", ".pnpm", ".store", "DeepSeek Harness.app"]`     | Excluded path segments (anywhere mode, exclusion-first) - the module's fence.                                                                                                        |
+| `sections`         | string[] | `["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"]` | Dependency sections the pinner may rewrite.                                                                                                                                          |
 
 ## The ledger
 

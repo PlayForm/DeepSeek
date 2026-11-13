@@ -48,7 +48,9 @@ export default async (State: State, Request: Batch): Promise<Commit> => {
 		case State.On === false: {
 			const Operations = Array.isArray(Request.operations) ? Request.operations : [];
 			const Id =
-				typeof Request.id === "string" && Request.id.length > 0 ? Request.id : "batch-disabled";
+				typeof Request.id === "string" && Request.id.length > 0
+					? Request.id
+					: "batch-disabled";
 			const Reason = "the merge is disabled (enabled=false)";
 			return {
 				id: Id,

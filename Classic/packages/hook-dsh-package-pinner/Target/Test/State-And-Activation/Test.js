@@ -124,10 +124,10 @@ const runTest = async () => {
   {
     const EventsBefore = ctx.events.length;
     const EffectsBefore = ctx.effects.length;
+    const LinesBefore = Lines(Ledger).length;
     Pinner.apply(ctx, Validate({ log: true, logFile: Ledger, enabled: false }));
     const Disabled = ctx.__hookDshPinnerPackageState;
     const DisabledListener = ctx.events.filter((e) => e[0] === "fs/observed").at(-1)[1];
-    const LinesBefore = Lines(Ledger).length;
     const Excluded = {
       displayPath: Path.join(Root, "node_modules", "probe", "package.json")
     };
