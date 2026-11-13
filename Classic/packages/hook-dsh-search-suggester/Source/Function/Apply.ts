@@ -750,9 +750,8 @@ export default (Context: Context, Options: Config): void => {
 	// guarded access keeps a bare mount (no ctx.tools) applying cleanly (the
 	// batch-decision precedent).
 	// ------------------------------------------------------------------
-	const Tools = (
-		Context as unknown as { tools?: { register?: (definition: unknown) => () => void } }
-	).tools;
+	const Tools = Context.get?.("tools") as
+		{ register?: (definition: unknown) => () => void } | undefined;
 	if (typeof Tools?.register === "function") {
 		Tools.register(DismissTool(State, (Message) => FactoryAppend(Context, State, Message)));
 	}

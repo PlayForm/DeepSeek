@@ -625,7 +625,9 @@ export default (Context: Context, Options: Config): void => {
 			>["WorkingDirectory"],
 			Subagent: Context.get?.("subagent") as NonNullable<State["Wave"]>["Subagent"],
 			Agents: Context.get?.("agents") as NonNullable<State["Wave"]>["Agents"],
-			SandboxPolicy: Context.get?.("sandboxPolicy") as NonNullable<State["Wave"]>["SandboxPolicy"],
+			SandboxPolicy: Context.get?.("sandboxPolicy") as NonNullable<
+				State["Wave"]
+			>["SandboxPolicy"],
 		};
 	})();
 

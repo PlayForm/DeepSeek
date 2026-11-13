@@ -82,12 +82,11 @@ export default (Context: Context, Options: Config): void => {
 
 	// The two tools (the probe keeps the POC self-contained: the tools
 	// service is a host facility, not a sibling package).
-	const Host = Context as unknown as {
-		tools?: { register?: (definition: unknown) => () => void };
-	};
-	if (typeof Host.tools?.register === "function") {
-		Host.tools.register(Tools.ProposeTool(State));
-		Host.tools.register(Tools.ProposalsTool(State));
+	const Host = Context.get?.("tools") as
+		{ register?: (definition: unknown) => () => void } | undefined;
+	if (typeof Host?.register === "function") {
+		Host.register(Tools.ProposeTool(State));
+		Host.register(Tools.ProposalsTool(State));
 	}
 	// The own P5-style storage effect: probe `storageDomain` once, open the
 	// hook's domain (never awaited - best-effort inside), close on dispose.
