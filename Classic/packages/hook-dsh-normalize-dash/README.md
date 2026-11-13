@@ -41,7 +41,7 @@ was chosen.
 
 | Field                    | Type     | Default                                                                                        | Meaning                                                                                                                                        |
 | ------------------------ | -------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `enabled`                | boolean  | `true`                                                                                         | the master switch - false registers nothing, one `disabled (enabled=false)` ledger line (volatile)                                             |
+| `enabled`                | boolean  | `true`                                                                                         | the master switch - false = one `disabled (enabled=false)` ledger line, every surface registered and passing through silently (volatile)       |
 | `log`                    | boolean  | `true`                                                                                         | write the durable ledger file (volatile)                                                                                                       |
 | `logFile`                | string   | `~/.dsh/playform/hook-dsh-normalize-dash.log`                                                  | the normalize-dash ledger (volatile)                                                                                                           |
 | `replacement`            | string   | `-`                                                                                            | the transform's only knob - hot-editable, the next stream picks it up with no remount (volatile)                                               |
@@ -83,7 +83,7 @@ line).
 - Build:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-normalize-dash run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-normalize-dash/Target/Test/<Folder>/Test.js`
-    - Config-And-State - 15 checks
+    - Config-And-State - 25 checks
     - Journal-And-Custom - 19 checks
     - Overpass - 35 checks
     - Raw-Write-Tool - 52 checks

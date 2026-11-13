@@ -479,7 +479,7 @@ if (InvokedDirectly) {
 	// vacuously-green backstop for every folder's fixture - a broken seam
 	// would print fewer checks in every folder, which the runner's
 	// expected-count guard catches; this proves the seam itself at build time).
-	const Run = MakeGraph({ files: {} });
+	const Run = MakeGraph({ files: {}, enabled: true });
 	Check(Count, "selfcheck: the fake ctx registers the service instance", () => {
 		assert.equal(Run.provided["workspaceGraph"], Run.Graph);
 		assert.equal(Run.Graph.name, "workspaceGraph");
@@ -490,7 +490,7 @@ if (InvokedDirectly) {
 
 	// The trace seam selfcheck: an enabled graph subscribes to observe/stamp
 	// on the REAL bus (the mechanism the folders drive through Emit), and a
-	// disabled graph subscribes to nothing.
+	// disabled graph subscribes too - its consumer answers at call time.
 	const Enabled = MakeGraph({ files: {}, enabled: true });
 	Check(Count, "selfcheck: the enabled graph wires the trace adapter (observe/stamp)", () => {
 		assert.equal(Subscribers(Enabled, "observe/stamp"), 1);

@@ -68,8 +68,17 @@ symlink to a file OUTSIDE the root.
 - Group I4: the disabled gate.
     - Check: "a disabled graph still walks but every candidate is skipped" -
       `{ indexed: 0, skipped: 4, failed: 0, files: 0 }`, no `fs/observed` handler,
-      no `observe/stamp` subscription, and the four byte-exact
+      one live `observe/stamp` subscription (the adapter wires on every mount -
+      the consumer answers at call time), and the four byte-exact
       `graph: skipped <path> (disabled)` lines.
+    - Check: "the disabled mount logs the disabled line, not the activation
+      proof" - the byte-exact `graph: disabled (enabled=false)` line and no
+      `activated` line.
+    - Check: "a disabled subscription consumes nothing" - an observed change
+      while disabled moves no revision and writes no re-index line.
+    - Check: "a flip to enabled acts on the very next call" - flipping
+      `State.On` live makes the next `indexFile` index the changed file, and
+      flipping back refuses again with reason `disabled`.
 - Group I5: the A7 purity guard.
     - Check: "the fake fs records zero writeText calls (A7)".
 
@@ -87,6 +96,7 @@ symlink to a file OUTSIDE the root.
 - `graph: workspace capped at 2 files`.
 - `graph: reindexed <path> (indexed)`.
 - `graph: skipped <path> (disabled)`.
+- `graph: disabled (enabled=false)`.
 
 ## Edge cases
 
@@ -97,4 +107,4 @@ symlink to a file OUTSIDE the root.
 
 ## Expected count
 
-15 PASS.
+18 PASS.

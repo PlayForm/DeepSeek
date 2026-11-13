@@ -29,7 +29,8 @@ It covers acceptance check A6, where the store round-trips, `snapshot()` returns
     - Check: "limits: an excluded path is skipped with the byte-exact excluded line" - `node_modules/**` matches, and the line is exact.
     - Check: "limits: a file outside the include list is skipped with the byte-exact line" - reason `not included`, and the line is exact.
 - Group: the disabled posture.
-    - Check: "disabled: with enabled=false indexFile skips with the byte-exact disabled line" - reason `disabled`, the exact line, nothing stored, and the activation line still present.
+    - Check: "disabled: with enabled=false indexFile skips with the byte-exact disabled line" - reason `disabled`, the exact line, nothing stored, and the byte-exact `graph: disabled (enabled=false)` mount line instead of the activation proof.
+    - Check: "disabled: a flip acts on the very next call" - flipping `State.On` live makes the next `indexFile` index the file, and flipping back refuses again with reason `disabled`.
 - Group: the A7 purity guard.
     - Check: "purity: the fake fs records zero writeText calls (A7)" - the summed `writeText` captures of every fake ctx created in this folder is zero.
 
@@ -47,6 +48,7 @@ It covers acceptance check A6, where the store round-trips, `snapshot()` returns
 - `graph: skipped /proj/node_modules/pkg/index.ts (excluded)`.
 - `graph: skipped /proj/other/thing.ts (not included)`.
 - `graph: skipped /proj/src/store.ts (disabled)`.
+- `graph: disabled (enabled=false)`.
 
 ## Edge cases
 
@@ -54,4 +56,4 @@ It covers acceptance check A6, where the store round-trips, `snapshot()` returns
 
 ## Expected count
 
-13 PASS.
+14 PASS.

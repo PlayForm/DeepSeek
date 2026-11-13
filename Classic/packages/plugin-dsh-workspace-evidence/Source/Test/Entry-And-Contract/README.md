@@ -1,6 +1,6 @@
 # Entry-And-Contract - the loader contract and the mount
 
-This folder covers the object-form loader contract and the IDLE-forever posture: the default object, the cold mount, the fail-loud validation, and the enabled mount.
+This folder covers the object-form loader contract and the live disabled posture: the default object, the cold mount, the fail-loud validation, and the enabled mount.
 
 ## Scenarios
 
@@ -10,10 +10,12 @@ This folder covers the object-form loader contract and the IDLE-forever posture:
 - E2: the cold mount (enabled=false): apply returns nothing, the service is
   still provided (name `workspaceEvidence`), the byte-exact
   `evidence: disabled (enabled=false)` line (logger AND durable `[ISO]`
-  file), no root listener, no effect, and the service still answers
-  honestly (a validate fails loud with
-  `evidence: service is disabled (enabled=false)`; an invalidate finds
-  nothing).
+  file), the root `fs/observed` listener and the `evidence-storage` effect
+  STILL WIRED, the service still answering honestly (a validate fails loud
+  with `evidence: service is disabled (enabled=false)`; an invalidate finds
+  nothing), the listener doing nothing (no line, no write), and a flip to
+  enabled acting on the very next call (a validate lands) and a flip back
+  refusing again.
 - E3: the fail-loud validation - empty domain and zero maxValidations with
   the byte-exact `evidence: ` messages; a non-array `exclude` is caught
   earlier by the schema itself (`$.exclude expected array but got nope`).
@@ -33,4 +35,4 @@ The harness is the shared Harness: a fake ctx with a DISTINCT root object, the r
 
 ## Expected count
 
-12 PASS.
+14 PASS.

@@ -254,11 +254,11 @@ export const runTest = async (): Promise<number> => {
 		const Summary = await Run.Graph.indexWorkspace(Root);
 		Check(Count, "I4: a disabled graph still walks but every candidate is skipped", () => {
 			assert.deepEqual(Summary, { indexed: 0, skipped: 4, failed: 0, files: 0 });
-			assert.equal(Handlers(Run, "fs/observed"), 0, "a disabled graph wires no listener");
+			assert.equal(Handlers(Run, "fs/observed"), 0, "no direct root registration");
 			assert.equal(
 				Subscribers(Run, "observe/stamp"),
-				0,
-				"a disabled graph subscribes to nothing",
+				1,
+				"a disabled graph still subscribes - the consumer answers at call time",
 			);
 			for (const Path_ of [
 				Path.join(Root, "README.md"),
@@ -274,6 +274,26 @@ export const runTest = async (): Promise<number> => {
 			assert.deepEqual(LinesWith(Run, "workspace indexed"), [
 				"graph: workspace indexed 4 files (0 indexed, 4 skipped, 0 failed)",
 			]);
+		});
+		Check(Count, "I4: the disabled mount logs the disabled line, not the activation proof", () => {
+			assert.ok(Run.loggerLines.includes("graph: disabled (enabled=false)"));
+			assert.equal(LinesWith(Run, "activated").length, 0);
+		});
+		await CheckAsync(Count, "I4: a disabled subscription consumes nothing", async () => {
+			FileSystem.writeFileSync(CorePath, CORE_CHANGED);
+			const Revision = Run.Graph.statistics().indexRevision;
+			Emit(Run, { targetKey: CorePath, displayPath: CorePath }, { kind: "present", version: "v2" });
+			await Run.State.Flush;
+			assert.equal(Run.Graph.statistics().indexRevision, Revision);
+			assert.equal(LinesWith(Run, "reindexed").length, 0);
+		});
+		await CheckAsync(Count, "I4: a flip to enabled acts on the very next call", async () => {
+			Run.State.On = () => true;
+			const Outcome = await Run.Graph.indexFile(Path.join(Root, "src/core.ts"));
+			assert.equal(Outcome.status, "indexed");
+			Run.State.On = () => false;
+			const Refused = await Run.Graph.indexFile(Path.join(Root, "src/util.ts"));
+			assert.equal(Refused.reason, "disabled");
 		});
 	}
 

@@ -19,8 +19,9 @@
  */
 export default interface Config {
     /**
-     * Master switch - false = the plugin registers nothing and appends
-     * `disabled (enabled=false)` to the ledger (volatile).
+     * Master switch - false = the plugin appends `disabled (enabled=false)`
+     * to the ledger while every registered surface passes through at call
+     * time (volatile).
      */
     enabled: boolean;
     /**

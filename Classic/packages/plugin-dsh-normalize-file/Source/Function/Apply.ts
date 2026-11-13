@@ -93,13 +93,13 @@ export default (Context: Context, Options: Config): void => {
 	});
 	State.Factory = Factory;
 
-	// The master switch: disabled = the plugin registers NOTHING (the
-	// activation proof is replaced by the one disabled line, the tool and
-	// the two overpass arms below are skipped).
-	if (State.On === false) {
-		Factory.Append(State, "disabled (enabled=false)");
-		return;
-	}
+	// The master switch: the ONE mount-time effect of the flag is the ledger
+	// line - a disabled mount writes `disabled (enabled=false)` instead of the
+	// activation proof and still registers EVERYTHING below. Every registered
+	// surface checks the flag at CALL time (the volatile live-flip law: the
+	// factory refreshes State.On in place, so a flip acts on the very next
+	// call in both directions, with no remount) and a disabled surface passes
+	// through with ZERO ledger lines.
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone. Format (asserted by the smoke):
@@ -108,13 +108,17 @@ export default (Context: Context, Options: Config): void => {
 	// the `)` suffix) live in the core's Activate composer; the FIELD LIST is
 	// the module's own - a tool flavor has no stream flags to report, so the
 	// list is just the dash knob and the ledger file.
-	Factory.Append(
-		State,
-		Activate([
-			["replacement", State.Replacement],
-			["logFile", State.Ledger],
-		]),
-	);
+	if (State.On === false) {
+		Factory.Append(State, "disabled (enabled=false)");
+	} else {
+		Factory.Append(
+			State,
+			Activate([
+				["replacement", State.Replacement],
+				["logFile", State.Ledger],
+			]),
+		);
+	}
 
 	// THE OVERPASS ARMS (the plan's §4, both opt-in by default): the
 	// tools/post-execute arm (Function/Overpass — the tool-results scope,
@@ -128,11 +132,20 @@ export default (Context: Context, Options: Config): void => {
 	// must exist even while their scopes are off: a scope flipped on later
 	// lands through the P10 volatile-refresh without any re-registration.
 	// The file flavor's transform is the SIX-FOLD chain (the same Rewrite
-	// the tool body runs).
-	Context.on("tools/post-execute", (Exec, Result, Next) => Overpass(Exec, Result, Next, State), {
-		prepend: true,
-	});
-	Context.on("agent/pre-step", (Payload, Next) => StepBatch(Payload, Next, State));
+	// the tool body runs). Both arms also carry the CALL-TIME master switch:
+	// a disabled flavor awaits next() and returns the downstream decision
+	// UNCHANGED - no transform, no ledger line - reading State.On at the
+	// moment of the call.
+	Context.on(
+		"tools/post-execute",
+		(Exec, Result, Next) => (State.On === false ? Next() : Overpass(Exec, Result, Next, State)),
+		{
+			prepend: true,
+		},
+	);
+	Context.on("agent/pre-step", (Payload, Next) =>
+		State.On === false ? Next() : StepBatch(Payload, Next, State),
+	);
 
 	// THE HUMAN COMMAND (`normalize-overpass`, the plan's §5): registered
 	// through the probe-once Seam (never the dead accessor — a missing

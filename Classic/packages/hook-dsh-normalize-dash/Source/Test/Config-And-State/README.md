@@ -37,13 +37,26 @@ suite, moved verbatim.
     - Check: "state module = hook-dsh-normalize-dash (the ledger prefix)".
     - Check: "activation ledger line byte-exact" (the captured logger line,
       see below).
-- Group: Run D - the master switch off (the disabled ledger line, nothing
-  registered).
+- Group: Run D - the master switch off (the disabled ledger line, every
+  surface registered, every call a silent pass-through, the flip live).
     - Check: "disabled run: the disabled ledger line byte-exact" (the captured
       logger line, see below).
-    - Check: "disabled run: no activation line, no listeners, no tool, no
-      command" (the P10 volatile-update listener lives inside the factory's
-      State builder, ahead of the switch).
+    - Check: "disabled run: the listeners, the tool and the command ARE
+      registered (no activation line)" (the llm/stream, tools/post-execute and
+      agent/pre-step listeners, the raw-write tool and the
+      normalize-overpass command all captured; the P10 volatile-update
+      listener lives inside the factory's State builder, ahead of the switch).
+    - Check: "disabled run: a stream call passes through with zero new ledger
+      lines" (the upstream chunk by object identity, no new logger lines).
+    - Check: "disabled run: a post-execute call passes through with zero new
+      ledger lines" (the downstream decision by identity, no new lines).
+    - Check: "disabled run: a pre-step call passes through with zero new
+      ledger lines" (the downstream decision by identity, no new lines).
+    - Check: "disabled run: a live flip ON starts normalizing on the next
+      stream call (no remount)" (State.On assigned in place; the em-dash
+      chunk normalizes and the count line appears).
+    - Check: "disabled run: a live flip OFF passes through again with zero
+      new ledger lines" (the upstream chunk by identity, no new lines).
 - Group: Run 6 - HMR-safety probe (no module-level state).
     - Check: "each apply builds a FRESH state (no module-level globals)"
       (two applies build two distinct State objects with the same defaults).
@@ -64,6 +77,8 @@ ledger content.
   logger line, byte-exact).
 - `hook-dsh-normalize-dash: disabled (enabled=false)` (Run D's captured logger
   line, byte-exact).
+- `hook-dsh-normalize-dash: normalized 1 dash char(s) in one stream` (Run D's
+  live flip-ON stream, asserted with `includes`).
 
 ## Edge cases
 
@@ -77,4 +92,4 @@ ledger content.
 
 ## Expected count
 
-20 PASS.
+25 PASS.

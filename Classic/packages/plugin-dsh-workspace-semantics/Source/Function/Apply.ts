@@ -32,11 +32,13 @@ import Catalog from "@Variable/Adapters.js";
  * Wire on the ROOT context), and the own P5-style storage effect. The contract
  * is SEMANTICS.md.
  *
- * THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default and
- * the bundle patch row). A cold mount logs `disabled (enabled=false)`, registers
- * the service and the adapters (it answers honestly: resolve on an empty index
- * still builds through the adapter), and wires NOTHING else - no listener, no
- * storage effect, no events consumed.
+ * THE LIVE DISABLED POSTURE: `enabled` defaults to false (the schema default and
+ * the bundle patch row). A cold mount logs `disabled (enabled=false)` and wires
+ * EVERY surface - the service and the adapters (they answer honestly: resolve on
+ * an empty index still builds through the adapter), the fs/observed listener and
+ * the own storage effect - and each reads State.On at CALL time, so a flip acts
+ * on the very next call without a remount. The disabled listener does nothing
+ * (no line, no write).
  *
  * The function returns NOTHING (the loader contract: a returned value silently
  * kills event delivery). The test probe is the
@@ -139,15 +141,18 @@ export default (Context: Context, Options: Config): void => {
 	new ServiceClass(Context, State);
 	switch (true) {
 		case State.On === false:
-			// The cold mount: honest in the ledger, wired to nothing.
+			// The cold mount: honest in the ledger; every surface below still
+			// wires and answers at call time.
 			Factory.Append(State, "disabled (enabled=false)");
-			return;
+			break;
 		default:
+			// The activation proof (the module's own composed line).
+			Factory.Append(State, Activate([["domain", State.DomainName]]));
 	}
-	// The activation proof (the module's own composed line).
-	Factory.Append(State, Activate([["domain", State.DomainName]]));
 
 	// The fs/observed listener, on the ROOT context (the factory's Wire).
+	// Wired on EVERY mount (the live disabled posture); the listener reads
+	// State.On when the event arrives and a disabled listener does nothing.
 	Factory.Wire(
 		Context,
 		State,
@@ -155,8 +160,9 @@ export default (Context: Context, Options: Config): void => {
 			Watch(State, Target, Observation, Actor),
 	);
 
-	// The own P5-style storage effect: probe `storageDomain` once, open the
-	// service's domain (never awaited - best-effort inside), close on dispose.
+	// The own P5-style storage effect (registered on EVERY mount): probe
+	// `storageDomain` once, open the service's domain (never awaited -
+	// best-effort inside), close on dispose.
 	Context.effect?.(() => {
 		const Facility = Context.get?.("storageDomain");
 		switch (true) {

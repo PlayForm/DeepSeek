@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import {
   Boot,
   Check,
+  CheckAsync,
   Finish,
   Fire,
   FireAbsent,
@@ -41,9 +42,9 @@ const runTest = async () => {
       assert.equal(Run.Returned, void 0);
       assert.ok(Run.Provided["workspaceSemantics"] !== void 0);
     });
-    Check(Count, "W1: a disabled mount registers NOTHING on the root context", () => {
-      assert.deepEqual(Run.RootNames, []);
-      assert.deepEqual(Run.Effects, []);
+    Check(Count, "W1: a disabled mount wires the root listener and the storage effect", () => {
+      assert.deepEqual(Run.RootNames, ["fs/observed"]);
+      assert.deepEqual(Run.Effects, ["semantics-storage"]);
     });
     Check(Count, "W1: the cold mount logs the byte-exact lines", () => {
       assert.deepEqual(Run.Lines, [
@@ -51,7 +52,7 @@ const runTest = async () => {
         "semantics: disabled (enabled=false)"
       ]);
     });
-    Check(Count, "W1: a disabled service answers honestly with nothing", async () => {
+    await CheckAsync(Count, "W1: a disabled service answers honestly with nothing", async () => {
       assert.equal(await Run.Context.workspaceSemantics.resolve("/a.ts"), void 0);
       assert.equal(await Run.Context.workspaceSemantics.rename("/a.ts", { start: 0, end: 1 }, "x"), void 0);
       assert.deepEqual(Run.Context.workspaceSemantics.statistics(), {
@@ -59,6 +60,19 @@ const runTest = async () => {
         revision: 0,
         adapters: 7
       });
+    });
+    Check(Count, "W1: the disabled listener does nothing (no line, no revision)", () => {
+      Fire(Run, "/repo/src/a.ts", "1");
+      assert.equal(Run.State.Revision, 0);
+      assert.deepEqual(LinesWith(Run, "indexed /repo/src/a.ts"), []);
+    });
+    Check(Count, "W1: a flip to enabled acts on the very next event", () => {
+      Run.State.On = true;
+      Fire(Run, "/repo/src/a.ts", "1");
+      assert.equal(Run.State.Revision, 1);
+      Run.State.On = false;
+      Fire(Run, "/repo/src/b.ts", "2");
+      assert.equal(Run.State.Revision, 1);
     });
   }
   {

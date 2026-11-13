@@ -20,14 +20,18 @@ import Adapter from "../Trace/Adapter.js";
  * The State build is the factory's cell unwrap + the P10 volatile refresh.
  * The service registration is Function/Service (`workspaceContext`,
  * constructed here so `ctx.workspaceContext` resolves). The trace adapter
- * consumes `graph/invalidated` to invalidate the packet memo - wired only
- * after the enabled gate. The token-meter probe is V4-1 section 4: the
- * orientation budget uses ctx.tokenMeter where available.
+ * consumes `graph/invalidated` to invalidate the packet memo - registered on
+ * every mount, answering at call time. The token-meter probe is V4-1
+ * section 4: the orientation budget uses ctx.tokenMeter where available.
  *
- * THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default
- * and the bundle patch row). A cold mount logs `disabled (enabled=false)`,
- * registers the service (it answers honestly from whatever the graph
- * provides), and registers no tool.
+ * THE LIVE DISABLED POSTURE: `enabled` defaults to false (the schema default
+ * and the bundle patch row). A cold mount logs `disabled (enabled=false)` and
+ * registers EVERY surface - the service (it answers honestly from whatever
+ * the graph provides), the trace adapter and the tool - and every one of them
+ * checks State.On at CALL time, so a flip acts on the very next call without
+ * a remount. The disabled tool refuses with
+ * `workspace_context: the context plugin is disabled (enabled=false)` and
+ * writes no ledger line.
  *
  * The function returns NOTHING (the loader contract: a returned value
  * silently kills event delivery). The test probe is the
@@ -117,28 +121,31 @@ export default (Context: Context, Options: Config): void => {
 	new ServiceClass(Context, State);
 	switch (true) {
 		case State.On === false:
-			// The cold mount: honest in the ledger, no tool registered.
+			// The cold mount: honest in the ledger; every surface below still
+			// registers and answers at call time.
 			Factory.Append(State, "disabled (enabled=false)");
-			return;
+			break;
 		default:
+			// The activation proof (the module's own composed line).
+			Factory.Append(
+				State,
+				Activate([
+					["budget", `${State.BudgetTokens}/${State.BudgetMaximum}`],
+					["lenses", String(State.Lenses.length)],
+				]),
+			);
 	}
-	// The activation proof (the module's own composed line).
-	Factory.Append(
-		State,
-		Activate([
-			["budget", `${State.BudgetTokens}/${State.BudgetMaximum}`],
-			["lenses", String(State.Lenses.length)],
-		]),
-	);
 
 	// The trace adapter (D5): consume `graph/invalidated` to invalidate the
-	// packet memo. Wired only after the enabled gate; the bus is optional (an
-	// absent service subscribes to nothing) and the subscription is disposed
-	// with the fiber.
+	// packet memo. Registered on EVERY mount (the live disabled posture); the
+	// bus is optional (an absent service subscribes to nothing), the
+	// subscription is disposed with the fiber, and the consumer answers the
+	// disabled posture at call time (State.On read live).
 	Adapter(State);
 
 	// The tool registration (the live-containers posture: the context's
-	// `tools` facility, probed defensively).
+	// `tools` facility, probed defensively). Registered on EVERY mount; the
+	// tool answers its disabled refusal at call time (State.On read live).
 	const Tools = Context.get?.("tools") as
 		{ register?: (definition: unknown) => void } | undefined;
 	Tools?.register?.(Tool(State));

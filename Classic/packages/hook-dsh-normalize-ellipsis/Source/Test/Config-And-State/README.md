@@ -66,14 +66,31 @@ future home of the same contract).
 - Group: Run 1 - the activation line (the module's own string, byte-exact).
     - Sub: "activation ledger line byte-exact"
         - assert.ok(Run1.Lines.includes(the activation string below))
-- Group: Run D - the master switch off (the disabled ledger line, nothing
-  registered).
+- Group: Run D - the master switch off (the disabled ledger line, every
+  surface registered, every call a silent pass-through, the flip live).
     - Sub: "disabled run: the disabled ledger line byte-exact"
         - assert.ok(RunD.Lines.includes(the disabled string below))
-    - Sub: "disabled run: no activation line, no listeners, no command"
+    - Sub: "disabled run: the listeners and the command ARE registered (no
+      activation line)"
         - assert.ok(!RunD.Lines.some(includes "activated (") && the
-          llm/stream, tools/post-execute and agent/pre-step entries all absent
-          and CommandsRegistered empty)
+          llm/stream, tools/post-execute and agent/pre-step entries all
+          present and CommandsRegistered holding the one definition)
+    - Sub: "disabled run: a stream call passes through with zero new ledger
+      lines"
+        - await: the upstream chunk by object identity, no new logger lines
+    - Sub: "disabled run: a post-execute call passes through with zero new
+      ledger lines"
+        - await: the downstream decision by identity, no new lines
+    - Sub: "disabled run: a pre-step call passes through with zero new ledger
+      lines"
+        - await: the downstream decision by identity, no new lines
+    - Sub: "disabled run: a live flip ON starts normalizing on the next stream
+      call (no remount)"
+        - await: State.On assigned in place; the ellipsis chunk normalizes and
+          the count line appears
+    - Sub: "disabled run: a live flip OFF passes through again with zero new
+      ledger lines"
+        - await: the upstream chunk by identity, no new lines
 
 ## Fixtures
 
@@ -89,6 +106,8 @@ schema defaults. There are no temp files beyond the ledger log.
 
 - `hook-dsh-normalize-ellipsis: activated (replacement=..., reasoning=on, toolArgs=off, logFile=/tmp/ellipsis-smoke-ledger.log)`
 - `hook-dsh-normalize-ellipsis: disabled (enabled=false)` (Run D)
+- `hook-dsh-normalize-ellipsis: normalized 1 ellipsis char(s) in one stream`
+  (Run D's live flip-ON stream, asserted with `includes`).
 
 (The logger line is captured in the Lines of the fake ctx; the factory's
 Append also appends the same string to the ledger file. No other strings are
@@ -106,4 +125,4 @@ asserted in this folder.)
 
 ## Expected count
 
-19 PASS.
+24 PASS.

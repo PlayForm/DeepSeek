@@ -18,7 +18,9 @@ import DEFAULT_EXCLUDE from "@Variable/Default.js";
  * VOLATILE CELLS: every field is `.volatile()` - a hot edit commits into the running fiber
  * without remounting; the service's constructor unwraps the cells once at load
  * (`Function/Unwrap`) and the fail-loud validation (`Function/Validate`) runs on the plain
- * values.
+ * values - with ONE live exception: the `enabled` cell is kept raw and read through
+ * `State.On` at the moment of every call, so the master switch's flip acts on the very next
+ * call without a remount.
  *
  * `enabled` defaults to FALSE - the IDLE-FOREVER posture: the plugin ships disabled, never
  * appears in the profile's bundles, and enables only by an explicit ACTIVATE.

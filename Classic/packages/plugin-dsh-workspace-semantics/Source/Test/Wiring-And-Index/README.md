@@ -1,10 +1,10 @@
 # Wiring-And-Index - the wiring and the index maintainer
 
-The test covers the loader contract (apply returns nothing, and the default object carries name/apply/Config/inject), the IDLE-forever cold mount, the root-context registration with the distinct root identity, the service registered from apply, the adapter registry, the activation proof, the invalidation on fs/observed (the monotonic revision, no wall clock), the guard chain, the containment of malformed events, and the fail-loud validation.
+The test covers the loader contract (apply returns nothing, and the default object carries name/apply/Config/inject), the live disabled cold mount, the root-context registration with the distinct root identity, the service registered from apply, the adapter registry, the activation proof, the invalidation on fs/observed (the monotonic revision, no wall clock), the guard chain, the containment of malformed events, and the fail-loud validation.
 
 ## Scenarios
 
-- W1: the default object carries name/apply/Config/inject, the schema fills the Config base (`enabled` false, `log` true, the `logFile` default), apply returns nothing, the service is provided on a cold mount, a disabled mount wires nothing, the cold-mount lines are byte-exact, and a disabled service answers honestly with nothing.
+- W1: the default object carries name/apply/Config/inject, the schema fills the Config base (`enabled` false, `log` true, the `logFile` default), apply returns nothing, the service is provided on a cold mount, a disabled mount still wires the root listener and the storage effect, the cold-mount lines are byte-exact, a disabled service answers honestly with nothing, the disabled listener does nothing (no line, no revision), and a flip to enabled acts on the very next event (and a flip back stops it).
 - W2: fs/observed is registered on the ROOT context only, the root identity is distinct, the activation lines are byte-exact, and the storage effect is armed.
 - W3: the revision advances monotonically (`indexed <path> version <v> (revision <r>)`), and an absent observation invalidates as version absent.
 - W4: an excluded segment, the own actor, and a malformed event each give their byte-exact line, and the listener path touches zero file content.
@@ -23,4 +23,4 @@ The test covers the loader contract (apply returns nothing, and the default obje
 
 ## Expected count
 
-21 PASS.
+23 PASS.

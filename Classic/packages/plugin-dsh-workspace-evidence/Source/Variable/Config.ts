@@ -47,10 +47,12 @@ const DefaultMaxValidations = 512;
 const DefaultExclude: string[] = ["node_modules", "Target", ".git"];
 
 export default Compose(false, {
-	// The MASTER SWITCH (volatile: a flip is read on the next mount): false =
-	// the cold mount logs `disabled (enabled=false)` and the service wires
-	// nothing. Distinct from the shared `log` cell, which governs only the
-	// durable ledger file.
+	// The MASTER SWITCH (volatile: a flip is read on the very next call): false =
+	// the cold mount logs `disabled (enabled=false)` and every surface - the
+	// service, the fs/observed listener and the storage effect - still wires,
+	// answering at call time (the validate() refusal is byte-stable; the
+	// listener does nothing while disabled). Distinct from the shared `log`
+	// cell, which governs only the durable ledger file.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// Ledger enabled - write the durable log file (volatile).
 	log: Schema.boolean().default(DefaultLog).volatile(),

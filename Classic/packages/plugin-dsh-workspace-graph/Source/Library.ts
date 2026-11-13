@@ -61,10 +61,11 @@ import Adapter from "./Trace/Adapter.js";
  * THE CONSTRUCTOR: unwrap the volatile config cells, run the fail-loud validation
  * (`Function/Validate` - a bad config throws at construction, which is the class-form "at
  * load"), attach the `__workspaceGraphState` probe (the family's smoke seam), ledger the
- * byte-exact `graph: activated (domain=<domain>, languages=<n>)` line, fire the best-effort
+ * byte-exact mount line - `graph: activated (domain=<domain>, languages=<n>)` when enabled,
+ * the byte-exact `graph: disabled (enabled=false)` when not - fire the best-effort
  * storage-domain open (`Function/Open`) detached - its promise is kept on the state and
- * awaited by the async writers, so the store behavior is deterministic without a sleep - and,
- * when enabled, wire the TRACE ADAPTER (`Trace/Adapter`): the graph consumes `observe/stamp`
+ * awaited by the async writers, so the store behavior is deterministic without a sleep - and
+ * wire the TRACE ADAPTER (`Trace/Adapter`) on EVERY mount: the graph consumes `observe/stamp`
  * from the family's bus (`ctx.trace`, provided by the factory) instead of registering
  * `ctx.root.on("fs/observed")` directly, and emits `graph/indexed` / `graph/invalidated`. The
  * indexer is inferred from the bus - there is no separate process and no separate indexer
@@ -74,10 +75,13 @@ import Adapter from "./Trace/Adapter.js";
  * `workspaceGraph: WorkspaceGraph`, so `ctx.workspaceGraph` is a typed accessor (the brief's
  * section 4.3; the compile proof lives in the smoke).
  *
- * THE IDLE-FOREVER POSTURE: the plugin ships disabled (the schema default and the patch row);
- * with config `enabled=false` the service still registers, `indexFile` skips with the
- * byte-exact `skipped <path> (disabled)` line, and NO listener is wired (a disabled graph
- * hears nothing).
+ * THE LIVE DISABLED POSTURE: the plugin ships disabled (the schema default and the patch row);
+ * with config `enabled=false` the service still registers and the trace adapter still
+ * subscribes - the consumer answers at call time - the byte-exact `disabled (enabled=false)`
+ * mount line replaces the activation proof, `indexFile` skips with the byte-exact
+ * `skipped <path> (disabled)` line, and the enablement is read LIVE through `State.On` (the
+ * raw volatile cell, not the construction snapshot), so a flip acts on the very next call
+ * without a remount.
  */
 // The named TYPE exports (the consumer contract): the brief's section 4.3
 // schema, re-exported from the entry so consumers can import them instead of
@@ -110,7 +114,8 @@ export default class WorkspaceGraph extends Service {
 
 	constructor(Context: Context, Raw?: unknown) {
 		super(Context, "workspaceGraph");
-		const Plain = Unwrap(Raw ?? Definition({}));
+		const Source = (Raw ?? Definition({})) as Record<string, unknown>;
+		const Plain = Unwrap(Source);
 		// THE POLICY BLOCK (D6): the schema composes the shared block; the
 		// plain Configuration stays the frozen W1 table plus the two universal
 		// volatile ledger cells (no hidden knobs), so
@@ -121,10 +126,20 @@ export default class WorkspaceGraph extends Service {
 			(Plain["policy"] as Allowlist | undefined) ??
 			(Definition({}) as unknown as { policy: { get: () => Allowlist } }).policy.get();
 		const Config = ValidateFn(Plain as Record<string, unknown>);
+		// THE LIVE ENABLE CELL: the volatile cells are unwrapped into plain values once
+		// (Function/Unwrap), so `Config.enabled` is frozen at construction; the raw cell is
+		// kept as the live reader so a flip acts on the very next call (a hand-built plain
+		// config falls back to the snapshot value, still read at call time).
+		const Cell = Source["enabled"] as { get?: () => unknown } | undefined;
+		const On = (): boolean => {
+			const Value = Cell?.get?.() as boolean | undefined;
+			return typeof Value === "boolean" ? Value : Config.enabled;
+		};
 		this.State = {
 			Context,
 			Config,
 			Allow,
+			On,
 			Records: new Map(),
 			Revision: 0,
 			Domain: undefined,
@@ -139,14 +154,23 @@ export default class WorkspaceGraph extends Service {
 			Flush: Promise.resolve(),
 		};
 		(Context as { __workspaceGraphState?: State }).__workspaceGraphState = this.State;
-		Append(
-			this.State,
-			`activated (domain=${this.State.Config.domain}, languages=${this.State.Config.languages.length})`,
-		);
-		this.State.Opened = OpenStorage(this.State);
-		if (this.State.Config.enabled) {
-			Adapter(this.State);
+		// The durable mount line: the activation proof when enabled, the byte-exact
+		// disabled line when not ("did it activate" is answerable from the ledger alone).
+		switch (true) {
+			case On():
+				Append(
+					this.State,
+					`activated (domain=${this.State.Config.domain}, languages=${this.State.Config.languages.length})`,
+				);
+				break;
+			default:
+				Append(this.State, "disabled (enabled=false)");
 		}
+		this.State.Opened = OpenStorage(this.State);
+		// The trace adapter wires on EVERY mount (the live disabled posture): the
+		// consumer (`Trace/Consume`) answers the disabled posture at call time, so a
+		// flip acts without a remount.
+		Adapter(this.State);
 	}
 
 	/**

@@ -4,6 +4,7 @@ import {
   Finish,
   Ledger,
   LedgerLines,
+  LinesWith,
   Make,
   MakeCounter,
   Plugin,
@@ -44,9 +45,10 @@ const runTest = async () => {
         /^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] disabled \(enabled=false\)$/
       );
     });
-    Check(Count, "E2: the cold mount wires nothing - no root listener, no effect", () => {
-      assert.deepEqual(Run.RootNames, []);
-      assert.deepEqual(Run.Effects, []);
+    Check(Count, "E2: the cold mount wires the root listener and the storage effect", () => {
+      assert.deepEqual(Run.RootNames, ["fs/observed"]);
+      assert.deepEqual(Run.Effects, ["evidence-storage"]);
+      assert.ok(typeof Run.Listeners["fs/observed"] === "function");
     });
     Check(Count, "E2: the disabled service refuses loudly and invalidates nothing", () => {
       assert.throws(
@@ -54,6 +56,26 @@ const runTest = async () => {
         /evidence: service is disabled \(enabled=false\)/
       );
       assert.equal(Service.invalidate("x"), 0);
+    });
+    Check(Count, "E2: the disabled listener does nothing (no line, no write)", () => {
+      Run.Listeners["fs/observed"](
+        { displayPath: "/p/x.ts", targetKey: "/p/x.ts" },
+        { kind: "present", version: "2" },
+        void 0
+      );
+      assert.deepEqual(LinesWith(Run, "/p/x.ts"), []);
+      assert.deepEqual(LinesWith(Run, "validated"), []);
+      assert.deepEqual(Service.list(), []);
+    });
+    Check(Count, "E2: a flip to enabled acts on the very next call", () => {
+      Service.State.On = true;
+      const Record = Service.validate("a", "reality", "s", []);
+      assert.equal(Record.status, "fresh");
+      Service.State.On = false;
+      assert.throws(
+        () => Service.validate("b", "reality", "s", []),
+        /evidence: service is disabled \(enabled=false\)/
+      );
     });
   }
   {

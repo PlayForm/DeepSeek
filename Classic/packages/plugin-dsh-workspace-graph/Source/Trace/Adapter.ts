@@ -15,8 +15,10 @@ import Consume from "./Consume.js";
  *
  * @remarks
  *
- * Wired ONCE from the service constructor and ONLY when the graph is enabled at construction: a
- * disabled graph wires nothing at all (the IDLE-forever posture).
+ * Wired ONCE from the service constructor on EVERY mount: the consumer
+ * (`Trace/Consume`) answers the live disabled posture at call time, so a
+ * disabled graph subscribes but does nothing until a flip acts on the next
+ * stamp.
  *
  * THE BUS IS PROBED, NOT INJECTED: the service is provided by
  * `@playform/plugin-dsh-factory`, which the graph's package already depends on but does not

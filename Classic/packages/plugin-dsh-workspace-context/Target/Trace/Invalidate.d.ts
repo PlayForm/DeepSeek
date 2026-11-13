@@ -17,5 +17,9 @@ export default _default;
  *
  * Silent by design: the invalidation adds no ledger line (the module's
  * strings stay byte-exact); the trace ring is the evidence of the event.
+ *
+ * THE DISABLED ANSWER: the subscription is registered on every mount, and the
+ * consumer reads State.On at the moment of the event - when it is false the
+ * listener does nothing (no memo touch, no ledger line).
  */
 declare function _default(State: State, Envelope: Envelope): void;

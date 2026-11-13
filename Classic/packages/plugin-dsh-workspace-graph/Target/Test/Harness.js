@@ -302,7 +302,7 @@ if (InvokedDirectly) {
   Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
     assert.equal(1, 2);
   });
-  const Run = MakeGraph({ files: {} });
+  const Run = MakeGraph({ files: {}, enabled: true });
   Check(Count, "selfcheck: the fake ctx registers the service instance", () => {
     assert.equal(Run.provided["workspaceGraph"], Run.Graph);
     assert.equal(Run.Graph.name, "workspaceGraph");

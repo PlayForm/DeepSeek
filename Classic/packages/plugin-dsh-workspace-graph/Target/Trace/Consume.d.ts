@@ -12,8 +12,8 @@ export default _default;
  * It consumes `observe/stamp` and applies the same filter chain the `fs/observed` listener
  * applied:
  *
- * - a disabled graph (`enabled=false`) does nothing - the IDLE-forever posture (the adapter is
- *   not even wired when disabled);
+ * - a disabled graph (`enabled=false`) does nothing - the LIVE disabled posture (the adapter
+ *   is wired on every mount; the consumer reads `State.On` at the moment of the event);
  * - a foreign envelope or a malformed payload is caught and ledgered with the module's existing
  *   `failed <path> (<reason>)` line;
  * - a path matching an EXCLUDE pattern is ignored before any work;

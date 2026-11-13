@@ -44,10 +44,11 @@ const DefaultMapLimit = 12;
 const DefaultWorkspaceName = "workspace";
 
 export default Compose(false, {
-	// The MASTER SWITCH (volatile: a flip is read on the next mount): false =
-	// the cold mount logs `disabled (enabled=false)`, registers the service
-	// and registers no tool. Distinct from the shared `log` cell, which
-	// governs only the durable ledger file.
+	// The MASTER SWITCH (volatile: a flip is read on the very next call): false =
+	// the cold mount logs `disabled (enabled=false)` and every surface - the
+	// service, the trace adapter and the tool - still registers, answering at
+	// call time (the tool refuses; the listener does nothing). Distinct from
+	// the shared `log` cell, which governs only the durable ledger file.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// Ledger enabled - write the durable log file (volatile).
 	log: Schema.boolean().default(DefaultLog).volatile(),

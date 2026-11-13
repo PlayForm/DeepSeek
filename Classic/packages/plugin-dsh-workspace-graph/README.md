@@ -85,7 +85,8 @@ produces ONE byte-exact `graph: reindexed <path> (<status>)` line.
 An absent stamp, a removed record, and a replaced record emit `graph/invalidated`, while a stored
 record emits `graph/indexed`, which the consumers (the context packet memo) use.
 
-A disabled graph wires nothing, and an excluded path is ignored silently.
+A disabled graph subscribes but its consumer answers at call time (the live `State.On` read), so it
+does nothing until a flip acts on the very next stamp, and an excluded path is ignored silently.
 
 Records live in the KV facet through the storage domain (one record per path plus the `__meta`
 revision record in the `records` table of the domain named `Config.domain`, default
@@ -103,7 +104,11 @@ graph: workspace indexed <n> files (<indexed> indexed, <skipped> skipped, <faile
 graph: workspace capped at <maxFiles> files
 graph: reindexed <path> (<status>)
 graph: skipped <path> (disabled)
+graph: disabled (enabled=false)
 ```
+
+The last line is the disabled mount's ledger line - it replaces the
+`graph: activated (domain=<domain>, languages=<n>)` activation proof when the mount is disabled.
 
 ## The configuration
 

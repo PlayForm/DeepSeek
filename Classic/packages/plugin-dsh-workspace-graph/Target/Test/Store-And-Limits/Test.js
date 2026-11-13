@@ -151,9 +151,17 @@ const runTest = async () => {
       assert.ok(Run.loggerLines.includes(`graph: skipped ${Path} (disabled)`));
       assert.equal(Run.Graph.statistics().files, 0);
       assert.ok(
-        Run.loggerLines.includes("graph: activated (domain=workspace_graph, languages=3)"),
-        "the service still registers and announces itself"
+        Run.loggerLines.includes("graph: disabled (enabled=false)"),
+        "the mount line is the disabled line, not the activation proof"
       );
+    });
+    await CheckAsync(Count, "disabled: a flip acts on the very next call", async () => {
+      Run.State.On = () => true;
+      const Flipped = await Run.Graph.indexFile(Path);
+      assert.equal(Flipped.status, "indexed");
+      Run.State.On = () => false;
+      const Refused = await Run.Graph.indexFile(Path);
+      assert.equal(Refused.reason, "disabled");
     });
   }
   {

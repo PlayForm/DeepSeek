@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import {
   Check,
+  CheckAsync,
   Finish,
   Ledger,
   LedgerLines,
@@ -49,10 +50,30 @@ const runTest = async () => {
         /^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] disabled \(enabled=false\)$/
       );
     });
-    Check(Count, "E2: the cold mount registers no tool and touches no root seam", () => {
-      assert.equal(Run.Tools.length, 0);
+    Check(Count, "E2: the cold mount registers the tool and touches no root seam", () => {
+      assert.equal(Run.Tools.length, 1);
+      assert.equal(Run.Tools[0].name, "workspace_context");
       assert.equal(Run.RootNames.length, 0);
       assert.equal(Run.Effects.length, 0);
+    });
+    await CheckAsync(Count, "E2: the registered tool refuses at call time with no ledger write", async () => {
+      await assert.rejects(
+        Run.Tools[0].execute({}),
+        { message: "workspace_context: the context plugin is disabled (enabled=false)" }
+      );
+      assert.equal(LedgerWith("packet").length, 0);
+      assert.deepEqual(Run.Lines, ["context: disabled (enabled=false)"]);
+    });
+    await CheckAsync(Count, "E2: a flip to enabled acts on the very next call", async () => {
+      Service.State.On = true;
+      const Answer = await Run.Tools[0].execute({});
+      assert.ok(typeof Answer.text === "string" && Answer.text.length > 0);
+      assert.equal(typeof Answer.tokens, "number");
+      Service.State.On = false;
+      await assert.rejects(
+        Run.Tools[0].execute({}),
+        { message: "workspace_context: the context plugin is disabled (enabled=false)" }
+      );
     });
   }
   {

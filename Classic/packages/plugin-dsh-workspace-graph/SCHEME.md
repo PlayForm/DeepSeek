@@ -154,8 +154,9 @@ segment.
 
 ## 6.1 The trace adapter (the incremental wiring)
 
-It is registered ONCE from the constructor through `Trace/Adapter.ts` and ONLY when the graph is
-enabled at construction, so a disabled graph wires nothing.
+It is registered ONCE from the constructor on EVERY mount: the consumer (`Trace/Consume.ts`) reads
+the live `State.On` at the moment of each event, so a disabled graph subscribes but does nothing,
+and a flip acts on the very next stamp without a remount.
 
 The graph consumes `observe/stamp` from the family's trace bus (`ctx.trace`, provided by
 `@playform/plugin-dsh-factory`) instead of registering `ctx.root.on("fs/observed")` directly (D5:
@@ -241,6 +242,7 @@ when ahead.
 
 ```text
 graph: activated (domain=<domain>, languages=<n>)
+graph: disabled (enabled=false)
 graph: indexed <path> version <version> (<nodes> nodes, <edges> edges)
 graph: skipped <path> (<reason>)
 graph: failed <path> (<reason>)
@@ -250,6 +252,9 @@ graph: workspace indexed <n> files (<indexed> indexed, <skipped> skipped, <faile
 graph: workspace capped at <maxFiles> files
 graph: reindexed <path> (<status>)
 ```
+
+The first is the enabled mount's activation proof; `disabled (enabled=false)` replaces it on a
+disabled mount, and `skipped <path> (disabled)` is the per-op refusal under reason `disabled`.
 
 The last three are the INDEXING TRIGGER's lines, while the first four and the store line are the W1
 contract's.

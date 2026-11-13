@@ -56,6 +56,13 @@ export default interface State {
      */
     Allow: Allowlist;
     /**
+     * The LIVE enablement reader: the volatile `enabled` cell read at the moment of the
+     * call (the raw cell's `get`, or the plain snapshot's value for a hand-built config).
+     * Every disabled gate answers through this, never through the frozen `Config.enabled`,
+     * so a flip acts on the very next call without a remount.
+     */
+    On: () => boolean;
+    /**
      * The in-memory record mirror, keyed by the resolved display path.
      */
     Records: Map<string, Record>;

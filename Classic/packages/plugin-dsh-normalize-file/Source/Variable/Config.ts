@@ -64,10 +64,11 @@ const DefaultToolResultsExempt = [
 ];
 
 export default Compose(false, {
-	// The MASTER SWITCH (volatile: a flip is read on the next mount): false =
-	// the plugin appends `disabled (enabled=false)` to the ledger and
-	// registers nothing. Distinct from the shared `log` cell, which governs
-	// only the durable ledger file.
+	// The MASTER SWITCH (volatile: the running cells are refreshed in place,
+	// so a flip is read at the next CALL with no remount): false = the plugin
+	// appends `disabled (enabled=false)` to the ledger while every registered
+	// surface passes through silently. Distinct from the shared `log` cell,
+	// which governs only the durable ledger file.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// Ledger enabled - write the durable log file (volatile).
 	log: Schema.boolean().default(DefaultLog).volatile(),

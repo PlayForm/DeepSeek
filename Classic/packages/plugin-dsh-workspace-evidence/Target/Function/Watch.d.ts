@@ -33,5 +33,9 @@ export default _default;
  *   Function/Invalidate pass marks every dependent validation stale;
  * - the listener NEVER THROWS: the whole body is one try/catch - a malformed
  *   event is caught and ledgered as `failed <path> (<reason>)`.
+ *
+ * THE DISABLED ANSWER: the listener is wired on every mount, and State.On is
+ * read at the moment of the event - when it is false the listener does
+ * nothing at all (no line, no write), and a flip acts on the next event.
  */
 declare function _default(State: State, Target: FsTarget | undefined, Observation: FsObservation | undefined, Actor: object | undefined): void;

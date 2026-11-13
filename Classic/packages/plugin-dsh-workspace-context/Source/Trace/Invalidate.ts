@@ -19,9 +19,20 @@ import Contract from "./Contract.js";
  *
  * Silent by design: the invalidation adds no ledger line (the module's
  * strings stay byte-exact); the trace ring is the evidence of the event.
+ *
+ * THE DISABLED ANSWER: the subscription is registered on every mount, and the
+ * consumer reads State.On at the moment of the event - when it is false the
+ * listener does nothing (no memo touch, no ledger line).
  */
 export default (State: State, Envelope: Envelope): void => {
 	try {
+		switch (true) {
+			// The live disabled check: State.On is read at the moment of the
+			// call, never a captured boolean (the flip acts on the next event).
+			case State.On === false:
+				return;
+			default:
+		}
 		const Path = Contract(Envelope);
 		switch (true) {
 			case Path === undefined:

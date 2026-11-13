@@ -46,9 +46,10 @@ stable-until-event.
 The invalidation is the trace's (D5): the graph emits `graph/invalidated` when a record it held is
 replaced, removed, or observed absent.
 
-`Source/Trace/Adapter.ts` (wired from apply only after the enabled gate, disposed with the fiber)
-consumes it through `Source/Trace/Invalidate.ts`, which clears the memo wholesale (a packet may cite
-any path in FOCUS/NEIGHBORS/EVIDENCE).
+`Source/Trace/Adapter.ts` (wired from apply on every mount, disposed with the fiber) consumes it
+through `Source/Trace/Invalidate.ts`, which reads `State.On` at the moment of the event (a disabled
+listener does nothing) and clears the memo wholesale (a packet may cite any path in
+FOCUS/NEIGHBORS/EVIDENCE).
 
 The caller-focus tracker (`State.Focus`) is NOT touched, because the STALE contract is about the
 version the caller held, which an invalidation does not change.

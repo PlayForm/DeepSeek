@@ -16,8 +16,9 @@ import Invalidate from "./Invalidate.js";
  * probe-once `Seam` accessor (`ctx.get("trace")`), so a context without the
  * bus (a bare fixture) behaves exactly as before and subscribes to nothing.
  *
- * Wired from apply ONLY after the enabled gate (the IDLE-forever posture: a
- * disabled context wires nothing), and the subscription is registered on the
+ * Wired from apply on EVERY mount (the live disabled posture: the consumer
+ * answers the disabled posture at call time - `Trace/Invalidate` reads
+ * State.On when the event arrives), and the subscription is registered on the
  * fiber effect so an unload drops it.
  */
 export default (State: State): void => {

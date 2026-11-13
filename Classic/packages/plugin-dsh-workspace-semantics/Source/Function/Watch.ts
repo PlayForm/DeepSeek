@@ -36,6 +36,10 @@ import type State from "@Interface/State.js";
  * the listener NEVER THROWS: the whole body is one try/catch - a malformed
  *     event is caught and ledgered as `failed <path> (<reason>)`.
  * ```
+ *
+ * THE DISABLED ANSWER: the listener is wired on every mount, and State.On is
+ * read at the moment of the event - when it is false the listener does
+ * nothing at all (no line, no write), and a flip acts on the next event.
  */
 export default (
 	State: State,
@@ -51,6 +55,11 @@ export default (
 			: "unknown";
 	try {
 		switch (true) {
+			// The live disabled check: State.On is read at the moment of the
+			// event, never a captured boolean (a flip acts on the next event);
+			// a disabled listener does nothing - no line, no write.
+			case State.On === false:
+				return;
 			case typeof (Target as { displayPath?: unknown } | null)?.displayPath !== "string":
 				throw new Error("malformed event: displayPath is not a string");
 			default:

@@ -23,12 +23,13 @@ import { Activate } from "@playform/lib-dsh-core";
  * listener is the factory's Wire on the ROOT context - the invalidation seam.
  * The contract is EVIDENCE.md.
  *
- * THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default
- * and the bundle patch row). A cold mount logs `disabled (enabled=false)`,
- * registers the service (it answers honestly: a validate() fails loud with
- * `evidence: service is disabled (enabled=false)`, an invalidate() finds
- * nothing), and wires NOTHING - no listener, no storage effect, no events
- * consumed.
+ * THE LIVE DISABLED POSTURE: `enabled` defaults to false (the schema default
+ * and the bundle patch row). A cold mount logs `disabled (enabled=false)` and
+ * wires EVERY surface - the service (it answers honestly: a validate() fails
+ * loud with `evidence: service is disabled (enabled=false)`, an invalidate()
+ * finds nothing), the fs/observed listener and the storage effect - and each
+ * reads State.On at CALL time, so a flip acts on the very next call without a
+ * remount. The disabled listener does nothing (no line, no write).
  *
  * The function returns NOTHING (the loader contract: a returned value silently
  * kills event delivery). The test probe is the
@@ -97,16 +98,19 @@ export default (Context: Context, Options: Config): void => {
 	new ServiceClass(Context, State);
 	switch (true) {
 		case State.On === false:
-			// The cold mount: honest in the ledger, wired to nothing.
+			// The cold mount: honest in the ledger; every surface below still
+			// wires and answers at call time.
 			Factory.Append(State, "disabled (enabled=false)");
-			return;
+			break;
 		default:
+			// The activation proof (the module's own composed line).
+			Factory.Append(State, Activate([["domain", State.DomainName]]));
 	}
-	// The activation proof (the module's own composed line).
-	Factory.Append(State, Activate([["domain", State.DomainName]]));
 
 	// The fs/observed listener, on the ROOT context (the factory's Wire) -
-	// the invalidation seam: a changed path is an invalidation key.
+	// the invalidation seam. Wired on EVERY mount (the live disabled
+	// posture); the listener reads State.On when the event arrives and a
+	// disabled listener does nothing.
 	Factory.Wire(
 		Context,
 		State,
@@ -117,8 +121,9 @@ export default (Context: Context, Options: Config): void => {
 		) => Watch(State, Target, Observation, Actor),
 	);
 
-	// The own P5-style storage effect: probe `storageDomain` once, open the
-	// service's domain (never awaited - best-effort inside), close on dispose.
+	// The own P5-style storage effect (registered on EVERY mount): probe
+	// `storageDomain` once, open the service's domain (never awaited -
+	// best-effort inside), close on dispose.
 	Context.effect?.(() => {
 		const Facility = Context.get?.("storageDomain");
 		switch (true) {

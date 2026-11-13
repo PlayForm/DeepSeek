@@ -1,6 +1,6 @@
 # Entry-And-Contract - the loader contract and the mount
 
-This folder covers the object-form loader contract and the IDLE-forever posture: the default object, the cold mount, the fail-loud validation, and the enabled mount.
+This folder covers the object-form loader contract and the live disabled posture: the default object, the cold mount, the fail-loud validation, and the enabled mount.
 
 ## Scenarios
 
@@ -10,7 +10,11 @@ This folder covers the object-form loader contract and the IDLE-forever posture:
 - E2: the cold mount (enabled=false): apply returns nothing, the service
   is still provided (name `workspaceContext`), the byte-exact
   `context: disabled (enabled=false)` line (logger AND durable `[ISO]`
-  file), no tool, no root seam, no effect.
+  file), the `workspace_context` tool REGISTERED (no root seam, no effect),
+  the tool refusing at call time with the byte-exact
+  `workspace_context: the context plugin is disabled (enabled=false)` and no
+  ledger write, and a flip to enabled acting on the very next call (the
+  packet builds) and a flip back refusing again.
 - E3: the fail-loud validation - five invalid configs throw at load (four
   with the byte-exact `context: ` messages; a non-array `lenses` is caught
   earlier by the schema itself: `$.lenses expected array but got nope`).
@@ -29,4 +33,4 @@ The harness is the shared Harness: a fake ctx with a DISTINCT root object, the r
 
 ## Expected count
 
-14 PASS.
+16 PASS.

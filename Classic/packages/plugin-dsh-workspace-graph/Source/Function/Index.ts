@@ -42,7 +42,10 @@ export default async (StateRef: State, Path: string): Promise<Outcome> => {
 		return { path: Key, status: "failed", nodes: 0, edges: 0, reason: Reason };
 	};
 	try {
-		if (StateRef.Config.enabled === false) {
+		// The live disabled gate: State.On reads the volatile cell at the
+		// moment of the call (never the construction snapshot), so a flip
+		// acts on the very next indexFile. The refusal line stays byte-exact.
+		if (StateRef.On() === false) {
 			return Skip("disabled");
 		}
 		for (const Pattern of StateRef.Config.exclude) {

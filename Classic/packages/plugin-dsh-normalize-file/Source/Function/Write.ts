@@ -102,6 +102,15 @@ ${value.changed ? `Normalized ${value.count} character(s)` : "Already normalized
 					: { changed: false, path: value.path },
 		},
 		async execute(args, exec) {
+			// The call-time master switch: a disabled plugin answers the
+			// documented no-op - the same unchanged `changed:false` result the
+			// files-scope-off gate below returns, no resolve, no read, no
+			// write, no ledger line. State.On is read at the moment of the
+			// call, so a volatile flip acts on the very next call in both
+			// directions.
+			if (State.On === false) {
+				return { path: args.file_path, count: 0, changed: false };
+			}
 			// The FILES scope gate (the granular scope control): when
 			// `scopes.files` is off, the tool is a true no-op — the unchanged
 			// `changed:false` result, no resolve, no read, no write, no ledger

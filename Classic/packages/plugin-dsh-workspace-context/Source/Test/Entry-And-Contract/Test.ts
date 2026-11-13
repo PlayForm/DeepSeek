@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import {
 	Check,
+	CheckAsync,
 	Finish,
 	Ledger,
 	LedgerLines,
@@ -16,15 +17,17 @@ import {
 /**
  * @module Test
  *
- * The loader contract and the mount: the default object's four exports, the IDLE-forever cold
- * mount, the enabled mount, the fail-loud validation and the durable ledger forms.
+ * The loader contract and the mount: the default object's four exports, the live
+ * disabled cold mount, the enabled mount, the fail-loud validation and the durable ledger forms.
  *
  * @remarks
  *
  * The default object carries name/apply/Config/inject, the ONLY named exports - apply alone never
- * catches a missing inject. The cold mount is IDLE-forever with the byte-exact disabled line and
- * no tool. The enabled mount registers the service and the tool with the byte-exact activation
- * line. The fail-loud validation throws at load, and the durable ledger carries the `[ISO]` forms.
+ * catches a missing inject. The cold mount is the LIVE disabled posture: the byte-exact disabled
+ * line, the service still answering honestly, and the tool registered but refusing at call time
+ * with no ledger write (a flip acts on the very next call). The enabled mount registers the
+ * service and the tool with the byte-exact activation line. The fail-loud validation throws at
+ * load, and the durable ledger carries the `[ISO]` forms.
  */
 /**
  * A fresh run with an empty ledger.
@@ -51,7 +54,8 @@ export const runTest = async (): Promise<number> => {
 		assert.equal(Knobs.logFile.get(), "~/.dsh/playform/plugin-dsh-workspace-context.log");
 	});
 
-	// Group E2: the cold mount (the IDLE-forever posture).
+	// Group E2: the cold mount (the live disabled posture: every surface
+	// registers, each answers at call time).
 	{
 		const Run = Setup({ enabled: false });
 		const Service = Run.Provided.workspaceContext;
@@ -71,10 +75,30 @@ export const runTest = async (): Promise<number> => {
 				/^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] disabled \(enabled=false\)$/,
 			);
 		});
-		Check(Count, "E2: the cold mount registers no tool and touches no root seam", () => {
-			assert.equal(Run.Tools.length, 0);
+		Check(Count, "E2: the cold mount registers the tool and touches no root seam", () => {
+			assert.equal(Run.Tools.length, 1);
+			assert.equal(Run.Tools[0].name, "workspace_context");
 			assert.equal(Run.RootNames.length, 0);
 			assert.equal(Run.Effects.length, 0);
+		});
+		await CheckAsync(Count, "E2: the registered tool refuses at call time with no ledger write", async () => {
+			await assert.rejects(
+				Run.Tools[0].execute({}),
+				{ message: "workspace_context: the context plugin is disabled (enabled=false)" },
+			);
+			assert.equal(LedgerWith("packet").length, 0);
+			assert.deepEqual(Run.Lines, ["context: disabled (enabled=false)"]);
+		});
+		await CheckAsync(Count, "E2: a flip to enabled acts on the very next call", async () => {
+			Service.State.On = true;
+			const Answer = await Run.Tools[0].execute({});
+			assert.ok(typeof Answer.text === "string" && Answer.text.length > 0);
+			assert.equal(typeof Answer.tokens, "number");
+			Service.State.On = false;
+			await assert.rejects(
+				Run.Tools[0].execute({}),
+				{ message: "workspace_context: the context plugin is disabled (enabled=false)" },
+			);
 		});
 	}
 

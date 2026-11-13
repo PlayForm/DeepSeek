@@ -133,10 +133,17 @@ export default (Context: Context, State: State) => {
 	const AsWritten = (
 		Content: string,
 		Normalize: boolean | string | string[] | null | undefined,
-	): string =>
+	): string => {
+		// The call-time master switch: a disabled plugin writes VERBATIM
+		// (the card and the file can never disagree), whatever the per-call
+		// selection - reading State.On at the moment of the call.
+		if (State.On === false) {
+			return Content;
+		}
 		// An absent flag reaches Rewrite as an explicit undefined - which the
 		// chain resolves to the verbatim branch (no default-parameter coercion).
-		Rewrite(Content, State.Replacement, Normalize === undefined ? false : Normalize);
+		return Rewrite(Content, State.Replacement, Normalize === undefined ? false : Normalize);
+	};
 
 	return defineTool({
 		name: "raw-write",
@@ -200,6 +207,28 @@ ${value.operation === "create" ? "Created" : "Updated"} file
 			],
 		},
 		async execute(args, exec) {
+			// The call-time master switch: a disabled plugin PASSES THROUGH -
+			// the write runs VERBATIM through the shared executor (no family
+			// transform, no governance chain, no govern marker on the actor),
+			// with ZERO ledger lines from this module. State.On is read at the
+			// moment of the call, so a volatile flip acts on the very next
+			// write in both directions.
+			if (State.On === false) {
+				const target = await Context.fs.resolve(args.file_path, {
+					signal: exec.signal,
+				});
+				const outcome = await State.Factory.Write(State, target, args.content, {
+					signal: exec.signal,
+					actor: exec,
+					policy: "standing",
+				});
+				return {
+					path: target.displayPath,
+					operation: outcome.operation,
+					before: outcome.before,
+					after: outcome.after,
+				};
+			}
 			// The caller-side resolve; the executor owns the rest of the pipeline.
 			const target = await Context.fs.resolve(args.file_path, {
 				signal: exec.signal,

@@ -1,5 +1,15 @@
 import assert from "node:assert/strict";
-import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm, Validate } from "../Harness.js";
+import {
+  Check,
+  CheckAsync,
+  Finish,
+  Furnace,
+  Ledger,
+  Make,
+  MakeCounter,
+  rm,
+  Validate
+} from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   rm();
@@ -206,15 +216,105 @@ const runTest = async () => {
       }
     }
     {
-      const Sub = "disabled run: no activation line, no listeners, no command";
+      const Sub = "disabled run: the listeners and the command ARE registered (no activation line)";
       {
         Check(Count, Sub, () => {
           assert.ok(
-            !RunD.Lines.some((L) => L.includes("activated (")) && RunD.Listeners["llm/stream"] === void 0 && RunD.Listeners["tools/post-execute"] === void 0 && RunD.Listeners["agent/pre-step"] === void 0 && RunD.CommandsRegistered.length === 0,
-            "disabled run: no activation line, no listeners, no command"
+            !RunD.Lines.some((L) => L.includes("activated (")) && RunD.Listeners["llm/stream"] !== void 0 && RunD.Listeners["tools/post-execute"] !== void 0 && RunD.Listeners["agent/pre-step"] !== void 0 && RunD.CommandsRegistered.length === 1,
+            "disabled run: the listeners and the command ARE registered (no activation line)"
           );
         });
       }
+    }
+    {
+      const Sub = "disabled run: a stream call passes through with zero new ledger lines";
+      await CheckAsync(Count, Sub, async () => {
+        const Before = RunD.Lines.length;
+        const Chunk = { type: "text-delta", index: 0, text: "a - b" };
+        const Out = [];
+        for await (const C of RunD.Listeners["llm/stream"](
+          Object.freeze({}),
+          () => (async function* () {
+            yield Chunk;
+          })()
+        )) {
+          Out.push(C);
+        }
+        assert.ok(
+          Out.length === 1 && Out[0] === Chunk && RunD.Lines.length === Before,
+          "disabled run: a stream call passes through with zero new ledger lines"
+        );
+      });
+    }
+    {
+      const Sub = "disabled run: a post-execute call passes through with zero new ledger lines";
+      await CheckAsync(Count, Sub, async () => {
+        const Before = RunD.Lines.length;
+        const Decision = { kind: "success" };
+        const Out = await RunD.Listeners["tools/post-execute"](
+          { name: "read", callId: "d1", arguments: {} },
+          Decision,
+          async () => Decision
+        );
+        assert.ok(
+          Out === Decision && RunD.Lines.length === Before,
+          "disabled run: a post-execute call passes through with zero new ledger lines"
+        );
+      });
+    }
+    {
+      const Sub = "disabled run: a pre-step call passes through with zero new ledger lines";
+      await CheckAsync(Count, Sub, async () => {
+        const Before = RunD.Lines.length;
+        const Decision = { kind: "success" };
+        const Out = await RunD.Listeners["agent/pre-step"]({}, async () => Decision);
+        assert.ok(
+          Out === Decision && RunD.Lines.length === Before,
+          "disabled run: a pre-step call passes through with zero new ledger lines"
+        );
+      });
+    }
+    {
+      const Sub = "disabled run: a live flip ON starts normalizing on the next stream call (no remount)";
+      await CheckAsync(Count, Sub, async () => {
+        RunD.State.On = true;
+        const Out = [];
+        for await (const C of RunD.Listeners["llm/stream"](
+          Object.freeze({}),
+          () => (async function* () {
+            yield { type: "text-delta", index: 0, text: "a \u2026 b" };
+          })()
+        )) {
+          Out.push(C);
+        }
+        assert.ok(
+          Out.length === 1 && Out[0].text === "a ... b" && RunD.Lines.some(
+            (L) => L.includes("normalized 1 ellipsis char(s) in one stream")
+          ),
+          "disabled run: a live flip ON starts normalizing on the next stream call (no remount)"
+        );
+      });
+    }
+    {
+      const Sub = "disabled run: a live flip OFF passes through again with zero new ledger lines";
+      await CheckAsync(Count, Sub, async () => {
+        RunD.State.On = false;
+        const Before = RunD.Lines.length;
+        const Chunk = { type: "text-delta", index: 0, text: "a - b" };
+        const Out = [];
+        for await (const C of RunD.Listeners["llm/stream"](
+          Object.freeze({}),
+          () => (async function* () {
+            yield Chunk;
+          })()
+        )) {
+          Out.push(C);
+        }
+        assert.ok(
+          Out.length === 1 && Out[0] === Chunk && RunD.Lines.length === Before,
+          "disabled run: a live flip OFF passes through again with zero new ledger lines"
+        );
+      });
     }
   }
   return Finish(Count, "Config-And-State");

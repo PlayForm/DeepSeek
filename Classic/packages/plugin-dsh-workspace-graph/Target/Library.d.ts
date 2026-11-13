@@ -43,10 +43,11 @@ import Version from "./Variable/Version.js";
  * THE CONSTRUCTOR: unwrap the volatile config cells, run the fail-loud validation
  * (`Function/Validate` - a bad config throws at construction, which is the class-form "at
  * load"), attach the `__workspaceGraphState` probe (the family's smoke seam), ledger the
- * byte-exact `graph: activated (domain=<domain>, languages=<n>)` line, fire the best-effort
+ * byte-exact mount line - `graph: activated (domain=<domain>, languages=<n>)` when enabled,
+ * the byte-exact `graph: disabled (enabled=false)` when not - fire the best-effort
  * storage-domain open (`Function/Open`) detached - its promise is kept on the state and
- * awaited by the async writers, so the store behavior is deterministic without a sleep - and,
- * when enabled, wire the TRACE ADAPTER (`Trace/Adapter`): the graph consumes `observe/stamp`
+ * awaited by the async writers, so the store behavior is deterministic without a sleep - and
+ * wire the TRACE ADAPTER (`Trace/Adapter`) on EVERY mount: the graph consumes `observe/stamp`
  * from the family's bus (`ctx.trace`, provided by the factory) instead of registering
  * `ctx.root.on("fs/observed")` directly, and emits `graph/indexed` / `graph/invalidated`. The
  * indexer is inferred from the bus - there is no separate process and no separate indexer
@@ -56,10 +57,13 @@ import Version from "./Variable/Version.js";
  * `workspaceGraph: WorkspaceGraph`, so `ctx.workspaceGraph` is a typed accessor (the brief's
  * section 4.3; the compile proof lives in the smoke).
  *
- * THE IDLE-FOREVER POSTURE: the plugin ships disabled (the schema default and the patch row);
- * with config `enabled=false` the service still registers, `indexFile` skips with the
- * byte-exact `skipped <path> (disabled)` line, and NO listener is wired (a disabled graph
- * hears nothing).
+ * THE LIVE DISABLED POSTURE: the plugin ships disabled (the schema default and the patch row);
+ * with config `enabled=false` the service still registers and the trace adapter still
+ * subscribes - the consumer answers at call time - the byte-exact `disabled (enabled=false)`
+ * mount line replaces the activation proof, `indexFile` skips with the byte-exact
+ * `skipped <path> (disabled)` line, and the enablement is read LIVE through `State.On` (the
+ * raw volatile cell, not the construction snapshot), so a flip acts on the very next call
+ * without a remount.
  */
 export type { default as Node } from "./Interface/Node.js";
 export type { default as Edge } from "./Interface/Edge.js";
