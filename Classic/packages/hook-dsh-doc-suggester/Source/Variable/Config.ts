@@ -26,8 +26,9 @@ import Defaults from "./Weights.js";
  * matching the tool-coach's posture. There is no structural knob: the pack is an explicit
  * repo/user file resolved per call, never a config path.
  */
-const DefaultLogFile = "~/.dsh/playform/hook-dsh-doc-suggester.log";
 const DefaultEnabled = true;
+const DefaultLog = true;
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-doc-suggester.log";
 const DefaultThreshold = 0.75;
 const DefaultTools = ["read", "grep", "glob", "write", "edit", "raw-write"];
 const DefaultMaxCompanions = 7;
@@ -40,11 +41,15 @@ const DefaultLearnWindow = 3;
 const DefaultStoreLimit = 512;
 
 export default Compose(false, {
+	// The master switch (volatile): false appends `disabled (enabled=false)`
+	// and every listener passes through - distinct from the shared `log`
+	// cell, which governs only the durable ledger file.
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
 	// Ledger file - the doc suggester's ledger, SEPARATE from the family's
 	// logs (one log per module) - volatile: hot-editable without remounting.
 	logFile: Schema.string().default(DefaultLogFile).volatile(),
-	// The master switch (volatile): false mutes every listener to a passthrough.
-	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The confidence gate (volatile); the pack's per-family thresholds override.
 	threshold: Schema.number().default(DefaultThreshold).volatile(),
 	// The judged doc-task tools (volatile): the read/search calls that touch

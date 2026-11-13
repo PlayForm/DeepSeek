@@ -15,10 +15,10 @@
 # app is restarted (bundle layers compose at host boot). A file: dependency
 # alone is NOT activation.
 #
-# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and the FULL
-# Config defaults as the row - the plugin never appears in the profile's
-# bundles and enables only by an explicit ACTIVATE (the user edits the
-# profile and restarts). With config enabled=false the mutating operations
+# THE SHIPPED POSTURE: this entry ships with enabled: true (installing the
+# plugin yields an enabled plugin) and the FULL Config defaults as the row - a
+# profile turns it off with `enabled: false`. With config enabled=false the
+# mutating operations
 # (indexFile, indexWorkspace) skip with the byte-exact
 # `graph: skipped <path> (disabled)` ledger line while the service itself
 # still registers, and NO trace adapter is wired (the graph subscribes to
@@ -41,7 +41,9 @@
       - id: plugin-dsh-workspace-graph
         name: "@playform/plugin-dsh-workspace-graph"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ""
             policy:
                 read: auto
                 index: auto

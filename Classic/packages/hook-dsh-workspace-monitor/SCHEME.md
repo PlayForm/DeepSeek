@@ -4,8 +4,9 @@ The configuration schema follows (all knobs are volatile, and hot edits commit w
 
 | Field             | Type              | Default                                              |
 | ----------------- | ----------------- | ---------------------------------------------------- |
+| `enabled`         | boolean           | `true`                                               |
+| `log`             | boolean           | `true`                                               |
 | `logFile`         | string            | `~/.dsh/playform/hook-dsh-workspace-monitor.log`     |
-| `enabled`         | boolean           | `false`                                              |
 | `domain`          | string            | `workspace_monitor`                                  |
 | `debounceMs`      | number            | `250`                                                |
 | `sweepIntervalMs` | number            | `600000` (0 = sweep at every checkpoint)             |

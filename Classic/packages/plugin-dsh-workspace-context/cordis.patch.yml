@@ -17,11 +17,11 @@
 # app is restarted (bundle layers compose at host boot). A file: dependency
 # alone is NOT activation.
 #
-# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
-# else - the plugin never appears in the profile's bundles and enables only
-# by an explicit ACTIVATE (the user edits the profile and restarts). On a
-# cold mount the State build logs `disabled (enabled=false)`, the service is
-# registered, and no tool is. The schema defaults are the truth; the full
+# THE SHIPPED POSTURE: this entry ships with enabled: true (installing the
+# plugin yields an enabled plugin), log: true and the ledger path - a profile
+# turns it off with `enabled: false`. On a disabled mount the State build
+# logs `disabled (enabled=false)`, the service is registered, and no tool is.
+# The schema defaults are the truth; the full
 # default surface (budgetTokens 2000, budgetMaximum 4000, the three lenses,
 # lensDefault code, neighborLimit 20, evidenceLimit 12, mapLimit 12,
 # workspaceName workspace) lives in the Variable/Config.ts schema. EVERY
@@ -38,7 +38,9 @@
       - id: plugin-dsh-workspace-context
         name: "@playform/plugin-dsh-workspace-context"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ~/.dsh/playform/plugin-dsh-workspace-context.log
             policy:
                 read: auto
                 index: auto

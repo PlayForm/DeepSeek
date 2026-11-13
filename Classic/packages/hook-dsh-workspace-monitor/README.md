@@ -32,8 +32,8 @@ with **no real timers**.
   (events, sweeps, last sweep stamp) live on the state probed as
   `ctx.__hookDshWorkspaceMonitorState`.
 
-The plugin ships **disabled** (the IDLE-forever posture), so it never appears in the profile's
-bundles and enables only by an explicit ACTIVATE.
+The plugin ships **enabled** (installing it yields an enabled plugin); the profile may turn it off
+with `enabled: false`.
 
 ## The surfaces
 
@@ -54,7 +54,7 @@ The health and performance counters (events, sweeps, last sweep stamp) live on t
 
 | Field             | Default                                          | Meaning                              |
 | ----------------- | ------------------------------------------------ | ------------------------------------ |
-| `enabled`         | `false`                                          | the master switch (IDLE-forever)     |
+| `enabled`         | `true`                                           | the master switch (ships enabled)    |
 | `log`             | `true`                                           | the ledger switch (shared cell)      |
 | `logFile`         | `~/.dsh/playform/hook-dsh-workspace-monitor.log` | the ledger                           |
 | `domain`          | `workspace_monitor`                              | the KV domain name                   |

@@ -17,7 +17,9 @@ Everything below is what the code does today, and nothing else is claimed.
 
 | Field           | Type                         | Default                                         |
 | --------------- | ---------------------------- | ----------------------------------------------- |
-| enabled         | boolean                      | false                                           |
+| enabled         | boolean                      | true                                            |
+| log             | boolean                      | true                                            |
+| logFile         | string                       | `""` (empty = the logger is the only surface)   |
 | domain          | string                       | `workspace_graph`                               |
 | languages       | array of the three languages | all three                                       |
 | include         | array of glob strings        | []                                              |
@@ -59,8 +61,9 @@ batch commit, no spawn), so the block documents the posture and refuses nothing.
 The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved
 pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
-The plain `Configuration` keeps the frozen W1 table (no hidden knobs), and the block rides from the
-schema straight onto `State.Allow` in the constructor.
+The plain `Configuration` keeps the frozen W1 table plus the two universal volatile ledger cells
+(`log`, `logFile`; no hidden knobs), and the block rides from the schema straight onto `State.Allow`
+in the constructor.
 
 No new ledger line exists, because the package has no gated action.
 
@@ -256,5 +259,6 @@ the walk stopped at the bound, and `reindexed` is emitted once per fs/observed r
 status `indexFile` reported.
 
 Every line goes through the module's own Append: logger first (`graph: <message>`), then the durable
-ledger file (`[ISO] graph: <message>`) when the internal `State.Ledger` seam is set, because the
-frozen config table has no ledger knob and the logger is the default surface.
+ledger file (`[ISO] graph: <message>`) when the internal `State.Ledger` seam is set - config
+`logFile` names the path and config `log` gates it, and the empty default keeps the logger as the
+default surface.

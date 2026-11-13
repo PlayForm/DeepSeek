@@ -17,6 +17,12 @@
  */
 export default interface Config {
 	/**
+	 * Master switch - when false, the hook logs `disabled (enabled=false)` and every listener
+	 * passes through (volatile).
+	 */
+	enabled: boolean;
+
+	/**
 	 * Ledger enabled - write the durable log file (volatile).
 	 */
 	log: boolean;
@@ -25,12 +31,6 @@ export default interface Config {
 	 * Ledger file - the hook's own ledger, separate from the family's logs (volatile).
 	 */
 	logFile: string;
-
-	/**
-	 * Master switch - when false, the hook logs `disabled (enabled=false)` and every listener
-	 * passes through (volatile).
-	 */
-	enabled: boolean;
 
 	/**
 	 * The default confidence gate (volatile; the pack's per-intent thresholds may raise it).

@@ -39,9 +39,9 @@ algebra of section 3).
 
 | Field             | Type     | Default                                                                   | Volatile | Meaning                                                              |
 | ----------------- | -------- | ------------------------------------------------------------------------- | -------- | -------------------------------------------------------------------- |
+| `enabled`         | boolean  | `true` (patch ships `false`)                                              | yes      | The master switch                                                    |
 | `log`             | boolean  | `true`                                                                    | yes      | Ledger enabled                                                       |
 | `logFile`         | string   | `~/.dsh/playform/hook-dsh-edit-suggester.log`                             | yes      | The suggester's own ledger (one log per module)                      |
-| `enabled`         | boolean  | `true` (patch ships `false`)                                              | yes      | The master switch                                                    |
 | `threshold`       | number   | `0.75`                                                                    | yes      | The default confidence gate (a family's own threshold may raise it)  |
 | `tools`           | string[] | `["write","edit","raw-write"]`                                            | yes      | The judged modification tools                                        |
 | `maxCompanions`   | number   | `7`                                                                       | yes      | Maximum companions in one note, and the `Adjacent` limit             |

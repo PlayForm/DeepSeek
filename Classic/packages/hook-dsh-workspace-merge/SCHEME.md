@@ -62,13 +62,14 @@ pack's `policy` section overrides the defaults per action (the wiring is the nex
 
 | Field           | Type                              | Default                                        |
 | --------------- | --------------------------------- | ---------------------------------------------- |
-| `enabled`       | boolean                           | `false`                                        |
+| `enabled`       | boolean                           | `true`                                         |
+| `log`           | boolean                           | `true`                                         |
+| `logFile`       | string                            | `~/.dsh/playform/hook-dsh-workspace-merge.log` |
 | `domain`        | string                            | `workspace_merge`                              |
 | `mode`          | `"all-or-nothing" \| "survivors"` | `all-or-nothing`                               |
 | `maxFiles`      | number                            | `50`                                           |
 | `maxTotalBytes` | number                            | `1000000`                                      |
 | `policy`        | `Allowlist`                       | the D6 defaults (see above)                    |
-| `logFile`       | string                            | `~/.dsh/playform/hook-dsh-workspace-merge.log` |
 
 All volatile.
 

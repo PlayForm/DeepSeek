@@ -79,10 +79,10 @@ export default async (
 	}
 	switch (true) {
 		case OK:
-			State.Factory.Append(State, `update: DONE - pins bumped per policy`);
+			State.Factory.Append(State, `update: DONE — pins bumped per policy`);
 			return 0;
 		default:
-			State.Factory.Append(State, `update: FAILED - see lines above`);
+			State.Factory.Append(State, `update: FAILED — see lines above`);
 			return 1;
 	}
 };

@@ -44,12 +44,18 @@ export const runTest = async (): Promise<number> => {
 	{
 		const Loader = await import("../../../Target/Library.js");
 		rm();
-		const Run = Make(Validate({ logFile: Ledger }));
+		const Run = Make(Validate({ logFile: Ledger, enabled: false }));
 		Check(Count, "W1: the default object carries name/apply/Config/inject", () => {
 			assert.equal(Loader.default.name, "plugin-dsh-workspace-semantics");
 			assert.equal(Loader.default.apply, Loader.apply);
 			assert.ok(Loader.default.Config !== undefined);
 			assert.deepEqual(Loader.default.inject, ["pluginFactory", "fs"]);
+		});
+		Check(Count, "W1: the schema fills the Config base (enabled, log, logFile)", () => {
+			const Knobs = Validate({});
+			assert.equal(Knobs.enabled.get(), true);
+			assert.equal(Knobs.log.get(), true);
+			assert.equal(Knobs.logFile.get(), "~/.dsh/playform/plugin-dsh-workspace-semantics.log");
 		});
 		Check(Count, "W1: apply returns NOTHING and the service is still provided", () => {
 			assert.equal(Run.Returned, undefined);

@@ -12,6 +12,14 @@ export default interface Config {
      */
     enabled: boolean;
     /**
+     * Ledger enabled - write the durable log file (the shared `log` cell).
+     */
+    log: boolean;
+    /**
+     * The hook's own ledger file (one log per module).
+     */
+    logFile: string;
+    /**
      * The hook's own KV domain name.
      */
     domain: string;
@@ -37,8 +45,4 @@ export default interface Config {
      * section overrides it per action.
      */
     policy: Allowlist;
-    /**
-     * The hook's own ledger file (one log per module).
-     */
-    logFile: string;
 }

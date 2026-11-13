@@ -2,15 +2,15 @@
 
 The config surface below has all fields volatile, and the schema defaults are the truth.
 
-| Field            | Type      | Default                                             | Meaning                                                |
-| ---------------- | --------- | --------------------------------------------------- | ------------------------------------------------------ |
-| `log`            | boolean   | `true`                                              | Ledger enabled - write the durable log file.           |
-| `logFile`        | string    | `~/.dsh/playform/plugin-dsh-workspace-evidence.log` | The module's own ledger.                               |
-| `enabled`        | boolean   | `false`                                             | The master switch - the IDLE-forever posture.          |
-| `domain`         | string    | `workspace_evidence`                                | The KV domain name.                                    |
-| `maxValidations` | number    | `512`                                               | The store bound (superseded evict first, then oldest). |
-| `exclude`        | string[]  | `["node_modules/**", "**/Target/**", "**/.git/**"]` | Paths whose events trigger no invalidation.            |
-| `policy`         | Allowlist | the D6 block (see below)                            | The per-action allowlist (the shared factory block).   |
+| Field            | Type      | Default                                             | Meaning                                                                          |
+| ---------------- | --------- | --------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `enabled`        | boolean   | `true`                                              | The master switch - ships enabled; a profile turns it off with `enabled: false`. |
+| `log`            | boolean   | `true`                                              | Ledger enabled - write the durable log file.                                     |
+| `logFile`        | string    | `~/.dsh/playform/plugin-dsh-workspace-evidence.log` | The module's own ledger.                                                         |
+| `domain`         | string    | `workspace_evidence`                                | The KV domain name.                                                              |
+| `maxValidations` | number    | `512`                                               | The store bound (superseded evict first, then oldest).                           |
+| `exclude`        | string[]  | `["node_modules/**", "**/Target/**", "**/.git/**"]` | Paths whose events trigger no invalidation.                                      |
+| `policy`         | Allowlist | the D6 block (see below)                            | The per-action allowlist (the shared factory block).                             |
 
 ## The policy block (D6)
 

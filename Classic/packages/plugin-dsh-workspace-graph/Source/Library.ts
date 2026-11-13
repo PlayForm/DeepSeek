@@ -112,22 +112,27 @@ export default class WorkspaceGraph extends Service {
 		super(Context, "workspaceGraph");
 		const Plain = Unwrap(Raw ?? Definition({}));
 		// THE POLICY BLOCK (D6): the schema composes the shared block; the
-		// plain Configuration stays the frozen W1 table (no hidden knobs), so
+		// plain Configuration stays the frozen W1 table plus the two universal
+		// volatile ledger cells (no hidden knobs), so
 		// the block rides straight onto State.Allow (the family convention). A
 		// raw config that bypasses the schema falls back to the schema's own
 		// defaults.
 		const Allow =
 			(Plain["policy"] as Allowlist | undefined) ??
 			(Definition({}) as unknown as { policy: { get: () => Allowlist } }).policy.get();
+		const Config = ValidateFn(Plain as Record<string, unknown>);
 		this.State = {
 			Context,
-			Config: ValidateFn(Plain as Record<string, unknown>),
+			Config,
 			Allow,
 			Records: new Map(),
 			Revision: 0,
 			Domain: undefined,
 			Opened: undefined,
-			Ledger: "",
+			// The ledger seam: config `log` gates the durable file, config
+			// `logFile` names it; the empty default keeps the logger as the
+			// only surface (the schema's own default).
+			Ledger: Config.log ? Config.logFile : "",
 			Invalid: 0,
 			SkippedImports: 0,
 			Loop: undefined,

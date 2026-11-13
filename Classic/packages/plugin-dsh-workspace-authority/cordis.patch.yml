@@ -16,17 +16,17 @@
 # dsh.profile.bundles AND the app is restarted (bundle layers compose at host
 # boot). A file: dependency alone is NOT activation.
 #
-# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
-# else - the plugin never appears in the profile's bundles and enables only by
-# an explicit ACTIVATE. On a cold mount the State build logs `disabled
-# (enabled=false)`; the workspaceAuthority service still registers and reads
-# honestly from the empty state, but grants, leases and evictions are refused
-# with a byte-stable `refused ... (the authority is disabled)` line until
-# enabled. The schema defaults are the truth; the full default surface (the
-# default lease TTL, the per-holder ceilings, the revocation grace and the
-# policy table) lives in the Variable/Config.ts schema. Every knob is a
-# volatile cell (hot-editable without remounting); a policy edit lands on the
-# next eviction pass.
+# THE SHIPPED POSTURE: this entry ships with enabled: true (installing the
+# plugin yields an enabled plugin), log: true and the ledger path - a profile
+# turns it off with `enabled: false`. On a disabled mount the State build logs
+# `disabled (enabled=false)`; the workspaceAuthority service still registers
+# and reads honestly from the empty state, but grants, leases and evictions
+# are refused with a byte-stable `refused ... (the authority is disabled)`
+# line while disabled. The schema defaults are the truth; the full default
+# surface (the default lease TTL, the per-holder ceilings, the revocation
+# grace and the policy table) lives in the Variable/Config.ts schema. Every
+# knob is a volatile cell (hot-editable without remounting); a policy edit
+# lands on the next eviction pass.
 #
 # THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
 # shared factory block, mapped to State.Allow. The key is `automation`, NOT
@@ -43,7 +43,9 @@
       - id: plugin-dsh-workspace-authority
         name: "@playform/plugin-dsh-workspace-authority"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ~/.dsh/playform/plugin-dsh-workspace-authority.log
             automation:
                 read: auto
                 index: auto

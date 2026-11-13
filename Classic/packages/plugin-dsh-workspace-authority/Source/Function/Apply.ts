@@ -108,7 +108,7 @@ export default (Context: Context, Options: Config): void => {
 	// calls ctx.reflect.provide("workspaceAuthority", this).
 	new ServiceClass(Context, State);
 	switch (true) {
-		case !State.On:
+		case State.On === false:
 			// The cold mount: honest in the ledger, serving nothing.
 			Factory.Append(State, "disabled (enabled=false)");
 			break;

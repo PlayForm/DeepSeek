@@ -13,17 +13,17 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  */
 export default interface Config {
     /**
-     * The durable ledger file (one log per module).
+     * The master switch - the IDLE-forever posture: false by default.
      */
-    logFile: string;
+    enabled: boolean;
     /**
      * Ledger enabled - write the durable log file.
      */
     log: boolean;
     /**
-     * The master switch - the IDLE-forever posture: false by default.
+     * The durable ledger file (one log per module).
      */
-    enabled: boolean;
+    logFile: string;
     /**
      * The tool names whose calls the gate evaluates.
      */

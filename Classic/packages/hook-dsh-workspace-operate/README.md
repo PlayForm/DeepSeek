@@ -87,7 +87,7 @@ pack's `policy` section overrides the defaults per action (the wiring is the nex
 
 | Field          | Default                                          | Meaning                         |
 | -------------- | ------------------------------------------------ | ------------------------------- |
-| `enabled`      | `false`                                          | the master switch               |
+| `enabled`      | `true`                                           | the master switch               |
 | `log`          | `true`                                           | the ledger switch (shared cell) |
 | `logFile`      | `~/.dsh/playform/hook-dsh-workspace-operate.log` | the ledger                      |
 | `domain`       | `workspace_operate`                              | the KV domain name              |
@@ -105,8 +105,8 @@ tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
 ## The plan
 
-The plugin ships **disabled** (`enabled: false`, the IDLE-forever posture) and enables only by an
-explicit ACTIVATE.
+The plugin ships **enabled** (`enabled: true`; installing it yields an enabled plugin) and the
+profile may turn it off with `enabled: false`.
 
 This is the PoC build, and the smoke suite and the ETS twin land at the end phase.
 

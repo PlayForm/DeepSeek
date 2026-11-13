@@ -15,7 +15,8 @@ AuthorizationDecision downstream.
 An intent must not authorize its own means: the gate checks the means, and the intent is never the
 permission.
 
-The plugin ships **disabled** (the idle-forever posture) and enables only by an explicit ACTIVATE.
+The plugin ships **enabled** (installing it yields an enabled plugin); the profile may turn it off
+with `enabled: false`.
 
 ## The surfaces
 
@@ -56,18 +57,19 @@ ledger line.
 
 ## The configuration (all volatile)
 
-| Field             | Default                                                  | Meaning                                                                                                       |
-| ----------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `enabled`         | `false`                                                  | the master switch                                                                                             |
-| `log` / `logFile` | `true` / `~/.dsh/playform/hook-dsh-workspace-govern.log` | the durable ledger (one log per module)                                                                       |
-| `tools`           | `write, edit, bash, applyPatch`                          | the gated tool names                                                                                          |
-| `scope`           | `[]` (unrestricted)                                      | the authorized-scope allowlist (globs)                                                                        |
-| `exclude`         | `node_modules/**, **/Target/**, **/.git/**`              | never gated, in silence                                                                                       |
-| `policy`          | `[]`                                                     | the policy table (`{kind, decision, operation?}`)                                                             |
-| `recovery`        | `[]`                                                     | the recovery-table overrides (`{obligation, behavior}`)                                                       |
-| `loopBound`       | `4`                                                      | the recursion-prevention loop bound                                                                           |
-| `maxDecisions`    | `500`                                                    | the decision ring bound                                                                                       |
-| `automation`      | D6 defaults                                              | the per-action allowlist (the shared factory block; keyed `automation` - `policy` is the decision rule table) |
+| Field          | Default                                         | Meaning                                                                                                       |
+| -------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `enabled`      | `true`                                          | the master switch                                                                                             |
+| `log`          | `true`                                          | the ledger switch (the shared cell)                                                                           |
+| `logFile`      | `~/.dsh/playform/hook-dsh-workspace-govern.log` | the durable ledger (one log per module)                                                                       |
+| `tools`        | `write, edit, bash, applyPatch`                 | the gated tool names                                                                                          |
+| `scope`        | `[]` (unrestricted)                             | the authorized-scope allowlist (globs)                                                                        |
+| `exclude`      | `node_modules/**, **/Target/**, **/.git/**`     | never gated, in silence                                                                                       |
+| `policy`       | `[]`                                            | the policy table (`{kind, decision, operation?}`)                                                             |
+| `recovery`     | `[]`                                            | the recovery-table overrides (`{obligation, behavior}`)                                                       |
+| `loopBound`    | `4`                                             | the recursion-prevention loop bound                                                                           |
+| `maxDecisions` | `500`                                           | the decision ring bound                                                                                       |
+| `automation`   | D6 defaults                                     | the per-action allowlist (the shared factory block; keyed `automation` - `policy` is the decision rule table) |
 
 ### The policy block (D6) - the `automation` key
 

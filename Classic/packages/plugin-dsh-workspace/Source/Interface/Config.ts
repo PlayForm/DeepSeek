@@ -25,6 +25,11 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  */
 export default interface Config {
 	/**
+	 * Master switch - false = the shipped DISABLED posture, every tool no-ops.
+	 */
+	enabled: boolean;
+
+	/**
 	 * The durable ledger toggle (the factory's shared cell).
 	 */
 	log: boolean;
@@ -33,11 +38,6 @@ export default interface Config {
 	 * The ledger file (the agent's SEPARATE ledger, one log per module).
 	 */
 	logFile: string;
-
-	/**
-	 * Master switch - false = the shipped DISABLED posture, every tool no-ops.
-	 */
-	enabled: boolean;
 
 	/**
 	 * The workspace_map default depth (the top modules traversal).

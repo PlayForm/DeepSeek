@@ -32,8 +32,9 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * disabled, never appears in the profile's bundles, and enables only by an
  * explicit ACTIVATE.
  */
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-evidence.log";
-const DefaultEnabled = false;
 // The KV domain name (the service's own domain, not a shared one).
 const DefaultDomain = "workspace_evidence";
 // The store bound: the last maxValidations validation objects survive
@@ -46,8 +47,17 @@ const DefaultMaxValidations = 512;
 const DefaultExclude: string[] = ["node_modules", "Target", ".git"];
 
 export default Compose(false, {
-	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	// The MASTER SWITCH (volatile: a flip is read on the next mount): false =
+	// the cold mount logs `disabled (enabled=false)` and the service wires
+	// nothing. Distinct from the shared `log` cell, which governs only the
+	// durable ledger file.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	// Ledger file - the service's SEPARATE ledger, one log per module -
+	// volatile: hot-editable without remounting (overrides the minimal
+	// shared block's empty default).
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	domain: Schema.string().default(DefaultDomain).volatile(),
 	maxValidations: Schema.number().default(DefaultMaxValidations).volatile(),
 	exclude: Schema.array(Schema.string()).default(DefaultExclude).volatile(),

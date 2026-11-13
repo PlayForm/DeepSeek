@@ -20,9 +20,10 @@
 # dsh.profile.bundles AND the app is restarted (bundle layers compose at host
 # boot). A file: dependency alone is NOT activation.
 #
-# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
-# else - the plugin never appears in the profile's bundles and enables only by
-# an explicit ACTIVATE. On a cold mount the State build logs `disabled
+# THE SHIP-ENABLED POSTURE: this entry ships with enabled: true plus the log
+# base (log: true and the module's ledger logFile) - installing the plugin
+# yields an enabled plugin, and the profile may turn it off
+# with enabled: false. On a cold mount with enabled: false the State build logs `disabled
 # (enabled=false)` and the gate is a pass-through: every listener returns the
 # downstream decision unchanged. The schema defaults are the truth; the full
 # default surface (the gated tool list, the authorized-scope allowlist, the
@@ -44,7 +45,9 @@
       - id: hook-dsh-workspace-govern
         name: "@playform/hook-dsh-workspace-govern"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ~/.dsh/playform/hook-dsh-workspace-govern.log
             automation:
                 read: auto
                 index: auto

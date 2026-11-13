@@ -27,24 +27,26 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * PLACE, so a flip (enabled, domain, maxBatches, maxEntryBytes, exclude, ...)
  * takes effect on the next call.
  *
- * `enabled` defaults to FALSE - the IDLE-forever posture: the plugin ships
- * disabled, never appears in the profile's bundles, and enables only by an
- * explicit ACTIVATE.
+ * `enabled` defaults to TRUE - the plugin ships enabled, so installing it
+ * yields an enabled plugin; the profile may turn it off with `enabled: false`.
  *
  * This is one of the modules in the tree with a runtime import of
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance -
  * the loader consumes it through the Standard Schema `~standard` interface).
  */
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-workspace-journal.log";
-const DefaultEnabled = false;
 const DefaultDomain = "workspace_journal";
 const DefaultMaxBatches = 200;
 const DefaultMaxEntryBytes = 65536;
 const DefaultExclude = ["node_modules/**", "**/Target/**", "**/.git/**"];
 
 export default Compose(false, {
-	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// The KV domain name (the hook's own domain - the rollback layer's
 	// per-batch records and revert data; a NEW domain, never an extension
 	// record in the shared package_governance one).

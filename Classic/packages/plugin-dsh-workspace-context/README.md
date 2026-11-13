@@ -33,8 +33,7 @@ required/relevant/deferred) and the context economy.
     The trace bus (`ctx.trace`) is optional, so without it the memo simply lives until the process
     ends.
 
-The plugin ships **disabled** (the IDLE-forever posture): it never appears in the profile's bundles
-and enables only by an explicit ACTIVATE.
+The plugin ships **enabled** (a profile turns it off with `enabled: false`).
 
 Plan: Documentation/Plans/WORKSPACE-FAMILY-V4-1.md section 3.5 +
 Documentation/Plans/Workspace-Family/CONTEXT.md.
@@ -60,19 +59,19 @@ context: clamped (<tokens> -> <tokens> tok, budget <max>)
 
 ## The configuration
 
-| Field           | Default                                            | Meaning                                      |
-| --------------- | -------------------------------------------------- | -------------------------------------------- |
-| `enabled`       | `false`                                            | the master switch (the IDLE-forever posture) |
-| `log`           | `true`                                             | the ledger switch (shared cell)              |
-| `logFile`       | `~/.dsh/playform/plugin-dsh-workspace-context.log` | the ledger                                   |
-| `budgetTokens`  | `2000`                                             | the target token budget                      |
-| `budgetMaximum` | `4000`                                             | the hard cap                                 |
-| `lensDefault`   | `code`                                             | the default lens                             |
-| `neighborLimit` | `20`                                               | the NEIGHBORS section bound                  |
-| `evidenceLimit` | `12`                                               | the EVIDENCE section bound                   |
-| `mapLimit`      | `12`                                               | the MAP section bound                        |
-| `workspaceName` | `workspace`                                        | the WORKSPACE section name                   |
-| `policy.*`      | D6 defaults                                        | the per-action allowlist (see below)         |
+| Field           | Default                                            | Meaning                              |
+| --------------- | -------------------------------------------------- | ------------------------------------ |
+| `enabled`       | `true`                                             | the master switch (ships enabled)    |
+| `log`           | `true`                                             | the ledger switch (shared cell)      |
+| `logFile`       | `~/.dsh/playform/plugin-dsh-workspace-context.log` | the ledger                           |
+| `budgetTokens`  | `2000`                                             | the target token budget              |
+| `budgetMaximum` | `4000`                                             | the hard cap                         |
+| `lensDefault`   | `code`                                             | the default lens                     |
+| `neighborLimit` | `20`                                               | the NEIGHBORS section bound          |
+| `evidenceLimit` | `12`                                               | the EVIDENCE section bound           |
+| `mapLimit`      | `12`                                               | the MAP section bound                |
+| `workspaceName` | `workspace`                                        | the WORKSPACE section name           |
+| `policy.*`      | D6 defaults                                        | the per-action allowlist (see below) |
 
 Every field is a volatile cell.
 
@@ -86,8 +85,7 @@ tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 - Documentation/Plans/WORKSPACE-FAMILY-V4-1.md section 3.5 - the orientation packet.
 - [Workspace-Family/CONTEXT](../../../Documentation/Plans/Workspace-Family/CONTEXT.md) - the context
   service.
-- The plugin ships **disabled** (the IDLE-forever posture): it never appears in the profile's
-  bundles and enables only by an explicit ACTIVATE.
+- The plugin ships **enabled** (a profile turns it off with `enabled: false`).
 
 ## License
 

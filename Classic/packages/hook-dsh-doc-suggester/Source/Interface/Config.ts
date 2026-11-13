@@ -18,6 +18,11 @@
  */
 export default interface Config {
 	/**
+	 * The master switch (volatile): false disables every listener to a passthrough.
+	 */
+	enabled: boolean;
+
+	/**
 	 * Ledger enabled - write the durable log file (volatile).
 	 */
 	log: boolean;
@@ -27,11 +32,6 @@ export default interface Config {
 	 * (volatile).
 	 */
 	logFile: string;
-
-	/**
-	 * The master switch (volatile): false disables every listener to a passthrough.
-	 */
-	enabled: boolean;
 
 	/**
 	 * The confidence gate (volatile); the pack's per-family thresholds override per family.

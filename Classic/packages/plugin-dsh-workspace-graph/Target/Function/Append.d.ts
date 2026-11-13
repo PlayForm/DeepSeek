@@ -12,7 +12,8 @@ export default _default;
  * byte-stable (the brief's section 4.6 list).
  *
  * The durable file is appended only when a ledger path is set (the internal `State.Ledger` seam
- * - the frozen config table has no ledger knob). It is the plugin's OWN diagnostic log, not a
+ * - config `logFile` names the path and config `log` gates it; the empty default keeps the
+ * logger as the only surface). It is the plugin's OWN diagnostic log, not a
  * governed file, so the plain `appendFileSync` is the documented exemption (identical to the
  * factory's).
  *

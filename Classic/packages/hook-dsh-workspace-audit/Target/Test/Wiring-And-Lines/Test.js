@@ -25,7 +25,7 @@ const runTest = async () => {
   {
     const Loader = await import("../../../Target/Library.js");
     rm();
-    const Run = Make(Validate({ logFile: Ledger }));
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }));
     Check(Count, "W1: the default object carries name/apply/Config/inject", () => {
       assert.equal(Loader.default.name, "hook-dsh-workspace-audit");
       assert.equal(Loader.default.apply, Loader.apply);

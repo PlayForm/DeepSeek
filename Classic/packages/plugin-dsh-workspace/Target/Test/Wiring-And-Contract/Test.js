@@ -40,7 +40,9 @@ const runTest = async () => {
     });
     Check(Count, "W1: the schema fills the defaults the contract documents", () => {
       const Knobs = Plain(Validate({}));
-      assert.equal(Knobs.enabled, false);
+      assert.equal(Knobs.enabled, true);
+      assert.equal(Knobs.log, true);
+      assert.equal(Knobs.logFile, "~/.dsh/playform/plugin-dsh-workspace.log");
       assert.equal(Knobs.mapDepth, 2);
       assert.equal(Knobs.mapMaxModules, 20);
       assert.equal(Knobs.findLimit, 50);
@@ -55,7 +57,7 @@ const runTest = async () => {
   }
   {
     rm();
-    const Run = Make(Validate({ logFile: Ledger }), StandardGraph());
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }), StandardGraph());
     Check(Count, "W2: a disabled mount still serves the tools (the refusal lives in execute) and logs the byte-exact disabled line", () => {
       assert.deepEqual(
         Run.Registered.map((Definition) => Definition.name),

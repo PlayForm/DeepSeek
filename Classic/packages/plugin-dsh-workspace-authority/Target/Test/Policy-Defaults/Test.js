@@ -40,7 +40,7 @@ const runTest = async () => {
     });
   }
   {
-    const Run = Make(Validate({ logFile: "/nonexistent/authority.log" }));
+    const Run = Make(Validate({ logFile: "/nonexistent/authority.log", enabled: false }));
     Check(Count, "P2: the package has no gated action", () => {
       assert.equal(Decide(Run.State.Allow, "read"), "auto", "the read verdict is automatic");
       assert.equal(Decide(Run.State.Allow, "record"), "auto", "the record verdict is automatic");

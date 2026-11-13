@@ -75,11 +75,12 @@ Ledger lines (module-owned, prefixed `approve:`): `activated`, `disabled`, `boun
 
 ## The configuration
 
-Every knob is volatile (hot-editable without remounting): `logFile`
-(`~/.dsh/playform/hook-dsh-workspace-approve.log`), `log`, `enabled` (false - the IDLE-forever
-posture), `domain` (`workspace_approve`), `maxBindings` (1000), `requireConstraints` (true).
+Every knob is volatile (hot-editable without remounting): `enabled` (true - the plugin ships
+enabled), `log` (true), `logFile` (`~/.dsh/playform/hook-dsh-workspace-approve.log`), `domain`
+(`workspace_approve`), `maxBindings` (1000), `requireConstraints` (true).
 
-The plugin ships disabled and enables only by an explicit ACTIVATE.
+The plugin ships enabled (installing it yields an enabled plugin); the profile may turn it off with
+`enabled: false`.
 
 ### The policy block (D6)
 

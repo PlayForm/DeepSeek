@@ -26,12 +26,12 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * flip (enabled, tools, scope, policy, recovery, ...) takes effect on the next
  * gated call.
  *
- * `enabled` defaults to FALSE - the IDLE-forever posture: the plugin ships
- * disabled, never appears in the profile's bundles, and enables only by an
- * explicit ACTIVATE.
+ * `enabled` defaults to TRUE - the plugin ships enabled, so installing it
+ * yields an enabled plugin; the profile may turn it off with `enabled: false`.
  */
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-workspace-govern.log";
-const DefaultEnabled = false;
 const DefaultTools = ["write", "edit", "bash", "applyPatch"];
 const DefaultScope: string[] = [];
 const DefaultExclude = ["node_modules/**", "**/Target/**", "**/.git/**"];
@@ -43,8 +43,10 @@ const DefaultLoopBound = 4;
 const DefaultMaxDecisions = 500;
 
 export default Compose(false, {
-	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// The gated tools: the tool names whose calls carry the gate (the
 	// mutating surface of the workspace family's operate step).
 	tools: Schema.array(Schema.string()).default(DefaultTools).volatile(),

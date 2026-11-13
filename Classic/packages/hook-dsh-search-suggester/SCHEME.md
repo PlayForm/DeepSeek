@@ -36,9 +36,9 @@ Source of truth: `Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md`.
 
 | Field             | Type     | Default                                                 | Volatile | Meaning                                                                                                 |
 | ----------------- | -------- | ------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------- |
+| `enabled`         | boolean  | `true` (patch ships `false`)                            | yes      | The master switch                                                                                       |
 | `log`             | boolean  | `true`                                                  | yes      | Ledger enabled                                                                                          |
 | `logFile`         | string   | `~/.dsh/playform/hook-dsh-search-suggester.log`         | yes      | The suggester's own ledger (one log per module)                                                         |
-| `enabled`         | boolean  | `true` (patch ships `false`)                            | yes      | The master switch                                                                                       |
 | `threshold`       | number   | `0.75`                                                  | yes      | The default confidence gate (the synthetic family's own gate is 0.75; a config value can only raise it) |
 | `maxCandidates`   | number   | `7`                                                     | yes      | Maximum candidates in one note (and the `Adjacent` limit)                                               |
 | `maxNoteChars`    | number   | `1200`                                                  | yes      | Hard character cap on the note text                                                                     |

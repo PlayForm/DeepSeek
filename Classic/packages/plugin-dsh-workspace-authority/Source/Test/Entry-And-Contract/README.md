@@ -5,7 +5,8 @@ This folder covers the object-form loader contract and the IDLE-forever posture:
 ## Scenarios
 
 - A1: the default object carries name (`plugin-dsh-workspace-authority`),
-  `apply`, `Config` and `inject` (`["pluginFactory"]`).
+  `apply`, `Config` and `inject` (`["pluginFactory"]`), and the schema fills
+  the Config base (`enabled` false, `log` true, the `logFile` default).
 - A2: the cold mount (enabled=false): apply returns nothing, the service is
   still provided (name `workspaceAuthority`), the byte-exact
   `authority: disabled (enabled=false)` line (logger AND durable `[ISO]`
@@ -28,4 +29,4 @@ The harness is the shared Harness: a fake ctx with the real factory instance, th
 
 ## Expected count
 
-8 PASS.
+9 PASS.

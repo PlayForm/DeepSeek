@@ -16,6 +16,10 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  */
 export default interface Config {
     /**
+     * Master switch - every listener no-ops to a passthrough when false.
+     */
+    enabled: boolean;
+    /**
      * Ledger enabled - write the durable log file (the shared `log` cell).
      */
     log: boolean;
@@ -23,10 +27,6 @@ export default interface Config {
      * Ledger file - the plugin's own ledger, separate from the family's logs.
      */
     logFile: string;
-    /**
-     * Master switch - every listener no-ops to a passthrough when false.
-     */
-    enabled: boolean;
     /**
      * The KV domain name - the plugin's own domain (workspace_journal).
      */

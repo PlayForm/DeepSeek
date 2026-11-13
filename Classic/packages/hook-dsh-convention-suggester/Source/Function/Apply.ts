@@ -216,8 +216,9 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone. The FIELD LIST is the module's own; the `activated (`
-	// mechanics live in the core's Activate composer.
-	if (!State.On) {
+	// mechanics live in the core's Activate composer. The `=== false` guard
+	// keeps a bare fixture that omits the key mounted.
+	if (State.On === false) {
 		Factory.Append(State, "disabled (enabled=false)");
 	} else {
 		Factory.Append(

@@ -107,17 +107,18 @@ graph: skipped <path> (disabled)
 
 ## The configuration
 
-| Field             | Default           | Meaning                              |
-| ----------------- | ----------------- | ------------------------------------ |
-| `enabled`         | `false`           | the master switch (ships disabled)   |
-| `log`             | `true`            | the ledger switch (shared cell)      |
-| `domain`          | `workspace_graph` | the KV storage domain                |
-| `maxFileBytes`    | `1000000`         | the per-file byte cap                |
-| `maxNodesPerFile` | `5000`            | the per-file node cap                |
-| `maxFiles`        | `2000`            | the `indexWorkspace` walk bound      |
-| `limitDefault`    | `50`              | the default list limit               |
-| `limitMaximum`    | `500`             | the maximum list limit               |
-| `policy.*`        | D6 defaults       | the per-action allowlist (see below) |
+| Field             | Default           | Meaning                               |
+| ----------------- | ----------------- | ------------------------------------- |
+| `enabled`         | `true`            | the master switch (ships enabled)     |
+| `log`             | `true`            | the ledger switch (shared cell)       |
+| `logFile`         | `""`              | the ledger path (empty = logger only) |
+| `domain`          | `workspace_graph` | the KV storage domain                 |
+| `maxFileBytes`    | `1000000`         | the per-file byte cap                 |
+| `maxNodesPerFile` | `5000`            | the per-file node cap                 |
+| `maxFiles`        | `2000`            | the `indexWorkspace` walk bound       |
+| `limitDefault`    | `50`              | the default list limit                |
+| `limitMaximum`    | `500`             | the maximum list limit                |
+| `policy.*`        | D6 defaults       | the per-action allowlist (see below)  |
 
 Every field is volatile, so no remount is needed.
 

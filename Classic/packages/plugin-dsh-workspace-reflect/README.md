@@ -77,12 +77,12 @@ returning the reply union.
 
 ## The configuration
 
-Every knob is volatile and hot-editable without a remount: `logFile`
-(`~/.dsh/playform/plugin-dsh-workspace-reflect.log`), `log`, `enabled` (false, the IDLE-forever
-posture), `propagate` (`block` | `file`, default `block`), `maxFileBytes` (1000000), and
-`maxBlockLines` (5000).
+Every knob is volatile and hot-editable without a remount: `enabled` (true, a profile turns it off
+with `enabled: false`), `log`, `logFile` (`~/.dsh/playform/plugin-dsh-workspace-reflect.log`),
+`propagate` (`block` | `file`, default `block`), `maxFileBytes` (1000000), and `maxBlockLines`
+(5000).
 
-The plugin ships disabled and enables only through an explicit ACTIVATE.
+The plugin ships enabled; a profile turns it off with `enabled: false`.
 
 The package adds no new knob, because the graph and the semantics service are optional siblings.
 

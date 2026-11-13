@@ -7,13 +7,24 @@
  * @remarks
  *
  * The brief's section 4.5 frozen table plus ONE field the indexing trigger needs (`maxFiles` -
- * the workspace walk's bound, section 4.3's `indexWorkspace`); no other hidden knobs.
+ * the workspace walk's bound, section 4.3's `indexWorkspace`) and the two universal volatile
+ * ledger cells (`log`, `logFile`); no other hidden knobs.
  */
 export default interface Configuration {
 	/**
 	 * Whether the plugin indexes at all; false skips every file with the `disabled` reason.
 	 */
 	enabled: boolean;
+
+	/**
+	 * Ledger enabled - write the durable log file.
+	 */
+	log: boolean;
+
+	/**
+	 * The durable ledger file; the empty string keeps the logger as the only surface.
+	 */
+	logFile: string;
 
 	/**
 	 * The storage domain name, a lowercase unit name.

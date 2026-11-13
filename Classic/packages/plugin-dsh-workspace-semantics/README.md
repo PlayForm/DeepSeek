@@ -82,24 +82,24 @@ A coalesced repeat event (the repeat-event guard) records nothing and adds no li
 
     The service never writes a file, because the plan goes to the operate proposals.
 
-- **The idle-forever posture**: the package ships disabled (`enabled: false`), never appears in the
-  bundles of the profile, and enables only through an explicit ACTIVATE.
+- **The shipped posture**: the package ships enabled (`enabled: true`); a profile turns it off with
+  `enabled: false`.
 - **The ledger**: the module owns its strings under the prefix `semantics:` (byte-stable), with one
   log per module (default `~/.dsh/playform/plugin-dsh-workspace-semantics.log`).
 
 ## The configuration
 
-| Field        | Default                                                         | Meaning                                      |
-| ------------ | --------------------------------------------------------------- | -------------------------------------------- |
-| `enabled`    | `false`                                                         | the master switch (the idle-forever posture) |
-| `log`        | `true`                                                          | the ledger switch (shared cell)              |
-| `logFile`    | `~/.dsh/playform/plugin-dsh-workspace-semantics.log`            | the ledger                                   |
-| `domain`     | `workspace_semantics`                                           | the KV domain name                           |
-| `maxEntries` | `256`                                                           | the index entry bound                        |
-| `root`       | `""` (the session cwd)                                          | the workspace root                           |
-| `lsp`        | `true`                                                          | the LSP deepener switch                      |
-| `adapters`   | `[]` (the seven TS/JS extensions stay the default registration) | the opt-in any-file adapters, by name        |
-| `policy.*`   | D6 defaults                                                     | the per-action allowlist (see below)         |
+| Field        | Default                                                         | Meaning                               |
+| ------------ | --------------------------------------------------------------- | ------------------------------------- |
+| `enabled`    | `true`                                                          | the master switch (ships enabled)     |
+| `log`        | `true`                                                          | the ledger switch (shared cell)       |
+| `logFile`    | `~/.dsh/playform/plugin-dsh-workspace-semantics.log`            | the ledger                            |
+| `domain`     | `workspace_semantics`                                           | the KV domain name                    |
+| `maxEntries` | `256`                                                           | the index entry bound                 |
+| `root`       | `""` (the session cwd)                                          | the workspace root                    |
+| `lsp`        | `true`                                                          | the LSP deepener switch               |
+| `adapters`   | `[]` (the seven TS/JS extensions stay the default registration) | the opt-in any-file adapters, by name |
+| `policy.*`   | D6 defaults                                                     | the per-action allowlist (see below)  |
 
 Every field is a volatile cell.
 

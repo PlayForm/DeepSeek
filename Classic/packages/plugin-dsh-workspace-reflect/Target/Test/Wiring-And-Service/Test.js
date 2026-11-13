@@ -18,7 +18,13 @@ const runTest = async () => {
   const Count = MakeCounter();
   {
     rm();
-    const Run = Make(Validate({ logFile: Ledger }));
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }));
+    Check(Count, "W1: the schema fills the Config base (enabled, log, logFile)", () => {
+      const Knobs = Validate({});
+      assert.equal(Knobs.enabled.get(), true);
+      assert.equal(Knobs.log.get(), true);
+      assert.equal(Knobs.logFile.get(), "~/.dsh/playform/plugin-dsh-workspace-reflect.log");
+    });
     Check(Count, "W1: apply returns NOTHING and the service is still provided", () => {
       assert.equal(Run.Returned, void 0);
       assert.ok(Run.Provided["workspaceReflect"] !== void 0);

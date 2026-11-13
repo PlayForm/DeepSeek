@@ -49,7 +49,8 @@ The activation line moved with the fifth tool: `workspace: activated (bundle 0.2
 
 ## The configuration
 
-The package ships **disabled** (`enabled: false`), and every knob is volatile:
+The package ships **enabled** (`enabled: true` - a profile turns it off with `enabled: false`), and
+every knob is volatile:
 
 `enabled`, `log`/`logFile`, `mapDepth`, `mapMaxModules`, `findLimit`, `findLimitMax`, `expandDepth`,
 `expandMaxNeighbors`, `packetTokenBudget`, `packetTokenMax`, `tokenCharsPerToken`, `kinds`.

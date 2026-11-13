@@ -6,9 +6,9 @@ The complete scheme: every config field, every surface, every ledger string.
 
 | Field             | Type     | Default                                        | Volatile | Notes                                                                                                                               |
 | ----------------- | -------- | ---------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `enabled`         | boolean  | `true`                                         | yes      | `false` logs `disabled (enabled=false)` and every listener passes through. The patch row ships `false`.                             |
 | `log`             | boolean  | `true`                                         | yes      | The shared universal cell (the factory's minimal block).                                                                            |
 | `logFile`         | string   | `~/.dsh/playform/hook-dsh-graph-suggester.log` | yes      | The hook's OWN ledger, one log per module.                                                                                          |
-| `enabled`         | boolean  | `true`                                         | yes      | `false` logs `disabled (enabled=false)` and every listener passes through. The patch row ships `false`.                             |
 | `threshold`       | number   | `0.75`                                         | yes      | The confidence gate. The effective gate is `max(0.75, threshold)`: the graph floor raises a lower value, never lowers a higher one. |
 | `maxCandidates`   | number   | `7`                                            | yes      | The note's candidate cap and the `neighborhood` limit.                                                                              |
 | `maxNoteChars`    | number   | `1200`                                         | yes      | Hard character cap on the note text.                                                                                                |

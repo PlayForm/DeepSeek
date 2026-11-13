@@ -128,7 +128,7 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone (the master switch and the surface on the line).
-	if (!State_.On) {
+	if (State_.On === false) {
 		Factory.Append(State_, "disabled (enabled=false)");
 	} else {
 		Factory.Append(

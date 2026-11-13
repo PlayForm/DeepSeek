@@ -85,9 +85,9 @@ Every knob is `.volatile()`.
 
 | Field       | Type      | Default                                          | Meaning                                      |
 | ----------- | --------- | ------------------------------------------------ | -------------------------------------------- |
-| `logFile`   | string    | `~/.dsh/playform/hook-dsh-workspace-observe.log` | the module's OWN ledger, one log per module  |
+| `enabled`   | boolean   | `true`                                           | the MASTER switch - the plugin ships enabled |
 | `log`       | boolean   | `true`                                           | the durable ledger file enabled              |
-| `enabled`   | boolean   | `false`                                          | the MASTER switch - the IDLE-forever posture |
+| `logFile`   | string    | `~/.dsh/playform/hook-dsh-workspace-observe.log` | the module's OWN ledger, one log per module  |
 | `domain`    | string    | `workspace_observe`                              | the KV domain NAME (non-empty, fail-loud)    |
 | `maxStamps` | number    | `1000`                                           | the ring bound (integer ≥ 1, fail-loud)      |
 | `include`   | string[]  | `[]`                                             | the optional allowlist; empty = every path   |
@@ -172,8 +172,9 @@ expected count under `## Expected count`.
 
 No fingerprint (the graph owns content hashes, the W1 record decision), no fs/write-intent or
 fs/edit-intent registration (the single-slot waterfalls belong to the observation policy), no tools,
-no surfaces, no file content reads, no wall clock, no profile activation (the IDLE-forever posture),
-and no surfacing of the stamps to the conversation (a later wave's events do that).
+no surfaces, no file content reads, no wall clock (the cold mount with enabled: false is the
+disabled posture), and no surfacing of the stamps to the conversation (a later wave's events do
+that).
 
 ## 9. The EffectTS twin
 

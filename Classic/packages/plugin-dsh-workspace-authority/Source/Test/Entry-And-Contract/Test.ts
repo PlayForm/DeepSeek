@@ -41,10 +41,16 @@ export const runTest = async (): Promise<number> => {
 		assert.equal(typeof Plugin.Config, "function");
 		assert.deepEqual(Plugin.inject, ["pluginFactory"]);
 	});
+	Check(Count, "A1: the schema fills the Config base (enabled, log, logFile)", () => {
+		const Knobs = Validate({});
+		assert.equal(Knobs.enabled.get(), true);
+		assert.equal(Knobs.log.get(), true);
+		assert.equal(Knobs.logFile.get(), "~/.dsh/playform/plugin-dsh-workspace-authority.log");
+	});
 
 	// Group A2: the cold mount.
 	{
-		const Run = Setup({});
+		const Run = Setup({ enabled: false });
 		const Service = Run.Provided.workspaceAuthority;
 		Check(Count, "A2: apply returns nothing, the service is still provided", () => {
 			assert.equal(Run.Returned, undefined);

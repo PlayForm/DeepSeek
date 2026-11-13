@@ -4,9 +4,9 @@ The config surface, all volatile, where the schema defaults are the truth.
 
 | Field        | Type      | Default                                              | Meaning                                                                                                                              |
 | ------------ | --------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `enabled`    | boolean   | `true`                                               | The master switch - ships enabled; a profile turns it off with `enabled: false`.                                                     |
 | `log`        | boolean   | `true`                                               | Ledger enabled - write the durable log file.                                                                                         |
 | `logFile`    | string    | `~/.dsh/playform/plugin-dsh-workspace-semantics.log` | The module's own ledger.                                                                                                             |
-| `enabled`    | boolean   | `false`                                              | The master switch - the IDLE-forever posture.                                                                                        |
 | `domain`     | string    | `workspace_semantics`                                | The KV domain name.                                                                                                                  |
 | `maxEntries` | number    | `256`                                                | The index bound (the oldest models drop first).                                                                                      |
 | `exclude`    | string[]  | `["node_modules/**", "**/Target/**", "**/.git/**"]`  | Paths no model is built for.                                                                                                         |

@@ -27,13 +27,15 @@ declaration merging compiles) and the fail-loud config rule.
       declaration merge; the noemit pass gates the build on it).
 - Group: the config defaults and the volatile cells.
     - Check: "config: the schema defaults flow into the plain State config" -
-      the State's Config equals the frozen defaults (enabled false, domain
+      the State's Config equals the frozen defaults (enabled false, log true,
+      the empty logFile, domain
       workspace_graph, the three languages, empty include, the three default
       excludes, 1000000 / 5000 / 2000 / 50 / 500) - including `maxFiles`, the
-      one field the indexing trigger added.
+      one field the indexing trigger added, and the two universal volatile
+      ledger cells.
     - Check: "config: every volatile field arrives as a cell and unwraps" -
-      all ten fields arrive as `{ get }` cells from the schema and the State
-      carries the unwrapped plain values.
+      all twelve fields arrive as `{ get }` cells from the schema and the
+      State carries the unwrapped plain values.
 - Group: fail-loud validation (each refusal on the exact message).
     - Check: "config: a wrong-typed field fails loud at the schema
       (Schemastery)" - `maxFileBytes: {}` throws Schemastery's

@@ -5,7 +5,8 @@ This folder covers the object-form loader contract and the IDLE-forever posture:
 ## Scenarios
 
 - E1: the default object carries name (`plugin-dsh-workspace-context`),
-  `apply`, `Config` and `inject` (`["pluginFactory"]`).
+  `apply`, `Config` and `inject` (`["pluginFactory"]`), and the schema fills
+  the Config base (`enabled` false, `log` true, the `logFile` default).
 - E2: the cold mount (enabled=false): apply returns nothing, the service
   is still provided (name `workspaceContext`), the byte-exact
   `context: disabled (enabled=false)` line (logger AND durable `[ISO]`
@@ -28,4 +29,4 @@ The harness is the shared Harness: a fake ctx with a DISTINCT root object, the r
 
 ## Expected count
 
-13 PASS.
+14 PASS.

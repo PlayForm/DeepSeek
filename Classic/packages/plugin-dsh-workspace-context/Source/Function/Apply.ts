@@ -116,7 +116,7 @@ export default (Context: Context, Options: Config): void => {
 	// calls ctx.reflect.provide("workspaceContext", this).
 	new ServiceClass(Context, State);
 	switch (true) {
-		case !State.On:
+		case State.On === false:
 			// The cold mount: honest in the ledger, no tool registered.
 			Factory.Append(State, "disabled (enabled=false)");
 			return;

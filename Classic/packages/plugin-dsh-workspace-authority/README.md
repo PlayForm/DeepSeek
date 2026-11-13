@@ -11,8 +11,9 @@ operate proposes → the govern gates → **the authority licenses** → the app
 The service keeps the **three separate authority records** (v4.1 section 3.9, correcting the
 corpus's own conflation) and owns the **eviction dispositions**.
 
-The plugin ships **disabled** (the idle-forever posture): the service registers and reads honestly,
-but grants, leases, and evictions are refused with a byte-stable ledger line until enabled.
+The plugin ships **enabled** (a profile turns it off with `enabled: false`): the service registers
+and reads honestly, but grants, leases, and evictions are refused with a byte-stable ledger line
+while disabled.
 
 ## The three records (never one object)
 
@@ -57,7 +58,7 @@ only within the revocation grace).
 
 | Field                      | Default                                                       | Meaning                                                            |
 | -------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------ |
-| `enabled`                  | `false`                                                       | the master switch                                                  |
+| `enabled`                  | `true`                                                        | the master switch                                                  |
 | `log` / `logFile`          | `true` / `~/.dsh/playform/plugin-dsh-workspace-authority.log` | the durable ledger                                                 |
 | `defaultTtlMs`             | `300000`                                                      | the default lease TTL                                              |
 | `maxLeasesPerHolder`       | `8`                                                           | the lease ceiling                                                  |
@@ -116,9 +117,9 @@ tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
 - [Workspace-Family/AUTHORITY](../../../Documentation/Plans/Workspace-Family/AUTHORITY.md) - the
   authority step.
-- The plugin ships **disabled** (the idle-forever posture): the service registers and reads
-  honestly, but grants, leases, and evictions are refused with a byte-stable ledger line until
-  enabled.
+- The plugin ships **enabled** (a profile turns it off with `enabled: false`): the service registers
+  and reads honestly, but grants, leases, and evictions are refused with a byte-stable ledger line
+  while disabled.
 
 ## License
 

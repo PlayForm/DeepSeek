@@ -18,6 +18,16 @@ export default interface Config {
 	enabled: boolean;
 
 	/**
+	 * Ledger enabled - write the durable log file (the shared `log` cell).
+	 */
+	log: boolean;
+
+	/**
+	 * The hook's own ledger file (one log per module).
+	 */
+	logFile: string;
+
+	/**
 	 * The hook's own KV domain name (NOT the shared package_governance one).
 	 */
 	domain: string;
@@ -37,11 +47,6 @@ export default interface Config {
 	 * The hard cap for any list limit.
 	 */
 	limitMaximum: number;
-
-	/**
-	 * The hook's own ledger file (one log per module).
-	 */
-	logFile: string;
 
 	/**
 	 * The per-action allowlist (D6) - the shared factory block. This

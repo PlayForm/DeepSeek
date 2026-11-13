@@ -21,6 +21,10 @@
  */
 export default interface Config {
     /**
+     * The master switch (volatile): false disables every listener to a passthrough.
+     */
+    enabled: boolean;
+    /**
      * Ledger enabled - write the durable log file (volatile).
      */
     log: boolean;
@@ -28,10 +32,6 @@ export default interface Config {
      * Ledger file - the search suggester's own ledger, separate from the family's logs (volatile).
      */
     logFile: string;
-    /**
-     * The master switch (volatile): false disables every listener to a passthrough.
-     */
-    enabled: boolean;
     /**
      * The confidence gate (volatile): a note emits only at or above it; the destructive intents' pack
      * thresholds (0.85) override per intent.

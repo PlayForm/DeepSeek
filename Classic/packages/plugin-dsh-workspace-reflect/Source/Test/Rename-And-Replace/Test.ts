@@ -272,7 +272,7 @@ export const runTest = async (): Promise<number> => {
 	// Group X3: the cold mount denies every op.
 	{
 		rm();
-		const Run = Make(Validate({ logFile: Ledger }), Seed({ "/repo/a.ts": CONTENT }));
+		const Run = Make(Validate({ logFile: Ledger, enabled: false }), Seed({ "/repo/a.ts": CONTENT }));
 		const Reply = await Run.Context.workspaceReflect.rename({
 			kind: "rename", path: "/repo/a.ts", startLine: 1, endLine: 1, oldName: "alpha", newName: "delta",
 		});

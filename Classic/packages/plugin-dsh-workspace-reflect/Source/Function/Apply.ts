@@ -93,7 +93,7 @@ export default (Context: Context, Options: Config): void => {
 	// calls ctx.reflect.provide("workspaceReflect", this).
 	new ServiceClass(Context, State);
 	switch (true) {
-		case !State.On:
+		case State.On === false:
 			// The cold mount: honest in the ledger, wired to nothing.
 			Factory.Append(State, "disabled (enabled=false)");
 			return;

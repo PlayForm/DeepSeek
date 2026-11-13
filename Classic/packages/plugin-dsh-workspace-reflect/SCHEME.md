@@ -135,9 +135,9 @@ reflect: rejected <path> (graph absent)
 
 | Field         | Type                | Default                                            |
 | ------------- | ------------------- | -------------------------------------------------- |
-| logFile       | string              | `~/.dsh/playform/plugin-dsh-workspace-reflect.log` |
-| log           | boolean             | true (the factory's shared block)                  |
 | enabled       | boolean             | false                                              |
+| log           | boolean             | true (the factory's shared block)                  |
+| logFile       | string              | `~/.dsh/playform/plugin-dsh-workspace-reflect.log` |
 | propagate     | `"block" \| "file"` | block                                              |
 | maxFileBytes  | number              | 1000000                                            |
 | maxBlockLines | number              | 5000                                               |

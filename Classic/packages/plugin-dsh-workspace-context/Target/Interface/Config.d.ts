@@ -14,13 +14,17 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  */
 export default interface Config {
     /**
-     * The service's own ledger file (one log per module).
-     */
-    logFile: string;
-    /**
      * The IDLE-forever posture: false by default; an explicit ACTIVATE.
      */
     enabled: boolean;
+    /**
+     * Ledger enabled - write the durable log file.
+     */
+    log: boolean;
+    /**
+     * The service's own ledger file (one log per module).
+     */
+    logFile: string;
     /**
      * The budget target in tokens (V4-1: target 2k).
      */

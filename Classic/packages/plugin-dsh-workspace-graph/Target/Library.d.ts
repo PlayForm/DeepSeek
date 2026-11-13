@@ -75,6 +75,8 @@ export default class WorkspaceGraph extends Service {
     static inject: string[];
     static Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
         enabled: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
+        log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
+        logFile: import("@deepseek-ai/schemastery").default<string, string, "volatile-defined">;
         domain: import("@deepseek-ai/schemastery").default<string, string, "volatile-defined">;
         languages: import("@deepseek-ai/schemastery").default<NoInfer<("javascript" | "markdown" | "typescript")[]>, NoInfer<("javascript" | "markdown" | "typescript")[]>, "volatile-defined">;
         include: import("@deepseek-ai/schemastery").default<NoInfer<string[]>, NoInfer<string[]>, "volatile-defined">;
@@ -105,6 +107,8 @@ export default class WorkspaceGraph extends Service {
         }>>>, "volatile">;
     }>>, Schemastery.ObjectT<NoInfer<{
         enabled: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
+        log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
+        logFile: import("@deepseek-ai/schemastery").default<string, string, "volatile-defined">;
         domain: import("@deepseek-ai/schemastery").default<string, string, "volatile-defined">;
         languages: import("@deepseek-ai/schemastery").default<NoInfer<("javascript" | "markdown" | "typescript")[]>, NoInfer<("javascript" | "markdown" | "typescript")[]>, "volatile-defined">;
         include: import("@deepseek-ai/schemastery").default<NoInfer<string[]>, NoInfer<string[]>, "volatile-defined">;

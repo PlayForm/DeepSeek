@@ -4,6 +4,8 @@ import Schema from "@deepseek-ai/schemastery";
  */
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     enabled: Schema<boolean, boolean, "volatile-defined">;
+    log: Schema<boolean, boolean, "volatile-defined">;
+    logFile: Schema<string, string, "volatile-defined">;
     domain: Schema<string, string, "volatile-defined">;
     languages: Schema<NoInfer<("javascript" | "markdown" | "typescript")[]>, NoInfer<("javascript" | "markdown" | "typescript")[]>, "volatile-defined">;
     include: Schema<NoInfer<string[]>, NoInfer<string[]>, "volatile-defined">;
@@ -34,6 +36,8 @@ declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     }>>>, "volatile">;
 }>>, Schemastery.ObjectT<NoInfer<{
     enabled: Schema<boolean, boolean, "volatile-defined">;
+    log: Schema<boolean, boolean, "volatile-defined">;
+    logFile: Schema<string, string, "volatile-defined">;
     domain: Schema<string, string, "volatile-defined">;
     languages: Schema<NoInfer<("javascript" | "markdown" | "typescript")[]>, NoInfer<("javascript" | "markdown" | "typescript")[]>, "volatile-defined">;
     include: Schema<NoInfer<string[]>, NoInfer<string[]>, "volatile-defined">;

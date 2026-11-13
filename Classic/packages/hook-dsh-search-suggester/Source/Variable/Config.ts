@@ -29,8 +29,9 @@ import { Schema as Compose } from "@playform/plugin-dsh-factory";
  * (the schema must be a real schemastery instance - the loader consumes it through the
  * Standard Schema `~standard` interface).
  */
-const DefaultLogFile = "~/.dsh/playform/hook-dsh-search-suggester.log";
 const DefaultEnabled = true;
+const DefaultLog = true;
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-search-suggester.log";
 const DefaultThreshold = 0.75;
 const DefaultMaxCandidates = 7;
 const DefaultMaxNoteChars = 1200;
@@ -62,11 +63,15 @@ const DefaultSectionMode = "off";
 const DefaultSectionTTL = 20;
 
 export default Compose(false, {
+	// The master switch (volatile): false appends `disabled (enabled=false)`
+	// and every listener passes through - distinct from the shared `log`
+	// cell, which governs only the durable ledger file.
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
 	// Ledger file - the search suggester's ledger, SEPARATE from the family's logs (one log
 	// per module) - volatile: hot-editable without remounting.
 	logFile: Schema.string().default(DefaultLogFile).volatile(),
-	// The master switch (volatile): false mutes every listener to a passthrough.
-	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The confidence gate (volatile). The destructive intents (Version, Path, Ledger) carry
 	// 0.85 in their pack rows and always override this default.
 	threshold: Schema.number().default(DefaultThreshold).volatile(),

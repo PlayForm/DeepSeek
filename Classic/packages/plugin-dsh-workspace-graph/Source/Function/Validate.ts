@@ -57,6 +57,8 @@ export default (Raw: Record<string, unknown>): Configuration => {
 	}
 	return {
 		enabled: Raw["enabled"] === true,
+		log: Raw["log"] !== false,
+		logFile: typeof Raw["logFile"] === "string" ? Raw["logFile"] : "",
 		domain: Domain,
 		languages: Languages as Configuration["languages"],
 		include: StringList(Raw["include"], "include"),

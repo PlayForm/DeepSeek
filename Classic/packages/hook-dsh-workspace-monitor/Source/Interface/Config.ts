@@ -16,14 +16,19 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  */
 export default interface Config {
 	/**
-	 * The hook's own ledger file (one log per module).
-	 */
-	logFile: string;
-
-	/**
 	 * The IDLE-forever posture: false by default; an explicit ACTIVATE.
 	 */
 	enabled: boolean;
+
+	/**
+	 * Ledger enabled - write the durable log file (the shared `log` cell).
+	 */
+	log: boolean;
+
+	/**
+	 * The hook's own ledger file (one log per module).
+	 */
+	logFile: string;
 
 	/**
 	 * The KV domain name reserved for the hook (its own domain, never the

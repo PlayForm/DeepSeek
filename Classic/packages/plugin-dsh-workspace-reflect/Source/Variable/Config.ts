@@ -35,8 +35,9 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance -
  * the loader consumes it through the Standard Schema `~standard` interface).
  */
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-reflect.log";
-const DefaultEnabled = false;
 // The default rename scope: "block" renames inside the operation's span
 // only; "file" renames whole-word across the whole file (the one-call
 // bundling of the affected references). The operation's own `scope`
@@ -51,8 +52,17 @@ const DefaultMaxFileBytes = 1000000;
 const DefaultMaxBlockLines = 5000;
 
 export default Compose(false, {
-	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	// The MASTER SWITCH (volatile: a flip is read on the next mount): false =
+	// the cold mount logs `disabled (enabled=false)` and every operation
+	// answers denied. Distinct from the shared `log` cell, which governs
+	// only the durable ledger file.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	// Ledger file - the plugin's SEPARATE ledger, one log per module -
+	// volatile: hot-editable without remounting (overrides the minimal
+	// shared block's empty default).
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	propagate: Schema.union(["block", "file"]).default(DefaultPropagate).volatile(),
 	maxFileBytes: Schema.number().default(DefaultMaxFileBytes).volatile(),
 	maxBlockLines: Schema.number().default(DefaultMaxBlockLines).volatile(),

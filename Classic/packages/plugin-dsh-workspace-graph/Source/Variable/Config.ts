@@ -12,7 +12,8 @@ import DEFAULT_EXCLUDE from "@Variable/Default.js";
  * Cordis validates the exported schema while the plugin loads and fills every default, so
  * invalid configuration fails LOUD at load instead of silently falling back per-field. The
  * shape this schema produces is `Interface/Config.ts`; every field is one of the brief's frozen
- * config rows (section 4.5, all volatile) and NOTHING else - no hidden knobs.
+ * config rows (section 4.5, all volatile), the two universal volatile ledger cells (`log`,
+ * `logFile`) beside them, and NOTHING else - no hidden knobs.
  *
  * VOLATILE CELLS: every field is `.volatile()` - a hot edit commits into the running fiber
  * without remounting; the service's constructor unwraps the cells once at load
@@ -25,7 +26,9 @@ import DEFAULT_EXCLUDE from "@Variable/Default.js";
  * The schema is a real `@deepseek-ai/schemastery` instance - the loader consumes it through the
  * Standard Schema `~standard` interface.
  */
-const DefaultEnabled = false;
+const DefaultEnabled = true;
+const DefaultLog = true;
+const DefaultLogFile = "";
 const DefaultDomain = "workspace_graph";
 const DefaultLanguages: Array<"typescript" | "javascript" | "markdown"> = [
 	"typescript",
@@ -48,6 +51,12 @@ const DefaultLimitMaximum = 500;
  */
 export default Schema.object({
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	// Ledger file (one separate log per module) - volatile: hot-editable;
+	// the empty default keeps the durable file opt-in (the logger is the
+	// default surface), and a configured path arms it.
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	domain: Schema.string().default(DefaultDomain).volatile(),
 	languages: Schema.array(Schema.union(["typescript", "javascript", "markdown"]))
 		.default(DefaultLanguages)

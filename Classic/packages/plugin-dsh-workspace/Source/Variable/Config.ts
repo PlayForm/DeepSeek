@@ -31,8 +31,9 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * disabled, never appears in the profile's bundles, and enables only by an
  * explicit ACTIVATE.
  */
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace.log";
-const DefaultEnabled = false;
 const DefaultMapDepth = 2;
 const DefaultMapMaxModules = 20;
 const DefaultFindLimit = 50;
@@ -45,8 +46,17 @@ const DefaultTokenCharsPerToken = 4;
 const DefaultKinds: Array<"File" | "Symbol" | "Block" | "Test" | "DocSection"> = [];
 
 export default Compose(false, {
-	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	// The MASTER SWITCH (volatile: a flip is read on the next mount): false =
+	// the State build logs `disabled (enabled=false)` and every tool no-ops
+	// to a clear refusal. Distinct from the shared `log` cell, which governs
+	// only the durable ledger file.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	// Ledger file - the agent's SEPARATE ledger, one log per module -
+	// volatile: hot-editable without remounting (overrides the minimal
+	// shared block's empty default).
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// The workspace_map knobs (V4-1 §3.4: the top-level modules, depth).
 	mapDepth: Schema.number().default(DefaultMapDepth).volatile(),
 	mapMaxModules: Schema.number().default(DefaultMapMaxModules).volatile(),

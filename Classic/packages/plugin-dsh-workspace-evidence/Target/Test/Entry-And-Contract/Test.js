@@ -22,8 +22,14 @@ const runTest = async () => {
     assert.equal(typeof Plugin.Config, "function");
     assert.deepEqual(Plugin.inject, ["pluginFactory"]);
   });
+  Check(Count, "E1: the schema fills the Config base (enabled, log, logFile)", () => {
+    const Knobs = Validate({});
+    assert.equal(Knobs.enabled.get(), true);
+    assert.equal(Knobs.log.get(), true);
+    assert.equal(Knobs.logFile.get(), "~/.dsh/playform/plugin-dsh-workspace-evidence.log");
+  });
   {
-    const Run = Setup({});
+    const Run = Setup({ enabled: false });
     const Service = Run.Provided.workspaceEvidence;
     Check(Count, "E2: apply returns nothing, the service is still provided", () => {
       assert.equal(Run.Returned, void 0);

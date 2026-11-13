@@ -39,7 +39,7 @@ export const runTest = async (): Promise<number> => {
 	// Group W1: the cold mount (the IDLE-forever posture).
 	{
 		rm();
-		const Run = Make(Validate({ logFile: Ledger }));
+		const Run = Make(Validate({ logFile: Ledger, enabled: false }));
 		Check(Count, "W1: apply returns NOTHING and the service is still provided", () => {
 			assert.equal(Run.Returned, undefined);
 			assert.ok(Run.Provided["workspaceObserve"] !== undefined);

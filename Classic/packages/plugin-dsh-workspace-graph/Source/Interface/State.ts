@@ -15,9 +15,9 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  * The state carries the owning context, the validated plain configuration, the in-memory
  * record mirror, the revision counter, the optional open storage-domain handle, the
  * pending-open promise (the constructor fires the open detached; the async writers await it so
- * the store assertions are deterministic), the optional durable ledger path (settable through
- * the `__workspaceGraphState` probe; not a config field - the frozen config table has no
- * ledger knob), the invalid-record counter (records skipped and counted, never guessed), the
+ * the store assertions are deterministic), the optional durable ledger path (config `logFile`,
+ * gated by config `log`; the empty default keeps the logger as the only surface), the
+ * invalid-record counter (records skipped and counted, never guessed), the
  * skipped-import counter (non-relative import specifiers, recorded - not faked as nodes), and
  * the detached loop the trace adapter builds (the per-path coalescing queue: ONE in-flight
  * re-index per path, no timers - `State.Flush` is its flush promise).

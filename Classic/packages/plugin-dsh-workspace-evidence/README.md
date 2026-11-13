@@ -48,8 +48,8 @@ assertions.
 
     The sequence is the service's own monotonic counter, never a wall clock.
 
-- **The idle-forever posture**: ships disabled (`enabled: false`), never appears in the profile's
-  bundles, and enables only by an explicit ACTIVATE.
+- **The shipped posture**: ships enabled (`enabled: true` - a profile turns it off with
+  `enabled: false`).
 - **The ledger**: its own strings, prefix `evidence:` (module-owned, byte-stable), one log per
   module (default `~/.dsh/playform/plugin-dsh-workspace-evidence.log`).
 
@@ -68,14 +68,14 @@ A coalesced repeat event (the repeat-event guard) records nothing and adds no li
 
 ## The configuration
 
-| Field            | Default                                             | Meaning                                      |
-| ---------------- | --------------------------------------------------- | -------------------------------------------- |
-| `enabled`        | `false`                                             | the master switch (the idle-forever posture) |
-| `log`            | `true`                                              | the ledger switch (shared cell)              |
-| `logFile`        | `~/.dsh/playform/plugin-dsh-workspace-evidence.log` | the ledger                                   |
-| `domain`         | `workspace_evidence`                                | the KV domain name                           |
-| `maxValidations` | `512`                                               | the validation ring bound                    |
-| `policy.*`       | D6 defaults                                         | the per-action allowlist (see below)         |
+| Field            | Default                                             | Meaning                              |
+| ---------------- | --------------------------------------------------- | ------------------------------------ |
+| `enabled`        | `true`                                              | the master switch (ships enabled)    |
+| `log`            | `true`                                              | the ledger switch (shared cell)      |
+| `logFile`        | `~/.dsh/playform/plugin-dsh-workspace-evidence.log` | the ledger                           |
+| `domain`         | `workspace_evidence`                                | the KV domain name                   |
+| `maxValidations` | `512`                                               | the validation ring bound            |
+| `policy.*`       | D6 defaults                                         | the per-action allowlist (see below) |
 
 Every field is a volatile cell.
 
@@ -88,8 +88,8 @@ tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
 - [Workspace-Family/EVIDENCE](../../../Documentation/Plans/Workspace-Family/EVIDENCE.md) - the
   evidence role.
-- The idle-forever posture: ships disabled (`enabled: false`), never appears in the profile's
-  bundles, and enables only by an explicit ACTIVATE.
+- The shipped posture: ships enabled (`enabled: true` - a profile turns it off with
+  `enabled: false`).
 
 ## License
 

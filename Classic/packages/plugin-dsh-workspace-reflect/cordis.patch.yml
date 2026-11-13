@@ -11,10 +11,10 @@
 # app is restarted (bundle layers compose at host boot). A file: dependency
 # alone is NOT activation.
 #
-# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
-# else - the plugin never appears in the profile's bundles and enables only
-# by an explicit ACTIVATE (the user edits the profile and restarts). On a
-# cold mount the State build logs `disabled (enabled=false)`, the service is
+# THE SHIPPED POSTURE: this entry ships with enabled: true (installing the
+# plugin yields an enabled plugin), log: true and the ledger path - a profile
+# turns it off with `enabled: false`. On a disabled mount the State build
+# logs `disabled (enabled=false)`, the service is
 # registered (every call answers denied with its own ledger line) and no
 # write path is armed. The schema defaults are the truth; the full default
 # surface (propagate block, maxFileBytes 1000000, maxBlockLines 5000) lives
@@ -34,7 +34,9 @@
       - id: plugin-dsh-workspace-reflect
         name: "@playform/plugin-dsh-workspace-reflect"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ~/.dsh/playform/plugin-dsh-workspace-reflect.log
             policy:
                 read: auto
                 index: auto

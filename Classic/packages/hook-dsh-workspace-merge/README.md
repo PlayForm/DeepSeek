@@ -95,7 +95,7 @@ merge: storage open failed: <reason>
 
 | Field           | Default                                        | Meaning                                                  |
 | --------------- | ---------------------------------------------- | -------------------------------------------------------- |
-| `enabled`       | `false`                                        | the master switch (the IDLE-forever posture)             |
+| `enabled`       | `true`                                         | the master switch (the plugin ships enabled)             |
 | `log`           | `true`                                         | the ledger switch (the shared cell)                      |
 | `logFile`       | `~/.dsh/playform/hook-dsh-workspace-merge.log` | the ledger                                               |
 | `domain`        | `workspace_merge`                              | the KV domain name                                       |
@@ -120,8 +120,8 @@ and the reply union by `Source/Test/Wiring-And-Gates` and `Source/Test/Commit-An
 - [WORKSPACE-FAMILY-V4-1](../../../Documentation/Plans/WORKSPACE-FAMILY-V4-1.md) - sections 3.7-3.8,
   the edit lifecycle.
 
-- The plugin ships **disabled** (`enabled: false`, the IDLE-forever posture) and enables only by an
-  explicit ACTIVATE.
+- The plugin ships **enabled** (`enabled: true`; installing it yields an enabled plugin) and the
+  profile may turn it off with `enabled: false`.
 
     This is the PoC build, and the smoke suite and the ETS twin land at the end phase.
 

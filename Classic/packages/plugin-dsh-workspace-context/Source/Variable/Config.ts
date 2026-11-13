@@ -29,8 +29,9 @@ import DefaultLens from "@Variable/DefaultLens.js";
  *
  * `enabled` defaults to FALSE - the IDLE-forever posture.
  */
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-context.log";
-const DefaultEnabled = false;
 // The budget: target 2k tokens (V4-1 section 3.5), hard cap configurable.
 const DefaultBudgetTokens = 2000;
 const DefaultBudgetMaximum = 4000;
@@ -43,8 +44,17 @@ const DefaultMapLimit = 12;
 const DefaultWorkspaceName = "workspace";
 
 export default Compose(false, {
-	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	// The MASTER SWITCH (volatile: a flip is read on the next mount): false =
+	// the cold mount logs `disabled (enabled=false)`, registers the service
+	// and registers no tool. Distinct from the shared `log` cell, which
+	// governs only the durable ledger file.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	// Ledger file - the service's SEPARATE ledger, one log per module -
+	// volatile: hot-editable without remounting (overrides the minimal
+	// shared block's empty default).
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	budgetTokens: Schema.number().default(DefaultBudgetTokens).volatile(),
 	budgetMaximum: Schema.number().default(DefaultBudgetMaximum).volatile(),
 	// The lenses: the catalog names the packet can be built through; the

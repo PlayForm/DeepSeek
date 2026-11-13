@@ -212,7 +212,8 @@ export default (Context: Context, Options: Config): void => {
 	// there is no boot pack, because the candidates come from the session's
 	// own tool calls and only an explicit pack may still speak.
 	//   doc-suggester: activated (bundle 0.2.1, history, threshold 0.75)
-	if (!State.On) {
+	// The `=== false` guard keeps a bare fixture that omits the key mounted.
+	if (State.On === false) {
 		Factory.Append(State, "disabled (enabled=false)");
 	} else {
 		Factory.Append(

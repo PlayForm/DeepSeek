@@ -58,13 +58,13 @@
 
 | Field          | Type      | Default                                          |
 | -------------- | --------- | ------------------------------------------------ |
-| `enabled`      | boolean   | `false`                                          |
+| `enabled`      | boolean   | `true`                                           |
 | `log`          | boolean   | `true`                                           |
+| `logFile`      | string    | `~/.dsh/playform/hook-dsh-workspace-operate.log` |
 | `domain`       | string    | `workspace_operate`                              |
 | `maxProposals` | number    | `500`                                            |
 | `limitDefault` | number    | `50`                                             |
 | `limitMaximum` | number    | `500`                                            |
-| `logFile`      | string    | `~/.dsh/playform/hook-dsh-workspace-operate.log` |
 | `policy`       | Allowlist | the D6 defaults (see below)                      |
 
 All volatile.

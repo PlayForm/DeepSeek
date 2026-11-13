@@ -310,8 +310,9 @@ export default (Context: Context, Options: Config): void => {
 	// ledger alone. The second segment is `history` (not an intent count):
 	// there is no boot pack, because the candidates come from the recall and
 	// only an explicit pack may still speak. The fourth segment stays the
-	// seeded store's record count.
-	if (!State.On) {
+	// seeded store's record count. The `=== false` guard keeps a bare fixture
+	// that omits the key mounted.
+	if (State.On === false) {
 		Factory.Append(State, "disabled (enabled=false)");
 	} else {
 		Factory.Append(

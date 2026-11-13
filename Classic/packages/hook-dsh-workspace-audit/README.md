@@ -62,7 +62,7 @@ Every knob is a volatile cell (hot edits commit without remounting):
 
 | Field      | Default                                             | Description                              |
 | ---------- | --------------------------------------------------- | ---------------------------------------- |
-| `enabled`  | `false`                                             | Master switch (the IDLE-forever posture) |
+| `enabled`  | `true`                                              | Master switch (the plugin ships enabled) |
 | `log`      | `true`                                              | Ledger enabled                           |
 | `logFile`  | `~/.dsh/playform/hook-dsh-workspace-audit.log`      | The plugin's own ledger                  |
 | `domain`   | `workspace_audit`                                   | The KV domain name                       |
@@ -70,8 +70,8 @@ Every knob is a volatile cell (hot edits commit without remounting):
 | `exclude`  | `["node_modules/**", "**/Target/**", "**/.git/**"]` | Excluded paths                           |
 | `policy.*` | see below                                           | The D6 per-action allowlist              |
 
-The plugin ships **disabled**, so it never appears in the profile's bundles and enables only by an
-explicit ACTIVATE.
+The plugin ships **enabled** (installing it yields an enabled plugin); the profile may turn it off
+with `enabled: false`.
 
 ### The policy block (D6)
 

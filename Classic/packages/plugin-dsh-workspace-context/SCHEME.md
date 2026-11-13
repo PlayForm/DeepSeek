@@ -4,8 +4,9 @@ The configuration schema below has all knobs volatile, so hot edits commit witho
 
 | Field           | Type      | Default                                            |
 | --------------- | --------- | -------------------------------------------------- |
+| `enabled`       | boolean   | `true`                                             |
+| `log`           | boolean   | `true`                                             |
 | `logFile`       | string    | `~/.dsh/playform/plugin-dsh-workspace-context.log` |
-| `enabled`       | boolean   | `false`                                            |
 | `budgetTokens`  | number    | `2000` (the target)                                |
 | `budgetMaximum` | number    | `4000` (the hard cap, >= target)                   |
 | `lenses`        | string[]  | `["code", "docs", "tests"]`                        |

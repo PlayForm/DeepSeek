@@ -140,7 +140,8 @@ export default (Context: Context, Options: Config): void => {
 	// ledger alone. The second segment is `graph` (not an intent count):
 	// there is no boot pack, because every candidate comes from the graph
 	// query and the retired literal pack is never a source.
-	if (!State.On) {
+	// The `=== false` guard keeps a bare fixture that omits the key mounted.
+	if (State.On === false) {
 		Factory.Append(State, "disabled (enabled=false)");
 	} else {
 		Factory.Append(

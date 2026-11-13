@@ -28,8 +28,9 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * `enabled` defaults to FALSE - the IDLE-forever posture: the service registers
  * and reads honestly, but grants and leases nothing until enabled.
  */
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-authority.log";
-const DefaultEnabled = false;
 // The default lease TTL (ms).
 const DefaultTTLMs = 300_000;
 // The lease ceiling per holder.
@@ -46,8 +47,17 @@ const DefaultDisposition = "keep";
 const DefaultPolicy: never[] = [];
 
 export default Compose(false, {
-	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	// The MASTER SWITCH (volatile: a flip is read on the next mount): false =
+	// the cold mount logs `disabled (enabled=false)` and the service grants,
+	// leases and evicts nothing. Distinct from the shared `log` cell, which
+	// governs only the durable ledger file.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	// Ledger file - the service's SEPARATE ledger, one log per module -
+	// volatile: hot-editable without remounting (overrides the minimal
+	// shared block's empty default).
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	defaultTtlMs: Schema.number().default(DefaultTTLMs).volatile(),
 	maxLeasesPerHolder: Schema.number().default(DefaultMaxLeasesPerHolder).volatile(),
 	maxCapabilitiesPerHolder: Schema.number().default(DefaultMaxCapabilitiesPerHolder).volatile(),

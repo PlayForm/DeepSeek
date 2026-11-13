@@ -223,7 +223,8 @@ export default (Context: Context, Options: Config): void => {
 	// ledger alone. The second segment is `history` (not an intent count):
 	// there is no boot pack, because the candidates come from the session's
 	// own tool calls and only an explicit pack may still speak.
-	if (!State.On) {
+	// The `=== false` guard keeps a bare fixture that omits the key mounted.
+	if (State.On === false) {
 		Factory.Append(State, "disabled (enabled=false)");
 	} else {
 		Factory.Append(

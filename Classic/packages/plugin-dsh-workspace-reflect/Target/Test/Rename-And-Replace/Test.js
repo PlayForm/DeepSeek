@@ -273,7 +273,7 @@ const runTest = async () => {
   }
   {
     rm();
-    const Run = Make(Validate({ logFile: Ledger }), Seed({ "/repo/a.ts": CONTENT }));
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }), Seed({ "/repo/a.ts": CONTENT }));
     const Reply = await Run.Context.workspaceReflect.rename({
       kind: "rename",
       path: "/repo/a.ts",

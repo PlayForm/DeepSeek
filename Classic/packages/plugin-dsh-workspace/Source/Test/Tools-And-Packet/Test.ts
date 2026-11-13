@@ -37,7 +37,7 @@ export const runTest = async (): Promise<number> => {
 	// Group T1: the disabled refusals.
 	{
 		rm();
-		const Run = Make(Validate({ logFile: Ledger }), StandardGraph());
+		const Run = Make(Validate({ logFile: Ledger, enabled: false }), StandardGraph());
 		CheckAsync(Count, "T1: a disabled plugin's map tool refuses with the byte-exact error", async () => {
 			await assert.rejects(
 				() => Tool(Run, "workspace_map").execute({}, {}),

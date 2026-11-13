@@ -18,7 +18,8 @@ The loader contract is `name: plugin-dsh-workspace`, `apply` (which returns noth
 
 | Field              | Type       | Default                                    |
 | ------------------ | ---------- | ------------------------------------------ |
-| enabled            | boolean    | `false`                                    |
+| enabled            | boolean    | `true`                                     |
+| log                | boolean    | `true`                                     |
 | logFile            | string     | `~/.dsh/playform/plugin-dsh-workspace.log` |
 | mapDepth           | number     | `2`                                        |
 | mapMaxModules      | number     | `20`                                       |
@@ -146,4 +147,4 @@ module-owned and asserted byte-exactly by the smoke.
 Built and smoked: `Wiring-And-Contract` (17), `Tools-And-Packet` (19, FakeGraph) and
 `Real-Graph-And-Tools` (10, the real populated graph).
 
-The package ships disabled in the bundle patch.
+The package ships enabled in the bundle patch; a profile turns it off with `enabled: false`.

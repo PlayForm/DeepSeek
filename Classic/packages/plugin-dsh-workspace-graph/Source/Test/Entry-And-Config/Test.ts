@@ -51,7 +51,9 @@ export const runTest = async (): Promise<number> => {
 		const Defaults = MakeGraph({ files: {} });
 		Check(Count, "config: the schema defaults flow into the plain State config", () => {
 			assert.deepEqual(Defaults.State.Config, {
-				enabled: false,
+				enabled: true,
+				log: true,
+				logFile: "",
 				domain: "workspace_graph",
 				languages: ["typescript", "javascript", "markdown"],
 				include: [],
@@ -65,7 +67,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		Check(Count, "config: every volatile field arrives as a cell and unwraps", () => {
 			const Cells = (Defaults.Graph.constructor as any).Config({});
-			for (const Key of ["enabled", "domain", "languages", "include", "exclude", "maxFileBytes", "maxNodesPerFile", "maxFiles", "limitDefault", "limitMaximum"]) {
+			for (const Key of ["enabled", "log", "logFile", "domain", "languages", "include", "exclude", "maxFileBytes", "maxNodesPerFile", "maxFiles", "limitDefault", "limitMaximum"]) {
 				assert.equal(typeof Cells[Key]?.get, "function", `cell for ${Key}`);
 			}
 			assert.equal(Defaults.State.Config.domain, "workspace_graph");

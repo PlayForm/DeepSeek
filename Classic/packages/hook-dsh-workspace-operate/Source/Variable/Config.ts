@@ -23,21 +23,25 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * VOLATILE CELLS: every knob in this schema is `.volatile()` - hot edits
  * commit WITHOUT remounting the plugin.
  *
- * `enabled` defaults to FALSE - the IDLE-forever posture.
+ * `enabled` defaults to TRUE - the plugin ships enabled; the profile may
+ * turn it off with `enabled: false`.
  *
  * This is one of the modules in the tree with a runtime import of
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance).
  */
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-workspace-operate.log";
-const DefaultEnabled = false;
 const DefaultDomain = "workspace_operate";
 const DefaultMaxProposals = 500;
 const DefaultLimitDefault = 50;
 const DefaultLimitMaximum = 500;
 
 export default Compose(false, {
-	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// The KV domain name (the hook's own domain, NOT the shared
 	// package_governance one - the hook owns its record schema).
 	domain: Schema.string().default(DefaultDomain).volatile(),

@@ -29,8 +29,9 @@ import Defaults from "./Weights.js";
  * the pack is an explicit repo/user file resolved per call, never a config
  * path.
  */
-const DefaultLogFile = "~/.dsh/playform/hook-dsh-edit-suggester.log";
 const DefaultEnabled = true;
+const DefaultLog = true;
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-edit-suggester.log";
 const DefaultThreshold = 0.75;
 const DefaultTools = ["write", "edit", "raw-write"];
 const DefaultMaxCompanions = 7;
@@ -43,11 +44,15 @@ const DefaultLearnWindow = 3;
 const DefaultStoreLimit = 512;
 
 export default Compose(false, {
+	// The master switch (volatile): false appends `disabled (enabled=false)`
+	// and every listener passes through - distinct from the shared `log`
+	// cell, which governs only the durable ledger file.
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
 	// Ledger file - the edit suggester's ledger, SEPARATE from the family's
 	// logs (one log per module) - volatile: hot-editable without remounting.
 	logFile: Schema.string().default(DefaultLogFile).volatile(),
-	// The master switch (volatile): false mutes every listener to a passthrough.
-	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The confidence gate (volatile). The destructive pack families (Version)
 	// carry 0.85 in their pack rows and always override this default.
 	threshold: Schema.number().default(DefaultThreshold).volatile(),

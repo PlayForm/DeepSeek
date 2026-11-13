@@ -42,8 +42,9 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
  * adapter - the switch exists so a deployment can keep the model purely
  * lexical.
  */
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-semantics.log";
-const DefaultEnabled = false;
 // The KV domain name (the service's own domain, not a shared one).
 const DefaultDomain = "workspace_semantics";
 // The index bound: the last maxEntries built models survive in memory (and in the
@@ -64,8 +65,17 @@ const DefaultLsp = true;
 const DefaultAdapters: string[] = [];
 
 export default Compose(false, {
-	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	// The MASTER SWITCH (volatile: a flip is read on the next mount): false =
+	// the cold mount logs `disabled (enabled=false)` and the service wires
+	// nothing else. Distinct from the shared `log` cell, which governs only
+	// the durable ledger file.
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	// Ledger file - the service's SEPARATE ledger, one log per module -
+	// volatile: hot-editable without remounting (overrides the minimal
+	// shared block's empty default).
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	domain: Schema.string().default(DefaultDomain).volatile(),
 	maxEntries: Schema.number().default(DefaultMaxEntries).volatile(),
 	exclude: Schema.array(Schema.string()).default(DefaultExclude).volatile(),

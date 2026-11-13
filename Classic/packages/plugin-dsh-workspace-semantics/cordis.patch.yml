@@ -12,9 +12,9 @@
 # 'entry "..." not found'. Activated when the profile's package.json lists
 # the package in dsh.profile.bundles AND the app is restarted.
 #
-# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
-# else - the service never appears in the profile's bundles and enables only
-# by an explicit ACTIVATE. On a cold mount the State build logs
+# THE SHIPPED POSTURE: this entry ships with enabled: true (installing the
+# plugin yields an enabled plugin), log: true and the ledger path - a profile
+# turns it off with `enabled: false`. On a disabled mount the State build logs
 # `disabled (enabled=false)` and the service answers honestly from an empty
 # index (resolve still builds through the adapter once enabled). The schema
 # defaults are the truth; the full default surface (domain
@@ -40,7 +40,9 @@
       - id: plugin-dsh-workspace-semantics
         name: "@playform/plugin-dsh-workspace-semantics"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ~/.dsh/playform/plugin-dsh-workspace-semantics.log
             policy:
                 read: auto
                 index: auto

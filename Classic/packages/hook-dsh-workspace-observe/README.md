@@ -109,9 +109,8 @@ pack's `policy` section overrides the defaults per action (the wiring is the nex
 
 ## The IDLE-forever posture
 
-The plugin ships DISABLED: the bundle entry declares `enabled: false` only, the plugin never appears
-in the profile's bundles, and it enables only by an explicit ACTIVATE (you edit the profile and
-restart).
+The plugin ships ENABLED: the bundle entry declares `enabled: true` (installing it yields an enabled
+plugin), and the profile may turn it off with `enabled: false` (you edit the profile and restart).
 
 A cold mount logs `disabled (enabled=false)` and wires nothing.
 

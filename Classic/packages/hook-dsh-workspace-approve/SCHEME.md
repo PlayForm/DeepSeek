@@ -124,9 +124,9 @@ approve: storage open failed: <reason>
 
 | Field              | Type        | Default                                          |
 | ------------------ | ----------- | ------------------------------------------------ |
-| logFile            | string      | `~/.dsh/playform/hook-dsh-workspace-approve.log` |
+| enabled            | boolean     | true                                             |
 | log                | boolean     | true (the factory's shared block)                |
-| enabled            | boolean     | false                                            |
+| logFile            | string      | `~/.dsh/playform/hook-dsh-workspace-approve.log` |
 | domain             | string      | `workspace_approve`                              |
 | maxBindings        | number      | 1000                                             |
 | requireConstraints | boolean     | true                                             |

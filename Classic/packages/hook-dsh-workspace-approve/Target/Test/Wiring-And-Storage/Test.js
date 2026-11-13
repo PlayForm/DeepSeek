@@ -27,7 +27,7 @@ const runTest = async () => {
   const Count = MakeCounter();
   {
     rm();
-    const Run = Make(Validate({ logFile: Ledger }));
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }));
     Check(Count, "W1: apply returns NOTHING and the service is still provided", () => {
       assert.equal(Run.Returned, void 0);
       assert.ok(Run.Provided["workspaceApprove"] !== void 0);

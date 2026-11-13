@@ -27,8 +27,9 @@ import { Schema as Compose } from "@playform/plugin-dsh-factory";
  * the loader consumes it through the Standard Schema `~standard` interface; the import resolves
  * from the running dsh's own copy, docs/user/develop/basic/publish.md:103).
  */
-const DefaultLogFile = "~/.dsh/playform/hook-dsh-graph-suggester.log";
 const DefaultEnabled = true;
+const DefaultLog = true;
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-graph-suggester.log";
 const DefaultThreshold = 0.75;
 const DefaultMaxCandidates = 7;
 const DefaultMaxNoteChars = 1200;
@@ -40,11 +41,16 @@ const DefaultExclude = ["node_modules", "Target", ".git", "dist"];
 const DefaultGraph = true;
 
 export default Compose(false, {
+	// Master switch (volatile: the kill-criterion flip is a hot edit). False
+	// appends `disabled (enabled=false)` to the ledger and every listener
+	// passes through - distinct from the shared `log` cell, which governs
+	// only the durable ledger file.
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
 	// Ledger file - the hook's own ledger, SEPARATE from the family's logs (one
 	// log per module) - volatile: hot-editable without remounting.
 	logFile: Schema.string().default(DefaultLogFile).volatile(),
-	// Master switch (volatile: the kill-criterion flip is a hot edit).
-	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The default confidence gate (volatile). The graph intents' 0.75 floor
 	// may raise it; a lower config value never lowers the floor (the gate is
 	// the max of the two).

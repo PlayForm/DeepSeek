@@ -4,7 +4,7 @@ The test covers the loader contract (apply returns nothing, and the default obje
 
 ## Scenarios
 
-- W1: the default object carries name/apply/Config/inject, apply returns nothing, the service is provided on a cold mount, a disabled mount wires nothing, the cold-mount lines are byte-exact, and a disabled service answers honestly with nothing.
+- W1: the default object carries name/apply/Config/inject, the schema fills the Config base (`enabled` false, `log` true, the `logFile` default), apply returns nothing, the service is provided on a cold mount, a disabled mount wires nothing, the cold-mount lines are byte-exact, and a disabled service answers honestly with nothing.
 - W2: fs/observed is registered on the ROOT context only, the root identity is distinct, the activation lines are byte-exact, and the storage effect is armed.
 - W3: the revision advances monotonically (`indexed <path> version <v> (revision <r>)`), and an absent observation invalidates as version absent.
 - W4: an excluded segment, the own actor, and a malformed event each give their byte-exact line, and the listener path touches zero file content.
@@ -23,4 +23,4 @@ The test covers the loader contract (apply returns nothing, and the default obje
 
 ## Expected count
 
-20 PASS.
+21 PASS.

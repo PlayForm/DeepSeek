@@ -37,7 +37,13 @@ export const runTest = async (): Promise<number> => {
 	// Group W1: the cold mount (the IDLE-forever posture).
 	{
 		rm();
-		const Run = Make(Validate({ logFile: Ledger }));
+		const Run = Make(Validate({ logFile: Ledger, enabled: false }));
+		Check(Count, "W1: the schema fills the Config base (enabled, log, logFile)", () => {
+			const Knobs = Validate({});
+			assert.equal(Knobs.enabled.get(), true);
+			assert.equal(Knobs.log.get(), true);
+			assert.equal(Knobs.logFile.get(), "~/.dsh/playform/plugin-dsh-workspace-reflect.log");
+		});
 		Check(Count, "W1: apply returns NOTHING and the service is still provided", () => {
 			assert.equal(Run.Returned, undefined);
 			assert.ok(Run.Provided["workspaceReflect"] !== undefined);

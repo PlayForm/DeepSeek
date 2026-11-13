@@ -12,9 +12,9 @@
 # profile's package.json lists the package in dsh.profile.bundles AND the
 # app is restarted.
 #
-# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
-# else - the plugin never appears in the profile's bundles and enables only
-# by an explicit ACTIVATE. On a cold mount the State build logs
+# THE SHIPPED POSTURE: this entry ships with enabled: true (installing the
+# plugin yields an enabled plugin), log: true and the ledger path - a profile
+# turns it off with `enabled: false`. On a disabled mount the State build logs
 # `disabled (enabled=false)` and every tool no-ops to a clear refusal. The
 # schema defaults are the truth; the full default surface lives in
 # Variable/Config.ts. EVERY knob is volatile (hot-editable without
@@ -33,7 +33,9 @@
       - id: plugin-dsh-workspace
         name: "@playform/plugin-dsh-workspace"
         config:
-            enabled: false
+            enabled: true
+            log: true
+            logFile: ~/.dsh/playform/plugin-dsh-workspace.log
             policy:
                 read: auto
                 index: auto
