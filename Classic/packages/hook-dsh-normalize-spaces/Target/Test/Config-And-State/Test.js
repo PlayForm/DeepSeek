@@ -14,6 +14,25 @@ const runTest = async () => {
   rm();
   const Raw1 = Validate({ logFile: Ledger });
   {
+    const Sub = "volatile cell: enabled arrives as { get }";
+    {
+      Check(Count, Sub, () => {
+        assert.ok(
+          typeof Raw1.enabled.get === "function",
+          "volatile cell: enabled arrives as { get }"
+        );
+      });
+    }
+  }
+  {
+    const Sub = "config default enabled=true";
+    {
+      Check(Count, Sub, () => {
+        assert.ok(Raw1.enabled.get() === true, "config default enabled=true");
+      });
+    }
+  }
+  {
     const Sub = "volatile cell: log arrives as { get }";
     {
       Check(Count, Sub, () => {
@@ -95,6 +114,17 @@ const runTest = async () => {
         assert.ok(
           Run1.State && Run1.State.Factory === Furnace,
           "state carries the REAL factory instance"
+        );
+      });
+    }
+  }
+  {
+    const Sub = "volatile unwrap: enabled cell unwrapped to State.On=true";
+    {
+      Check(Count, Sub, () => {
+        assert.ok(
+          Run1.State.On === true,
+          "volatile unwrap: enabled cell unwrapped to State.On=true"
         );
       });
     }

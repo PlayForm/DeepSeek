@@ -21,11 +21,13 @@ import Observe from "./Observe.js";
  * its observe/transform:
  *
  * 1. State - Furnace.State(ctx, config, { module: "hook-dsh-pinner-package",
- *    fields: { Section: "sections" }, policyFileName: "pin-policy.json",
- *    journalDomain: "hook_dsh_package_pinner" }): the shared shape (defensive
- *    cell unwrap of the factory's volatile shared fields,
+ *    fields: { On: "enabled", Section: "sections" }, policyFileName:
+ *    "pin-policy.json", journalDomain: "hook_dsh_package_pinner" }): the shared
+ *    shape (defensive cell unwrap of the factory's volatile shared fields,
  *    Tool/Policy/Ledger/Enabled/List mappings, Stash/Inflight/Seams/Queue/
- *    Journal, the P9 subprocess probe) + the pinner's Section.
+ *    Journal, the P9 subprocess probe) + the master switch (On <- enabled: a
+ *    disabled pinner appends `disabled (enabled=false)` and returns before
+ *    registering anything) + the pinner's Section.
  * 2. The activation proof - the MODULE'S ledger strings: the durable
  *    `activated (...)` Append ("did it activate" must be answerable from the
  *    ledger alone) and the P5 Journal record.
@@ -50,13 +52,23 @@ export default (Context: Context, Options: Config): void => {
 
 	const State = Furnace.State<State>(Context, Options, {
 		module: "hook-dsh-pinner-package", // doubles as the factory-composed line prefix
-		fields: { Section: "sections" }, // the pinner's own field (config key)
+		fields: { On: "enabled", Section: "sections" }, // On: the master switch; the pinner's own field (config key)
 		policyFileName: "pin-policy.json", // the union-discovery sidecar name
 		journalDomain: "hook_dsh_package_pinner", // the pinner's own journal domain (unit-name rule: lowercase/digits/underscores)
 	});
 
 	// The context attachment for test probes (never a return value).
 	(Context as unknown as Record<string, unknown>)["__hookDshPinnerPackageState"] = State;
+
+	// THE MASTER SWITCH (config `enabled`, volatile - the setup map's
+	// `On <- enabled`, so the State builder's P10 volatile-update listener
+	// refreshes it in place): a disabled pinner appends the durable disabled
+	// line and returns BEFORE registering anything - no Wire listener, no
+	// direct-govern step, no lifecycle effects (the tool-coach precedent).
+	if (!State.On) {
+		Furnace.Append(State, "disabled (enabled=false)");
+		return;
+	}
 
 	// Durable activation proof (the module's own string) + the P5 journal
 	// record — both flow through the factory's Append/Journal. The line's

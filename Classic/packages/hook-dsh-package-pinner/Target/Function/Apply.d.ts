@@ -16,11 +16,13 @@ export default _default;
  * its observe/transform:
  *
  * 1. State - Furnace.State(ctx, config, { module: "hook-dsh-pinner-package",
- *    fields: { Section: "sections" }, policyFileName: "pin-policy.json",
- *    journalDomain: "hook_dsh_package_pinner" }): the shared shape (defensive
- *    cell unwrap of the factory's volatile shared fields,
+ *    fields: { On: "enabled", Section: "sections" }, policyFileName:
+ *    "pin-policy.json", journalDomain: "hook_dsh_package_pinner" }): the shared
+ *    shape (defensive cell unwrap of the factory's volatile shared fields,
  *    Tool/Policy/Ledger/Enabled/List mappings, Stash/Inflight/Seams/Queue/
- *    Journal, the P9 subprocess probe) + the pinner's Section.
+ *    Journal, the P9 subprocess probe) + the master switch (On <- enabled: a
+ *    disabled pinner appends `disabled (enabled=false)` and returns before
+ *    registering anything) + the pinner's Section.
  * 2. The activation proof - the MODULE'S ledger strings: the durable
  *    `activated (...)` Append ("did it activate" must be answerable from the
  *    ledger alone) and the P5 Journal record.

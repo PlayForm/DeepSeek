@@ -14,6 +14,7 @@
       - id: hook-dsh-package-governor
         name: "@playform/hook-dsh-package-governor"
         config:
+            enabled: true
             log: true
             logFile: ~/.dsh/playform/hook-dsh-package-governor.log
             updateCooldownMs: 3000

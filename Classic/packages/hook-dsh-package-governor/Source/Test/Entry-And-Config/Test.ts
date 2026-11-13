@@ -72,10 +72,11 @@ export const runTest = async (): Promise<number> => {
 		}
 	}
 	{
-		const Sub = "Config: volatile cells + defaults (factory.Schema shared-block parity)";
+		const Sub = "Config: volatile cells + defaults (the family base + the restated shared knobs)";
 		{
 			Check(Count, Sub, () => {
 				const raw = Governor.Config({ logFile: Ledger });
+				assert.equal(raw.enabled.get(), true, "volatile enabled cell (the master switch)");
 				assert.equal(raw.logFile.get(), Ledger, "volatile logFile cell");
 				assert.equal(raw.log.get(), true, "volatile log cell default true");
 				assert.equal(raw["updateCooldownMs"].get(), 3000, "volatile cooldown cell");

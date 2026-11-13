@@ -6,7 +6,7 @@ This test verifies the following behavior.
 
 The pinner's loader contract and its factory-built Config schema are the two surfaces every other folder depends on silently.
 
-The module must export `name`/`apply`/`Config`/`inject` (the full default object included, with `default.apply` being the very same apply function), the schema must be a real callable with the schemastery dictionary, and it must validate to the historical defaults: the volatile cells (`log`, `logFile`, `mutationTools`, the factory's shared `updateCooldownMs`) plus the plain fields (`policyFile`, `sections`, `exclude`).
+The module must export `name`/`apply`/`Config`/`inject` (the full default object included, with `default.apply` being the very same apply function), the schema must be a real callable with the schemastery dictionary, and it must validate to the historical defaults: the base volatile cells (`enabled` - the master switch - `log`, `logFile`) and the restated volatile knobs (`mutationTools`, the family-parity `updateCooldownMs`) plus the plain fields (`policyFile`, `sections`, `exclude`).
 
 A drift here breaks every later folder, so it is its own folder.
 
@@ -16,8 +16,8 @@ The assertions are moved verbatim from `Classic/smokes/pinner-smoke.mjs` section
 
 - Group: the loader contract.
     - Sub: "loader contract: name/apply/Config/inject + the full default object"
-- Group: the Config schema (factory-built, real validation).
-    - Sub: "Config schema: all six shared/own fields validated with the historical defaults"
+- Group: the Config schema (the family base + the factory-built fields, real validation).
+    - Sub: "Config schema: the base fields + the shared/own fields validated with the historical defaults"
 
 ## Fixtures
 

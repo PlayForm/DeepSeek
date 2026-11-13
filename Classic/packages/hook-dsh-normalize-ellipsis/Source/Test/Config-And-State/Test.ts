@@ -29,6 +29,25 @@ export const runTest = async (): Promise<number> => {
 	// Group: Run 1 - the validated config (the volatile cells and the schema
 	// defaults, exactly as the loader hands them to apply).
 	{
+		const Sub = "volatile cell: enabled arrives as { get }";
+		{
+			Check(Count, Sub, () => {
+				assert.ok(
+					typeof Raw1.enabled.get === "function",
+					"volatile cell: enabled arrives as { get }",
+				);
+			});
+		}
+	}
+	{
+		const Sub = "config default enabled=true";
+		{
+			Check(Count, Sub, () => {
+				assert.ok(Raw1.enabled.get() === true, "config default enabled=true");
+			});
+		}
+	}
+	{
 		const Sub = "volatile cell: log arrives as { get }";
 		{
 			Check(Count, Sub, () => {
@@ -147,6 +166,17 @@ export const runTest = async (): Promise<number> => {
 		}
 	}
 	{
+		const Sub = "volatile unwrap: enabled cell unwrapped to State.On=true";
+		{
+			Check(Count, Sub, () => {
+				assert.ok(
+					Run1.State.On === true,
+					"volatile unwrap: enabled cell unwrapped to State.On=true",
+				);
+			});
+		}
+	}
+	{
 		const Sub = "volatile unwrap: replacement cell unwrapped to State.Replacement='...'";
 		{
 			Check(Count, Sub, () => {
@@ -191,6 +221,38 @@ export const runTest = async (): Promise<number> => {
 					"activation ledger line byte-exact",
 				);
 			});
+		}
+	}
+	// Group: Run D - the master switch off (the disabled ledger line, nothing
+	// registered).
+	{
+		rm();
+		const RunD = Make(Validate({ enabled: false, logFile: Ledger }));
+		{
+			const Sub = "disabled run: the disabled ledger line byte-exact";
+			{
+				Check(Count, Sub, () => {
+					assert.ok(
+						RunD.Lines.includes("hook-dsh-normalize-ellipsis: disabled (enabled=false)"),
+						"disabled run: the disabled ledger line byte-exact",
+					);
+				});
+			}
+		}
+		{
+			const Sub = "disabled run: no activation line, no listeners, no command";
+			{
+				Check(Count, Sub, () => {
+					assert.ok(
+						!RunD.Lines.some((L: string) => L.includes("activated (")) &&
+							RunD.Listeners["llm/stream"] === undefined &&
+							RunD.Listeners["tools/post-execute"] === undefined &&
+							RunD.Listeners["agent/pre-step"] === undefined &&
+							RunD.CommandsRegistered.length === 0,
+						"disabled run: no activation line, no listeners, no command",
+					);
+				});
+			}
 		}
 	}
 	return Finish(Count, "Config-And-State");

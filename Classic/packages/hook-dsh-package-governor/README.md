@@ -33,13 +33,14 @@ A factory flavor: the furnace of the family does the plumbing; this package is t
 | service  | `RegisterGovern("package.json", "update")`       | The direct-govern update-stage entry.                                               |
 | service  | update stage (Dispatch/Execute)                  | The detached, contained continuation (npm-check-updates programmatic or `ncu` bin). |
 | config   | `update-policy.json`                             | The update-stage policy file (`policyFileName`, shared discovery via the factory).  |
-| config   | Schemastery Config schema                        | The exported `Config` (shared block + the module's own fields).                     |
+| config   | Schemastery Config schema                        | The exported `Config` (the base fields + the module's own fields, one flat schema). |
 | tool     | ledger `hook-dsh-package-governor.log`           | The module's own log file (one global log).                                         |
 
 ## The configuration
 
 | Field               | Type     | Default                                                                       | Meaning                                                                             |
 | ------------------- | -------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `enabled`           | boolean  | `true`                                                                        | The master switch - off appends `disabled (enabled=false)` and registers nothing.   |
 | `log`               | boolean  | `true`                                                                        | Ledger enabled - write the durable log file (volatile).                             |
 | `logFile`           | string   | `~/.dsh/playform/hook-dsh-package-governor.log`                               | The ledger file - one global log, volatile.                                         |
 | `updateCooldownMs`  | number   | `3000`                                                                        | Cooldown between update-stage dispatches, per directory (volatile).                 |

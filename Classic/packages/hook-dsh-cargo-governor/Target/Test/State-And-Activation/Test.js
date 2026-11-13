@@ -49,6 +49,7 @@ const runTest = async () => {
       assert.equal(S.Policy, "");
       assert.equal(S.Ledger, m.ledger);
       assert.equal(S.Enabled, true);
+      assert.equal(S.On, true, "the master switch (enabled) mapped by the setup map");
       assert.deepEqual(S.Tool, ["write", "edit", "str_replace_editor", "raw-write"]);
       assert.deepEqual(S.List, [
         "node_modules",

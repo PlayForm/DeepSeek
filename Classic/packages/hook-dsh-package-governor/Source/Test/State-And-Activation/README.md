@@ -18,8 +18,9 @@ assertions are moved verbatim from section 3 of `Classic/smokes/governor-smoke.m
     - Sub: "apply: returns nothing; the state exposed via
       ctx.__hookDshGovernorPackageState"
     - Sub: "State: Module + Tool <- mutationTools (cell unwrapped by the factory)"
-    - Sub: "State: module fields via the setup map (Strict/Wait/Limit/Binary/Mode)"
-        - includes Mode === "programmatic" (the pre-override default)
+    - Sub: "State: module fields via the setup map (On/Strict/Wait/Limit/Binary/Mode)"
+        - includes On === true (the master switch, config `enabled`) and
+          Mode === "programmatic" (the pre-override default)
     - Sub: "State: shared mappings (Policy/policyFile, Ledger/logFile,
       Enabled/log, List/exclude)"
     - Sub: "State: P9 subprocess seam probed once at build"

@@ -26,11 +26,12 @@ const runTest = async () => {
     }
   }
   {
-    const Sub = "Config schema: all six shared/own fields validated with the historical defaults";
+    const Sub = "Config schema: the base fields + the shared/own fields validated with the historical defaults";
     {
       Check(Count, Sub, () => {
         const schema = Pinner.Config;
         const validated = schema({});
+        assert.equal(validated.enabled.get(), true, "enabled default (volatile cell - the master switch)");
         assert.equal(validated.log.get(), true, "log default (volatile cell)");
         assert.equal(
           validated.logFile.get(),

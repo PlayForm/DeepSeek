@@ -43,13 +43,14 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 	}
-	// Group: the Config schema (factory-built, real validation).
+	// Group: the Config schema (the family base + the factory-built fields, real validation).
 	{
-		const Sub = "Config schema: all six shared/own fields validated with the historical defaults";
+		const Sub = "Config schema: the base fields + the shared/own fields validated with the historical defaults";
 		{
 			Check(Count, Sub, () => {
 				const schema = Pinner.Config;
 				const validated = schema({});
+				assert.equal(validated.enabled.get(), true, "enabled default (volatile cell - the master switch)");
 				assert.equal(validated.log.get(), true, "log default (volatile cell)");
 				assert.equal(
 					validated.logFile.get(),

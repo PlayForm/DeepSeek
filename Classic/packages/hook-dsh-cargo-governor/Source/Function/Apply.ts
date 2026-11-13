@@ -18,7 +18,9 @@ import Observe from "./Observe.js";
  *
  * 1. State — the factory's State builder (cell unwrap, the fixed shared
  *    mappings Tool←mutationTools / Policy←policyFile / Ledger←logFile /
- *    Enabled←log / List←exclude, the module fields by name, the fresh
+ *    Enabled←log / List←exclude, the module fields by name — On ← enabled, the
+ *    master switch: a disabled module appends `disabled (enabled=false)` and
+ *    returns before registering anything —, the fresh
  *    Stash/Inflight/Seams/Queue structures and the P9 probe-once "subprocess"
  *    seam through the factory's Function/Seam). The module adds its own
  *    update-stage collections (Stamp/Set/Count) on top.
@@ -53,6 +55,7 @@ export default (Context: Context, Options: Config): void => {
 	const State = Factory.State<StateView>(Context, Options, {
 		module: "hook-dsh-governor-cargo",
 		fields: {
+			On: "enabled",
 			Section: "sections",
 			Policy: "policyFile",
 			Wait: "updateCooldownMs",
@@ -77,6 +80,17 @@ export default (Context: Context, Options: Config): void => {
 	// pattern): the P2 UpdateKey helper and the ledger/journal delegates
 	// consume it from every module function.
 	State.Factory = Factory;
+
+	// THE MASTER SWITCH (config `enabled`, volatile - the setup map's
+	// `On <- enabled`, so the State builder's P10 volatile-update listener
+	// refreshes it in place): a disabled cargo module appends the durable
+	// disabled line and returns BEFORE registering anything - no Wire
+	// listener, no direct-govern steps, no lifecycle effects (the tool-coach
+	// precedent).
+	if (!State.On) {
+		Factory.Append(State, "disabled (enabled=false)");
+		return;
+	}
 
 	// 2. The durable activation proof — the module's own ledger line (byte-
 	//    identical with the pre-refactor module) plus the structured P5

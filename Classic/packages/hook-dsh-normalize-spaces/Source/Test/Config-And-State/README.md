@@ -24,6 +24,10 @@ future home of the same contract).
 
 - Group: Run 1 - the validated config (the volatile cells and the schema
   defaults, exactly as the loader hands them to apply).
+    - Sub: "volatile cell: enabled arrives as { get }"
+        - assert.ok(typeof Raw1.enabled.get === "function")
+    - Sub: "config default enabled=true"
+        - assert.ok(Raw1.enabled.get() === true)
     - Sub: "volatile cell: log arrives as { get }"
         - assert.ok(Raw1.log && typeof Raw1.log.get === "function")
     - Sub: "volatile cell: logFile arrives as { get }"
@@ -47,6 +51,8 @@ future home of the same contract).
   spaces flavor's own fields, the volatile cells unwrapped).
     - Sub: "state carries the REAL factory instance"
         - assert.ok(Run1.State && Run1.State.Factory === Furnace)
+    - Sub: "volatile unwrap: enabled cell unwrapped to State.On=true"
+        - assert.ok(Run1.State.On === true)
     - Sub: "volatile unwrap: logFile cell unwrapped to State.Ledger"
         - assert.ok(Run1.State.Ledger === "/tmp/spaces-smoke-ledger.log")
     - Sub: "volatile unwrap: log cell unwrapped to State.Enabled=true"
@@ -92,4 +98,4 @@ asserted in this folder.)
 
 ## Expected count
 
-14 PASS.
+17 PASS.

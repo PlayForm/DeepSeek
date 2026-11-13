@@ -61,6 +61,7 @@ export const runTest = async (): Promise<number> => {
 	{
 		const cfg0 = Validate({});
 		Check(Count, "config: all defaults (separate ledger, cargoBin, updateMode, exclude list)", () => {
+			assert.equal(cfg0.enabled.get(), true, "enabled default (volatile cell - the master switch)");
 			assert.equal(cfg0.log.get(), true, "log default");
 			assert.equal(
 				cfg0.logFile.get(),
@@ -85,7 +86,7 @@ export const runTest = async (): Promise<number> => {
 			]);
 		});
 		Check(Count, "config: shared volatile cells + plain module fields", () => {
-			for (const f of ["log", "logFile", "updateCooldownMs", "mutationTools"])
+			for (const f of ["enabled", "log", "logFile", "updateCooldownMs", "mutationTools"])
 				assert.equal(typeof cfg0[f].get, "function", `${f} is a volatile cell`);
 			for (const f of [
 				"policyFile",

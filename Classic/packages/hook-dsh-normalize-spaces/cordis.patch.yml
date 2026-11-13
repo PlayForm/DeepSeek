@@ -35,6 +35,7 @@
       - id: hook-dsh-normalize-spaces
         name: "@playform/hook-dsh-normalize-spaces"
         config:
+            enabled: true
             log: true
             logFile: ~/.dsh/playform/hook-dsh-normalize-spaces.log
             replacement: " "

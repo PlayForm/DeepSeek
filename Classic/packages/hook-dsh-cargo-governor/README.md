@@ -33,21 +33,22 @@ refreshed by re-emitting `fs/observed` with the service-issued fresh version).
 
 ## The surfaces
 
-| Kind     | Name                                     | What                                                                         |
-| -------- | ---------------------------------------- | ---------------------------------------------------------------------------- |
-| listener | `fs/observed`                            | The `Wire`-registered observation listener; basename gate `Cargo.toml`.      |
-| listener | `fs/observed` (refresh)                  | The observation-policy refresh re-emits the service-issued fresh version.    |
-| service  | `RegisterGovern("Cargo.toml", "cargo")`  | The direct-govern chain-pass entry.                                          |
-| service  | `RegisterGovern("Cargo.toml", "update")` | The direct-govern update-stage entry.                                        |
-| service  | update stage (Dispatch/Run)              | The detached, contained continuation (`cargo upgrade` via `ctx.subprocess`). |
-| config   | `pin-policy.json`                        | The keep-list sidecar (`policyFileName`, shared discovery via the factory).  |
-| config   | Schemastery Config schema                | The exported `Config` (shared block + the module's own fields).              |
-| tool     | ledger `hook-dsh-cargo-governor.log`     | The module's own log file - separate from the npm ledgers.                   |
+| Kind     | Name                                     | What                                                                                |
+| -------- | ---------------------------------------- | ----------------------------------------------------------------------------------- |
+| listener | `fs/observed`                            | The `Wire`-registered observation listener; basename gate `Cargo.toml`.             |
+| listener | `fs/observed` (refresh)                  | The observation-policy refresh re-emits the service-issued fresh version.           |
+| service  | `RegisterGovern("Cargo.toml", "cargo")`  | The direct-govern chain-pass entry.                                                 |
+| service  | `RegisterGovern("Cargo.toml", "update")` | The direct-govern update-stage entry.                                               |
+| service  | update stage (Dispatch/Run)              | The detached, contained continuation (`cargo upgrade` via `ctx.subprocess`).        |
+| config   | `pin-policy.json`                        | The keep-list sidecar (`policyFileName`, shared discovery via the factory).         |
+| config   | Schemastery Config schema                | The exported `Config` (the base fields + the module's own fields, one flat schema). |
+| tool     | ledger `hook-dsh-cargo-governor.log`     | The module's own log file - separate from the npm ledgers.                          |
 
 ## The configuration
 
 | Field               | Type     | Default                                                                       | Meaning                                                                                                                        |
 | ------------------- | -------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `enabled`           | boolean  | `true`                                                                        | The master switch - off appends `disabled (enabled=false)` and registers nothing.                                              |
 | `log`               | boolean  | `true`                                                                        | Ledger enabled - write the durable log file (volatile).                                                                        |
 | `logFile`           | string   | `~/.dsh/playform/hook-dsh-cargo-governor.log`                                 | The CARGO MODULE's OWN ledger - separate from the package governor's (volatile).                                               |
 | `updateCooldownMs`  | number   | `3000`                                                                        | Cooldown between update-stage dispatches, per directory (volatile).                                                            |

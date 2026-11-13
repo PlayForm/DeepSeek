@@ -43,7 +43,7 @@ const runTest = async () => {
     }
   }
   {
-    const Sub = "State: module fields via the setup map (Strict/Wait/Limit/Binary/Mode)";
+    const Sub = "State: module fields via the setup map (On/Strict/Wait/Limit/Binary/Mode)";
     {
       Check(Count, Sub, () => {
         assert.equal(Probe.Strict, false);
@@ -62,6 +62,7 @@ const runTest = async () => {
         assert.equal(Probe.PolicyName, "update-policy.json", "sidecar name for union discovery");
         assert.equal(Probe.Ledger, Ledger);
         assert.equal(Probe.Enabled, true);
+        assert.equal(Probe.On, true, "the master switch (enabled) mapped by the setup map");
         assert.deepEqual(Probe.List, EXCLUDE);
       });
     }

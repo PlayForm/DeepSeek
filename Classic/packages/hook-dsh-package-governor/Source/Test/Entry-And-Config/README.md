@@ -8,8 +8,9 @@ The loader contract of the governor and its Config schema are the two surfaces t
 folder (and every consumer) silently depends on: the plugin entry must export
 `name`/`apply`/`Config`/`inject` with the factory + fs injections, the BUILT Target must resolve the
 factory exclusively through the injected ctx service (except the standalone Schema import of the
-Config module, the module-load use), and the schema must validate the shared volatile cells (`log`,
-`logFile`, `updateCooldownMs`, `mutationTools`) and the plain module defaults (`strict`,
+Config module, the module-load use), and the schema must validate the base volatile cells
+(`enabled`, `log`, `logFile` - the family base, `enabled` the master switch) and the restated
+volatile knobs (`updateCooldownMs`, `mutationTools`) plus the plain module defaults (`strict`,
 `maxUpdateFailures`, `updateMode`, `ncuBin`, `policyFile`, `exclude`). A drift here breaks every
 later folder, so it is its own folder. The assertions are moved verbatim from sections 1-2 of
 `Classic/smokes/governor-smoke.mjs` (the source suite stays in place during the migration).
@@ -25,8 +26,9 @@ later folder, so it is its own folder. The assertions are moved verbatim from se
       the Config module's standalone Schema import"
         - walk the built Target .js files; exactly one file may mention
           "plugin-dsh-factory": Target/Variable/Config.js
-    - Sub: "Config: volatile cells + defaults (factory.Schema shared-block parity)"
-        - logFile/log/updateCooldownMs/mutationTools are volatile cells
+    - Sub: "Config: volatile cells + defaults (the family base + the restated shared knobs)"
+        - enabled/log/logFile/updateCooldownMs/mutationTools are volatile cells
+          (enabled default true - the master switch; log default true)
         - strict=false, maxUpdateFailures=3, updateMode="programmatic",
           ncuBin="ncu", policyFile="", exclude = the six built-in segments
     - Sub: "Config: the default logFile is the documented ledger path"

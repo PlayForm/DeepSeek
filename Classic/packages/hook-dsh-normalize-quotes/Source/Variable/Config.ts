@@ -43,6 +43,8 @@ import { Schema as Compose } from "@playform/plugin-dsh-factory";
  * the import resolves from the running dsh's own copy,
  * docs/user/develop/basic/publish.md:103).
  */
+const DefaultEnabled = true;
+const DefaultLog = true;
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-normalize-quotes.log";
 const DefaultNormalizeReasoning = true;
 const DefaultNormalizeToolArguments = false;
@@ -63,6 +65,13 @@ const DefaultToolResultsExempt = [
 ];
 
 export default Compose(false, {
+	// The MASTER SWITCH (volatile: a flip is read on the next mount): false =
+	// the plugin appends `disabled (enabled=false)` to the ledger and
+	// registers nothing. Distinct from the shared `log` cell, which governs
+	// only the durable ledger file.
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile).
+	log: Schema.boolean().default(DefaultLog).volatile(),
 	// Ledger file — the quotes ledger, SEPARATE from the family's logs (one
 	// log per module) — volatile: hot-editable without remounting (overrides
 	// the minimal shared block's empty default).

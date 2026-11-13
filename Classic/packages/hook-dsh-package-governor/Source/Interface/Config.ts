@@ -17,6 +17,12 @@
  */
 export default interface Config {
 	/**
+	 * The master switch - a disabled governor appends `disabled (enabled=false)` to the
+	 * ledger and registers nothing.
+	 */
+	enabled: boolean;
+
+	/**
 	 * Ledger enabled — write the durable log file.
 	 */
 	log: boolean;

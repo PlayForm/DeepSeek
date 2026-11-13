@@ -49,6 +49,11 @@ import type { State as Shared } from "@playform/plugin-dsh-factory";
  */
 export default interface State extends Shared {
 	/**
+	 * Master switch (config `enabled`, volatile) - false = register nothing.
+	 */
+	On: boolean;
+
+	/**
 	 * Normalize reasoning deltas and the assembled reasoning block too.
 	 */
 	Reasoning: boolean;

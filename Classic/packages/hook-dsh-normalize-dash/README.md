@@ -41,6 +41,7 @@ was chosen.
 
 | Field                    | Type     | Default                                                                                        | Meaning                                                                                                                                        |
 | ------------------------ | -------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `enabled`                | boolean  | `true`                                                                                         | the master switch - false registers nothing, one `disabled (enabled=false)` ledger line (volatile)                                             |
 | `log`                    | boolean  | `true`                                                                                         | write the durable ledger file (volatile)                                                                                                       |
 | `logFile`                | string   | `~/.dsh/playform/hook-dsh-normalize-dash.log`                                                  | the normalize-dash ledger (volatile)                                                                                                           |
 | `replacement`            | string   | `-`                                                                                            | the transform's only knob - hot-editable, the next stream picks it up with no remount (volatile)                                               |
@@ -67,6 +68,7 @@ target's basename, or named steps only) are per-call tool parameters, not config
 
 ```text
 hook-dsh-normalize-dash: activated (replacement=-, reasoning=on, toolArgs=off, logFile=~/.dsh/playform/hook-dsh-normalize-dash.log)
+hook-dsh-normalize-dash: disabled (enabled=false)
 hook-dsh-normalize-dash: normalized N dash char(s) in one stream
 hook-dsh-normalize-dash: overpass: normalized N char(s) in tool result <toolName> <callId>
 hook-dsh-normalize-dash: overpass: normalized N char(s) in step batch (turn T step S)

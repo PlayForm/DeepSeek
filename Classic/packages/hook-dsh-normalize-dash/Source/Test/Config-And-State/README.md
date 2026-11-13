@@ -15,6 +15,8 @@ suite, moved verbatim.
 ## Scenario
 
 - Group: Run 1 - defaults (the config cells, the listeners, the state).
+    - Check: "volatile cell: enabled arrives as { get }".
+    - Check: "config default enabled=true".
     - Check: "volatile cell: log arrives as { get }".
     - Check: "volatile cell: logFile arrives as { get }".
     - Check: "volatile cell: replacement arrives as { get }".
@@ -26,6 +28,7 @@ suite, moved verbatim.
       listeners).
     - Check: "state carries the REAL factory instance" (State.Factory is the
       harness Furnace by identity).
+    - Check: "volatile unwrap: enabled cell unwrapped to State.On=true".
     - Check: "volatile unwrap: logFile cell unwrapped to State.Ledger".
     - Check: "volatile unwrap: log cell unwrapped to State.Enabled=true".
     - Check: "volatile unwrap: replacement cell unwrapped to
@@ -34,6 +37,13 @@ suite, moved verbatim.
     - Check: "state module = hook-dsh-normalize-dash (the ledger prefix)".
     - Check: "activation ledger line byte-exact" (the captured logger line,
       see below).
+- Group: Run D - the master switch off (the disabled ledger line, nothing
+  registered).
+    - Check: "disabled run: the disabled ledger line byte-exact" (the captured
+      logger line, see below).
+    - Check: "disabled run: no activation line, no listeners, no tool, no
+      command" (the P10 volatile-update listener lives inside the factory's
+      State builder, ahead of the switch).
 - Group: Run 6 - HMR-safety probe (no module-level state).
     - Check: "each apply builds a FRESH state (no module-level globals)"
       (two applies build two distinct State objects with the same defaults).
@@ -52,6 +62,8 @@ ledger content.
 
 - `hook-dsh-normalize-dash: activated (replacement=-, reasoning=on, toolArgs=off, logFile=/tmp/normalize-dash-smoke-ledger.log)` (the captured
   logger line, byte-exact).
+- `hook-dsh-normalize-dash: disabled (enabled=false)` (Run D's captured logger
+  line, byte-exact).
 
 ## Edge cases
 
@@ -65,4 +77,4 @@ ledger content.
 
 ## Expected count
 
-15 PASS.
+20 PASS.

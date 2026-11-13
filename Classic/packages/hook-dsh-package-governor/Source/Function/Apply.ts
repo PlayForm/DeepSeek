@@ -16,10 +16,11 @@ import Observe from "./Observe.js";
  * The module builds the State through `Factory.State` (the cell unwrap, the shared mappings
  * Tool<-mutationTools, Policy<-policyFile, Ledger<-logFile, Enabled<-log, List<-exclude, and the
  * machinery structures - SCHEME.md §2.10), adds the module's own fields via the setup `fields`
- * map, delegates ALL lifecycle effects to `Factory.Attach` (P1 jobs controller, P2 in-flight
- * disposal, P5 storage domain - SCHEME.md §2.12), emits the durable activation proof (the
- * module's own string, via Factory.Append + Factory.Journal), and wires the fs/observed hook
- * through `Factory.Wire` (SCHEME.md §2.11).
+ * map (On <- enabled - the master switch: a disabled governor appends `disabled (enabled=false)`
+ * and returns before registering anything), delegates ALL lifecycle effects to `Factory.Attach`
+ * (P1 jobs controller, P2 in-flight disposal, P5 storage domain - SCHEME.md §2.12), emits the
+ * durable activation proof (the module's own string, via Factory.Append + Factory.Journal), and
+ * wires the fs/observed hook through `Factory.Wire` (SCHEME.md §2.11).
  *
  * The module's own residue, deliberately kept here:
  *   - the cooldown / per-dir in-flight / circuit-breaker collections (Stamp, Set, Count) -
@@ -55,6 +56,7 @@ export default (Context: Context, Options: Config): void => {
 	const State: State = Factory.State(Context, Options, {
 		module: "hook-dsh-governor-package",
 		fields: {
+			On: "enabled",
 			Strict: "strict",
 			Wait: "updateCooldownMs",
 			Limit: "maxUpdateFailures",
@@ -70,6 +72,16 @@ export default (Context: Context, Options: Config): void => {
 	State.Set = new Set();
 	State.Count = new Map();
 	State.Factory = Factory;
+
+	// THE MASTER SWITCH (config `enabled`, volatile - the setup map's `On <- enabled`, so the
+	// State builder's P10 volatile-update listener refreshes it in place): a disabled
+	// governor appends the durable disabled line and returns BEFORE registering anything -
+	// no Wire listener, no direct-govern steps, no lifecycle effects (the tool-coach
+	// precedent).
+	if (!State.On) {
+		Factory.Append(State, "disabled (enabled=false)");
+		return;
+	}
 
 	// The lifecycle effects, all in the factory now: P1 attaches the jobs controller from this
 	// root context (serves every owner), P2 registers the in-flight disposal, P5 opens the

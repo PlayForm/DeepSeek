@@ -62,6 +62,7 @@ export const runTest = async (): Promise<number> => {
 				assert.equal(st.Module, "hook-dsh-pinner-package", "State.Module = the logger/ledger prefix");
 				assert.equal(st.Ledger, Ledger);
 				assert.equal(st.Enabled, true);
+				assert.equal(st.On, true, "the master switch (enabled) mapped by the setup map");
 				assert.deepEqual(st.Tool, ["write", "edit", "str_replace_editor", "raw-write"]);
 				assert.deepEqual(st.Section, [
 					"dependencies",

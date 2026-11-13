@@ -247,6 +247,7 @@ loader rejects unknown ids with `entry "..." not found`.
       - id: hook-dsh-package-pinner
         name: "@playform/hook-dsh-package-pinner"
         config:
+            enabled: true
             log: true
             logFile: ~/.dsh/playform/hook-dsh-package-pinner.log # SEPARATE ledger (own plugin)
             mutationTools: [write, edit, str_replace_editor] # reads emit too - gate required

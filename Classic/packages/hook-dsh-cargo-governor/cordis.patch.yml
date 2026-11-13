@@ -21,6 +21,7 @@
       - id: hook-dsh-cargo-governor
         name: "@playform/hook-dsh-cargo-governor"
         config:
+            enabled: true
             log: true
             logFile: ~/.dsh/playform/hook-dsh-cargo-governor.log
             updateCooldownMs: 3000

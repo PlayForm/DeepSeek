@@ -37,26 +37,27 @@ This is a factory flavor and a sibling of the package governor on the same `fs/o
 
 ## The surfaces
 
-| Kind     | Name                                    | What                                                                       |
-| -------- | --------------------------------------- | -------------------------------------------------------------------------- |
-| listener | `fs/observed`                           | The `Wire`-registered observation listener; basename gate `package.json`.  |
-| listener | `fs/observed` (refresh)                 | The observation-policy refresh re-emits the service-issued fresh version.  |
-| service  | `RegisterGovern("package.json", "pin")` | The direct-govern chain pass alone (Function/Direct.Pin).                  |
-| config   | `pin-policy.json`                       | The keep-list sidecar (`policyFileName`, union discovery via the factory). |
-| config   | Schemastery Config schema               | The exported `Config` (shared block + the module's own fields).            |
-| tool     | ledger `hook-dsh-package-pinner.log`    | The module's own log file - SEPARATE from the governor's.                  |
+| Kind     | Name                                    | What                                                                                |
+| -------- | --------------------------------------- | ----------------------------------------------------------------------------------- |
+| listener | `fs/observed`                           | The `Wire`-registered observation listener; basename gate `package.json`.           |
+| listener | `fs/observed` (refresh)                 | The observation-policy refresh re-emits the service-issued fresh version.           |
+| service  | `RegisterGovern("package.json", "pin")` | The direct-govern chain pass alone (Function/Direct.Pin).                           |
+| config   | `pin-policy.json`                       | The keep-list sidecar (`policyFileName`, union discovery via the factory).          |
+| config   | Schemastery Config schema               | The exported `Config` (the base fields + the module's own fields, one flat schema). |
+| tool     | ledger `hook-dsh-package-pinner.log`    | The module's own log file - SEPARATE from the governor's.                           |
 
 ## The configuration
 
-| Field              | Type     | Default                                                                           | Meaning                                                                             |
-| ------------------ | -------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `log`              | boolean  | `true`                                                                            | Ledger enabled - write the durable log file (volatile).                             |
-| `logFile`          | string   | `~/.dsh/playform/hook-dsh-package-pinner.log`                                     | The ledger file - separate from the governor's (volatile).                          |
-| `updateCooldownMs` | number   | `3000`                                                                            | Cooldown field from the shared block - the pinner never reads it (no update stage). |
-| `mutationTools`    | string[] | `["write", "edit", "str_replace_editor", "raw-write"]`                            | Actor tool names whose `fs/observed` events trigger pinning (volatile).             |
-| `policyFile`       | string   | `""`                                                                              | Global policy file; empty means discovery (`Function/Resolve`).                     |
-| `exclude`          | string[] | `["node_modules", ".git", ".dsh", ".pnpm", ".store", "DeepSeek Harness.app"]`     | Excluded path segments (anywhere mode, exclusion-first) - the module's fence.       |
-| `sections`         | string[] | `["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"]` | Dependency sections the pinner may rewrite.                                         |
+| Field              | Type     | Default                                                                           | Meaning                                                                           |
+| ------------------ | -------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `enabled`          | boolean  | `true`                                                                            | The master switch - off appends `disabled (enabled=false)` and registers nothing. |
+| `log`              | boolean  | `true`                                                                            | Ledger enabled - write the durable log file (volatile).                           |
+| `logFile`          | string   | `~/.dsh/playform/hook-dsh-package-pinner.log`                                     | The ledger file - separate from the governor's (volatile).                        |
+| `updateCooldownMs` | number   | `3000`                                                                            | Family-parity cooldown field - the pinner never reads it (no update stage).       |
+| `mutationTools`    | string[] | `["write", "edit", "str_replace_editor", "raw-write"]`                            | Actor tool names whose `fs/observed` events trigger pinning (volatile).           |
+| `policyFile`       | string   | `""`                                                                              | Global policy file; empty means discovery (`Function/Resolve`).                   |
+| `exclude`          | string[] | `["node_modules", ".git", ".dsh", ".pnpm", ".store", "DeepSeek Harness.app"]`     | Excluded path segments (anywhere mode, exclusion-first) - the module's fence.     |
+| `sections`         | string[] | `["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"]` | Dependency sections the pinner may rewrite.                                       |
 
 ## The ledger
 

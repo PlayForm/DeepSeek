@@ -28,6 +28,18 @@ export const runTest = async (): Promise<number> => {
 		const Raw1 = Validate({ logFile: Ledger });
 		const Run1 = Make(Raw1);
 		{
+			const Sub = "volatile cell: enabled arrives as { get }";
+			Check(Count, Sub, () => {
+				assert.ok(typeof Raw1.enabled.get === "function");
+			});
+		}
+		{
+			const Sub = "config default enabled=true";
+			Check(Count, Sub, () => {
+				assert.ok(Raw1.enabled.get() === true);
+			});
+		}
+		{
 			const Sub = "volatile cell: log arrives as { get }";
 			Check(Count, Sub, () => {
 				assert.ok(Raw1.log && typeof Raw1.log.get === "function");
@@ -82,6 +94,12 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 		{
+			const Sub = "volatile unwrap: enabled cell unwrapped to State.On=true";
+			Check(Count, Sub, () => {
+				assert.ok(Run1.State.On === true);
+			});
+		}
+		{
 			const Sub = "volatile unwrap: logFile cell unwrapped to State.Ledger";
 			Check(Count, Sub, () => {
 				assert.ok(Run1.State.Ledger === "/tmp/normalize-dash-smoke-ledger.log");
@@ -118,6 +136,30 @@ export const runTest = async (): Promise<number> => {
 					Run1.Lines.includes(
 						"hook-dsh-normalize-dash: activated (replacement=-, reasoning=on, toolArgs=off, logFile=/tmp/normalize-dash-smoke-ledger.log)",
 					),
+				);
+			});
+		}
+	}
+	// Group: Run D - the master switch off (the disabled ledger line, nothing
+	// registered).
+	{
+		const RunD = Make(Validate({ enabled: false, logFile: Ledger }));
+		{
+			const Sub = "disabled run: the disabled ledger line byte-exact";
+			Check(Count, Sub, () => {
+				assert.ok(RunD.Lines.includes("hook-dsh-normalize-dash: disabled (enabled=false)"));
+			});
+		}
+		{
+			const Sub = "disabled run: no activation line, no listeners, no tool, no command";
+			Check(Count, Sub, () => {
+				assert.ok(
+					!RunD.Lines.some((L: string) => L.includes("activated (")) &&
+						RunD.Listeners["llm/stream"] === undefined &&
+						RunD.Listeners["tools/post-execute"] === undefined &&
+						RunD.Listeners["agent/pre-step"] === undefined &&
+						RunD.Registered.length === 0 &&
+						RunD.CommandsRegistered.length === 0,
 				);
 			});
 		}

@@ -41,6 +41,7 @@ the normalization is deliberately **VISIBLE; it IS the feature**.
 
 | Field                    | Type     | Default                                                                                        | Meaning                                                                                                                                        |
 | ------------------------ | -------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `enabled`                | boolean  | `true`                                                                                         | the master switch - false registers nothing, one `disabled (enabled=false)` ledger line (volatile)                                             |
 | `log`                    | boolean  | `true`                                                                                         | write the durable ledger file (volatile)                                                                                                       |
 | `logFile`                | string   | `~/.dsh/playform/hook-dsh-normalize-ellipsis.log`                                              | the normalize-ellipsis ledger (volatile)                                                                                                       |
 | `replacement`            | string   | `...`                                                                                          | the transform's only knob - hot-editable, the next stream picks it up with no remount (volatile)                                               |
@@ -62,6 +63,7 @@ The module composes the factory helper with `shared: false`, so the shared block
 
 ```text
 hook-dsh-normalize-ellipsis: activated (replacement=..., reasoning=on, toolArgs=off, logFile=~/.dsh/playform/hook-dsh-normalize-ellipsis.log)
+hook-dsh-normalize-ellipsis: disabled (enabled=false)
 hook-dsh-normalize-ellipsis: normalized N ellipsis char(s) in one stream
 hook-dsh-normalize-ellipsis: overpass: normalized N char(s) in tool result <toolName> <callId>
 hook-dsh-normalize-ellipsis: overpass: normalized N char(s) in step batch (turn T step S)
@@ -76,7 +78,7 @@ line).
 - Build:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-normalize-ellipsis run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-normalize-ellipsis/Target/Test/<Folder>/Test.js`
-    - Config-And-State - 14 checks
+    - Config-And-State - 19 checks
     - Overpass - 34 checks
     - Runs - 23 checks
     - Scopes - 8 checks

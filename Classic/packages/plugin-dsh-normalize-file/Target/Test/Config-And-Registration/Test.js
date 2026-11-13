@@ -8,6 +8,18 @@ const runTest = async () => {
     const Run1 = Make(Raw1);
     const Tool = Run1.Registered[0];
     {
+      const Sub = "volatile cell: enabled arrives as { get }";
+      Check(Count, Sub, () => {
+        assert.ok(Raw1.enabled && typeof Raw1.enabled.get === "function");
+      });
+    }
+    {
+      const Sub = "config default enabled=true";
+      Check(Count, Sub, () => {
+        assert.ok(Raw1.enabled.get() === true);
+      });
+    }
+    {
       const Sub = "volatile cell: log arrives as { get }";
       Check(Count, Sub, () => {
         assert.ok(Raw1.log && typeof Raw1.log.get === "function");
@@ -63,6 +75,12 @@ const runTest = async () => {
       const Sub = "state carries the REAL factory instance";
       Check(Count, Sub, () => {
         assert.ok(Run1.State && Run1.State.Factory === Furnace);
+      });
+    }
+    {
+      const Sub = "volatile unwrap: enabled cell unwrapped to State.On=true";
+      Check(Count, Sub, () => {
+        assert.ok(Run1.State.On === true);
       });
     }
     {

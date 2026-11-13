@@ -10,7 +10,8 @@ The ledger's single activation line carries its exact regex byte-shape, which is
 the separate logFile under the harness Root, `updateMode=cargo`, `cargoBin=cargo`, the six-entry
 exclude list, and both discovery placeholders, with the logger prefix composed from State.Module.
 
-The full shared state shape holds Module, PolicyName `pin-policy.json`, Policy, Ledger, Enabled, Tool,
+The full shared state shape holds Module, PolicyName `pin-policy.json`, Policy, Ledger, Enabled, On
+(the master switch, config `enabled`), Tool,
 List, Strict, Wait, Limit, CargoBin, KeepFile, Mode, the Stash/Inflight/Seams Maps, the Queue array,
 the Stamp/Set/Count collections, the P9 Subprocess seam probed at State build, and the P5 Journal
 sink.

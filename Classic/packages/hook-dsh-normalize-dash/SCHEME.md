@@ -111,10 +111,10 @@ turns it on).
 
 It consumes from `@playform/plugin-dsh-factory` (the service, through `inject: ["pluginFactory"]`):
 
-| Method                                         | Use                                                                                                                                                                |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `State(ctx, config, {module, fields})` (§2.10) | cell unwrap (the volatile log/logFile/replacement), the shared mappings `Ledger←logFile`/`Enabled←log`, and the module fields `Replacement`/`Reasoning`/`ToolArgs` |
-| `Append(state, message)` (§2.1)                | the ledger lines: `hook-dsh-normalize-dash: activated (...)` and `hook-dsh-normalize-dash: normalized N dash char(s) in one stream`                                |
+| Method                                         | Use                                                                                                                                                                             |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `State(ctx, config, {module, fields})` (§2.10) | cell unwrap (the volatile enabled/log/logFile/replacement), the shared mappings `Ledger←logFile`/`Enabled←log`, and the module fields `On`/`Replacement`/`Reasoning`/`ToolArgs` |
+| `Append(state, message)` (§2.1)                | the ledger lines: `hook-dsh-normalize-dash: activated (...)` and `hook-dsh-normalize-dash: normalized N dash char(s) in one stream`                                             |
 
 Deliberately not consumed: `Wire` (§2.11 - fs/observed-hardwired; the normalize-dash makes its own
 plain registration with `ctx.on("llm/stream", ...)`), `Attach` (§2.12 - no jobs/inflight/storage),
@@ -141,18 +141,20 @@ Schema always emitted the shared block of the family - `updateCooldownMs`, `muta
 The normalize-dash supplies its own `logFile` default (its SEPARATE ledger) through its own fields,
 which override those of the minimal block.
 
-The shape: `log` (bool, true, volatile), `logFile` (`~/.dsh/playform/hook-dsh-normalize-dash.log`,
-volatile), `replacement` (`-`, volatile - the only knob of the transform), `normalizeReasoning`
-(bool, true), `normalizeToolArguments` (bool, false), `scopes` (object, volatile - the granular
-scope gates of §7), `toolResultsExempt` (string array, volatile - the tool-results exemption list of
-§7). The `scopes` object itself carries the volatile marker (its leaves stay plain, because
-schemastery rejects volatile leaves under an enclosing volatile field), so a change to one leaf
-commits one update, and the refresh listener of the State re-reads the whole object.
+The shape: `enabled` (bool, true, volatile - the MASTER SWITCH), `log` (bool, true, volatile),
+`logFile` (`~/.dsh/playform/hook-dsh-normalize-dash.log`, volatile), `replacement` (`-`, volatile -
+the only knob of the transform), `normalizeReasoning` (bool, true), `normalizeToolArguments` (bool,
+false), `scopes` (object, volatile - the granular scope gates of §7), `toolResultsExempt` (string
+array, volatile - the tool-results exemption list of §7). The `scopes` object itself carries the
+volatile marker (its leaves stay plain, because schemastery rejects volatile leaves under an
+enclosing volatile field), so a change to one leaf commits one update, and the refresh listener of
+the State re-reads the whole object.
 
 ## 5. Ledger lines (stable, asserted by the smoke)
 
 ```
 hook-dsh-normalize-dash: activated (replacement=-, reasoning=on, toolArgs=off, logFile=~/.dsh/playform/hook-dsh-normalize-dash.log)
+hook-dsh-normalize-dash: disabled (enabled=false)
 hook-dsh-normalize-dash: normalized 4 dash char(s) in one stream
 ```
 

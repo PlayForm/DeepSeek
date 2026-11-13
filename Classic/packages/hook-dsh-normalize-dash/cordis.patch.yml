@@ -33,6 +33,7 @@
       - id: hook-dsh-normalize-dash
         name: "@playform/hook-dsh-normalize-dash"
         config:
+            enabled: true
             log: true
             logFile: ~/.dsh/playform/hook-dsh-normalize-dash.log
             replacement: "-"

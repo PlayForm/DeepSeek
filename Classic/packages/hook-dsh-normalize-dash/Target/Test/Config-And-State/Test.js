@@ -7,6 +7,18 @@ const runTest = async () => {
     const Raw1 = Validate({ logFile: Ledger });
     const Run1 = Make(Raw1);
     {
+      const Sub = "volatile cell: enabled arrives as { get }";
+      Check(Count, Sub, () => {
+        assert.ok(typeof Raw1.enabled.get === "function");
+      });
+    }
+    {
+      const Sub = "config default enabled=true";
+      Check(Count, Sub, () => {
+        assert.ok(Raw1.enabled.get() === true);
+      });
+    }
+    {
       const Sub = "volatile cell: log arrives as { get }";
       Check(Count, Sub, () => {
         assert.ok(Raw1.log && typeof Raw1.log.get === "function");
@@ -57,6 +69,12 @@ const runTest = async () => {
       });
     }
     {
+      const Sub = "volatile unwrap: enabled cell unwrapped to State.On=true";
+      Check(Count, Sub, () => {
+        assert.ok(Run1.State.On === true);
+      });
+    }
+    {
       const Sub = "volatile unwrap: logFile cell unwrapped to State.Ledger";
       Check(Count, Sub, () => {
         assert.ok(Run1.State.Ledger === "/tmp/normalize-dash-smoke-ledger.log");
@@ -93,6 +111,23 @@ const runTest = async () => {
           Run1.Lines.includes(
             "hook-dsh-normalize-dash: activated (replacement=-, reasoning=on, toolArgs=off, logFile=/tmp/normalize-dash-smoke-ledger.log)"
           )
+        );
+      });
+    }
+  }
+  {
+    const RunD = Make(Validate({ enabled: false, logFile: Ledger }));
+    {
+      const Sub = "disabled run: the disabled ledger line byte-exact";
+      Check(Count, Sub, () => {
+        assert.ok(RunD.Lines.includes("hook-dsh-normalize-dash: disabled (enabled=false)"));
+      });
+    }
+    {
+      const Sub = "disabled run: no activation line, no listeners, no tool, no command";
+      Check(Count, Sub, () => {
+        assert.ok(
+          !RunD.Lines.some((L) => L.includes("activated (")) && RunD.Listeners["llm/stream"] === void 0 && RunD.Listeners["tools/post-execute"] === void 0 && RunD.Listeners["agent/pre-step"] === void 0 && RunD.Registered.length === 0 && RunD.CommandsRegistered.length === 0
         );
       });
     }

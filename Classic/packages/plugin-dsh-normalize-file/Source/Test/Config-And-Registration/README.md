@@ -16,6 +16,8 @@ This folder holds Run 1 of the source suite and the Run 8 fresh-state leaf, move
 ## Scenario
 
 - Group: Run 1 - defaults + the listener-less posture.
+    - Check: "volatile cell: enabled arrives as { get }".
+    - Check: "config default enabled=true".
     - Check: "volatile cell: log arrives as { get }".
     - Check: "volatile cell: logFile arrives as { get }".
     - Check: "volatile cell: replacement arrives as { get }".
@@ -30,6 +32,7 @@ This folder holds Run 1 of the source suite and the Run 8 fresh-state leaf, move
     - Check: "input schema: file_path is a required string".
     - Check: "state carries the REAL factory instance" (State.Factory is the
       harness Furnace by identity).
+    - Check: "volatile unwrap: enabled cell unwrapped to State.On=true".
     - Check: "volatile unwrap: logFile cell unwrapped to State.Ledger".
     - Check: "volatile unwrap: log cell unwrapped to State.Enabled=true".
     - Check: "volatile unwrap: replacement cell unwrapped to
@@ -78,4 +81,4 @@ ledger content.
 
 ## Expected count
 
-18 PASS.
+21 PASS.

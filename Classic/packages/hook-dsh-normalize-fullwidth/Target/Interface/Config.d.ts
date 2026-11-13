@@ -20,6 +20,11 @@
  */
 export default interface Config {
     /**
+     * Master switch - false = the plugin registers nothing and appends
+     * `disabled (enabled=false)` to the ledger (volatile).
+     */
+    enabled: boolean;
+    /**
      * Ledger enabled - write the durable log file (volatile).
      */
     log: boolean;

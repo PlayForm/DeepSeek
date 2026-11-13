@@ -6,6 +6,25 @@ const runTest = async () => {
   const Raw1 = Validate({ logFile: Ledger });
   const Run1 = Make(Raw1);
   {
+    const Sub = "volatile cell: enabled arrives as { get }";
+    {
+      Check(Count, Sub, () => {
+        assert.ok(
+          typeof Raw1.enabled.get === "function",
+          "volatile cell: enabled arrives as { get }"
+        );
+      });
+    }
+  }
+  {
+    const Sub = "config default enabled=true";
+    {
+      Check(Count, Sub, () => {
+        assert.ok(Raw1.enabled.get() === true, "config default enabled=true");
+      });
+    }
+  }
+  {
     const Sub = "volatile cell: log arrives as { get }";
     {
       Check(Count, Sub, () => {
@@ -116,6 +135,17 @@ const runTest = async () => {
     }
   }
   {
+    const Sub = "volatile unwrap: enabled cell unwrapped to State.On=true";
+    {
+      Check(Count, Sub, () => {
+        assert.ok(
+          Run1.State.On === true,
+          "volatile unwrap: enabled cell unwrapped to State.On=true"
+        );
+      });
+    }
+  }
+  {
     const Sub = "volatile unwrap: replacement cell unwrapped to State.Replacement='...'";
     {
       Check(Count, Sub, () => {
@@ -159,6 +189,32 @@ const runTest = async () => {
           "activation ledger line byte-exact"
         );
       });
+    }
+  }
+  {
+    rm();
+    const RunD = Make(Validate({ enabled: false, logFile: Ledger }));
+    {
+      const Sub = "disabled run: the disabled ledger line byte-exact";
+      {
+        Check(Count, Sub, () => {
+          assert.ok(
+            RunD.Lines.includes("hook-dsh-normalize-ellipsis: disabled (enabled=false)"),
+            "disabled run: the disabled ledger line byte-exact"
+          );
+        });
+      }
+    }
+    {
+      const Sub = "disabled run: no activation line, no listeners, no command";
+      {
+        Check(Count, Sub, () => {
+          assert.ok(
+            !RunD.Lines.some((L) => L.includes("activated (")) && RunD.Listeners["llm/stream"] === void 0 && RunD.Listeners["tools/post-execute"] === void 0 && RunD.Listeners["agent/pre-step"] === void 0 && RunD.CommandsRegistered.length === 0,
+            "disabled run: no activation line, no listeners, no command"
+          );
+        });
+      }
     }
   }
   return Finish(Count, "Config-And-State");

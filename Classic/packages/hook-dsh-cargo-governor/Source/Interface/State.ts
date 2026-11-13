@@ -17,7 +17,9 @@ import type PluginFactory from "@playform/plugin-dsh-factory";
  * THE SHAPE: the factory's shared State (its named type export `State` —
  * the v0.1.1 declaration fix: the built Target/Library.d.ts ships RELATIVE
  * specifiers, so the extracted shared shape is the real one and the
- * leak-era STRUCTURAL MIRROR is gone) plus the module's own fields.
+ * leak-era STRUCTURAL MIRROR is gone) plus the module's own fields, headed by
+ * the master switch (On ← config `enabled`, the apply-time gate: a disabled
+ * module appends `disabled (enabled=false)` and registers nothing).
  *
  * The shared machinery collections implement loop control by construction:
  *
@@ -41,6 +43,11 @@ import type PluginFactory from "@playform/plugin-dsh-factory";
  */
 export default interface State extends Shared {
 	// ── the cargo module's own fields ────────────────────────────────────────
+	/**
+	 * The MASTER SWITCH (config `enabled`; the setup map's `On <- enabled`).
+	 */
+	On: boolean;
+
 	/** The injected @playform/plugin-dsh-factory service (the P2 UpdateKey
 	 *  helper and the ledger/journal delegates; assigned once in
 	 *  Function/Apply — the governor-family pattern). */

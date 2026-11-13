@@ -23,6 +23,10 @@ future home of the same contract).
 
 - Group: Run 1 - the validated config (the volatile cells and the schema
   defaults, exactly as the loader hands them to apply).
+    - Sub: "volatile cell: enabled arrives as { get }"
+        - assert.ok(typeof Raw1.enabled.get === "function")
+    - Sub: "config default enabled=true"
+        - assert.ok(Raw1.enabled.get() === true)
     - Sub: "volatile cell: log arrives as { get }"
         - assert.ok(Raw1.log && typeof Raw1.log.get === "function")
     - Sub: "volatile cell: logFile arrives as { get }"
@@ -50,6 +54,8 @@ future home of the same contract).
         - assert.ok(Run1.State.Ledger === "/tmp/ellipsis-smoke-ledger.log")
     - Sub: "volatile unwrap: log cell unwrapped to State.Enabled=true"
         - assert.ok(Run1.State.Enabled === true)
+    - Sub: "volatile unwrap: enabled cell unwrapped to State.On=true"
+        - assert.ok(Run1.State.On === true)
     - Sub: "volatile unwrap: replacement cell unwrapped to
       State.Replacement='...'"
         - assert.ok(Run1.State.Replacement === "...")
@@ -60,6 +66,14 @@ future home of the same contract).
 - Group: Run 1 - the activation line (the module's own string, byte-exact).
     - Sub: "activation ledger line byte-exact"
         - assert.ok(Run1.Lines.includes(the activation string below))
+- Group: Run D - the master switch off (the disabled ledger line, nothing
+  registered).
+    - Sub: "disabled run: the disabled ledger line byte-exact"
+        - assert.ok(RunD.Lines.includes(the disabled string below))
+    - Sub: "disabled run: no activation line, no listeners, no command"
+        - assert.ok(!RunD.Lines.some(includes "activated (") && the
+          llm/stream, tools/post-execute and agent/pre-step entries all absent
+          and CommandsRegistered empty)
 
 ## Fixtures
 
@@ -74,6 +88,7 @@ schema defaults. There are no temp files beyond the ledger log.
 ## Expected ledger strings (byte-exact)
 
 - `hook-dsh-normalize-ellipsis: activated (replacement=..., reasoning=on, toolArgs=off, logFile=/tmp/ellipsis-smoke-ledger.log)`
+- `hook-dsh-normalize-ellipsis: disabled (enabled=false)` (Run D)
 
 (The logger line is captured in the Lines of the fake ctx; the factory's
 Append also appends the same string to the ledger file. No other strings are
@@ -91,4 +106,4 @@ asserted in this folder.)
 
 ## Expected count
 
-14 PASS.
+19 PASS.

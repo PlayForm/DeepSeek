@@ -36,6 +36,7 @@
       - id: hook-dsh-normalize-invisible
         name: "@playform/hook-dsh-normalize-invisible"
         config:
+            enabled: true
             log: true
             logFile: ~/.dsh/playform/hook-dsh-normalize-invisible.log
             replacement: ""

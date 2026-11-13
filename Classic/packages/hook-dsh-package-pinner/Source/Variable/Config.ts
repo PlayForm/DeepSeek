@@ -17,16 +17,17 @@ import Section from "./Section.js";
  * fails LOUD at load instead of silently falling back per-field, and `apply`
  * receives a validated plain config object.
  *
- * Since the factory refactor the schema is BUILT BY THE FACTORY - now through
- * the STANDALONE named export (factory v0.1.1, P1): `Schema(shared?, module?)`
- * composes the SHARED block (log, logFile, updateCooldownMs, mutationTools,
- * policyFile, exclude - log/logFile/updateCooldownMs/mutationTools are
- * volatile cells, hot edits commit without remounting; the factory's State
- * builder unwraps them) with the pinner's own `sections` field. The pinner
- * restates its historical defaults for logFile, mutationTools and exclude (its
- * own ledger file; its exclusion fence); log and policyFile match the factory
- * defaults. `updateCooldownMs` (default 3000) comes with the shared block -
- * the pinner never reads it (no update stage).
+ * THE FAMILY FORM (the tool-coach/replay-suggester posture, factory v0.1.1
+ * P1): the STANDALONE named export in its NON-MANIFEST posture -
+ * `Compose(false, {...})` - one flat object instead of the shared-block
+ * composition. `shared: false` emits only the two universal volatile cells
+ * (`log`, `logFile`); this module restates them (and adds `enabled`) as the
+ * THREE BASE FIELDS, then declares every existing knob after them in its
+ * current order with every default value VERBATIM: the fs/observed machinery
+ * knobs the shared block used to supply (`updateCooldownMs` - present for
+ * family parity, the pinner never reads it -, `mutationTools`, `policyFile` -
+ * the factory's own defaults, unchanged), the pinner's own fence (`exclude` -
+ * Variable/Default) and its own field (`sections` - Variable/Section).
  *
  * The schema must exist as a MODULE-LEVEL export (the loader reads Config
  * before any apply runs), while the factory is a SERVICE - the named export is
@@ -35,23 +36,45 @@ import Section from "./Section.js";
  * schema factory is a pure delegate with no Context use). The REAL service
  * instance (`ctx.pluginFactory`, from inject) is what every runtime call goes
  * through.
+ *
+ * VOLATILE CELLS: `enabled`, `log`, `logFile`, `updateCooldownMs` and
+ * `mutationTools` are `.volatile()` - hot edits commit WITHOUT remounting
+ * (the factory's State builder unwraps the cells). `enabled` is the pinner's
+ * MASTER SWITCH (distinct from the shared `log` cell, which governs only the
+ * durable ledger file).
+ *
+ * Runtime import of @deepseek-ai/schemastery (the schema must be a real
+ * schemastery instance - the loader consumes it through the Standard Schema
+ * `~standard` interface; the import resolves from the running dsh's own copy,
+ * docs/user/develop/basic/publish.md:103).
  */
-const DefaultLog = false;
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-package-pinner.log";
 
-export default Compose(
-	{
-		// Ledger file (SEPARATE from the governor's — the pinner is its own plugin).
-		logFile: "~/.dsh/playform/hook-dsh-package-pinner.log",
-		// Actor tool names whose fs/observed events trigger pinning.
-		mutationTools: ["write", "edit", "str_replace_editor", "raw-write"],
-		// Excluded path segments (anywhere mode, exclusion-first) — Variable/Default.
-		exclude: Default,
-	},
-	{
-		// The ledger switch: diagnostic logs OFF by default; volatile so a
-		// hot edit commits without remounting.
-		log: Schema.boolean().default(DefaultLog).volatile(),
-		// Dependency sections the pinner may rewrite — Variable/Section.
-		sections: Schema.array(Schema.string()).default(Section),
-	},
-);
+export default Compose(false, {
+	// THE BASE (the family's three universal fields, in order): the master
+	// switch, the ledger switch and the ledger file (SEPARATE from the
+	// governor's - the pinner is its own plugin) - volatile so a hot edit
+	// commits without remounting. `enabled` and `log` carry the family
+	// defaults; `logFile` is the pinner's own ledger (the module's own field
+	// overrides the minimal block's default).
+	enabled: Schema.boolean().default(true).volatile(),
+	log: Schema.boolean().default(true).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	// Cooldown between update-stage dispatches - included for family parity;
+	// the pinner never reads it (no update stage). The factory shared block's
+	// default, restated verbatim.
+	updateCooldownMs: Schema.number().default(3000).volatile(),
+	// Actor tool names whose fs/observed events trigger pinning (the factory
+	// shared block's default, restated verbatim).
+	mutationTools: Schema.array(Schema.string())
+		.default(["write", "edit", "str_replace_editor", "raw-write"])
+		.volatile(),
+	// Global pin-policy.json; empty means discovery (Function/Resolve) - the
+	// factory shared block's default, restated verbatim.
+	policyFile: Schema.string().default(""),
+	// Excluded path segments (anywhere mode, exclusion-first) -
+	// Variable/Default (the pinner's fence).
+	exclude: Schema.array(Schema.string()).default(Default),
+	// Dependency sections the pinner may rewrite - Variable/Section.
+	sections: Schema.array(Schema.string()).default(Section),
+});

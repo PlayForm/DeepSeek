@@ -9,8 +9,11 @@ import type { State as Shared } from "@playform/plugin-dsh-factory";
  *
  * Since the factory refactor the State is the factory's shared shape (the
  * shape Function/State of @playform/plugin-dsh-factory builds, consumed by
- * every factory primitive) extended with the pinner's own field:
+ * every factory primitive) extended with the pinner's own fields:
  *
+ * - On - the MASTER SWITCH (config `enabled`, copied by the State builder's
+ *   `fields` map; the apply-time gate: a disabled pinner appends
+ *   `disabled (enabled=false)` and registers nothing);
  * - Section - the dependency sections the pinner may rewrite (config
  *   `sections`, copied by the State builder's `fields` map).
  *
@@ -44,6 +47,10 @@ import type { State as Shared } from "@playform/plugin-dsh-factory";
  * (subsystems/filesystem.md).
  */
 export default interface State extends Shared {
+    /**
+     * The MASTER SWITCH (config `enabled`; the setup map's `On <- enabled`).
+     */
+    On: boolean;
     /**
      * Dependency sections the pinner may rewrite (config `sections`).
      */

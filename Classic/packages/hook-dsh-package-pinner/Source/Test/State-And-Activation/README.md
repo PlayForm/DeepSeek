@@ -8,7 +8,7 @@ The pinner's apply-time wiring is the runtime posture in one place.
 
 The REAL factory service is instantiated against the fake ctx and registered as `ctx.pluginFactory`, `apply` returns nothing, and the Wire registers exactly one `fs/observed` hook.
 
-The factory-built state includes the pinner's `Section` field and the `pin-policy.json` union-discovery sidecar name.
+The factory-built state includes the pinner's `On` master switch (config `enabled`), `Section` field and the `pin-policy.json` union-discovery sidecar name.
 
 The activation's durable `activated (pinner, ...)` ledger line has a byte-identical shape with the `hook-dsh-pinner-package: ` logger prefix.
 

@@ -34,6 +34,7 @@
       - id: hook-dsh-normalize-ellipsis
         name: "@playform/hook-dsh-normalize-ellipsis"
         config:
+            enabled: true
             log: true
             logFile: ~/.dsh/playform/hook-dsh-normalize-ellipsis.log
             replacement: "..."

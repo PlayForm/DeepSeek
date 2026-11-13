@@ -80,6 +80,7 @@ export default (Context: Context, Options: Config): void => {
 	const State: State = Factory.State<State>(Context, Options, {
 		module: "plugin-dsh-normalize-file",
 		fields: {
+			On: "enabled",
 			Replacement: "replacement",
 			// The granular scope gates + the tool-results exemption list —
 			// volatile, refreshed in place by the factory's P10
@@ -91,6 +92,14 @@ export default (Context: Context, Options: Config): void => {
 		},
 	});
 	State.Factory = Factory;
+
+	// The master switch: disabled = the plugin registers NOTHING (the
+	// activation proof is replaced by the one disabled line, the tool and
+	// the two overpass arms below are skipped).
+	if (State.On === false) {
+		Factory.Append(State, "disabled (enabled=false)");
+		return;
+	}
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone. Format (asserted by the smoke):

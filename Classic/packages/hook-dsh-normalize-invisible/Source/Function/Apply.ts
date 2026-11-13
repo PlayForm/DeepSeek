@@ -63,6 +63,7 @@ export default (Context: Context, Options: Config): void => {
 	const State: State = Factory.State<State>(Context, Options, {
 		module: "hook-dsh-normalize-invisible",
 		fields: {
+			On: "enabled",
 			Replacement: "replacement",
 			Reasoning: "normalizeReasoning",
 			ToolArgs: "normalizeToolArguments",
@@ -76,6 +77,14 @@ export default (Context: Context, Options: Config): void => {
 		},
 	});
 	State.Factory = Factory;
+
+	// The master switch: disabled = the plugin registers NOTHING (the
+	// activation proof is replaced by the one disabled line, the listeners
+	// below are skipped).
+	if (State.On === false) {
+		Factory.Append(State, "disabled (enabled=false)");
+		return;
+	}
 
 	// Durable activation proof — "did it activate" must be answerable from the
 	// ledger alone. Format (asserted by the smoke):

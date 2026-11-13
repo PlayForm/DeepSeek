@@ -51,6 +51,11 @@ import type { State as Shared } from "@playform/plugin-dsh-factory";
  */
 export default interface State extends Shared {
 	/**
+	 * Master switch (config `enabled`, volatile) - false = register nothing.
+	 */
+	On: boolean;
+
+	/**
 	 * The dash replacement - the transform's only knob (config `replacement`).
 	 */
 	Replacement: string;
