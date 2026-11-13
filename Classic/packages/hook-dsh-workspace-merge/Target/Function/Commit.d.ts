@@ -31,5 +31,10 @@ export default _default;
  * the gates and before any write, with the documented
  * `merge held (<n> files) (policy commit=approve)` line; the reply is the
  * `rejected` commit shape and nothing is persisted. `auto` proceeds.
+ *
+ * THE CALL-TIME MASTER SWITCH: a disabled hook refuses the whole batch with
+ * the `rejected` commit reply shape, ZERO ledger lines, no sequence bump and
+ * no record (the live-flip law - State.On is read at the moment of the call,
+ * never captured at mount).
  */
 declare function _default(State: State, Request: Batch): Promise<Commit>;

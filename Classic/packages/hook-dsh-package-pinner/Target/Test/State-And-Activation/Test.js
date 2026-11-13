@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import * as Path from "node:path";
 import {
   Boot,
   Check,
@@ -6,8 +7,11 @@ import {
   Ledger,
   Lines,
   LoggerLines,
-  MakeCounter
+  MakeCounter,
+  Root,
+  Validate
 } from "../Harness.js";
+import * as Pinner from "../../../Target/Library.js";
 const runTest = async () => {
   const Count = MakeCounter();
   const World = Boot();
@@ -114,6 +118,86 @@ const runTest = async () => {
       Check(Count, Sub, () => {
         st.Journal("x", "", "y");
         assert.equal(st.Queue.length, 0, "P5 absent: the sink is a no-op \u2014 no queue growth");
+      });
+    }
+  }
+  {
+    const EventsBefore = ctx.events.length;
+    const EffectsBefore = ctx.effects.length;
+    Pinner.apply(ctx, Validate({ log: true, logFile: Ledger, enabled: false }));
+    const Disabled = ctx.__hookDshPinnerPackageState;
+    const DisabledListener = ctx.events.filter((e) => e[0] === "fs/observed").at(-1)[1];
+    const LinesBefore = Lines(Ledger).length;
+    const Excluded = {
+      displayPath: Path.join(Root, "node_modules", "probe", "package.json")
+    };
+    {
+      const Sub = "disabled mount: every surface still registers and the ledger line is the byte-exact disabled line (no early return)";
+      Check(Count, Sub, () => {
+        assert.equal(Disabled.On, false, "the disabled mount's master switch");
+        const All = Lines(Ledger);
+        assert.equal(All.length, LinesBefore + 1, "exactly one new ledger line");
+        assert.match(
+          All.at(-1),
+          /^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] disabled \(enabled=false\)$/,
+          "the byte-exact disabled line instead of the activation proof"
+        );
+        assert.ok(
+          ctx.events.slice(EventsBefore).some((e) => e[0] === "fs/observed"),
+          "the fs/observed listener STILL registered on the disabled mount"
+        );
+        assert.deepEqual(
+          ctx.effects.slice(EffectsBefore).map((e) => e[0]),
+          [
+            "hook-dsh-pinner-package-jobs",
+            "hook-dsh-pinner-package-inflight",
+            "hook-dsh-pinner-package-storage"
+          ],
+          "the P1/P2/P5 lifecycle effects STILL registered on the disabled mount"
+        );
+        assert.ok(
+          LoggerLines.info.includes("hook-dsh-pinner-package: disabled (enabled=false)"),
+          "the disabled logger line carries the State.Module prefix"
+        );
+      });
+    }
+    {
+      const Sub = "disabled mount: a call passes through with ZERO new ledger lines";
+      Check(Count, Sub, () => {
+        DisabledListener(
+          { targetKey: "disabled-probe", ...Excluded },
+          { kind: "present", version: "v-disabled-1" },
+          { name: "edit" }
+        );
+        assert.equal(
+          Lines(Ledger).length,
+          LinesBefore + 1,
+          "the disabled call did nothing (no exclusion line, no gate line)"
+        );
+      });
+    }
+    {
+      const Sub = "disabled mount: flipping enabled acts on the very next call - and back";
+      Check(Count, Sub, () => {
+        Disabled.On = true;
+        DisabledListener(
+          { targetKey: "disabled-probe", ...Excluded },
+          { kind: "present", version: "v-disabled-1" },
+          { name: "edit" }
+        );
+        const All = Lines(Ledger);
+        assert.equal(All.length, LinesBefore + 2, "the flipped-on call ran the gates (one new line)");
+        assert.ok(
+          All.at(-1).includes("skipped (excluded)"),
+          "the pass really ran (the module's exclusion line)"
+        );
+        Disabled.On = false;
+        DisabledListener(
+          { targetKey: "disabled-probe-2", ...Excluded },
+          { kind: "present", version: "v-disabled-2" },
+          { name: "edit" }
+        );
+        assert.equal(Lines(Ledger).length, LinesBefore + 2, "the flipped-back call is silent again");
       });
     }
   }

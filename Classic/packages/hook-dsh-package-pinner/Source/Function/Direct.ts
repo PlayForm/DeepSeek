@@ -37,6 +37,11 @@ import Transform from "./Transform.js";
  * instead of discarding it, so the factory's Govern awaits the chain to
  * completion (its guarded write + its ledger line) before any other registered
  * step reads the file - the version-guarded writes can never race.
+ *
+ * THE CALL-TIME MASTER SWITCH (the LIVE disabled posture): the step reads
+ * State.On at the moment of the call (never captured at mount) and passes
+ * through with ZERO ledger lines while disabled - the volatile live-flip law
+ * makes a flip act on the very next call in both directions.
  */
 export const Pin = (
 	Furnace: Factory,
@@ -45,6 +50,14 @@ export const Pin = (
 	Actor: object | undefined,
 	Version: FsVersion,
 ): Promise<void> | void => {
+	// THE CALL-TIME MASTER SWITCH (State.On, read at the moment of the call):
+	// a disabled pinner passes through with ZERO ledger lines - the step
+	// returns without running its pass (the fold sees no chain promise) - and
+	// the flip acts on the very next call in both directions (the volatile
+	// live-flip law).
+	if (State.On === false) {
+		return;
+	}
 	try {
 		// The idempotence gate BEFORE the write: the direct path mirrors the
 		// Observe's seeding (our own re-emits within the async window hit the

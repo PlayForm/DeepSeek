@@ -98,7 +98,7 @@ const FakeFs = (Files = {}, Faults = {}) => {
   };
   return Fs;
 };
-const Make = (Raw, Faults) => {
+const Make = (Raw, Faults, Attach) => {
   const Listeners = {};
   const CtxListeners = {};
   const Lines = [];
@@ -176,6 +176,7 @@ const Make = (Raw, Faults) => {
     Raw,
     Fs
   };
+  Attach?.(Context, Run);
   Run.Returned = Plugin.apply(Context, Raw);
   Run.State = Context.__hookDshWorkspaceMergeState;
   return Run;
@@ -183,6 +184,24 @@ const Make = (Raw, Faults) => {
 const Validate = (Raw) => Plugin.Config({ ...Raw });
 const LinesWith = (Run, Needle) => Run.Lines.filter((L) => L.includes(Needle));
 const LedgerWith = (Needle) => LedgerLines().filter((L) => L.includes(Needle));
+const FakeTools = () => {
+  const Registered = [];
+  return {
+    registered: Registered,
+    register: (Definition) => {
+      Registered.push(Definition);
+      return () => true;
+    }
+  };
+};
+const Write = /* @__PURE__ */ Symbol.for("cosmokit.volatile.write");
+const Flip = (CellValue, New) => {
+  const Cell = CellValue;
+  if (typeof Cell?.[Write] !== "function") {
+    throw new Error("Flip: not a volatile cell (no cosmokit write symbol)");
+  }
+  Cell[Write](New);
+};
 const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
 if (InvokedDirectly) {
   const Count = MakeCounter();
@@ -214,7 +233,9 @@ export {
   Check,
   CheckAsync,
   FakeFs,
+  FakeTools,
   Finish,
+  Flip,
   Furnace,
   Ledger,
   LedgerLines,

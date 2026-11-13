@@ -1,12 +1,12 @@
 # Wiring-And-Decisions - the loader contract, wiring, and gate decisions
 
-This folder covers the govern hook's loader contract, the service registration from apply, the cold-mount idle-forever posture, the fail-loud validation, the four independent means-checks through the real service, the policy override, the fail-open recovery table, the decision ring, and the purity invariant.
+This folder covers the govern hook's loader contract, the service registration from apply, the live disabled posture (registered, silent, the volatile flip live), the fail-loud validation, the four independent means-checks through the real service, the policy override, the fail-open recovery table, the decision ring, and the purity invariant.
 
 ## Scenarios
 
 - G1: the default object carries exactly name/apply/Config/inject, and inject is `["pluginFactory"]`.
 - G2: an enabled mount returns NOTHING from apply, exposes `ctx.__hookDshWorkspaceGovernState`, registers the `workspaceGovern` service (the gate/decisions methods resolve on the context), and the activation line is byte-exact: `govern: activated (tools=4, policy=0)` (logger and durable file).
-- G3: a disabled mount wires NOTHING (no waterfall listeners) and logs the honest `govern: disabled (enabled=false)` line while the service stays registered.
+- G3: a disabled mount registers EVERY listener (the `tools/pre-execute` gate arm and the `tools/post-execute` observer beside the factory's `loader/volatile-update`) and logs the honest `govern: disabled (enabled=false)` line while the service stays registered; a disabled gate call answers a pass decision (the obligations `n/a`) with ZERO new ledger lines and no ring entry, a disabled waterfall call passes the downstream decision through unchanged on both arms, and a volatile flip (`enabled` through the cosmokit cell plus the captured `loader/volatile-update` dispatch) acts on the very next call in both directions with no remount and no new activation line.
 - G4: the fail-loud validation throws module-prefixed errors for a non-array policy table, a bad recovery override behavior, and a zero loop bound.
 - D1: a declared, contributed proposal passes with the byte-exact `passed op:1 (write /repo/src/a.ts)` line (logger and durable file).
 - D2: an empty contribution denies with the byte-exact `denied op:1 (contributes)` line and the obligations record.
@@ -31,4 +31,4 @@ The fixtures use the shared Harness (fake ctx + the REAL built factory + the REA
 
 ## Expected count
 
-21 PASS.
+25 PASS.

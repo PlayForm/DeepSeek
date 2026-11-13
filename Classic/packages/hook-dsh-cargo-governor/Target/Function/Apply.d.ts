@@ -14,8 +14,9 @@ export default _default;
  * 1. State — the factory's State builder (cell unwrap, the fixed shared
  *    mappings Tool←mutationTools / Policy←policyFile / Ledger←logFile /
  *    Enabled←log / List←exclude, the module fields by name — On ← enabled, the
- *    master switch: a disabled module appends `disabled (enabled=false)` and
- *    returns before registering anything —, the fresh
+ *    master switch: the ONE mount-time effect of the flag is the ledger line —
+ *    a disabled module appends `disabled (enabled=false)` INSTEAD of the
+ *    activation proof and still registers everything — the fresh
  *    Stash/Inflight/Seams/Queue structures and the P9 probe-once "subprocess"
  *    seam through the factory's Function/Seam). The module adds its own
  *    update-stage collections (Stamp/Set/Count) on top.

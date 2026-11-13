@@ -19,6 +19,10 @@ import type WatchEntry from "@Interface/WatchEntry.js";
  * module's Clock, and then runs the sweep's deadline scan (the event IS the
  * checkpoint - no real timers).
  *
+ * - The CALL-TIME master switch FIRST: a disabled hook reads State.On at the
+ *   moment of the call and passes through with ZERO ledger lines and ZERO
+ *   watch-state changes (the live-flip law - a volatile flip acts on the
+ *   very next event).
  * - NO awaits and NO subprocess work on the listener path; the ledger Append
  *   rides the family's synchronous Append (logger + appendFileSync);
  * - the guard chain, in order:
@@ -40,6 +44,14 @@ export default (
 	Observation: FsObservation | undefined,
 	Actor: object | undefined,
 ): void => {
+	// The call-time master switch: a disabled hook is fully silent (zero
+	// ledger lines, zero watch-state changes), read at the moment of the
+	// call.
+	switch (true) {
+		case State.On === false:
+			return;
+		default:
+	}
 	// The path is read defensively BEFORE the guarded body so even a malformed
 	// event can be ledgered with whatever identity it carried.
 	const Path =

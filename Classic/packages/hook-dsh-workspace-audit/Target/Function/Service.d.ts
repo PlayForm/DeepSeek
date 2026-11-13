@@ -18,6 +18,12 @@ import type State from "../Interface/State.js";
  * - chain(operation) - one operation's lines, in order;
  * - lines(limit?) - the ring, newest first;
  * - statistics() - { operations, lines, sequence }.
+ *
+ * THE CALL-TIME MASTER SWITCH: the recording paths (line, assessment) read
+ * State.On at the moment of the call and refuse with `undefined` and ZERO
+ * ledger lines while the hook is disabled (the live-flip law - a volatile
+ * flip acts on the very next call); the read surface answers from the state
+ * and writes nothing, so it needs no flag.
  */
 export default class WorkspaceAudit extends Service {
     /**
@@ -35,12 +41,12 @@ export default class WorkspaceAudit extends Service {
         path?: string;
         outcome?: Line["outcome"];
         assessment?: string;
-    }): Line;
+    }): Line | undefined;
     /**
      * Close the loop: the IntentAssessment line for one operation, recording
      * whether its IntentSpecification was satisfied.
      */
-    assessment(Operation: string, Satisfied: boolean, Detail?: string): Line;
+    assessment(Operation: string, Satisfied: boolean, Detail?: string): Line | undefined;
     /**
      * One operation's audit chain, in recording order.
      */

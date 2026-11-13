@@ -24,5 +24,10 @@ export default _default;
  * and the async stages (the chain pass and the update stage) run detached and contained - the
  * factory's Continue catches its own, and Function/Follow catches its own, so neither can
  * ever surface as a tool error (the silence invariant).
+ *
+ * THE CALL-TIME MASTER SWITCH (the LIVE disabled posture): the listener reads State.On at
+ * the moment of the call (never captured at mount); while disabled it passes through with
+ * ZERO ledger lines, and the volatile live-flip law makes a flip act on the very next call
+ * in both directions.
  */
 declare function _default(State: State, Target: FsTarget, Observation: FsObservation, Actor: object | undefined): void;

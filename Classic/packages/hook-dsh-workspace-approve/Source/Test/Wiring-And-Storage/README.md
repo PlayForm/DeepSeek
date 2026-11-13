@@ -4,7 +4,7 @@ This folder covers the plugin's loader wiring and its own P5-style storage domai
 
 ## Scenarios
 
-- W1: the IDLE-forever cold mount, where apply returns NOTHING, the service is still provided, nothing registers on the root context, no storage effect is armed, and the ledger carries the byte-exact `disabled (enabled=false)` line.
+- W1: the live disabled posture: apply returns NOTHING, the service is still provided, EVERY surface registers (the `fs/observed` root listener and the `approve-storage` effect), the ledger carries the byte-exact `disabled (enabled=false)` line, a disabled `fs/observed` event and a disabled service call (bind, check, approve) pass through with ZERO new ledger lines, and a volatile flip (`enabled` through the cosmokit cell plus the captured `loader/volatile-update` dispatch) acts on the very next call in both directions with no remount and no new activation line.
 - W2: the enabled mount, where `fs/observed` registers on the ROOT context only (never on the plugin context, because the fake root is a distinct object and a ctx-side registration cannot pass), the root identity is not the plugin ctx, the activation line `activated (domain=workspace_approve)` is byte-exact, the storage effect is armed, and the state probe is attached.
 - W3: the fail-loud validation, where an empty `domain` and a `maxBindings` below 1 throw at load with the byte-exact `approve: ` messages, and a non-boolean `requireConstraints` fails loud at the schema (a `ValidationError`, because the schema validates the type first).
 - W4: the absent facility, where the effect is a SILENT SKIP: no `storage open failed` line, the handle stays undefined, and the bindings live in memory only.
@@ -19,8 +19,8 @@ There is no fake clock, because the plugin has no clock dependency and every tim
 
 ## Expected ledger strings (byte-exact, `approve: ` prefix)
 
-`disabled (enabled=false)`, `activated (domain=workspace_approve)`, `storage open failed: storage unavailable`.
+`disabled (enabled=false)`, `activated (domain=workspace_approve)`, `bound ap-1 /repo/a.ts fingerprint fp-1`, `storage open failed: storage unavailable`.
 
 ## Expected count
 
-13 PASS.
+17 PASS.

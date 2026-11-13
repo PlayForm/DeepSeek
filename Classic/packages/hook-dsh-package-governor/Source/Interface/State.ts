@@ -21,7 +21,9 @@ import type { State as Shared } from "@playform/plugin-dsh-factory";
  * map of the State setup + the built collections):
  *
  *   - On - the MASTER SWITCH (config `enabled`; the setup map's `On <- enabled` - the
- *     apply-time gate: a disabled governor appends `disabled (enabled=false)` and returns);
+ *     mount-time switch: a disabled governor appends `disabled (enabled=false)` INSTEAD of
+ *     the activation proof and still registers everything - every surface reads it at call
+ *     time, the volatile live-flip law);
  *   - Strict - strict chain pass (strip unknown deps in a governed workspace);
  *   - Wait - cooldown between update-stage dispatches, per directory;
  *   - Limit - circuit breaker: consecutive update-stage failures before pause;

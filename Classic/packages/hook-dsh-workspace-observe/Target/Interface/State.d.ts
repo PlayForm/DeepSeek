@@ -21,7 +21,8 @@ import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
  */
 interface Extra {
     /**
-     * The master switch (config `enabled` - the IDLE-forever posture).
+     * The master switch (config `enabled` - the live disabled posture: a
+     * disabled mount registers everything, the call-time checks answer).
      */
     On: boolean;
     /**

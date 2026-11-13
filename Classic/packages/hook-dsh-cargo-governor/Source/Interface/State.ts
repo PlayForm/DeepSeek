@@ -18,8 +18,10 @@ import type PluginFactory from "@playform/plugin-dsh-factory";
  * the v0.1.1 declaration fix: the built Target/Library.d.ts ships RELATIVE
  * specifiers, so the extracted shared shape is the real one and the
  * leak-era STRUCTURAL MIRROR is gone) plus the module's own fields, headed by
- * the master switch (On ← config `enabled`, the apply-time gate: a disabled
- * module appends `disabled (enabled=false)` and registers nothing).
+ * the master switch (On ← config `enabled`, the mount-time switch: a disabled
+ * module appends `disabled (enabled=false)` INSTEAD of the activation proof
+ * and still registers everything - every surface reads it at call time, the
+ * volatile live-flip law).
  *
  * The shared machinery collections implement loop control by construction:
  *

@@ -16,6 +16,9 @@ import type State from "@Interface/State.js";
  *
  * The discipline, per the family contract:
  *
+ * - The CALL-TIME master switch FIRST: a disabled hook reads State.On at the
+ *   moment of the call and passes through with ZERO ledger lines (the
+ *   live-flip law - a volatile flip acts on the very next event).
  * - NO awaits, NO I/O on the listener path.
  * - An event whose `actor` is the hook's OWN actor object is ignored (the
  *   identity check).
@@ -30,6 +33,13 @@ export default (
 	Observation: unknown,
 	Actor: object | undefined,
 ): void => {
+	// The call-time master switch: a disabled hook is fully silent (zero
+	// ledger lines, zero state changes), read at the moment of the call.
+	switch (true) {
+		case State.On === false:
+			return;
+		default:
+	}
 	const Path =
 		typeof (Target as { displayPath?: unknown } | null)?.displayPath === "string"
 			? (Target as { displayPath: string }).displayPath

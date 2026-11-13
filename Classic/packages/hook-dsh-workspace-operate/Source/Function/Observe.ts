@@ -20,6 +20,10 @@ import type State from "@Interface/State.js";
  * the hook's own actor. Silent by design - the ledger line for every
  * observed write already comes from the observe hook; a second line would
  * be noise.
+ *
+ * The CALL-TIME master switch: a disabled hook reads State.On at the moment
+ * of the call and passes through with ZERO tracker updates (the live-flip
+ * law - a volatile flip acts on the very next event).
  */
 export default (
 	State: State,
@@ -27,6 +31,12 @@ export default (
 	Observation: FsObservation | undefined,
 	Actor: object | undefined,
 ): void => {
+	// The call-time master switch: a disabled hook does nothing.
+	switch (true) {
+		case State.On === false:
+			return;
+		default:
+	}
 	try {
 		switch (true) {
 			case Actor === State.Self:

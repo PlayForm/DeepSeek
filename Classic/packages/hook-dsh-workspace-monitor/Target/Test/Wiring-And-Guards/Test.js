@@ -5,6 +5,7 @@ import {
   Fire,
   FireAbsent,
   FireMalformed,
+  Flip,
   Ledger,
   LedgerWith,
   LinesWith,
@@ -57,10 +58,39 @@ const runTest = async () => {
   }
   {
     const Run = Make(Validate({ logFile: Ledger, enabled: false }));
-    Check(Count, "G3: a disabled mount wires NOTHING and logs the honest line", () => {
-      assert.deepEqual(Run.RootNames, []);
+    Check(Count, "G3: a disabled mount registers EVERY surface and logs the honest line", () => {
+      assert.deepEqual(Run.RootNames, ["fs/observed"]);
       assert.deepEqual(Object.keys(Run.CtxListeners), ["loader/volatile-update"]);
       assert.deepEqual(Run.Lines, ["monitor: disabled (enabled=false)"]);
+    });
+    Check(Count, "G3: a disabled event passes through with zero new lines and zero watch state", () => {
+      const Before = Run.Lines.length;
+      Fire(Run, "/repo/src/a.ts", "1");
+      FireMalformed(Run);
+      assert.equal(Run.Lines.length, Before);
+      assert.equal(Run.State.Watch.size, 0);
+      assert.equal(Run.State.Events, 0);
+    });
+  }
+  {
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }));
+    Flip(Run.Raw.enabled, true);
+    Run.CtxListeners["loader/volatile-update"](["enabled"]);
+    Check(Count, "G3: a volatile flip to enabled watches on the very next event, no remount", () => {
+      assert.equal(Run.State.On, true);
+      Fire(Run, "/repo/src/a.ts", "1");
+      assert.deepEqual(LinesWith(Run, "watch"), [
+        "monitor: watch /repo/src/a.ts version 1 (tsc,format)"
+      ]);
+      assert.equal(Run.State.Events, 1);
+    });
+    Flip(Run.Raw.enabled, false);
+    Run.CtxListeners["loader/volatile-update"](["enabled"]);
+    Check(Count, "G3: the flip back to disabled silences the very next event", () => {
+      const Before = Run.Lines.length;
+      Fire(Run, "/repo/src/b.ts", "1");
+      assert.equal(Run.Lines.length, Before);
+      assert.equal(Run.State.Events, 1);
     });
   }
   {

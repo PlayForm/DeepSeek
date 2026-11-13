@@ -22,5 +22,9 @@ export default _default;
  *   decision supersedes the earlier one).
  * - Any other transition is refused with its own ledger line and the binding is
  *   returned unchanged.
+ *
+ * The CALL-TIME master switch: a disabled hook refuses with `undefined` and
+ * ZERO ledger lines (the live-flip law - State.On is read at the moment of
+ * the call, never captured at mount).
  */
 declare function _default(State: State, Id: string, Action: "approve" | "deny" | "revoke", Who: string, Constraints: string[] | undefined): Binding | undefined;

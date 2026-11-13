@@ -29,5 +29,10 @@ export default _default;
  *   (P2), reads the manifest through ctx.fs.readText, resolves the union
  *   keep-list (with the P3 chain-keys interlock), and calls the MODULE'S
  *   transform (Function/Transform - the range law).
+ *
+ * THE CALL-TIME MASTER SWITCH (the LIVE disabled posture): the listener reads
+ * State.On at the moment of the call (never captured at mount); while disabled
+ * it passes through with ZERO ledger lines, and the volatile live-flip law
+ * makes a flip act on the very next call in both directions.
  */
 declare function _default(Furnace: Factory, State: State, Target: FsTarget, Observation: FsObservation, Actor: object | undefined): void;

@@ -21,6 +21,10 @@ import type State from "@Interface/State.js";
  *   the event already carries the version token;
  * - the sequence is the plugin's own monotonic counter (`State.Sequence`),
  *   never a wall clock;
+ * - the CALL-TIME master switch FIRST: a disabled hook reads State.On at the
+ *   moment of the call and passes through with ZERO ledger lines and ZERO
+ *   state changes (the live-flip law - a volatile flip acts on the very
+ *   next event);
  * - the guard chain, in order:
  *   1. an event whose `actor` is the hook's OWN actor object is ignored (the
  *      identity check) - ledger `ignored <path> (own actor)`;
@@ -43,6 +47,13 @@ export default (
 	Observation: FsObservation | undefined,
 	Actor: object | undefined,
 ): void => {
+	// The call-time master switch: a disabled hook is fully silent (zero
+	// ledger lines, zero state changes), read at the moment of the call.
+	switch (true) {
+		case State.On === false:
+			return;
+		default:
+	}
 	// The path is read defensively BEFORE the guarded body so even a malformed
 	// event can be ledgered with whatever identity it carried; a missing
 	// displayPath is a MALFORMED event: it throws into the guarded body and

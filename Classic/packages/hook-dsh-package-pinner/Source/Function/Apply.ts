@@ -25,9 +25,11 @@ import Observe from "./Observe.js";
  *    "pin-policy.json", journalDomain: "hook_dsh_package_pinner" }): the shared
  *    shape (defensive cell unwrap of the factory's volatile shared fields,
  *    Tool/Policy/Ledger/Enabled/List mappings, Stash/Inflight/Seams/Queue/
- *    Journal, the P9 subprocess probe) + the master switch (On <- enabled: a
- *    disabled pinner appends `disabled (enabled=false)` and returns before
- *    registering anything) + the pinner's Section.
+ *    Journal, the P9 subprocess probe) + the master switch (On <- enabled: the
+ *    ONE mount-time effect of the flag is the ledger line - a disabled pinner
+ *    appends `disabled (enabled=false)` INSTEAD of the activation proof and
+ *    still registers everything - the LIVE disabled posture) + the pinner's
+ *    Section.
  * 2. The activation proof - the MODULE'S ledger strings: the durable
  *    `activated (...)` Append ("did it activate" must be answerable from the
  *    ledger alone) and the P5 Journal record.
@@ -62,27 +64,32 @@ export default (Context: Context, Options: Config): void => {
 
 	// THE MASTER SWITCH (config `enabled`, volatile - the setup map's
 	// `On <- enabled`, so the State builder's P10 volatile-update listener
-	// refreshes it in place): a disabled pinner appends the durable disabled
-	// line and returns BEFORE registering anything - no Wire listener, no
-	// direct-govern step, no lifecycle effects (the tool-coach precedent).
-	if (!State.On) {
+	// refreshes it in place): the ONE mount-time effect of the flag is the
+	// ledger line - a disabled pinner appends the durable disabled line
+	// INSTEAD of the activation proof and still registers EVERYTHING below
+	// (no early return - the LIVE disabled posture). Every registered surface
+	// checks the flag at CALL time (Function/Observe and the Function/Direct
+	// Pin step read State.On at the moment of the call - the factory refreshes
+	// State.On in place, so a flip acts on the very next call in both
+	// directions, with no remount) and a disabled surface passes through with
+	// ZERO ledger lines.
+	if (State.On === false) {
 		Furnace.Append(State, "disabled (enabled=false)");
-		return;
+	} else {
+		// Durable activation proof (the module's own string) + the P5 journal
+		// record — both flow through the factory's Append/Journal. The line's
+		// string mechanics live in the core's Activate composer; the FIELD LIST
+		// is the module's own — the leading bare flavor word (empty key) and the
+		// bracketed lists.
+		const Proof = Activate([
+			["", "pinner"],
+			["logFile", State.Ledger],
+			["sections", `[${State.Section.join(", ")}]`],
+			["exclude", `[${State.List.join(", ")}]`],
+		]);
+		Furnace.Append(State, Proof);
+		Furnace.Journal(State, "activated", "", Proof);
 	}
-
-	// Durable activation proof (the module's own string) + the P5 journal
-	// record — both flow through the factory's Append/Journal. The line's
-	// string mechanics live in the core's Activate composer; the FIELD LIST
-	// is the module's own — the leading bare flavor word (empty key) and the
-	// bracketed lists.
-	const Proof = Activate([
-		["", "pinner"],
-		["logFile", State.Ledger],
-		["sections", `[${State.Section.join(", ")}]`],
-		["exclude", `[${State.List.join(", ")}]`],
-	]);
-	Furnace.Append(State, Proof);
-	Furnace.Journal(State, "activated", "", Proof);
 
 	// The listener is owned by the current fiber: removed on unload — no
 	// manual removeListener bookkeeping, ever (the factory's Wire).

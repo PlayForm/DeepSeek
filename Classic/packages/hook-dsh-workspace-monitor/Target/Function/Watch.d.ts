@@ -15,6 +15,10 @@ export default _default;
  * module's Clock, and then runs the sweep's deadline scan (the event IS the
  * checkpoint - no real timers).
  *
+ * - The CALL-TIME master switch FIRST: a disabled hook reads State.On at the
+ *   moment of the call and passes through with ZERO ledger lines and ZERO
+ *   watch-state changes (the live-flip law - a volatile flip acts on the
+ *   very next event).
  * - NO awaits and NO subprocess work on the listener path; the ledger Append
  *   rides the family's synchronous Append (logger + appendFileSync);
  * - the guard chain, in order:

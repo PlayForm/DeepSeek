@@ -42,6 +42,11 @@ import Transform from "./Transform.js";
  *   AFTER the continuation resolves so the ledger order stays byte-identical
  *   (`governed …` before `update stage dispatched …`), skipped entirely when
  *   Filter finds nothing public for cargo to do.
+ *
+ * THE CALL-TIME MASTER SWITCH (the LIVE disabled posture): the listener reads
+ * State.On at the moment of the call (never captured at mount); while disabled
+ * it passes through with ZERO ledger lines, and the volatile live-flip law
+ * makes a flip act on the very next call in both directions.
  */
 export default (
 	Factory: PluginFactory,
@@ -50,6 +55,14 @@ export default (
 	Observation: FsObservation,
 	Actor: object | undefined,
 ): void => {
+	// THE CALL-TIME MASTER SWITCH (State.On, read at the moment of the call -
+	// never captured at mount): a disabled cargo module passes through with
+	// ZERO ledger lines - the listener does nothing - and the flip acts on the
+	// very next call in both directions (the volatile live-flip law: the
+	// factory refreshes State.On in place).
+	if (State.On === false) {
+		return;
+	}
 	try {
 		// g1 — the trigger gate set, as ONE factory call (it logs nothing; the
 		// module composes its own lines for the outcomes it cares about — at

@@ -19,10 +19,15 @@ import { Activate } from "@playform/lib-dsh-core";
  *
  * @remarks
  *
- * The idle-forever posture: `enabled` defaults to false (the schema default and
- * the bundle patch row). A cold mount logs `disabled (enabled=false)`,
- * registers the service (it reads honestly from the empty state), and wires
- * NOTHING - no listener, no storage effect, no events consumed.
+ * The live disabled posture: `enabled` defaults to false (the schema default
+ * and the bundle patch row). A cold mount logs `disabled (enabled=false)` and
+ * registers EVERY surface - the fs/observed listener (the factory's Wire) and
+ * the own P5-style storage effect, beside the service. Every registered
+ * surface checks the flag at CALL time (the volatile cell refreshed in place
+ * by the factory's P10 loader/volatile-update listener, never captured at
+ * mount), so a disabled call passes through with ZERO ledger lines and a
+ * volatile flip acts on the very next call in both directions, with no
+ * remount.
  *
  * The function returns NOTHING (the loader contract: a returned value silently
  * kills event delivery). The test probe is the
@@ -94,15 +99,19 @@ export default (Context: Context, Options: Config): void => {
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("workspaceApprove", this).
 	new ServiceClass(Context, State);
+	// The master switch: the ONE mount-time effect of the flag is the ledger
+	// line - a disabled mount writes `disabled (enabled=false)` instead of
+	// the activation proof and still registers EVERYTHING below (the
+	// live-flip law: the factory refreshes State.On in place, so a flip acts
+	// on the very next call in both directions, with no remount).
 	switch (true) {
 		case !State.On:
-			// The cold mount: honest in the ledger, wired to nothing.
 			Factory.Append(State, "disabled (enabled=false)");
-			return;
+			break;
 		default:
+			// The activation proof (the module's own composed line).
+			Factory.Append(State, Activate([["domain", State.DomainName]]));
 	}
-	// The activation proof (the module's own composed line).
-	Factory.Append(State, Activate([["domain", State.DomainName]]));
 
 	// The fs/observed listener, on the ROOT context (the factory's Wire): it
 	// invalidates bindings whose file moved under the approval.

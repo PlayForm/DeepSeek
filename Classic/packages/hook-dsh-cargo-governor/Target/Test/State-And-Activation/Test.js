@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
+import * as Path from "node:path";
 import {
   Boot,
   Check,
   Finish,
+  Fire,
   Furnace,
   Group,
   Ledger,
@@ -11,6 +13,7 @@ import {
   MakeContext,
   MakeCounter,
   ProbeState,
+  Root,
   SeamStub
 } from "../Harness.js";
 const runTest = async () => {
@@ -135,6 +138,71 @@ const runTest = async () => {
         "P1 attaches the root controller"
       );
     });
+  }
+  {
+    const m = MakeContext({ services: { subprocess: SeamStub() } });
+    m.ctx.pluginFactory = Furnace;
+    m.ledger = LedgerFile("disabled");
+    Boot(m, { enabled: false });
+    const S = ProbeState;
+    const Excluded = {
+      displayPath: Path.join(Root, "node_modules", "probe", "Cargo.toml")
+    };
+    Check(
+      Count,
+      "disabled mount: every surface still registers and the ledger line is the byte-exact disabled line (no early return)",
+      () => {
+        assert.equal(S.On, false, "the disabled mount's master switch");
+        assert.deepEqual(
+          Ledger(m.ledger),
+          ["disabled (enabled=false)"],
+          "the ONLY ledger line is the byte-exact disabled line (no activation proof)"
+        );
+        assert.equal(
+          m.captured.events.filter((e) => e[0] === "fs/observed").length,
+          1,
+          "the fs/observed listener STILL registered (no early return)"
+        );
+        assert.deepEqual(
+          m.captured.effects.map((e) => e[0]),
+          [
+            "hook-dsh-governor-cargo-jobs",
+            "hook-dsh-governor-cargo-inflight",
+            "hook-dsh-governor-cargo-storage"
+          ],
+          "the P1/P2/P5 lifecycle effects STILL registered"
+        );
+        assert.equal(
+          LoggerLines.info.at(-1),
+          `hook-dsh-governor-cargo: ${Ledger(m.ledger)[0]}`,
+          "logger prefix = State.Module"
+        );
+      }
+    );
+    {
+      const Silent = Ledger(m.ledger).length;
+      Check(Count, "disabled mount: a call passes through with ZERO new ledger lines", () => {
+        Fire(m, { targetKey: "disabled-probe", ...Excluded }, "v-disabled-1");
+        assert.equal(
+          Ledger(m.ledger).length,
+          Silent,
+          "the disabled call did nothing (no exclusion line, no gate line)"
+        );
+      });
+      Check(Count, "disabled mount: flipping enabled acts on the very next call - and back", () => {
+        S.On = true;
+        Fire(m, { targetKey: "disabled-probe", ...Excluded }, "v-disabled-1");
+        const lines = Ledger(m.ledger);
+        assert.equal(lines.length, Silent + 1, "the flipped-on call ran the gates (one new line)");
+        assert.ok(
+          lines.at(-1).startsWith("skipped (excluded) "),
+          "the pass really ran (the module's exclusion line)"
+        );
+        S.On = false;
+        Fire(m, { targetKey: "disabled-probe-2", ...Excluded }, "v-disabled-2");
+        assert.equal(Ledger(m.ledger).length, Silent + 1, "the flipped-back call is silent again");
+      });
+    }
   }
   return Finish(Count, "State-And-Activation");
 };

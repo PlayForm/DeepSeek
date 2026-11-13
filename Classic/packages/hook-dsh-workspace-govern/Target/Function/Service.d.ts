@@ -23,6 +23,12 @@ import type State from "../Interface/State.js";
  *   any consumer that holds a proposal record).
  * - `decisions(limit)` - the decision ring, newest first.
  * - `statistics()` - { decisions, sequence }.
+ *
+ * THE CALL-TIME MASTER SWITCH: the gate reads State.On at the moment of the
+ * call; a disabled hook answers a pass decision (`decision: "pass"`, the
+ * obligations `n/a`, ZERO ledger lines, no ring entry - the live-flip law, a
+ * volatile flip acts on the very next call); the read surface answers from
+ * the state and writes nothing, so it needs no flag.
  */
 export default class WorkspaceGovern extends Service {
     /**

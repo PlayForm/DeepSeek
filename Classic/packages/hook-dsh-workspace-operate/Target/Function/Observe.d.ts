@@ -20,5 +20,9 @@ export default _default;
  * the hook's own actor. Silent by design - the ledger line for every
  * observed write already comes from the observe hook; a second line would
  * be noise.
+ *
+ * The CALL-TIME master switch: a disabled hook reads State.On at the moment
+ * of the call and passes through with ZERO tracker updates (the live-flip
+ * law - a volatile flip acts on the very next event).
  */
 declare function _default(State: State, Target: FsTarget | undefined, Observation: FsObservation | undefined, Actor: object | undefined): void;

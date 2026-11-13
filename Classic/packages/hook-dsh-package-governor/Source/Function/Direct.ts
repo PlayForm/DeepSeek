@@ -45,6 +45,11 @@ import Transform from "./Transform.js";
  * discarding it, so the factory's Govern awaits one step's chain to completion (its guarded
  * write + its ledger line) before the next step reads the file - the steps' version-guarded
  * writes can never race.
+ *
+ * THE CALL-TIME MASTER SWITCH (the LIVE disabled posture): both steps read State.On at the
+ * moment of the call (never captured at mount) and pass through with ZERO ledger lines while
+ * disabled - the volatile live-flip law makes a flip act on the very next call in both
+ * directions.
  */
 // The chain pass WITHOUT the update follow: the direct-path counterpart of the Observe's
 // g2 + seed + Continue sequence.
@@ -54,6 +59,13 @@ export const Canonicalize = (
 	Actor: object | undefined,
 	Version: FsVersion,
 ): Promise<void> | void => {
+	// THE CALL-TIME MASTER SWITCH (State.On, read at the moment of the call): a disabled
+	// governor passes through with ZERO ledger lines - the step returns without running its
+	// pass (the fold sees no chain promise) - and the flip acts on the very next call in both
+	// directions (the volatile live-flip law).
+	if (State.On === false) {
+		return;
+	}
 	try {
 		const Path = Target.displayPath;
 		const Dir = Parent(Path);
@@ -117,6 +129,12 @@ export const Update = (
 	Actor: object | undefined,
 	Version: FsVersion,
 ): Promise<void> | void => {
+	// THE CALL-TIME MASTER SWITCH (State.On, read at the moment of the call): a disabled
+	// governor passes through with ZERO ledger lines - the update stage does not run - and
+	// the flip acts on the very next call in both directions (the volatile live-flip law).
+	if (State.On === false) {
+		return;
+	}
 	try {
 		const Dir = Parent(Target.displayPath);
 		// Quiet g2: the update stage's engine inputs (the registry for the Filter gate, the

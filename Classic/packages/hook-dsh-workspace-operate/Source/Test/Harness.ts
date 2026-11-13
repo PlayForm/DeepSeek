@@ -196,7 +196,7 @@ export const FakeGraph = (Nodes: any[], Edges: any[] = []): any => ({
  * its setup immediately and records the disposer, get() resolves through the
  * context properties.
  */
-export const Make = (Raw: any, Graph?: any): any => {
+export const Make = (Raw: any, Graph?: any, Tools?: unknown): any => {
 	const Listeners: any = {};
 	const CtxListeners: any = {};
 	const Lines: string[] = [];
@@ -254,6 +254,11 @@ export const Make = (Raw: any, Graph?: any): any => {
 	if (Graph !== undefined) {
 		Context.workspaceGraph = Graph;
 	}
+	if (Tools !== undefined) {
+		// The fake tools host: captures the registered tool definitions (the
+		// probe `ctx.get("tools")` resolves through the context properties).
+		Context.tools = Tools;
+	}
 	const Run: any = {
 		Context,
 		Root,
@@ -271,6 +276,42 @@ export const Make = (Raw: any, Graph?: any): any => {
 	Run.Returned = (Plugin.apply as any)(Context, Raw);
 	Run.State = Context.__hookDshWorkspaceOperateState;
 	return Run;
+};
+
+/**
+ * The fake tools host: captures the registered tool definitions.
+ */
+export const FakeTools = (): any => {
+	const Registered: unknown[] = [];
+	return {
+		registered: Registered,
+		register: (Definition: unknown) => {
+			Registered.push(Definition);
+			return () => true;
+		},
+	};
+};
+
+/**
+ * A volatile-cell write symbol (cosmokit): the loader's hot-edit path
+ * commits a new value into a `{ get }` cell through it. The harness uses the
+ * REGISTERED global symbol - the same mechanism the live loader uses, so the
+ * flip tests exercise the real cells the schema produces.
+ */
+const Write = Symbol.for("cosmokit.volatile.write");
+
+/**
+ * Commit a new value into a volatile cell (the hot-edit write), WITHOUT
+ * firing the loader event - the caller then fires the captured
+ * loader/volatile-update listener with the changed key, mirroring the live
+ * sequence (commit, then the event).
+ */
+export const Flip = (CellValue: unknown, New: unknown): void => {
+	const Cell = CellValue as { [Write]?: (Value: unknown) => unknown };
+	if (typeof Cell?.[Write] !== "function") {
+		throw new Error("Flip: not a volatile cell (no cosmokit write symbol)");
+	}
+	Cell[Write](New);
 };
 
 /**

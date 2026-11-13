@@ -18,6 +18,10 @@ export default _default;
  *   the event already carries the version token;
  * - the sequence is the plugin's own monotonic counter (`State.Sequence`),
  *   never a wall clock;
+ * - the CALL-TIME master switch FIRST: a disabled hook reads State.On at the
+ *   moment of the call and passes through with ZERO ledger lines and ZERO
+ *   state changes (the live-flip law - a volatile flip acts on the very
+ *   next event);
  * - the guard chain, in order:
  *   1. an event whose `actor` is the hook's OWN actor object is ignored (the
  *      identity check) - ledger `ignored <path> (own actor)`;

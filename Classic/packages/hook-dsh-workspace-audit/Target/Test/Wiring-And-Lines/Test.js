@@ -5,6 +5,7 @@ import {
   Finish,
   Fire,
   FireMalformed,
+  Flip,
   Ledger,
   LedgerLines,
   LedgerWith,
@@ -36,9 +37,9 @@ const runTest = async () => {
       assert.equal(Run.Returned, void 0);
       assert.ok(Run.Provided["workspaceAudit"] !== void 0);
     });
-    Check(Count, "W1: a disabled mount registers NOTHING on the root context", () => {
-      assert.deepEqual(Run.RootNames, []);
-      assert.deepEqual(Run.Effects, []);
+    Check(Count, "W1: a disabled mount registers EVERY surface (listener and storage effect)", () => {
+      assert.deepEqual(Run.RootNames, ["fs/observed"]);
+      assert.deepEqual(Run.Effects, ["audit-storage"]);
     });
     Check(Count, "W1: the cold mount logs the byte-exact disabled line", () => {
       assert.deepEqual(Run.Lines, ["audit: disabled (enabled=false)"]);
@@ -51,6 +52,43 @@ const runTest = async () => {
       });
       assert.deepEqual(Run.Context.workspaceAudit.chain("op1"), []);
       assert.deepEqual(Run.Context.workspaceAudit.lines(), []);
+    });
+    Check(Count, "W1: a disabled fs/observed event passes through with zero new lines", () => {
+      const Before = Run.Lines.length;
+      Fire(Run, "/repo/src/a.ts");
+      FireMalformed(Run);
+      assert.equal(Run.Lines.length, Before);
+      assert.equal(Run.State.Ring.length, 0);
+    });
+    Check(Count, "W1: a disabled recording service call refuses with zero new lines", () => {
+      const Before = Run.Lines.length;
+      assert.equal(
+        Run.Context.workspaceAudit.line({ operation: "op1", category: "outcome-evidence", path: "/repo/a.ts", outcome: "success" }),
+        void 0
+      );
+      assert.equal(Run.Context.workspaceAudit.assessment("op1", true), void 0);
+      assert.equal(Run.State.Sequence, 0);
+      assert.equal(Run.Lines.length, Before);
+    });
+  }
+  {
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }));
+    Flip(Run.Raw.enabled, true);
+    Run.CtxListeners["loader/volatile-update"](["enabled"]);
+    Check(Count, "W1: a volatile flip to enabled acts on the very next call, no remount", () => {
+      assert.equal(Run.State.On, true);
+      Fire(Run, "/repo/src/a.ts");
+      assert.equal(Run.State.Sequence, 1);
+      assert.ok(Run.Lines.includes("audit: audit outcome-evidence /repo/src/a.ts (success) /repo/src/a.ts"));
+    });
+    Flip(Run.Raw.enabled, false);
+    Run.CtxListeners["loader/volatile-update"](["enabled"]);
+    Check(Count, "W1: the flip back to disabled silences the very next call", () => {
+      const Before = Run.Lines.length;
+      Fire(Run, "/repo/src/b.ts");
+      assert.equal(Run.Lines.length, Before);
+      assert.equal(Run.State.Sequence, 1);
     });
   }
   {

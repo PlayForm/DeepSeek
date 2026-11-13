@@ -20,11 +20,16 @@ export default _default;
  * P5-style one. The contract is
  * Documentation/Plans/Workspace-Family/OPERATE.md.
  *
- * THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default
+ * THE LIVE DISABLED POSTURE: `enabled` defaults to false (the schema default
  * and the bundle patch row). A cold mount logs
- * `disabled (enabled=false)`, registers the service (it reads honestly from
- * the empty state), and wires NOTHING - no listener, no storage effect, no
- * tools.
+ * `disabled (enabled=false)` and registers EVERY surface - the fs/observed
+ * fence tracker, the two tools and the storage effect, beside the service.
+ * Every registered surface checks the flag at CALL time (the volatile cell
+ * refreshed in place by the factory's P10 loader/volatile-update listener,
+ * never captured at mount): a disabled fence tracker stays silent, a
+ * disabled propose refuses with the typed `disabled` refusal and ZERO
+ * ledger lines (Function/Propose), and a volatile flip acts on the very
+ * next call in both directions, with no remount.
  *
  * The function returns NOTHING (the loader contract: a returned value
  * silently kills event delivery). The test probe is the

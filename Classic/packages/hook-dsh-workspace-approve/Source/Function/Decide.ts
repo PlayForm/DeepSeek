@@ -23,6 +23,10 @@ import type State from "@Interface/State.js";
  *   decision supersedes the earlier one).
  * - Any other transition is refused with its own ledger line and the binding is
  *   returned unchanged.
+ *
+ * The CALL-TIME master switch: a disabled hook refuses with `undefined` and
+ * ZERO ledger lines (the live-flip law - State.On is read at the moment of
+ * the call, never captured at mount).
  */
 export default (
 	State: State,
@@ -31,6 +35,11 @@ export default (
 	Who: string,
 	Constraints: string[] | undefined,
 ): Binding | undefined => {
+	switch (true) {
+		case State.On === false:
+			return undefined;
+		default:
+	}
 	const Binding = State.ById.get(Id);
 	if (Binding === undefined) {
 		State.Factory.Append(State, `unknown ${Id}`);

@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
 import {
   Check,
+  CheckAsync,
   Finish,
   Fire,
+  Flip,
   Ledger,
   LedgerWith,
   MakeCounter,
@@ -25,11 +27,45 @@ const runTest = async () => {
       assert.equal(Run.Returned, void 0);
       assert.ok(Run.Provided["workspaceObserve"] !== void 0);
     });
-    Check(Count, "W1: a disabled mount registers NOTHING on the root context", () => {
-      assert.deepEqual(Run.RootNames, []);
+    Check(Count, "W1: a disabled mount registers EVERY surface (listener and storage effect)", () => {
+      assert.deepEqual(Run.RootNames, ["fs/observed"]);
+      assert.deepEqual(Run.Effects, ["observe-storage"]);
     });
     Check(Count, "W1: the cold mount logs the byte-exact disabled line", () => {
       assert.deepEqual(Run.Lines, ["observe: disabled (enabled=false)"]);
+    });
+    await CheckAsync(Count, "W1: a disabled event and a disabled manual call pass through with zero new lines", async () => {
+      const Before = Run.Lines.length;
+      Fire(Run, "/repo/src/a.ts", "1");
+      assert.equal(await Run.Context.workspaceObserve.manual("/repo/src/a.ts"), void 0);
+      assert.equal(Run.Lines.length, Before);
+      assert.equal(Run.State.Latest.size, 0);
+      assert.equal(Run.State.Sequence, 0);
+    });
+  }
+  {
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }));
+    Flip(Run.Raw.enabled, true);
+    Run.CtxListeners["loader/volatile-update"](["enabled"]);
+    Check(Count, "W1: a volatile flip to enabled stamps on the very next event, no remount", () => {
+      assert.equal(Run.State.On, true);
+      Fire(Run, "/repo/src/a.ts", "1");
+      assert.deepEqual(Run.State.Latest.get("/repo/src/a.ts"), {
+        path: "/repo/src/a.ts",
+        version: "1",
+        origin: "fs/observed",
+        sequence: 1
+      });
+      assert.ok(Run.Lines.includes("observe: stamped /repo/src/a.ts version 1 (fs/observed)"));
+    });
+    Flip(Run.Raw.enabled, false);
+    Run.CtxListeners["loader/volatile-update"](["enabled"]);
+    Check(Count, "W1: the flip back to disabled silences the very next event", () => {
+      const Before = Run.Lines.length;
+      Fire(Run, "/repo/src/b.ts", "2");
+      assert.equal(Run.Lines.length, Before);
+      assert.equal(Run.State.Sequence, 1);
     });
   }
   {

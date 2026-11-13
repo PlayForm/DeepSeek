@@ -4,6 +4,8 @@ import {
 	Check,
 	CheckAsync,
 	Finish,
+	FakeTools,
+	Flip,
 	Ledger,
 	LedgerWith,
 	LinesWith,
@@ -17,7 +19,8 @@ import {
 /**
  * @module Test
  *
- * The loader contract, the service registration, the cold-mount idle-forever posture, the
+ * The loader contract, the service registration, the live disabled posture
+ * (registered, silent, the volatile flip live), the
  * activation proof, the fail-loud validation, and the ATOMIC GATES in their frozen order.
  *
  * @remarks
@@ -83,12 +86,78 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group G3: the cold-mount idle-forever posture.
+	// Group G3: the live disabled posture (registered, silent, the flip live).
 	{
-		const Run = Make(Validate({ logFile: Ledger, enabled: false }));
-		Check(Count, "G3: a disabled mount logs the honest line and registers no tool-less wiring", () => {
+		const Tools = FakeTools();
+		const Run = Make(Validate({ logFile: Ledger, enabled: false }), undefined, (Context: any) => {
+			Context.tools = Tools;
+		});
+		Check(Count, "G3: a disabled mount logs the honest line and registers EVERY surface", () => {
 			assert.deepEqual(Run.Lines, ["merge: disabled (enabled=false)"]);
 			assert.ok(Run.Provided["workspaceMerge"] !== undefined);
+			assert.deepEqual(Run.Effects, ["merge-storage"]);
+			assert.equal(Tools.registered.length, 1);
+			assert.equal((Tools.registered[0] as any).name, "workspace_merge");
+		});
+		await CheckAsync(Count, "G3: a disabled commit is refused with zero new lines (tool and service)", async () => {
+			const Before = Run.Lines.length;
+			const Reply = await Run.Context.workspaceMerge.commit({
+				operations: [{ path: "/repo/src/a.ts", content: "x", version: "v1" }],
+			});
+			assert.equal(Reply.status, "rejected");
+			assert.equal(Reply.reason, "the merge is disabled (enabled=false)");
+			assert.deepEqual(Reply.replies, [
+				{
+					path: "/repo/src/a.ts",
+					status: "rejected",
+					reason: "the merge is disabled (enabled=false)",
+				},
+			]);
+			assert.equal(Reply.id, "batch-disabled");
+			const Executed = await (Tools.registered[0] as any).execute(
+				{ commit: true, operations: [{ path: "/repo/src/a.ts", content: "x", version: "v1" }] },
+				{},
+			);
+			assert.equal(Executed.action, "commit");
+			assert.equal(Executed.ok, false);
+			assert.equal(Executed.reason, "the merge is disabled (enabled=false)");
+			assert.equal(Run.State.Sequence, 0);
+			assert.deepEqual(Run.Context.workspaceMerge.statistics(), {
+				batches: 0,
+				applied: 0,
+				conflicts: 0,
+				rejected: 0,
+				recovery: 0,
+				sequence: 0,
+			});
+			assert.equal(Run.Lines.length, Before);
+		});
+	}
+
+	// Group G3: the flip is live (the volatile cell refresh, no remount).
+	{
+		const Run = Make(Validate({ logFile: Ledger, enabled: false, policy: { commit: "auto" } }));
+		Flip(Run.Raw.enabled, true);
+		Run.CtxListeners["loader/volatile-update"](["enabled"]);
+		await CheckAsync(Count, "G3: a volatile flip to enabled commits on the very next call, no remount", async () => {
+			assert.equal(Run.State.On, true);
+			const Reply = await Run.Context.workspaceMerge.commit({
+				operations: [{ path: "/repo/src/a.ts", content: "x", version: "v1" }],
+			});
+			assert.equal(Reply.status, "applied");
+			assert.ok(Run.Lines.includes("merge: batch batch-1 started (1 files, 1 bytes)"));
+			assert.ok(Run.Lines.includes("merge: applied /repo/src/a.ts version v2 (batch batch-1)"));
+		});
+		Flip(Run.Raw.enabled, false);
+		Run.CtxListeners["loader/volatile-update"](["enabled"]);
+		await CheckAsync(Count, "G3: the flip back to disabled silences the very next call", async () => {
+			const Before = Run.Lines.length;
+			const Reply = await Run.Context.workspaceMerge.commit({
+				operations: [{ path: "/repo/src/b.ts", content: "y", version: "v1" }],
+			});
+			assert.equal(Reply.status, "rejected");
+			assert.equal(Reply.reason, "the merge is disabled (enabled=false)");
+			assert.equal(Run.Lines.length, Before);
 		});
 	}
 

@@ -33,5 +33,10 @@ export default _default;
  *   AFTER the continuation resolves so the ledger order stays byte-identical
  *   (`governed …` before `update stage dispatched …`), skipped entirely when
  *   Filter finds nothing public for cargo to do.
+ *
+ * THE CALL-TIME MASTER SWITCH (the LIVE disabled posture): the listener reads
+ * State.On at the moment of the call (never captured at mount); while disabled
+ * it passes through with ZERO ledger lines, and the volatile live-flip law
+ * makes a flip act on the very next call in both directions.
  */
 declare function _default(Factory: PluginFactory, State: State, Target: FsTarget, Observation: FsObservation, Actor: object | undefined): void;

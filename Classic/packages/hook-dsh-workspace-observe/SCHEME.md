@@ -161,7 +161,7 @@ The one string beyond the frozen set is the P5 incident posture's `storage open 
 
 | Folder                | PASS | Covers                                                                                                                                                                                                                                                                                                                                                                                 |
 | --------------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Wiring-And-Stamps`   | 16   | the cold mount, the root registration with the distinct root identity, the apply-registered service, the activation proof, the stamp mechanics (monotonic sequence, event version, origin), the fail-loud validation, the statistics triple                                                                                                                                            |
+| `Wiring-And-Stamps`   | 19   | the live disabled mount (every surface registered, the passthrough and the volatile flip live), the root registration with the distinct root identity, the apply-registered service, the activation proof, the stamp mechanics (monotonic sequence, event version, origin), the fail-loud validation, the statistics triple                                                                                                                               |
 | `Guards-And-Ring`     | 19   | the excluded path, the own-actor identity check, the include allowlist, the latest overwrite, the ring cap with the byte-exact capped line, the malformed-event containment, the volatile flip of the ring bound, the repeat-event guard (Function/Duplicate: the same path and version inside the window is dropped silently; a different version or a post-window repeat is stamped) |
 | `Storage-And-Service` | 14   | the domain spec, the record persistence, the restart recovery with the continued sequence, the persisted cap, the manual path, the ZERO writeText/readText guarantee, the absent facility, the loud open failure                                                                                                                                                                       |
 
@@ -172,8 +172,9 @@ expected count under `## Expected count`.
 
 No fingerprint (the graph owns content hashes, the W1 record decision), no fs/write-intent or
 fs/edit-intent registration (the single-slot waterfalls belong to the observation policy), no tools,
-no surfaces, no file content reads, no wall clock (the cold mount with enabled: false is the
-disabled posture), and no surfacing of the stamps to the conversation (a later wave's events do
+no surfaces, no file content reads, no wall clock (the cold mount with enabled: false registers
+everything and the call-time checks answer), and no surfacing of the stamps to the conversation (a
+later wave's events do
 that).
 
 ## 9. The EffectTS twin

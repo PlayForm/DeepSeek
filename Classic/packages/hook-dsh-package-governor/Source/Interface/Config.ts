@@ -18,7 +18,9 @@
 export default interface Config {
 	/**
 	 * The master switch - a disabled governor appends `disabled (enabled=false)` to the
-	 * ledger and registers nothing.
+	 * ledger INSTEAD of the activation proof and still registers everything (the LIVE
+	 * disabled posture); every surface reads it at call time, so a flip acts on the very
+	 * next call in both directions.
 	 */
 	enabled: boolean;
 

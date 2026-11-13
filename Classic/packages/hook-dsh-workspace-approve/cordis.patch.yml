@@ -16,9 +16,12 @@
 # log base (log: true and the module's ledger logFile) - installing the
 # plugin yields an enabled plugin, and the profile may turn it off
 # with enabled: false (then restart). On a cold mount with enabled: false
-# the State build logs `disabled (enabled=false)`, the service is
-# registered (it reads honestly from the empty state) and every listener
-# stays unwired. The schema defaults are the truth; the full default surface
+# the State build logs `disabled (enabled=false)`, and every surface is
+# still registered - the fs/observed listener, the storage effect and the
+# service - with each surface checking the flag at CALL time, so a disabled
+# call passes through with zero ledger lines and a volatile flip acts on the
+# very next call without a remount. The schema defaults are the truth; the
+# full default surface
 # (domain workspace_approve, maxBindings 1000, requireConstraints true)
 # lives in the Variable/Config.ts schema. Every knob is volatile
 # (hot-editable without remounting).

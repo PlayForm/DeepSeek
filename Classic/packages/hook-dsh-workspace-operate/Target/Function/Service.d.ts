@@ -26,6 +26,14 @@ import type Statistics from "../Interface/Statistics.js";
  *   - get(id) - one proposal or undefined;
  *   - withdraw(id) - mark one proposal withdrawn;
  *   - statistics() - the honest counts.
+ *
+ * THE CALL-TIME MASTER SWITCH: the mutating paths (proposeRename,
+ * proposeConnect, proposeReplace, withdraw) read State.On at the moment of
+ * the call and refuse with zero ledger lines while the hook is disabled (a
+ * typed `disabled` refusal for the propose paths, `false` for withdraw;
+ * Function/Propose, Function/Withdraw - the live-flip law, a volatile flip
+ * acts on the very next call). The read paths answer from the state and
+ * write nothing, so they need no flag.
  */
 export default class WorkspaceOperate extends Service {
     /**

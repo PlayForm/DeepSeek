@@ -16,7 +16,8 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  */
 export default interface Config {
 	/**
-	 * The IDLE-forever posture: false by default; an explicit ACTIVATE.
+	 * The live disabled posture: the listener stays registered while
+	 * disabled and checks this cell at call time (the live-flip law).
 	 */
 	enabled: boolean;
 

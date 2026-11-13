@@ -42,8 +42,15 @@ import { Activate } from "@playform/lib-dsh-core";
  * (per-obligation failures are governed by the recovery table instead -
  * `Function/Recovery`).
  *
- * THE IDLE-FOREVER POSTURE: `enabled` defaults to false. A cold mount logs
- * `disabled (enabled=false)` and wires NOTHING.
+ * THE LIVE DISABLED POSTURE: `enabled` defaults to false. A cold mount logs
+ * `disabled (enabled=false)` and registers EVERY surface - both gate
+ * listeners and the service. Every registered surface checks the flag at
+ * CALL time (the volatile cell refreshed in place by the factory's P10
+ * loader/volatile-update listener, never captured at mount): a disabled
+ * waterfall call awaits `next()` and returns the downstream decision
+ * UNCHANGED with zero ledger lines, a disabled service gate refuses with a
+ * pass decision and zero ledger lines, and a volatile flip acts on the very
+ * next call in both directions, with no remount.
  *
  * The function returns NOTHING (the loader contract). The test probe is the
  * `ctx.__hookDshWorkspaceGovernState` attachment.
@@ -142,21 +149,25 @@ export default (Context: Context, Options: Config): void => {
 		Factory.Append(State, Message);
 	};
 	new ServiceClass(Context, State, Append);
+	// The master switch: the ONE mount-time effect of the flag is the ledger
+	// line - a disabled mount writes `disabled (enabled=false)` instead of
+	// the activation proof and still registers EVERYTHING below (the
+	// live-flip law: the factory refreshes State.On in place, so a flip acts
+	// on the very next call in both directions, with no remount).
 	switch (true) {
 		case !State.On:
-			// The cold mount: honest in the ledger, wired to nothing.
 			Factory.Append(State, "disabled (enabled=false)");
-			return;
+			break;
 		default:
+			// The activation proof (the module's own composed line).
+			Factory.Append(
+				State,
+				Activate([
+					["tools", String(State.Tools.length)],
+					["policy", String(State.PolicyRules.length)],
+				]),
+			);
 	}
-	// The activation proof (the module's own composed line).
-	Factory.Append(
-		State,
-		Activate([
-			["tools", String(State.Tools.length)],
-			["policy", String(State.PolicyRules.length)],
-		]),
-	);
 
 	// The gate arm: tools/pre-execute.
 	Context.on(

@@ -31,5 +31,10 @@ import type Factory from "@playform/plugin-dsh-factory";
  * instead of discarding it, so the factory's Govern awaits the chain to
  * completion (its guarded write + its ledger line) before any other registered
  * step reads the file - the version-guarded writes can never race.
+ *
+ * THE CALL-TIME MASTER SWITCH (the LIVE disabled posture): the step reads
+ * State.On at the moment of the call (never captured at mount) and passes
+ * through with ZERO ledger lines while disabled - the volatile live-flip law
+ * makes a flip act on the very next call in both directions.
  */
 export declare const Pin: (Furnace: Factory, State: State, Target: FsTarget, Actor: object | undefined, Version: FsVersion) => Promise<void> | void;

@@ -16,5 +16,9 @@ export default _default;
  * token). A fs failure throws to the caller (the service's async surface may
  * reject; the listener's silence invariant does not apply here) - but the
  * ledger line still lands first, so the durable record stays complete.
+ *
+ * The CALL-TIME master switch: a disabled hook refuses with `undefined` and
+ * ZERO ledger lines (the live-flip law - State.On is read at the moment of
+ * the call, never captured at mount).
  */
-declare function _default(State: State, Path: string): Promise<Stamp>;
+declare function _default(State: State, Path: string): Promise<Stamp | undefined>;

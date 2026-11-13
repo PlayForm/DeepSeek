@@ -35,6 +35,11 @@ import type State from "../Interface/State.js";
  * discarding it, so the factory's Govern awaits one step's chain to completion (its guarded
  * write + its ledger line) before the next step reads the file - the steps' version-guarded
  * writes can never race.
+ *
+ * THE CALL-TIME MASTER SWITCH (the LIVE disabled posture): both steps read State.On at the
+ * moment of the call (never captured at mount) and pass through with ZERO ledger lines while
+ * disabled - the volatile live-flip law makes a flip act on the very next call in both
+ * directions.
  */
 export declare const Canonicalize: (State: State, Target: FsTarget, Actor: object | undefined, Version: FsVersion) => Promise<void> | void;
 export declare const Update: (State: State, Target: FsTarget, Actor: object | undefined, Version: FsVersion) => Promise<void> | void;

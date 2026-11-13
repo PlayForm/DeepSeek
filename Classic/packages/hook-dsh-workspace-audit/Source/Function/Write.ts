@@ -20,6 +20,10 @@ import type State from "@Interface/State.js";
  * - with an assessment suffix for intent-assessment lines:
  *   `audit intent-assessment <operation> (satisfied|unsatisfied)
  *   <assessment>`.
+ *
+ * The CALL-TIME master switch: a disabled hook records nothing - `undefined`
+ * with ZERO ledger lines and ZERO state changes (the live-flip law - State.On
+ * is read at the moment of the call, never captured at mount).
  */
 export default (
 	State: State,
@@ -31,7 +35,12 @@ export default (
 		outcome: Line["outcome"];
 		assessment?: string;
 	},
-): Line => {
+): Line | undefined => {
+	switch (true) {
+		case State.On === false:
+			return undefined;
+		default:
+	}
 	State.Sequence += 1;
 	const Entry: Line = {
 		id: `a${State.Sequence}`,

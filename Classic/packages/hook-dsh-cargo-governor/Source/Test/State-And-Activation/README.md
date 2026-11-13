@@ -38,6 +38,24 @@ The assertions are moved verbatim from `Classic/smokes/cargo-smoke.mjs` section 
       P10 volatile-update refresh"
 - Group: the attach posture.
     - Sub: "attach: P1/P2/P5 effect labels + P1 root jobs controller"
+- Group: the disabled mount (the LIVE disabled posture).
+    - Sub: "disabled mount: every surface still registers and the ledger line
+      is the byte-exact disabled line (no early return)"
+        - a dedicated enabled=false mount on its own world: the fs/observed
+          listener and the P1/P2/P5 effects STILL register, the ONLY ledger
+          line is the byte-exact `disabled (enabled=false)` (no activation
+          proof), and the logger line carries the State.Module prefix
+    - Sub: "disabled mount: a call passes through with ZERO new ledger lines"
+        - the disabled mount's own wired listener fires on an excluded target
+          (`node_modules/probe/Cargo.toml` - the deterministic fs-free probe:
+          an ENABLED call would land `skipped (excluded) ...`) and the ledger
+          does not move (the call-time master switch)
+    - Sub: "disabled mount: flipping enabled acts on the very next call - and
+      back"
+        - On=true then the next call lands the `skipped (excluded) ...` line
+          (exactly one new line); On=false again then the next call is silent
+          (a fresh version token keeps the Stash gate out of the way - the
+          master switch is the only gate standing)
 
 ## Fixtures
 
@@ -53,6 +71,11 @@ The harness builds per-scenario worlds with the `subprocess` SeamStub and the re
   keepFile=(discovery))` (the regex byte-shape; the logFile tail matches the
   harness Root's `cargo-smoke-` prefix)
 - `hook-dsh-governor-cargo: <the activation line>` (the logger composition)
+- The disabled mount's single ledger line `disabled (enabled=false)`
+  (byte-exact; the ISO prefix is stripped by the Ledger reader), plus the
+  logger line `hook-dsh-governor-cargo: disabled (enabled=false)`.
+- The flipped-on call's `skipped (excluded) <Root>/node_modules/probe/Cargo.toml`
+  line (the module's exclusion string, byte-exact).
 
 ## Edge cases
 
@@ -62,4 +85,4 @@ The harness builds per-scenario worlds with the `subprocess` SeamStub and the re
 
 ## Expected count
 
-4 PASS.
+7 PASS.

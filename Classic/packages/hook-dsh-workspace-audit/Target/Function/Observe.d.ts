@@ -19,12 +19,17 @@ export default _default;
  * observation and "failure" for an absent one (an observed absence of a
  * previously-present path is the deletion evidence).
  *
- * Guard chain: own actor, then excluded, then non-empty include. A malformed
- * event is caught and ledgered "failed <path> (<reason>)".
+ * Guard chain, in order (the CALL-TIME master switch FIRST: a disabled hook
+ * reads State.On at the moment of the call and passes through with ZERO
+ * ledger lines - the live-flip law):
+ *
+ * 0. disabled - pass through, silent;
+ * 1. own actor, then excluded, then non-empty include. A malformed
+ *   event is caught and ledgered "failed <path> (<reason>)".
  *
  * Repeat events (Function/Duplicate): the same path carrying the same version
  * within the coalescing window is dropped before any line - that observed
  * write was already recorded, and the last distinct version always wins. The
- * service's manual lines are never guarded.
+ * service's manual lines ride the same Write path and its call-time switch.
  */
 declare function _default(State: State, Target: FsTarget | undefined, Observation: FsObservation | undefined, Actor: object | undefined): void;

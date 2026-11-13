@@ -15,8 +15,11 @@
 # base (log: true and the module's ledger logFile) - installing the plugin
 # yields an enabled plugin, and the profile may turn it off
 # with enabled: false (then restart). On a cold mount with enabled: false
-# the State build logs `disabled (enabled=false)` and every
-# listener no-ops to a passthrough (it checks State.On first). The schema
+# the State build logs `disabled (enabled=false)` and every surface stays
+# registered - the listener, the storage effect and the service - with each
+# checking State.On at CALL time, so a disabled call passes through with
+# zero ledger lines and a volatile flip acts on the very next call without
+# a remount. The schema
 # defaults are the truth; the full default surface (logFile
 # ~/.dsh/playform/hook-dsh-workspace-audit.log, domain workspace_audit, maxLines 2000, the
 # default exclusion triple) lives in Variable/Config.ts. EVERY knob is

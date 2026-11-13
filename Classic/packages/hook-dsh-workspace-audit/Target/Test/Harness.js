@@ -214,6 +214,14 @@ const OpenStorage = async (Run, Facility) => {
 };
 const LinesWith = (Run, Needle) => Run.Lines.filter((L) => L.includes(Needle));
 const LedgerWith = (Needle) => LedgerLines().filter((L) => L.includes(Needle));
+const Write = /* @__PURE__ */ Symbol.for("cosmokit.volatile.write");
+const Flip = (CellValue, New) => {
+  const Cell = CellValue;
+  if (typeof Cell?.[Write] !== "function") {
+    throw new Error("Flip: not a volatile cell (no cosmokit write symbol)");
+  }
+  Cell[Write](New);
+};
 const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
 if (InvokedDirectly) {
   const Count = MakeCounter();
@@ -247,6 +255,7 @@ export {
   Finish,
   Fire,
   FireMalformed,
+  Flip,
   Furnace,
   Ledger,
   LedgerLines,

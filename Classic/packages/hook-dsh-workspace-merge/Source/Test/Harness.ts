@@ -193,7 +193,7 @@ export const FakeFs = (Files: Record<string, { version: string; text: string }> 
  * runs its setup immediately and records the disposer, get() resolves
  * through the context properties.
  */
-export const Make = (Raw: any, Faults?: { write?: string; read?: string }): any => {
+export const Make = (Raw: any, Faults?: { write?: string; read?: string }, Attach?: (Context: any, Run: any) => void): any => {
 	const Listeners: any = {};
 	const CtxListeners: any = {};
 	const Lines: string[] = [];
@@ -271,6 +271,11 @@ export const Make = (Raw: any, Faults?: { write?: string; read?: string }): any 
 		Raw,
 		Fs,
 	};
+
+	// The optional pre-apply attachment: the fake tools host (capturing the
+	// registered tool definitions) must be in place BEFORE apply runs - the
+	// probe happens at apply time.
+	Attach?.(Context, Run);
 	Run.Returned = (Plugin.apply as any)(Context, Raw);
 	Run.State = Context.__hookDshWorkspaceMergeState;
 	return Run;
@@ -294,6 +299,44 @@ export const LinesWith = (Run: any, Needle: string): string[] =>
  */
 export const LedgerWith = (Needle: string): string[] =>
 	LedgerLines().filter((L: string) => L.includes(Needle));
+
+/**
+ * The fake tools host: captures the registered tool definitions (the probe
+ * `ctx.get("tools")` resolves through the context properties, so the fixture
+ * attaches the host under the `tools` key).
+ */
+export const FakeTools = (): any => {
+	const Registered: unknown[] = [];
+	return {
+		registered: Registered,
+		register: (Definition: unknown) => {
+			Registered.push(Definition);
+			return () => true;
+		},
+	};
+};
+
+/**
+ * A volatile-cell write symbol (cosmokit): the loader's hot-edit path
+ * commits a new value into a `{ get }` cell through it. The harness uses the
+ * REGISTERED global symbol - the same mechanism the live loader uses, so the
+ * flip tests exercise the real cells the schema produces.
+ */
+const Write = Symbol.for("cosmokit.volatile.write");
+
+/**
+ * Commit a new value into a volatile cell (the hot-edit write), WITHOUT
+ * firing the loader event - the caller then fires the captured
+ * loader/volatile-update listener with the changed key, mirroring the live
+ * sequence (commit, then the event).
+ */
+export const Flip = (CellValue: unknown, New: unknown): void => {
+	const Cell = CellValue as { [Write]?: (Value: unknown) => unknown };
+	if (typeof Cell?.[Write] !== "function") {
+		throw new Error("Flip: not a volatile cell (no cosmokit write symbol)");
+	}
+	Cell[Write](New);
+};
 
 // Standalone entry: `node Target/Test/Harness.js --selfcheck`.
 const InvokedDirectly =

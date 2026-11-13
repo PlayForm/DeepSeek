@@ -3,8 +3,10 @@ import {
 	Check,
 	CheckAsync,
 	Finish,
+	FakeTools,
 	FileNode,
 	FakeGraph,
+	Flip,
 	Ledger,
 	LedgerWith,
 	LinesWith,
@@ -19,7 +21,8 @@ import {
 /**
  * @module Test
  *
- * The loader contract, the service registration, the cold-mount idle-forever posture, the
+ * The loader contract, the service registration, the live disabled posture
+ * (registered, silent, the volatile flip live), the
  * activation proof, the fail-loud validation, and the resolution rules through the real service.
  *
  * @remarks
@@ -96,13 +99,69 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group G3: the cold-mount idle-forever posture.
+	// Group G3: the live disabled posture (registered, silent, the flip live).
 	{
-		const Run = Make(Validate({ logFile: Ledger, enabled: false }));
-		Check(Count, "G3: a disabled mount wires NOTHING and logs the honest line", () => {
-			assert.deepEqual(Run.RootNames, []);
+		const Tools = FakeTools();
+		const Run = Make(Validate({ logFile: Ledger, enabled: false }), undefined, Tools);
+		Check(Count, "G3: a disabled mount registers EVERY surface and logs the honest line", () => {
+			assert.deepEqual(Run.RootNames, ["fs/observed"]);
+			assert.deepEqual(Run.Effects, ["operate-storage"]);
+			assert.deepEqual(Tools.registered.map((Tool: any) => Tool.name), [
+				"workspace_propose",
+				"workspace_proposals",
+			]);
 			assert.deepEqual(Run.Lines, ["operate: disabled (enabled=false)"]);
 			assert.ok(Run.Provided["workspaceOperate"] !== undefined);
+		});
+		await CheckAsync(Count, "G3: a disabled propose and withdraw refuse with zero new lines", async () => {
+			const Before = Run.Lines.length;
+			const Service = Run.Context.workspaceOperate;
+			assert.deepEqual(await Service.proposeRename({ path: "/repo/src/a.ts", name: "Alpha", to: "Beta" }), {
+				status: "refused",
+				refusal: { kind: "rename", reason: "disabled", detail: "enabled=false" },
+			});
+			assert.equal(Service.withdraw("rename-1"), false);
+			const Executed = await (Tools.registered[0] as any).execute(
+				{ kind: "rename", path: "/repo/src/a.ts", name: "Alpha", to: "Beta" },
+				{},
+			);
+			assert.equal(Executed.status, "refused");
+			assert.equal(Executed.refusal.reason, "disabled");
+			assert.equal(Run.State.Sequence, 0);
+			assert.equal(Run.State.Refused, 0);
+			assert.equal(Run.Lines.length, Before);
+		});
+	}
+
+	// Group G3: the flip is live (the volatile cell refresh, no remount).
+	{
+		const Run = Make(Validate({ logFile: Ledger, enabled: false }), DefaultGraph());
+		Flip(Run.Raw.enabled, true);
+		Run.CtxListeners["loader/volatile-update"](["enabled"]);
+		await CheckAsync(Count, "G3: a volatile flip to enabled proposes on the very next call, no remount", async () => {
+			assert.equal(Run.State.On, true);
+			const Outcome = await Run.Context.workspaceOperate.proposeRename({
+				path: "/repo/src/a.ts",
+				name: "Alpha",
+				to: "Beta",
+				version: "v1",
+			});
+			assert.equal(Outcome.status, "proposed");
+			assert.deepEqual(LinesWith(Run, "proposed"), [
+				"operate: proposed rename-1 rename /repo/src/a.ts",
+			]);
+		});
+		Flip(Run.Raw.enabled, false);
+		Run.CtxListeners["loader/volatile-update"](["enabled"]);
+		await CheckAsync(Count, "G3: the flip back to disabled silences the very next call", async () => {
+			const Before = Run.Lines.length;
+			const Outcome = await Run.Context.workspaceOperate.proposeRename({
+				path: "/repo/src/a.ts",
+				name: "Alpha",
+				to: "Gamma",
+			});
+			assert.equal(Outcome.refusal.reason, "disabled");
+			assert.equal(Run.Lines.length, Before);
 		});
 	}
 

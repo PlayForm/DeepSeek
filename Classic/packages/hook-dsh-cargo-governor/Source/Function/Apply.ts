@@ -19,8 +19,9 @@ import Observe from "./Observe.js";
  * 1. State — the factory's State builder (cell unwrap, the fixed shared
  *    mappings Tool←mutationTools / Policy←policyFile / Ledger←logFile /
  *    Enabled←log / List←exclude, the module fields by name — On ← enabled, the
- *    master switch: a disabled module appends `disabled (enabled=false)` and
- *    returns before registering anything —, the fresh
+ *    master switch: the ONE mount-time effect of the flag is the ledger line —
+ *    a disabled module appends `disabled (enabled=false)` INSTEAD of the
+ *    activation proof and still registers everything — the fresh
  *    Stash/Inflight/Seams/Queue structures and the P9 probe-once "subprocess"
  *    seam through the factory's Function/Seam). The module adds its own
  *    update-stage collections (Stamp/Set/Count) on top.
@@ -83,34 +84,38 @@ export default (Context: Context, Options: Config): void => {
 
 	// THE MASTER SWITCH (config `enabled`, volatile - the setup map's
 	// `On <- enabled`, so the State builder's P10 volatile-update listener
-	// refreshes it in place): a disabled cargo module appends the durable
-	// disabled line and returns BEFORE registering anything - no Wire
-	// listener, no direct-govern steps, no lifecycle effects (the tool-coach
-	// precedent).
-	if (!State.On) {
+	// refreshes it in place): the ONE mount-time effect of the flag is the
+	// ledger line - a disabled cargo module appends the durable disabled line
+	// INSTEAD of the activation proof and still registers EVERYTHING below
+	// (no early return - the LIVE disabled posture). Every registered surface
+	// checks the flag at CALL time (Function/Observe and both Function/Direct
+	// steps read State.On at the moment of the call - the factory refreshes
+	// State.On in place, so a flip acts on the very next call in both
+	// directions, with no remount) and a disabled surface passes through with
+	// ZERO ledger lines.
+	if (State.On === false) {
 		Factory.Append(State, "disabled (enabled=false)");
-		return;
+	} else {
+		// 2. The durable activation proof — the module's own ledger line (byte-
+		//    identical with the pre-refactor module) plus the structured P5
+		//    journal record (queued until the optional storage domain opens). The
+		//    line's string mechanics live in the core's Activate composer; the
+		//    FIELD LIST is the module's own — the leading bare flavor word (empty
+		//    key), the bracketed lists and the `(discovery)` fallbacks.
+		Factory.Append(
+			State,
+			Activate([
+				["", "cargo flavor"],
+				["logFile", State.Ledger],
+				["updateMode", State.Mode],
+				["cargoBin", State.CargoBin],
+				["exclude", `[${State.List.join(", ")}]`],
+				["policyFile", State.Policy || "(discovery)"],
+				["keepFile", State.KeepFile || "(discovery)"],
+			]),
+		);
+		Factory.Journal(State, "activated", "", State.Mode);
 	}
-
-	// 2. The durable activation proof — the module's own ledger line (byte-
-	//    identical with the pre-refactor module) plus the structured P5
-	//    journal record (queued until the optional storage domain opens). The
-	//    line's string mechanics live in the core's Activate composer; the
-	//    FIELD LIST is the module's own — the leading bare flavor word (empty
-	//    key), the bracketed lists and the `(discovery)` fallbacks.
-	Factory.Append(
-		State,
-		Activate([
-			["", "cargo flavor"],
-			["logFile", State.Ledger],
-			["updateMode", State.Mode],
-			["cargoBin", State.CargoBin],
-			["exclude", `[${State.List.join(", ")}]`],
-			["policyFile", State.Policy || "(discovery)"],
-			["keepFile", State.KeepFile || "(discovery)"],
-		]),
-	);
-	Factory.Journal(State, "activated", "", State.Mode);
 
 	// 3. Wire — the factory's fs/observed registration; the listener is owned
 	//    by the current fiber: removed on unload, no manual bookkeeping, ever.

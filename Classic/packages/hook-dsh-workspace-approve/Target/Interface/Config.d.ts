@@ -13,7 +13,8 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  */
 export default interface Config {
     /**
-     * The master switch - the IDLE-forever posture: false by default.
+     * The master switch - the live disabled posture: false by default, and
+     * every surface stays registered while disabled (the call-time checks).
      */
     enabled: boolean;
     /**

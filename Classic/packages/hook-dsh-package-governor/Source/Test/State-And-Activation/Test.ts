@@ -12,9 +12,12 @@ import {
 	ledgerLines,
 	MakeCounter,
 	NCU_BIN,
+	Root,
 	Services,
 	StorageRecords,
 	TOOLS,
+	actor,
+	mkTarget,
 	settle,
 } from "../Harness.js";
 import Governor from "../../../Target/Library.js";
@@ -185,6 +188,106 @@ export const runTest = async (): Promise<number> => {
 					"activation proof composed byte-identically",
 				);
 			});
+		}
+	}
+	// Group: the disabled mount (enabled=false) - the LIVE disabled posture. A disabled
+	// mount registers EVERYTHING (no early return) and its only mount-time effect is the
+	// byte-exact disabled ledger line instead of the activation proof; every surface then
+	// checks the flag at CALL time and passes through with zero new lines, and a volatile
+	// flip acts on the very next call in both directions.
+	{
+		const Sub =
+			"disabled mount: every surface still registers and the ledger line is the byte-exact disabled line (no early return)";
+		{
+			const LinesBefore = ledgerLines().length;
+			const EventsBefore = Events.length;
+			const EffectsBefore = Effects.length;
+			const ControllersBefore = Controllers.length;
+			const RecordsBefore = StorageRecords.length;
+			Governor.apply(Context, (Governor.Config as any)({ logFile: Ledger, enabled: false }));
+			const Disabled = Context.__hookDshGovernorPackageState;
+			Check(Count, Sub, () => {
+				assert.equal(Disabled.On, false, "the disabled mount's master switch");
+				const Lines = ledgerLines();
+				assert.equal(Lines.length, LinesBefore + 1, "exactly one new ledger line");
+				assert.match(
+					Lines.at(-1) as string,
+					/^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] disabled \(enabled=false\)$/,
+					"the byte-exact disabled line instead of the activation proof",
+				);
+				assert.ok(
+					Events.slice(EventsBefore).some(([n]) => n === "fs/observed"),
+					"the fs/observed listener STILL registered on the disabled mount",
+				);
+				assert.deepEqual(
+					Effects.slice(EffectsBefore).map((e) => e[0]),
+					[
+						"hook-dsh-governor-package-jobs",
+						"hook-dsh-governor-package-inflight",
+						"hook-dsh-governor-package-storage",
+					],
+					"the P1/P2/P5 lifecycle effects STILL registered on the disabled mount",
+				);
+				assert.equal(
+					Controllers.length,
+					ControllersBefore + 1,
+					"the P1 jobs controller STILL attached",
+				);
+				assert.equal(
+					StorageRecords.length,
+					RecordsBefore,
+					"no activated journal record for the disabled mount (the proof is the disabled line)",
+				);
+			});
+			// The disabled mount's own wired listener (the LAST fs/observed registration)
+			// drives the call-time groups below; the direct-govern steps carry the same
+			// State.On guard inside Function/Direct.
+			const DisabledListener = (
+				Events.filter(([n]) => n === "fs/observed").at(-1) as [string, any]
+			)[1];
+			const Silent = ledgerLines().length;
+			Check(Count, "disabled mount: a call passes through with ZERO new ledger lines", () => {
+				DisabledListener(
+					mkTarget(Root, "disabled-probe"),
+					{ kind: "present", version: "v-disabled-1" },
+					actor,
+				);
+				assert.equal(
+					ledgerLines().length,
+					Silent,
+					"the disabled call did nothing (no gate line, no skip line, no write)",
+				);
+			});
+			const Flipped = ledgerLines().length;
+			Check(Count, "disabled mount: flipping enabled acts on the very next call - and back", () => {
+				// Flip ON: the next call runs the pass (the g2 chain-skip line is the
+				// deterministic first line; the g1 gate is silent by design).
+				Disabled.On = true;
+				DisabledListener(
+					mkTarget(Root, "disabled-probe"),
+					{ kind: "present", version: "v-disabled-1" },
+					actor,
+				);
+				const Lines = ledgerLines();
+				assert.equal(Lines.length, Flipped + 1, "the flipped-on call ran the pass (one new line)");
+				assert.ok(
+					(Lines.at(-1) as string).includes("no registry.json found for"),
+					"the pass really ran (the g2 chain-skip line)",
+				);
+				// Flip OFF: the next call is silent again (a fresh version token keeps the
+				// Stash idempotence gate out of the way - the master switch is the only
+				// gate standing).
+				Disabled.On = false;
+				DisabledListener(
+					mkTarget(Root, "disabled-probe"),
+					{ kind: "present", version: "v-disabled-2" },
+					actor,
+				);
+				assert.equal(ledgerLines().length, Flipped + 1, "the flipped-back call is silent again");
+			});
+			// Let the flipped-on call's detached continuation drain (it is contained and
+			// ledger-silent; nothing after this point asserts exact counts).
+			await settle();
 		}
 	}
 	return Finish(Count, "State-And-Activation");

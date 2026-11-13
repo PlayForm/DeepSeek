@@ -20,8 +20,11 @@ import type State from "@Interface/State.js";
  * Events outside any open batch are not the journal's concern (the observe
  * hook owns those stamps) - they are silently passed through, no line.
  *
- * Guard chain: own actor → excluded. A malformed event is caught and
- * ledgered "failed <path> (<reason>)" (never thrown into the emitter).
+ * Guard chain, in order (the CALL-TIME master switch FIRST: a disabled hook
+ * reads State.On at the moment of the call and passes through with ZERO
+ * ledger lines - the live-flip law): own actor → excluded. A malformed event
+ * is caught and ledgered "failed <path> (<reason>)" (never thrown into the
+ * emitter).
  */
 export default (
 	State: State,
@@ -29,6 +32,13 @@ export default (
 	_Observation: FsObservation | undefined,
 	Actor: object | undefined,
 ): void => {
+	// The call-time master switch: a disabled hook is fully silent (zero
+	// ledger lines, zero state changes), read at the moment of the call.
+	switch (true) {
+		case State.On === false:
+			return;
+		default:
+	}
 	const Path =
 		typeof (Target as { displayPath?: unknown } | null)?.displayPath === "string"
 			? (Target as { displayPath: string }).displayPath

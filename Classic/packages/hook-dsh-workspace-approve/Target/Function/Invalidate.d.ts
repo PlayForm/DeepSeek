@@ -14,6 +14,9 @@ export default _default;
  *
  * The discipline, per the family contract:
  *
+ * - The CALL-TIME master switch FIRST: a disabled hook reads State.On at the
+ *   moment of the call and passes through with ZERO ledger lines (the
+ *   live-flip law - a volatile flip acts on the very next event).
  * - NO awaits, NO I/O on the listener path.
  * - An event whose `actor` is the hook's OWN actor object is ignored (the
  *   identity check).

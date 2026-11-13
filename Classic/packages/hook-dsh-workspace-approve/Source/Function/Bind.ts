@@ -22,8 +22,17 @@ import type State from "@Interface/State.js";
  *   approval.
  * - The binding id is `ap-<sequence>`; the sequence is the plugin's own
  *   monotonic counter, never a wall clock.
+ *
+ * The CALL-TIME master switch: a disabled hook refuses with `undefined` and
+ * ZERO ledger lines (the live-flip law - State.On is read at the moment of
+ * the call, never captured at mount).
  */
-export default (State: State, Candidate: Candidate): Binding => {
+export default (State: State, Candidate: Candidate): Binding | undefined => {
+	switch (true) {
+		case State.On === false:
+			return undefined;
+		default:
+	}
 	const Path = String(Candidate.path ?? "");
 	const Fingerprint = String(Candidate.fingerprint ?? "");
 	const Version = String(Candidate.version ?? "");

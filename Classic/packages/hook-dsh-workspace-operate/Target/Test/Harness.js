@@ -98,7 +98,7 @@ const FakeGraph = (Nodes, Edges = []) => ({
   }),
   snapshot: () => ({ indexRevision: "r1", nodes: Nodes, edges: Edges })
 });
-const Make = (Raw, Graph) => {
+const Make = (Raw, Graph, Tools) => {
   const Listeners = {};
   const CtxListeners = {};
   const Lines = [];
@@ -156,6 +156,9 @@ const Make = (Raw, Graph) => {
   if (Graph !== void 0) {
     Context.workspaceGraph = Graph;
   }
+  if (Tools !== void 0) {
+    Context.tools = Tools;
+  }
   const Run = {
     Context,
     Root: Root2,
@@ -173,6 +176,24 @@ const Make = (Raw, Graph) => {
   Run.Returned = Plugin.apply(Context, Raw);
   Run.State = Context.__hookDshWorkspaceOperateState;
   return Run;
+};
+const FakeTools = () => {
+  const Registered = [];
+  return {
+    registered: Registered,
+    register: (Definition) => {
+      Registered.push(Definition);
+      return () => true;
+    }
+  };
+};
+const Write = /* @__PURE__ */ Symbol.for("cosmokit.volatile.write");
+const Flip = (CellValue, New) => {
+  const Cell = CellValue;
+  if (typeof Cell?.[Write] !== "function") {
+    throw new Error("Flip: not a volatile cell (no cosmokit write symbol)");
+  }
+  Cell[Write](New);
 };
 const Validate = (Raw) => Plugin.Config({ ...Raw });
 const SymbolNode = (Name, Path2, Id = `sym-${Name}`) => ({
@@ -229,9 +250,11 @@ export {
   CheckAsync,
   FakeFs,
   FakeGraph,
+  FakeTools,
   FileNode,
   Finish,
   Fire,
+  Flip,
   Furnace,
   Ledger,
   LedgerLines,

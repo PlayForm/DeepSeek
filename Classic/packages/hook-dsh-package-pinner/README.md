@@ -50,7 +50,7 @@ This is a factory flavor and a sibling of the package governor on the same `fs/o
 
 | Field              | Type     | Default                                                                           | Meaning                                                                           |
 | ------------------ | -------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `enabled`          | boolean  | `true`                                                                            | The master switch - off appends `disabled (enabled=false)` and registers nothing. |
+| `enabled`          | boolean  | `true`                                                                            | The master switch - off appends `disabled (enabled=false)` instead of the activation proof; every surface stays registered and reads it at call time (a flip acts on the next call). |
 | `log`              | boolean  | `true`                                                                            | Ledger enabled - write the durable log file (volatile).                           |
 | `logFile`          | string   | `~/.dsh/playform/hook-dsh-package-pinner.log`                                     | The ledger file - separate from the governor's (volatile).                        |
 | `updateCooldownMs` | number   | `3000`                                                                            | Family-parity cooldown field - the pinner never reads it (no update stage).       |
@@ -86,7 +86,7 @@ activated.
     - Gates - 3 checks
     - Loader-And-Config - 2 checks
     - Pin-Pass-And-No-Ops - 5 checks
-    - State-And-Activation - 6 checks
+    - State-And-Activation - 9 checks
 
 ## The plan
 

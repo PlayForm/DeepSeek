@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import {
 	Check,
+	CheckAsync,
 	Finish,
+	Flip,
 	Ledger,
 	LedgerWith,
 	LinesWith,
@@ -9,6 +11,7 @@ import {
 	Make,
 	Plugin,
 	Proposal,
+	Exec,
 	rm,
 	Validate,
 } from "../Harness.js";
@@ -20,7 +23,8 @@ import {
  *
  * @remarks
  *
- * Covers the service registration, the cold-mount idle-forever posture, the activation proof, the
+ * Covers the service registration, the live disabled posture (registered,
+ * silent, the volatile flip live), the activation proof, the
  * fail-loud validation, the four independent means-checks, the policy override (and "allow" as
  * never a bypass), the fail-open recovery table with its byte-exact recovery line, the decision
  * ring, and the byte-exact decision lines.
@@ -73,13 +77,68 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group G3: the cold-mount idle-forever posture.
+	// Group G3: the live disabled posture (registered, silent, the flip live).
 	{
 		const Run = Make(Validate({ logFile: Ledger, enabled: false }));
-		Check(Count, "G3: a disabled mount wires NOTHING and logs the honest line", () => {
-			assert.deepEqual(Object.keys(Run.CtxListeners), ["loader/volatile-update"]);
+		Check(Count, "G3: a disabled mount registers EVERY listener and logs the honest line", () => {
+			assert.deepEqual(Object.keys(Run.CtxListeners), [
+				"loader/volatile-update",
+				"tools/pre-execute",
+				"tools/post-execute",
+			]);
 			assert.deepEqual(Run.Lines, ["govern: disabled (enabled=false)"]);
 			assert.ok(Run.Provided["workspaceGovern"] !== undefined);
+		});
+		Check(Count, "G3: a disabled gate call answers a pass decision with zero new lines", () => {
+			const Before = Run.Lines.length;
+			const Decision = Run.Context.workspaceGovern.gate(Proposal());
+			assert.equal(Decision.decision, "pass");
+			assert.deepEqual(Decision.obligations, {
+				contributes: "n/a",
+				scope: "n/a",
+				preconditions: "n/a",
+			});
+			assert.equal(Run.Lines.length, Before);
+			assert.deepEqual(Run.Context.workspaceGovern.decisions(), []);
+		});
+		await CheckAsync(
+			Count,
+			"G3: a disabled waterfall call passes the downstream decision through unchanged",
+			async () => {
+				const Before = Run.Lines.length;
+				const Sentinel = { kind: "pass-through" };
+				const Pre = await Run.CtxListeners["tools/pre-execute"](Exec(), async () => Sentinel);
+				assert.equal(Pre, Sentinel);
+				const Post = await Run.CtxListeners["tools/post-execute"](
+					Exec(),
+					{ success: true },
+					async () => Sentinel,
+				);
+				assert.equal(Post, Sentinel);
+				assert.equal(Run.Lines.length, Before);
+			},
+		);
+	}
+
+	// Group G3: the flip is live (the volatile cell refresh, no remount).
+	{
+		rm();
+		const Run = Make(Validate({ logFile: Ledger, enabled: false }));
+		Flip(Run.Raw.enabled, true);
+		Run.CtxListeners["loader/volatile-update"](["enabled"]);
+		Check(Count, "G3: a volatile flip to enabled gates the very next call, no remount", () => {
+			assert.equal(Run.State.On, true);
+			const Decision = Run.Context.workspaceGovern.gate(Proposal());
+			assert.equal(Decision.decision, "pass");
+			assert.deepEqual(LinesWith(Run, "op:1"), ["govern: passed op:1 (write /repo/src/a.ts)"]);
+		});
+		Flip(Run.Raw.enabled, false);
+		Run.CtxListeners["loader/volatile-update"](["enabled"]);
+		Check(Count, "G3: the flip back to disabled silences the very next call", () => {
+			const Before = Run.Lines.length;
+			const Decision = Run.Context.workspaceGovern.gate(Proposal({ operation: "op:2" }));
+			assert.equal(Decision.decision, "pass");
+			assert.equal(Run.Lines.length, Before);
 		});
 	}
 

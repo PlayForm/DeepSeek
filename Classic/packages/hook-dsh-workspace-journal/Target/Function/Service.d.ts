@@ -30,6 +30,15 @@ import type State from "../Interface/State.js";
  *   batches()            - all batch records (ring order);
  *   entries(batchId)     - one batch's revert data;
  *   statistics()         - { batches, entries, applying }.
+ *
+ * THE CALL-TIME MASTER SWITCH: the mutating paths (open, seal, revert) read
+ * State.On at the moment of the call and refuse by throwing the byte-stable
+ * `journal: disabled (enabled=false)` error with ZERO ledger lines while the
+ * hook is disabled (the existing throw-refusal shape, "no journal, no
+ * writes"; the live-flip law - a volatile flip acts on the very next call).
+ * recover() answers the honest empty report `{ batchIds: [] }` (Function/
+ * Recover). The read surface answers from the state and writes nothing, so
+ * it needs no flag.
  */
 export default class WorkspaceJournal extends Service {
     /**

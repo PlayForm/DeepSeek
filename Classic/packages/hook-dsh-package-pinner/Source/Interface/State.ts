@@ -13,8 +13,10 @@ import type { State as Shared } from "@playform/plugin-dsh-factory";
  * every factory primitive) extended with the pinner's own fields:
  *
  * - On - the MASTER SWITCH (config `enabled`, copied by the State builder's
- *   `fields` map; the apply-time gate: a disabled pinner appends
- *   `disabled (enabled=false)` and registers nothing);
+ *   `fields` map; the mount-time switch: a disabled pinner appends
+ *   `disabled (enabled=false)` INSTEAD of the activation proof and still
+ *   registers everything - every surface reads it at call time, the volatile
+ *   live-flip law);
  * - Section - the dependency sections the pinner may rewrite (config
  *   `sections`, copied by the State builder's `fields` map).
  *

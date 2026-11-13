@@ -2,9 +2,11 @@ import assert from "node:assert/strict";
 import {
 	Boot,
 	Check,
+	CheckAsync,
 	Finish,
 	Fire,
 	FireMalformed,
+	Flip,
 	Ledger,
 	LinesWith,
 	MakeCounter,
@@ -21,8 +23,10 @@ import {
  * @remarks
  *
  * Covers the loader contract (apply returns nothing, the default object carries
- * name/apply/Config/inject), the IDLE-forever cold mount, the root-context registration with the
- * distinct root identity, the service registered from apply, the activation proof, the storage
+ * name/apply/Config/inject), the live disabled cold mount (registered, silent,
+ * and the volatile flip live), the root-context registration with the
+ * distinct root identity, the service registered from apply, the activation
+ * proof, the storage
  * effect, the monotonic progress counter (no wall clock on the event path), and the fail-loud
  * validation.
  */
@@ -54,9 +58,9 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Run.Returned, undefined);
 			assert.ok(Run.Provided["workspaceJournal"] !== undefined);
 		});
-		Check(Count, "W1: a disabled mount registers NOTHING on the root context", () => {
-			assert.deepEqual(Run.RootNames, []);
-			assert.deepEqual(Run.Effects, []);
+		Check(Count, "W1: a disabled mount registers EVERY surface (listener and storage effect)", () => {
+			assert.deepEqual(Run.RootNames, ["fs/observed"]);
+			assert.deepEqual(Run.Effects, ["journal-storage"]);
 		});
 		Check(Count, "W1: the cold mount logs the byte-exact disabled line", () => {
 			assert.deepEqual(Run.Lines, ["journal: disabled (enabled=false)"]);
@@ -70,6 +74,53 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Run.Context.workspaceJournal.batch("b1"), undefined);
 			assert.deepEqual(Run.Context.workspaceJournal.batches(), []);
 			assert.deepEqual(Run.Context.workspaceJournal.entries("b1"), []);
+		});
+		Check(Count, "W1: a disabled fs/observed event passes through with zero new lines", () => {
+			const Before = Run.Lines.length;
+			Fire(Run, "/repo/a.ts");
+			FireMalformed(Run);
+			assert.equal(Run.Lines.length, Before);
+			assert.equal(Run.State.Batches.size, 0);
+		});
+		await CheckAsync(Count, "W1: a disabled mutating service call refuses with zero new lines", async () => {
+			const Before = Run.Lines.length;
+			const Service = Run.Context.workspaceJournal;
+			await assert.rejects(
+				() => Service.open({ batchId: "b1", operation: "op", files: [] }, []),
+				/journal: disabled \(enabled=false\)/,
+			);
+			await assert.rejects(() => Service.seal("b1", "verified"), /journal: disabled \(enabled=false\)/);
+			await assert.rejects(() => Service.revert("b1"), /journal: disabled \(enabled=false\)/);
+			assert.deepEqual(await Service.recover(), { batchIds: [] });
+			assert.equal(Run.State.Batches.size, 0);
+			assert.equal(Run.Lines.length, Before);
+		});
+	}
+
+	// Group W1: the flip is live (the volatile cell refresh, no remount).
+	{
+		rm();
+		const Run = Make(Validate({ logFile: Ledger, enabled: false }));
+		Flip(Run.Raw.enabled, true);
+		Run.CtxListeners["loader/volatile-update"](["enabled"]);
+		await CheckAsync(Count, "W1: a volatile flip to enabled journals on the very next call, no remount", async () => {
+			assert.equal(Run.State.On, true);
+			const Opened = await Run.Context.workspaceJournal.open(
+				{ batchId: "b1", operation: "op", files: ["/repo/a.ts"] },
+				[{ path: "/repo/a.ts", state: "present", version: "1", content: "A" }],
+			);
+			assert.equal(Opened.state, "applying");
+			assert.ok(Run.Lines.includes("journal: opened b1 (1 files)"));
+		});
+		Flip(Run.Raw.enabled, false);
+		Run.CtxListeners["loader/volatile-update"](["enabled"]);
+		await CheckAsync(Count, "W1: the flip back to disabled silences the very next call", async () => {
+			const Before = Run.Lines.length;
+			await assert.rejects(
+				() => Run.Context.workspaceJournal.open({ batchId: "b2", operation: "op", files: [] }, []),
+				/journal: disabled \(enabled=false\)/,
+			);
+			assert.equal(Run.Lines.length, Before);
 		});
 	}
 

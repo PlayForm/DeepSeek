@@ -12,7 +12,10 @@ import type { Allowlist } from "@playform/plugin-dsh-factory";
  */
 export default interface Config {
     /**
-     * The IDLE-forever switch: false means disabled, wired to nothing.
+     * The master switch: false logs `disabled (enabled=false)` at mount and
+     * every surface stays registered, answering its disabled result at call
+     * time (the live-flip law - the factory refreshes this cell in place, so
+     * a flip acts on the very next call without a remount).
      */
     enabled: boolean;
     /**

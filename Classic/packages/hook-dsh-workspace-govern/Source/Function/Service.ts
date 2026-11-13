@@ -26,6 +26,12 @@ import Decide from "./Decide.js";
  *   any consumer that holds a proposal record).
  * - `decisions(limit)` - the decision ring, newest first.
  * - `statistics()` - { decisions, sequence }.
+ *
+ * THE CALL-TIME MASTER SWITCH: the gate reads State.On at the moment of the
+ * call; a disabled hook answers a pass decision (`decision: "pass"`, the
+ * obligations `n/a`, ZERO ledger lines, no ring entry - the live-flip law, a
+ * volatile flip acts on the very next call); the read surface answers from
+ * the state and writes nothing, so it needs no flag.
  */
 export default class WorkspaceGovern extends Service {
 	/**
@@ -48,6 +54,18 @@ export default class WorkspaceGovern extends Service {
 	 * Run the gate on one proposal record.
 	 */
 	gate(Proposal_: Proposal): Decision {
+		switch (true) {
+			// The call-time master switch: a disabled gate is a pass with
+			// the obligations n/a - zero ledger lines, no ring entry.
+			case !this.State.On:
+				return {
+					decision: "pass",
+					reason: "the hook is disabled (enabled=false)",
+					obligations: { contributes: "n/a", scope: "n/a", preconditions: "n/a" },
+					operation: Proposal_.operation,
+				};
+			default:
+		}
 		return Decide(this.State, Proposal_, this.Append);
 	}
 

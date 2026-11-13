@@ -40,7 +40,7 @@ A factory flavor: the furnace of the family does the plumbing; this package is t
 
 | Field               | Type     | Default                                                                       | Meaning                                                                             |
 | ------------------- | -------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `enabled`           | boolean  | `true`                                                                        | The master switch - off appends `disabled (enabled=false)` and registers nothing.   |
+| `enabled`           | boolean  | `true`                                                                        | The master switch - off appends `disabled (enabled=false)` instead of the activation proof; every surface stays registered and reads it at call time (a flip acts on the next call). |
 | `log`               | boolean  | `true`                                                                        | Ledger enabled - write the durable log file (volatile).                             |
 | `logFile`           | string   | `~/.dsh/playform/hook-dsh-package-governor.log`                               | The ledger file - one global log, volatile.                                         |
 | `updateCooldownMs`  | number   | `3000`                                                                        | Cooldown between update-stage dispatches, per directory (volatile).                 |
@@ -97,7 +97,7 @@ module identity is `hook-dsh-governor-package`).
     - Entry-And-Config - 4 checks
     - Gate-Matrix - 9 checks
     - Refusals-And-Transform - 10 checks
-    - State-And-Activation - 10 checks
+    - State-And-Activation - 13 checks
     - Update-Stage - 21 checks
 
 ## The plan

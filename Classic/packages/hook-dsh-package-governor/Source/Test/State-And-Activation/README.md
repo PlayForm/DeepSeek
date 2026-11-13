@@ -34,6 +34,22 @@ assertions are moved verbatim from section 3 of `Classic/smokes/governor-smoke.m
     - Sub: "activation: the P5 record drained into the opened domain"
     - Sub: "activation: durable proof line byte-identical ([ISO] format +
       summary fields)"
+    - Sub: "disabled mount: every surface still registers and the ledger line
+      is the byte-exact disabled line (no early return)"
+        - a SECOND apply with enabled=false: the fs/observed listener, the
+          P1/P2/P5 effects and the P1 controller STILL register, exactly one
+          new ledger line lands in the `[ISO] disabled (enabled=false)` shape,
+          and NO activated journal record is emitted (the proof is the
+          disabled line)
+    - Sub: "disabled mount: a call passes through with ZERO new ledger lines"
+        - the disabled mount's own wired listener fires on a fresh target and
+          the ledger does not move (the call-time master switch)
+    - Sub: "disabled mount: flipping enabled acts on the very next call - and
+      back"
+        - On=true then the next listener call runs the pass (exactly one new
+          line, the g2 chain-skip line); On=false again then the next call is
+          silent (a fresh version token keeps the Stash gate out of the way -
+          the master switch is the only gate standing)
 
 ## Fixtures
 
@@ -49,6 +65,8 @@ so the activation record drains on the first settle.
   ncuBin=ncu, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek
   Harness.app], policyFile=(discovery))` (the U+2026 ellipsis and U+2192
   arrows appear in later folders' lines, not here).
+- The disabled mount's single ledger line, ISO-timestamped, in the shape
+  `[ISO] disabled (enabled=false)` (byte-exact).
 
 ## Edge cases
 
@@ -60,4 +78,4 @@ so the activation record drains on the first settle.
 
 ## Expected count
 
-10 PASS.
+13 PASS.

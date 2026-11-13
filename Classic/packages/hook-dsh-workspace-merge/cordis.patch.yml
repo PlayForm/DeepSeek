@@ -21,8 +21,11 @@
 # base (log: true and the module's ledger logFile) - installing the plugin
 # yields an enabled plugin, and the profile may turn it off
 # with enabled: false (then restart). On a cold mount with enabled: false
-# the State build logs `disabled (enabled=false)` and nothing is
-# wired. The schema defaults are the truth; the full default surface (domain
+# the State build logs `disabled (enabled=false)` and every surface stays
+# registered - the tool and the storage effect, beside the service - with
+# each checking State.On at CALL time: a disabled commit is refused with the
+# rejected reply shape and zero ledger lines, and a volatile flip acts on
+# the very next call without a remount. The schema defaults are the truth; the full default surface (domain
 # workspace_merge, mode all-or-nothing, maxFiles 50, maxTotalBytes 1000000)
 # lives in the Variable/Config.ts schema. EVERY knob is volatile
 # (hot-editable without remounting): enabled, log/logFile, domain, mode,

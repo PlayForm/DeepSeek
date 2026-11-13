@@ -37,8 +37,32 @@ import { Decide } from "@playform/plugin-dsh-factory";
  * the gates and before any write, with the documented
  * `merge held (<n> files) (policy commit=approve)` line; the reply is the
  * `rejected` commit shape and nothing is persisted. `auto` proceeds.
+ *
+ * THE CALL-TIME MASTER SWITCH: a disabled hook refuses the whole batch with
+ * the `rejected` commit reply shape, ZERO ledger lines, no sequence bump and
+ * no record (the live-flip law - State.On is read at the moment of the call,
+ * never captured at mount).
  */
 export default async (State: State, Request: Batch): Promise<Commit> => {
+	switch (true) {
+		case State.On === false: {
+			const Operations = Array.isArray(Request.operations) ? Request.operations : [];
+			const Id =
+				typeof Request.id === "string" && Request.id.length > 0 ? Request.id : "batch-disabled";
+			const Reason = "the merge is disabled (enabled=false)";
+			return {
+				id: Id,
+				status: "rejected",
+				replies: Operations.map((Op) => ({
+					path: Op.path,
+					status: "rejected",
+					reason: Reason,
+				})),
+				reason: Reason,
+			};
+		}
+		default:
+	}
 	State.Sequence += 1;
 	const Id =
 		typeof Request.id === "string" && Request.id.length > 0

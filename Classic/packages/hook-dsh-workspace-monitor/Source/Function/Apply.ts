@@ -17,9 +17,13 @@ import { Activate } from "@playform/lib-dsh-core";
  * the listener is the factory's Wire on the ROOT context. The contract is
  * Documentation/Plans/Workspace-Family/MONITOR.md.
  *
- * THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default
+ * THE LIVE DISABLED POSTURE: `enabled` defaults to false (the schema default
  * and the bundle patch row). A cold mount logs `disabled (enabled=false)` and
- * wires NOTHING - no listener, no watch state, no events consumed.
+ * registers EVERY surface - the fs/observed listener on the ROOT context.
+ * The listener checks the flag at CALL time (the volatile cell refreshed in
+ * place by the factory's P10 loader/volatile-update listener, never captured
+ * at mount), so a disabled event passes through with ZERO ledger lines and a
+ * volatile flip acts on the very next event, with no remount.
  *
  * The function returns NOTHING (the loader contract: a returned value silently
  * kills event delivery). The test probe is the
@@ -92,21 +96,25 @@ export default (Context: Context, Options: Config): void => {
 	// object as its actor is the hook's own (the identity check in the
 	// listener) and is ignored.
 	State.Self = { plugin: "hook-dsh-workspace-monitor" };
+	// The master switch: the ONE mount-time effect of the flag is the ledger
+	// line - a disabled mount writes `disabled (enabled=false)` instead of
+	// the activation proof and still registers EVERYTHING below (the
+	// live-flip law: the factory refreshes State.On in place, so a flip acts
+	// on the very next call in both directions, with no remount).
 	switch (true) {
 		case !State.On:
-			// The cold mount: honest in the ledger, wired to nothing.
 			Factory.Append(State, "disabled (enabled=false)");
-			return;
+			break;
 		default:
+			// The activation proof (the module's own composed line).
+			Factory.Append(
+				State,
+				Activate([
+					["domain", State.DomainName],
+					["checksets", String(Object.keys(State.CheckSets ?? {}).length)],
+				]),
+			);
 	}
-	// The activation proof (the module's own composed line).
-	Factory.Append(
-		State,
-		Activate([
-			["domain", State.DomainName],
-			["checksets", String(Object.keys(State.CheckSets ?? {}).length)],
-		]),
-	);
 
 	// The fs/observed listener, on the ROOT context (the factory's Wire).
 	Factory.Wire(Context, State, (Target, Observation, Actor) =>

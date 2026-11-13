@@ -16,9 +16,11 @@ import Observe from "./Observe.js";
  * The module builds the State through `Factory.State` (the cell unwrap, the shared mappings
  * Tool<-mutationTools, Policy<-policyFile, Ledger<-logFile, Enabled<-log, List<-exclude, and the
  * machinery structures - SCHEME.md §2.10), adds the module's own fields via the setup `fields`
- * map (On <- enabled - the master switch: a disabled governor appends `disabled (enabled=false)`
- * and returns before registering anything), delegates ALL lifecycle effects to `Factory.Attach`
- * (P1 jobs controller, P2 in-flight disposal, P5 storage domain - SCHEME.md §2.12), emits the
+ * map (On <- enabled - the master switch: the ONE mount-time effect of the flag is the ledger
+ * line - a disabled governor appends `disabled (enabled=false)` INSTEAD of the activation
+ * proof and still registers EVERYTHING - the LIVE disabled posture), delegates ALL lifecycle
+ * effects to `Factory.Attach` (P1 jobs controller, P2 in-flight disposal, P5 storage domain -
+ * SCHEME.md §2.12), emits the
  * durable activation proof (the module's own string, via Factory.Append + Factory.Journal), and
  * wires the fs/observed hook through `Factory.Wire` (SCHEME.md §2.11).
  *
@@ -73,37 +75,42 @@ export default (Context: Context, Options: Config): void => {
 	State.Count = new Map();
 	State.Factory = Factory;
 
-	// THE MASTER SWITCH (config `enabled`, volatile - the setup map's `On <- enabled`, so the
-	// State builder's P10 volatile-update listener refreshes it in place): a disabled
-	// governor appends the durable disabled line and returns BEFORE registering anything -
-	// no Wire listener, no direct-govern steps, no lifecycle effects (the tool-coach
-	// precedent).
-	if (!State.On) {
-		Factory.Append(State, "disabled (enabled=false)");
-		return;
-	}
-
 	// The lifecycle effects, all in the factory now: P1 attaches the jobs controller from this
 	// root context (serves every owner), P2 registers the in-flight disposal, P5 opens the
-	// optional storage domain.
+	// optional storage domain. They register on EVERY mount, disabled or not (the LIVE
+	// disabled posture: a disabled mount registers everything and only the ledger line
+	// differs).
 	Factory.Attach(Context, { state: State, name: "hook-dsh-governor-package" });
 
-	// Durable activation proof - "did it activate" must be answerable from the ledger alone.
-	// The same summary becomes the storage journal's `activated` record (P5; queued until the
-	// optional domain opens). The line's string mechanics (the `activated (` prefix, the `k=v`
-	// join, the `)` suffix) live in the core's Activate composer; the FIELD LIST is the
-	// module's own - the leading bare flavor word (empty key), the bracketed lists and the
-	// `(discovery)` fallbacks.
-	const Proof = Activate([
-		["", "anywhere mode"],
-		["logFile", State.Ledger],
-		["updateMode", State.Mode],
-		["ncuBin", State.Binary],
-		["exclude", `[${State.List.join(", ")}]`],
-		["policyFile", State.Policy || "(discovery)"],
-	]);
-	Factory.Append(State, Proof);
-	Factory.Journal(State, "activated", "", Proof);
+	// THE MASTER SWITCH (config `enabled`, volatile - the setup map's `On <- enabled`, so the
+	// State builder's P10 volatile-update listener refreshes it in place): the ONE mount-time
+	// effect of the flag is the ledger line - a disabled governor appends the durable disabled
+	// line INSTEAD of the activation proof and still registers EVERYTHING below (no early
+	// return - the LIVE disabled posture). Every registered surface checks the flag at CALL
+	// time (Function/Observe and both Function/Direct steps read State.On at the moment of
+	// the call - the factory refreshes State.On in place, so a flip acts on the very next
+	// call in both directions, with no remount) and a disabled surface passes through with
+	// ZERO ledger lines.
+	if (State.On === false) {
+		Factory.Append(State, "disabled (enabled=false)");
+	} else {
+		// Durable activation proof - "did it activate" must be answerable from the ledger
+		// alone. The same summary becomes the storage journal's `activated` record (P5;
+		// queued until the optional domain opens). The line's string mechanics (the
+		// `activated (` prefix, the `k=v` join, the `)` suffix) live in the core's Activate
+		// composer; the FIELD LIST is the module's own - the leading bare flavor word (empty
+		// key), the bracketed lists and the `(discovery)` fallbacks.
+		const Proof = Activate([
+			["", "anywhere mode"],
+			["logFile", State.Ledger],
+			["updateMode", State.Mode],
+			["ncuBin", State.Binary],
+			["exclude", `[${State.List.join(", ")}]`],
+			["policyFile", State.Policy || "(discovery)"],
+		]);
+		Factory.Append(State, Proof);
+		Factory.Journal(State, "activated", "", Proof);
+	}
 
 	// The listener is owned by the current fiber (Factory.Wire): removed on unload - no manual
 	// removeListener bookkeeping, ever.

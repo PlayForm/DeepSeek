@@ -24,5 +24,10 @@ export default _default;
  * An intent must not authorize its own means: this check validates the
  * implementation against the approved candidate, it never grants authority by
  * itself - the authority licensing happened earlier in the flow.
+ *
+ * The CALL-TIME master switch: a disabled hook refuses with `undefined` (the
+ * approval contract is inactive - nothing is bound, nothing is approved) and
+ * ZERO ledger lines (the live-flip law - State.On is read at the moment of
+ * the call, never captured at mount).
  */
-declare function _default(State: State, Request: Request): Check;
+declare function _default(State: State, Request: Request): Check | undefined;

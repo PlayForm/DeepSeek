@@ -21,6 +21,12 @@ import type Statistics from "../Interface/Statistics.js";
  *   batch(id)          - one recorded batch or undefined;
  *   batches()          - all recorded batches;
  *   statistics()       - the honest counts.
+ *
+ * THE CALL-TIME MASTER SWITCH: the commit path reads State.On at the moment
+ * of the call and answers the `rejected` commit reply with ZERO ledger lines
+ * while the hook is disabled (Function/Commit; the live-flip law - a
+ * volatile flip acts on the very next call). The read paths answer from the
+ * state and write nothing, so they need no flag.
  */
 export default class WorkspaceMerge extends Service {
     /**

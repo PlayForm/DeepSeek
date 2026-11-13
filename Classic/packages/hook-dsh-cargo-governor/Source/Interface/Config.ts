@@ -23,7 +23,10 @@
 export default interface Config {
 	/**
 	 * The master switch - a disabled cargo module appends
-	 * `disabled (enabled=false)` to the ledger and registers nothing.
+	 * `disabled (enabled=false)` to the ledger INSTEAD of the activation proof
+	 * and still registers everything (the LIVE disabled posture); every
+	 * surface reads it at call time, so a flip acts on the very next call in
+	 * both directions.
 	 */
 	enabled: boolean;
 

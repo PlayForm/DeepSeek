@@ -20,9 +20,11 @@ export default _default;
  *    "pin-policy.json", journalDomain: "hook_dsh_package_pinner" }): the shared
  *    shape (defensive cell unwrap of the factory's volatile shared fields,
  *    Tool/Policy/Ledger/Enabled/List mappings, Stash/Inflight/Seams/Queue/
- *    Journal, the P9 subprocess probe) + the master switch (On <- enabled: a
- *    disabled pinner appends `disabled (enabled=false)` and returns before
- *    registering anything) + the pinner's Section.
+ *    Journal, the P9 subprocess probe) + the master switch (On <- enabled: the
+ *    ONE mount-time effect of the flag is the ledger line - a disabled pinner
+ *    appends `disabled (enabled=false)` INSTEAD of the activation proof and
+ *    still registers everything - the LIVE disabled posture) + the pinner's
+ *    Section.
  * 2. The activation proof - the MODULE'S ledger strings: the durable
  *    `activated (...)` Append ("did it activate" must be answerable from the
  *    ledger alone) and the P5 Journal record.

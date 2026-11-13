@@ -19,6 +19,10 @@ export default _default;
  * - with an assessment suffix for intent-assessment lines:
  *   `audit intent-assessment <operation> (satisfied|unsatisfied)
  *   <assessment>`.
+ *
+ * The CALL-TIME master switch: a disabled hook records nothing - `undefined`
+ * with ZERO ledger lines and ZERO state changes (the live-flip law - State.On
+ * is read at the moment of the call, never captured at mount).
  */
 declare function _default(State: State, Input: {
     operation: string;
@@ -27,4 +31,4 @@ declare function _default(State: State, Input: {
     path: string;
     outcome: Line["outcome"];
     assessment?: string;
-}): Line;
+}): Line | undefined;

@@ -11,9 +11,11 @@ export default _default;
  * The module builds the State through `Factory.State` (the cell unwrap, the shared mappings
  * Tool<-mutationTools, Policy<-policyFile, Ledger<-logFile, Enabled<-log, List<-exclude, and the
  * machinery structures - SCHEME.md §2.10), adds the module's own fields via the setup `fields`
- * map (On <- enabled - the master switch: a disabled governor appends `disabled (enabled=false)`
- * and returns before registering anything), delegates ALL lifecycle effects to `Factory.Attach`
- * (P1 jobs controller, P2 in-flight disposal, P5 storage domain - SCHEME.md §2.12), emits the
+ * map (On <- enabled - the master switch: the ONE mount-time effect of the flag is the ledger
+ * line - a disabled governor appends `disabled (enabled=false)` INSTEAD of the activation
+ * proof and still registers EVERYTHING - the LIVE disabled posture), delegates ALL lifecycle
+ * effects to `Factory.Attach` (P1 jobs controller, P2 in-flight disposal, P5 storage domain -
+ * SCHEME.md §2.12), emits the
  * durable activation proof (the module's own string, via Factory.Append + Factory.Journal), and
  * wires the fs/observed hook through `Factory.Wire` (SCHEME.md §2.11).
  *

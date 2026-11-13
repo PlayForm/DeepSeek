@@ -21,5 +21,9 @@ export default _default;
  *   approval.
  * - The binding id is `ap-<sequence>`; the sequence is the plugin's own
  *   monotonic counter, never a wall clock.
+ *
+ * The CALL-TIME master switch: a disabled hook refuses with `undefined` and
+ * ZERO ledger lines (the live-flip law - State.On is read at the moment of
+ * the call, never captured at mount).
  */
-declare function _default(State: State, Candidate: Candidate): Binding;
+declare function _default(State: State, Candidate: Candidate): Binding | undefined;

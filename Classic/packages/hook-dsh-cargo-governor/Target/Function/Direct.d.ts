@@ -39,6 +39,11 @@ import type PluginFactory from "@playform/plugin-dsh-factory";
  * instead of discarding it, so the factory's Govern awaits one step's chain to
  * completion (its guarded write + its ledger line) before the next step reads
  * the file — the steps' version-guarded writes can never race.
+ *
+ * THE CALL-TIME MASTER SWITCH (the LIVE disabled posture): both steps read
+ * State.On at the moment of the call (never captured at mount) and pass
+ * through with ZERO ledger lines while disabled - the volatile live-flip law
+ * makes a flip act on the very next call in both directions.
  */
 /**
  * The chain + normalization pass WITHOUT the update stage: the direct-path

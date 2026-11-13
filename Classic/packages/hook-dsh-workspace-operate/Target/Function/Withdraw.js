@@ -1,1 +1,1 @@
-import o from"./Persist.js";var a=(t,e)=>{const r=t.Proposals.get(e);return r===void 0||r.status!=="proposed"?!1:(r.status="withdrawn",o(t,r),t.Factory.Append(t,`withdrawn ${e}`),!0)};export{a as default};
+import s from"./Persist.js";var a=(r,e)=>{if(!0===(r.On===!1))return!1;const t=r.Proposals.get(e);return t===void 0||t.status!=="proposed"?!1:(t.status="withdrawn",s(r,t),r.Factory.Append(r,`withdrawn ${e}`),!0)};export{a as default};

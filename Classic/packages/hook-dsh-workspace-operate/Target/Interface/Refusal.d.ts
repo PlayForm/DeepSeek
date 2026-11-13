@@ -24,6 +24,8 @@
  *   - span-beyond-file - the replace span does not fit the file.
  *   - bad-request - the input is not shaped as the kind requires.
  *   - full - the proposal table is at config maxProposals.
+ *   - disabled - the hook is disabled (enabled=false); the call-time master
+ *     switch refuses before any rule runs, with ZERO ledger lines.
  */
 export default interface Refusal {
     /**

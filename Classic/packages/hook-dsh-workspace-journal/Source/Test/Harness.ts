@@ -372,6 +372,28 @@ export const LinesWith = (Run: any, Needle: string): string[] =>
 export const LedgerWith = (Needle: string): string[] =>
 	LedgerLines().filter((L: string) => L.includes(Needle));
 
+/**
+ * A volatile-cell write symbol (cosmokit): the loader's hot-edit path
+ * commits a new value into a `{ get }` cell through it. The harness uses the
+ * REGISTERED global symbol - the same mechanism the live loader uses, so the
+ * flip tests exercise the real cells the schema produces.
+ */
+const Write = Symbol.for("cosmokit.volatile.write");
+
+/**
+ * Commit a new value into a volatile cell (the hot-edit write), WITHOUT
+ * firing the loader event - the caller then fires the captured
+ * loader/volatile-update listener with the changed key, mirroring the live
+ * sequence (commit, then the event).
+ */
+export const Flip = (CellValue: unknown, New: unknown): void => {
+	const Cell = CellValue as { [Write]?: (Value: unknown) => unknown };
+	if (typeof Cell?.[Write] !== "function") {
+		throw new Error("Flip: not a volatile cell (no cosmokit write symbol)");
+	}
+	Cell[Write](New);
+};
+
 // Standalone entry: `node Target/Test/Harness.js --selfcheck`.
 const InvokedDirectly =
 	process.argv[1] !== undefined &&

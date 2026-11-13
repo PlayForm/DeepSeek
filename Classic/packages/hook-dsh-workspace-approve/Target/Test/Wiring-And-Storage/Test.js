@@ -3,6 +3,8 @@ import {
   Check,
   CheckAsync,
   Finish,
+  Fire,
+  Flip,
   Ledger,
   LinesWith,
   MakeCounter,
@@ -32,12 +34,55 @@ const runTest = async () => {
       assert.equal(Run.Returned, void 0);
       assert.ok(Run.Provided["workspaceApprove"] !== void 0);
     });
-    Check(Count, "W1: a disabled mount registers NOTHING on the root context", () => {
-      assert.deepEqual(Run.RootNames, []);
-      assert.deepEqual(Run.Effects, []);
+    Check(Count, "W1: a disabled mount registers EVERY surface (listener and storage effect)", () => {
+      assert.deepEqual(Run.RootNames, ["fs/observed"]);
+      assert.deepEqual(Run.Effects, ["approve-storage"]);
     });
     Check(Count, "W1: the cold mount logs the byte-exact disabled line", () => {
       assert.deepEqual(Run.Lines, ["approve: disabled (enabled=false)"]);
+    });
+    Check(Count, "W1: a disabled fs/observed event passes through with zero new lines", () => {
+      const Before = Run.Lines.length;
+      Fire(Run, "/repo/src/a.ts", "1");
+      assert.equal(Run.Lines.length, Before);
+      assert.equal(Run.State.Ring.length, 0);
+    });
+    Check(Count, "W1: a disabled service call refuses with zero new lines", () => {
+      const Before = Run.Lines.length;
+      const Service = Run.Context.workspaceApprove;
+      assert.equal(
+        Service.bind({ path: "/repo/a.ts", fingerprint: "fp-1", version: "1", constraints: ["no tests"] }),
+        void 0
+      );
+      assert.equal(Service.check({ path: "/repo/a.ts", fingerprint: "fp-1", version: "1" }), void 0);
+      assert.equal(Service.approve("ap-1", "human-1"), void 0);
+      assert.equal(Service.statistics().bindings, 0);
+      assert.equal(Run.Lines.length, Before);
+    });
+  }
+  {
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }));
+    Flip(Run.Raw.enabled, true);
+    Run.CtxListeners["loader/volatile-update"](["enabled"]);
+    Check(Count, "W1: a volatile flip to enabled acts on the very next call, no remount", () => {
+      assert.equal(Run.State.On, true);
+      const Bound = Run.Context.workspaceApprove.bind({
+        path: "/repo/a.ts",
+        fingerprint: "fp-1",
+        version: "1",
+        constraints: ["no tests"]
+      });
+      assert.ok(Bound !== void 0);
+      assert.ok(Run.Lines.includes("approve: bound ap-1 /repo/a.ts fingerprint fp-1"));
+    });
+    Flip(Run.Raw.enabled, false);
+    Run.CtxListeners["loader/volatile-update"](["enabled"]);
+    Check(Count, "W1: the flip back to disabled silences the very next call", () => {
+      const Before = Run.Lines.length;
+      Fire(Run, "/repo/a.ts", "2");
+      assert.equal(Run.Lines.length, Before);
+      assert.equal(Run.Context.workspaceApprove.approve("ap-1", "human-1"), void 0);
     });
   }
   {

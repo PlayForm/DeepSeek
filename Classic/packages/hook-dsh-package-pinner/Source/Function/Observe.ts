@@ -34,6 +34,11 @@ import Transform from "./Transform.js";
  *   (P2), reads the manifest through ctx.fs.readText, resolves the union
  *   keep-list (with the P3 chain-keys interlock), and calls the MODULE'S
  *   transform (Function/Transform - the range law).
+ *
+ * THE CALL-TIME MASTER SWITCH (the LIVE disabled posture): the listener reads
+ * State.On at the moment of the call (never captured at mount); while disabled
+ * it passes through with ZERO ledger lines, and the volatile live-flip law
+ * makes a flip act on the very next call in both directions.
  */
 export default (
 	Furnace: Factory,
@@ -42,6 +47,14 @@ export default (
 	Observation: FsObservation,
 	Actor: object | undefined,
 ): void => {
+	// THE CALL-TIME MASTER SWITCH (State.On, read at the moment of the call -
+	// never captured at mount): a disabled pinner passes through with ZERO
+	// ledger lines - the listener does nothing - and the flip acts on the very
+	// next call in both directions (the volatile live-flip law: the factory
+	// refreshes State.On in place).
+	if (State.On === false) {
+		return;
+	}
 	try {
 		// g1 — the factory gate (logs nothing; the module composes its lines).
 		const Verdict = Furnace.Gate(State, Target, Observation, Actor, {

@@ -21,8 +21,10 @@
 # base (log: true and the module's ledger logFile) - installing the plugin
 # yields an enabled plugin, and the profile may turn it off
 # with enabled: false (then restart). On a cold mount with enabled: false
-# the State build logs `disabled (enabled=false)` and no listener
-# is wired. The schema defaults are the truth; the full default surface
+# the State build logs `disabled (enabled=false)` and the listener stays
+# registered, checking State.On at CALL time: a disabled event passes
+# through with zero ledger lines and a volatile flip acts on the very next
+# event without a remount. The schema defaults are the truth; the full default surface
 # (domain workspace_monitor, debounceMs 250, sweepIntervalMs 600000,
 # maxWatch 500, include empty, the glob exclude triple, and the four-entry
 # check-set catalog) lives in the Variable/Config.ts schema. EVERY knob is

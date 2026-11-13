@@ -29,6 +29,12 @@ import type State from "@Interface/State.js";
  *   the human decision paths.
  * - `check(request)` - the merge/execute side's exactness check.
  * - `binding(id)` / `bindings(limit?)` / `statistics()` - the read surface.
+ *
+ * THE CALL-TIME MASTER SWITCH: the mutating paths (bind, approve, deny,
+ * revoke, check) read State.On at the moment of the call and refuse with
+ * `undefined` and ZERO ledger lines while the hook is disabled (the
+ * live-flip law - a volatile flip acts on the very next call); the read
+ * surface answers from the state and writes nothing, so it needs no flag.
  */
 export default class WorkspaceApprove extends Service {
 	/**
@@ -42,9 +48,10 @@ export default class WorkspaceApprove extends Service {
 	}
 
 	/**
-	 * Register an exact candidate as a pending binding.
+	 * Register an exact candidate as a pending binding (undefined while the
+	 * hook is disabled - the call-time master switch).
 	 */
-	bind(Candidate: Candidate): Binding {
+	bind(Candidate: Candidate): Binding | undefined {
 		return BindFn(this.State, Candidate);
 	}
 
@@ -70,9 +77,10 @@ export default class WorkspaceApprove extends Service {
 	}
 
 	/**
-	 * The exactness check for the merge/execute side.
+	 * The exactness check for the merge/execute side (undefined while the
+	 * hook is disabled - the call-time master switch).
 	 */
-	check(Req: Request): CheckResult {
+	check(Req: Request): CheckResult | undefined {
 		return Check(this.State, Req);
 	}
 

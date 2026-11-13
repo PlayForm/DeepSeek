@@ -48,7 +48,7 @@ refreshed by re-emitting `fs/observed` with the service-issued fresh version).
 
 | Field               | Type     | Default                                                                       | Meaning                                                                                                                        |
 | ------------------- | -------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `enabled`           | boolean  | `true`                                                                        | The master switch - off appends `disabled (enabled=false)` and registers nothing.                                              |
+| `enabled`           | boolean  | `true`                                                                        | The master switch - off appends `disabled (enabled=false)` instead of the activation proof; every surface stays registered and reads it at call time (a flip acts on the next call). |
 | `log`               | boolean  | `true`                                                                        | Ledger enabled - write the durable log file (volatile).                                                                        |
 | `logFile`           | string   | `~/.dsh/playform/hook-dsh-cargo-governor.log`                                 | The CARGO MODULE's OWN ledger - separate from the package governor's (volatile).                                               |
 | `updateCooldownMs`  | number   | `3000`                                                                        | Cooldown between update-stage dispatches, per directory (volatile).                                                            |
@@ -106,7 +106,7 @@ module identity is `hook-dsh-governor-cargo`).
     - Gates-And-Registry-Discovery - 6 checks
     - Keep-Refusal-And-Guarded-Write - 8 checks
     - Loader-And-Config - 6 checks
-    - State-And-Activation - 4 checks
+    - State-And-Activation - 7 checks
     - Update-Stage - 13 checks
 
 ## The plan

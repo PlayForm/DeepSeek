@@ -24,6 +24,12 @@ import type State from "@Interface/State.js";
  * - manual(path) - resolve through ctx.fs, stat for the version, record with
  *   origin "manual", ledger (async);
  * - statistics() - { paths, stamps, sequence }.
+ *
+ * THE CALL-TIME MASTER SWITCH: the recording path (manual) reads State.On at
+ * the moment of the call and refuses with `undefined` and ZERO ledger lines
+ * while the hook is disabled (the live-flip law - a volatile flip acts on
+ * the very next call); the read surface answers from the state and writes
+ * nothing, so it needs no flag.
  */
 export default class WorkspaceObserve extends Service {
 	/**
@@ -51,9 +57,10 @@ export default class WorkspaceObserve extends Service {
 	}
 
 	/**
-	 * The manual stamp: resolve, stat, record, ledger.
+	 * The manual stamp: resolve, stat, record, ledger (undefined while the
+	 * hook is disabled - the call-time master switch).
 	 */
-	manual(Path: string): Promise<Stamp> {
+	manual(Path: string): Promise<Stamp | undefined> {
 		return Manual(this.State, Path);
 	}
 

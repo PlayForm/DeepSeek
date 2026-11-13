@@ -19,8 +19,25 @@ import type State from "@Interface/State.js";
  * The live-table bound (config maxProposals) is enforced here: a pass when
  * the table is full is refused `full` - never silently dropped, never an
  * oldest-evicted guess.
+ *
+ * The CALL-TIME master switch: a disabled hook refuses with the typed
+ * `disabled` refusal and ZERO ledger lines, ZERO counter moves and no
+ * persistence (the live-flip law - State.On is read at the moment of the
+ * call, never captured at mount).
  */
 export default async (State: State, Kind: Proposal["kind"], Input: unknown): Promise<Outcome> => {
+	switch (true) {
+		case State.On === false:
+			return {
+				status: "refused",
+				refusal: {
+					kind: Kind,
+					reason: "disabled",
+					detail: "enabled=false",
+				},
+			};
+		default:
+	}
 	const Outcome = await Rules(State, Kind, Input);
 	switch (true) {
 		case Outcome.status === "refused": {

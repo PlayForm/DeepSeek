@@ -15,5 +15,9 @@ export default _default;
  * operator (or a later slice's automation) can complete or compensate.
  * The honest all-or-nothing (WORKSPACE-FAMILY-V4-1.md section 3.6 item 6):
  * recoverable partial states, never an invisible intermediate state.
+ *
+ * The CALL-TIME master switch: a disabled hook answers the empty report
+ * `{ batchIds: [] }` with ZERO ledger lines (the live-flip law - State.On is
+ * read at the moment of the call, never captured at mount).
  */
 declare function _default(State: State): Promise<RecoveryReport>;
