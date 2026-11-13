@@ -1,0 +1,1 @@
+const a=2e3,l=2048;var c=(t,e,n,u,o=2e3,d=2048)=>{const r=u(),s=t.get(e);if(!0===(s!==void 0&&s.version===n&&r-s.at<o))return!0;for(;t.size>=d;){const i=t.keys().next().value;!0===(i===void 0)||t.delete(i)}return t.delete(e),t.set(e,{version:n,at:r}),!1};export{c as default};

@@ -1,59 +1,31 @@
 import type State from "@Interface/State.js";
+import { Coalesce } from "@playform/lib-dsh-core";
 
 /**
  * @module Duplicate
  *
- * The repeat-event guard: the COALESCER for fs/observed repeats of an
- * already-processed file state.
+ * The repeat-event guard: the thin delegate over the core's coalescer
+ * (`@playform/lib-dsh-core`, the `Coalesce` export).
  *
  * @remarks
  *
- * A repeat event for the same path that carries the SAME version within the
- * window on the module's clock announces a file state that was already
- * processed (the version token identifies the file state), so it is dropped
- * before any work: no sequence, no line, no storage put, no ledger line. A
- * different version - or a repeat outside the window - is processed normally,
- * so the LAST distinct version always wins. The clock is the monitor's
- * pattern: `State.Now` (the test seam) when set, otherwise the wall clock;
- * there is NO timer anywhere (the family's no-real-timers rule).
+ * The machinery lives in the core: the 2000 ms window, the 2048-entry cap, the
+ * silent eviction of the oldest entry, and the rule that a MISSING entry always
+ * processes, so the cap can never skip a first sighting.
  *
- * The guard keeps one entry per path in `State.Seen` (the version plus the
- * clock stamp of the processing). The map is capped at `Limit` with a silent
- * eviction of the oldest entry: a MISSING entry always processes, so the cap
- * can never skip a first sighting. The guard lives on the fs/observed listener
- * only: the service's manual lines are explicit records and are never
- * coalesced.
+ * This file supplies only the module's own two seams:
+ *
+ * - the clock - `State.Now` (the test seam) when set, otherwise the wall clock;
+ *   there is NO timer anywhere (the family's no-real-timers rule);
+ * - the Seen map - the module's own `State.Seen`, one entry per path (the
+ *   version plus the clock stamp of the processing).
+ *
+ * A repeat event for the same path that carries the SAME version inside the
+ * window announces a file state that was already processed, so it is dropped
+ * before any work. A different version - or a repeat outside the window - is
+ * processed normally, so the LAST distinct version always wins.
  */
-/**
- * The coalescing window in milliseconds: a repeat inside the window that
- * carries the same version is dropped.
- */
-const Window = 2000;
-
-/**
- * The seen map's entry cap (the oldest entry is evicted silently).
- */
-const Limit = 2048;
-
-export default (State: State, Path: string, Version: string): boolean => {
-	const Now = typeof State.Now === "function" ? Number(State.Now()) : Date.now();
-	const Seen = State.Seen;
-	const Previous = Seen.get(Path);
-	switch (true) {
-		case Previous !== undefined && Previous.version === Version && Now - Previous.at < Window:
-			return true;
-		default:
-	}
-	while (Seen.size >= Limit) {
-		const Oldest = Seen.keys().next().value;
-		switch (true) {
-			case Oldest === undefined:
-				break;
-			default:
-				Seen.delete(Oldest);
-		}
-	}
-	Seen.delete(Path);
-	Seen.set(Path, { version: Version, at: Now });
-	return false;
-};
+export default (State: State, Path: string, Version: string): boolean =>
+	Coalesce(State.Seen, Path, Version, () =>
+		typeof State.Now === "function" ? Number(State.Now()) : Date.now(),
+	);

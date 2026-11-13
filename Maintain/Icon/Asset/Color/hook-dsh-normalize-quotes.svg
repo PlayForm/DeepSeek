@@ -19,7 +19,7 @@
 		<path id="hook-dsh-normalize-quotes-1" d="M69,21 L69,22 L67,23 L65,22 L65,21 L65,19 L67,18 L69,19 Z"/>
 		<path id="hook-dsh-normalize-quotes-2" d="M18,52 L18,54 L16,55 L14,54 L14,52 L14,51 L16,50 L18,51 Z"/>
 		<path id="hook-dsh-normalize-quotes-3" d="M82,66 L82,68 L80,68 L78,68 L78,66 L78,64 L80,64 L82,64 Z"/>
-		<path id="hook-dsh-normalize-quotes-4" d="M91,48 L69,86 L30,87 L8,50 L28,14 L72,11 Z M56,52 L92,68 L92,69 L55,53 Z M70,53 L70,54 L70,55 L69,55 L68,55 L67,55 L66,55 L65,54 L65,53 L65,52 L66,51 L67,50 L68,50 L69,50 L70,51 L70,52 Z M50,56 L50,96 L48,96 L50,56 Z M47,55 L27,90 L25,89 L47,55 Z M35,65 L35,67 L34,68 L33,69 L31,69 L30,69 L28,68 L27,67 L27,65 L27,63 L28,62 L30,61 L31,61 L33,61 L34,62 L35,63 Z M44,49 L5,40 L6,38 L44,48 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="hook-dsh-normalize-quotes-4" d="M93,48 L69,84 L28,88 L8,50 L29,12 L72,14 Z M56,51 L96,54 L96,55 L56,51 Z M38,39 L38,40 L37,41 L36,42 L36,42 L35,42 L34,41 L33,40 L33,39 L33,38 L34,38 L35,37 L36,37 L36,37 L37,38 L38,38 Z M53,55 L70,91 L68,92 L52,56 Z M47,55 L27,90 L25,89 L47,55 Z M77,55 L76,56 L76,57 L75,58 L74,58 L72,58 L71,57 L71,56 L70,55 L71,53 L71,52 L72,52 L74,52 L75,52 L76,52 L76,53 Z M44,48 L8,32 L9,30 L45,47 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
 		<path id="hook-dsh-normalize-quotes-5" d="M64,50 L64,54 L62,57 L60,60 L57,62 L54,64 L50,64 L46,64 L43,62 L40,60 L38,57 L36,54 L36,50 L36,46 L38,43 L40,40 L43,38 L46,36 L50,36 L54,36 L57,38 L60,40 L62,43 L64,46 Z M62,50 L61,53 L60,56 L58,58 L56,60 L53,61 L50,62 L47,61 L44,60 L42,58 L40,56 L39,53 L38,50 L39,47 L40,44 L42,42 L44,40 L47,39 L50,38 L53,39 L56,40 L58,42 L60,44 L61,47 Z"/>
 		<path id="hook-dsh-normalize-quotes-6" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
 		<path id="hook-dsh-normalize-quotes-7" d="M92,48 L86,50 L92,52 Z"/>
@@ -30,12 +30,12 @@
 		<path id="hook-dsh-normalize-quotes-12" d="M51,74 L51,75 L50,75 L50,74 L50,73 L51,73 Z"/>
 		<path id="hook-dsh-normalize-quotes-13" d="M28,58 L28,59 L27,59 L27,58 L27,57 L28,57 Z"/>
 		<path id="hook-dsh-normalize-quotes-14" d="M36,31 L36,32 L35,32 L35,31 L35,30 L36,30 Z"/>
-		<path id="hook-dsh-normalize-quotes-15" d="M4,40 L3,38 L5,38 Z"/>
+		<path id="hook-dsh-normalize-quotes-15" d="M27,88 L23,90 L23,85 Z"/>
 		<path id="hook-dsh-normalize-quotes-16" d="M65,30 L64,31 L63,31 L63,30 L63,30 L64,30 Z"/>
-		<path id="hook-dsh-normalize-quotes-17" d="M8,40 L6,38 L9,37 Z"/>
-		<path id="hook-dsh-normalize-quotes-18" d="M10,75 L6,75 L8,71 Z"/>
-		<path id="hook-dsh-normalize-quotes-19" d="M63,11 L65,9 L66,12 Z"/>
-		<path id="hook-dsh-normalize-quotes-20" d="M10,24 L9,20 L13,20 Z"/>
+		<path id="hook-dsh-normalize-quotes-17" d="M92,64 L94,67 L91,68 Z"/>
+		<path id="hook-dsh-normalize-quotes-18" d="M60,92 L58,97 L54,93 Z"/>
+		<path id="hook-dsh-normalize-quotes-19" d="M4,56 L3,55 L4,53 Z"/>
+		<path id="hook-dsh-normalize-quotes-20" d="M41,94 L37,97 L35,92 Z"/>
 		<path id="hook-dsh-normalize-quotes-21" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
 	</defs>
 	<g class="hook-dsh-normalize-quotes-scene">
@@ -48,7 +48,7 @@
 		<use class="hook-dsh-normalize-quotes-fire" style="animation-delay:-2.36s" href="#hook-dsh-normalize-quotes-3"/>
 	</g>
 	<g fill="#1E3768" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
-		<use href="#hook-dsh-normalize-quotes-4"/>
+		<use class="hook-dsh-normalize-quotes-breathe" href="#hook-dsh-normalize-quotes-4"/>
 	</g>
 	<g fill="#40548D" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="hook-dsh-normalize-quotes-breathe" href="#hook-dsh-normalize-quotes-5"/>

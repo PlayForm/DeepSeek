@@ -1,86 +1,34 @@
 import type { StreamChunk } from "@deepseek-ai/dsh-llm";
 import type State from "@Interface/State.js";
+import { Stream } from "@playform/lib-dsh-core";
 
 import Chunk from "./Chunk.js";
 
 /**
  * @module Normalize
  *
- * The stream wrapper: an async-generator over the UPSTREAM chunk stream that
- * yields each chunk through the pure dispatch (Function/Chunk) and, after a
- * NORMAL loop completion, writes the ledger line when anything was replaced.
+ * The stream wrapper: the thin delegate over the core's llm-stream arm factory
+ * (`@playform/lib-dsh-core`, the `Stream` export).
  *
  * @remarks
  *
- * This is the spaces hook's OWN Wire: the factory's Wire is fs/observed-hardwired
- * (this family's silence), while the spaces hook's normalization must be
- * VISIBLE - it is the feature - so it registers a plain
- * `ctx.on("llm/stream", ...)` listener (Function/Apply) whose body is exactly
- * `Normalize(Next(), State)`.
+ * The machinery lives in the core: the per-call id and raw-marker tracking, the
+ * count, the one-in-one-out loop, and the settle line plus journal record. This
+ * file supplies only what makes it THE NORMALIZE-SPACES:
  *
- * Invariants (docs/subsystems/llm-streaming.md:1108-1125, :296-304;
- * docs/cordis-api/events.md:97-123):
+ * - the space transform - the core's `Chunk` dispatch pinned to the configured
+ *   replacement and the effective scopes, read per call from the volatile
+ *   State;
+ * - the space ledger line - the module's own string, byte-identical with the
+ *   pre-delegate arm: `normalized N space char(s) in one stream`;
+ * - the space ledger sink - `State.Factory.Append` / `State.Factory.Journal`.
  *
- * - next() is ALWAYS called by the listener BEFORE this generator runs -
- *   omitting it short-circuits the waterfall and the model call never happens
- *   (the waterfall discipline: only decision-owners may veto).
- * - options is NEVER touched by this plugin: a LOOP-built request arrives
- *   deep-frozen (mutation throws) and its content is a pure function of the
- *   session log - listeners read it, never rewrite it.
- * - CHUNK ORDER is preserved: one in, one out, strictly sequential.
- * - The stream is never buffered: each upstream chunk is yielded before the
- *   next `next()` on the upstream iterator (the for-await loop), so consumers
- *   see deltas live.
- * - Upstream throws PROPAGATE: no try/finally wraps the loop, so a failed
- *   stream (the LlmRuntime normalizes adapter failures to a terminal
- *   `error`/`aborted` finish) passes through untouched - and a thrown-away
- *   stream writes NO ledger line (the count line only follows a normal
- *   completion).
- * - The ledger line is exactly `hook-dsh-normalize-spaces: normalized N space
- *   char(s) in one stream` (via State.Factory.Append - logger + durable file,
- *   never throws), written only when N > 0.
- *
- * Per-call RAW-marker state - LOCAL variables of THIS generator invocation,
- * never module-level (two concurrent streams must never share the state, and
- * an HMR reload must never inherit stale state):
- *
- * - `CurrentCall` - the tool-call id whose deltas are currently flowing; the
- *   id is the per-call state boundary (the real 0.2.0-rc.2 ToolCallDelta
- *   carries it on every delta, alongside its optional `name`).
- * - `RawCall` - whether THAT call opened its arguments with the
- *   `{"__normalize":false` marker (the FIRST key): a raw call passes through
- *   the tool-args gate UNNORMALIZED - its explicit per-call opt-out - with the
- *   marker entry itself stripped by the core (Stream/Strip), so the executed
- *   call carries no unknown key.
- * - The marker is detected on the FIRST delta of the call - the delta that
- *   carries the arguments start. A pathologically tiny first delta (shorter
- *   than the marker) is the documented edge: its split text is invisible to
- *   the startsWith probe and the call normalizes normally.
- * - The edit exemption needs NO state here: the core's dispatch exempts a
- *   delta/block whose `name` is "edit" on every chunk individually (the edit
- *   tool's `old_string` must match the real file bytes).
+ * Invariants: `next()` is always called by the listener before this generator
+ * runs, the chunk order is preserved, the stream is never buffered, and an
+ * upstream throw propagates untouched (the core owns all four).
  */
-export default async function* (
-	Upstream: AsyncIterable<StreamChunk>,
-	State: State,
-): AsyncGenerator<StreamChunk, void, void> {
-	let Count = 0;
-	let CurrentCall = "";
-	let RawCall = false;
-	for await (const Original of Upstream) {
-		switch (true) {
-			case Original.type === "tool-call-delta" && Original.id !== CurrentCall: {
-				CurrentCall = Original.id;
-				RawCall = Original.argumentsDelta.startsWith('{"__normalize":false');
-				break;
-			}
-		}
-		// The effective gates (the granular scope control, defaults = the
-		// previous behavior): the conversation scope gates the text paths, the
-		// reasoning scope is the sub-gate of `normalizeReasoning` (ANDed), and
-		// the tool-input scope is OR-ed into `normalizeToolArguments` (the
-		// deprecated field keeps working). The fallback object covers a
-		// hand-built config that omits `scopes` entirely.
+export default Stream<StreamChunk, State>(
+	(Original, State, Raw) => {
 		const Scopes = State.Scopes ?? {
 			conversation: true,
 			reasoning: true,
@@ -89,29 +37,18 @@ export default async function* (
 			files: true,
 			batch: false,
 		};
-		const Result = Chunk(
+		return Chunk(
 			Original,
 			State.Replacement,
 			State.Reasoning && Scopes.reasoning,
 			State.ToolArgs || Scopes.toolInput,
-			RawCall,
+			Raw,
 			Scopes.conversation,
 		);
-		Count += Result.count;
-		yield Result.chunk;
-	}
-	switch (true) {
-		case Count > 0:
-			State.Factory.Append(State, `normalized ${Count} space char(s) in one stream`);
-			// P5 journal — the same count event into the shared storage domain
-			// (event "normalized"), best-effort: with no storage facility the
-			// wrapper is a silent no-op. Detail byte-identical to the ledger line.
-			State.Factory.Journal(
-				State,
-				"normalized",
-				"",
-				`normalized ${Count} space char(s) in one stream`,
-			);
-			break;
-	}
-}
+	},
+	(Count) => `normalized ${Count} space char(s) in one stream`,
+	{
+		Append: (State, Line) => State.Factory.Append(State, Line),
+		Journal: (State, Event, Path, Value) => State.Factory.Journal(State, Event, Path, Value),
+	},
+);

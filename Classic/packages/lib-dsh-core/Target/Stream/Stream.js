@@ -1,0 +1,1 @@
+var c=(l,o,a)=>async function*(u,e){let n=0,r="",s=!1;for await(const t of u){!0===(t.type==="tool-call-delta"&&t.id!==r)&&(r=t.id,s=t.argumentsDelta.startsWith('{"__normalize":false'));const i=l(t,e,s);n+=i.count,yield i.chunk}if(!0===n>0){const t=o(n);a.Append(e,t),a.Journal(e,"normalized","",t)}};export{c as default};

@@ -4,13 +4,13 @@
 	<style>
 		@media (prefers-reduced-motion: no-preference) {
 			.lib-dsh-core-scene * { transform-box: view-box; transform-origin: 50% 50%; }
-		.lib-dsh-core-counter { animation: lib-dsh-core-counter 24s linear -3s infinite; }
+		.lib-dsh-core-counter { animation: lib-dsh-core-counter 28s linear -5s infinite; }
 		@keyframes lib-dsh-core-counter { to { transform: rotate(-360deg); } }
-		.lib-dsh-core-breathe { animation: lib-dsh-core-breathe 6s ease-in-out -3s infinite; }
+		.lib-dsh-core-breathe { animation: lib-dsh-core-breathe 5s ease-in-out -5s infinite; }
 		@keyframes lib-dsh-core-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
-		.lib-dsh-core-fire { animation: lib-dsh-core-fire 2.9s ease-in-out infinite; }
+		.lib-dsh-core-fire { animation: lib-dsh-core-fire 3.1s ease-in-out infinite; }
 		@keyframes lib-dsh-core-fire { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
-		.lib-dsh-core-twinkle { animation: lib-dsh-core-twinkle 9s ease-in-out -3s infinite; }
+		.lib-dsh-core-twinkle { animation: lib-dsh-core-twinkle 7s ease-in-out -5s infinite; }
 		@keyframes lib-dsh-core-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
 		}
 	</style>
@@ -22,9 +22,9 @@
 		<path id="lib-dsh-core-4" d="M74,57 L73,58 L73,58 L72,57 L73,56 L73,56 Z"/>
 		<path id="lib-dsh-core-5" d="M33,66 L33,67 L32,67 L32,66 L32,66 L33,66 Z"/>
 		<path id="lib-dsh-core-6" d="M45,27 L45,27 L44,27 L44,27 L44,26 L45,26 Z"/>
-		<path id="lib-dsh-core-7" d="M72,77 L43,70 L15,57 L34,37 L59,13 L73,43 Z M51,56 L58,95 L57,95 L51,56 Z M66,62 L66,63 L66,63 L65,64 L64,64 L63,64 L62,63 L61,63 L61,62 L61,61 L62,60 L63,59 L64,59 L65,59 L66,60 L66,61 Z M46,54 L17,82 L15,80 L45,54 Z M44,48 L7,33 L8,31 L45,48 Z M29,55 L29,56 L28,57 L28,57 L27,58 L25,57 L25,57 L24,56 L24,55 L24,54 L25,53 L25,52 L27,52 L28,52 L28,53 L29,54 Z M48,44 L38,6 L40,5 L49,44 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
-		<path id="lib-dsh-core-8" d="M80,63 L81,66 L79,66 Z"/>
-		<path id="lib-dsh-core-9" d="M18,42 L15,39 L19,38 Z"/>
+		<path id="lib-dsh-core-7" d="M84,51 L62,72 L31,79 L26,52 L32,21 L60,28 Z M55,54 L86,78 L85,79 L55,54 Z M43,36 L43,37 L42,39 L41,39 L39,40 L38,39 L36,39 L35,37 L35,36 L35,34 L36,33 L38,32 L39,31 L41,32 L42,33 L43,34 Z M53,55 L72,91 L70,91 L53,55 Z M46,54 L16,81 L14,79 L45,54 Z M39,69 L39,71 L38,72 L37,73 L36,73 L34,73 L33,72 L32,71 L32,69 L32,68 L33,66 L34,66 L36,65 L37,66 L38,66 L39,68 Z M44,48 L6,37 L7,34 L44,48 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="lib-dsh-core-8" d="M13,65 L9,64 L12,60 Z"/>
+		<path id="lib-dsh-core-9" d="M12,60 L9,58 L11,56 Z"/>
 		<path id="lib-dsh-core-10" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
 	</defs>
 	<g class="lib-dsh-core-scene">
@@ -35,7 +35,7 @@
 		<use class="lib-dsh-core-breathe" href="#lib-dsh-core-1"/>
 	</g>
 	<g fill="#8A5A9E" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
-		<use class="lib-dsh-core-fire" style="animation-delay:-3.00s" href="#lib-dsh-core-2"/>
+		<use class="lib-dsh-core-fire" style="animation-delay:-5.00s" href="#lib-dsh-core-2"/>
 	</g>
 	<g fill="#B07CC6" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="lib-dsh-core-breathe" href="#lib-dsh-core-3"/>
@@ -43,7 +43,7 @@
 		<use class="lib-dsh-core-counter" href="#lib-dsh-core-5"/>
 		<use class="lib-dsh-core-counter" href="#lib-dsh-core-6"/>
 	</g>
-	<g fill="#2A1B3D" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#241536" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use href="#lib-dsh-core-7"/>
 	</g>
 	<g fill="#B07CC6" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">

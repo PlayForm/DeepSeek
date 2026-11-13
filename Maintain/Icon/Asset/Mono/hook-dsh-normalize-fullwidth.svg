@@ -19,7 +19,7 @@
 		<path id="hook-dsh-normalize-fullwidth-1" d="M78,73 L77,74 L75,75 L74,74 L73,73 L74,71 L75,70 L77,71 Z"/>
 		<path id="hook-dsh-normalize-fullwidth-2" d="M26,71 L25,73 L23,73 L22,73 L21,71 L22,69 L23,69 L25,69 Z"/>
 		<path id="hook-dsh-normalize-fullwidth-3" d="M22,65 L21,67 L19,67 L18,67 L17,65 L18,63 L19,63 L21,63 Z"/>
-		<path id="hook-dsh-normalize-fullwidth-4" d="M92,61 L61,91 L23,78 L10,38 L41,9 L80,20 Z M54,55 L79,86 L78,87 L54,55 Z M40,62 L39,63 L39,64 L38,65 L37,65 L35,65 L35,64 L34,63 L34,62 L34,61 L35,60 L35,59 L37,59 L38,59 L39,60 L39,61 Z M49,56 L44,96 L42,95 L49,56 Z M45,53 L11,75 L10,73 L45,53 Z M77,47 L77,48 L76,49 L75,50 L74,50 L73,50 L72,49 L71,48 L71,47 L71,46 L72,45 L73,44 L74,44 L75,44 L76,45 L77,46 Z M46,45 L20,15 L22,14 L46,45 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="hook-dsh-normalize-fullwidth-4" d="M93,52 L71,87 L29,90 L6,51 L28,15 L72,13 Z M56,51 L95,59 L95,60 L56,51 Z M69,41 L69,42 L68,43 L67,44 L66,44 L65,44 L64,43 L63,42 L63,41 L63,40 L64,39 L65,38 L66,38 L67,38 L68,39 L69,40 Z M51,56 L57,95 L55,96 L51,56 Z M45,53 L8,70 L8,68 L44,52 Z M41,70 L41,72 L40,73 L39,74 L37,74 L35,74 L34,73 L33,72 L33,70 L33,68 L34,67 L35,66 L37,66 L39,66 L40,67 L41,68 Z M44,50 L4,48 L4,45 L44,49 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
 		<path id="hook-dsh-normalize-fullwidth-5" d="M64,50 L64,54 L62,57 L60,60 L57,62 L54,64 L50,64 L46,64 L43,62 L40,60 L38,57 L36,54 L36,50 L36,46 L38,43 L40,40 L43,38 L46,36 L50,36 L54,36 L57,38 L60,40 L62,43 L64,46 Z M62,50 L61,53 L60,56 L58,58 L56,60 L53,61 L50,62 L47,61 L44,60 L42,58 L40,56 L39,53 L38,50 L39,47 L40,44 L42,42 L44,40 L47,39 L50,38 L53,39 L56,40 L58,42 L60,44 L61,47 Z"/>
 		<path id="hook-dsh-normalize-fullwidth-6" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
 		<path id="hook-dsh-normalize-fullwidth-7" d="M92,48 L86,50 L92,52 Z"/>
@@ -30,12 +30,12 @@
 		<path id="hook-dsh-normalize-fullwidth-12" d="M51,74 L51,75 L50,75 L50,74 L50,73 L51,73 Z"/>
 		<path id="hook-dsh-normalize-fullwidth-13" d="M28,58 L28,59 L27,59 L27,58 L27,57 L28,57 Z"/>
 		<path id="hook-dsh-normalize-fullwidth-14" d="M36,31 L36,32 L35,32 L35,31 L35,30 L36,30 Z"/>
-		<path id="hook-dsh-normalize-fullwidth-15" d="M86,70 L86,72 L84,72 Z"/>
+		<path id="hook-dsh-normalize-fullwidth-15" d="M80,23 L82,22 L82,25 Z"/>
 		<path id="hook-dsh-normalize-fullwidth-16" d="M65,30 L64,31 L63,31 L63,30 L63,30 L64,30 Z"/>
-		<path id="hook-dsh-normalize-fullwidth-17" d="M42,95 L39,97 L37,94 Z"/>
-		<path id="hook-dsh-normalize-fullwidth-18" d="M15,22 L14,17 L19,17 Z"/>
-		<path id="hook-dsh-normalize-fullwidth-19" d="M17,79 L12,79 L13,74 Z"/>
-		<path id="hook-dsh-normalize-fullwidth-20" d="M14,69 L10,68 L12,65 Z"/>
+		<path id="hook-dsh-normalize-fullwidth-17" d="M92,52 L95,55 L92,57 Z"/>
+		<path id="hook-dsh-normalize-fullwidth-18" d="M6,40 L4,36 L8,35 Z"/>
+		<path id="hook-dsh-normalize-fullwidth-19" d="M78,17 L81,16 L81,20 Z"/>
+		<path id="hook-dsh-normalize-fullwidth-20" d="M82,20 L84,20 L84,22 Z"/>
 		<path id="hook-dsh-normalize-fullwidth-21" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
 	</defs>
 	<g class="hook-dsh-normalize-fullwidth-scene">
@@ -48,7 +48,7 @@
 		<use class="hook-dsh-normalize-fullwidth-fire" style="animation-delay:-3.36s" href="#hook-dsh-normalize-fullwidth-3"/>
 	</g>
 	<g fill="currentColor" fill-opacity="1" fill-rule="evenodd">
-		<use href="#hook-dsh-normalize-fullwidth-4"/>
+		<use class="hook-dsh-normalize-fullwidth-breathe" href="#hook-dsh-normalize-fullwidth-4"/>
 	</g>
 	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
 		<use class="hook-dsh-normalize-fullwidth-breathe" href="#hook-dsh-normalize-fullwidth-5"/>

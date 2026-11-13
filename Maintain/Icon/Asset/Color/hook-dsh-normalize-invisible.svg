@@ -19,7 +19,7 @@
 		<path id="hook-dsh-normalize-invisible-1" d="M54,16 L53,18 L51,18 L49,18 L49,16 L49,14 L51,14 L53,14 Z"/>
 		<path id="hook-dsh-normalize-invisible-2" d="M24,32 L23,34 L21,34 L19,34 L19,32 L19,30 L21,30 L23,30 Z"/>
 		<path id="hook-dsh-normalize-invisible-3" d="M81,32 L81,34 L79,34 L77,34 L76,32 L77,30 L79,30 L81,30 Z"/>
-		<path id="hook-dsh-normalize-invisible-4" d="M88,60 L60,92 L21,80 L9,37 L41,10 L79,21 Z M55,53 L91,71 L90,72 L55,53 Z M69,57 L69,58 L69,59 L68,60 L67,60 L66,60 L65,59 L64,58 L64,57 L64,56 L65,55 L66,54 L67,54 L68,54 L69,55 L69,56 Z M50,56 L47,96 L45,96 L49,56 Z M46,54 L16,81 L15,79 L45,54 Z M42,71 L41,72 L41,73 L40,74 L38,74 L37,74 L36,73 L35,72 L35,71 L35,70 L36,69 L37,68 L38,68 L40,68 L41,69 L41,70 Z M45,47 L8,30 L10,28 L45,47 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="hook-dsh-normalize-invisible-4" d="M91,47 L70,86 L30,88 L7,50 L27,15 L72,12 Z M55,53 L91,70 L91,71 L55,53 Z M44,66 L44,67 L44,68 L43,68 L42,69 L41,68 L40,68 L40,67 L40,66 L40,65 L40,64 L41,64 L42,64 L43,64 L44,64 L44,65 Z M50,56 L49,96 L47,96 L50,56 Z M44,52 L7,67 L7,65 L44,52 Z M72,64 L72,65 L71,66 L71,67 L69,67 L68,67 L67,66 L67,65 L66,64 L67,63 L67,62 L68,61 L69,61 L71,61 L71,62 L72,63 Z M44,49 L4,46 L4,43 L44,49 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
 		<path id="hook-dsh-normalize-invisible-5" d="M64,50 L64,54 L62,57 L60,60 L57,62 L54,64 L50,64 L46,64 L43,62 L40,60 L38,57 L36,54 L36,50 L36,46 L38,43 L40,40 L43,38 L46,36 L50,36 L54,36 L57,38 L60,40 L62,43 L64,46 Z M62,50 L61,53 L60,56 L58,58 L56,60 L53,61 L50,62 L47,61 L44,60 L42,58 L40,56 L39,53 L38,50 L39,47 L40,44 L42,42 L44,40 L47,39 L50,38 L53,39 L56,40 L58,42 L60,44 L61,47 Z"/>
 		<path id="hook-dsh-normalize-invisible-6" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
 		<path id="hook-dsh-normalize-invisible-7" d="M92,48 L86,50 L92,52 Z"/>
@@ -30,12 +30,12 @@
 		<path id="hook-dsh-normalize-invisible-12" d="M51,74 L51,75 L50,75 L50,74 L50,73 L51,73 Z"/>
 		<path id="hook-dsh-normalize-invisible-13" d="M28,58 L28,59 L27,59 L27,58 L27,57 L28,57 Z"/>
 		<path id="hook-dsh-normalize-invisible-14" d="M36,31 L36,32 L35,32 L35,31 L35,30 L36,30 Z"/>
-		<path id="hook-dsh-normalize-invisible-15" d="M9,56 L6,55 L9,52 Z"/>
+		<path id="hook-dsh-normalize-invisible-15" d="M37,92 L35,93 L34,91 Z"/>
 		<path id="hook-dsh-normalize-invisible-16" d="M65,30 L64,31 L63,31 L63,30 L63,30 L64,30 Z"/>
-		<path id="hook-dsh-normalize-invisible-17" d="M5,62 L3,60 L4,57 Z"/>
-		<path id="hook-dsh-normalize-invisible-18" d="M6,55 L3,53 L6,51 Z"/>
-		<path id="hook-dsh-normalize-invisible-19" d="M9,67 L6,66 L8,63 Z"/>
-		<path id="hook-dsh-normalize-invisible-20" d="M60,92 L58,95 L56,92 Z"/>
+		<path id="hook-dsh-normalize-invisible-17" d="M8,62 L4,60 L7,57 Z"/>
+		<path id="hook-dsh-normalize-invisible-18" d="M62,8 L65,6 L66,9 Z"/>
+		<path id="hook-dsh-normalize-invisible-19" d="M19,19 L19,15 L23,16 Z"/>
+		<path id="hook-dsh-normalize-invisible-20" d="M9,58 L6,57 L9,55 Z"/>
 		<path id="hook-dsh-normalize-invisible-21" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
 	</defs>
 	<g class="hook-dsh-normalize-invisible-scene">
@@ -48,7 +48,7 @@
 		<use class="hook-dsh-normalize-invisible-fire" style="animation-delay:-1.36s" href="#hook-dsh-normalize-invisible-3"/>
 	</g>
 	<g fill="#26305E" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
-		<use href="#hook-dsh-normalize-invisible-4"/>
+		<use class="hook-dsh-normalize-invisible-breathe" href="#hook-dsh-normalize-invisible-4"/>
 	</g>
 	<g fill="#7C8AD1" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="hook-dsh-normalize-invisible-breathe" href="#hook-dsh-normalize-invisible-5"/>

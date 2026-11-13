@@ -1752,8 +1752,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "f3076823f5d0fb5d12664dbaa0186fa56f166a50fe13388aa069af5a2a33d5cc",
-				"colour": "553f2900ec9598cda67b7dcbfcc0392345d59dafdff7d98c1c81ca6f93206214"
+				"mono": "cdf5386a534170d946320b29b01a34756b4b864a62cb094ef4a4fde8581611b0",
+				"colour": "eccb37693302c9d583f0c479b28e8e6c780a4fd49d025f46589ced94500b8755"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-normalize-dash.svg",
@@ -1775,8 +1775,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "101299abf1667329c7e783c4e8ce4f32056b216fa273ed2a75a1af1a6d7fc948",
-				"colour": "f55b0f8ffa791aec4dd28007172580f078090dfce102d8102ddd268106045abb"
+				"mono": "a7b885e385bf25335d681268d8c4778c6aebb97c26a79009781c9def32cbca62",
+				"colour": "e987efde8894b000016cdd4772034aed1c706ea65cd917dd5b462ab9c7a1b088"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-normalize-ellipsis.svg",
@@ -1798,8 +1798,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "6737eb56f43c19aec7703cb3d3c0b91f59bbce2e2732504720fb657fcc72b19c",
-				"colour": "622cdb1bb29edf1206a36b2bc6daaba9e36f456df66693b12d8c9f9f1c1b0d01"
+				"mono": "13f7e3237543dbef51f1d09bb9946e79d4b7765b3c11b93c6c481d545e57e0f0",
+				"colour": "0113d947dfa30a622d28746b271c6c1d42006b0e4fc3099438b0446cdf749a37"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-normalize-fullwidth.svg",
@@ -1821,8 +1821,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "61f02d0d4c32a2dff9419281c3109914b0b6f088f0998795642b64c0ef0a0be6",
-				"colour": "1243c4b8be8ddc3d903a2ad7685ff872621aeac8fc8d2a5d96418483c7cc57c5"
+				"mono": "e5cf497c1a629c5f020e377bf0be90bc8c92f095d665fb8b815c1dd387f63822",
+				"colour": "d805bd1b089f21a4ee81ca2ea73fc7d59610bc921fcd9da7d791484dfbd586fc"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-normalize-invisible.svg",
@@ -1844,8 +1844,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "0704593aaf24fa670c118ea4e4e057ce7414d1afe870abb9ab2dc4469339205e",
-				"colour": "03a00ca7fe30ab2d7cb80821c38f28b649f09dacb125a2733cde2e671e66510e"
+				"mono": "747157b4a59e381e43fe22f18ca2ba7a63933a5fc4dd1050766e344272edb57c",
+				"colour": "93dd7fe005556e6984c6386d5af010d239087c98b3caba42a0dfc76e0b4ab63e"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-normalize-quotes.svg",
@@ -1867,8 +1867,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "99de7f782a8850b8a7056be58fd8487a55c8f25a406bb01c9a212ab61804cfb2",
-				"colour": "7ee8f73a48518e60bb665d00352d986128b5afef15f8109913688d31f7e4f639"
+				"mono": "6f7a38b7cc55df7b616c27164a8df3eff5fcfd2b1df4ead544de2596cdb11dd0",
+				"colour": "61f813d3e2922ca01b6463f8d7f708f3ff5a7c1bc8720e84addde3eb224873ff"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-normalize-spaces.svg",
@@ -2249,7 +2249,7 @@
 			"kind": "lib",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "1becf07f4644e6e99d399260aa456f6acabc7ddd6e12b235bd88aed60647ad0c",
+			"seed": "74cf383023a2dfd1cedd9b4ebb32495030a36f341f6d6e556db455017a008833",
 			"grammar": "crescent-ring",
 			"order": 4,
 			"arms": 4,
@@ -2258,8 +2258,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "07e6feebb60744c267868648af08507cc09c9c8d70b4d9b3ac5cb4fa5eb33419",
-				"colour": "3392159fd001bded0eda6965152591229302cf7a873f357daf502740db9832ce"
+				"mono": "8e739c9269de28e839b967cbf06ed36d08bb213de59ea9f9dd9b3cd90d516e4d",
+				"colour": "42208a0e44e5cfa365be20a6a0fb2edc99c82b96ec66918f00323b91a387bc2c"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/lib-dsh-core.svg",
