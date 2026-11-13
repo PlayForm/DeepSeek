@@ -4,13 +4,13 @@
 	<style>
 		@media (prefers-reduced-motion: no-preference) {
 			.lib-dsh-core-scene * { transform-box: view-box; transform-origin: 50% 50%; }
-		.lib-dsh-core-counter { animation: lib-dsh-core-counter 28s linear -5s infinite; }
+		.lib-dsh-core-counter { animation: lib-dsh-core-counter 28s linear -6s infinite; }
 		@keyframes lib-dsh-core-counter { to { transform: rotate(-360deg); } }
-		.lib-dsh-core-breathe { animation: lib-dsh-core-breathe 5s ease-in-out -5s infinite; }
+		.lib-dsh-core-breathe { animation: lib-dsh-core-breathe 6s ease-in-out -6s infinite; }
 		@keyframes lib-dsh-core-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
-		.lib-dsh-core-fire { animation: lib-dsh-core-fire 3.1s ease-in-out infinite; }
+		.lib-dsh-core-fire { animation: lib-dsh-core-fire 2.7s ease-in-out infinite; }
 		@keyframes lib-dsh-core-fire { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
-		.lib-dsh-core-twinkle { animation: lib-dsh-core-twinkle 7s ease-in-out -5s infinite; }
+		.lib-dsh-core-twinkle { animation: lib-dsh-core-twinkle 8s ease-in-out -6s infinite; }
 		@keyframes lib-dsh-core-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
 		}
 	</style>
@@ -22,22 +22,22 @@
 		<path id="lib-dsh-core-4" d="M74,57 L73,58 L73,58 L72,57 L73,56 L73,56 Z"/>
 		<path id="lib-dsh-core-5" d="M33,66 L33,67 L32,67 L32,66 L32,66 L33,66 Z"/>
 		<path id="lib-dsh-core-6" d="M45,27 L45,27 L44,27 L44,27 L44,26 L45,26 Z"/>
-		<path id="lib-dsh-core-7" d="M84,51 L62,72 L31,79 L26,52 L32,21 L60,28 Z M55,54 L86,78 L85,79 L55,54 Z M43,36 L43,37 L42,39 L41,39 L39,40 L38,39 L36,39 L35,37 L35,36 L35,34 L36,33 L38,32 L39,31 L41,32 L42,33 L43,34 Z M53,55 L72,91 L70,91 L53,55 Z M46,54 L16,81 L14,79 L45,54 Z M39,69 L39,71 L38,72 L37,73 L36,73 L34,73 L33,72 L32,71 L32,69 L32,68 L33,66 L34,66 L36,65 L37,66 L38,66 L39,68 Z M44,48 L6,37 L7,34 L44,48 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
-		<path id="lib-dsh-core-8" d="M13,65 L9,64 L12,60 Z"/>
-		<path id="lib-dsh-core-9" d="M12,60 L9,58 L11,56 Z"/>
+		<path id="lib-dsh-core-7" d="M87,60 L58,76 L23,79 L25,43 L37,14 L66,31 Z M56,52 L92,68 L92,69 L55,53 Z M38,42 L38,44 L37,45 L35,46 L34,46 L32,46 L31,45 L30,44 L30,42 L30,41 L31,39 L32,38 L34,38 L35,38 L37,39 L38,41 Z M48,56 L36,94 L35,93 L48,56 Z M44,52 L7,66 L6,64 L44,52 Z M41,71 L41,72 L40,73 L39,74 L38,74 L37,74 L36,73 L35,72 L35,71 L35,69 L36,68 L37,68 L38,67 L39,68 L40,68 L41,69 Z M45,47 L8,30 L10,28 L45,47 Z M52,44 L66,7 L69,8 L52,45 Z M81,38 L81,39 L80,41 L79,41 L78,42 L76,41 L75,41 L74,39 L74,38 L74,37 L75,36 L76,35 L78,34 L79,35 L80,36 L81,37 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="lib-dsh-core-8" d="M76,77 L77,80 L74,79 Z"/>
+		<path id="lib-dsh-core-9" d="M55,86 L54,89 L52,86 Z"/>
 		<path id="lib-dsh-core-10" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
 	</defs>
 	<g class="lib-dsh-core-scene">
-	<g fill="#E6CDB3" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#ECD3B9" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="lib-dsh-core-breathe" href="#lib-dsh-core-0"/>
 	</g>
-	<g fill="#B07CC6" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#C08AD0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="lib-dsh-core-breathe" href="#lib-dsh-core-1"/>
 	</g>
-	<g fill="#8A5A9E" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
-		<use class="lib-dsh-core-fire" style="animation-delay:-5.00s" href="#lib-dsh-core-2"/>
-	</g>
 	<g fill="#B07CC6" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="lib-dsh-core-fire" style="animation-delay:-6.00s" href="#lib-dsh-core-2"/>
+	</g>
+	<g fill="#C08AD0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="lib-dsh-core-breathe" href="#lib-dsh-core-3"/>
 		<use class="lib-dsh-core-counter" href="#lib-dsh-core-4"/>
 		<use class="lib-dsh-core-counter" href="#lib-dsh-core-5"/>
@@ -46,10 +46,10 @@
 	<g fill="#241536" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use href="#lib-dsh-core-7"/>
 	</g>
-	<g fill="#B07CC6" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#C08AD0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="lib-dsh-core-twinkle" href="#lib-dsh-core-8"/>
 	</g>
-	<g fill="#8A5A9E" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#B07CC6" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="lib-dsh-core-twinkle" href="#lib-dsh-core-9"/>
 		<use class="lib-dsh-core-breathe" href="#lib-dsh-core-10"/>
 	</g>

@@ -1720,17 +1720,17 @@
 			"kind": "hook",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "7f06426e8bcc6be203ffd48404fe6a156c94d6cb4f5c3d1eb3eddd92545955dd",
+			"seed": "7460d26417f5d2c5051d2688ecf10a0bcade704b50a285a8fb43de3e2dabd12f",
 			"grammar": "spike-star",
 			"order": 12,
 			"arms": 6,
 			"rings": 3,
 			"orbit": 12,
-			"rim": "none",
+			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "b76a9cb1b22db4e08bf34b6d05a8f6158affdf13001dae8d58da2360d48fc46a",
-				"colour": "72b489e737df22bc49282af442080fe2023babcaa9371add9d362b18d394e599"
+				"mono": "d50609a104f3fe2317c0aadde54e9bc5f6e0f69e528ae325aa5be52b327edaeb",
+				"colour": "57cf2b22ef7313e07501f65aaa3451621cb77898a7687907c1667bbee719ebd8"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-live-containers.svg",
@@ -2249,17 +2249,17 @@
 			"kind": "lib",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "74cf383023a2dfd1cedd9b4ebb32495030a36f341f6d6e556db455017a008833",
+			"seed": "4e032d476e868df90156468ae87ba51783b76e0da05849008777a9428c7d44e2",
 			"grammar": "crescent-ring",
 			"order": 4,
 			"arms": 4,
 			"rings": 0,
 			"orbit": 4,
-			"rim": "none",
+			"rim": "woven",
 			"mode": "single",
 			"hash": {
-				"mono": "8e739c9269de28e839b967cbf06ed36d08bb213de59ea9f9dd9b3cd90d516e4d",
-				"colour": "42208a0e44e5cfa365be20a6a0fb2edc99c82b96ec66918f00323b91a387bc2c"
+				"mono": "f7f3a9600a1e4dfa1ed7496a65a0050fb07f611b620ab85a911feed9828f63b8",
+				"colour": "36f063bcaa439dd78332c18ccfdd5dc97e4777c0c58cece1de63b5aff3f76a1b"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/lib-dsh-core.svg",
@@ -2364,17 +2364,17 @@
 			"kind": "plugin",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "20185ebabd7fcffafb812dcb0406bc8f93746dbd318d1a04ce4eb18271102f2d",
+			"seed": "25c8a98ad9ccea9a11b72cc81e22b8fb74b8cfba2cefb0fbebcf0dd33adde7a4",
 			"grammar": "interlace-tile",
 			"order": 12,
 			"arms": 8,
 			"rings": 3,
 			"orbit": 12,
-			"rim": "square",
+			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "37308a0e7fb0e3336d56e5a5303b773c9454472495b069350907a8c0af912693",
-				"colour": "232facf042e9bd107d383d69fbfa334b62b7570263cdfb6a1dadea5e17c3bcaa"
+				"mono": "3358b80d06376ab6fe6cdbb22d13c0cc1981d43939f96f758b47c05975090615",
+				"colour": "538bcb8a8d67776c30f369f78819bda8ed483e4ec20f870217949528a25be5ef"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-batch-edit.svg",
@@ -2479,17 +2479,17 @@
 			"kind": "plugin",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "626c9080b4ed49c89b0734a130322979fc46a36cd817db16e9f59f3658112174",
+			"seed": "15f289053468cd5c1dbbd77d29dc2a2a703857081624df9930d223fcf7cc47d8",
 			"grammar": "interlace-tile",
 			"order": 12,
 			"arms": 8,
 			"rings": 1,
 			"orbit": 8,
-			"rim": "square",
+			"rim": "woven",
 			"mode": "single",
 			"hash": {
-				"mono": "3269d87bd5351a382d4b45a982e6531464eb849297198d1fbbff617906f14ef2",
-				"colour": "abaf06ee8993fcc44eb6b3ba69081f87230835df63be1346e96074ee61a09a90"
+				"mono": "9972ba4d975c96fab21cea5c9edfa259454dd342e910331ef9d486ac1de5829c",
+				"colour": "0816c888d6c27ffaff45bc3a67bd95674a23ba1af171f5b70f5c533dfcfe2fa5"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-factory.svg",
@@ -2663,17 +2663,17 @@
 			"kind": "plugin",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "93afaa6291473324f18f5f6019e4feb51a1df2242e23a58253afb48c1e66a5b8",
+			"seed": "e0c717ae79ec2535717c5abf198aa1710bc42403839a9eb6f5ea52082da04b33",
 			"grammar": "interlace-tile",
 			"order": 6,
 			"arms": 4,
 			"rings": 2,
 			"orbit": 8,
-			"rim": "square",
+			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "ed537b51aa7d09bc297e38e167b3f1730ec209d4562920148e0aed4a8ed6308a",
-				"colour": "879d826175770064e06ee09ac68c7d1e04a4bedf37f7b7e7f83a0ed6782dcf85"
+				"mono": "ad96916a8e7a93bef71d3ce7ae8bd3bc6ac3a64e282824514b397ff81cc67b83",
+				"colour": "729914b5583fefc026fdcc97c4a324c690192aeb4f6e56bddf804f81bdf76437"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-queue.svg",
