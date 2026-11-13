@@ -6,6 +6,7 @@ import EnqueueFn, { type Input } from "@Function/Enqueue.js";
 import PullFn from "@Function/Pull.js";
 import ReconcileFn, { type Report } from "@Function/Reconcile.js";
 import SettleFn from "@Function/Settle.js";
+import Transition from "@Function/Transition.js";
 import type State from "@Interface/State.js";
 import type Task from "@Interface/Task.js";
 
@@ -102,12 +103,23 @@ export default class Dispatcher extends Service {
 	 */
 	Start(Id: string): Task | undefined {
 		const Task_ = this.State.Tasks.get(Id);
-		if (Task_ === undefined || Task_.state !== "dispatched") {
+		if (Task_ === undefined) {
 			return Task_;
 		}
-		Task_.state = "running";
-		this.State.Factory?.Journal(this.State, "task running", Id, Task_.assignedAgent ?? MAIN);
-		this.State.Factory?.Append(this.State, `running ${Id}`);
+		switch (true) {
+			case Transition(Task_.state, "running"):
+				Task_.state = "running";
+				this.State.Factory?.Journal(
+					this.State,
+					"task running",
+					Id,
+					Task_.assignedAgent ?? MAIN,
+				);
+				this.State.Factory?.Append(this.State, `running ${Id}`);
+				break;
+			default:
+				return Task_;
+		}
 		return Task_;
 	}
 

@@ -2,7 +2,7 @@ import type { Context, Events } from "@deepseek-ai/cordis";
 import type { GenerateOptions, StreamChunk } from "@deepseek-ai/dsh-llm";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 
 import Command, {
 	type CommandsService,
@@ -99,19 +99,15 @@ export default (Context: Context, Options: Config): void => {
 	// in per the compatibility decision); with the schema defaults the value
 	// is identical to the old expression, so the line stays byte-identical.
 	// The scopes themselves are NOT on the line.
-	if (State.On === false) {
-		Factory.Append(State, "disabled (enabled=false)");
-	} else {
-		Factory.Append(
-			State,
-			Activate([
-				["replacement", State.Replacement],
-				["reasoning", State.Reasoning ? "on" : "off"],
-				["toolArgs", State.ToolArgs || State.Scopes?.toolInput === true ? "on" : "off"],
-				["logFile", State.Ledger],
-			]),
-		);
-	}
+	Factory.Append(
+		State,
+		Proof(State.On !== false, [
+			["replacement", State.Replacement],
+			["reasoning", State.Reasoning ? "on" : "off"],
+			["toolArgs", State.ToolArgs || State.Scopes?.toolInput === true ? "on" : "off"],
+			["logFile", State.Ledger],
+		]),
+	);
 
 	// The invisible hook's own Wire: one llm/stream waterfall listener, owned
 	// by the current fiber (removed on unload — no manual removeListener

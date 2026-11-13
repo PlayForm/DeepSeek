@@ -1,7 +1,7 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 
 import * as Direct from "./Direct.js";
 import Observe from "./Observe.js";
@@ -25,8 +25,9 @@ import Observe from "./Observe.js";
  * wires the fs/observed hook through `Factory.Wire` (SCHEME.md §2.11).
  *
  * The module's own residue, deliberately kept here:
- *   - the cooldown / per-dir in-flight / circuit-breaker collections (Stamp, Set, Count) -
- *     update-engine state, not factory machinery;
+ *   - the update machinery birth request - the setup `updates: true` option (the
+ *     cooldown / per-dir in-flight / circuit-breaker collections themselves - Stamp, Set,
+ *     Count - are born FRESH by the factory's State builder, per mount, never module-level);
  *   - the module identity for the factory ("hook-dsh-governor-package" - doubles as the prefix
  *     of every factory-composed line, keeping them byte-identical);
  *   - the activation proof string (the module's ledger vocabulary);
@@ -66,13 +67,12 @@ export default (Context: Context, Options: Config): void => {
 			Mode: "updateMode",
 		},
 		policyFileName: "update-policy.json",
+		updates: true, // the update stage runs here - the factory births Stamp/Set/Count fresh
 	});
 
-	// The update engine's own collections (module state, not factory machinery): cooldown
-	// stamps, per-dir in-flight set, circuit breaker.
-	State.Stamp = new Map();
-	State.Set = new Set();
-	State.Count = new Map();
+	// The injected factory service stored on the State (the governor-family pattern): the
+	// update engine consumes it from every module function; the update machinery itself
+	// (Stamp/Set/Count) was born FRESH by the State builder's `updates` option above.
 	State.Factory = Factory;
 
 	// The lifecycle effects, all in the factory now: P1 attaches the jobs controller from this
@@ -91,25 +91,26 @@ export default (Context: Context, Options: Config): void => {
 	// the call - the factory refreshes State.On in place, so a flip acts on the very next
 	// call in both directions, with no remount) and a disabled surface passes through with
 	// ZERO ledger lines.
-	if (State.On === false) {
-		Factory.Append(State, "disabled (enabled=false)");
-	} else {
-		// Durable activation proof - "did it activate" must be answerable from the ledger
-		// alone. The same summary becomes the storage journal's `activated` record (P5;
-		// queued until the optional domain opens). The line's string mechanics (the
-		// `activated (` prefix, the `k=v` join, the `)` suffix) live in the core's Activate
-		// composer; the FIELD LIST is the module's own - the leading bare flavor word (empty
-		// key), the bracketed lists and the `(discovery)` fallbacks.
-		const Proof = Activate([
-			["", "anywhere mode"],
-			["logFile", State.Ledger],
-			["updateMode", State.Mode],
-			["ncuBin", State.Binary],
-			["exclude", `[${State.List.join(", ")}]`],
-			["policyFile", State.Policy || "(discovery)"],
-		]);
-		Factory.Append(State, Proof);
-		Factory.Journal(State, "activated", "", Proof);
+	// Durable activation proof - "did it activate" must be answerable from the ledger
+	// alone. The same summary becomes the storage journal's `activated` record (P5;
+	// queued until the optional domain opens). The line's string mechanics (the
+	// `activated (` prefix, the `k=v` join, the `)` suffix) live in the core's Proof
+	// composer; the FIELD LIST is the module's own - the leading bare flavor word (empty
+	// key), the bracketed lists and the `(discovery)` fallbacks.
+	const Line = Proof(State.On !== false, [
+		["", "anywhere mode"],
+		["logFile", State.Ledger],
+		["updateMode", State.Mode],
+		["ncuBin", State.Binary],
+		["exclude", `[${State.List.join(", ")}]`],
+		["policyFile", State.Policy || "(discovery)"],
+	]);
+	Factory.Append(State, Line);
+	// The storage journal's `activated` record belongs to the LIVE mount only:
+	// the disabled mount's proof is the disabled line alone (the test asserts
+	// the absence of an activated record on a disabled mount).
+	if (State.On !== false) {
+		Factory.Journal(State, "activated", "", Line);
 	}
 
 	// The listener is owned by the current fiber (Factory.Wire): removed on unload - no manual

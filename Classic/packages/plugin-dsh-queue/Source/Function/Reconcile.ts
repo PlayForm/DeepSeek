@@ -1,5 +1,6 @@
 import { MAIN, Release } from "@Function/Capacity.js";
 import Restore from "@Function/Restore.js";
+import Transition from "@Function/Transition.js";
 import type { AgentsService } from "@Interface/Agent.js";
 import type State from "@Interface/State.js";
 import type Task from "@Interface/Task.js";
@@ -80,23 +81,26 @@ export default (
 		}
 		const Agent = Task_.assignedAgent ?? MAIN;
 		Release(State, Agent);
-		if (Task_.attempts < 1) {
-			Task_.attempts += 1;
-			Task_.state = "queued";
-			Task_.childId = undefined;
-			Task_.assignedAgent = undefined;
-			Task_.dispatchedAt = undefined;
-			Task_.route = undefined;
-			Task_.agentOptions = undefined;
-			State.Factory?.Journal(State, "task requeued", Task_.id, Agent);
-			Append(`requeued ${Task_.id} (${Agent} gone)`);
-			Report_.requeued.push(Task_.id);
-			continue;
+		switch (true) {
+			case Transition(Task_.state, "queued") && Task_.attempts < 1:
+				Task_.attempts += 1;
+				Task_.state = "queued";
+				Task_.childId = undefined;
+				Task_.assignedAgent = undefined;
+				Task_.dispatchedAt = undefined;
+				Task_.route = undefined;
+				Task_.agentOptions = undefined;
+				State.Factory?.Journal(State, "task requeued", Task_.id, Agent);
+				Append(`requeued ${Task_.id} (${Agent} gone)`);
+				Report_.requeued.push(Task_.id);
+				break;
+			case Transition(Task_.state, "failed"):
+				Task_.state = "failed";
+				State.Factory?.Journal(State, "task failed", Task_.id, Agent);
+				Append(`failed ${Task_.id} (${Agent})`);
+				Report_.failed.push(Task_.id);
+				break;
 		}
-		Task_.state = "failed";
-		State.Factory?.Journal(State, "task failed", Task_.id, Agent);
-		Append(`failed ${Task_.id} (${Agent})`);
-		Report_.failed.push(Task_.id);
 	}
 	return Report_;
 };

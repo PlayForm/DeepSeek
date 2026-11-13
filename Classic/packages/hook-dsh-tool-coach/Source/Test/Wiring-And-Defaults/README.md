@@ -63,4 +63,4 @@ The ledger file lives in a fresh per-process mkdtemp directory.
 
 ## Expected count
 
-39 PASS.
+40 PASS.

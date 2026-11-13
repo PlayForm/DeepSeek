@@ -31,6 +31,13 @@
  *   open out of the shared domain's single-open contention. The name must
  *   satisfy the storage domain's unit-name rule (lowercase letters, digits
  *   and underscores).
+ * - `updates` - OPTIONAL. Set `true` when the module runs the update stage
+ *   (the core's `lib-dsh-core/Function/Update` Dispatch/Settle pair): the
+ *   State builder then births the per-directory update machinery on the
+ *   returned State - `Stamp` (cooldown), `Set` (in-flight) and `Count`
+ *   (circuit breaker) - as FRESH instances per mount. When the option is
+ *   absent or false, the three fields are not added and the shape stays as
+ *   it is for every other module; the birth is never module-level.
  */
 export default interface Options {
 	/**
@@ -52,4 +59,9 @@ export default interface Options {
 	 * The storage journal domain name (P5; default "package_governance").
 	 */
 	journalDomain?: string | undefined;
+
+	/**
+	 * Birth the per-directory update machinery on the State (Stamp/Set/Count).
+	 */
+	updates?: boolean | undefined;
 }

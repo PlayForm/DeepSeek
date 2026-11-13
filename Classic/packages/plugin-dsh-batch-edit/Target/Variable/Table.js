@@ -1,0 +1,1 @@
+const s={observed:["running","halted"],running:["observed","halted","done","errored"],halted:["running"],done:["observed","halted"],errored:["running","halted"]};var o=(e,r)=>s[e].includes(r);export{o as default};

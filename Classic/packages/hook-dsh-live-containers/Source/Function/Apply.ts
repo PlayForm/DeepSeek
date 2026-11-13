@@ -29,7 +29,7 @@ import * as Suggester from "@Function/Suggester.js";
 import type Config from "@Interface/Config.js";
 import { KINDS, type AgentState, type BlockSpecification } from "@Interface/Execution.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 import Version from "@Variable/Version.js";
 
 /**
@@ -668,20 +668,19 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone (the master switch and the render knobs on the line).
-	if (!State.On) {
-		Factory.Append(State, "disabled (enabled=false)");
-	} else {
-		Factory.Append(
-			State,
-			Activate([
-				["", `bundle ${Version}`],
-				["blocks", String((State.Blocks ?? []).length)],
-				["refresh", State.Refresh],
-			]),
-		);
-		// The monitors layer's own on-state proof (the wave-3 addition): the
-		// second explicit flip after the plugin's enable. "off" - the default
-		// and the shipped state - proves nothing and logs nothing.
+	Factory.Append(
+		State,
+		Proof(State.On !== false, [
+			["", `bundle ${Version}`],
+			["blocks", String((State.Blocks ?? []).length)],
+			["refresh", State.Refresh],
+		]),
+	);
+	// The monitors layer's own on-state proof (the wave-3 addition): the
+	// second explicit flip after the plugin's enable. "off" - the default
+	// and the shipped state - proves nothing and logs nothing. LIVE-ONLY:
+	// a disabled mount journals nothing beyond the disabled line.
+	if (State.On !== false) {
 		if (State.MonitorOn === "on") {
 			Factory.Append(
 				State,

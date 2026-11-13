@@ -1,0 +1,1 @@
+const a={running:["running","stalled","stale","done","failed"],stalled:["running","stalled","stale","done","failed"],stale:["stale","stalled","done","failed"],done:["running","stalled","done","failed"],failed:["running","stalled","done","failed"]};var n=(e,l)=>a[e].includes(l);export{n as default};

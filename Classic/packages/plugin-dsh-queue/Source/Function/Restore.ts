@@ -23,6 +23,8 @@ import type Task from "@Interface/Task.js";
 export default (State: State, Persisted: readonly Task[]): void => {
 	State.Tasks.clear();
 	State.Seats.clear();
+	State.Spawns.clear();
+	State.Controllers.clear();
 	State.Seq = 0;
 	for (const Task_ of Persisted) {
 		const Copy: Task = {

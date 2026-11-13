@@ -22,6 +22,7 @@ import type Query from "@Interface/Query.js";
 import type Snapshot from "@Interface/Snapshot.js";
 import type State from "@Interface/State.js";
 import type Statistics from "@Interface/Statistics.js";
+import { Proof } from "@playform/lib-dsh-core";
 import type { Allowlist } from "@playform/plugin-dsh-factory";
 import Definition from "@Variable/Config.js";
 import Version from "@Variable/Version.js";
@@ -156,16 +157,13 @@ export default class WorkspaceGraph extends Service {
 		(Context as { __workspaceGraphState?: State }).__workspaceGraphState = this.State;
 		// The durable mount line: the activation proof when enabled, the byte-exact
 		// disabled line when not ("did it activate" is answerable from the ledger alone).
-		switch (true) {
-			case On():
-				Append(
-					this.State,
-					`activated (domain=${this.State.Config.domain}, languages=${this.State.Config.languages.length})`,
-				);
-				break;
-			default:
-				Append(this.State, "disabled (enabled=false)");
-		}
+		Append(
+			this.State,
+			Proof(On() !== false, [
+				["domain", this.State.Config.domain],
+				["languages", String(this.State.Config.languages.length)],
+			]),
+		);
 		this.State.Opened = OpenStorage(this.State);
 		// The trace adapter wires on EVERY mount (the live disabled posture): the
 		// consumer (`Trace/Consume`) answers the disabled posture at call time, so a

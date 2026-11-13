@@ -28,4 +28,15 @@ export default interface FactoryHandle {
      * The ledger: logger first, then the durable file; never throws.
      */
     Append(State: unknown, Message: string): void;
+    /**
+     * The optional storage-domain open (P5): probe, define, open, restore, or one loud line.
+     */
+    OpenDomain(State: unknown, Facility: unknown, Spec: {
+        Name: string;
+        Version: number;
+        Tables: Record<string, unknown>;
+        Compatible?: number[];
+        Line: (Cause: unknown) => string;
+        Restore?: (Handle: unknown) => void;
+    }): Promise<unknown>;
 }

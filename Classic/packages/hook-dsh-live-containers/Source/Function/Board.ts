@@ -1,4 +1,5 @@
 import Clock from "@Function/Clock.js";
+import Flip from "@Function/Flip.js";
 import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
 import * as Policy from "@Function/Policy.js";
 import type { Log } from "@Function/Render.js";
@@ -173,16 +174,16 @@ export const Report = (
 		Member.lastReport = Cap(Payload, 240);
 		Member.lastReportAt = At;
 		if (Status === "running") {
-			Member.status = Member.status === "stale" ? "stale" : "running";
+			Flip(Member, Member.status === "stale" ? "stale" : "running");
 		} else if (Status === "stalled") {
-			Member.status = "stalled";
+			Flip(Member, "stalled");
 		} else if (Status === "error") {
-			Member.status = "failed";
+			Flip(Member, "failed");
 			Member.summary = Cap(Payload, 64);
 			Member.settledAt = At;
 			Board.lease.reporters.delete(AgentID);
 		} else if (Status === "done") {
-			Member.status = "done";
+			Flip(Member, "done");
 			Member.summary = Cap(Payload, 48);
 			Member.settledAt = At;
 			Board.lease.reporters.delete(AgentID);
@@ -232,6 +233,10 @@ export const Report = (
 		}
 	}
 	if (Reset && Entry !== undefined) {
+		// THE RESET-ON-REPORT RULE: a foldable report (past the coalescing
+		// window) restores the FULL lease window HERE, before the next parent
+		// turn's decrement reads it - a member that reported in a window never
+		// decrements for that window.
 		Entry.remaining = Entry.turnWindow;
 	}
 	if (Entry !== undefined) {
@@ -274,12 +279,12 @@ export const OnSettled = (Agent: State, Event: JobEvent, Append: Log): void => {
 			}
 			const At = Clock(Agent);
 			if (Event.job.status === "killed" || Event.job.status === "failed") {
-				Member.status = "failed";
+				Flip(Member, "failed");
 				Member.summary = Cap(Event.job.detail ?? Event.job.status, 64);
 				Member.settledAt = At;
 				Board.lease.reporters.delete(Owner);
 			} else {
-				Member.status = "done";
+				Flip(Member, "done");
 				Member.summary = Cap(Event.job.detail ?? "done", 48);
 				Member.settledAt = At;
 				Board.lease.reporters.delete(Owner);
@@ -309,7 +314,7 @@ export const OnTurn = (Agent: State, AgentID: string, Append: Log): void => {
 				Member.lastReportAt !== undefined &&
 				At - Member.lastReportAt > Agent.Plant.stallMs
 			) {
-				Member.status = "stalled";
+				Flip(Member, "stalled");
 				if (Entry !== undefined && !Entry.stalledLedged) {
 					Entry.stalledLedged = true;
 					Append(`member stalled ${Board.id} ${Member.agentId}`);
@@ -326,12 +331,20 @@ export const OnTurn = (Agent: State, AgentID: string, Append: Log): void => {
 				Entry.remaining = Entry.turnWindow;
 				continue;
 			}
+			// THE TURN ORDER: the decrement below MUST run BEFORE the render
+			// reads these rows in the same assemble pass (SectionParts ->
+			// Frame) - the ordering the module depends on, so a lease expiring
+			// this turn declares stale in THIS frame and never renders the
+			// stale row one turn late. The reset branch above is the paired
+			// rule: a member that reported in the last window is restored to
+			// the full window before the decrement, so it never decrements in
+			// the turn it reported.
 			Entry.remaining -= 1;
 			if (Entry.remaining <= 0 && !Entry.declared) {
 				Entry.declared = true;
 				Entry.declaredTurn = Agent.TurnCounts.get(AgentID) ?? 0;
 				if (Member !== undefined) {
-					Member.status = "stale";
+					Flip(Member, "stale");
 				}
 				Append(`lease expired ${Board.id} ${MemberID} (after ${Entry.turnWindow} turns)`);
 			}

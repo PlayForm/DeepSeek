@@ -1,6 +1,7 @@
 import type BatchRecord from "@Interface/Batch.js";
 import type EntryRecord from "@Interface/Entry.js";
 import type State from "@Interface/State.js";
+import { Capped, Ring } from "@playform/lib-dsh-core";
 
 /**
  * @module Open
@@ -28,14 +29,14 @@ export default async (State: State, Batch: BatchRecord, Entries: EntryRecord[]):
 	}
 	// The ring cap: the oldest batch is EVICTED (its record and entries are
 	// removed from memory and the domain) when the bound is exceeded - the
-	// eviction is ledgered, never silent.
-	State.Ring.push(Batch.batchId);
-	while (State.Ring.length > State.MaxBatches) {
-		const Evicted = State.Ring.shift();
-		if (Evicted !== undefined) {
-			State.Factory.Append(State, `capped ${Evicted} (maxBatches ${State.MaxBatches})`);
-			Drop(State, Evicted);
-		}
+	// eviction is ledgered, never silent. The ring mechanics and the `capped`
+	// line live in the core (`Ring`, `Capped`); the `Drop` cleanup stays here.
+	const Dropped = Ring(State.Ring, Batch.batchId, State.MaxBatches);
+	switch (true) {
+		case Dropped !== undefined:
+			State.Factory.Append(State, Capped(Dropped, "Batches", State.MaxBatches));
+			Drop(State, Dropped);
+			break;
 	}
 	try {
 		const Handle = State.Handle;

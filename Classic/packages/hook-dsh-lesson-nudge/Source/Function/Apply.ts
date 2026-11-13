@@ -1,5 +1,5 @@
 import type { Context } from "@deepseek-ai/cordis";
-import { Activate } from "@playform/lib-dsh-core";
+import { PerAgent, Proof } from "@playform/lib-dsh-core";
 
 import type {} from "../Interface/Agent.js";
 import type {} from "../Interface/Factory.js";
@@ -82,8 +82,12 @@ export default (Context: Context, Options: Config): void => {
 		},
 	});
 	State.Factory = Factory;
-	State.Reviews = new Map();
 	State.Warned = false;
+
+	// The per-agent review counters (the core's PerAgent registry: a WeakMap
+	// keyed on the agent object, born on first use and collected with the
+	// agent - the per-session cap cannot outlive its session).
+	const ReviewsOf = PerAgent(() => ({ Value: 0 }));
 
 	/**
 	 * The ledger append (the factory's Append, fail-safe).
@@ -117,12 +121,10 @@ export default (Context: Context, Options: Config): void => {
 	// ledger alone:
 	//   hook-dsh-lesson-nudge: activated (bundle=0.2.1, cap=3)
 	Append(
-		State.On
-			? Activate([
-					["bundle", Version],
-					["cap", `${State.Cap}`],
-				])
-			: "disabled (enabled=false)",
+		Proof(State.On, [
+			["bundle", Version],
+			["cap", `${State.Cap}`],
+		]),
 	);
 
 	// ------------------------------------------------------------------
@@ -165,7 +167,7 @@ export default (Context: Context, Options: Config): void => {
 			}
 			// The hook's own runaway guard: a mis-set service interval must not
 			// turn every idle edge into a review.
-			const Done = State.Reviews.get(Agent) ?? 0;
+			const Done = ReviewsOf(Agent).Value;
 			switch (true) {
 				case Done >= State.Cap:
 					Append(`cap reached (${Done} reviews)`);
@@ -181,7 +183,7 @@ export default (Context: Context, Options: Config): void => {
 				default:
 					break;
 			}
-			State.Reviews.set(Agent, Done + 1);
+			ReviewsOf(Agent).Value = Done + 1;
 			const Task = (
 				Run as (Task: (Signal: AbortSignal) => Promise<unknown>) => Promise<unknown>
 			).call(Agent, async (Signal: AbortSignal) => {

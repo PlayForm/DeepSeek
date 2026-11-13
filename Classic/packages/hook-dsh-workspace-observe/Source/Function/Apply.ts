@@ -5,7 +5,7 @@ import ServiceClass from "@Function/Service.js";
 import Storage from "@Function/Storage.js";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 
 /**
  * @module Apply
@@ -103,14 +103,7 @@ export default (Context: Context, Options: Config): void => {
 	// the activation proof and still registers EVERYTHING below (the
 	// live-flip law: the factory refreshes State.On in place, so a flip acts
 	// on the very next call in both directions, with no remount).
-	switch (true) {
-		case !State.On:
-			Factory.Append(State, "disabled (enabled=false)");
-			break;
-		default:
-			// The activation proof (the module's own composed line).
-			Factory.Append(State, Activate([["domain", State.DomainName]]));
-	}
+	Factory.Append(State, Proof(State.On !== false, [["domain", State.DomainName]]));
 
 	// The fs/observed listener, on the ROOT context (the factory's Wire).
 	Factory.Wire(

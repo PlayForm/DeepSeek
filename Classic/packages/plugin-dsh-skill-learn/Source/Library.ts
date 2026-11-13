@@ -5,7 +5,7 @@ import { Service, type Context } from "@deepseek-ai/cordis";
 import type {} from "@deepseek-ai/dsh-agent";
 import type {} from "@deepseek-ai/dsh-tools";
 
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 
 import { Restore as Unarchive } from "./Function/Archive.js";
 import Catalog, { type CatalogOptions } from "./Function/Catalog.js";
@@ -478,14 +478,12 @@ export default class SkillLearnService extends Service {
 		//   skillLearn: activated (bundle=0.2.1, interval=15 calls, ...) (logFile ...)
 		this.Ledger(
 			Line(
-				this.Knobs.enabled
-					? Activate([
-							["bundle", Version],
-							["interval", `${this.Knobs.intervalIterations} calls`],
-							["corpus", this.Knobs.skillsRoot],
-							["write", this.Knobs.policy.write],
-						])
-					: "disabled (enabled=false)",
+				Proof(this.Knobs.enabled !== false, [
+					["bundle", Version],
+					["interval", `${this.Knobs.intervalIterations} calls`],
+					["corpus", this.Knobs.skillsRoot],
+					["write", this.Knobs.policy.write],
+				]),
 				this.Knobs,
 			),
 		);

@@ -1,7 +1,7 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 
 import Command, {
 	type CommandsService,
@@ -108,17 +108,13 @@ export default (Context: Context, Options: Config): void => {
 	// the `)` suffix) live in the core's Activate composer; the FIELD LIST is
 	// the module's own - a tool flavor has no stream flags to report, so the
 	// list is just the dash knob and the ledger file.
-	if (State.On === false) {
-		Factory.Append(State, "disabled (enabled=false)");
-	} else {
-		Factory.Append(
-			State,
-			Activate([
-				["replacement", State.Replacement],
-				["logFile", State.Ledger],
-			]),
-		);
-	}
+	Factory.Append(
+		State,
+		Proof(State.On !== false, [
+			["replacement", State.Replacement],
+			["logFile", State.Ledger],
+		]),
+	);
 
 	// THE OVERPASS ARMS (the plan's §4, both opt-in by default): the
 	// tools/post-execute arm (Function/Overpass — the tool-results scope,

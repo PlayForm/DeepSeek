@@ -1,7 +1,7 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type StateView from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 
 import * as Direct from "./Direct.js";
 import Observe from "./Observe.js";
@@ -23,8 +23,9 @@ import Observe from "./Observe.js";
  *    a disabled module appends `disabled (enabled=false)` INSTEAD of the
  *    activation proof and still registers everything — the fresh
  *    Stash/Inflight/Seams/Queue structures and the P9 probe-once "subprocess"
- *    seam through the factory's Function/Seam). The module adds its own
- *    update-stage collections (Stamp/Set/Count) on top.
+ *    seam through the factory's Function/Seam). The module sets the
+ *    `updates` setup option, so the factory births the update-stage
+ *    collections (Stamp/Set/Count) fresh on the State, per mount.
  * 2. The activation proof — the module's OWN Append + Journal: "did it
  *    activate" must be answerable from the ledger alone, and the cargo module
  *    string is distinct from the package.json governor's.
@@ -69,17 +70,14 @@ export default (Context: Context, Options: Config): void => {
 		},
 		policyFileName: "pin-policy.json",
 		journalDomain: "hook_dsh_cargo_governor", // the cargo module's own journal domain (unit-name rule: lowercase/digits/underscores)
+		updates: true, // the update stage runs here - the factory births Stamp/Set/Count fresh
 	});
-
-	// The update stage's per-directory collections (cooldown, in-flight set,
-	// circuit breaker) — module-owned loop control on top of the shared shape.
-	State.Stamp = new Map();
-	State.Set = new Set();
-	State.Count = new Map();
 
 	// The injected factory service stored on the State (the governor-family
 	// pattern): the P2 UpdateKey helper and the ledger/journal delegates
-	// consume it from every module function.
+	// consume it from every module function. The update-stage collections
+	// (Stamp/Set/Count) were born FRESH by the State builder's `updates`
+	// option above, per mount.
 	State.Factory = Factory;
 
 	// THE MASTER SWITCH (config `enabled`, volatile - the setup map's
@@ -93,27 +91,27 @@ export default (Context: Context, Options: Config): void => {
 	// State.On in place, so a flip acts on the very next call in both
 	// directions, with no remount) and a disabled surface passes through with
 	// ZERO ledger lines.
-	if (State.On === false) {
-		Factory.Append(State, "disabled (enabled=false)");
-	} else {
-		// 2. The durable activation proof — the module's own ledger line (byte-
-		//    identical with the pre-refactor module) plus the structured P5
-		//    journal record (queued until the optional storage domain opens). The
-		//    line's string mechanics live in the core's Activate composer; the
-		//    FIELD LIST is the module's own — the leading bare flavor word (empty
-		//    key), the bracketed lists and the `(discovery)` fallbacks.
-		Factory.Append(
-			State,
-			Activate([
-				["", "cargo flavor"],
-				["logFile", State.Ledger],
-				["updateMode", State.Mode],
-				["cargoBin", State.CargoBin],
-				["exclude", `[${State.List.join(", ")}]`],
-				["policyFile", State.Policy || "(discovery)"],
-				["keepFile", State.KeepFile || "(discovery)"],
-			]),
-		);
+	// 2. The durable activation proof — the module's own ledger line (byte-
+	//    identical with the pre-refactor module) plus the structured P5
+	//    journal record (queued until the optional storage domain opens). The
+	//    line's string mechanics live in the core's Proof composer; the
+	//    FIELD LIST is the module's own — the leading bare flavor word (empty
+	//    key), the bracketed lists and the `(discovery)` fallbacks.
+	Factory.Append(
+		State,
+		Proof(State.On !== false, [
+			["", "cargo flavor"],
+			["logFile", State.Ledger],
+			["updateMode", State.Mode],
+			["cargoBin", State.CargoBin],
+			["exclude", `[${State.List.join(", ")}]`],
+			["policyFile", State.Policy || "(discovery)"],
+			["keepFile", State.KeepFile || "(discovery)"],
+		]),
+	);
+	// The storage journal's `activated` record belongs to the LIVE mount only:
+	// the disabled mount's proof is the disabled line alone.
+	if (State.On !== false) {
 		Factory.Journal(State, "activated", "", State.Mode);
 	}
 

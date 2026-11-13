@@ -1,7 +1,7 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { Activate, PerAgent } from "@playform/lib-dsh-core";
 
 import Intent from "./Intent.js";
 import Overpass from "./Overpass.js";
@@ -85,8 +85,11 @@ export default (Context: Context, Options: Config): void => {
 	State.Factory = Factory;
 
 	// The runtime-only fields (NOT config cells: the intent stash and the core
-	// scope adapter are per-apply state, initialized here).
-	State.IntentMap = new Map();
+	// scope adapter are per-apply state, initialized here). The stash is the
+	// core's PerAgent registry: a WeakMap keyed on the agent object, one
+	// `{ Text }` holder per agent born on first use and collected with the
+	// agent; a call without an agent shares the registry's one default key.
+	State.IntentOf = PerAgent(() => ({ Text: "" }));
 	State.Global = "";
 	State.Scopes = Scopes;
 

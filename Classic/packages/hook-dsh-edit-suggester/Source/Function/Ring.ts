@@ -1,3 +1,5 @@
+import { SuggestRing } from "@playform/lib-dsh-core";
+
 import Match from "./Match.js";
 
 /**
@@ -21,6 +23,13 @@ import Match from "./Match.js";
  * `learnWindow` untouched closes as a soft REJECT. The per-turn reset
  * forgets an open note without a verdict (the turn boundary is not a judged
  * call), so a reset never invents an outcome.
+ *
+ * The machinery lives in the core (`SuggestRing` of `@playform/lib-dsh-core`): the
+ * eight ring methods are the core's, bound to this package's own state factory and
+ * companion predicate - the state (`Pending`, `RingState`, `Fresh`) and the `Match`
+ * argument order (companion first) stay the package's. The default export stays the
+ * per-mount factory: every `Ring()` call binds the core's methods to a fresh WeakMap,
+ * so the ring is born in `apply` and dies with the mount.
  */
 /**
  * One open note awaiting its follow-through verdict.
@@ -92,118 +101,4 @@ export const Fresh = (): RingState => ({
  * call without an agent shares the module's default key, so edits are still
  * tracked and noted.
  */
-export default () => {
-	const Agents = new WeakMap<object, RingState>();
-	const DefaultKey: object = {};
-	return {
-		/**
-		 * Get (or create) the state for an agent key.
-		 */
-		State: (Key: unknown): RingState => {
-			const Object_ = (Key as object) ?? DefaultKey;
-			let State = Agents.get(Object_);
-			if (!State) {
-				State = Fresh();
-				Agents.set(Object_, State);
-			}
-			return State;
-		},
-		/**
-		 * Record one judged (edited) path.
-		 */
-		Touch: (State: RingState, Path: string): void => {
-			State.touched.add(Path);
-			State.calls += 1;
-		},
-		/**
-		 * Age the cooldown counters by one judged call, dropping expired entries.
-		 */
-		Tick: (State: RingState, Window: number): void => {
-			for (const [Family, Age] of State.cooled) {
-				if (Age + 1 > Window) {
-					State.cooled.delete(Family);
-				} else {
-					State.cooled.set(Family, Age + 1);
-				}
-			}
-		},
-		/**
-		 * Mark an emit: the family cools, the dedupe key is kept, the counter moves.
-		 */
-		Mark: (State: RingState, Family: string, Key: string): void => {
-			State.cooled.set(Family, 0);
-			State.cooledNoted.add(Key);
-			State.notes += 1;
-		},
-		/**
-		 * Open the follow-through window for the note just emitted.
-		 */
-		Open: (State: RingState, Family: string, Companions: string[]): void => {
-			State.pending = { family: Family, companions: [...Companions], since: 0 };
-		},
-		/**
-		 * The follow signal: the call names a companion of the open note.
-		 */
-		Follow: (
-			State: RingState,
-			Path: string,
-		): { family: string; companions: string[]; companion: string } | undefined => {
-			const Pending_ = State.pending;
-			switch (true) {
-				case Pending_ === undefined:
-					return undefined;
-				default:
-					break;
-			}
-			const Companion = Pending_.companions.find((One) => Match(One, Path));
-			switch (true) {
-				case Companion === undefined:
-					return undefined;
-				default:
-					break;
-			}
-			State.pending = undefined;
-			return {
-				family: Pending_.family,
-				companions: Pending_.companions,
-				companion: Companion as string,
-			};
-		},
-		/**
-		 * Age the open note by one judged call; the closed note is returned.
-		 */
-		Age: (
-			State: RingState,
-			Window: number,
-		): { family: string; companions: string[] } | undefined => {
-			const Pending_ = State.pending;
-			switch (true) {
-				case Pending_ === undefined:
-					return undefined;
-				default:
-					break;
-			}
-			Pending_.since += 1;
-			switch (true) {
-				case Pending_.since < Window:
-					return undefined;
-				default:
-					break;
-			}
-			State.pending = undefined;
-			return { family: Pending_.family, companions: Pending_.companions };
-		},
-		/**
-		 * The per-turn reset: touched paths, cooldowns, dedupe, counters, the
-		 * open note.
-		 */
-		Reset: (State: RingState): void => {
-			State.touched.clear();
-			State.cooled.clear();
-			State.cooledNoted.clear();
-			State.notes = 0;
-			State.calls = 0;
-			State.pending = undefined;
-		},
-	};
-};
+export default () => SuggestRing(Fresh, (Path, Companion) => Match(Companion, Path));

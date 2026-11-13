@@ -1,7 +1,7 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 
 import { Pin } from "./Direct.js";
 import Observe from "./Observe.js";
@@ -73,22 +73,22 @@ export default (Context: Context, Options: Config): void => {
 	// State.On in place, so a flip acts on the very next call in both
 	// directions, with no remount) and a disabled surface passes through with
 	// ZERO ledger lines.
-	if (State.On === false) {
-		Furnace.Append(State, "disabled (enabled=false)");
-	} else {
-		// Durable activation proof (the module's own string) + the P5 journal
-		// record — both flow through the factory's Append/Journal. The line's
-		// string mechanics live in the core's Activate composer; the FIELD LIST
-		// is the module's own — the leading bare flavor word (empty key) and the
-		// bracketed lists.
-		const Proof = Activate([
-			["", "pinner"],
-			["logFile", State.Ledger],
-			["sections", `[${State.Section.join(", ")}]`],
-			["exclude", `[${State.List.join(", ")}]`],
-		]);
-		Furnace.Append(State, Proof);
-		Furnace.Journal(State, "activated", "", Proof);
+	// Durable activation proof (the module's own string) + the P5 journal
+	// record — both flow through the factory's Append/Journal. The line's
+	// string mechanics live in the core's Proof composer; the FIELD LIST
+	// is the module's own — the leading bare flavor word (empty key) and the
+	// bracketed lists.
+	const Line = Proof(State.On !== false, [
+		["", "pinner"],
+		["logFile", State.Ledger],
+		["sections", `[${State.Section.join(", ")}]`],
+		["exclude", `[${State.List.join(", ")}]`],
+	]);
+	Furnace.Append(State, Line);
+	// The storage journal's `activated` record belongs to the LIVE mount only:
+	// the disabled mount's proof is the disabled line alone.
+	if (State.On !== false) {
+		Furnace.Journal(State, "activated", "", Line);
 	}
 
 	// The listener is owned by the current fiber: removed on unload — no

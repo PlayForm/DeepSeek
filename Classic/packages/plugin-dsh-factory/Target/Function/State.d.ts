@@ -23,6 +23,15 @@ export default _default;
  * fallback lives in `Function/Open`, so a module that does not set the
  * option keeps its behavior.
  *
+ * The optional `updates` setup option (v0.2 - the update-stage machinery's
+ * birth): a module that runs the update stage (the core's
+ * `lib-dsh-core/Function/Update` Dispatch/Settle pair) sets it and receives
+ * the per-directory machinery BORN on its State - Stamp (cooldown), Set
+ * (in-flight) and Count (circuit breaker) as FRESH instances built at
+ * State-build time, per mount, never module-level. When the option is
+ * absent or false the three fields are not added and the shape stays as it
+ * is for every other module.
+ *
  * Returns the SHARED shape intersected with the module's extra fields
  * (`State & Extra`) - the caller names its own extras type. Never returned
  * from `apply` itself: the loader treats apply return values specially, and

@@ -4,7 +4,7 @@ import Tool from "@Function/Tool.js";
 import type Config from "@Interface/Config.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 
 import Adapter from "../Trace/Adapter.js";
 
@@ -119,22 +119,16 @@ export default (Context: Context, Options: Config): void => {
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("workspaceContext", this).
 	new ServiceClass(Context, State);
-	switch (true) {
-		case State.On === false:
-			// The cold mount: honest in the ledger; every surface below still
-			// registers and answers at call time.
-			Factory.Append(State, "disabled (enabled=false)");
-			break;
-		default:
-			// The activation proof (the module's own composed line).
-			Factory.Append(
-				State,
-				Activate([
-					["budget", `${State.BudgetTokens}/${State.BudgetMaximum}`],
-					["lenses", String(State.Lenses.length)],
-				]),
-			);
-	}
+	// The mount line: the activation proof when live, the byte-exact disabled
+	// marker when not (the module's own composed line; the cold mount stays
+	// honest in the ledger and every surface below still registers).
+	Factory.Append(
+		State,
+		Proof(State.On !== false, [
+			["budget", `${State.BudgetTokens}/${State.BudgetMaximum}`],
+			["lenses", String(State.Lenses.length)],
+		]),
+	);
 
 	// The trace adapter (D5): consume `graph/invalidated` to invalidate the
 	// packet memo. Registered on EVERY mount (the live disabled posture); the

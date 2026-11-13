@@ -112,4 +112,23 @@ export default interface State {
 	 * "package_governance" (a module that does not opt out keeps its
 	 * behavior). */
 	JournalDomain?: string | undefined;
+
+	/** THE UPDATE-STAGE MACHINERY - born by the State builder ONLY when the
+	 * `updates` setup option is true, as FRESH instances per mount (never
+	 * module-level); absent (and not even typed as present on other
+	 * modules' shapes) when the option is not set. The element types are
+	 * exactly what the core's `lib-dsh-core/Function/Update` Dependencies
+	 * consume; a module's own State interface may redeclare them as
+	 * required.
+	 *
+	 * - `Stamp` - directory -> epoch ms of the last update-stage dispatch
+	 *   (cooldown);
+	 * - `Set` - directories with an update run in flight;
+	 * - `Count` - directory -> consecutive update-stage failures (the
+	 *   circuit breaker). */
+	Stamp?: Map<string, number> | undefined;
+
+	Set?: Set<string> | undefined;
+
+	Count?: Map<string, number> | undefined;
 }

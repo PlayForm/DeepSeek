@@ -4,7 +4,7 @@ import Guard from "@Function/Guard.js";
 import type Config from "@Interface/Config.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 
 /**
  * @module Apply
@@ -76,25 +76,20 @@ export default (Context: Context, Options: Config): void => {
 		},
 	}) as State;
 	State.Factory = Factory;
-	switch (true) {
-		case !State.On:
-			// The disabled mount: the byte-exact line, and the mount CONTINUES -
-			// the tools/pre-execute listener registers exactly as on an enabled
-			// mount (the LIVE DISABLED posture); the guard reads the volatile On
-			// cell at call time and passes through with zero ledger lines.
-			Factory.Append(State, "disabled (enabled=false)");
-			break;
-		default:
-			// The activation proof (the module's own composed line).
-			Factory.Append(
-				State,
-				Activate([
-					["strict", String(State.Strict)],
-					["denyPatterns", String(State.Deny.length)],
-					["allowPatterns", String(State.Allow.length)],
-				]),
-			);
-	}
+	// The activation proof (the core's Proof composer): the module's own field
+	// list on the live arm, the byte-exact `disabled (enabled=false)` marker
+	// otherwise. The disabled mount CONTINUES - the tools/pre-execute listener
+	// registers exactly as on an enabled mount (the LIVE DISABLED posture);
+	// the guard reads the volatile `On` cell at call time and passes through
+	// with zero ledger lines.
+	Factory.Append(
+		State,
+		Proof(State.On !== false, [
+			["strict", String(State.Strict)],
+			["denyPatterns", String(State.Deny.length)],
+			["allowPatterns", String(State.Allow.length)],
+		]),
+	);
 
 	// The tools/pre-execute registration: the intercept (the plan's
 	// trigger surface - the same pre-execute hook the family's mutation

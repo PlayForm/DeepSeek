@@ -7,7 +7,7 @@ import type { ReplayRecord } from "@Interface/History.js";
 import type { Candidate, Intent } from "@Interface/Pack.js";
 import type { AgentMemory } from "@Interface/State.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 import { Families, Home, Resolve, Root as RootOf } from "@playform/lib-dsh-pack";
 import Version from "@Variable/Version.js";
 
@@ -310,21 +310,17 @@ export default (Context: Context, Options: Config): void => {
 	// ledger alone. The second segment is `history` (not an intent count):
 	// there is no boot pack, because the candidates come from the recall and
 	// only an explicit pack may still speak. The fourth segment stays the
-	// seeded store's record count. The `=== false` guard keeps a bare fixture
+	// seeded store's record count. The `!== false` guard keeps a bare fixture
 	// that omits the key mounted.
-	if (State.On === false) {
-		Factory.Append(State, "disabled (enabled=false)");
-	} else {
-		Factory.Append(
-			State,
-			Activate([
-				["", `bundle ${Version}`],
-				["", "history"],
-				["", `threshold ${State.Threshold}`],
-				["", `history ${State.Records.length}`],
-			]),
-		);
-	}
+	Factory.Append(
+		State,
+		Proof(State.On !== false, [
+			["", `bundle ${Version}`],
+			["", "history"],
+			["", `threshold ${State.Threshold}`],
+			["", `history ${State.Records.length}`],
+		]),
+	);
 
 	// Whether a call is judged: only the configured tool names.
 	const Judged = (Name: string): boolean =>

@@ -14,7 +14,9 @@ export default _default;
  * - `State.Ring` keeps every binding up to `State.MaxBindings`; the oldest is
  *   DROPPED (shifted) when the bound is exceeded and the drop is ledgered as
  *   `capped <id> (maxBindings <n>)` - never silently discarded (the eviction
- *   disposition `evict`, applied FIFO).
+ *   disposition `evict`, applied FIFO). The ring mechanics and the `capped`
+ *   line live in the core (`Ring`, `Capped` in `@playform/lib-dsh-core`); this
+ *   file supplies the by-id map and the persistence puts.
  * - Persistence (only when the domain is open): the binding is PUT under its id
  *   in the `bindings` table, the ring snapshot is PUT under the meta key
  *   `__ring` in the `ring` table. Every put is `void .catch(() => {})` - a

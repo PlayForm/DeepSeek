@@ -29,7 +29,7 @@ import type State from "@Interface/State.js";
  *
  * `exec.agent` is the tool execution's agent identity (the harness's ToolExecutionInput.agent,
  * "the agent on whose behalf the call runs"); it is the SAME object the agent/pre-step payload
- * carries, which is what makes the `Map<object, string>` stash work. A call with no agent (a
+ * carries, which is what makes the `PerAgent` stash work. A call with no agent (a
  * bare dispatch) falls back to the last text seen by ANY agent - the documented Global fallback.
  */
 /**
@@ -52,10 +52,13 @@ export default (State: State, Exec: Execution): boolean => {
 			case !State.IntentOn:
 				return true;
 		}
-		// 5: the task text - the agent's stash, or the global fallback.
+		// 5: the task text - the agent's stash, or the global fallback. The
+		// registry entry is born `""` (Intent never stores an empty text), so
+		// a never-written agent falls through to Global exactly as the old
+		// Map's missing key did.
 		const Stash =
-			typeof Agent === "object" && Agent !== null ? State.IntentMap.get(Agent) : undefined;
-		const Text = (Stash ?? State.Global ?? "").toLowerCase();
+			typeof Agent === "object" && Agent !== null ? State.IntentOf(Agent).Text : undefined;
+		const Text = (Stash || State.Global || "").toLowerCase();
 		// 6: a task ABOUT comments leaves the read result untouched.
 		const Mentioned = State.Keywords.some(
 			(Keyword) => Keyword.length > 0 && Text.includes(Keyword.toLowerCase()),

@@ -6,7 +6,7 @@ import type Config from "@Interface/Config.js";
 import type { Candidate, Intent } from "@Interface/Pack.js";
 import type { AgentMemory } from "@Interface/State.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 import { Adjacent, Families, Home, Resolve, Root as RootOf } from "@playform/lib-dsh-pack";
 import Version from "@Variable/Version.js";
 
@@ -223,20 +223,16 @@ export default (Context: Context, Options: Config): void => {
 	// ledger alone. The second segment is `history` (not an intent count):
 	// there is no boot pack, because the candidates come from the session's
 	// own tool calls and only an explicit pack may still speak.
-	// The `=== false` guard keeps a bare fixture that omits the key mounted.
-	if (State.On === false) {
-		Factory.Append(State, "disabled (enabled=false)");
-	} else {
-		Factory.Append(
-			State,
-			Activate([
-				// Bare segments (empty key): the plan's activation format (§4.9).
-				["", `bundle ${Version}`],
-				["", "history"],
-				["", `threshold ${State.Threshold}`],
-			]),
-		);
-	}
+	// The `!== false` guard keeps a bare fixture that omits the key mounted.
+	Factory.Append(
+		State,
+		Proof(State.On !== false, [
+			// Bare segments (empty key): the plan's activation format (§4.9).
+			["", `bundle ${Version}`],
+			["", "history"],
+			["", `threshold ${State.Threshold}`],
+		]),
+	);
 
 	// The history fold, installed on the seam that receives the log
 	// (Function/Register -> Function/Unit). Registered even when the hook is

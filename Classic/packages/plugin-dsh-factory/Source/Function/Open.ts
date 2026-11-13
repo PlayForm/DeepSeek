@@ -1,6 +1,7 @@
 import type State from "@Interface/State.js";
 
 import Append from "./Append.js";
+import { Bind, Drain } from "./Journal.js";
 
 /**
  * @module Open
@@ -162,43 +163,21 @@ export default async (
 		// The SHARED sink: the first successful open hands its put to the
 		// factory instance - every module's records route through it (the
 		// domain is single-open; later modules' own opens fail `already-open`).
+		// Bind (Function/Journal) registers the sink under the State's domain
+		// in `SharedJournals` and, for the shared `package_governance` domain
+		// only, in the legacy `SharedJournal` slot when that slot is empty.
 		switch (true) {
 			case !!Factory:
-				(Factory.SharedJournals = Factory.SharedJournals ?? new Map()).set(
-					State.JournalDomain ?? "package_governance",
-					Sink,
-				);
-				break;
-		}
-		switch (true) {
-			case !!Factory &&
-				!Factory.SharedJournal &&
-				(State.JournalDomain ?? "package_governance") === "package_governance":
-				Factory.SharedJournal = Sink;
+				Bind(Factory, State.JournalDomain ?? "package_governance", Sink);
 				break;
 		}
 		State.Journal = Sink;
-		// Drain the pre-open queue through the real sink, timestamps preserved.
-		for (const Item of State.Queue.splice(0, State.Queue.length)) {
-			State.Journal(Item.event, Item.path, Item.detail, Item.at);
-		}
-		// Drain the FACTORY-LEVEL pre-bind buffer (the boot-window race): the
-		// records journaled before ANY open succeeded - including the other
-		// modules' `activated` records — route through this sink with
-		// timestamps preserved, then the buffer is retired (the pre-bind stage
-		// is over; Function/Journal routes straight through the shared sink).
-		switch (true) {
-			case !!Factory && Array.isArray(Factory.PendingJournal): {
-				for (const Item of Factory.PendingJournal.splice(
-					0,
-					Factory.PendingJournal.length,
-				)) {
-					Sink(Item.event, Item.path, Item.detail, Item.at);
-				}
-				Factory.PendingJournal = undefined;
-				break;
-			}
-		}
+		// Drain (Function/Journal): the pre-open queue and the FACTORY-LEVEL
+		// pre-bind buffer (the boot-window race) through the just-bound sink
+		// - per-State first, then the buffer, timestamps preserved - and the
+		// buffer retired (the pre-bind stage is over; Function/Journal routes
+		// straight through the shared sink).
+		Drain(State, Factory);
 	} catch (Cause) {
 		// LOUD (see header - the P5 v2 incident): the failed open used to
 		// vanish silently, the sink was never bound, PendingJournal never

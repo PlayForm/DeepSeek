@@ -51,9 +51,11 @@ import Version from "./Variable/Version.js";
  *     Seam(state, name)                      - the probe-once optional-service accessor
  *     RegisterGovern(basename, name, run)    - the direct-govern step registration (the modules call it at apply)
  *     Govern(target, selection, actor, version): Promise<void> - the direct-govern entry (the raw-write tool's post-write call; the SEQUENTIAL FOLD, v0.2.1)
+ *     OpenDomain(state, facility, spec)      - the optional storage-domain open (P5): define, open, restore, or one loud line
+ *     OpenJournal(state, facility, factory?) - the optional journal open (P5): bind the shared sink, drain both buffers, retire
  *
  * THE POLICY BLOCK (D6) - the two MODULE-LEVEL named helpers (not service
- * methods, so the class surface stays at the documented nineteen):
+ * methods, so the class surface stays at the documented twenty-one):
  *
  *     Policy()                               - the shared policy-block builder (one key per action class)
  *     Decide(policy, action)                 - the verdict lookup: "auto" | "approve"
@@ -222,6 +224,18 @@ export default class PluginFactory extends Service {
      *  its Open opens its own domain instead of contending for the shared
      *  one. */
     Journal(State: Shape, Event: string, Path: string, Detail: string, At?: number): void;
+    /** The optional storage-domain open (P5): probe, define, open, restore, or one loud line. */
+    OpenDomain(State: Shape, Facility: unknown, Spec: {
+        Name: string;
+        Version: number;
+        Tables: Record<string, unknown>;
+        Compatible?: number[];
+        Line: (Cause: unknown) => string;
+        Restore?: (Handle: unknown) => void;
+    }): Promise<unknown>;
+    /** The optional journal open (P5): bind the shared sink, drain both
+     *  buffers, retire the pre-bind stage. */
+    OpenJournal(State: Shape, Facility: unknown, Factory?: unknown): Promise<void>;
     /** The SHARED P5 journal sink (see Journal): bound by the first
      *  successful Function/Open (per service instance - each test context
      *  gets a fresh factory, so the smokes stay per-scenario). The PRE-BIND

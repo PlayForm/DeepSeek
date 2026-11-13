@@ -2,6 +2,7 @@ import type { Context } from "@deepseek-ai/cordis";
 import type JobsRegistry from "@Interface/Jobs.js";
 import type State from "@Interface/State.js";
 
+import { Retire } from "./Journal.js";
 import Open from "./Open.js";
 
 /**
@@ -96,11 +97,11 @@ export default (Context: Context, Module: { state: State; name: string }): void 
 			}
 			default:
 				// Silent skip: nothing to open, nothing to close - and no queue
-				// growth either (the sink is retired AND the pre-open queue is
-				// dropped — records queued before the probe (e.g. the activation
-				// record) have nowhere to go; the human ledger remains the source).
-				Module.state.Queue.length = 0;
-				Module.state.Journal = () => {};
+				// growth either (Retire (Function/Journal) zeroes the queue and
+				// no-ops the sink - records queued before the probe (e.g. the
+				// activation record) have nowhere to go; the human ledger
+				// remains the source).
+				Retire(Module.state);
 				return () => {};
 		}
 	}, `${Module.name}-storage`);

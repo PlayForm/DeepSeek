@@ -1,5 +1,6 @@
 import type Line from "@Interface/Line.js";
 import type State from "@Interface/State.js";
+import { Capped, Ring } from "@playform/lib-dsh-core";
 
 /**
  * @module Record
@@ -17,7 +18,10 @@ import type State from "@Interface/State.js";
  *   in recording order (the chain view).
  * - `State.Ring` keeps every line up to `State.MaxLines`; the oldest is
  *   DROPPED (shifted) when the bound is exceeded and the drop is ledgered as
- *   `capped <id> (maxLines <n>)` - never silently discarded.
+ *   `capped <id> (maxLines <n>)` - never silently discarded. The ring
+ *   mechanics and the `capped` line live in the core (`Ring`, `Capped` in
+ *   `@playform/lib-dsh-core`); this file supplies the chain map and the
+ *   persistence puts.
  * - Persistence (only when the domain is open): the line is PUT under its id
  *   in the `lines` table, the ring snapshot is PUT under the meta key
  *   `__ring` in the `ring` table. Every put is `void .catch(() => {})` - a
@@ -27,12 +31,11 @@ export default (State: State, Entry: Line): void => {
 	const Chain = State.Chains.get(Entry.operation) ?? [];
 	Chain.push(Entry);
 	State.Chains.set(Entry.operation, Chain);
-	State.Ring.push(Entry);
-	while (State.Ring.length > State.MaxLines) {
-		const Dropped = State.Ring.shift();
-		if (Dropped !== undefined) {
-			State.Factory.Append(State, `capped ${Dropped.id} (maxLines ${State.MaxLines})`);
-		}
+	const Dropped = Ring(State.Ring, Entry, State.MaxLines);
+	switch (true) {
+		case Dropped !== undefined:
+			State.Factory.Append(State, Capped(Dropped.id, "Lines", State.MaxLines));
+			break;
 	}
 	try {
 		const Handle = State.Handle;

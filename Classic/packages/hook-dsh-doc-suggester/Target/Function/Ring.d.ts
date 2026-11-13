@@ -18,6 +18,13 @@
  * config's `learnWindow` untouched closes as a soft REJECT. The per-turn reset forgets an
  * open note without a verdict (the turn boundary is not a judged call), so a reset never
  * invents an outcome.
+ *
+ * The machinery lives in the core (`SuggestRing` of `@playform/lib-dsh-core`): the eight
+ * ring methods are the core's, bound to this package's own state factory and companion
+ * predicate - the state (`Pending`, `RingState`, `Fresh`) and the `Match` argument order
+ * (companion first) stay the package's. The default export stays the per-mount factory:
+ * every `Ring()` call binds the core's methods to a fresh WeakMap, so the ring is born in
+ * `apply` and dies with the mount.
  */
 /**
  * One open note awaiting its follow-through verdict.
@@ -74,43 +81,19 @@ export default _default;
  * tracked and noted.
  */
 declare function _default(): {
-    /**
-     * Get (or create) the state for an agent key.
-     */
     State: (Key: unknown) => RingState;
-    /**
-     * Record one judged (edited) path.
-     */
     Touch: (State: RingState, Path: string) => void;
-    /**
-     * Age the cooldown counters by one judged call, dropping expired entries.
-     */
     Tick: (State: RingState, Window: number) => void;
-    /**
-     * Mark an emit: the family cools, the dedupe key is kept, the counter moves.
-     */
     Mark: (State: RingState, Family: string, Key: string) => void;
-    /**
-     * Open the follow-through window for the note just emitted.
-     */
     Open: (State: RingState, Family: string, Companions: string[]) => void;
-    /**
-     * The follow signal: the call names a companion of the open note.
-     */
     Follow: (State: RingState, Path: string) => {
         family: string;
         companions: string[];
         companion: string;
     } | undefined;
-    /**
-     * Age the open note by one judged call; the closed note is returned.
-     */
     Age: (State: RingState, Window: number) => {
         family: string;
         companions: string[];
     } | undefined;
-    /**
-     * The per-turn reset: touched paths, cooldowns, dedupe, counters, the open note.
-     */
     Reset: (State: RingState) => void;
 };

@@ -1,7 +1,7 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type { UserMessage } from "@deepseek-ai/dsh-llm";
 import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 import { Adjacent, Families, Home, Locate, Resolve, Root as RootOf } from "@playform/lib-dsh-pack";
 
 import type Config from "../Interface/Config.js";
@@ -216,21 +216,17 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone. The FIELD LIST is the module's own; the `activated (`
-	// mechanics live in the core's Activate composer. The `=== false` guard
+	// mechanics live in the core's Proof composer. The `!== false` guard
 	// keeps a bare fixture that omits the key mounted.
-	if (State.On === false) {
-		Factory.Append(State, "disabled (enabled=false)");
-	} else {
-		Factory.Append(
-			State,
-			Activate([
-				// Bare segments (empty key): the plan's activation format (§4.9).
-				["", `bundle ${Version}`],
-				["", "history"],
-				["", `threshold ${State.Threshold}`],
-			]),
-		);
-	}
+	Factory.Append(
+		State,
+		Proof(State.On !== false, [
+			// Bare segments (empty key): the plan's activation format (§4.9).
+			["", `bundle ${Version}`],
+			["", "history"],
+			["", `threshold ${State.Threshold}`],
+		]),
+	);
 
 	// The history fold, installed on the seam that receives the log
 	// (Function/Register -> Function/Unit). Registered even when the hook is

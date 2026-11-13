@@ -9,7 +9,7 @@ import OS from "node:os";
 import { dirname as Dirname, join as Join } from "node:path";
 
 import { Service, type Context } from "@deepseek-ai/cordis";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 
 import Apply from "./Function/Apply.js";
 import Curate, { type Curation } from "./Function/Curate.js";
@@ -226,14 +226,12 @@ export default class LessonService extends Service {
 			}
 		};
 		this.Ledger(
-			this.Knobs.enabled
-				? Activate([
-						["bundle", Version],
-						["interval", `${this.Knobs.intervalTurns} turns`],
-						["corpus", this.Knobs.skillsRoot],
-						["write", this.Knobs.policy.write],
-					])
-				: "disabled (enabled=false)",
+			Proof(this.Knobs.enabled !== false, [
+				["bundle", Version],
+				["interval", `${this.Knobs.intervalTurns} turns`],
+				["corpus", this.Knobs.skillsRoot],
+				["write", this.Knobs.policy.write],
+			]),
 		);
 		// The store load runs detached (a constructor cannot await); every
 		// mutation serialises behind it, so a review never sees a half store.

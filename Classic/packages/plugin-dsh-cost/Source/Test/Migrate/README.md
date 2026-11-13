@@ -48,4 +48,4 @@ and the v3 data survives.
 
 ## Expected count
 
-11 PASS.
+12 PASS.

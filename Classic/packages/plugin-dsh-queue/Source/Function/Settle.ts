@@ -1,4 +1,5 @@
 import { Release } from "@Function/Capacity.js";
+import Transition from "@Function/Transition.js";
 import type State from "@Interface/State.js";
 import type Task from "@Interface/Task.js";
 import type { TaskState } from "@Interface/Task.js";
@@ -28,18 +29,21 @@ export default (
 		return undefined;
 	}
 	// Only an active task settles (a queued/dispatched task is not running).
-	if (Task_.state !== "dispatched" && Task_.state !== "running") {
-		return undefined;
-	}
-	const Agent = Task_.assignedAgent ?? "main";
-	Task_.state = Next;
-	if (Next === "completed") {
-		Task_.resultHash = ResultHash;
-	}
-	Release(State, Agent);
-	State.Factory?.Journal(State, `task ${Next}`, Id, Agent);
+	switch (true) {
+		case Transition(Task_.state, Next): {
+			const Agent = Task_.assignedAgent ?? "main";
+			Task_.state = Next;
+			if (Next === "completed") {
+				Task_.resultHash = ResultHash;
+			}
+			Release(State, Agent);
+			State.Factory?.Journal(State, `task ${Next}`, Id, Agent);
 
-	// Byte-stable template: `<state> <id> (<agent>)`.
-	Append?.(`${Next} ${Id} (${Agent})`);
-	return Task_;
+			// Byte-stable template: `<state> <id> (<agent>)`.
+			Append?.(`${Next} ${Id} (${Agent})`);
+			return Task_;
+		}
+		default:
+			return undefined;
+	}
 };

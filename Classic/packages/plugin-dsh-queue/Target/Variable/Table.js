@@ -1,0 +1,1 @@
+const a={queued:["dispatched"],dispatched:["queued","running","completed","failed","interrupted"],running:["queued","completed","failed","interrupted"],completed:[],failed:[],interrupted:[]};var d=(e,t)=>a[e].includes(t);export{d as default};

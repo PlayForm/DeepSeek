@@ -6,7 +6,7 @@ import Storage from "@Function/Storage.js";
 import type Config from "@Interface/Config.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 
 /**
  * @module Apply
@@ -130,25 +130,17 @@ export default (Context: Context, Options: Config): void => {
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("batchstate", this).
 	new ServiceClass(Context, State);
-	switch (true) {
-		case !State.On:
-			// The disabled mount: the byte-exact line, and the mount CONTINUES -
-			// the service, the store probe (the domain effect or the JSON
-			// fallback recovery) and the inbox splice register exactly as on an
-			// enabled mount (the LIVE DISABLED posture); only the ledger line
-			// differs.
-			Factory.Append(State, "disabled (enabled=false)");
-			break;
-		default:
-			// The activation proof (the module's own composed line).
-			Factory.Append(
-				State,
-				Activate([
-					["batch", State.Batch],
-					["stateFile", State.StateFile],
-				]),
-			);
-	}
+	// The mount proof: the byte-exact disabled line or the module's own
+	// activation summary (the LIVE DISABLED posture above: the service, the
+	// store probe and the inbox splice register on either mount; only this
+	// ledger line differs).
+	Factory.Append(
+		State,
+		Proof(State.On !== false, [
+			["batch", State.Batch],
+			["stateFile", State.StateFile],
+		]),
+	);
 
 	// THE STORE PROBE (the family's P5-style optional facility): the storage
 	// hub's domain form first, then the provided storageDomain service.

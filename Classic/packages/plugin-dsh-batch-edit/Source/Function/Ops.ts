@@ -7,6 +7,7 @@ import type Output from "@Interface/Output.js";
 import type { MachineRecord, OpLine, ProcessCell, SearchSpec } from "@Interface/Process.js";
 import type State from "@Interface/State.js";
 
+import Flip from "./Flip.js";
 import * as Ledger from "./Ledger.js";
 import { Cells } from "./Present.js";
 
@@ -362,7 +363,7 @@ export const Commit = async (
 	const Total = Selected.length;
 	for (let Index = 0; Index < Total; Index++) {
 		const Cell = Selected[Index]!;
-		Cell.status = "running";
+		Flip(Cell, "running");
 		Cell.opAt = Index + 1;
 		Append(Ledger.Running(Cell.path, Index + 1, Total));
 		try {
@@ -371,8 +372,7 @@ export const Commit = async (
 				case Plan.changed === 0:
 					// The designed NO-OP: the cell returns to observed, nothing
 					// written, nothing logged (the silence invariant).
-					Cell.status = "observed";
-					Cell.haltReason = undefined;
+					Flip(Cell, "observed");
 					Cell.error = undefined;
 					Cell.diff = undefined;
 					Cell.opAt = undefined;
@@ -384,16 +384,14 @@ export const Commit = async (
 			const Reason = Thrown instanceof Error ? Thrown.message : String(Thrown);
 			switch (true) {
 				case Reason === "stale":
-					Cell.status = "halted";
-					Cell.haltReason = "stale";
+					Flip(Cell, "halted", "stale");
 					Cell.error = undefined;
 					Append(Ledger.Halted(Cell.path, "stale"));
 					Halted += 1;
 					break;
 				default:
-					Cell.status = "errored";
+					Flip(Cell, "errored");
 					Cell.error = Reason;
-					Cell.haltReason = undefined;
 					Append(Ledger.Errored(Cell.path, Reason));
 					Failed += 1;
 			}
@@ -419,7 +417,7 @@ export const Commit = async (
 								const Fresh = await ApplyWrite(State, Remaining, Exec);
 								const Old = Remaining.cell.version;
 								Remaining.cell.version = Fresh;
-								Remaining.cell.status = "done";
+								Flip(Remaining.cell, "done");
 								Remaining.cell.diff = Remaining.diff;
 								Remaining.cell.freshVersion = Fresh;
 								Remaining.cell.opAt = undefined;
@@ -428,7 +426,7 @@ export const Commit = async (
 							} catch (Thrown) {
 								const Reason =
 									Thrown instanceof Error ? Thrown.message : String(Thrown);
-								Remaining.cell.status = "errored";
+								Flip(Remaining.cell, "errored");
 								Remaining.cell.error = Reason;
 								Append(Ledger.Errored(Remaining.cell.path, Reason));
 								Failed += 1;
@@ -439,8 +437,7 @@ export const Commit = async (
 				});
 			} else {
 				for (const Remaining of Rest) {
-					Remaining.cell.status = "halted";
-					Remaining.cell.haltReason = "deadline";
+					Flip(Remaining.cell, "halted", "deadline");
 					Append(Ledger.Halted(Remaining.cell.path, "deadline"));
 					Halted += 1;
 				}
@@ -452,7 +449,7 @@ export const Commit = async (
 			const Fresh = await ApplyWrite(State, Plan, Exec);
 			Plan.cell.version = Fresh;
 			Plan.cell.freshVersion = Fresh;
-			Plan.cell.status = "done";
+			Flip(Plan.cell, "done");
 			Plan.cell.diff = Options.preview === false ? undefined : Plan.diff;
 			Plan.cell.opAt = undefined;
 			Append(Ledger.Applied(Plan.cell.path, Old, Fresh));
@@ -462,12 +459,12 @@ export const Commit = async (
 			// the unwritten remainder returns to observed, nothing
 			// half-committed gets a successor write.
 			const Reason = Thrown instanceof Error ? Thrown.message : String(Thrown);
-			Plan.cell.status = "errored";
+			Flip(Plan.cell, "errored");
 			Plan.cell.error = Reason;
 			Append(Ledger.Errored(Plan.cell.path, Reason));
 			Failed += 1;
 			for (const Remaining of Plans.slice(At + 1)) {
-				Remaining.cell.status = "observed";
+				Flip(Remaining.cell, "observed");
 				Remaining.cell.opAt = undefined;
 			}
 			break;

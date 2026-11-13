@@ -2,7 +2,7 @@ import type { Context, Events } from "@deepseek-ai/cordis";
 import type { GenerateOptions, StreamChunk } from "@deepseek-ai/dsh-llm";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 
 import Command, {
 	type CommandsService,
@@ -114,19 +114,15 @@ export default (Context: Context, Options: Config): void => {
 	// NOT on the line (the activation line never changes for volatile edits -
 	// observability goes through the read-only `normalize-overpass scopes`
 	// report instead).
-	if (State.On === false) {
-		Factory.Append(State, "disabled (enabled=false)");
-	} else {
-		Factory.Append(
-			State,
-			Activate([
-				["replacement", State.Replacement],
-				["reasoning", State.Reasoning ? "on" : "off"],
-				["toolArgs", State.ToolArgs || State.Scopes?.toolInput === true ? "on" : "off"],
-				["logFile", State.Ledger],
-			]),
-		);
-	}
+	Factory.Append(
+		State,
+		Proof(State.On !== false, [
+			["replacement", State.Replacement],
+			["reasoning", State.Reasoning ? "on" : "off"],
+			["toolArgs", State.ToolArgs || State.Scopes?.toolInput === true ? "on" : "off"],
+			["logFile", State.Ledger],
+		]),
+	);
 
 	// The hook-dsh-normalize-dash's own Wire: one llm/stream waterfall
 	// listener, owned by the current fiber (removed on unload - no manual

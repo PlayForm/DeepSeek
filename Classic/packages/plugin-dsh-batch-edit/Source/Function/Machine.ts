@@ -5,6 +5,7 @@ import type { FsObservation, FsTarget, FsVersion } from "@Interface/Fs.js";
 import type { MachineRecord, OpLine, ProcessCell, SearchSpec } from "@Interface/Process.js";
 import type State from "@Interface/State.js";
 
+import Flip from "./Flip.js";
 import * as Ledger from "./Ledger.js";
 
 /**
@@ -272,11 +273,10 @@ export const Adopt = (Machine: MachineRecord, Cells: ProcessCell[]): void => {
 		}
 		if (Existing !== undefined) {
 			// done -> observed (re-inserted for a next batch).
-			Existing.status = "observed";
+			Flip(Existing, "observed");
 			Existing.version = Item.version;
 			Existing.diff = undefined;
 			Existing.error = undefined;
-			Existing.haltReason = undefined;
 			continue;
 		}
 		Machine.files.set(Item.path, Item);
@@ -364,8 +364,7 @@ export const Remove = (
 export const Close = (Machine: MachineRecord, Append: (Message: string) => void): void => {
 	for (const Item of Machine.files.values()) {
 		if (Item.status === "running") {
-			Item.status = "halted";
-			Item.haltReason = "interrupted";
+			Flip(Item, "halted", "interrupted");
 			Append(Ledger.Halted(Item.path, "interrupted"));
 		}
 	}
@@ -404,8 +403,7 @@ export const OnObserved = (
 		if (Version === undefined || Item.version === Version) {
 			continue;
 		}
-		Item.status = "halted";
-		Item.haltReason = "stale";
+		Flip(Item, "halted", "stale");
 		Append(Ledger.Halted(Path, "stale"));
 	}
 };

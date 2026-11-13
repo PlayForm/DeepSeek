@@ -20,8 +20,9 @@ export default _default;
  * wires the fs/observed hook through `Factory.Wire` (SCHEME.md §2.11).
  *
  * The module's own residue, deliberately kept here:
- *   - the cooldown / per-dir in-flight / circuit-breaker collections (Stamp, Set, Count) -
- *     update-engine state, not factory machinery;
+ *   - the update machinery birth request - the setup `updates: true` option (the
+ *     cooldown / per-dir in-flight / circuit-breaker collections themselves - Stamp, Set,
+ *     Count - are born FRESH by the factory's State builder, per mount, never module-level);
  *   - the module identity for the factory ("hook-dsh-governor-package" - doubles as the prefix
  *     of every factory-composed line, keeping them byte-identical);
  *   - the activation proof string (the module's ledger vocabulary);

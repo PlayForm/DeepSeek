@@ -18,8 +18,9 @@ export default _default;
  *    a disabled module appends `disabled (enabled=false)` INSTEAD of the
  *    activation proof and still registers everything — the fresh
  *    Stash/Inflight/Seams/Queue structures and the P9 probe-once "subprocess"
- *    seam through the factory's Function/Seam). The module adds its own
- *    update-stage collections (Stamp/Set/Count) on top.
+ *    seam through the factory's Function/Seam). The module sets the
+ *    `updates` setup option, so the factory births the update-stage
+ *    collections (Stamp/Set/Count) fresh on the State, per mount.
  * 2. The activation proof — the module's OWN Append + Journal: "did it
  *    activate" must be answerable from the ledger alone, and the cargo module
  *    string is distinct from the package.json governor's.

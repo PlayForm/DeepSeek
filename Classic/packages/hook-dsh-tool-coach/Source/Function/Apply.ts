@@ -20,7 +20,7 @@ import BuildNote, { Prepend } from "@Function/Note.js";
 import type Config from "@Interface/Config.js";
 import type { AgentState, CoachRow, Decision, Detection } from "@Interface/Execution.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { PerAgent, Proof } from "@playform/lib-dsh-core";
 import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
 import Version from "@Variable/Version.js";
 
@@ -210,7 +210,6 @@ export default (Context: Context, Options: Config): void => {
 		},
 	});
 	State.Factory = Factory;
-	State.Agents = new WeakMap();
 	State.Registry = new Set();
 
 	// The effective rows: the built-in defaults, with the user's rows
@@ -229,20 +228,16 @@ export default (Context: Context, Options: Config): void => {
 		...new Set([...DEFAULT_EXEMPTS, ...(Array.isArray(State.Exempt) ? State.Exempt : [])]),
 	];
 
-	// The per-agent state (WeakMap keyed on the Agent object, like the
-	// repeat-tool-reminder's chains). A call without an agent shares the
-	// module's default key, so offenses are still counted and noted.
-	const DefaultKey: object = {};
-	const Agent = (Key: unknown): AgentState => {
-		const Object_ = (Key as object) ?? DefaultKey;
-		let AgentState = State.Agents.get(Object_);
-		if (!AgentState) {
-			AgentState = FreshState();
-			State.Agents.set(Object_, AgentState);
-			State.Registry.add(AgentState);
-		}
+	// The per-agent state (the core's PerAgent registry: a WeakMap keyed on
+	// the Agent object, born on first use and collected with the agent). A
+	// call without an agent shares the registry's one default key, so
+	// offenses are still counted and noted.
+	const AgentOf = PerAgent(() => {
+		const AgentState = FreshState();
+		State.Registry.add(AgentState);
 		return AgentState;
-	};
+	});
+	const Agent = (Key: unknown): AgentState => AgentOf(Key);
 
 	// The live catalog fetch (per note, plan Part 3 §3.1): tier 1/3 fetch
 	// right before composing; failure degrades to the static table. With
@@ -277,23 +272,19 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone (the master switch and the ladder's knobs on the line).
-	if (!State.On) {
-		Factory.Append(State, "disabled (enabled=false)");
-	} else {
-		Factory.Append(
-			State,
-			Activate([
-				["", `bundle ${Version}`],
-				["threshold", `${State.Threshold}/${State.Window}`],
-				["cooldown", String(State.Cooldown)],
-				["escalate", String(State.Escalate)],
-				["clean", String(State.Clean)],
-				["enforce", `${State.Enforce}@${State.EnforceThreshold}`],
-				["judge", State.Judge.join(",")],
-				["fetch", State.FetchLive ? "live" : "static"],
-			]),
-		);
-	}
+	Factory.Append(
+		State,
+		Proof(State.On, [
+			["", `bundle ${Version}`],
+			["threshold", `${State.Threshold}/${State.Window}`],
+			["cooldown", String(State.Cooldown)],
+			["escalate", String(State.Escalate)],
+			["clean", String(State.Clean)],
+			["enforce", `${State.Enforce}@${State.EnforceThreshold}`],
+			["judge", State.Judge.join(",")],
+			["fetch", State.FetchLive ? "live" : "static"],
+		]),
+	);
 
 	// ------------------------------------------------------------------
 	// Listener 1: tools/post-execute (tier 0 ledger, tier 1 note, tier 2

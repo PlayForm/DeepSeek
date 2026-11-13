@@ -28,7 +28,7 @@ import type State from "../Interface/State.js";
  *
  * `exec.agent` is the tool execution's agent identity (the harness's ToolExecutionInput.agent,
  * "the agent on whose behalf the call runs"); it is the SAME object the agent/pre-step payload
- * carries, which is what makes the `Map<object, string>` stash work. A call with no agent (a
+ * carries, which is what makes the `PerAgent` stash work. A call with no agent (a
  * bare dispatch) falls back to the last text seen by ANY agent - the documented Global fallback.
  */
 /**

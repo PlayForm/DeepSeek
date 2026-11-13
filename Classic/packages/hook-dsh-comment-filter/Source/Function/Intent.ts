@@ -12,9 +12,10 @@ import type State from "@Interface/State.js";
  * records). On every step it extracts the LAST USER MESSAGE's text, lowercases it, and stores
  * it:
  *
- * - in `State.IntentMap`, keyed by `payload.agent` (the agent proposing the step - the SAME
+ * - in `State.IntentOf(Agent)`, keyed by `payload.agent` (the agent proposing the step - the SAME
  *   object a tool execution carries as `exec.agent`, which is what makes the per-agent lookup
- *   in Function/Gate work), and
+ *   in Function/Gate work) - the core's `PerAgent` registry returns that agent's one-field
+ *   holder, and the write lands in its `Text` field, and
  * - in `State.Global`, the fallback for a dispatch with no agent identity.
  *
  * WHY A STASH AND NOT A RE-READ: the `tools/post-execute` arm cannot see the conversation - it
@@ -77,10 +78,11 @@ export default async <Decision>(
 			return Decision;
 		}
 		const Agent = (Payload as { agent?: unknown } | undefined)?.agent;
-		// The per-agent stash (the Map<object, string> contract).
+		// The per-agent stash (the PerAgent registry: the accessor returns the
+		// agent's holder, so the write lands in its Text field).
 		switch (true) {
 			case typeof Agent === "object" && Agent !== null:
-				State.IntentMap.set(Agent, Text);
+				State.IntentOf(Agent).Text = Text;
 		}
 		// The global fallback (a dispatch with no agent identity).
 		State.Global = Text;

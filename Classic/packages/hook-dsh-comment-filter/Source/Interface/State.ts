@@ -32,9 +32,9 @@ import type { State as Shared } from "@playform/plugin-dsh-factory";
  * - `IntentOn` - consult the per-task intent gate (config `intent`).
  * - `Keywords` - the intent keywords (config `intentKeywords`).
  * - `Notice` - append the omission notice line (config `notice`).
- * - `IntentMap` - agent object -> the last user text seen at `agent/pre-step`, lowercased (the
- *   per-task intent stash). RUNTIME-ONLY, not a config field: Function/Apply builds a fresh Map
- *   per apply.
+ * - `IntentOf` - the per-agent intent registry (the core's `PerAgent`: a WeakMap keyed on the
+ *   agent object, one `{ Text }` holder per agent, born on first use and collected with the
+ *   agent). RUNTIME-ONLY, not a config field: Function/Apply builds a fresh registry per apply.
  * - `Global` - the same text for calls whose `exec.agent` is absent (the fallback).
  *   RUNTIME-ONLY, initialized to "" per apply.
  * - `Scopes` - THE CORE ADAPTER: the shared ToolResults arm factory reads
@@ -96,9 +96,11 @@ export default interface State extends Shared {
 	Notice: boolean;
 
 	/**
-	 * agent -> the last user text at `agent/pre-step`, lowercased (runtime).
+	 * The per-agent intent registry (the core's `PerAgent`): `IntentOf(agent)` returns that
+	 * agent's one-field holder (a never-written entry reads `""`), and the WeakMap collects the
+	 * entry with the agent (runtime).
 	 */
-	IntentMap: Map<object, string>;
+	IntentOf: (Key: unknown) => { Text: string };
 
 	/**
 	 * The same text when `exec.agent` is absent (runtime fallback).

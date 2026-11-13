@@ -16,7 +16,9 @@ export default _default;
  * - `State.Ring` keeps every stamp up to `State.MaxStamps`; the oldest is
  *   DROPPED (shifted) when the bound is exceeded and the drop is ledgered as
  *   `capped <path> (maxStamps <n>)` with the dropped stamp's path - never
- *   silently discarded.
+ *   silently discarded. The ring mechanics and the `capped` line live in the
+ *   core (`Ring`, `Capped` in `@playform/lib-dsh-core`); this file supplies the
+ *   latest map, the persistence puts and the trace adapter.
  * - Persistence (only when the domain is open): the latest record is PUT
  *   under its path in the `stamps` table, the ring snapshot is PUT under the
  *   meta key `__ring` in the `ring` table. Every put is

@@ -33,6 +33,13 @@ export default _default;
  *    the sink it just bound and retires it.
  * 3. PER-STATE FALLBACK - the defensive default (no shared sink, buffer
  *    retired): the per-State sink (queue or retired no-op), unchanged.
+ *
+ * The OPEN-SIDE STAGES also live here, as named exports beside the router -
+ * this module is the journal machine's ONE owner: `Bind` (register a
+ * just-opened domain's sink on the factory instance), `Drain` (the per-State
+ * queue first, then the factory-level pre-bind buffer, then the buffer's
+ * retirement) and `Retire` (zero the queue, no-op the sink) - the stages
+ * `Function/Open` and `Function/Attach` call instead of inlining them.
  */
 declare function _default(Factory: {
     SharedJournal?: (Event: string, Path: string, Detail: string, At?: number) => void;
@@ -44,3 +51,37 @@ declare function _default(Factory: {
         at: number;
     }[] | undefined;
 }, State: State, Event: string, Path: string, Detail: string, At?: number): void;
+/** The journal record's put: the shared shape of the shared-sink register
+ *  (Function/Open binds it) and the per-State sink (Function/State). */
+type Put = (Event: string, Path: string, Detail: string, At?: number) => void;
+/** The sink BINDING (the Open-side stage one): register the just-opened
+ *  domain's sink on the factory instance - in `Factory.SharedJournals` under
+ *  the domain name (creating the map when absent) and, for the shared
+ *  `package_governance` domain only, in the legacy `Factory.SharedJournal`
+ *  slot when that slot is still empty (the FIRST successful open wins; a
+ *  later module's `already-open` failure never loses its records, since the
+ *  router above sends them through the bound sink either way). */
+export declare const Bind: (Factory: {
+    SharedJournal?: Put;
+    SharedJournals?: Map<string, Put>;
+}, Domain: string, Sink: Put) => void;
+/** The DRAIN (the Open-side stage two): the per-State pre-open queue first,
+ *  then the factory-level pre-bind buffer (the boot-window race - the other
+ *  modules' records journaled before ANY open succeeded), each through the
+ *  just-bound sink with timestamps preserved and in that order, and then the
+ *  buffer retires (`PendingJournal = undefined` - the pre-bind stage is
+ *  over; the router above then routes straight through the shared sink). */
+export declare const Drain: (State: State, Factory?: {
+    PendingJournal?: {
+        event: string;
+        path: string;
+        detail: string;
+        at: number;
+    }[] | undefined;
+}) => void;
+/** The RETIREMENT (the absent-facility stage): zero the pre-open queue and
+ *  replace the sink with a no-op - nothing to open, nothing to close, and no
+ *  queue growth either (records queued before the probe - e.g. the
+ *  activation record - have nowhere to go; the human ledger remains the
+ *  source). */
+export declare const Retire: (State: State) => void;

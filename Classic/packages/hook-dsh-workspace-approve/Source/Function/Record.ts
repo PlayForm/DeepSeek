@@ -1,5 +1,6 @@
 import type Binding from "@Interface/Binding.js";
 import type State from "@Interface/State.js";
+import { Capped, Ring } from "@playform/lib-dsh-core";
 
 /**
  * @module Record
@@ -14,7 +15,9 @@ import type State from "@Interface/State.js";
  * - `State.Ring` keeps every binding up to `State.MaxBindings`; the oldest is
  *   DROPPED (shifted) when the bound is exceeded and the drop is ledgered as
  *   `capped <id> (maxBindings <n>)` - never silently discarded (the eviction
- *   disposition `evict`, applied FIFO).
+ *   disposition `evict`, applied FIFO). The ring mechanics and the `capped`
+ *   line live in the core (`Ring`, `Capped` in `@playform/lib-dsh-core`); this
+ *   file supplies the by-id map and the persistence puts.
  * - Persistence (only when the domain is open): the binding is PUT under its id
  *   in the `bindings` table, the ring snapshot is PUT under the meta key
  *   `__ring` in the `ring` table. Every put is `void .catch(() => {})` - a
@@ -22,12 +25,11 @@ import type State from "@Interface/State.js";
  */
 export default (State: State, Binding: Binding): void => {
 	State.ById.set(Binding.id, Binding);
-	State.Ring.push(Binding);
-	while (State.Ring.length > State.MaxBindings) {
-		const Dropped = State.Ring.shift();
-		if (Dropped !== undefined) {
-			State.Factory.Append(State, `capped ${Dropped.id} (maxBindings ${State.MaxBindings})`);
-		}
+	const Dropped = Ring(State.Ring, Binding, State.MaxBindings);
+	switch (true) {
+		case Dropped !== undefined:
+			State.Factory.Append(State, Capped(Dropped.id, "Bindings", State.MaxBindings));
+			break;
 	}
 	try {
 		const Handle = State.Handle;
