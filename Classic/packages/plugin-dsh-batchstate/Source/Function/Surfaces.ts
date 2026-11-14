@@ -16,6 +16,7 @@ import type State from "@Interface/State.js";
 export default (State: State, Agent: string, Surfaces: string[]): void => {
 	const Member = Ensure(State, Agent);
 	Member.scope = [...Surfaces];
+	State.Dirty.add("members");
 	State.Factory.Append(State, `scope ${Agent}: ${Surfaces.length} surfaces`);
 	Persist(State);
 	Emit(State, { batch: State.Batch, id: Agent, kind: "scope" });

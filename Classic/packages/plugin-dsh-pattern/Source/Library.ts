@@ -8,6 +8,7 @@ import Open from "./Function/Open.js";
 import Registry from "./Function/Registry.js";
 import { Expand, Load, Save } from "./Function/Snapshot.js";
 import type Configuration from "./Interface/Config.js";
+import type FactoryHandle from "./Interface/Factory.js";
 import type Handle from "./Interface/Handle.js";
 import type { MatchResult } from "./Interface/Match.js";
 import type { Outcome } from "./Interface/Outcome.js";
@@ -109,6 +110,12 @@ export default class PatternService extends Service {
 	private Handle: Handle | undefined;
 
 	/**
+	 * The factory instance (the shared storage-domain open); undefined when
+	 * the host does not provide the factory service.
+	 */
+	private Factory: FactoryHandle | undefined;
+
+	/**
 	 * The store chain: the open/recovery and every mutation write, in order.
 	 * Flush and Save await it, so the smokes need no sleep.
 	 */
@@ -133,6 +140,11 @@ export default class PatternService extends Service {
 				? `activated (seeded ${this.Store.Size()} patterns)`
 				: "disabled (enabled=false)",
 		);
+		// THE FACTORY (the family's shared machinery): the soft probe - the
+		// `inject` static stays empty (the loader contract the smokes pin),
+		// so the instance is acquired without a hard dependency. An absent
+		// factory degrades the PRIMARY to the JSON fallback (Connect).
+		this.Factory = Context.get?.("pluginFactory") as FactoryHandle | undefined;
 		// THE STORE PROBE (the family's P5-style optional facility): the
 		// storage hub's domain form first, then the provided storageDomain
 		// service. `ctx.get` never throws on a missing service.
@@ -262,42 +274,83 @@ export default class PatternService extends Service {
 
 	/**
 	 * Open the KV domain and recover the registry from it (the primary
-	 * store). A failed open is loud and degrades to the JSON fallback.
+	 * store). The open routes through the factory's shared `OpenDomain`
+	 * (Function/Domain): the loud failure line is appended THERE from this
+	 * module's own string and the method resolves undefined, so the JSON
+	 * fallback recovers - never rethrown.
 	 */
 	private Connect(Facility: unknown): void {
 		this.Pending = this.Pending.then(async () => {
-			try {
-				const Handle = await Open(this.Knobs.domain, Facility);
-				const Patterns = [...Handle.table("patterns").entries()].map(
-					([, Value]) => Value as Pattern,
-				);
-				switch (true) {
-					case Patterns.length > 0:
-						// The domain is a PER-RECORD overlay on the cold-start
-						// catalog: a stored record replaces the catalog entry with
-						// the same id, and a catalog entry the domain never
-						// received stays (the JSON fallback is a full snapshot and
-						// replaces the catalog - the PoC's behaviour). A LIVE
-						// record the store has not seen yet wins when it is newer
-						// (a mutation in the open window is never clobbered by the
-						// store's older copy).
-						for (const Stored of Patterns) {
-							const Live = this.Store.Get(Stored.id);
-							switch (true) {
-								case Live !== undefined && Live.updatedAt > Stored.updatedAt:
-									continue;
-								default:
-									this.Store.Put(Stored);
-							}
+			switch (true) {
+				case this.Factory === undefined:
+					// No factory service: the shared open machinery is absent -
+					// the JSON fallback is the store (the degraded posture).
+					await this.RestoreJSON();
+					break;
+				default: {
+					try {
+						const Handle = await Open(
+							{
+								Context: this.ctx,
+								Module: "pattern",
+								DomainName: this.Knobs.domain,
+								LogFile: this.Knobs.logFile,
+								Factory: this.Factory,
+							},
+							Facility,
+							// The recovery (the OpenDomain restore hook): the
+							// domain is a PER-RECORD overlay on the cold-start
+							// catalog: a stored record replaces the catalog entry
+							// with the same id, and a catalog entry the domain
+							// never received stays (the JSON fallback is a full
+							// snapshot and replaces the catalog - the PoC's
+							// behaviour). A LIVE record the store has not seen
+							// yet wins when it is newer (a mutation in the open
+							// window is never clobbered by the store's older
+							// copy).
+							(Opened) => {
+								const Patterns = [
+									...(Opened as Handle).table("patterns").entries(),
+								].map(([, Value]) => Value as Pattern);
+								switch (true) {
+									case Patterns.length > 0:
+										for (const Stored of Patterns) {
+											const Live = this.Store.Get(Stored.id);
+											switch (true) {
+												case Live !== undefined &&
+													Live.updatedAt > Stored.updatedAt:
+													continue;
+												default:
+													this.Store.Put(Stored);
+											}
+										}
+										this.Ledger(
+											`restored ${Patterns.length} patterns from snapshot`,
+										);
+										break;
+									default:
+								}
+							},
+						);
+						switch (true) {
+							case Handle === undefined:
+								// The open failed (the loud line is already
+								// appended by the shared method): the JSON
+								// fallback recovers - never rethrown.
+								await this.RestoreJSON();
+								break;
+							default:
+								this.Handle = Handle;
 						}
-						this.Ledger(`restored ${Patterns.length} patterns from snapshot`);
-						break;
-					default:
+					} catch (Cause) {
+						// A failure OUTSIDE the shared method (the schema
+						// import): the same loud line, then the JSON fallback.
+						this.Ledger(
+							`storage open failed: ${(Cause as Error)?.message ?? String(Cause)}`,
+						);
+						await this.RestoreJSON();
+					}
 				}
-				this.Handle = Handle;
-			} catch (Cause) {
-				this.Ledger(`storage open failed: ${(Cause as Error)?.message ?? String(Cause)}`);
-				await this.RestoreJSON();
 			}
 		});
 	}

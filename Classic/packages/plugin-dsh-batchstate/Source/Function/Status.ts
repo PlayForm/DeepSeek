@@ -19,6 +19,9 @@ import type State from "@Interface/State.js";
  */
 export default (State: State, Agent: string, Status: string): void => {
 	const Member = Ensure(State, Agent);
+	// The persisted member moved (and Ensure may have created it); the queue
+	// moves only on the terminal branch below.
+	State.Dirty.add("members");
 	switch (true) {
 		case Status === "active":
 			Member.status = "active";
@@ -32,6 +35,7 @@ export default (State: State, Agent: string, Status: string): void => {
 			switch (true) {
 				case At >= 0:
 					State.IdleQueue.splice(At, 1);
+					State.Dirty.add("queue");
 					break;
 				default:
 			}

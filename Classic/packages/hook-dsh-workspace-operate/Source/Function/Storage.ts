@@ -1,5 +1,6 @@
 import type Proposal from "@Interface/Proposal.js";
 import type State from "@Interface/State.js";
+import { Resume } from "@playform/lib-dsh-core";
 
 /**
  * @module Storage
@@ -102,7 +103,7 @@ export default async (State: State, Facility: unknown): Promise<void> => {
 		for (const [, Row] of Handle.table("meta").entries()) {
 			const Meta = Row as { sequence?: unknown; refused?: unknown } | null;
 			if (Meta !== null && typeof Meta === "object" && typeof Meta.sequence === "number") {
-				State.Sequence = Math.max(State.Sequence, Meta.sequence);
+				State.Sequence = Resume(State.Sequence, Meta.sequence);
 				State.Refused = typeof Meta.refused === "number" ? Meta.refused : State.Refused;
 			}
 		}

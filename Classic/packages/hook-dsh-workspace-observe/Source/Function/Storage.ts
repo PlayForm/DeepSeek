@@ -1,5 +1,6 @@
 import type Stamp from "@Interface/Stamp.js";
 import type State from "@Interface/State.js";
+import { Resume } from "@playform/lib-dsh-core";
 
 /**
  * @module Storage
@@ -108,7 +109,10 @@ export default async (State: State, Facility: unknown): Promise<void> => {
 			}
 		}
 		// Recovery: the sequence restarts at the maximum loaded sequence.
-		State.Sequence = Math.max(0, ...State.Ring.map((Entry) => Entry.sequence));
+		State.Sequence = Resume(
+			State.Sequence,
+			Math.max(0, ...State.Ring.map((Entry) => Entry.sequence)),
+		);
 		State.Handle = Handle;
 	} catch (Cause) {
 		// LOUD (see header): the failed open used to vanish silently in the

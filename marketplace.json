@@ -6228,11 +6228,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794394724,
+					"publishTimestamp": 1794607528,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "30f52f998310c471025c508b12834abad77d935c",
+						"commit": "f697b0ccd201aed5fc2b6f20f803468abb461b32",
 						"path": "Classic/packages/plugin-dsh-skill-learn"
 					},
 					"engines": {}

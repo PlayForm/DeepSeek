@@ -25,8 +25,9 @@
  *     3. the JOBS ENVELOPE via the module's Start hook: an UNOWNED job (`owner` key
  *        absent - open to any caller until service disposal) whose `cancel` aborts the
  *        task-owned signal and whose `done` is the never-rejecting chain Stage -> Settle
- *        -> `{ status, detail: `exit code: <code>` }`; a bug-level rejection still
- *        settles the breaker and resolves `failed` with the module's rejected detail.
+ *        -> `{ status, detail: `exit code: <code>` }`; a bug-level rejection settles
+ *        through the same Settle (the breaker, the module's failure line and the P5
+ *        record) and resolves `failed` with the module's rejected detail.
  *        When no job registry serves the context (or the starter rejects), the module's
  *        Start hook invokes the detached fallback instead: the same contained chain,
  *        unobserved;
@@ -155,17 +156,25 @@ export default <S, T, V, R>(
 		// fallback.
 		const Stage = (Signal: AbortSignal, Job: Job | undefined): Promise<number> =>
 			Dependency.Stage(State, Dir, Target, Actor, Registry, PolicyPath, Signal, Job);
+		// The stage-threw sentinel: the exit-style code a bug-level Stage
+		// rejection settles with (a rejection carries no exit code). The module
+		// may own its own (RejectedCode); the core default is -1.
+		const Rejected = Dependency.RejectedCode ?? -1;
 		// The detached, contained fallback (no job registry, or the module's
 		// Start hook rejected the starter): never awaited by the listener, fully
-		// contained — a bug-level rejection still settles the breaker and never
+		// contained — a bug-level rejection settles through the SAME Settle (the
+		// breaker, the module's failure line and the P5 record) and never
 		// surfaces as a tool error (containment invariant).
 		const Detached = (): void => {
 			Stage(Control.signal, undefined)
 				.then((Code) => Settle(State, Dir, Target, Actor, Code))
 				.catch(() => {
-					Dependency.Set(State).delete(Dir);
-					Dependency.Inflight(State).delete(Dependency.UpdateKey(State, Target));
-					Dependency.Count(State).set(Dir, (Dependency.Count(State).get(Dir) ?? 0) + 1);
+					// The one settlement on the rejection path: the rejected code
+					// feeds the breaker, the module's failure line and the P5
+					// failure record, in the place the success path settles.
+					Settle(State, Dir, Target, Actor, Rejected).catch(() => {
+						/* a delegate failure inside Settle never surfaces */
+					});
 				});
 		};
 		// The jobs envelope. The spec is the governor-family uniform form: the
@@ -184,24 +193,26 @@ export default <S, T, V, R>(
 					cancel: () => Control.abort("killed"),
 					// Never rejects: the child stage and the settlement are contained,
 					// and the defensive catch mirrors the fallback's — a bug-level
-					// rejection still settles the breaker and resolves a failed
-					// outcome (the runtime converts a rejecting done to `failed`, but
-					// the semantics must not rely on it).
+					// rejection settles through the same Settle with the rejected
+					// code and resolves a failed outcome (the runtime converts a
+					// rejecting done to `failed`, but the semantics must not rely
+					// on it).
 					done: Stage(Control.signal, Job)
 						.then((Code) => Settle(State, Dir, Target, Actor, Code))
 						.then((Code) => ({
 							status: (Code === 0 ? "completed" : "failed") as "completed" | "failed",
 							detail: `exit code: ${Code}`,
 						}))
-						.catch(() => {
-							Dependency.Set(State).delete(Dir);
-							Dependency.Inflight(State).delete(Dependency.UpdateKey(State, Target));
-							Dependency.Count(State).set(
-								Dir,
-								(Dependency.Count(State).get(Dir) ?? 0) + 1,
-							);
-							return { status: "failed" as const, detail: Dependency.RejectedDetail };
-						}),
+						// The ONE settlement on the rejection path: the rejected code
+						// feeds the breaker, the module's failure line and the P5
+						// failure record; the failed outcome keeps the module's
+						// rejected detail.
+						.catch(() =>
+							Settle(State, Dir, Target, Actor, Rejected).then(() => ({
+								status: "failed" as const,
+								detail: Dependency.RejectedDetail,
+							})),
+						),
 				}),
 			},
 			Detached,
@@ -374,6 +385,12 @@ export interface Dependencies<S, T, V, R> {
 	 * The failed outcome's detail for a bug-level rejection (containment).
 	 */
 	RejectedDetail: string;
+
+	/** The exit-style code a bug-level Stage rejection settles with ("the
+	 *  stage threw" — a rejection carries no exit code). It feeds the module's
+	 *  own `Lines.Failed` line and the P5 record exactly as an exit code would.
+	 *  Absent: the core's -1 sentinel. */
+	RejectedCode?: number;
 
 	/** The child execution stage — THE drift the family absorbs here: the
 	 *  ncu modes vs the cargo CLI. Returns an exit-style code (0 success) fed

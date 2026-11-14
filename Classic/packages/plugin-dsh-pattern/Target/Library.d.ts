@@ -49,6 +49,11 @@ export default class PatternService extends Service {
      */
     private Handle;
     /**
+     * The factory instance (the shared storage-domain open); undefined when
+     * the host does not provide the factory service.
+     */
+    private Factory;
+    /**
      * The store chain: the open/recovery and every mutation write, in order.
      * Flush and Save await it, so the smokes need no sleep.
      */
@@ -80,7 +85,10 @@ export default class PatternService extends Service {
     Save(): Promise<void>;
     /**
      * Open the KV domain and recover the registry from it (the primary
-     * store). A failed open is loud and degrades to the JSON fallback.
+     * store). The open routes through the factory's shared `OpenDomain`
+     * (Function/Domain): the loud failure line is appended THERE from this
+     * module's own string and the method resolves undefined, so the JSON
+     * fallback recovers - never rethrown.
      */
     private Connect;
     /**

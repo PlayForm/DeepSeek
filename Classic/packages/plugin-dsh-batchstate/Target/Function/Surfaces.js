@@ -1,1 +1,1 @@
-import s from"./Emit.js";import t from"./Ensure.js";import e from"./Persist.js";var n=(r,o,i)=>{const p=t(r,o);p.scope=[...i],r.Factory.Append(r,`scope ${o}: ${i.length} surfaces`),e(r),s(r,{batch:r.Batch,id:o,kind:"scope"})};export{n as default};
+import s from"./Emit.js";import e from"./Ensure.js";import p from"./Persist.js";var f=(r,o,i)=>{const m=e(r,o);m.scope=[...i],r.Dirty.add("members"),r.Factory.Append(r,`scope ${o}: ${i.length} surfaces`),p(r),s(r,{batch:r.Batch,id:o,kind:"scope"})};export{f as default};

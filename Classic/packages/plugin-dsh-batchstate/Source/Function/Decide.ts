@@ -39,6 +39,7 @@ export default (State: State, Payload: Record<string, unknown>): void => {
 	const By = Payload["by"] === "policy" ? "policy" : "user";
 	Entry.status = Outcome;
 	Entry.at = Date.now();
+	State.Dirty.add("proposals");
 	State.Factory.Append(State, `proposal ${Id} decided ${Outcome} (by ${By})`);
 	Persist(State);
 	Emit(State, { batch: State.Batch, id: Id, kind: "decision" });

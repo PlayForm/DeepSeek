@@ -26,8 +26,9 @@ export default _default;
  *     3. the JOBS ENVELOPE via the module's Start hook: an UNOWNED job (`owner` key
  *        absent - open to any caller until service disposal) whose `cancel` aborts the
  *        task-owned signal and whose `done` is the never-rejecting chain Stage -> Settle
- *        -> `{ status, detail: `exit code: <code>` }`; a bug-level rejection still
- *        settles the breaker and resolves `failed` with the module's rejected detail.
+ *        -> `{ status, detail: `exit code: <code>` }`; a bug-level rejection settles
+ *        through the same Settle (the breaker, the module's failure line and the P5
+ *        record) and resolves `failed` with the module's rejected detail.
  *        When no job registry serves the context (or the starter rejects), the module's
  *        Start hook invokes the detached fallback instead: the same contained chain,
  *        unobserved;
@@ -189,6 +190,11 @@ export interface Dependencies<S, T, V, R> {
      * The failed outcome's detail for a bug-level rejection (containment).
      */
     RejectedDetail: string;
+    /** The exit-style code a bug-level Stage rejection settles with ("the
+     *  stage threw" — a rejection carries no exit code). It feeds the module's
+     *  own `Lines.Failed` line and the P5 record exactly as an exit code would.
+     *  Absent: the core's -1 sentinel. */
+    RejectedCode?: number;
     /** The child execution stage — THE drift the family absorbs here: the
      *  ncu modes vs the cargo CLI. Returns an exit-style code (0 success) fed
      *  to the outcome mapping and the module's failure line. Never rejects. */

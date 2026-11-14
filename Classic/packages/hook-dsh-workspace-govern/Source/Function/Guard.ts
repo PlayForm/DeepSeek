@@ -1,4 +1,5 @@
 import type State from "@Interface/State.js";
+import { Capped } from "@playform/lib-dsh-core";
 
 /**
  * @module Guard
@@ -26,6 +27,7 @@ export default (State: State, Operation: string, Append: (Message: string) => vo
 			break;
 		}
 		State.Recent.delete(Oldest);
+		Append(Capped(Oldest, "Recent", CAP));
 	}
 	switch (true) {
 		case Count > State.LoopBound:

@@ -18,6 +18,7 @@ import type State from "@Interface/State.js";
  */
 export default (State: State, Agent: string, Task: string): void => {
 	const Member = Ensure(State, Agent);
+	State.Dirty.add("members");
 	Member.task = Task;
 	switch (true) {
 		case Member.startedAt === 0:

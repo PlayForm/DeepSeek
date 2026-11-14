@@ -18,6 +18,11 @@ export default (State: State): void => {
 	State.Proposals.clear();
 	State.Gates.clear();
 	State.Seen.length = 0;
+	// The reset empties every persisted table.
+	State.Dirty.add("members");
+	State.Dirty.add("queue");
+	State.Dirty.add("proposals");
+	State.Dirty.add("gates");
 	State.Factory.Append(State, "cleared");
 	Persist(State);
 	Emit(State, { batch: State.Batch, id: "", kind: "clear" });

@@ -1,5 +1,6 @@
 import type State from "@Interface/State.js";
 import type Validation from "@Interface/Validation.js";
+import { Resume } from "@playform/lib-dsh-core";
 
 /**
  * @module Storage
@@ -112,8 +113,8 @@ export default async (State: State, Facility: unknown): Promise<void> => {
 		// Recovery: the sequence from the meta record (monotonic, never a
 		// wall clock).
 		for (const [, Row] of Handle.table("meta").entries()) {
-			if (typeof Row === "number" && Row > State.Sequence) {
-				State.Sequence = Row;
+			if (typeof Row === "number") {
+				State.Sequence = Resume(State.Sequence, Row);
 			}
 		}
 		State.Handle = Handle;

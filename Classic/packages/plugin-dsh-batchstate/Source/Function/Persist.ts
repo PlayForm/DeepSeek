@@ -13,12 +13,17 @@ import { Expand } from "@playform/lib-dsh-core";
  * @remarks
  *
  * THE PRIMARY: the storage-domain KV domain (Function/Storage, the config `domain`). Every state
- * change writes the FULL state into the four tables - the members keyed by id, the queue under
- * `__queue`, the proposals keyed by id, the gates keyed by name - and every table is RECONCILED
- * first: a record the live state no longer holds is deleted, so a clear cannot resurrect a member
- * from the medium. The writes are serialised on State.Pending (the same chain the open/recovery
- * runs on), so the open always lands before the first write and the smokes can await the chain
- * without a sleep.
+ * change writes only the tables whose contents changed (the per-table dirty marker on the State,
+ * Interface/State's `Dirty`) into the four tables - the members keyed by id, the queue under
+ * `__queue`, the proposals keyed by id, the gates keyed by name - and every WRITTEN table is
+ * RECONCILED first: a record the live state no longer holds is deleted, so a clear cannot
+ * resurrect a member from the medium. The marker is born fully dirty per mount (Function/Apply),
+ * so the first sync after a restore/open still writes everything; each mutation site marks its own
+ * tables; a write clears the markers BEFORE it runs, so a mutation that lands mid-write re-marks
+ * its table and re-queues its own write, and a failed table write re-marks itself (the store is
+ * best-effort, but a retry is never silently dropped). The writes are serialised on State.Pending
+ * (the same chain the open/recovery runs on), so the open always lands before the first write and
+ * the smokes can await the chain without a sleep.
  *
  * THE FALLBACK: the well-known JSON file (the plan's file-based fallback), engaged only when no
  * storage facility is present or its open failed. Its write is SYNCHRONOUS and unconditional - the
@@ -81,20 +86,49 @@ const Sync = async (Handle: Handle, Name: string, Rows: [string, unknown][]): Pr
 };
 
 /**
- * Write the full state into the KV domain's four tables.
+ * Write the changed tables of the state into the KV domain's four tables (only the dirty ones; the
+ * rows are read at the write site, exactly as the full rewrite read them).
  */
 const Domain = async (State: State, Handle: Handle): Promise<void> => {
-	await Sync(Handle, "members", [...State.Members.entries()]);
-	await Sync(Handle, "queue", [[QUEUE, [...State.IdleQueue]]]);
-	await Sync(Handle, "proposals", [...State.Proposals.entries()]);
-	await Sync(Handle, "gates", [...State.Gates.entries()]);
+	// The dirty snapshot: the markers clear BEFORE the writes, so a mutation
+	// that lands mid-write re-marks its own table and re-queues its own write
+	// instead of being erased by the write that is still running.
+	const Dirty = new Set(State.Dirty);
+	State.Dirty.clear();
+	const Tables: [string, () => [string, unknown][]][] = [
+		["members", () => [...State.Members.entries()]],
+		["queue", () => [[QUEUE, [...State.IdleQueue]]]],
+		["proposals", () => [...State.Proposals.entries()]],
+		["gates", () => [...State.Gates.entries()]],
+	];
+	try {
+		for (const [Name, Rows] of Tables) {
+			switch (true) {
+				case Dirty.has(Name):
+					await Sync(Handle, Name, Rows());
+					break;
+				default:
+			}
+		}
+	} catch (Cause) {
+		// The store is best-effort: the tables of this sync stay dirty, so the
+		// next change retries them (a table that already wrote is rewritten
+		// with the same rows - the store's content does not move).
+		for (const Name of Dirty) {
+			State.Dirty.add(Name);
+		}
+		throw Cause;
+	}
 };
 
 export default (State: State): void => {
 	switch (State.Store) {
 		case "file":
-			// The fallback: synchronous, exactly the file-only lane's write.
+			// The fallback: synchronous, exactly the file-only lane's write. The
+			// unconditional file write covers every table, and it is synchronous
+			// (no mutation can land mid-write), so the markers clear with it.
 			File(State);
+			State.Dirty.clear();
 			return;
 		case "pending":
 			// The open is still in flight: the decision is made on the chain,
@@ -104,6 +138,7 @@ export default (State: State): void => {
 				switch (true) {
 					case Handle === undefined:
 						File(State);
+						State.Dirty.clear();
 						return;
 					default:
 						break;
@@ -121,6 +156,7 @@ export default (State: State): void => {
 				const Handle = State.Handle;
 				switch (true) {
 					case Handle === undefined:
+						// Nothing was written - the markers stay dirty.
 						return;
 					default:
 						break;

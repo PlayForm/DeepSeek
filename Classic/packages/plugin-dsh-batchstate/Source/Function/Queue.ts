@@ -23,6 +23,9 @@ export default (State: State, Agent: string): void => {
 	const Member = Ensure(State, Agent);
 	State.IdleQueue.push(Agent);
 	Member.queue = State.IdleQueue.length - 1;
+	// The queue record and the member's queue position both moved.
+	State.Dirty.add("queue");
+	State.Dirty.add("members");
 	State.Factory.Append(State, `queued ${Agent} (position ${Member.queue})`);
 	Persist(State);
 	Emit(State, { batch: State.Batch, id: Agent, kind: "queue" });

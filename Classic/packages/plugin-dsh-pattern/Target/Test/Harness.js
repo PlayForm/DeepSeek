@@ -2,7 +2,11 @@ import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
 import PatternService from "../../Target/Library.js";
+const Furnace = new FactoryClass({
+  reflect: { provide: () => void 0 }
+});
 const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "pattern-smoke-home-"));
 process.env["HOME"] = Home;
 const MakeCounter = () => ({ N: 0, F: 0 });
@@ -47,6 +51,7 @@ const Make = (Knobs = {}, Attach) => {
   const Effects = [];
   const Disposers = [];
   const Context = {
+    pluginFactory: Furnace,
     logger: {
       info: (M) => {
         Lines.push(M);
@@ -162,6 +167,7 @@ export {
   CheckAsync,
   FakeStorage,
   Finish,
+  Furnace,
   Home,
   Make,
   MakeCounter,

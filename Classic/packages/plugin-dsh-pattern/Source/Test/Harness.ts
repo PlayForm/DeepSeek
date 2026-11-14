@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
 import PatternService from "../../Target/Library.js";
 
 /**
@@ -31,6 +32,17 @@ import PatternService from "../../Target/Library.js";
  * the passed value - the no-wall-clock rule holds without a time seam.
  */
 export { PatternService };
+
+/**
+ * The REAL factory instance (constructed exactly the way the factory's own
+ * smoke does - the Service base constructor registers through
+ * ctx.reflect.provide; the stub context is used once and discarded). The
+ * storage-domain open routes through it (`State.Factory.OpenDomain`), the
+ * same seam the batch-state and live-containers harnesses use.
+ */
+export const Furnace: any = new FactoryClass({
+	reflect: { provide: () => undefined },
+} as any);
 
 /**
  * The fresh temp home: the service's `~/.dsh` paths resolve inside it.
@@ -125,6 +137,7 @@ export const Make = (
 	const Effects: string[] = [];
 	const Disposers: Array<() => void> = [];
 	const Context: any = {
+		pluginFactory: Furnace,
 		logger: {
 			info: (M: string) => {
 				Lines.push(M);

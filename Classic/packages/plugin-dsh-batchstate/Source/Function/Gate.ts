@@ -30,6 +30,7 @@ export default (State: State, Name: string, State_: string, Owner = ""): void =>
 			break;
 	}
 	State.Gates.set(Name, { name: Name, state: State_ as GateState, owner: Owner });
+	State.Dirty.add("gates");
 	State.Factory.Append(
 		State,
 		Owner.length > 0 ? `gate ${Name}: ${State_} (owner ${Owner})` : `gate ${Name}: ${State_}`,

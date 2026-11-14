@@ -84,6 +84,7 @@ export default (State: State, Payload: Record<string, unknown>, Origin: string):
 			State.Proposals.delete(Oldest);
 		}
 	}
+	State.Dirty.add("proposals");
 	State.Factory.Append(
 		State,
 		`proposal ${Proposal.id} spliced (intent ${Proposal.intent}, targets ${Proposal.targets.length}, rev ${Proposal.revision}, origin ${Proposal.origin ?? "-"})`,

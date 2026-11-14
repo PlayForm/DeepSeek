@@ -68,6 +68,12 @@ interface Extra {
 	 * (Function/Persist decides on the chain). */
 	Store: "domain" | "file" | "pending";
 
+	/** The domain tables whose contents changed since the last successful sync (the names are
+	 * Function/Storage's four tables). Born fully dirty per mount (Function/Apply), so the first
+	 * sync after a restore/open still writes everything; each mutation site marks its own tables
+	 * (Function/Persist writes only the marked ones and clears them on success). */
+	Dirty: Set<string>;
+
 	/**
 	 * The live members, keyed by the agent id.
 	 */

@@ -122,10 +122,13 @@ export default (Context: Context, Options: Config): void => {
 	State.Seen = [];
 
 	// The store's own state: no domain open yet, nothing on the chain, and the
-	// JSON fallback as the default until a facility is probed.
+	// JSON fallback as the default until a facility is probed. The four domain
+	// tables start FULLY DIRTY (Interface/State's `Dirty`), so the first sync
+	// after a restore/open writes everything the recovery merged or downgraded.
 	State.Handle = undefined;
 	State.Pending = Promise.resolve();
 	State.Store = "file";
+	State.Dirty = new Set(["members", "queue", "proposals", "gates"]);
 
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("batchstate", this).
