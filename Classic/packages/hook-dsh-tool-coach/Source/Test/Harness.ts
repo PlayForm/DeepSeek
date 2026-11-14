@@ -4,13 +4,15 @@ import * as OS from "node:os";
 import * as Path from "node:path";
 import Coach from "../../Target/Library.js";
 import Detect from "../../Target/Function/Detect.js";
+import { DefaultOf, ParamsOf, PrimaryOf } from "../../Target/Function/Fetch.js";
+import { CATALOG } from "../../Target/Variable/Catalog.js";
 import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "../../Target/Variable/Patterns.js";
 import {
+	CLASS_LEADS,
 	NOTE_DENIED,
 	NOTE_DENIED_TOOL,
 	NOTE_FIRST,
 	NOTE_PERSISTENT,
-	STATIC_TOOL_LINES,
 } from "../../Target/Variable/Notes.js";
 import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
 
@@ -41,7 +43,21 @@ import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
  * note, 12 clean calls, calls-9 >= ttl 2), so the TTL/cooldown paths are driven deterministically
  * by the call sequences in the folders; there are no timer stubs to fake.
  */
-export { Coach, Detect, DEFAULT_EXEMPTS, DEFAULT_PATTERNS, NOTE_DENIED, NOTE_DENIED_TOOL, NOTE_FIRST, NOTE_PERSISTENT, STATIC_TOOL_LINES };
+export {
+	CATALOG,
+	CLASS_LEADS,
+	Coach,
+	DefaultOf,
+	Detect,
+	DEFAULT_EXEMPTS,
+	DEFAULT_PATTERNS,
+	NOTE_DENIED,
+	NOTE_DENIED_TOOL,
+	NOTE_FIRST,
+	NOTE_PERSISTENT,
+	ParamsOf,
+	PrimaryOf,
+};
 
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks.
@@ -137,33 +153,71 @@ export const Furnace: any = new FactoryClass({
 /**
  * The LIVE registry fixture (the fake ctx.tools.schemas). The read
  * description carries a distinctive `(live fixture)` marker so the tests can
- * tell a LIVE fetch from the STATIC fallback table (D1 vs D2).
+ * tell a LIVE fetch from the GENERATED static fallback (D1 vs D2), and the
+ * read/edit schemas carry `required` plus the harness's own
+ * "Defaults to X." parameter sentences so the parameter projection is
+ * exercised exactly as the real registry exercises it.
  */
 export const LiveSchemas = () => [
 	{
 		name: "read",
 		description: "Read a UTF-8 text file (live fixture) and return line-numbered content.",
-		parameters: { properties: { file_path: {}, offset: {} } },
+		parameters: {
+			type: "object",
+			properties: {
+				file_path: { type: "string", description: "Path to read." },
+				offset: { type: "number", description: "1-based first line to return. Defaults to 1." },
+				limit: {
+					type: "number",
+					description: "Maximum number of lines to return. Defaults to 2000.",
+				},
+			},
+			required: ["file_path"],
+		},
 	},
 	{
 		name: "write",
 		description: "Create or fully replace a UTF-8 text file.",
-		parameters: { properties: { file_path: {} } },
+		parameters: { properties: { file_path: {} }, required: ["file_path"] },
 	},
 	{
 		name: "edit",
 		description: "Edit an existing UTF-8 text file by replacing literal text.",
-		parameters: { properties: { old_string: {}, new_string: {} } },
+		parameters: {
+			properties: {
+				file_path: { description: "Path to edit." },
+				old_string: { description: "Literal text to replace." },
+				new_string: { description: "Literal replacement text." },
+				replace_all: {
+					description: "Replace all matches. Defaults to false; when false, old_string must appear exactly once.",
+				},
+			},
+			required: ["file_path", "old_string", "new_string"],
+		},
 	},
 	{
 		name: "grep",
 		description: "Search file contents with a ripgrep regular expression.",
-		parameters: { properties: { pattern: {} } },
+		parameters: { properties: { pattern: {} }, required: ["pattern"] },
+	},
+	{
+		name: "aaa_fixture",
+		description: "Fixture tool that sorts first, so the top-up has a stable first row.",
+		parameters: { properties: { x: {} } },
 	},
 	{
 		name: "web_search",
 		description: "Search the web for current information.",
-		parameters: { properties: { queries: {} } },
+		parameters: { properties: { queries: {} }, required: ["queries"] },
+	},
+	{
+		name: "working_directory",
+		description: "Read the current working directory, or change it with cd.",
+		parameters: {
+			properties: {
+				cd: { description: "Existing directory to enter. Omit to read the current directory." },
+			},
+		},
 	},
 	{
 		name: "zzz_fixture",

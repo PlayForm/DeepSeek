@@ -17,6 +17,13 @@
 # app is restarted (bundle layers compose at host boot). A file: dependency
 # alone is NOT activation.
 #
+# THE SHIPPED POSTURE: this entry ships with enabled: true, log: true and the
+# ledger path - a profile turns it off with `enabled: false`; a disabled mount
+# logs `disabled (enabled=false)` while all five listeners stay registered and
+# pass through, reading the flag at call time (the volatile-cell hot-flip
+# pattern). The schema defaults are the truth; the full default surface lives
+# in Variable/Config.ts.
+#
 # All five listeners (tools/post-execute, tools/pre-execute, agent/pre-step,
 # system-prompt/assemble, tools/change) are fail-open and await next() first.
 # EVERY knob below is volatile (hot-editable without remounting): enabled,
@@ -32,9 +39,9 @@
       - id: hook-dsh-tool-coach
         name: "@playform/ets-hook-dsh-tool-coach"
         config:
-            log: true
-            logFile: ~/.dsh/playform/hook-dsh-tool-coach.log
             enabled: true
+            log: true
+            logFile: ~/.dsh/playform/ets-hook-dsh-tool-coach.log
             judgeTools:
                 - bash
                 - pwsh

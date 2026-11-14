@@ -22,6 +22,9 @@ import type { Scope } from "effect";
  * Seams cache with the P9 subprocess probe, and the P5 pre-open journal queue.
  * The governor's own half (the `fields` map of the State setup + the built
  * collections):
+ * - On - the MASTER SWITCH (config `enabled`; the ONE mount-time effect of the
+ *   flag is the ledger line - a disabled mount appends the disabled line and
+ *   still registers everything);
  * - Strict - strict chain pass (strip unknown deps in a governed workspace);
  * - Wait - cooldown between update-stage dispatches, per directory;
  * - Limit - circuit breaker: consecutive update-stage failures before pause;
@@ -42,6 +45,11 @@ import type { Scope } from "effect";
  * `apply` - the loader treats apply returns specially, a live-verified lesson).
  */
 export default interface State extends Shared {
+	/**
+	 * The MASTER SWITCH (config `enabled`; the setup map's `On <- enabled`).
+	 */
+	On: boolean;
+
 	/**
 	 * Strict chain pass: strip unknown deps in a governed workspace.
 	 */

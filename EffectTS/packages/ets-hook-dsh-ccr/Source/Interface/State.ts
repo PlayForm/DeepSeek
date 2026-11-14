@@ -22,6 +22,9 @@ import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
  * journal-domain line is the activation record, best-effort).
  *
  * The CCR hook's own fields:
+ * - `On` - the master switch (config `enabled`, volatile); false = the mount
+ *   logs `disabled (enabled=false)` while every surface stays registered and
+ *   inert.
  * - `Targets` - the allow-list of compressible tool names (config
  *   `targets`).
  * - `Exempt` - the never-compressed tools (config `exempt`).
@@ -55,6 +58,13 @@ import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
  * live-verified lesson recorded in the plugin-development skill).
  */
 export default interface State extends Shared {
+	/**
+	 * Master switch (config `enabled`, volatile) - false = the mount logs
+	 * `disabled (enabled=false)` and every surface stays registered and
+	 * inert.
+	 */
+	On: boolean;
+
 	/**
 	 * The allow-list of compressible tool names (config `targets`).
 	 */

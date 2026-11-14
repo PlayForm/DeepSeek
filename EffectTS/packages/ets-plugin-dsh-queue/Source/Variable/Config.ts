@@ -21,13 +21,18 @@ import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
  * VOLATILE CELLS: every knob is `.volatile()` - a capacity or policy edit
  * lands on the next dispatch without a remount.
  *
- * `enabled` defaults to FALSE - the IDLE-forever posture: the plugin ships
- * disabled, never appears in the profile's bundles, and enables only by an
- * explicit ACTIVATE.
+ * `enabled` defaults to TRUE - the shipped posture is ON, and a profile turns
+ * it off with `enabled: false` (the LIVE disabled posture: a cold mount logs
+ * `disabled (enabled=false)` and the tools and the service answer the
+ * documented disabled payloads while every registration stays mounted).
  */
 export default Compose(false, {
+	// The MASTER SWITCH (volatile: a flip is read at the next dispatch or
+	// tool call with no remount): false = the mount appends
+	// `disabled (enabled=false)` to the ledger while the service and the
+	// tools stay registered and answer the documented disabled payloads.
+	enabled: Schema.boolean().default(true).volatile(),
 	logFile: Schema.string().default("~/.dsh/playform/ets-plugin-dsh-queue.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
 	// The user's capacity model is the law (SUBAGENT-QUEUE-PLUGIN.md section
 	// 2.2): the MAIN conversation holds up to 10 subagents (the pool's
 	// reserved slots, including the IDLE-held lanes); EVERY spawned agent's

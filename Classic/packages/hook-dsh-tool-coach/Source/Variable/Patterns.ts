@@ -177,9 +177,14 @@ export const DEFAULT_PATTERNS: PatternRow[] = [
 		class: "discovery",
 		tool: "glob",
 	},
-	// pwd/cd in a bash call -> the working_directory tool keeps shells correct.
+	// A bare pwd -> the working_directory tool (omit `cd` to read the current
+	// directory). `cd` is deliberately NOT a row: `cd X && cmd` is the ordinary
+	// shell idiom for running a command in a directory, its replacement is the
+	// bash tool's own `workdir` parameter rather than another tool, and the
+	// per-pipeline split cannot tell a harmless prefix from a real directory
+	// change - so flagging it produced notes on legitimate calls.
 	{
-		pattern: String.raw`^(pwd|cd)\b`,
+		pattern: String.raw`^pwd\s*$`,
 		class: "discovery",
 		tool: "working_directory",
 	},
@@ -190,11 +195,15 @@ export const DEFAULT_PATTERNS: PatternRow[] = [
 		tool: "web_fetch",
 	},
 	// --- CONTROL class (note-only, never denied) -----------------------------
-	// Background shell jobs -> run_in_background + job_output/job_kill.
+	// Background shell jobs -> the bash tool's own run_in_background parameter,
+	// collected through job_output/job_kill. The row names `bash` because that
+	// IS the tool: `run_in_background` is a parameter of bash, not a tool of its
+	// own, and naming a parameter as the tool produced a note that pointed at a
+	// capability the registry does not have.
 	{
 		pattern: String.raw`\b(nohup|screen|tmux|disown)\b`,
 		class: "control",
-		tool: "run_in_background",
+		tool: "bash",
 	},
 	// cron/at/launchctl -> the schedule_* tools.
 	{

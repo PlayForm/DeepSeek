@@ -1619,7 +1619,7 @@
 				"en": "Tool Coach (Effect-TS)"
 			},
 			"description": {
-				"en": "The tool-coach hook: an EffectTS DeepSeek Harness plugin (the Classic twin behind Effect v4) that teaches the model to stop using the terminal for file content. It hooks the tools/post- and tools/pre-execute waterfalls, the agent/pre-step..."
+				"en": "The tool-coach hook: a DeepSeek Harness plugin that teaches the model to stop using the terminal for file content. It hooks the tools/post- and tools/pre-execute waterfalls, the agent/pre-step boundary, the system-prompt/assemble waterfall..."
 			},
 			"icon": "Icon/ets-hook-dsh-tool-coach.svg",
 			"author": "PlayForm",

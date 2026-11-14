@@ -1,4 +1,4 @@
-import type { AgentState, CoachNotes, CoachRow } from "./Execution.js";
+import type { AgentState, CoachNotes, CoachRow, ToolOverride } from "./Execution.js";
 import type Factory from "@playform/plugin-dsh-factory";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
 /**
@@ -86,6 +86,14 @@ export default interface State extends Shared {
      * Live-fetch toggle (config `fetchLive`, volatile).
      */
     FetchLive: boolean;
+    /**
+     * Per-tool overrides of the model-facing line (config `toolDescriptions`, volatile).
+     */
+    ToolDescriptions: Record<string, ToolOverride>;
+    /**
+     * Maximum parameters a tier-1 note or tier-3 reason names (config `maxNoteParams`, volatile).
+     */
+    MaximumNoteParams: number;
     /**
      * Maximum tier-2 tool-table rows (config `maxSectionTools`, volatile).
      */

@@ -36,14 +36,30 @@ const runTest = async () => {
   }
   {
     rm();
-    const Run = Make(Validate({ logFile: Ledger, stateFile: StateFile }));
-    Check(Count, "W1: the cold mount logs the byte-exact disabled line", () => {
-      assert.deepEqual(Run.Lines, ["batchstate: disabled (enabled=false)"]);
+    const Run = Make(Validate({ logFile: Ledger, enabled: false, stateFile: StateFile }));
+    Check(Count, "W1: the disabled mount logs the byte-exact disabled line", () => {
+      assert.deepEqual(Run.Lines, [
+        "batchstate: disabled (enabled=false)",
+        "batchstate: recovered (0 members, queue 0)"
+      ]);
+    });
+    Check(Count, "W1: the disabled mount still registers everything (the unconditional posture)", () => {
+      assert.ok(Run.Provided["batchstate"] !== void 0);
+      assert.ok(Run.CtxListeners["session/event"] !== void 0);
+      assert.ok(Run.CtxListeners["agent/inbox/inserted"] !== void 0);
     });
     Check(Count, "W1: the service still registers and reads the empty state", () => {
       assert.ok(Run.Provided["batchstate"] !== void 0);
       assert.equal(Run.Context.batchstate.getState().running.length, 0);
       assert.equal(Run.Context.batchstate.getContext("a").startsWith("[BATCH STATE - default - live]"), true);
+    });
+    Check(Count, "W1: a disabled write no-ops with zero ledger lines (the call-time gate)", () => {
+      const Before = Run.Lines.length;
+      Run.Context.batchstate.setTask("a", "T1");
+      Run.Context.batchstate.queue("a");
+      Run.Context.batchstate.clear();
+      assert.equal(Run.Lines.length, Before, "nothing logged while disabled");
+      assert.equal(Run.State.Members.size, 0, "no member was written");
     });
   }
   {

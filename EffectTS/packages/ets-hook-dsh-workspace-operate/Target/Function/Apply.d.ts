@@ -17,11 +17,11 @@ export default _default;
  * per the family's tools-live-in-their-owning-hook law. The contract is
  * Documentation/Plans/Workspace-Family/OPERATE.md.
  *
- * THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default
+ * THE LIVE DISABLED POSTURE: `enabled` defaults to false (the schema default
  * and the bundle patch row). A cold mount logs
- * `disabled (enabled=false)`, registers the service (it reads honestly from
- * the empty state), and wires NOTHING - no listener, no storage effect, no
- * tools.
+ * `disabled (enabled=false)` and registers EVERY surface - the fs/observed
+ * fence tracker, the two tools, the own P5-style storage effect and the
+ * service (it reads honestly from the empty state).
  *
  * The function returns NOTHING (the loader contract: a returned value
  * silently kills event delivery). The test probe is the

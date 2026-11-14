@@ -10,6 +10,7 @@ import {
 	Make,
 	MakeCounter,
 	NOTE_DENIED,
+	NOTE_DENIED_TOOL,
 	NOTE_FIRST,
 	NOTE_PERSISTENT,
 	Validate,
@@ -21,24 +22,19 @@ import {
 /**
  * @module Test
  *
- * The singular test of the loader contract and the config defaults, the two
- * surfaces every other folder (and every consumer) silently depends on.
+ * Runs one singular test: the loader contract and the config defaults, the two surfaces every other
+ * folder (and every consumer) silently depends on.
  *
  * @remarks
  *
- * The test covers the volatile cells, the defaults, the activation posture
- * (six registrations, the REAL factory on the state, the byte-exact
- * activation ledger line, the durable `[ISO]` proof), and the fail-loud
- * validation refusals. A drift here breaks every later folder, so it is its
- * own folder.
- *
- * The file runs standalone
- * (`node Target/Test/Wiring-And-Defaults/Test.js`) and under the aggregate
+ * Covers the volatile cells, the defaults, the activation posture (six registrations, the REAL
+ * factory on the state, the byte-exact activation ledger line, the durable [ISO] proof), and the
+ * fail-loud validation refusals. A drift here breaks every later folder, so it is its own folder.
+ * Runs standalone (`node Target/Test/Wiring-And-Defaults/Test.js`) AND under the aggregate
  * (`Maintain/Run/Smokes/Index.mjs` spawns it).
  *
- * It is a unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions
- * are moved verbatim from `Classic/smokes/tool-coach-smoke.mjs` (Run 1 +
- * the fail-loud validation checks).
+ * Unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions are moved verbatim from
+ * Classic/smokes/tool-coach-smoke.mjs (Run 1 + the fail-loud validation checks).
  */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -59,6 +55,27 @@ export const runTest = async (): Promise<number> => {
 		});
 		Check(Count, "volatile cell: notes arrives as { get } (object cell)", () => {
 			assert.equal(typeof Raw1.notes.get, "function");
+		});
+	}
+	// Group: the Config base (enabled, log, logFile - the base order, the
+	// schema defaults).
+	{
+		const Base = Validate({});
+		Check(Count, "config default enabled=true", () => {
+			assert.equal(Base.enabled.get(), true);
+		});
+		Check(Count, "config default log=true", () => {
+			assert.equal(Base.log.get(), true);
+		});
+		Check(Count, "config default logFile = the coach's ledger path", () => {
+			assert.equal(Base.logFile.get(), "~/.dsh/playform/ets-hook-dsh-tool-coach.log");
+		});
+		Check(Count, "the base keys sit first, and they are enabled, log, logFile", () => {
+			assert.deepEqual(
+				Object.keys(Base).slice(0, 3).sort(),
+				["enabled", "log", "logFile"],
+				"the base keys are the first three",
+			);
 		});
 	}
 	{
@@ -98,10 +115,15 @@ export const runTest = async (): Promise<number> => {
 				JSON.stringify(["bash", "pwsh"]),
 			);
 		});
-		Check(Count, "config default notes: the three verbatim templates", () => {
+		Check(Count, "config default notes: the four verbatim templates", () => {
 			assert.equal(
 				JSON.stringify(Raw1.notes.get()),
-				JSON.stringify({ first: NOTE_FIRST, persistent: NOTE_PERSISTENT, denied: NOTE_DENIED }),
+				JSON.stringify({
+					first: NOTE_FIRST,
+					persistent: NOTE_PERSISTENT,
+					denied: NOTE_DENIED,
+					deniedTool: NOTE_DENIED_TOOL,
+				}),
 			);
 		});
 		Check(Count, "config default patternTable = the built-in adversarial table", () => {

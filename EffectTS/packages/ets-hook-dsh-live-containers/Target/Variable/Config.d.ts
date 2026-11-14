@@ -33,8 +33,10 @@ import Schema from "@deepseek-ai/schemastery";
  * safe: the render engine dispatches per block id and keeps NO per-kind structural state
  * (design section 2.2).
  *
- * `enabled` defaults to FALSE - the IDLE-forever posture: the plugin ships disabled,
- * never appears in the profile's bundles, and enables only by an explicit ACTIVATE.
+ * `enabled` defaults to TRUE - the shipped posture is ON, and a profile turns
+ * it off with `enabled: false` (the LIVE disabled posture: a cold mount logs
+ * `disabled (enabled=false)` and every listener stays registered, reading the
+ * flag at call time).
  *
  * This is one of the modules in the tree with a runtime import of
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance - the loader

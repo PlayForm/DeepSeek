@@ -1,5 +1,5 @@
 import type { Context } from "@deepseek-ai/cordis";
-import { Activate } from "@playform/ets-base-dsh";
+import { Proof } from "@playform/ets-base-dsh";
 
 import type {} from "../Interface/Agent.js";
 import type {} from "../Interface/Factory.js";
@@ -114,13 +114,13 @@ export default (Context: Context, Options: Config): void => {
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone:
 	//   hook-dsh-lesson-nudge: activated (bundle=0.2.1, cap=3)
+	// The disabled marker's byte-exact text belongs to the core's Proof
+	// composer (the parity rule: one composer owns the branch).
 	Append(
-		State.On
-			? Activate([
-					["bundle", Version],
-					["cap", `${State.Cap}`],
-				])
-			: "disabled (enabled=false)",
+		Proof(State.On, [
+			["bundle", Version],
+			["cap", `${State.Cap}`],
+		]),
 	);
 
 	// ------------------------------------------------------------------

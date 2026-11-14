@@ -45,9 +45,9 @@ import Version from "./Variable/Version.js";
  * (Variable/Keywords) when the launch does not declare a role; the user's
  * policy is the final authority.
  *
- * The plugin ships DISABLED - the IDLE-forever posture: it never appears in
- * the profile's bundles and enables only by an explicit ACTIVATE; a cold
- * mount logs `disabled (enabled=false)` and both launch-path listeners no-op
+ * The plugin ships ENABLED - the live disabled posture: a profile turns it
+ * off with `enabled: false`; a cold disabled mount logs
+ * `disabled (enabled=false)` and both launch-path listeners no-op
  * to a passthrough (they check State.On first).
  *
  * Sits NEXT TO the BATCH-STATE plugin in the orchestration layer

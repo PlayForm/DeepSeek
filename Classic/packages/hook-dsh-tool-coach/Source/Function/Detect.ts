@@ -217,6 +217,15 @@ export default (Command: string, Rows: CoachRow[], Exempts: string[]): Detection
  * the RAW command so the ORIGINAL segment text is preserved for the note's
  * ${command} fill; each pipeline is normalized independently (heredoc bodies
  * are stripped inside normalization).
+ *
+ * A bare `&` splits only when it is a BACKGROUND operator. It is not one when
+ * it belongs to a file-descriptor redirect - `2>&1`, `>&2`, `<&0`, `&>file` -
+ * because splitting there invents a pipeline out of the redirect's tail:
+ * `node x.js 2>&1 | tail -30` used to split into `node x.js 2>` and
+ * `1 | tail -30`, and the invented second pipeline began with `1`, so the
+ * exempt `node` head no longer dominated and the `tail` segment was reported
+ * as a read offense. That is the ordinary way to trim a command's own output,
+ * so the split made the coach flag legitimate calls.
  */
 const SplitPipelines = (Command: string): string[] => {
 	const Pipelines: string[] = [];
@@ -225,6 +234,7 @@ const SplitPipelines = (Command: string): string[] => {
 	for (let Index = 0; Index < Command.length; Index += 1) {
 		const Char = Command[Index];
 		const Next = Command[Index + 1];
+		const Previous = Command[Index - 1];
 		if (Quote !== undefined) {
 			Current += Char;
 			if (Char === Quote && Command[Index - 1] !== "\\") {
@@ -241,6 +251,11 @@ const SplitPipelines = (Command: string): string[] => {
 			Pipelines.push(Current);
 			Current = "";
 			Index += 1;
+			continue;
+		}
+		if (Char === "&" && (Previous === ">" || Previous === "<" || Next === ">")) {
+			// A file-descriptor redirect, not a background operator.
+			Current += Char;
 			continue;
 		}
 		if (Char === ";" || Char === "&" || Char === "\n") {

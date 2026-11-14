@@ -73,6 +73,11 @@ import type { Scope } from "effect";
  */
 export default interface State extends Shared {
 	/**
+	 * Master switch (config `enabled`, volatile) - false = register nothing.
+	 */
+	On: boolean;
+
+	/**
 	 * The space replacement - the transform's only knob (config
 	 * `replacement`).
 	 */

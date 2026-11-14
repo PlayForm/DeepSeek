@@ -1,10 +1,10 @@
 # Wiring-And-Lines - the wiring and the recorder
 
-The loader contract (apply returns nothing, the default object carries name/apply/Config/inject), the IDLE-forever cold mount, the root-context registration with the distinct root identity, the service registered from apply, the activation proof, the OutcomeEvidence recording (the monotonic sequence, the parent pointer, success vs failure), the guard chain, the malformed-event containment, and the fail-loud validation.
+The loader contract (apply returns nothing, the default object carries name/apply/Config/inject), the live disabled cold mount, the root-context registration with the distinct root identity, the service registered from apply, the activation proof, the OutcomeEvidence recording (the monotonic sequence, the parent pointer, success vs failure), the guard chain, the malformed-event containment, and the fail-loud validation.
 
 ## Scenarios
 
-- W1: the default object carries name/apply/Config/inject; apply returns nothing; the service is provided on a cold mount; a disabled mount wires nothing; the disabled line is byte-exact; and the cold-mount service reads honestly from the empty state.
+- W1: the default object carries name/apply/Config/inject; apply returns nothing; the service is provided on a cold mount; a disabled mount registers EVERY surface (the `fs/observed` root listener and the `audit-storage` effect); the disabled line is byte-exact; and the cold-mount service reads honestly from the empty state.
 - W2: fs/observed is registered on the ROOT context only; the root identity is distinct; the activation line is byte-exact; and the storage effect is armed.
 - W3: two events record sequences 1 and 2 with the exact ids (`a1`/`a2`), never a wall clock; the success/failure outcome split applies; the recorded line is byte-exact (logger and durable); and the parent pointer carries the tag of the actor.
 - W4: an excluded segment, the own actor, and a malformed event, each with its byte-exact line; the listener path touches zero file content.

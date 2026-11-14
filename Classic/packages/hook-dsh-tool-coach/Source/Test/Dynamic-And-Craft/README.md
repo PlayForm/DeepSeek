@@ -30,7 +30,7 @@ The assertions are moved verbatim from `Classic/smokes/tool-coach-smoke.mjs` (D2
     - Sub: "D3: the rows follow the mapped-class priority (write tools first, then read) - no search/discovery/control rows"
     - Sub: "D3b: the cap-24 table holds every mapped tool plus the top-up"
     - Sub: "D3b: the mapped order is write, read, search, discovery, control (first appearance within a class)"
-    - Sub: "D3b: non-mapped live tools top up the table" (web_search, zzz_fixture)
+    - Sub: "D3b: non-mapped live tools top up the table" (the alphabetically first fixture tool, `aaa_fixture`, opens the top-up)
     - Sub: "D3b: the top-up is alphabetical"
 - Group: D4 - the section cache (sectionTtl=2).
     - Sub: "D4: the first build is silent"
@@ -63,7 +63,7 @@ The virtual clock is the judged-call counter: D4's TTL is crossed at calls=11 ve
 - `: section rebuilt (ttl 2)` and `: section rebuilt (tools/change)` (D4)
 - `: strike 2/2 bash read -> note read` (D5, the flipped threshold)
 - No `schema fetch failed` line at all with fetchLive=false (D5)
-- The static tool line: `- read: <STATIC_TOOL_LINES.read.description> (key parameter: file_path).`
+- The static tool line: `- read: Read a UTF-8 text file and return line-numbered content. Parameters: file_path (required), offset (default 1), limit (default 2000).` (the GENERATED table, projected through the same path as the live fetch).
 
 ## Edge cases
 

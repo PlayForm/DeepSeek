@@ -1,14 +1,15 @@
-import type { AgentState, CoachNotes, CoachRow } from "./Execution.js";
+import type { AgentState, CoachNotes, CoachRow, ToolOverride } from "./Execution.js";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 /**
  * @module State
  *
- * The per-apply plugin state: the FACTORY's shared shape (built by
- * `Factory.State(ctx, config, { ... })` - factory SCHEME.md §2.10) extended
- * with the coach's own fields.
+ * The per-apply plugin state: the FACTORY's shared shape extended with the
+ * coach's own fields.
  *
  * @remarks
+ *
+ * Built by `Factory.State(ctx, config, { ... })` - factory SCHEME.md §2.10.
  *
  * The shared half comes from the factory's NAMED type export (`State`). The
  * shared machinery that stays inert here: Tool/Policy/PolicyName/List (no
@@ -38,6 +39,10 @@ export default interface State extends Shared {
      */
     Judge: string[];
     /**
+     * The tools denied on every call regardless of the ladder (config `denyTools`, volatile).
+     */
+    Deny: string[];
+    /**
      * Strikes within the window that trigger a tier-1 note (volatile).
      */
     Threshold: number;
@@ -62,8 +67,7 @@ export default interface State extends Shared {
      */
     Enforce: "off" | "write" | "all";
     /**
-     * Per-class strikes since the last note that arm the tier-3 deny
-     * (volatile).
+     * Per-class strikes since the last note that arm the tier-3 deny (volatile).
      */
     EnforceThreshold: number;
     /**
@@ -82,6 +86,14 @@ export default interface State extends Shared {
      * Live-fetch toggle (config `fetchLive`, volatile).
      */
     FetchLive: boolean;
+    /**
+     * Per-tool overrides of the model-facing line (config `toolDescriptions`, volatile).
+     */
+    ToolDescriptions: Record<string, ToolOverride>;
+    /**
+     * Maximum parameters a tier-1 note or tier-3 reason names (config `maxNoteParams`, volatile).
+     */
+    MaximumNoteParams: number;
     /**
      * Maximum tier-2 tool-table rows (config `maxSectionTools`, volatile).
      */

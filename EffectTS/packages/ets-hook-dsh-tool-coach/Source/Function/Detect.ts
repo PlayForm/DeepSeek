@@ -4,17 +4,17 @@ import type { CoachRow, Detection, Match } from "@Interface/Execution.js";
 /**
  * @module Detect
  *
- * The classifier for one judged terminal call (plan Part 3 §3.5 step 1 + the
- * adversarial layer Part 2 §2.7). Detection is NEVER exact-match only: command
- * normalization (Function/Normalize) + the pattern rows + an intent-marker
- * scan + a craft library + a catch-all - the pattern table is one input, not
- * the authority.
+ * The classifier for one judged terminal call.
  *
  * @remarks
  *
+ * Plan Part 3 §3.5 step 1 + the adversarial layer Part 2 §2.7. Detection is
+ * NEVER exact-match only: command normalization (Function/Normalize) + the
+ * pattern rows + an intent-marker scan + a craft library + a catch-all - the
+ * pattern table is one input, not the authority.
+ *
  * The evaluation order per pipeline (a maximal run of segments joined by `|`,
  * pipelines split on `;`/`&&`/`||`/`&`):
- *
  *   1. CLASSIFY (rows first, then markers) - exemption is an OVERRIDE of a
  *      would-be offense, so the pipeline is classified first;
  *   2. EXEMPT override: if the pipeline's head matches an exemption and the
@@ -27,7 +27,6 @@ import type { CoachRow, Detection, Match } from "@Interface/Execution.js";
  *      write match is reported).
  *
  * Markers (plan §2.7b) - class determined by intent, not vocabulary:
- *
  *   - redirect to a real path (`>` / `>>` not to /dev/null) -> write (the
  *     catch-all: novel zero-day forms still land; the redirect wins over an
  *     earlier read-row match because write outranks every other class, e.g.
@@ -68,6 +67,7 @@ const Unwrap = (Segment: string): string | null => {
  * The redirect marker: `>` / `>>` followed by a real path token.
  */
 const REDIRECT = />>(?!\s*\/dev\/null\b)(?!\s*\|)\s*\S+|>(?!\s*\/dev\/null\b)(?!\s*\|)\s*\S+/;
+
 /**
  * Ambiguous in-place flag: safe to catch-all on any segment.
  */
@@ -217,6 +217,15 @@ export default (Command: string, Rows: CoachRow[], Exempts: string[]): Detection
  * the RAW command so the ORIGINAL segment text is preserved for the note's
  * ${command} fill; each pipeline is normalized independently (heredoc bodies
  * are stripped inside normalization).
+ *
+ * A bare `&` splits only when it is a BACKGROUND operator. It is not one when
+ * it belongs to a file-descriptor redirect - `2>&1`, `>&2`, `<&0`, `&>file` -
+ * because splitting there invents a pipeline out of the redirect's tail:
+ * `node x.js 2>&1 | tail -30` used to split into `node x.js 2>` and
+ * `1 | tail -30`, and the invented second pipeline began with `1`, so the
+ * exempt `node` head no longer dominated and the `tail` segment was reported
+ * as a read offense. That is the ordinary way to trim a command's own output,
+ * so the split made the coach flag legitimate calls.
  */
 const SplitPipelines = (Command: string): string[] => {
 	const Pipelines: string[] = [];
@@ -225,6 +234,7 @@ const SplitPipelines = (Command: string): string[] => {
 	for (let Index = 0; Index < Command.length; Index += 1) {
 		const Char = Command[Index];
 		const Next = Command[Index + 1];
+		const Previous = Command[Index - 1];
 		if (Quote !== undefined) {
 			Current += Char;
 			if (Char === Quote && Command[Index - 1] !== "\\") {
@@ -241,6 +251,11 @@ const SplitPipelines = (Command: string): string[] => {
 			Pipelines.push(Current);
 			Current = "";
 			Index += 1;
+			continue;
+		}
+		if (Char === "&" && (Previous === ">" || Previous === "<" || Next === ">")) {
+			// A file-descriptor redirect, not a background operator.
+			Current += Char;
 			continue;
 		}
 		if (Char === ";" || Char === "&" || Char === "\n") {

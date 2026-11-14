@@ -28,9 +28,11 @@ import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
  * mapped State fields IN PLACE, so a flip (enabled, batch, stateFile,
  * maxRecent) takes effect on the next write or read.
  *
- * `enabled` defaults to FALSE - the IDLE-forever posture: the plugin ships
- * disabled, never appears in the profile's bundles, and enables only by an
- * explicit ACTIVATE.
+ * `enabled` defaults to TRUE - the LIVE DISABLED posture: the service, the
+ * store probe and the inbox splice register unconditionally on every mount,
+ * a disabled mount writes only the byte-exact `disabled (enabled=false)`
+ * ledger line instead of the activation proof, and every surface reads the
+ * volatile cell at CALL time.
  *
  * This is one of the modules in the tree with a runtime import of
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance -
@@ -40,8 +42,12 @@ import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
  * The plugin's Config schema, built once at load.
  */
 export default Compose(false, {
+	// The MASTER SWITCH (volatile: a flip is read at the next call): false =
+	// the mount writes `disabled (enabled=false)` to the ledger while every
+	// registered surface passes through silently. Distinct from the shared
+	// `log` cell, which governs only the durable ledger file.
+	enabled: Schema.boolean().default(true).volatile(),
 	logFile: Schema.string().default("~/.dsh/playform/ets-plugin-dsh-batchstate.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
 	// The batch key: ONE state store serves every batch, isolated by this
 	// key (the plan's multi-batch support, section 7.3).
 	batch: Schema.string().default("default").volatile(),

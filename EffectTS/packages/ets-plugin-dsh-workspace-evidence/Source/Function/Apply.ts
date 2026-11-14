@@ -6,7 +6,7 @@ import Watch from "@Function/Watch.js";
 import type Config from "@Interface/Config.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
+import { Proof } from "@playform/ets-base-dsh";
 
 /**
  * @module Apply
@@ -95,15 +95,14 @@ export default (Context: Context, Options: Config): void => {
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("workspaceEvidence", this).
 	new ServiceClass(Context, State);
-	switch (true) {
-		case !State.On:
-			// The cold mount: honest in the ledger, wired to nothing.
-			Factory.Append(State, "disabled (enabled=false)");
-			return;
-		default:
+	// The mount line: the activation proof when live, the byte-exact disabled
+	// marker when not (the module's own composed line; the cold mount stays
+	// honest in the ledger and wires nothing).
+	Factory.Append(State, Proof(State.On !== false, [["domain", State.DomainName]]));
+	// The cold mount: honest in the ledger, wired to nothing.
+	if (!State.On) {
+		return;
 	}
-	// The activation proof (the module's own composed line).
-	Factory.Append(State, Activate([["domain", State.DomainName]]));
 
 	// The fs/observed listener, on the ROOT context (the factory's Wire) -
 	// the invalidation seam: a changed path is an invalidation key.

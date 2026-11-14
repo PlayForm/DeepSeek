@@ -1,7 +1,7 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type StateView from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
+import { Proof } from "@playform/ets-base-dsh";
 import { Effect, Scope } from "effect";
 
 import * as Direct from "./Direct.js";
@@ -55,6 +55,7 @@ export default (Context: Context, Options: Config): void => {
 	const State = Factory.State<StateView>(Context, Options, {
 		module: "hook-dsh-governor-cargo",
 		fields: {
+			On: "enabled",
 			Section: "sections",
 			Policy: "policyFile",
 			Wait: "updateCooldownMs",
@@ -97,15 +98,21 @@ export default (Context: Context, Options: Config): void => {
 	// scope gets the fiber interruption for free.
 	State.Scope = Effect.runSync(Scope.make());
 
+	// THE MASTER SWITCH (config `enabled`, volatile - the setup map's
+	// `On <- enabled`, so the State builder's P10 volatile-update listener
+	// refreshes it in place): the ONE mount-time effect of the flag is the
+	// ledger line - a disabled cargo module appends the durable disabled
+	// line INSTEAD of the activation proof and still registers EVERYTHING
+	// below (no early return - the LIVE disabled posture).
 	// 2. The durable activation proof — the module's own ledger line (byte-
 	//    identical with the pre-refactor module) plus the structured P5
 	//    journal record (queued until the optional storage domain opens). The
-	//    line's string mechanics live in the core's Activate composer; the
+	//    line's string mechanics live in the core's Proof composer; the
 	//    FIELD LIST is the module's own — the leading bare flavor word (empty
 	//    key), the bracketed lists and the `(discovery)` fallbacks.
 	Factory.Append(
 		State,
-		Activate([
+		Proof(State.On !== false, [
 			["", "cargo flavor"],
 			["logFile", State.Ledger],
 			["updateMode", State.Mode],
@@ -115,7 +122,11 @@ export default (Context: Context, Options: Config): void => {
 			["keepFile", State.KeepFile || "(discovery)"],
 		]),
 	);
-	Factory.Journal(State, "activated", "", State.Mode);
+	// The storage journal's `activated` record belongs to the LIVE mount only:
+	// the disabled mount's proof is the disabled line alone.
+	if (State.On !== false) {
+		Factory.Journal(State, "activated", "", State.Mode);
+	}
 
 	// 3. Wire — the factory's fs/observed registration; the listener is owned
 	//    by the current fiber: removed on unload, no manual bookkeeping, ever.

@@ -6,7 +6,7 @@ import Storage from "@Function/Storage.js";
 import type Config from "@Interface/Config.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
+import { Proof } from "@playform/ets-base-dsh";
 
 /**
  * @module Apply
@@ -24,10 +24,10 @@ import { Activate } from "@playform/ets-base-dsh";
  * refresh. The service is Function/Service as `workspaceAudit`, constructed
  * here so `ctx.workspaceAudit` resolves.
  *
- * THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default
- * and the bundle patch row). A cold mount logs `disabled (enabled=false)`,
- * registers the service (it reads honestly from the empty state), and wires
- * NOTHING - no listener, no storage effect, no events consumed.
+ * THE LIVE DISABLED POSTURE: `enabled` defaults to false (the schema default
+ * and the bundle patch row). A cold mount logs `disabled (enabled=false)` and
+ * registers EVERY surface - the fs/observed listener, the own P5-style
+ * storage effect and the service (it reads honestly from the empty state).
  *
  * The function returns NOTHING (the loader contract: a returned value
  * silently kills event delivery). The test probe is the
@@ -95,17 +95,14 @@ export default (Context: Context, Options: Config): void => {
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("workspaceAudit", this).
 	new ServiceClass(Context, State);
-	switch (true) {
-		case !State.On:
-			// The cold mount: honest in the ledger, wired to nothing.
-			Factory.Append(State, "disabled (enabled=false)");
-			return;
-		default:
-	}
-	// The activation proof (the module's own composed line).
+	// The master switch: the ONE mount-time effect of the flag is the ledger
+	// line - a disabled mount writes `disabled (enabled=false)` instead of
+	// the activation proof and still registers EVERYTHING below (the
+	// live-flip law: the factory refreshes State.On in place, so a flip acts
+	// on the very next call in both directions, with no remount).
 	Factory.Append(
 		State,
-		Activate([
+		Proof(State.On !== false, [
 			["domain", State.DomainName],
 			["maxLines", String(State.MaxLines)],
 		]),

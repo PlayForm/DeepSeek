@@ -4,7 +4,7 @@ The loader wiring of the plugin and its own P5-style storage domain: the cold mo
 
 ## Scenarios
 
-- W1: the IDLE-forever cold mount, where apply returns NOTHING, the service is still provided, nothing registers on the root context and no storage effect is armed, and the ledger carries the byte-exact `disabled (enabled=false)` line.
+- W1: the live disabled cold mount, where apply returns NOTHING, the service is still provided, EVERY surface registers (the `fs/observed` root listener and the `approve-storage` effect), and the ledger carries the byte-exact `disabled (enabled=false)` line.
 - W2: the enabled mount, where `fs/observed` registers on the ROOT context only (never on the plugin context, because the fake root is a distinct object, so a ctx-side registration cannot pass), the root identity is not the plugin ctx, the activation line `activated (domain=workspace_approve)` is byte-exact, the storage effect is armed, and the state probe is attached.
 - W3: the fail-loud validation, where an empty `domain` and a `maxBindings` below 1 throw at load with the byte-exact `approve: ` messages, and a non-boolean `requireConstraints` fails loud at the schema (a `ValidationError`, since the schema validates the type first).
 - W4: the absent facility, where the effect is a SILENT SKIP: no `storage open failed` line, the handle stays undefined, and the bindings live in memory only.

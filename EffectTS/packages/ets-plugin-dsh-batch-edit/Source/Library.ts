@@ -37,10 +37,12 @@ import Version from "./Variable/Version.js";
  * protected and resumable); a commit exceeding the deadline continues as a
  * background job with a typed jobId handle.
  *
- * THE IDLE-FOREVER POSTURE: the plugin ships DISABLED (schema default and
- * patch entry), never appears in the profile's bundles, and enables only by
- * an explicit ACTIVATE; a cold mount logs `disabled (enabled=false)` and the
- * tool refuses loudly while disabled.
+ * THE LIVE DISABLED POSTURE: every listener, the batch_edit tool and the root
+ * observer register unconditionally on every mount; a disabled mount
+ * (`enabled: false`) logs the byte-exact `disabled (enabled=false)` line
+ * instead of the activation proof, and every registered surface reads the
+ * volatile `On` cell at CALL time, so a disabled surface passes through with
+ * zero ledger lines and the tool refuses loudly while disabled.
  *
  * Plans: Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md (the hub) +
  * Documentation/Plans/Batch-Edit-Tool/SCHEMA.md, STATE-MACHINE.md,

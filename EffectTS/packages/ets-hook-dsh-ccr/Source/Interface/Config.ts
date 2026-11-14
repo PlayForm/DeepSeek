@@ -11,16 +11,22 @@
  * lives in Variable/Config.ts (the plan's §5 schema, verbatim); every field
  * here is a config field (the cordis.yml test - no hardcoded tunables).
  *
- * VOLATILE CELLS: `log`, `logFile` (the shared universal cells), plus
- * `thresholdBytes`, `previewMaxChars` and `multipliers` are `.volatile()` in
- * the schema - the loader hands them to apply as stable `{ get() }`
- * references, and the FACTORY'S State builder unwraps them defensively, so
- * this interface stays the plain shape. Hot edits to the volatile fields
- * commit WITHOUT remounting the plugin - matching Aphrodite's hot-reload
- * thresholds. Structural knobs (targets, exempt, store, journal, auto-expand,
- * the context-engine phase-4 flags) are plain (remount on edit).
+ * VOLATILE CELLS: `enabled`, `log`, `logFile` (the shared universal cells),
+ * plus `thresholdBytes`, `previewMaxChars` and `multipliers` are
+ * `.volatile()` in the schema - the loader hands them to apply as stable
+ * `{ get() }` references, and the FACTORY'S State builder unwraps them
+ * defensively, so this interface stays the plain shape. Hot edits to the
+ * volatile fields commit WITHOUT remounting the plugin - matching Aphrodite's
+ * hot-reload thresholds. Structural knobs (targets, exempt, store, journal,
+ * auto-expand, the context-engine phase-4 flags) are plain (remount on edit).
  */
 export default interface Config {
+	/**
+	 * Master switch - every surface stays registered and inert when false; a
+	 * disabled mount logs `disabled (enabled=false)` (volatile).
+	 */
+	enabled: boolean;
+
 	/**
 	 * Ledger enabled - write the durable log file (volatile).
 	 */

@@ -36,7 +36,7 @@ const runTest = async () => {
   }
   {
     rm();
-    const Run = Make(Validate({ logFile: Ledger }));
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }));
     Check(Count, "M2: a cold mount logs the byte-exact disabled line", () => {
       assert.deepEqual(Run.Lines, ["plugin-dsh-batch-edit: disabled (enabled=false)"]);
     });
@@ -50,6 +50,13 @@ const runTest = async () => {
         /plugin-dsh-batch-edit is disabled \(enabled=false\)/
       );
     });
+    Check(Count, "M2: the disabled mount still registers every ctx listener (the unconditional posture)", () => {
+      assert.deepEqual(Object.keys(Run.CtxListeners), [
+        "loader/volatile-update",
+        "tools/pre-execute",
+        "agent/pre-step"
+      ]);
+    });
   }
   {
     const Run = Setup();
@@ -62,8 +69,20 @@ const runTest = async () => {
       assert.deepEqual(Object.keys(Run.RootListeners), ["fs/observed"]);
       assert.notEqual(Run.Root, Run.Context);
     });
-    Check(Count, "M3: the pre-step listener sits on the ctx; no pre-execute listener while intercept is off", () => {
-      assert.deepEqual(Object.keys(Run.CtxListeners), ["loader/volatile-update", "agent/pre-step"]);
+    Check(Count, "M3: the pre-step and pre-execute listeners sit on the ctx (the intercept registers unconditionally; its call-time gates are On and interceptBash)", () => {
+      assert.deepEqual(Object.keys(Run.CtxListeners), [
+        "loader/volatile-update",
+        "tools/pre-execute",
+        "agent/pre-step"
+      ]);
+    });
+    await CheckAsync(Count, "M3: the intercept is inert while interceptBash is off (the call-time scope gate)", async () => {
+      const Before = Run.Lines.length;
+      const Exec_ = { name: "bash", args: { command: "cat a.txt" }, agent: { id: "agent-a" } };
+      const Decision = await Run.CtxListeners["tools/pre-execute"](Exec_, async () => ({ kind: "allow" }));
+      assert.deepEqual(Decision, { kind: "allow" });
+      assert.equal(Exec_.batchEditOffer, void 0);
+      assert.equal(Run.Lines.length, Before);
     });
     Check(Count, "M3: the State probe carries the contract fields", () => {
       assert.equal(Run.State.On, true);

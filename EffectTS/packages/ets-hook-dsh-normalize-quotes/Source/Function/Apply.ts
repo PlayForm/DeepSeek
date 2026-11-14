@@ -2,7 +2,7 @@ import type { Context, Events } from "@deepseek-ai/cordis";
 import type { GenerateOptions, StreamChunk } from "@deepseek-ai/dsh-llm";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate, StreamGate as Gate } from "@playform/ets-base-dsh";
+import { StreamGate as Gate, Proof } from "@playform/ets-base-dsh";
 import { Effect, Scope, Stream } from "effect";
 
 import Command, {
@@ -114,6 +114,7 @@ export default (Context: Context, Options: Config): void => {
 	const State: State = Factory.State<State>(Context, Options, {
 		module: "hook-dsh-normalize-quotes",
 		fields: {
+			On: "enabled",
 			Reasoning: "normalizeReasoning",
 			ToolArgs: "normalizeToolArguments",
 			// The granular scope gates + the tool-results exemption list —
@@ -149,7 +150,7 @@ export default (Context: Context, Options: Config): void => {
 	// NOT on the line.
 	Factory.Append(
 		State,
-		Activate([
+		Proof(State.On !== false, [
 			["reasoning", State.Reasoning ? "on" : "off"],
 			["toolArgs", State.ToolArgs || State.Scopes?.toolInput === true ? "on" : "off"],
 			["logFile", State.Ledger],

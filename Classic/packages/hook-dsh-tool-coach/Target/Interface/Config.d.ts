@@ -1,4 +1,4 @@
-import type { CoachNotes, CoachRow } from "./Execution.js";
+import type { CoachNotes, CoachRow, ToolOverride } from "./Execution.js";
 /**
  * @module Config
  *
@@ -86,6 +86,15 @@ export default interface Config {
      * Fetch tool descriptions live from the registry; false = static table only (volatile).
      */
     fetchLive: boolean;
+    /**
+     * Per-tool overrides of the model-facing line: the user's own words for a
+     * tool, applied on top of the harness's live or generated data (volatile).
+     */
+    toolDescriptions: Record<string, ToolOverride>;
+    /**
+     * Maximum parameters a tier-1 note or tier-3 reason names (volatile).
+     */
+    maxNoteParams: number;
     /**
      * Maximum rows in the tier-2 tool table (volatile).
      */

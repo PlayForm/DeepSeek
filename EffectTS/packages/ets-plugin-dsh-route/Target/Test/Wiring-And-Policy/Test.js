@@ -14,7 +14,7 @@ const runTest = async () => {
   const Count = MakeCounter();
   {
     const Loader = await import("../../../Target/Library.js");
-    const Run = Make(Validate({}));
+    const Run = Make(Validate({ enabled: false }));
     Check(Count, "W1: the default object carries name/apply/Config/inject", () => {
       assert.equal(Loader.default.name, "plugin-dsh-route");
       assert.equal(Loader.default.apply, Loader.apply);

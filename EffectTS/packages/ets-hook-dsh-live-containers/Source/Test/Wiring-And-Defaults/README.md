@@ -29,7 +29,8 @@ A drift here breaks every later folder, so it is its own folder.
         - logFile, enabled, sectionName, refresh, ttlCalls, separator,
           sectionBudgetBytes and blocks are `{ get }` callable cells
     - Sub: "config defaults: the shipped posture"
-        - enabled=false (the IDLE-forever posture), logFile=
+        - enabled=true (the shipped posture; off = the live disabled
+          posture), logFile=
           ~/.dsh/playform/hook-dsh-live-containers.log, sectionName=live-containers,
           refresh="request", ttlCalls=8, separator="---",
           sectionBudgetBytes=4096
@@ -58,7 +59,7 @@ A drift here breaks every later folder, so it is its own folder.
 
 The harness world: the fake ctx (on/get/logger capture + the root seam) with the REAL
 `@playform/ets-plugin-dsh-factory` instance from its built Target, and one
-`Make(Validate({ logFile: Ledger }))` against the harness tmpdir ledger.
+`Make(Validate({ logFile: Ledger, enabled: false }))` against the harness tmpdir ledger.
 
 Each validation refusal constructs a throwaway mount through the same `Validate` helper (each throws
 before any listener registration matters).

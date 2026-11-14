@@ -16,6 +16,12 @@ import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
  * is the factory's own Variable/Default list, identical to this module's
  * historical one) followed by the module's OWN fields verbatim.
  *
+ * VOLATILE CELLS: `enabled`, `log`, `logFile`, `updateCooldownMs` and
+ * `mutationTools` are `.volatile()` - hot edits commit WITHOUT remounting the
+ * plugin (the factory's State builder unwraps the cells). `enabled` is the
+ * cargo module's MASTER SWITCH (distinct from the shared `log` cell, which
+ * governs only the durable ledger file).
+ *
  * Defaults mirror the package.json governor except for the module-specific
  * fields: the SEPARATE ledger (ets-hook-dsh-cargo-governor.log - never the
  * package governor's log, passed as the `shared.logFile` default),
@@ -41,6 +47,12 @@ export default Compose(
 		logFile: "~/.dsh/playform/ets-hook-dsh-cargo-governor.log",
 	},
 	{
+		// THE MASTER SWITCH (volatile): false = the cargo module appends
+		// `disabled (enabled=false)` to the ledger instead of the activation
+		// proof while every surface stays registered (the LIVE disabled
+		// posture) - distinct from the shared `log` cell, which governs only
+		// the durable ledger file.
+		enabled: Schema.boolean().default(true).volatile(),
 		// Strict chain pass: strip unknown deps (the whole `name = "…"` entry) in
 		// a governed workspace — the documented Cargo-specific decision.
 		strict: Schema.boolean().default(false),

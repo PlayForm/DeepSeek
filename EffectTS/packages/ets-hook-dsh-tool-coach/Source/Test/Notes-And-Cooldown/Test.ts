@@ -20,21 +20,19 @@ import {
 /**
  * @module Test
  *
- * The singular test of tier 1 of the coaching ladder: detection plus
- * strikes (R2) and the cooldown gating (R3).
+ * Runs one singular test: tier 1 of the coaching ladder - detection + strikes (R2) and the cooldown
+ * gating (R3).
  *
  * @remarks
  *
- * The two tiers share one run on purpose: R3's counts continue the exact
- * run R2 built (R3's strike/suppression arithmetic is relative to R2's
- * history), so the folder replays R2's four setup calls before R3's
- * fresh-agent sequence.
+ * The two tiers share one run on purpose: R3's counts continue the exact run R2 built (R3's
+ * strike/suppression arithmetic is relative to R2's history), so the folder replays R2's four setup
+ * calls before R3's fresh-agent sequence. Runs standalone
+ * (`node Target/Test/Notes-And-Cooldown/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
  *
- * The file runs standalone (`node Target/Test/Notes-And-Cooldown/Test.js`)
- * and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
- *
- * It is a unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions
- * are moved verbatim from `Classic/smokes/tool-coach-smoke.mjs` (R2 + R3).
+ * Unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions are moved verbatim from
+ * Classic/smokes/tool-coach-smoke.mjs (R2 + R3).
  */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -93,8 +91,9 @@ export const runTest = async (): Promise<number> => {
 				assert.equal(
 					R2Text,
 					`Tool-coach note (strike 4, read-class bash pattern):
-- "cat a.md" is forbidden for file content. Use the read tool instead.
-- read: Read a UTF-8 text file (live fixture) and return line-numbered content. (key parameter: file_path).
+- "cat a.md" reads file content into the conversation through the terminal. Use the read tool instead.
+- read: Read a UTF-8 text file (live fixture) and return line-numbered content. Parameters: file_path (required), offset (default 1), limit (default 2000).
+- Call shape: read { file_path, offset?, limit? }.
 - terminal edits produce no fs/observed event, so the governor/pinner/normalize plugins never see them.
 The terminal runs COMMANDS (builds, tests, git, package managers); the tools handle CONTENT.`,
 				);

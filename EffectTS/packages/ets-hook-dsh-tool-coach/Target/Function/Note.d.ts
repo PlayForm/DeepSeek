@@ -2,11 +2,13 @@ import type { UserMessage } from "@deepseek-ai/dsh-llm";
 /**
  * @module Note
  *
- * The tier-1 additionalContexts notice builder (plan Part 3 §3.5 step 5).
- * Builds the labeled UserMessage the post-execute listener prepends to the
- * downstream decision's additionalContexts.
+ * The tier-1 additionalContexts notice builder: the labeled UserMessage the
+ * post-execute listener prepends to the downstream decision's
+ * additionalContexts.
  *
  * @remarks
+ *
+ * Plan Part 3 §3.5 step 5.
  *
  * THE SOURCE LABEL IS LOAD-BEARING (the repeat-tool-reminder precedent,
  * README:89): an unlabeled context would render as a user prompt in derived
@@ -20,10 +22,6 @@ import type { UserMessage } from "@deepseek-ai/dsh-llm";
  * contract LOCALLY (identified, deep-frozen, random UUID) - the repeat-
  * tool-reminder bundles the same helper instead of importing it, so the
  * built Target carries no runtime import of the harness's own packages.
- */
-/**
- * The coach's own source kind, declared in the coach's own module (the
- * MessageSourceMap vocabulary is merge-extensible by design).
  */
 declare module "@deepseek-ai/dsh-llm" {
     interface MessageSourceMap {

@@ -1,6 +1,12 @@
 import { Escape } from "@Function/Normalize.js";
-import type { AgentState, Decision, ToolCatalog, ToolEntry } from "@Interface/Execution.js";
-import { STATIC_TOOL_LINES, TRACEABILITY } from "@Variable/Notes.js";
+import type {
+	AgentState,
+	Decision,
+	ToolCatalog,
+	ToolEntry,
+	ToolParam,
+} from "@Interface/Execution.js";
+import { CLASS_LEADS, TRACEABILITY } from "@Variable/Notes.js";
 
 /**
  * @module Compose
@@ -16,31 +22,34 @@ import { STATIC_TOOL_LINES, TRACEABILITY } from "@Variable/Notes.js";
  * read from the ORIGINAL template and replaced with its value; user data
  * (the ${command} fill) is escaped (`${` -> `$${`) BEFORE insertion, so user
  * content can never add an unfilled placeholder, and inserted values are
- * never re-scanned. Any placeholder missing a fetched value degrades to the
- * static line (Variable/Notes.STATIC_TOOL_LINES) - composed output never
- * fails on a fetch gap.
+ * never re-scanned. A placeholder the catalog cannot fill degrades to its
+ * neutral form - composed output never fails on a fetch gap.
+ *
+ * The note carries the harness's OWN parameter surface, not a paraphrase of
+ * it: `${tool.params}` renders every key with its requiredness and its declared
+ * default, and `${tool.shape}` renders the call the model should make. That is
+ * what makes a suggestion actionable - `read { file_path, offset?, limit? }`
+ * answers "what are lines 45200-45240", while `read (key parameter: file_path)`
+ * does not.
  */
 /**
  * The knob values the composers read (the live State values).
  */
 export interface ComposeConfig {
 	maxSectionTools: number;
+	maxNoteParams: number;
 }
 
 /**
- * The tool entry a note names, with the static fallback applied.
+ * The entry a note names. A tool absent from the catalog (a user row naming a
+ * tool this deployment does not carry) composes to its neutral form.
  */
-const Entry = (Catalog: ToolCatalog, Name: string): ToolEntry => {
-	const Live = Catalog.tools.get(Name);
-	if (Live) {
-		return Live;
-	}
-	const Static = STATIC_TOOL_LINES[Name];
-	return {
-		description: Static?.description ?? "",
-		param: Static?.param ?? "",
-	};
-};
+const EMPTY: ToolEntry = { description: "", param: "", params: [] };
+
+/**
+ * The tool entry a note names.
+ */
+const Entry = (Catalog: ToolCatalog, Name: string): ToolEntry => Catalog.tools.get(Name) ?? EMPTY;
 
 /**
  * Single-pass template fill (no re-scanning of inserted values).
@@ -69,34 +78,91 @@ export const Fill = (Template: string, Values: Record<string, string | number>):
 };
 
 /**
+ * Render the parameter surface the note names, in the schema's own order:
+ * `file_path (required), offset (default 1), limit (default 2000)`.
+ *
+ * The cap keeps a note from turning into a schema dump: a tool with a dozen
+ * parameters names the first `maxNoteParams` and reports the remainder as a
+ * count, so the model still knows the surface is wider than what it reads.
+ */
+export const Params = (Params_: ToolParam[], Limit: number): string => {
+	if (Params_.length === 0) {
+		return "none declared";
+	}
+	const Shown = Params_.slice(0, Math.max(1, Limit));
+	const Rendered = Shown.map((Param) => {
+		if (Param.required) {
+			return `${Param.name} (required)`;
+		}
+		return Param.default === undefined
+			? `${Param.name} (optional)`
+			: `${Param.name} (default ${Param.default})`;
+	});
+	if (Params_.length > Shown.length) {
+		Rendered.push(`+${Params_.length - Shown.length} more`);
+	}
+	return Rendered.join(", ");
+};
+
+/**
+ * Render the call shape: `read { file_path, offset?, limit? }` (an optional key
+ * carries `?`, the convention the model already reads in the tool schema).
+ */
+export const Shape = (Name: string, Params_: ToolParam[]): string => {
+	if (!Name) {
+		return "the tool's own schema";
+	}
+	if (Params_.length === 0) {
+		return `${Name} { }`;
+	}
+	const Keys = Params_.map((Param) => (Param.required ? Param.name : `${Param.name}?`));
+	return `${Name} { ${Keys.join(", ")} }`;
+};
+
+/**
  * The shared placeholder values for a note about one decision.
  */
-const Values = (Decision: Decision, Catalog: ToolCatalog): Record<string, string | number> => {
+const Values = (
+	Decision: Decision,
+	Catalog: ToolCatalog,
+	Config: ComposeConfig,
+): Record<string, string | number> => {
 	const Match = Decision.match;
 	const Name = Match?.tool ?? "";
 	const Tool = Entry(Catalog, Name);
 	return {
 		"${command}": Escape(Match?.command ?? ""),
 		"${class}": Match?.class ?? "",
+		"${class.lead}": Match === null ? "" : (CLASS_LEADS[Match.class] ?? ""),
 		"${count}": Decision.strikes,
 		"${traceability}": TRACEABILITY,
 		"${tool.name}": Name,
 		"${tool.description}": Tool.description,
 		"${tool.param}": Tool.param,
+		"${tool.params}": Params(Tool.params, Config.maxNoteParams),
+		"${tool.shape}": Shape(Name, Tool.params),
 	};
 };
 
 /**
- * The tier-1 note text (the fetched description line + traceability).
+ * The tier-1 note text (the fetched description line + the parameter surface).
  */
-export const First = (Decision: Decision, Catalog: ToolCatalog, Template: string): string =>
-	Fill(Template, Values(Decision, Catalog));
+export const First = (
+	Decision: Decision,
+	Catalog: ToolCatalog,
+	Template: string,
+	Config: ComposeConfig,
+): string => Fill(Template, Values(Decision, Catalog, Config));
 
 /**
  * The tier-3 deny reason (the same forbidden phrasing).
  */
-export const Denied = (Decision: Decision, Catalog: ToolCatalog, Template: string): string =>
-	Fill(Template, Values(Decision, Catalog));
+export const Denied = (
+	Decision: Decision,
+	Catalog: ToolCatalog,
+	Template: string,
+	Config: ComposeConfig,
+): string => Fill(Template, Values(Decision, Catalog, Config));
 
 /**
  * The tier-2 section text (3 fixed rules + the tool table).

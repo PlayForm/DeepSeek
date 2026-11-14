@@ -1,11 +1,12 @@
 /**
  * @module Patterns
  *
- * The default regression-pattern table and the default exemption list (the
- * plan's Part 2 tables, verbatim scope). The tool-coach only judges TERMINAL
- * calls (config `judgeTools`); these rows classify the COMMAND text.
+ * The default regression-pattern table and the default exemption list.
  *
  * @remarks
+ *
+ * The plan's Part 2 tables, verbatim scope. The tool-coach only judges
+ * TERMINAL calls (config `judgeTools`); these rows classify the COMMAND text.
  *
  * The boundary rule (Documentation/Skill/task-routing/SKILL.md:165-170 +
  * code-authoring/SKILL.md:25-32): the terminal runs COMMANDS; the tools handle

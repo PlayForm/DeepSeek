@@ -1,12 +1,12 @@
 # Rules-And-Refusals - the resolution rules and the refusal-to-guess tests
 
-The loader contract of the operate hook, the service registration from apply, the cold-mount idle-forever posture, the fail-loud validation, the happy-path proposals, the full refusal vocabulary, and the purity rule.
+The loader contract of the operate hook, the service registration from apply, the cold-mount live disabled posture, the fail-loud validation, the happy-path proposals, the full refusal vocabulary, and the purity rule.
 
 ## Scenarios
 
 - G1: the default object carries exactly name/apply/Config/inject, and inject is `["pluginFactory", "fs"]`.
 - G2: an enabled mount returns NOTHING from apply, exposes `ctx.__hookDshWorkspaceOperateState`, registers the `workspaceOperate` service, registers the fs/observed fence tracker on the ROOT only, and the activation line is byte-exact: `operate: activated (domain=workspace_operate)` (logger and durable file).
-- G3: a disabled mount wires NOTHING and logs the honest `operate: disabled (enabled=false)` line while the service stays registered.
+- G3: a disabled mount registers EVERY surface (the fs/observed fence tracker and the `operate-storage` effect) and logs the honest `operate: disabled (enabled=false)` line while the service stays registered.
 - G4: the fail-loud validation, where an empty domain and a zero maxProposals throw with module-prefixed errors.
 - P1: the happy paths, where a rename, a connect, and a replace proposal are each recorded with the byte-exact `proposed <id> <kind> <path>` line (logger and durable file) and carry the monotonic id `<kind>-<sequence>`, the version fence, and the sequence.
 - P2: the refusal vocabulary, byte-exact and never guessed: `bad-request` (malformed rename and replace), `missing-version`, `graph-unavailable` (no workspaceGraph mounted), `unknown-symbol` (rename and connect endpoints), `name-collision`, `incompatible-edge`, `duplicate-edge`, `stale-version` (fence contradicts the file version), and `span-beyond-file` (checked against the real line count of the file); every refusal is ledgered with the `refused <kind> <reason>` line.

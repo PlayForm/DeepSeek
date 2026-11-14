@@ -23,6 +23,12 @@ import Schema from "@deepseek-ai/schemastery";
  * defaults. `updateCooldownMs` (default 3000) comes with the shared block -
  * the pinner never reads it (no update stage).
  *
+ * VOLATILE CELLS: `enabled`, `log`, `logFile`, `updateCooldownMs` and
+ * `mutationTools` are `.volatile()` - hot edits commit WITHOUT remounting the
+ * plugin (the factory's State builder unwraps the cells). `enabled` is the
+ * pinner's MASTER SWITCH (distinct from the shared `log` cell, which governs
+ * only the durable ledger file).
+ *
  * The schema must exist as a MODULE-LEVEL export (the loader reads Config
  * before any apply runs), while the factory is a SERVICE - the named export is
  * the module-load use (the pre-v0.1.1 workaround - instantiating the service

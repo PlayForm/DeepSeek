@@ -10,6 +10,7 @@ import {
   Make,
   MakeCounter,
   NOTE_DENIED,
+  NOTE_DENIED_TOOL,
   NOTE_FIRST,
   NOTE_PERSISTENT,
   Validate,
@@ -33,6 +34,25 @@ const runTest = async () => {
     });
     Check(Count, "volatile cell: notes arrives as { get } (object cell)", () => {
       assert.equal(typeof Raw1.notes.get, "function");
+    });
+  }
+  {
+    const Base = Validate({});
+    Check(Count, "config default enabled=true", () => {
+      assert.equal(Base.enabled.get(), true);
+    });
+    Check(Count, "config default log=true", () => {
+      assert.equal(Base.log.get(), true);
+    });
+    Check(Count, "config default logFile = the coach's ledger path", () => {
+      assert.equal(Base.logFile.get(), "~/.dsh/playform/ets-hook-dsh-tool-coach.log");
+    });
+    Check(Count, "the base keys sit first, and they are enabled, log, logFile", () => {
+      assert.deepEqual(
+        Object.keys(Base).slice(0, 3).sort(),
+        ["enabled", "log", "logFile"],
+        "the base keys are the first three"
+      );
     });
   }
   {
@@ -72,10 +92,15 @@ const runTest = async () => {
         JSON.stringify(["bash", "pwsh"])
       );
     });
-    Check(Count, "config default notes: the three verbatim templates", () => {
+    Check(Count, "config default notes: the four verbatim templates", () => {
       assert.equal(
         JSON.stringify(Raw1.notes.get()),
-        JSON.stringify({ first: NOTE_FIRST, persistent: NOTE_PERSISTENT, denied: NOTE_DENIED })
+        JSON.stringify({
+          first: NOTE_FIRST,
+          persistent: NOTE_PERSISTENT,
+          denied: NOTE_DENIED,
+          deniedTool: NOTE_DENIED_TOOL
+        })
       );
     });
     Check(Count, "config default patternTable = the built-in adversarial table", () => {

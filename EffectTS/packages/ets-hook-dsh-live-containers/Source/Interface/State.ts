@@ -276,7 +276,7 @@ export default interface State extends Shared {
 	 * both.
 	 *
 	 * The monitor flip (config `monitors`, volatile) - the second explicit flip after the
-	 * plugin's own enable (the IDLE-forever posture).
+	 * plugin's own enable ("off" even when the plugin is enabled).
 	 */
 	MonitorOn: "off" | "on";
 

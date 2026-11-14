@@ -136,7 +136,7 @@ export const runTest = async (): Promise<number> => {
 		Run.Service.Record(Block());
 		Check(Count, "T2: Record still stores without journaling when disabled", () => {
 			assert.equal(Run.State.Sessions.get("session-child").blocks.size, 1);
-			assert.deepEqual(JournalEvents(), ["recorded"]);
+			assert.deepEqual(JournalEvents(), []);
 		});
 	}
 

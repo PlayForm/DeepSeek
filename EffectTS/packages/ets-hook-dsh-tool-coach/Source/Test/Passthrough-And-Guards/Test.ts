@@ -16,22 +16,17 @@ import {
 /**
  * @module Test
  *
- * The singular test of the zero-noise paths.
+ * Runs one singular test: the zero-noise paths.
  *
  * @remarks
  *
- * The zero-noise paths: legitimate bash passes through with NO
- * additionalContexts and no ledger noise (R1), the fail-open envelope turns
- * a malformed payload into a prefixed warning instead of a throw, and the
- * dedicated tools are never judged.
+ * Legitimate bash passes through with NO additionalContexts and no ledger noise (R1), the fail-open
+ * envelope turns a malformed payload into a prefixed warning instead of a throw, and the dedicated
+ * tools are never judged. Runs standalone (`node Target/Test/Passthrough-And-Guards/Test.js`) AND
+ * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
  *
- * The file runs standalone
- * (`node Target/Test/Passthrough-And-Guards/Test.js`) and under the
- * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
- *
- * It is a unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions
- * are moved verbatim from `Classic/smokes/tool-coach-smoke.mjs` (R1 + the
- * fail-open envelope checks + the non-judged check).
+ * Unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions are moved verbatim from
+ * Classic/smokes/tool-coach-smoke.mjs (R1 + the fail-open envelope checks + the non-judged check).
  */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();

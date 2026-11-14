@@ -25,9 +25,12 @@ import Schema from "@deepseek-ai/schemastery";
  * opsPerCommit, deadlineMs, strictMode, interceptBash, monitorChecksets)
  * lands on the next tool call without a remount.
  *
- * `enabled` defaults to FALSE - the IDLE-forever posture: the plugin ships
- * disabled, never appears in the profile's bundles, and enables only by an
- * explicit ACTIVATE.
+ * `enabled` defaults to TRUE - the LIVE DISABLED posture: every listener, the
+ * tool and the root observer register unconditionally on every mount (a
+ * disabled mount writes only the byte-exact `disabled (enabled=false)` ledger
+ * line instead of the activation proof), and every registered surface reads
+ * the volatile `On` cell at CALL time, so a flip lands on the next tool call
+ * without a remount.
  *
  * The runtime import of `@deepseek-ai/schemastery` (the schema must be a real
  * schemastery instance - the loader consumes it through the Standard Schema

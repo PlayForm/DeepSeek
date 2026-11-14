@@ -12,6 +12,11 @@ import type KindSpec from "./KindSpec.js";
  * Variable/Config.ts produces it.
  */
 export default interface Config {
+	/**
+	 * The pass-on's on/off switch (the schema's `enabled`, default true;
+	 * false journals `disabled (enabled=false)` and Prepare refuses at call
+	 * time).
+	 */
 	enabled: boolean;
 
 	/**

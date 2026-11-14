@@ -14,6 +14,12 @@ import Schema from "@deepseek-ai/schemastery";
  * is the factory's own Variable/Default list, identical to this module's
  * historical one) followed by the module's OWN fields verbatim.
  *
+ * VOLATILE CELLS: `enabled`, `log`, `logFile`, `updateCooldownMs` and
+ * `mutationTools` are `.volatile()` - hot edits commit WITHOUT remounting the
+ * plugin (the factory's State builder unwraps the cells). `enabled` is the
+ * cargo module's MASTER SWITCH (distinct from the shared `log` cell, which
+ * governs only the durable ledger file).
+ *
  * Defaults mirror the package.json governor except for the module-specific
  * fields: the SEPARATE ledger (ets-hook-dsh-cargo-governor.log - never the
  * package governor's log, passed as the `shared.logFile` default),

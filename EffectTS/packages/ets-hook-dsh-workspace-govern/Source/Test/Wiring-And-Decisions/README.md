@@ -1,12 +1,12 @@
 # Wiring-And-Decisions - the loader contract, wiring, and gate decisions
 
-The loader contract of the govern hook, the service registration from apply, the cold-mount idle-forever posture, the fail-loud validation, the four independent means-checks through the real service, the policy override, the fail-open recovery table, the decision ring, and the purity invariant.
+The loader contract of the govern hook, the service registration from apply, the cold-mount live disabled posture, the fail-loud validation, the four independent means-checks through the real service, the policy override, the fail-open recovery table, the decision ring, and the purity invariant.
 
 ## Scenarios
 
 - G1: the default object carries exactly name/apply/Config/inject, and inject is `["pluginFactory"]`.
 - G2: an enabled mount returns NOTHING from apply, exposes `ctx.__hookDshWorkspaceGovernState`, registers the `workspaceGovern` service (the gate/decisions methods resolve on the context), and the activation line is byte-exact: `govern: activated (tools=4, policy=0)` (logger and durable file).
-- G3: a disabled mount wires NOTHING (no waterfall listeners) and logs the honest `govern: disabled (enabled=false)` line while the service stays registered.
+- G3: a disabled mount registers EVERY listener (the two gate waterfall listeners beside the factory's) and logs the honest `govern: disabled (enabled=false)` line while the service stays registered.
 - G4: the fail-loud validation, where a non-array policy table, a bad recovery override behavior, and a zero loop bound all throw with module-prefixed errors.
 - D1: a declared, contributed proposal passes with the byte-exact `passed op:1 (write /repo/src/a.ts)` line (logger and durable file).
 - D2: an empty contribution denies with the byte-exact `denied op:1 (contributes)` line and the obligations record.

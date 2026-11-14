@@ -3,17 +3,17 @@ import type Factory from "@playform/ets-plugin-dsh-factory";
 /**
  * @module Factory
  *
- * The STRUCTURAL VIEW of the injected @playform/plugin-dsh-factory service
- * (the family's class/service plugin, factory SCHEME.md §0-§2).
+ * The STRUCTURAL VIEW of the injected @playform/ets-plugin-dsh-factory service.
  *
  * @remarks
  *
- * The coach is the factory's NON-MANIFEST consumer: it uses the State builder
- * (cell unwrap + shared fields + the P10 volatile refresh, §2.10) and the
- * ledger (Append, §2.1) - but NOT the fs/observed Wire (§2.11,
- * fs/observed-hardwired to this family's silence): the coach implements its
- * OWN plain `ctx.on(...)` registrations, the same fiber-owned pattern (with
- * the waterfall's `next()`-first discipline and the fail-open envelope).
+ * The family's class/service plugin, factory SCHEME.md §0-§2. The coach is the
+ * factory's NON-MANIFEST consumer: it uses the State builder (cell unwrap +
+ * shared fields + the P10 volatile refresh, §2.10) and the ledger (Append,
+ * §2.1) - but NOT the fs/observed Wire (§2.11, fs/observed-hardwired to this
+ * family's silence): the coach implements its OWN plain `ctx.on(...)`
+ * registrations, the same fiber-owned pattern (with the waterfall's
+ * `next()`-first discipline and the fail-open envelope).
  *
  * The type arrives TYPE-ONLY from the factory package (erased at build - the
  * built Target has NO runtime import of the factory: at runtime the service
@@ -27,7 +27,7 @@ import type Factory from "@playform/ets-plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
 	interface Context {
 		/**
-		 * The plugin-factory service (@playform/plugin-dsh-factory).
+		 * The plugin-factory service (@playform/ets-plugin-dsh-factory).
 		 */
 		pluginFactory: Factory;
 	}

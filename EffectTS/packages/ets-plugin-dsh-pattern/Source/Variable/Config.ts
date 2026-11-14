@@ -10,16 +10,19 @@ import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
  *
  * Composed with the factory's standalone Schema helper (`shared: false` - the
  * minimal block, only the universal log/logFile volatile cells; the service
- * hooks no fs/observed machinery). Every knob is a volatile cell so a hot
- * edit lands on the next service call without a remount. The service class
- * reads these through Configure; the defaults here are the truth. `enabled`
- * defaults to FALSE - the idle-forever posture: the patch row and the README
- * ship the service disabled; a cold mount logs `disabled (enabled=false)` and
- * Match returns the empty result (the abstention) while the service stays
- * resolvable.
+ * hooks no fs/observed machinery). Every knob is a volatile cell so a hot edit
+ * lands on the next service call without a remount. The service class reads
+ * these through Configure; the defaults here are the truth. `enabled` defaults
+ * to TRUE - the shipped posture is ON, and a profile turns it off with
+ * `enabled: false` (the LIVE disabled posture: a cold mount logs
+ * `disabled (enabled=false)` and Match returns the empty result - the
+ * abstention - while the service stays resolvable).
  */
 export default Compose(false, {
-	enabled: Schema.boolean().default(false).volatile(),
+	// The MASTER SWITCH (volatile: a flip is read at the next service call
+	// with no remount): false = the mount logs `disabled (enabled=false)`
+	// while the service stays resolvable and Match abstains silently.
+	enabled: Schema.boolean().default(true).volatile(),
 	logFile: Schema.string().default("~/.dsh/playform/ets-plugin-dsh-pattern.log").volatile(),
 	// The storage-domain name: the KV domain is the PRIMARY store (the JSON
 	// snapshot below is the fallback). A lowercase unit name (the library's

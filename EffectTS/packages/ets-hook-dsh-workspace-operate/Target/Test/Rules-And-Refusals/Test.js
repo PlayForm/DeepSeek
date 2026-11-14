@@ -64,8 +64,9 @@ const runTest = async () => {
   }
   {
     const Run = Make(Validate({ logFile: Ledger, enabled: false }));
-    Check(Count, "G3: a disabled mount wires NOTHING and logs the honest line", () => {
-      assert.deepEqual(Run.RootNames, []);
+    Check(Count, "G3: a disabled mount registers EVERY surface and logs the honest line", () => {
+      assert.deepEqual(Run.RootNames, ["fs/observed"]);
+      assert.deepEqual(Run.Effects, ["operate-storage"]);
       assert.deepEqual(Run.Lines, ["operate: disabled (enabled=false)"]);
       assert.ok(Run.Provided["workspaceOperate"] !== void 0);
     });

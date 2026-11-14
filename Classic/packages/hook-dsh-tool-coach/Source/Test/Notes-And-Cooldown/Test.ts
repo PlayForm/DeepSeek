@@ -91,8 +91,9 @@ export const runTest = async (): Promise<number> => {
 				assert.equal(
 					R2Text,
 					`Tool-coach note (strike 4, read-class bash pattern):
-- "cat a.md" is forbidden for file content. Use the read tool instead.
-- read: Read a UTF-8 text file (live fixture) and return line-numbered content. (key parameter: file_path).
+- "cat a.md" reads file content into the conversation through the terminal. Use the read tool instead.
+- read: Read a UTF-8 text file (live fixture) and return line-numbered content. Parameters: file_path (required), offset (default 1), limit (default 2000).
+- Call shape: read { file_path, offset?, limit? }.
 - terminal edits produce no fs/observed event, so the governor/pinner/normalize plugins never see them.
 The terminal runs COMMANDS (builds, tests, git, package managers); the tools handle CONTENT.`,
 				);

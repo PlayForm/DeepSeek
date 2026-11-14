@@ -4,16 +4,15 @@ import { CLASS_PRIORITY } from "@Variable/Patterns.js";
 /**
  * @module Normalize
  *
- * Command normalization and segment splitting (plan Part 2 §2.7a).
+ * Command normalization and segment splitting.
  *
  * @remarks
  *
- * Detection is NEVER exact-match only: before any matching, the raw command is
- * normalized so obfuscated variants resolve to the same text the pattern rows
- * and the intent-marker scan see.
+ * Plan Part 2 §2.7a. Detection is NEVER exact-match only: before any
+ * matching, the raw command is normalized so obfuscated variants resolve to
+ * the same text the pattern rows and the intent-marker scan see.
  *
  * The normalizer, in order:
- *
  *   1. Heredoc bodies are STRIPPED (`<< [+-]MARKER` ... MARKER): the body is
  *      stdin data, not command text, and must not match rows or markers; the
  *      `<< MARKER` prefix and any redirect survive (the heredoc-to-file row).

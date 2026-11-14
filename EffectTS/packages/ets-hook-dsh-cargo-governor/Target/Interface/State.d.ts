@@ -40,6 +40,10 @@ import type { Scope } from "effect";
  */
 export default interface State extends Shared {
     /**
+     * The MASTER SWITCH (config `enabled`; the setup map's `On <- enabled`).
+     */
+    On: boolean;
+    /**
      * The injected @playform/ets-plugin-dsh-factory service (the P2 UpdateKey
      * helper and the ledger/journal delegates; assigned once in
      * Function/Apply - the governor-family pattern).

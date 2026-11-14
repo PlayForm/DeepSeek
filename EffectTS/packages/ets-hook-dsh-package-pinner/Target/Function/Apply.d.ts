@@ -12,11 +12,12 @@ export default _default;
  * Everything here is factory machinery (ctx.pluginFactory, injected - the
  * loader holds this bundle pending until the factory service exists):
  * - State - Furnace.State(ctx, config, { module: "hook-dsh-pinner-package",
- *   fields: { Section: "sections" }, policyFileName: "pin-policy.json",
- *   journalDomain: "hook_dsh_package_pinner" }): the shared shape (defensive
- *   cell unwrap of the factory's volatile shared fields,
- *   Tool/Policy/Ledger/Enabled/List mappings, Stash/Inflight/Seams/Queue/
- *   Journal, the P9 subprocess probe) + the pinner's Section.
+ *   fields: { On: "enabled", Section: "sections" }, policyFileName:
+ *   "pin-policy.json", journalDomain: "hook_dsh_package_pinner" }): the
+ *   shared shape (defensive cell unwrap of the factory's volatile shared
+ *   fields, Tool/Policy/Ledger/Enabled/List mappings, Stash/Inflight/Seams/
+ *   Queue/Journal, the P9 subprocess probe) + the master switch and the
+ *   pinner's Section.
  * - The activation proof - the MODULE'S ledger strings: the durable
  *   `activated (...)` Append ("did it activate" must be answerable from the
  *   ledger alone) and the P5 Journal record.
@@ -40,7 +41,7 @@ export default _default;
  * sync `Scope.make` run through `Effect.runSync` is fully synchronous, so no
  * async boundary is introduced). THE PINNER HAS NO UPDATE STAGE - it never
  * uses the core's typed-effect Update envelope (no Dispatch/Settle; its only
- * core imports are the plain composers Activate / Suppress / Refusal) and its
+ * core imports are the plain composers Proof / Suppress / Refusal) and its
  * pin chain runs as the FACTORY'S detached contained continuation (the
  * factory's own Effect runtime: the `dsh.chain-pass` span, the WriteService,
  * the `Effect.ensuring` P2 finalizer) - so, unlike the governor, no

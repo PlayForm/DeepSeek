@@ -16,10 +16,11 @@ export default _default;
  * per the family's tools-live-in-their-owning-hook law. The contract is
  * Documentation/Plans/Workspace-Family/MERGE.md.
  *
- * THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default
- * and the bundle patch row). A cold mount logs `disabled (enabled=false)`,
- * registers the service (it reads honestly from the empty state), and wires
- * NOTHING - no tool, no storage effect.
+ * THE LIVE DISABLED POSTURE: `enabled` defaults to false (the schema default
+ * and the bundle patch row). A cold mount logs
+ * `disabled (enabled=false)` and registers EVERY surface - the tool, the own
+ * P5-style storage effect and the service (it reads honestly from the empty
+ * state).
  *
  * The function returns NOTHING (the loader contract). The test probe is
  * the `ctx.__hookDshWorkspaceMergeState` attachment.

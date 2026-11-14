@@ -79,8 +79,12 @@ export const runTest = async (): Promise<number> => {
 	// Group G3: the cold-mount idle-forever posture.
 	{
 		const Run = Make(Validate({ logFile: Ledger, enabled: false }));
-		Check(Count, "G3: a disabled mount wires NOTHING and logs the honest line", () => {
-			assert.deepEqual(Object.keys(Run.CtxListeners), ["loader/volatile-update"]);
+		Check(Count, "G3: a disabled mount registers EVERY listener and logs the honest line", () => {
+			assert.deepEqual(Object.keys(Run.CtxListeners), [
+				"loader/volatile-update",
+				"tools/pre-execute",
+				"tools/post-execute",
+			]);
 			assert.deepEqual(Run.Lines, ["govern: disabled (enabled=false)"]);
 			assert.ok(Run.Provided["workspaceGovern"] !== undefined);
 		});

@@ -1,7 +1,7 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
+import { Proof } from "@playform/ets-base-dsh";
 import { Effect, Scope } from "effect";
 
 import * as Direct from "./Direct.js";
@@ -53,6 +53,7 @@ export default (Context: Context, Options: Config): void => {
 	const State: State = Factory.State(Context, Options, {
 		module: "hook-dsh-governor-package",
 		fields: {
+			On: "enabled",
 			Strict: "strict",
 			Wait: "updateCooldownMs",
 			Limit: "maxUpdateFailures",
@@ -91,14 +92,20 @@ export default (Context: Context, Options: Config): void => {
 	// in-flight disposal, P5 opens the optional storage domain.
 	Factory.Attach(Context, { state: State, name: "hook-dsh-governor-package" });
 
-	// Durable activation proof — "did it activate" must be answerable from
+	// THE MASTER SWITCH (config `enabled`, volatile - the setup map's
+	// `On <- enabled`, so the State builder's P10 volatile-update listener
+	// refreshes it in place): the ONE mount-time effect of the flag is the
+	// ledger line - a disabled governor appends the durable disabled line
+	// INSTEAD of the activation proof and still registers EVERYTHING below
+	// (no early return - the LIVE disabled posture).
+	// Durable activation proof - "did it activate" must be answerable from
 	// the ledger alone. The same summary becomes the storage journal's
 	// `activated` record (P5; queued until the optional domain opens). The
 	// line's string mechanics (the `activated (` prefix, the `k=v` join, the
-	// `)` suffix) live in the core's Activate composer; the FIELD LIST is the
+	// `)` suffix) live in the core's Proof composer; the FIELD LIST is the
 	// module's own — the leading bare flavor word (empty key), the bracketed
 	// lists and the `(discovery)` fallbacks.
-	const Proof = Activate([
+	const Line = Proof(State.On !== false, [
 		["", "anywhere mode"],
 		["logFile", State.Ledger],
 		["updateMode", State.Mode],
@@ -106,8 +113,13 @@ export default (Context: Context, Options: Config): void => {
 		["exclude", `[${State.List.join(", ")}]`],
 		["policyFile", State.Policy || "(discovery)"],
 	]);
-	Factory.Append(State, Proof);
-	Factory.Journal(State, "activated", "", Proof);
+	Factory.Append(State, Line);
+	// The storage journal's `activated` record belongs to the LIVE mount only:
+	// the disabled mount's proof is the disabled line alone (the test asserts
+	// the absence of an activated record on a disabled mount).
+	if (State.On !== false) {
+		Factory.Journal(State, "activated", "", Line);
+	}
 
 	// The listener is owned by the current fiber (Factory.Wire): removed on
 	// unload — no manual removeListener bookkeeping, ever.

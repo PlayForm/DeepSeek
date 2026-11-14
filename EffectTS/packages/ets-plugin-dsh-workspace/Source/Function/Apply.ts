@@ -8,7 +8,7 @@ import type Config from "@Interface/Config.js";
 import type { NodeKind } from "@Interface/Graph.js";
 import type State from "@Interface/State.js";
 import type { Log } from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
+import { Proof } from "@playform/ets-base-dsh";
 import Version from "@Variable/Version.js";
 
 /**
@@ -129,17 +129,13 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone (the master switch and the surface on the line).
-	if (!State_.On) {
-		Factory.Append(State_, "disabled (enabled=false)");
-	} else {
-		Factory.Append(
-			State_,
-			Activate([
-				["", `bundle ${Version}`],
-				["tools", "5"],
-			]),
-		);
-	}
+	Factory.Append(
+		State_,
+		Proof(State_.On !== false, [
+			["", `bundle ${Version}`],
+			["tools", "5"],
+		]),
+	);
 
 	// The five tools - the ONLY conversational surface: the four navigation
 	// tools (V4-1 §3.4) plus the indexing trigger (workspace_index). The

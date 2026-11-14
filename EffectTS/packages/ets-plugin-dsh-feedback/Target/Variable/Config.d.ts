@@ -15,10 +15,11 @@ import Schema from "@deepseek-ai/schemastery";
  * no factory State to hot-refresh, so a config edit reloads the plugin (the PO C decision is
  * recorded in SCHEME.md).
  *
- * `enabled` defaults to true once the plugin is ACTIVATED: the feedback member is a passive
- * collector - it writes only its own ledger and never touches the waterfall - so its idle risk
- * is the ledger size, capped by maxSessions. The bundle patch still ships `enabled: true`
- * explicit so the activation is visible in the patch.
+ * `enabled` defaults to TRUE - the LIVE DISABLED posture: the service and the
+ * session/event listener register on every mount (a disabled member passes
+ * every call through with ZERO ledger lines - Push and Outcome no-op, the
+ * listener records nothing, the in-memory Record keeps its documented store
+ * without a journal line), and the read methods stay honest.
  */
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     enabled: Schema<boolean, boolean, "defined">;

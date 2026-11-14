@@ -15,7 +15,7 @@ import {
  * @module Test
  *
  * The wiring and the enqueue path: the loader contract (the default object
- * carries name/apply/Config/inject, apply returns nothing), the IDLE-forever
+ * carries name/apply/Config/inject, apply returns nothing), the live disabled
  * cold mount, the activation proof, the dshQueue service registered from
  * apply, the two tools registered, the enqueue ledger strings byte-exact, the
  * fail-loud capacity validation, the disabled tools, and the zero
@@ -49,10 +49,11 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group W1: the cold mount (the IDLE-forever posture).
+	// Group W1: the cold mount (the live disabled posture: registered,
+	// silent, and the flag read at call time).
 	{
 		rm();
-		const Run = Make(Validate({ logFile: Ledger }));
+		const Run = Make(Validate({ logFile: Ledger, enabled: false }));
 		Check(Count, "W1: the cold mount logs the byte-exact disabled line", () => {
 			assert.deepEqual(Run.Lines, ["plugin-dsh-queue: disabled (enabled=false)"]);
 		});

@@ -1,4 +1,5 @@
 import { Service, type Context } from "@deepseek-ai/cordis";
+import { Proof } from "@playform/ets-base-dsh";
 
 import { Decay as DecayConfidence } from "./Function/Confidence.js";
 import Knobs from "./Function/Knobs.js";
@@ -130,10 +131,11 @@ export default class PatternService extends Service {
 		for (const Pattern_ of DefaultPatterns) {
 			this.Store.Put({ ...Pattern_ });
 		}
+		// The mount proof: the byte-exact disabled marker or the activation
+		// summary (the live disabled posture - the switch and the pairs live
+		// module-side, the composer owns the branch).
 		this.Ledger(
-			this.Knobs.enabled
-				? `activated (seeded ${this.Store.Size()} patterns)`
-				: "disabled (enabled=false)",
+			Proof(this.Knobs.enabled !== false, [["", `seeded ${this.Store.Size()} patterns`]]),
 		);
 		// THE STORE PROBE (the family's P5-style optional facility): the
 		// storage hub's domain form first, then the provided storageDomain

@@ -18,7 +18,8 @@ mechanical Push hop with its no-ops and chain cap, and the transfer format.
   and the honest content untouched; the destination session is new, so the journal event is
   `recorded` there.
 - T2: the no-ops - a push back to the same session, and a push when `enabled: false`; Record still
-  stores (and journals) while disabled.
+  stores while disabled and journals nothing (the journal gate reads the master switch at call
+  time).
 - T3: the chain cap - a block whose chain exceeds `maxChain` is dropped, never recorded.
 - R1: the transfer format is byte-exact, and the hopped form carries the joined DELTAS/TRANSFERRED
   chains and the read-status.

@@ -13,7 +13,7 @@ import ServiceClass from "@Function/Service.js";
 import type Config from "@Interface/Config.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
+import { Proof } from "@playform/ets-base-dsh";
 
 /**
  * @module Apply
@@ -43,8 +43,10 @@ import { Activate } from "@playform/ets-base-dsh";
  * dispatch (per-obligation failures are governed by the recovery table
  * instead - Function/Recovery).
  *
- * THE IDLE-FOREVER POSTURE: `enabled` defaults to false. A cold mount logs
- * `disabled (enabled=false)` and wires NOTHING.
+ * THE LIVE DISABLED POSTURE: `enabled` defaults to false. A cold mount logs
+ * `disabled (enabled=false)` and registers EVERY surface - the two gate
+ * listeners and the service. The listeners check the flag at CALL time, so
+ * a disabled call passes through with ZERO ledger lines.
  *
  * The function returns NOTHING (the loader contract). The test probe is the
  * `ctx.__hookDshWorkspaceGovernState` attachment.
@@ -143,17 +145,14 @@ export default (Context: Context, Options: Config): void => {
 		Factory.Append(State, Message);
 	};
 	new ServiceClass(Context, State, Append);
-	switch (true) {
-		case !State.On:
-			// The cold mount: honest in the ledger, wired to nothing.
-			Factory.Append(State, "disabled (enabled=false)");
-			return;
-		default:
-	}
-	// The activation proof (the module's own composed line).
+	// The master switch: the ONE mount-time effect of the flag is the ledger
+	// line - a disabled mount writes `disabled (enabled=false)` instead of
+	// the activation proof and still registers EVERYTHING below (the
+	// live-flip law: the factory refreshes State.On in place, so a flip acts
+	// on the very next call in both directions, with no remount).
 	Factory.Append(
 		State,
-		Activate([
+		Proof(State.On !== false, [
 			["tools", String(State.Tools.length)],
 			["policy", String(State.PolicyRules.length)],
 		]),

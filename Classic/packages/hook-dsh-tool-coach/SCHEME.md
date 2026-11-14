@@ -79,15 +79,32 @@ exempt override → highest class priority wins (`write > read > search > discov
 - **Exemptions**: `DEFAULT_EXEMPTS` + the user's, matched per pipeline anchored at the head (an
   exempt head dominates its pipe, while a bare `echo x > file` still fires).
 
-## 4. The dynamic fetch (Function/Fetch + Function/Compose)
+## 4. The dynamic fetch (Function/Fetch + Function/Compose + Function/Override)
 
 `ctx.tools.schemas()` yields the name, the first sentence of the description (≤120 chars,
-parenthesis-aware), and the primary parameter key (`parameters.properties[0]`).
+parenthesis-aware), and the FULL parameter surface: every key in `parameters.properties`, with
+requiredness from `parameters.required` and the default from the parameter's `default` annotation or
+its "Defaults to X." description sentence (the harness's house convention; a continuation clause
+like "Defaults to and is capped by configuration." states no default and is rejected).
+
+`${tool.params}` renders that surface
+(`file_path (required), offset (default 1), limit (default 2000)`, capped at `maxNoteParams` with a
+`+N more` tail) and `${tool.shape}` renders the call (`read { file_path, offset?, limit? }`);
+`${tool.param}` is the first REQUIRED key (the schema's own answer, not the first declared one -
+`edit` declares `file_path` first but requires `old_string`/`new_string` too).
 
 Tier 1 and 3 fetch per note, and tier 2 caches per `sectionTtl` + `tools/change`.
 
-Any failure produces `STATIC_TOOL_LINES` + `schema fetch failed -> static fallback`, and
-`fetchLive: false` means static only with no failure line.
+Any failure produces the GENERATED `Variable/Catalog` table +
+`schema fetch failed -> static fallback`, and `fetchLive: false` means static only with no failure
+line. The generated table is a projection of the harness's own `docs/tool-catalog.md` (from the
+`Module/deepseek-harness` submodule) through the SAME code path as the live fetch, so the fallback
+carries the harness's parameter surface and defaults rather than a hand-maintained approximation.
+
+`toolDescriptions` is the last layer: a per-tool `{ description?, params? }` override applied on top
+of live AND static data, per field, so a user can reword a line, pin a parameter surface, or both.
+An empty `params` list means "not provided" (the schema's array default), so a description-only
+override keeps the harness's parameters.
 
 Template fills are single-pass, and user data is escaped (`${` → `$${`) before insertion, so
 composed output never gains an unfilled placeholder.
@@ -100,11 +117,12 @@ DURABLE ledger switch and path). Then the domain knobs: `judgeTools ['bash','pws
 `window 8`, `cooldown 10`, `escalateThreshold 6`, `cleanWindow 12`, `enforce 'off'`,
 `enforceThreshold 4`, `exemptPatterns DEFAULT_EXEMPTS`, `patternTable DEFAULT_PATTERNS`,
 `notes {first, persistent, denied}` (volatile object, plain leaves - the schemastery nesting rule),
-`fetchLive true`, `maxSectionTools 5`, `sectionTtl 20`.
+`fetchLive true`, `toolDescriptions {}`, `maxNoteParams 4`, `maxSectionTools 5`, `sectionTtl 20`.
 
 Fail-loud validation in `apply`: threshold ≥ 1, window ≥ threshold, cooldown ≥ 1, escalateThreshold
-≥ threshold, cleanWindow ≥ 1, enforceThreshold ≥ 1, maxSectionTools 1-24, sectionTtl ≥ 1, every row
-pattern compiles + tool non-empty, no built-in duplicates, notes templates non-empty.
+≥ threshold, cleanWindow ≥ 1, enforceThreshold ≥ 1, maxSectionTools 1-24, maxNoteParams 1-12,
+sectionTtl ≥ 1, every row pattern compiles + tool non-empty, no built-in duplicates, notes templates
+non-empty, every `toolDescriptions` entry an object with a string description and named params.
 
 ## 6. The ledger strings (byte-exact, prefix `hook-dsh-tool-coach: `)
 
@@ -125,9 +143,11 @@ The durable ledger file carries the same strings in `[ISO] <message>` form.
 
 ## 7. The smoke battery
 
-Same assertion set as the Classic suite, plus the tracing-hygiene mode (the suite spawns itself with
-`FACTORY_SMOKE_TRACING=1` and requires byte-identical stdout and ledger).
-(EffectTS/smokes/tool-coach-smoke.mjs, 129 checks)
+The per-test folders under `Source/Test` (each compiled to `Target/Test/<Folder>/Test.js` and
+guarded by its README's expected PASS count, 168 checks across eight folders): Wiring-And-Defaults
+40, Passthrough-And-Guards 6, Notes-And-Cooldown 16, Persistent-Section 16, Enforce-And-Exempts 15,
+Dynamic-And-Craft 40, Deny-Tools 10, Defaults-And-Overrides 25. The retired `.mjs` fallback suites
+(the former `EffectTS/smokes/tool-coach-smoke.mjs`) are superseded by these folders.
 
 - **R1** legitimate bash passthrough (10 calls, zero lines).
 - **R2** detect + strike (3 offenses below threshold, the 4th same-class offense notes; byte-exact

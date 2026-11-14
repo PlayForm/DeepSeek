@@ -52,6 +52,7 @@ const DefaultEscalateThreshold = 6;
 const DefaultCleanWindow = 12;
 const DefaultEnforce = "off";
 const DefaultEnforceThreshold = 4;
+const DefaultMaxNoteParams = 4;
 
 export default Compose(false, {
 	// The MASTER SWITCH (volatile: a flip is read at the next judged call
@@ -101,6 +102,29 @@ export default Compose(false, {
 	}).volatile(),
 	// The dynamic-instruction knobs (plan Part 3 §3.4):
 	fetchLive: Schema.boolean().default(true).volatile(),
+	// Per-tool overrides of the model-facing line: the coach's own interface to
+	// the descriptions it renders. The harness's live registry is the default
+	// source and the generated static table is the fallback; this cell is the
+	// user's layer on top of BOTH, per FIELD (an override may reword the
+	// description, pin the parameter surface, or do both). The OBJECT carries
+	// the volatile marker and its leaves stay PLAIN, like `notes` above.
+	toolDescriptions: Schema.dict(
+		Schema.object({
+			description: Schema.string(),
+			params: Schema.array(
+				Schema.object({
+					name: Schema.string().required(),
+					required: Schema.boolean().default(false),
+					default: Schema.string(),
+				}),
+			),
+		}),
+	)
+		.default({})
+		.volatile(),
+	// How many parameters a tier-1 note or tier-3 reason names (the rest are
+	// reported as a count, so a wide tool never turns a note into a schema dump).
+	maxNoteParams: Schema.number().default(DefaultMaxNoteParams).volatile(),
 	maxSectionTools: Schema.number().default(5).volatile(),
 	sectionTtl: Schema.number().default(20).volatile(), // judged calls between tier-2 rebuilds
 });

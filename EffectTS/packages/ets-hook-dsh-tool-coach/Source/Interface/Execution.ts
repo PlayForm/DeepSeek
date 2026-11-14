@@ -62,6 +62,7 @@ export interface CoachNotes {
 	first: string;
 	persistent: string;
 	denied: string;
+	deniedTool: string;
 }
 
 /**
@@ -71,11 +72,55 @@ export type Detection =
 	{ kind: "offense"; match: Match } | { kind: "exempt"; pattern: string } | null;
 
 /**
- * One fetched (or static) tool entry: first-sentence description + key param.
+ * One parameter of a named tool, as the harness's own schema declares it: the
+ * key, whether the schema requires it, and the default the harness states for
+ * it (the `default` annotation, else the "Defaults to X." sentence in the
+ * parameter's description - the harness's house convention for a model-facing
+ * default).
+ */
+export interface ToolParam {
+	/**
+	 * The parameter key the model passes.
+	 */
+	name: string;
+
+	/**
+	 * Whether the tool's schema lists the key in `required`.
+	 */
+	required: boolean;
+
+	/**
+	 * The declared default, when the schema states one.
+	 */
+	default?: string;
+}
+
+/**
+ * A user override for one tool's model-facing line (config `toolDescriptions`).
+ * Each field is independent: overriding the parameters keeps the harness's
+ * description, and overriding the description keeps the harness's parameters.
+ */
+export interface ToolOverride {
+	/**
+	 * The replacement description line.
+	 */
+	description?: string;
+
+	/**
+	 * The replacement parameter surface.
+	 */
+	params?: ToolParam[];
+}
+
+/**
+ * One fetched (or static) tool entry: the first-sentence description, the
+ * primary parameter key (the schema's first REQUIRED key, else its first key),
+ * and the full parameter surface the note renders.
  */
 export interface ToolEntry {
 	description: string;
 	param: string;
+	params: ToolParam[];
 }
 
 /**
@@ -131,8 +176,7 @@ export interface AgentState {
 	tier2: boolean;
 
 	/**
-	 * The composed tier-2 section cache: text + the judged-call count at
-	 * build.
+	 * The composed tier-2 section cache: text + the judged-call count at build.
 	 */
 	sectionCache?: { built: number; text: string } | undefined;
 

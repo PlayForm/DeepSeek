@@ -5,7 +5,7 @@ import Launch from "@Function/Launch.js";
 import Validate from "@Function/Validate.js";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
+import { Proof } from "@playform/ets-base-dsh";
 import Version from "@Variable/Version.js";
 
 /**
@@ -79,18 +79,14 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from
 	// the ledger alone (the master switch and the policy identity on the line).
-	if (!State.On) {
-		Factory.Append(State, "disabled (enabled=false)");
-	} else {
-		Factory.Append(
-			State,
-			Activate([
-				["", `bundle ${Version}`],
-				["defaultRole", State.DefaultRole],
-				["models", String(State.RoutePolicy.allowedModels.length)],
-			]),
-		);
-	}
+	Factory.Append(
+		State,
+		Proof(State.On !== false, [
+			["", `bundle ${Version}`],
+			["defaultRole", State.DefaultRole],
+			["models", String(State.RoutePolicy.allowedModels.length)],
+		]),
+	);
 
 	// The service: registered immediately on construction, removed with the
 	// owning fiber (the plugin's own).

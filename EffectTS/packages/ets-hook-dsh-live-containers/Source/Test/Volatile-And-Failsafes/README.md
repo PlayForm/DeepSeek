@@ -16,7 +16,7 @@ The fail-open negatives hold: a render failure skips the block and logs `render 
 skipped` while the assembly still resolves, a throwing clock degrades to the real clock, and a
 malformed pre-step payload never throws.
 
-The cold-mount IDLE-forever posture is proven behaviorally (full passthrough, the byte-exact
+The live disabled cold-mount posture is proven behaviorally (full passthrough, the byte-exact
 `disabled (enabled=false)` line, zero warnings).
 
 The per-scope labels ({{sessionId}}) are stable per scope object and distinct across scopes.
@@ -50,7 +50,8 @@ The per-scope labels ({{sessionId}}) are stable per scope object and distinct ac
       into the assembly
     - Sub: a malformed pre-step payload (messages not an array) returns the
       downstream result unchanged with zero warnings
-- Group: the IDLE-forever cold mount (enabled=false).
+- Group: the live disabled cold mount (`enabled: false`, explicit - the
+  shipped default is the live posture).
     - Sub: the assemble listener passes the downstream assembly through by
       identity; the byte-exact disabled line is the ONLY info line; the
       post-execute observer passes the decision through; the tools/change

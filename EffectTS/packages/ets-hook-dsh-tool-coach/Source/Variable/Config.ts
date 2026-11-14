@@ -1,6 +1,6 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
-import { NOTE_DENIED, NOTE_FIRST, NOTE_PERSISTENT } from "@Variable/Notes.js";
+import { NOTE_DENIED, NOTE_DENIED_TOOL, NOTE_FIRST, NOTE_PERSISTENT } from "@Variable/Notes.js";
 import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
 
 /**
@@ -40,17 +40,43 @@ import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance -
  * the loader consumes it through the Standard Schema `~standard` interface).
  */
+const DefaultLogFile = "~/.dsh/playform/ets-hook-dsh-tool-coach.log";
+const DefaultEnabled = true;
+const DefaultLog = true;
+const DefaultJudgeTools = ["bash", "pwsh"];
+const DefaultDenyTools: string[] = [];
+const DefaultThreshold = 3;
+const DefaultWindow = 8;
+const DefaultCooldown = 10;
+const DefaultEscalateThreshold = 6;
+const DefaultCleanWindow = 12;
+const DefaultEnforce = "off";
+const DefaultEnforceThreshold = 4;
+const DefaultMaxNoteParams = 4;
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-tool-coach.log").volatile(),
-	enabled: Schema.boolean().default(true).volatile(),
-	judgeTools: Schema.array(Schema.string()).default(["bash", "pwsh"]).volatile(),
-	threshold: Schema.number().default(3).volatile(),
-	window: Schema.number().default(8).volatile(),
-	cooldown: Schema.number().default(10).volatile(),
-	escalateThreshold: Schema.number().default(6).volatile(),
-	cleanWindow: Schema.number().default(12).volatile(),
-	enforce: Schema.union(["off", "write", "all"]).default("off").volatile(),
-	enforceThreshold: Schema.number().default(4).volatile(),
+	// The MASTER SWITCH (volatile: a flip is read at the next judged call
+	// with no remount): false = the mount appends `disabled (enabled=false)`
+	// to the ledger while every listener stays registered and passes through
+	// silently. Distinct from the shared `log` cell, which governs only the
+	// durable ledger file.
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	// Ledger enabled - write the durable log file (volatile; overrides the
+	// minimal shared block's empty default).
+	log: Schema.boolean().default(DefaultLog).volatile(),
+	// Ledger file - the hook-dsh-tool-coach ledger (one log per module) -
+	// volatile: hot-editable without remounting (overrides the minimal shared
+	// block's empty default).
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	judgeTools: Schema.array(Schema.string()).default(DefaultJudgeTools).volatile(),
+	denyTools: Schema.array(Schema.string()).default(DefaultDenyTools).volatile(),
+	threshold: Schema.number().default(DefaultThreshold).volatile(),
+	window: Schema.number().default(DefaultWindow).volatile(),
+	cooldown: Schema.number().default(DefaultCooldown).volatile(),
+	escalateThreshold: Schema.number().default(DefaultEscalateThreshold).volatile(),
+	cleanWindow: Schema.number().default(DefaultCleanWindow).volatile(),
+	enforce: Schema.union(["off", "write", "all"]).default(DefaultEnforce).volatile(),
+	enforceThreshold: Schema.number().default(DefaultEnforceThreshold).volatile(),
 	exemptPatterns: Schema.array(Schema.string()).default(DEFAULT_EXEMPTS).volatile(),
 	patternTable: Schema.array(
 		Schema.object({
@@ -72,9 +98,33 @@ export default Compose(false, {
 		first: Schema.string().default(NOTE_FIRST),
 		persistent: Schema.string().default(NOTE_PERSISTENT),
 		denied: Schema.string().default(NOTE_DENIED),
+		deniedTool: Schema.string().default(NOTE_DENIED_TOOL),
 	}).volatile(),
 	// The dynamic-instruction knobs (plan Part 3 §3.4):
 	fetchLive: Schema.boolean().default(true).volatile(),
+	// Per-tool overrides of the model-facing line: the coach's own interface to
+	// the descriptions it renders. The harness's live registry is the default
+	// source and the generated static table is the fallback; this cell is the
+	// user's layer on top of BOTH, per FIELD (an override may reword the
+	// description, pin the parameter surface, or do both). The OBJECT carries
+	// the volatile marker and its leaves stay PLAIN, like `notes` above.
+	toolDescriptions: Schema.dict(
+		Schema.object({
+			description: Schema.string(),
+			params: Schema.array(
+				Schema.object({
+					name: Schema.string().required(),
+					required: Schema.boolean().default(false),
+					default: Schema.string(),
+				}),
+			),
+		}),
+	)
+		.default({})
+		.volatile(),
+	// How many parameters a tier-1 note or tier-3 reason names (the rest are
+	// reported as a count, so a wide tool never turns a note into a schema dump).
+	maxNoteParams: Schema.number().default(DefaultMaxNoteParams).volatile(),
 	maxSectionTools: Schema.number().default(5).volatile(),
 	sectionTtl: Schema.number().default(20).volatile(), // judged calls between tier-2 rebuilds
 });

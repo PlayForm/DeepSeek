@@ -1,12 +1,12 @@
 # Wiring-And-Guards - the loader contract, wiring, and guard chain tests
 
-The loader contract of the monitor, the root-identity wiring, the cold-mount idle-forever posture, the fail-loud validation, the guard chain and record shape of the watch recorder, the malformed-event containment, and the purity invariants.
+The loader contract of the monitor, the root-identity wiring, the cold-mount live disabled posture, the fail-loud validation, the guard chain and record shape of the watch recorder, the malformed-event containment, and the purity invariants.
 
 ## Scenarios
 
 - G1: the default object carries exactly name/apply/Config/inject; the name agrees with the package identity; inject is `["pluginFactory"]`.
 - G2: an enabled mount returns NOTHING from apply, exposes `ctx.__hookDshWorkspaceMonitorState`, registers `fs/observed` on the ROOT only (the ctx keeps only the `loader/volatile-update` of the factory), and the activation line is byte-exact: `monitor: activated (domain=workspace_monitor, checksets=4)` (logger and durable file).
-- G3: a disabled mount wires NOTHING and logs the honest `monitor: disabled (enabled=false)` line.
+- G3: a disabled mount registers EVERY surface (the `fs/observed` root listener) and logs the honest `monitor: disabled (enabled=false)` line.
 - G4: the fail-loud validation throws at apply with module-prefixed errors: an empty domain, a zero maxWatch, and a non-array include.
 - G5: the guard chain in order: an excluded path segment is ignored with the byte-exact `monitor: ignored <path> (excluded)` line (logger and durable file); the exclusion match is the LITERAL segment match of the factory (a list entry matches a path segment by name), so the fixtures use plain segment names; an own-actor event is ignored with `monitor: ignored <path> (own actor)`; and a non-matching path under a non-empty include is ignored with `monitor: ignored <path> (not included)` while a matching path records normally.
 - G6: the watch record shape, where a present observation records the version verbatim with the check-set list (`monitor: watch <path> version 1 (tsc,format)`), a repeated same-version event does not bump `versions`, a version change does, an absent observation records `version absent` (never fabricated), and the shipped catalog classifies cargo and governance.

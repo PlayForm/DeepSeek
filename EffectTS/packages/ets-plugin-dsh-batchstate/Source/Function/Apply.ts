@@ -6,7 +6,7 @@ import Storage from "@Function/Storage.js";
 import type Config from "@Interface/Config.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
+import { Proof } from "@playform/ets-base-dsh";
 
 /**
  * @module Apply
@@ -29,10 +29,13 @@ import { Activate } from "@playform/ets-base-dsh";
  *
  * The contract is BATCH-STATE-PLUGIN.md sections 2 and 7.
  *
- * THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default
- * and the bundle patch row). A cold mount logs `disabled (enabled=false)`,
- * registers the service (it reads honestly from the empty state), and wires
- * NOTHING - no listener, no event, no store.
+ * THE LIVE DISABLED POSTURE: `enabled` defaults to true. Every surface
+ * registers on every mount - the service, the store probe (the domain effect
+ * or the JSON fallback recovery) and the inbox splice listeners - and a
+ * disabled mount logs only the byte-exact `disabled (enabled=false)` line
+ * instead of the activation proof. Every registered surface reads the
+ * volatile `On` cell at CALL time, so a disabled write or splice passes
+ * through with zero ledger lines.
  *
  * The function returns NOTHING (the loader contract: a returned value
  * silently kills event delivery). The test probe is the
@@ -132,17 +135,13 @@ export default (Context: Context, Options: Config): void => {
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("batchstate", this).
 	new ServiceClass(Context, State);
-	switch (true) {
-		case !State.On:
-			// The cold mount: honest in the ledger, wired to nothing.
-			Factory.Append(State, "disabled (enabled=false)");
-			return;
-		default:
-	}
-	// The activation proof (the module's own composed line).
+	// The mount proof: the byte-exact disabled line or the module's own
+	// activation summary (the LIVE DISABLED posture above: the service, the
+	// store probe and the inbox splice register on either mount; only this
+	// ledger line differs).
 	Factory.Append(
 		State,
-		Activate([
+		Proof(State.On !== false, [
 			["batch", State.Batch],
 			["stateFile", State.StateFile],
 		]),

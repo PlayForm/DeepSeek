@@ -14,7 +14,6 @@ import {
 	Detect,
 	DEFAULT_PATTERNS,
 	DEFAULT_EXEMPTS,
-	STATIC_TOOL_LINES,
 	Ledger,
 	LiveSchemas,
 } from "../Harness.js";
@@ -22,24 +21,19 @@ import {
 /**
  * @module Test
  *
- * The singular test of the dynamic-instruction engine (D1's engine paths)
- * plus the craft library.
+ * Runs one singular test: the dynamic-instruction engine (D1's engine paths) plus the craft library.
  *
  * @remarks
  *
- * The engine paths: the fetch failure degrades to the static table (D2),
- * the section cap / mapped-class priority / top-up (D3), the section cache
- * with its TTL and tools/change rebuild paths (D4), and fetchLive=false
- * plus the volatile flips via the P10 loader/volatile-update dispatch (D5).
- * The craft library classifies every obfuscated variant correctly,
- * including the catch-all and the exemption rows.
+ * The engine paths: the fetch failure degrades to the static table (D2), the section cap /
+ * mapped-class priority / top-up (D3), the section cache with its TTL and tools/change rebuild
+ * paths (D4), and fetchLive=false plus the volatile flips via the P10 loader/volatile-update
+ * dispatch (D5). The craft library classifies every obfuscated variant correctly, including the
+ * catch-all and the exemption rows. Runs standalone (`node Target/Test/Dynamic-And-Craft/Test.js`)
+ * AND under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
  *
- * The file runs standalone (`node Target/Test/Dynamic-And-Craft/Test.js`)
- * and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
- *
- * It is a unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions
- * are moved verbatim from `Classic/smokes/tool-coach-smoke.mjs` (D2 + D3 +
- * D4 + D5 + the craft battery).
+ * Unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions are moved verbatim from
+ * Classic/smokes/tool-coach-smoke.mjs (D2 + D3 + D4 + D5 + the craft battery).
  */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -60,12 +54,12 @@ export const runTest = async (): Promise<number> => {
 		await Post(RunD2, "cat a.md", AgentD2);
 		await Post(RunD2, "cat a.md", AgentD2);
 		const D2Out = await Post(RunD2, "cat a.md", AgentD2); // the 3rd read offense notes (same class)
-		await CheckAsync(Count, "D2: the note degrades to the STATIC tool line (no live fixture marker)", async () => {
+		await CheckAsync(Count, "D2: the note degrades to the GENERATED static tool line with the full parameter surface", async () => {
 			const D2Text = D2Out.additionalContexts[0].content[0].text;
-			const StaticRead: string = STATIC_TOOL_LINES["read"]?.description ?? "";
 			assert.ok(
-				D2Text.includes(`- read: ${StaticRead} (key parameter: file_path).`) &&
-					!D2Text.includes("(live fixture)"),
+				D2Text.includes(
+					"- read: Read a UTF-8 text file and return line-numbered content. Parameters: file_path (required), offset (default 1), limit (default 2000).",
+				) && !D2Text.includes("(live fixture)"),
 			);
 		});
 		await CheckAsync(
@@ -143,7 +137,7 @@ export const runTest = async (): Promise<number> => {
 						"glob",
 						"working_directory",
 						"web_fetch",
-						"run_in_background",
+						"bash",
 						"schedule_create",
 						"plugin_manager",
 					]),
@@ -155,7 +149,11 @@ export const runTest = async (): Promise<number> => {
 				.split("\n")
 				.filter((Row: string) => Row.startsWith("| ") && !Row.startsWith("| ---"));
 			const D3bTopUp = D3bRows.map((Row: string) => Row.split(" | ")[0]!.slice(2)).slice(11);
-			assert.ok(D3bTopUp.includes("web_search") && D3bTopUp.includes("zzz_fixture"));
+			// The generated catalog is far larger than the row cap, so the top-up
+			// is asserted through its first row (the alphabetically first fixture
+			// tool) rather than through a name that now sorts past the cap.
+			assert.equal(D3bTopUp[0], "aaa_fixture");
+			assert.ok(D3bTopUp.length > 0);
 		});
 		await CheckAsync(Count, "D3b: the top-up is alphabetical", async () => {
 			const D3bRows = (D3bAssembly.sections[1].text.split("| tool | purpose |")[1] ?? "")
@@ -223,11 +221,11 @@ export const runTest = async (): Promise<number> => {
 		await Post(RunD5, "cat a.md", AgentD5);
 		await Post(RunD5, "cat a.md", AgentD5);
 		const D5Out = await Post(RunD5, "cat a.md", AgentD5); // the 3rd read offense notes
-		await CheckAsync(Count, "D5: fetchLive=false - the note uses the static table only", async () => {
+		await CheckAsync(Count, "D5: fetchLive=false - the note uses the generated static table only", async () => {
 			const D5Text = D5Out.additionalContexts[0].content[0].text;
-			const StaticRead: string = STATIC_TOOL_LINES["read"]?.description ?? "";
 			assert.ok(
-				D5Text.includes(StaticRead) && !D5Text.includes("(live fixture)"),
+				D5Text.includes("Parameters: file_path (required), offset (default 1), limit (default 2000).") &&
+					!D5Text.includes("(live fixture)"),
 			);
 		});
 		await CheckAsync(

@@ -110,17 +110,17 @@
 			"kind": "lib",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "22f316174f4932f91cf1cb3ba08f31e30d1af230e1de0a98fc21936fa110dee2",
+			"seed": "9dd99f342dfed1a9dfb1cd3142878099655c3519a955c7afb7ce0accd2b6e461",
 			"grammar": "crescent-ring",
 			"order": 4,
 			"arms": 4,
 			"rings": 0,
 			"orbit": 4,
-			"rim": "woven",
+			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "9239878dae645a606a5a77f8630cb7e394de45dc9fc3db68cf89481a7af7748b",
-				"colour": "ac8abeec371ebe742d190602bffac542184551f98f18cb7289d5221b89832912"
+				"mono": "16c6032ec0878fada6d4b1d2abfefef3f7ca3305eaa1bb0e2b3b183e7a837470",
+				"colour": "68e77dc9764c8b24b3520ffeb087e4b02d919c721e1e49d534daa5bffb7fd5fb"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-base-dsh.svg",
@@ -685,17 +685,17 @@
 			"kind": "hook",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "003e470007a96d53fbdfced26dc4c09021269faad93279f5a73f7d134273c01a",
+			"seed": "d33e2b0c759efd4268da803c7f96bd308da4623c9db96541afa712027eadcbbf",
 			"grammar": "spike-star",
 			"order": 12,
 			"arms": 8,
 			"rings": 2,
 			"orbit": 8,
-			"rim": "none",
+			"rim": "diamond",
 			"mode": "traced",
 			"hash": {
-				"mono": "858f36ec9c066a2653e287c237f641710312520cdc5065046c8ed17cc6f00e02",
-				"colour": "d1a25ae224871b97b23e2eae4384e7eece08eb7632e375c8d4f7f29e901a4606"
+				"mono": "03e0fa96ed92d977e8e6f32ef503fa87b85f80efd269291c72986a5609264765",
+				"colour": "4c6d5dc9ee31f46a5d62aaed46378a822c81bd1178be30477157092af810b9d5"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-tool-coach.svg",
@@ -1996,7 +1996,7 @@
 			"kind": "hook",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "3922655b48d2b3efee0d62b43111eef6f4c6aa765130ad79e302980780d005ad",
+			"seed": "c04b0775ae815a83eb5aecf43f2f2b58e6c67cde540e172428eade3a68e1b9bb",
 			"grammar": "spike-star",
 			"order": 12,
 			"arms": 8,
@@ -2005,8 +2005,8 @@
 			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "632c45b768a012f6c232c55f1130dd9ddaad867302dc73a577ead164cbf360d8",
-				"colour": "efaa0bac72161786d4ba3581d758e524d9c5a5cfc33594d4144fb0a34d2baf01"
+				"mono": "64f2ba33d66a2786fda964b889ed55f15cbdf7b1a044e45e003bb016a3b7db32",
+				"colour": "a86e9055ccdfc61239e28b48a751b6d0c644086dd6b4c6770024ce8b32402a3f"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-tool-coach.svg",

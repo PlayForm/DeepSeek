@@ -1,89 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img"
-	aria-label="@playform/ets-lib-dsh-style - crescent-ring">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="@playform/ets-lib-dsh-style - crescent-ring">
 	<title>@playform/ets-lib-dsh-style - crescent-ring</title>
 	<style>
 		@media (prefers-reduced-motion: no-preference) {
-			.ets-lib-dsh-style-scene * {
-				transform-box: view-box;
-				transform-origin: 50% 50%;
-			}
-
-			.ets-lib-dsh-style-breathe {
-				animation: ets-lib-dsh-style-breathe 8s ease-in-out -4s infinite;
-			}
-
-			@keyframes ets-lib-dsh-style-breathe {
-				50% {
-					transform: scale(1.06);
-					opacity: 0.85;
-				}
-			}
-
-			.ets-lib-dsh-style-twinkle {
-				animation: ets-lib-dsh-style-twinkle 11s ease-in-out -4s infinite;
-			}
-
-			@keyframes ets-lib-dsh-style-twinkle {
-
-				0%,
-				100% {
-					transform: scale(0.94);
-					opacity: 0.4;
-				}
-
-				50% {
-					transform: scale(1.06);
-					opacity: 1;
-				}
-			}
-
-			.ets-lib-dsh-style-trace {
-				animation: ets-lib-dsh-style-trace 6s ease-in-out -4s infinite;
-			}
-
-			@keyframes ets-lib-dsh-style-trace {
-
-				0%,
-				100% {
-					transform: translate(0, 0);
-					opacity: 1;
-				}
-
-				50% {
-					transform: translate(1.4px, -1.4px);
-					opacity: 0.35;
-				}
-			}
+			.ets-lib-dsh-style-scene * { transform-box: view-box; transform-origin: 50% 50%; }
+		.ets-lib-dsh-style-breathe { animation: ets-lib-dsh-style-breathe 8s ease-in-out -4s infinite; }
+		@keyframes ets-lib-dsh-style-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
+		.ets-lib-dsh-style-twinkle { animation: ets-lib-dsh-style-twinkle 11s ease-in-out -4s infinite; }
+		@keyframes ets-lib-dsh-style-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
+		.ets-lib-dsh-style-trace { animation: ets-lib-dsh-style-trace 6s ease-in-out -4s infinite; }
+		@keyframes ets-lib-dsh-style-trace { 0%, 100% { transform: translate(0, 0); opacity: 1; } 50% { transform: translate(1.4px, -1.4px); opacity: 0.35; } }
 		}
 	</style>
 	<defs>
-		<path id="ets-lib-dsh-style-0"
-			d="M91,67 L88,73 L83,79 L79,83 L73,88 L67,91 L60,93 L53,94 L47,94 L40,93 L33,91 L27,88 L21,83 L17,79 L12,73 L9,67 L7,60 L6,53 L6,47 L7,40 L9,33 L12,27 L17,21 L21,17 L27,12 L33,9 L40,7 L47,6 L53,6 L60,7 L67,9 L73,12 L79,17 L83,21 L88,27 L91,33 L93,40 L94,47 L94,53 L93,60 Z" />
-		<path id="ets-lib-dsh-style-1"
-			d="M80,51 L58,66 L36,74 L32,50 L35,25 L59,35 Z M55,53 L88,76 L87,77 L55,53 Z M46,66 L45,67 L44,69 L43,70 L41,70 L40,70 L38,69 L37,67 L37,66 L37,64 L38,63 L40,62 L41,62 L43,62 L44,63 L45,64 Z M50,56 L51,96 L50,96 L50,56 Z" />
-		<path id="ets-lib-dsh-style-2" d="M46,16 L47,14 L48,16 Z" />
-		<path id="ets-lib-dsh-style-3" d="M69,76 L69,80 L66,78 Z" />
-		<path id="ets-lib-dsh-style-4" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z" />
+		<path id="ets-lib-dsh-style-0" d="M91,67 L88,73 L83,79 L79,83 L73,88 L67,91 L60,93 L53,94 L47,94 L40,93 L33,91 L27,88 L21,83 L17,79 L12,73 L9,67 L7,60 L6,53 L6,47 L7,40 L9,33 L12,27 L17,21 L21,17 L27,12 L33,9 L40,7 L47,6 L53,6 L60,7 L67,9 L73,12 L79,17 L83,21 L88,27 L91,33 L93,40 L94,47 L94,53 L93,60 Z"/>
+		<path id="ets-lib-dsh-style-1" d="M80,51 L58,66 L36,74 L32,50 L35,25 L59,35 Z M55,53 L88,76 L87,77 L55,53 Z M46,66 L45,67 L44,69 L43,70 L41,70 L40,70 L38,69 L37,67 L37,66 L37,64 L38,63 L40,62 L41,62 L43,62 L44,63 L45,64 Z M50,56 L51,96 L50,96 L50,56 Z"/>
+		<path id="ets-lib-dsh-style-2" d="M46,16 L47,14 L48,16 Z"/>
+		<path id="ets-lib-dsh-style-3" d="M69,76 L69,80 L66,78 Z"/>
+		<path id="ets-lib-dsh-style-4" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
 	</defs>
 	<g class="ets-lib-dsh-style-scene">
-		<g fill="currentColor" fill-opacity="0.3" fill-rule="evenodd">
-			<use class="ets-lib-dsh-style-breathe" href="#ets-lib-dsh-style-0" />
+	<g fill="currentColor" fill-opacity="0.3" fill-rule="evenodd">
+		<use class="ets-lib-dsh-style-breathe" href="#ets-lib-dsh-style-0"/>
+	</g>
+	<g fill="currentColor" fill-opacity="1" fill-rule="evenodd">
+		<use href="#ets-lib-dsh-style-1"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+		<use class="ets-lib-dsh-style-twinkle" href="#ets-lib-dsh-style-2"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
+		<use class="ets-lib-dsh-style-twinkle" href="#ets-lib-dsh-style-3"/>
+		<use class="ets-lib-dsh-style-breathe" href="#ets-lib-dsh-style-4"/>
+	</g>
+	<g class="ets-lib-dsh-style-trace" fill="currentColor" fill-opacity="0.18" fill-rule="evenodd" stroke="none">
+		<g transform="translate(1.2,-1.2)">
+			<use href="#ets-lib-dsh-style-1"/>
 		</g>
-		<g fill="currentColor" fill-opacity="1" fill-rule="evenodd">
-			<use href="#ets-lib-dsh-style-1" />
-		</g>
-		<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
-			<use class="ets-lib-dsh-style-twinkle" href="#ets-lib-dsh-style-2" />
-		</g>
-		<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
-			<use class="ets-lib-dsh-style-twinkle" href="#ets-lib-dsh-style-3" />
-			<use class="ets-lib-dsh-style-breathe" href="#ets-lib-dsh-style-4" />
-		</g>
-		<g class="ets-lib-dsh-style-trace" fill="currentColor" fill-opacity="0.18" fill-rule="evenodd" stroke="none">
-			<g transform="translate(1.2,-1.2)">
-				<use href="#ets-lib-dsh-style-1" />
-			</g>
-		</g>
+	</g>
 	</g>
 </svg>

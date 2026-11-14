@@ -8,8 +8,9 @@ import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
  */
 export default interface Config {
     /**
-     * The IDLE-forever posture: the plugin ships disabled and enables only by
-     * an explicit ACTIVATE.
+     * The MASTER SWITCH (the LIVE DISABLED posture): every surface registers
+     * on every mount and reads this volatile cell at call time; false writes
+     * only the `disabled (enabled=false)` ledger line at mount.
      */
     enabled: boolean;
     /**

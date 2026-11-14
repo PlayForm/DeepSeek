@@ -60,7 +60,7 @@ export const runTest = async (): Promise<number> => {
 					JSON.stringify(R5Denied),
 					JSON.stringify({
 						kind: "deny",
-						reason: `Blocked by tool-coach: "sed -i s/x/y/ f" is forbidden (write-class bash pattern). Use the edit tool for this operation instead \u2014 Edit an existing UTF-8 text file by replacing literal text. (key parameter: old_string). Then rerun only the legitimate command parts (build/test/git), if any.`,
+						reason: `Blocked by tool-coach: "sed -i s/x/y/ f" is forbidden (write-class bash pattern). Use the edit tool for this operation instead - Edit an existing UTF-8 text file by replacing literal text. Parameters: file_path (required), old_string (required), new_string (required), replace_all (default false). Call it as edit { file_path, old_string, new_string, replace_all? }. Then rerun only the legitimate command parts (build/test/git), if any.`,
 					}),
 				);
 			},

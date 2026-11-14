@@ -21,23 +21,19 @@ import {
 /**
  * @module Test
  *
- * The singular test of tiers 0 and 3 at the edges.
+ * Runs one singular test: tiers 0 and 3 at the edges.
  *
  * @remarks
  *
- * The enforce ladder: the tier-3 deny fires for the write class at the
- * threshold with the byte-exact NOTE_DENIED reason, read class is not
- * denied under 'write', 'all' denies read too, 'off' never denies. The
- * exemptions: the carve-out logs its exempt line once, deduped per pattern
- * per agent; enabled=false is the full passthrough; an emptied pattern
- * table is the N=0 passthrough.
+ * Covers the enforce ladder (the tier-3 deny fires for the write class at the threshold with the
+ * byte-exact NOTE_DENIED reason, the read class is not denied under 'write', 'all' denies read too,
+ * 'off' never denies) and the exemptions (the carve-out logs its exempt line once, deduped per
+ * pattern per agent; enabled=false is the full passthrough; an emptied pattern table is the N=0
+ * passthrough). Runs standalone (`node Target/Test/Enforce-And-Exempts/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
  *
- * The file runs standalone
- * (`node Target/Test/Enforce-And-Exempts/Test.js`) and under the aggregate
- * (`Maintain/Run/Smokes/Index.mjs` spawns it).
- *
- * It is a unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions
- * are moved verbatim from `Classic/smokes/tool-coach-smoke.mjs` (R5 + R6).
+ * Unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions are moved verbatim from
+ * Classic/smokes/tool-coach-smoke.mjs (R5 + R6).
  */
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -64,7 +60,7 @@ export const runTest = async (): Promise<number> => {
 					JSON.stringify(R5Denied),
 					JSON.stringify({
 						kind: "deny",
-						reason: `Blocked by tool-coach: "sed -i s/x/y/ f" is forbidden (write-class bash pattern). Use the edit tool for this operation instead \u2014 Edit an existing UTF-8 text file by replacing literal text. (key parameter: old_string). Then rerun only the legitimate command parts (build/test/git), if any.`,
+						reason: `Blocked by tool-coach: "sed -i s/x/y/ f" is forbidden (write-class bash pattern). Use the edit tool for this operation instead - Edit an existing UTF-8 text file by replacing literal text. Parameters: file_path (required), old_string (required), new_string (required), replace_all (default false). Call it as edit { file_path, old_string, new_string, replace_all? }. Then rerun only the legitimate command parts (build/test/git), if any.`,
 					}),
 				);
 			},

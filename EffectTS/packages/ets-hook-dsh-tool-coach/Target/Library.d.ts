@@ -2,15 +2,16 @@ import Version from "./Variable/Version.js";
 /**
  * @module Library
  *
- * The entry module (mirrors Source/Library.rs).
+ * The entry module (mirrors Source/Library.rs): the loader contract's export
+ * surface for the tool-coach hook.
  *
  * @remarks
  *
  * Loader contract: `export const name` + `export const apply` +
  * `export const Config` + `export const inject` +
- * `export default { name, apply, Config, inject }` - the ONLY named exports in
- * the tree (cordis requires them); every other module is a nameless default
- * export composed Rust-style.
+ * `export default { name, apply, Config, inject }` - the ONLY named exports
+ * in the tree (cordis requires them); every other module is a nameless
+ * default export composed Rust-style.
  *
  * THE DEFAULT OBJECT CARRIES ALL OF THEM: `export default { name, apply }`
  * SHADOWS the named exports - inject and Config MUST also sit on the default
@@ -18,7 +19,7 @@ import Version from "./Variable/Version.js";
  * inject` (live-verified 2026-10-03; a smoke that calls apply directly never
  * catches this).
  *
- * @playform/hook-dsh-tool-coach - the tool-coach hook. The model "is still
+ * @playform/ets-hook-dsh-tool-coach - the tool-coach hook. The model "is still
  * regressing to use bash and sed for simple read write calls which can be
  * tool calls". The coach goes where that regression flows and teaches the
  * full harness toolset through a FOUR-TIER ladder over the TERMINAL tool
@@ -34,9 +35,11 @@ import Version from "./Variable/Version.js";
  *                                `threshold` strikes within `window` judged
  *                                calls, cooled down by `cooldown` - the note
  *                                names the correct tool with its LIVE
- *                                registry description (ctx.tools.schemas(),
- *                                first sentence + key parameter) and the
- *                                fs/observed traceability mechanism;
+ *                                registry description and FULL parameter
+ *                                surface (ctx.tools.schemas(): first sentence
+ *                                plus every parameter's requiredness and
+ *                                declared default, and the call shape) and
+ *                                the fs/observed traceability mechanism;
  *   tier 2  system-prompt/assemble  a persistent "Tool discipline" section
  *                                (three fixed rules + a live-fetched tool
  *                                table capped at maxSectionTools rows) while
@@ -99,7 +102,7 @@ export declare const Config: import("@deepseek-ai/schemastery").default<Schemast
 export { Version };
 /**
  * Required services (skill: declare, never rely on load order). The factory
- * (@playform/plugin-dsh-factory) provides the State builder (cell unwrap +
+ * (@playform/ets-plugin-dsh-factory) provides the State builder (cell unwrap +
  * shared fields + the P10 volatile refresh) and the ledger; `tools` serves
  * the live registry fetch (ctx.tools.schemas(), plan Part 3 §3.1). Nothing
  * else: the coach registers NO fs/observed listener, never touches the

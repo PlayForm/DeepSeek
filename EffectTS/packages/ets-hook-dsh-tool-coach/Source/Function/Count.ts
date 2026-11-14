@@ -3,13 +3,14 @@ import type { AgentState, CoachClass, Decision, Match } from "@Interface/Executi
 /**
  * @module Count
  *
- * The escalation math (plan Part 3 §3.5 step 2 + the tier ladder in
- * TOOL-COACH-PLAN.md §5). Pure state transition: advances the per-agent
- * counters for one JUDGED call (terminal calls only; non-terminal tools are
- * transparent and never reach this function) and returns the decision. All
- * counters are in JUDGED calls.
+ * The escalation math: a pure state transition that advances the per-agent
+ * counters for one JUDGED call and returns the decision.
  *
  * @remarks
+ *
+ * Plan Part 3 §3.5 step 2 + the tier ladder in TOOL-COACH-PLAN.md §5.
+ * Terminal calls only; non-terminal tools are transparent and never reach
+ * this function. All counters are in JUDGED calls.
  *
  * The state (per agent, in a WeakMap keyed like the repeat-tool-reminder's
  * chains): a sliding `window` of the last `window` judged calls (the offense
@@ -19,7 +20,6 @@ import type { AgentState, CoachClass, Decision, Match } from "@Interface/Executi
  * tier-2 flag, the tier-2 section cache, and the total judged-call clock.
  *
  * Decision precedence (per call):
- *
  *   1. a clean call while tier 2 is on: sinceClean grows; when it reaches
  *      cleanWindow the section turns OFF (tier 2 off);
  *   2. an offense: sinceClean resets, the window and all counters advance;

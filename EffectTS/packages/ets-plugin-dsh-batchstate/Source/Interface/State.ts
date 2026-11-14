@@ -24,7 +24,7 @@ import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory"
  */
 interface Extra {
 	/**
-	 * The master switch (config `enabled` - the IDLE-forever posture).
+	 * The master switch (config `enabled` - the LIVE DISABLED posture).
 	 */
 	On: boolean;
 

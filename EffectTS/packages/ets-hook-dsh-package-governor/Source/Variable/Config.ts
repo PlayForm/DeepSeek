@@ -32,14 +32,15 @@ import Default from "./Default.js";
  * The shape this schema produces is Interface/Config.ts; every default below
  * is the schema-level home of that shape's field values.
  *
- * P8 - VOLATILE CELLS: `log`, `logFile`, `updateCooldownMs` and
+ * P8 - VOLATILE CELLS: `enabled`, `log`, `logFile`, `updateCooldownMs` and
  * `mutationTools` are `.volatile()` - hot edits to them commit WITHOUT
  * remounting the plugin (the fiber, and with it the ledger file handle state,
  * the in-flight map and the circuit breaker, stay alive). The loader hands
  * volatile fields to apply as stable references (`{ get() }` cells, not raw
  * values) - the FACTORY'S State builder already unwraps them defensively
  * (SCHEME.md §2.10), so the State still sees the same plain config shape (the
- * smoke's defaults hold).
+ * smoke's defaults hold). `enabled` is the governor's MASTER SWITCH (distinct
+ * from the shared `log` cell, which governs only the durable ledger file).
  *
  * This is the ONLY module in the tree with a runtime import of
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance -
@@ -55,6 +56,12 @@ export default Compose(
 		exclude: Default,
 	},
 	{
+		// THE MASTER SWITCH (volatile): false = the governor appends
+		// `disabled (enabled=false)` to the ledger instead of the activation
+		// proof while every surface stays registered (the LIVE disabled
+		// posture) - distinct from the shared `log` cell, which governs only
+		// the durable ledger file.
+		enabled: Schema.boolean().default(true).volatile(),
 		// Strict chain pass: strip unknown deps in a governed workspace.
 		strict: Schema.boolean().default(false),
 		// Circuit breaker: consecutive update-stage failures per directory before pause.

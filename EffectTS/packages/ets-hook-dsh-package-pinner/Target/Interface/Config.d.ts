@@ -22,6 +22,13 @@
  */
 export default interface Config {
     /**
+     * The master switch - a disabled pinner appends `disabled (enabled=false)`
+     * to the ledger INSTEAD of the activation proof and still registers
+     * everything (the LIVE disabled posture); a flip is read without a
+     * remount (the volatile cell).
+     */
+    enabled: boolean;
+    /**
      * Factory shared field: ledger enabled — write the durable log file.
      */
     log: boolean;

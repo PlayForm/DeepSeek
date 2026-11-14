@@ -37,16 +37,22 @@ import { DEFAULT_CHECK_SETS } from "@Variable/DefaultCheckSets.js";
  * safe: the render engine dispatches per block id and keeps NO per-kind structural state
  * (design section 2.2).
  *
- * `enabled` defaults to FALSE - the IDLE-forever posture: the plugin ships disabled,
- * never appears in the profile's bundles, and enables only by an explicit ACTIVATE.
+ * `enabled` defaults to TRUE - the shipped posture is ON, and a profile turns
+ * it off with `enabled: false` (the LIVE disabled posture: a cold mount logs
+ * `disabled (enabled=false)` and every listener stays registered, reading the
+ * flag at call time).
  *
  * This is one of the modules in the tree with a runtime import of
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance - the loader
  * consumes it through the Standard Schema `~standard` interface).
  */
 export default Compose(false, {
+	// The MASTER SWITCH (volatile: a flip is read at the next assembly with
+	// no remount): false = the mount appends `disabled (enabled=false)` to the
+	// ledger while every listener stays registered and passes through
+	// silently.
+	enabled: Schema.boolean().default(true).volatile(),
 	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-live-containers.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
 	sectionName: Schema.string().default("live-containers").volatile(),
 	refresh: Schema.union(["request", "ttl"]).default("request").volatile(),
 	// Assemblies between section rebuilds when refresh = "ttl" (the
@@ -163,7 +169,7 @@ export default Compose(false, {
 	// watchlist ARRAY and the checksets DICT are the volatile cells with
 	// plain leaves (the schemastery rule - the blocks table precedent).
 	// `monitors` is the SECOND explicit flip after the plugin's own `enable`
-	// (the IDLE-forever posture: "off" even when the plugin is enabled).
+	// ("off" even when the plugin is enabled).
 	monitors: Schema.union(["off", "on"]).default("off").volatile(),
 	// The watchlist: the automatic enrollment is watchlist-gated. Default
 	// EMPTY - enroll-on-write only, no scan, no watch-all (privacy and cost

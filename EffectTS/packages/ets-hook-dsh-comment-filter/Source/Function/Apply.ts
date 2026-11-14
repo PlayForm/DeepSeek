@@ -1,7 +1,7 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
+import { Proof } from "@playform/ets-base-dsh";
 
 import Intent from "./Intent.js";
 import Overpass from "./Overpass.js";
@@ -104,17 +104,20 @@ export default (Context: Context, Options: Config): void => {
 	// ledger alone. Format (asserted by the smoke):
 	//   hook-dsh-comment-filter: activated (targets 2, intent on, notice on, logFile=...)
 	// The line's string mechanics (the `activated (` prefix, the `k=v` join,
-	// the `)` suffix) live in the core's Activate composer; the FIELD LIST is
-	// the module's own. The three flag segments are passed with an EMPTY key -
-	// the composer's bare-segment form (the family's "anywhere mode"
-	// precedent) - so the line reads as a sentence (`targets 2, intent on,
-	// notice on`) while the logFile stays a k=v field. The values are the
-	// MOUNT-TIME effective values: the volatile cells (intent/notice/logFile)
-	// are hot-editable later without a new activation line - observability
-	// then goes through the logger.
+	// the `)` suffix) live in the core's Proof composer, which owns the
+	// master switch: a live mount writes the `activated (...)` summary, a
+	// disabled one the byte-exact `disabled (enabled=false)` marker; the
+	// FIELD LIST is the module's own. The `!== false` guard keeps a bare
+	// fixture that omits the key mounted. The three flag segments are passed
+	// with an EMPTY key - the composer's bare-segment form (the family's
+	// "anywhere mode" precedent) - so the line reads as a sentence (`targets
+	// 2, intent on, notice on`) while the logFile stays a k=v field. The
+	// values are the MOUNT-TIME effective values: the volatile cells
+	// (intent/notice/logFile) are hot-editable later without a new activation
+	// line - observability then goes through the logger.
 	Factory.Append(
 		State,
-		Activate([
+		Proof(State.Active !== false, [
 			["", `targets ${State.Targets.length}`],
 			["", `intent ${State.IntentOn ? "on" : "off"}`],
 			["", `notice ${State.Notice ? "on" : "off"}`],

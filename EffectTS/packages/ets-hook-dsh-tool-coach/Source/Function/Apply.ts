@@ -12,29 +12,30 @@ import type {
 	ToolExecutionResult,
 } from "@deepseek-ai/dsh-tools";
 import * as Compose from "@Function/Compose.js";
+import type { ComposeConfig } from "@Function/Compose.js";
 import Count, { FreshState } from "@Function/Count.js";
 import Detect from "@Function/Detect.js";
 import Enforce from "@Function/Enforce.js";
 import Fetch, { StaticCatalog } from "@Function/Fetch.js";
 import BuildNote, { Prepend } from "@Function/Note.js";
+import Override from "@Function/Override.js";
 import type Config from "@Interface/Config.js";
 import type { AgentState, CoachRow, Decision, Detection } from "@Interface/Execution.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
+import { PerAgent, Proof } from "@playform/ets-base-dsh";
 import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
 import Version from "@Variable/Version.js";
 
 /**
  * @module Apply
  *
- * The plugin entry function: fail-loud validation, the State build (the
- * factory's cell unwrap + the P10 volatile refresh), the durable activation
- * proof, and the FIVE listeners of the coaching ladder (plan Part 3 §3.2 +
- * Part 4 §4.1).
+ * The plugin entry function: fail-loud validation, the State build, the
+ * durable activation proof, and the FIVE listeners of the coaching ladder.
  *
  * @remarks
  *
- * The listeners:
+ * The State build uses the factory's cell unwrap + the P10 volatile refresh.
+ * Plan Part 3 §3.2 + Part 4 §4.1:
  *
  *   1. tools/post-execute  (waterfall, plain ctx.on - AFTER the CCR
  *      {prepend:true} listener and normalize's post-execute, since plain
@@ -112,6 +113,8 @@ const Validate = (Options: unknown): void => {
 			Fail('enforce must be one of "off" | "write" | "all"');
 		case !(Numeric("maxSectionTools") >= 1 && Numeric("maxSectionTools") <= 24):
 			Fail("maxSectionTools must be between 1 and 24");
+		case !(Numeric("maxNoteParams") >= 1 && Numeric("maxNoteParams") <= 12):
+			Fail("maxNoteParams must be between 1 and 12");
 		case !(Numeric("sectionTtl") >= 1):
 			Fail("sectionTtl must be >= 1");
 		default:
@@ -153,9 +156,40 @@ const Validate = (Options: unknown): void => {
 	}
 	const Notes = Cell(Raw["notes"]) as Record<string, unknown> | undefined;
 	if (Notes && typeof Notes === "object") {
-		for (const Key of ["first", "persistent", "denied"]) {
+		for (const Key of ["first", "persistent", "denied", "deniedTool"]) {
 			if (typeof Notes[Key] !== "string" || (Notes[Key] as string).length === 0) {
 				Fail(`notes.${Key} must be a non-empty template string`);
+			}
+		}
+	}
+	const Descriptions = Cell(Raw["toolDescriptions"]);
+	if (Descriptions !== undefined && (Descriptions === null || typeof Descriptions !== "object")) {
+		Fail("toolDescriptions must be a map of tool name -> { description?, params? }");
+	}
+	if (Descriptions && typeof Descriptions === "object") {
+		for (const [Name, Value] of Object.entries(Descriptions as Record<string, unknown>)) {
+			if (!Name || Value === null || typeof Value !== "object") {
+				Fail(`toolDescriptions.${Name} must be an object`);
+			}
+			const Override = Value as { description?: unknown; params?: unknown };
+			if (Override.description !== undefined && typeof Override.description !== "string") {
+				Fail(`toolDescriptions.${Name}.description must be a string`);
+			}
+			if (Override.params !== undefined) {
+				if (!Array.isArray(Override.params)) {
+					Fail(`toolDescriptions.${Name}.params must be an array`);
+				}
+				for (const Param of Override.params as unknown[]) {
+					const Shape = Param as { name?: unknown; default?: unknown };
+					if (typeof Shape?.name !== "string" || Shape.name.length === 0) {
+						Fail(`toolDescriptions.${Name}.params entries need a non-empty name`);
+					}
+					if (Shape?.default !== undefined && typeof Shape.default !== "string") {
+						Fail(
+							`toolDescriptions.${Name}.params.${Shape.name}.default must be a string`,
+						);
+					}
+				}
 			}
 		}
 	}
@@ -194,6 +228,7 @@ export default (Context: Context, Options: Config): void => {
 		fields: {
 			On: "enabled",
 			Judge: "judgeTools",
+			Deny: "denyTools",
 			Threshold: "threshold",
 			Window: "window",
 			Cooldown: "cooldown",
@@ -206,11 +241,12 @@ export default (Context: Context, Options: Config): void => {
 			Notes: "notes",
 			FetchLive: "fetchLive",
 			MaximumSectionTools: "maxSectionTools",
+			MaximumNoteParams: "maxNoteParams",
+			ToolDescriptions: "toolDescriptions",
 			SectionTTL: "sectionTtl",
 		},
 	});
 	State.Factory = Factory;
-	State.Agents = new WeakMap();
 	State.Registry = new Set();
 
 	// The effective rows: the built-in defaults, with the user's rows
@@ -229,31 +265,38 @@ export default (Context: Context, Options: Config): void => {
 		...new Set([...DEFAULT_EXEMPTS, ...(Array.isArray(State.Exempt) ? State.Exempt : [])]),
 	];
 
-	// The per-agent state (WeakMap keyed on the Agent object, like the
-	// repeat-tool-reminder's chains). A call without an agent shares the
-	// module's default key, so offenses are still counted and noted.
-	const DefaultKey: object = {};
-	const Agent = (Key: unknown): AgentState => {
-		const Object_ = (Key as object) ?? DefaultKey;
-		let AgentState = State.Agents.get(Object_);
-		if (!AgentState) {
-			AgentState = FreshState();
-			State.Agents.set(Object_, AgentState);
-			State.Registry.add(AgentState);
-		}
+	// The per-agent state (the core's PerAgent registry: a WeakMap keyed on
+	// the Agent object, born on first use and collected with the agent). A
+	// call without an agent shares the registry's one default key, so
+	// offenses are still counted and noted.
+	const AgentOf = PerAgent(() => {
+		const AgentState = FreshState();
+		State.Registry.add(AgentState);
 		return AgentState;
-	};
+	});
+	const Agent = (Key: unknown): AgentState => AgentOf(Key);
 
 	// The live catalog fetch (per note, plan Part 3 §3.1): tier 1/3 fetch
-	// right before composing; failure degrades to the static table. With
-	// fetchLive off, the static catalog is used unconditionally and no
-	// fetch-failure line is ever logged.
+	// right before composing; failure degrades to the generated static table.
+	// With fetchLive off, the static catalog is used unconditionally and no
+	// fetch-failure line is ever logged. The user's `toolDescriptions` cell is
+	// the LAST layer either way, so an override lands on live and static data
+	// alike and a fetch outage never silently drops the user's own wording.
 	const Catalog = () =>
-		State.FetchLive
-			? Fetch(Context.tools as ToolsService, (Message: string) =>
-					Factory.Append(State, Message),
-				)
-			: StaticCatalog();
+		Override(
+			State.FetchLive
+				? Fetch(Context.tools as ToolsService, (Message: string) =>
+						Factory.Append(State, Message),
+					)
+				: StaticCatalog(),
+			State.ToolDescriptions,
+		);
+
+	// The composer's live knob values (every one is volatile).
+	const Knobs = (): ComposeConfig => ({
+		maxSectionTools: State.MaximumSectionTools,
+		maxNoteParams: State.MaximumNoteParams,
+	});
 
 	// Whether a call is judged: only the configured terminal tools.
 	const Judged = (Name: string): boolean =>
@@ -277,23 +320,19 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone (the master switch and the ladder's knobs on the line).
-	if (!State.On) {
-		Factory.Append(State, "disabled (enabled=false)");
-	} else {
-		Factory.Append(
-			State,
-			Activate([
-				["", `bundle ${Version}`],
-				["threshold", `${State.Threshold}/${State.Window}`],
-				["cooldown", String(State.Cooldown)],
-				["escalate", String(State.Escalate)],
-				["clean", String(State.Clean)],
-				["enforce", `${State.Enforce}@${State.EnforceThreshold}`],
-				["judge", State.Judge.join(",")],
-				["fetch", State.FetchLive ? "live" : "static"],
-			]),
-		);
-	}
+	Factory.Append(
+		State,
+		Proof(State.On, [
+			["", `bundle ${Version}`],
+			["threshold", `${State.Threshold}/${State.Window}`],
+			["cooldown", String(State.Cooldown)],
+			["escalate", String(State.Escalate)],
+			["clean", String(State.Clean)],
+			["enforce", `${State.Enforce}@${State.EnforceThreshold}`],
+			["judge", State.Judge.join(",")],
+			["fetch", State.FetchLive ? "live" : "static"],
+		]),
+	);
 
 	// ------------------------------------------------------------------
 	// Listener 1: tools/post-execute (tier 0 ledger, tier 1 note, tier 2
@@ -348,7 +387,7 @@ export default (Context: Context, Options: Config): void => {
 						State,
 						`strike ${Decision.strikes}/${State.Threshold} ${Exec.name} ${Decision.match.class} -> note ${Decision.match.tool}`,
 					);
-					const Text = Compose.First(Decision, Catalog(), State.Notes.first);
+					const Text = Compose.First(Decision, Catalog(), State.Notes.first, Knobs());
 					const Note = BuildNote(
 						Text,
 						`${Exec.name} ${Decision.match.class} × ${Decision.strikes}`,
@@ -411,6 +450,26 @@ export default (Context: Context, Options: Config): void => {
 			// next() FIRST: the downstream listeners settle before any decision.
 			const Downstream = await Next();
 			try {
+				if (State.On && Array.isArray(State.Deny) && State.Deny.includes(Exec.name)) {
+					const Pseudo: Decision = {
+						match: null,
+						tier: 3,
+						note: false,
+						tier2On: false,
+						tier2Off: false,
+						suppressed: false,
+						strikes: 0,
+						sinceNote: 0,
+					};
+					const Reason = Compose.Denied(
+						Pseudo,
+						Catalog(),
+						State.Notes.deniedTool,
+						Knobs(),
+					);
+					Factory.Append(State, `denied ${Exec.name} denyTools`);
+					return { kind: "deny", reason: Reason };
+				}
 				if (!State.On || State.Enforce === "off" || !Judged(Exec.name)) {
 					return Downstream;
 				}
@@ -437,7 +496,7 @@ export default (Context: Context, Options: Config): void => {
 					strikes: 0,
 					sinceNote: 0,
 				};
-				const Reason = Compose.Denied(Pseudo, Catalog(), State.Notes.denied);
+				const Reason = Compose.Denied(Pseudo, Catalog(), State.Notes.denied, Knobs());
 				Factory.Append(
 					State,
 					`denied ${Exec.name} ${Detection.match.class} ${Detection.match.pattern} -> use ${Detection.match.tool}`,
@@ -537,7 +596,7 @@ export default (Context: Context, Options: Config): void => {
 							AgentState,
 							Live,
 							State.Notes.persistent,
-							{ maxSectionTools: State.MaximumSectionTools },
+							Knobs(),
 							Mapped(),
 							[...Live.tools.keys()],
 						),

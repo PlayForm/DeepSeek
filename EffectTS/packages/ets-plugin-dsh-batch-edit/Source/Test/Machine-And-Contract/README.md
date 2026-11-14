@@ -1,6 +1,7 @@
 # Machine-And-Contract - the loader contract and the machine lifecycle tests
 
-The loader contract, the IDLE-forever cold mount, the byte-exact activation line, the fail-loud
+The loader contract, the disabled cold mount (enabled: false, explicit - the shipped default is the
+live posture), the byte-exact activation line, the fail-loud
 validation, the machine lifecycle with its byte-exact ledger lines, the grammar parsers, the miss
 listing, and the machinesPerAgent cap.
 
@@ -8,12 +9,14 @@ listing, and the machinesPerAgent cap.
 
 - M1: the default export carries name/apply/Config/inject, the identity is the package name, and
   apply returns nothing.
-- M2: a cold mount logs the byte-exact `plugin-dsh-batch-edit: disabled (enabled=false)` line, and
-  the tool still registers and refuses loudly while disabled.
+- M2: an explicit disabled cold mount logs the byte-exact `plugin-dsh-batch-edit: disabled
+  (enabled=false)` line, the tool still registers and refuses loudly while disabled, and every ctx
+  listener still registers (the unconditional posture).
 - M3: the activation line is byte-exact (`activated bundle 0.2.1 (machinesPerAgent 2, opsPerCommit
   64, deadlineMs 120000, strictMode false, interceptBash false)`), the fs/observed observer sits on
-  the ROOT context, the pre-step listener sits on the ctx, no pre-execute listener runs while the
-  intercept is off, and the State probe carries the contract fields.
+  the ROOT context, the pre-step and pre-execute listeners sit on the ctx (the intercept registers
+  unconditionally; its call-time gates are On and interceptBash), the intercept is inert while
+  interceptBash is off, and the State probe carries the contract fields.
 - M4: deadlineMs 999/200000, machinesPerAgent 0, and opsPerCommit 0 all fail loud at load.
 - M5: open resolves, versions, and adopts the files with the byte-exact
   `machine opened mach-1 (1 files, scope=a.txt)` and `inserted a.txt at version v1` lines, and a
@@ -26,4 +29,4 @@ listing, and the machinesPerAgent cap.
 
 ## Expected count
 
-25 PASS.
+27 PASS.

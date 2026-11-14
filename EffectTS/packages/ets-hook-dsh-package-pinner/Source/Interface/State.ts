@@ -11,7 +11,10 @@ import type { Scope } from "effect";
  *
  * Since the factory refactor the shared shape is the one Function/State of
  * @playform/ets-plugin-dsh-factory builds, consumed by every factory
- * primitive. The pinner's own field:
+ * primitive. The pinner's own fields:
+ * - On - the MASTER SWITCH (config `enabled`; the ONE mount-time effect of the
+ *   flag is the ledger line - a disabled mount appends the disabled line and
+ *   still registers everything);
  * - Section - the dependency sections the pinner may rewrite (config
  *   `sections`, copied by the State builder's `fields` map).
  *
@@ -58,6 +61,11 @@ import type { Scope } from "effect";
  * the Classic ones (the P2 Inflight abort, the factory's Attach effect).
  */
 export default interface State extends Shared {
+	/**
+	 * The MASTER SWITCH (config `enabled`; the setup map's `On <- enabled`).
+	 */
+	On: boolean;
+
 	/**
 	 * Dependency sections the pinner may rewrite (config `sections`).
 	 */

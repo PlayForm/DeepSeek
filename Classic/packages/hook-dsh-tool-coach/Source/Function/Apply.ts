@@ -12,11 +12,13 @@ import type {
 	ToolExecutionResult,
 } from "@deepseek-ai/dsh-tools";
 import * as Compose from "@Function/Compose.js";
+import type { ComposeConfig } from "@Function/Compose.js";
 import Count, { FreshState } from "@Function/Count.js";
 import Detect from "@Function/Detect.js";
 import Enforce from "@Function/Enforce.js";
 import Fetch, { StaticCatalog } from "@Function/Fetch.js";
 import BuildNote, { Prepend } from "@Function/Note.js";
+import Override from "@Function/Override.js";
 import type Config from "@Interface/Config.js";
 import type { AgentState, CoachRow, Decision, Detection } from "@Interface/Execution.js";
 import type State from "@Interface/State.js";
@@ -111,6 +113,8 @@ const Validate = (Options: unknown): void => {
 			Fail('enforce must be one of "off" | "write" | "all"');
 		case !(Numeric("maxSectionTools") >= 1 && Numeric("maxSectionTools") <= 24):
 			Fail("maxSectionTools must be between 1 and 24");
+		case !(Numeric("maxNoteParams") >= 1 && Numeric("maxNoteParams") <= 12):
+			Fail("maxNoteParams must be between 1 and 12");
 		case !(Numeric("sectionTtl") >= 1):
 			Fail("sectionTtl must be >= 1");
 		default:
@@ -155,6 +159,37 @@ const Validate = (Options: unknown): void => {
 		for (const Key of ["first", "persistent", "denied", "deniedTool"]) {
 			if (typeof Notes[Key] !== "string" || (Notes[Key] as string).length === 0) {
 				Fail(`notes.${Key} must be a non-empty template string`);
+			}
+		}
+	}
+	const Descriptions = Cell(Raw["toolDescriptions"]);
+	if (Descriptions !== undefined && (Descriptions === null || typeof Descriptions !== "object")) {
+		Fail("toolDescriptions must be a map of tool name -> { description?, params? }");
+	}
+	if (Descriptions && typeof Descriptions === "object") {
+		for (const [Name, Value] of Object.entries(Descriptions as Record<string, unknown>)) {
+			if (!Name || Value === null || typeof Value !== "object") {
+				Fail(`toolDescriptions.${Name} must be an object`);
+			}
+			const Override = Value as { description?: unknown; params?: unknown };
+			if (Override.description !== undefined && typeof Override.description !== "string") {
+				Fail(`toolDescriptions.${Name}.description must be a string`);
+			}
+			if (Override.params !== undefined) {
+				if (!Array.isArray(Override.params)) {
+					Fail(`toolDescriptions.${Name}.params must be an array`);
+				}
+				for (const Param of Override.params as unknown[]) {
+					const Shape = Param as { name?: unknown; default?: unknown };
+					if (typeof Shape?.name !== "string" || Shape.name.length === 0) {
+						Fail(`toolDescriptions.${Name}.params entries need a non-empty name`);
+					}
+					if (Shape?.default !== undefined && typeof Shape.default !== "string") {
+						Fail(
+							`toolDescriptions.${Name}.params.${Shape.name}.default must be a string`,
+						);
+					}
+				}
 			}
 		}
 	}
@@ -206,6 +241,8 @@ export default (Context: Context, Options: Config): void => {
 			Notes: "notes",
 			FetchLive: "fetchLive",
 			MaximumSectionTools: "maxSectionTools",
+			MaximumNoteParams: "maxNoteParams",
+			ToolDescriptions: "toolDescriptions",
 			SectionTTL: "sectionTtl",
 		},
 	});
@@ -240,15 +277,26 @@ export default (Context: Context, Options: Config): void => {
 	const Agent = (Key: unknown): AgentState => AgentOf(Key);
 
 	// The live catalog fetch (per note, plan Part 3 §3.1): tier 1/3 fetch
-	// right before composing; failure degrades to the static table. With
-	// fetchLive off, the static catalog is used unconditionally and no
-	// fetch-failure line is ever logged.
+	// right before composing; failure degrades to the generated static table.
+	// With fetchLive off, the static catalog is used unconditionally and no
+	// fetch-failure line is ever logged. The user's `toolDescriptions` cell is
+	// the LAST layer either way, so an override lands on live and static data
+	// alike and a fetch outage never silently drops the user's own wording.
 	const Catalog = () =>
-		State.FetchLive
-			? Fetch(Context.tools as ToolsService, (Message: string) =>
-					Factory.Append(State, Message),
-				)
-			: StaticCatalog();
+		Override(
+			State.FetchLive
+				? Fetch(Context.tools as ToolsService, (Message: string) =>
+						Factory.Append(State, Message),
+					)
+				: StaticCatalog(),
+			State.ToolDescriptions,
+		);
+
+	// The composer's live knob values (every one is volatile).
+	const Knobs = (): ComposeConfig => ({
+		maxSectionTools: State.MaximumSectionTools,
+		maxNoteParams: State.MaximumNoteParams,
+	});
 
 	// Whether a call is judged: only the configured terminal tools.
 	const Judged = (Name: string): boolean =>
@@ -339,7 +387,7 @@ export default (Context: Context, Options: Config): void => {
 						State,
 						`strike ${Decision.strikes}/${State.Threshold} ${Exec.name} ${Decision.match.class} -> note ${Decision.match.tool}`,
 					);
-					const Text = Compose.First(Decision, Catalog(), State.Notes.first);
+					const Text = Compose.First(Decision, Catalog(), State.Notes.first, Knobs());
 					const Note = BuildNote(
 						Text,
 						`${Exec.name} ${Decision.match.class} × ${Decision.strikes}`,
@@ -413,7 +461,12 @@ export default (Context: Context, Options: Config): void => {
 						strikes: 0,
 						sinceNote: 0,
 					};
-					const Reason = Compose.Denied(Pseudo, Catalog(), State.Notes.deniedTool);
+					const Reason = Compose.Denied(
+						Pseudo,
+						Catalog(),
+						State.Notes.deniedTool,
+						Knobs(),
+					);
 					Factory.Append(State, `denied ${Exec.name} denyTools`);
 					return { kind: "deny", reason: Reason };
 				}
@@ -443,7 +496,7 @@ export default (Context: Context, Options: Config): void => {
 					strikes: 0,
 					sinceNote: 0,
 				};
-				const Reason = Compose.Denied(Pseudo, Catalog(), State.Notes.denied);
+				const Reason = Compose.Denied(Pseudo, Catalog(), State.Notes.denied, Knobs());
 				Factory.Append(
 					State,
 					`denied ${Exec.name} ${Detection.match.class} ${Detection.match.pattern} -> use ${Detection.match.tool}`,
@@ -543,7 +596,7 @@ export default (Context: Context, Options: Config): void => {
 							AgentState,
 							Live,
 							State.Notes.persistent,
-							{ maxSectionTools: State.MaximumSectionTools },
+							Knobs(),
 							Mapped(),
 							[...Live.tools.keys()],
 						),

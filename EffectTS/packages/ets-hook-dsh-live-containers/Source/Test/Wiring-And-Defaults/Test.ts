@@ -66,8 +66,8 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 	{
-		Check(Count, "config default enabled=false (the IDLE-forever posture)", () => {
-			assert.equal(Raw1.enabled.get(), false);
+		Check(Count, "config default enabled=true (the shipped posture; off = the live disabled posture)", () => {
+			assert.equal(Raw1.enabled.get(), true);
 		});
 		Check(Count, "config default logFile=~/.dsh/playform/hook-dsh-live-containers.log", () => {
 			assert.equal(Raw1.logFile.get(), "~/.dsh/playform/hook-dsh-live-containers.log");
@@ -111,7 +111,10 @@ export const runTest = async (): Promise<number> => {
 	// Group: the apply-time wiring and the activation (the REAL factory, the
 	// five registrations, the state probe, the byte-exact ledger lines).
 	{
-		const Run1 = Make(Validate({ logFile: Ledger }));
+		// The disabled cold mount (the live disabled posture): the schema
+		// default is enabled, so the disabled mount passes `enabled: false`
+		// explicitly.
+		const Run1 = Make(Validate({ logFile: Ledger, enabled: false }));
 		Check(Count, "apply returns NOTHING (the loader contract)", () => {
 			assert.equal(Run1.Returned, undefined);
 		});

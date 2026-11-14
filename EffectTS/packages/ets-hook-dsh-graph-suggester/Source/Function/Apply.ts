@@ -6,7 +6,7 @@ import type WorkspaceGraph from "@Interface/Graph.js";
 import type { Candidate, Intent } from "@Interface/Pack.js";
 import type { AgentMemory } from "@Interface/State.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
+import { Proof } from "@playform/ets-base-dsh";
 import Version from "@Variable/Version.js";
 
 import Detect, { Compile } from "./Detect.js";
@@ -143,18 +143,15 @@ export default (Context: Context, Options: Config): void => {
 	// ledger alone. The second segment is `graph` (not an intent count):
 	// there is no boot pack, because every candidate comes from the graph
 	// query and the retired literal pack is never a source.
-	if (!State.On) {
-		Factory.Append(State, "disabled (enabled=false)");
-	} else {
-		Factory.Append(
-			State,
-			Activate([
-				["", `bundle ${Version}`],
-				["", "graph"],
-				["", `threshold ${State.Threshold}`],
-			]),
-		);
-	}
+	// The `!== false` guard keeps a bare fixture that omits the key mounted.
+	Factory.Append(
+		State,
+		Proof(State.On !== false, [
+			["", `bundle ${Version}`],
+			["", "graph"],
+			["", `threshold ${State.Threshold}`],
+		]),
+	);
 
 	// Whether a call is judged: only the configured tool names.
 	const Judged = (Name: string): boolean =>

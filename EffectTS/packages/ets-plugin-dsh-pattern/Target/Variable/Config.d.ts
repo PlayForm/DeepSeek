@@ -8,13 +8,13 @@ import Schema from "@deepseek-ai/schemastery";
  *
  * Composed with the factory's standalone Schema helper (`shared: false` - the
  * minimal block, only the universal log/logFile volatile cells; the service
- * hooks no fs/observed machinery). Every knob is a volatile cell so a hot
- * edit lands on the next service call without a remount. The service class
- * reads these through Configure; the defaults here are the truth. `enabled`
- * defaults to FALSE - the idle-forever posture: the patch row and the README
- * ship the service disabled; a cold mount logs `disabled (enabled=false)` and
- * Match returns the empty result (the abstention) while the service stays
- * resolvable.
+ * hooks no fs/observed machinery). Every knob is a volatile cell so a hot edit
+ * lands on the next service call without a remount. The service class reads
+ * these through Configure; the defaults here are the truth. `enabled` defaults
+ * to TRUE - the shipped posture is ON, and a profile turns it off with
+ * `enabled: false` (the LIVE disabled posture: a cold mount logs
+ * `disabled (enabled=false)` and Match returns the empty result - the
+ * abstention - while the service stays resolvable).
  */
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     log: Schema<boolean, boolean, "volatile-defined">;

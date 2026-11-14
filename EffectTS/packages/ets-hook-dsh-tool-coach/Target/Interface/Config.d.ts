@@ -1,4 +1,4 @@
-import type { CoachNotes, CoachRow } from "./Execution.js";
+import type { CoachNotes, CoachRow, ToolOverride } from "./Execution.js";
 /**
  * @module Config
  *
@@ -15,30 +15,33 @@ import type { CoachNotes, CoachRow } from "./Execution.js";
  * stable `{ get }` references and the factory's State builder unwraps them +
  * refreshes them in place on loader/volatile), so every knob - including
  * fetchLive, maxSectionTools and sectionTtl - flips live without remounting.
- * The factory's shared `log` cell (added by the Compose(false, ...) wrapper)
- * governs the DURABLE ledger file only; the coach's own `enabled` cell is the
- * master switch for the coaching itself.
+ * The Config base sits first (enabled, log, logFile): the coach's own
+ * `enabled` cell is the master switch for the coaching itself, and the
+ * `log` cell (also composed by the Compose(false, ...) wrapper) governs the
+ * DURABLE ledger file only.
  */
 export default interface Config {
+    /**
+     * Master switch - every listener no-ops to a passthrough when false; a
+     * disabled mount logs `disabled (enabled=false)` (volatile).
+     */
+    enabled: boolean;
     /**
      * Ledger enabled - write the durable log file (the shared `log` cell).
      */
     log: boolean;
     /**
-     * Ledger file - the coach's own ledger, separate from the family's logs
-     * (volatile).
+     * Ledger file - the coach's own ledger, separate from the family's logs (volatile).
      */
     logFile: string;
     /**
-     * Master switch - every listener no-ops to a passthrough when false
-     * (volatile).
-     */
-    enabled: boolean;
-    /**
-     * The terminal tools that are judged; dedicated tools are never judged
-     * (volatile).
+     * The terminal tools that are judged; dedicated tools are never judged (volatile).
      */
     judgeTools: string[];
+    /**
+     * The tools denied on EVERY call, before and independent of the strikes ladder (volatile).
+     */
+    denyTools: string[];
     /**
      * Strikes within the window that trigger a tier-1 note (volatile).
      */
@@ -64,13 +67,11 @@ export default interface Config {
      */
     enforce: "off" | "write" | "all";
     /**
-     * Per-class offenses since the last note that arm the tier-3 deny
-     * (volatile).
+     * Per-class offenses since the last note that arm the tier-3 deny (volatile).
      */
     enforceThreshold: number;
     /**
-     * Legitimate-bash exemption regexes, appended to the built-in defaults
-     * (volatile).
+     * Legitimate-bash exemption regexes, appended to the built-in defaults (volatile).
      */
     exemptPatterns: string[];
     /**
@@ -82,10 +83,18 @@ export default interface Config {
      */
     notes: CoachNotes;
     /**
-     * Fetch tool descriptions live from the registry; false = static table
-     * only (volatile).
+     * Fetch tool descriptions live from the registry; false = static table only (volatile).
      */
     fetchLive: boolean;
+    /**
+     * Per-tool overrides of the model-facing line: the user's own words for a
+     * tool, applied on top of the harness's live or generated data (volatile).
+     */
+    toolDescriptions: Record<string, ToolOverride>;
+    /**
+     * Maximum parameters a tier-1 note or tier-3 reason names (volatile).
+     */
+    maxNoteParams: number;
     /**
      * Maximum rows in the tier-2 tool table (volatile).
      */

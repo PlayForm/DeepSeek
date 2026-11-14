@@ -101,8 +101,9 @@ export const runTest = async (): Promise<number> => {
 	// Group G3: the cold-mount idle-forever posture.
 	{
 		const Run = Make(Validate({ logFile: Ledger, enabled: false }));
-		Check(Count, "G3: a disabled mount wires NOTHING and logs the honest line", () => {
-			assert.deepEqual(Run.RootNames, []);
+		Check(Count, "G3: a disabled mount registers EVERY surface and logs the honest line", () => {
+			assert.deepEqual(Run.RootNames, ["fs/observed"]);
+			assert.deepEqual(Run.Effects, ["operate-storage"]);
 			assert.deepEqual(Run.Lines, ["operate: disabled (enabled=false)"]);
 			assert.ok(Run.Provided["workspaceOperate"] !== undefined);
 		});

@@ -18,6 +18,16 @@ import type State from "../Interface/State.js";
  * service. The session and the agent id are read from the block itself.
  */
 export default (State: State, Event: Event, Block: FeedbackBlock): void => {
+	switch (true) {
+		// THE MASTER SWITCH (the LIVE DISABLED posture - read at call time by
+		// the listener and the journal gate): a disabled surface passes
+		// through with ZERO ledger lines while the in-memory record
+		// continues, the documented disabled answer of the class form.
+		case !State.Config.enabled:
+			return;
+		default:
+			break;
+	}
 	try {
 		const Ledger = Expand(State.Ledger);
 		Make(Parent(Ledger), { recursive: true });

@@ -65,6 +65,17 @@ Documentation/Archive/**
 # Maintain/Generate/Marketplace/Index.mjs; prettier would break its --check.
 marketplace.json
 
+# The generated tool-catalog tables - written byte-for-byte by
+# Maintain/Generate/Catalog/Index.mjs from the harness submodule's
+# docs/tool-catalog.md; prettier would break their --check.
+**/Source/Variable/Catalog.ts
+
+# The DeepSeek Harness submodule - another repository's working tree, read at
+# build time for its generated docs/tool-catalog.md. Formatting it would dirty
+# that checkout and block `git submodule update`.
+Module/deepseek-harness
+Module/deepseek-harness/**
+
 # Test fixtures - frozen by design, never reformat
 Test
 Test/**

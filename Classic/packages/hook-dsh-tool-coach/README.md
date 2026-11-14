@@ -38,10 +38,21 @@ across chained segments (`cat a; sed -i ...` counts once, as write).
 
 Every note names the correct tool with its LIVE registry data, fetched through
 `ctx.tools.schemas()`: the tool name, the FIRST SENTENCE of its description (≤ 120 chars), and the
-primary parameter key.
+FULL parameter surface - every key with its requiredness and its declared default
+(`file_path (required), offset (default 1), limit (default 2000)`), plus the call shape the model
+should make (`read { file_path, offset?, limit? }`).
 
-Any fetch failure degrades to the static `STATIC_TOOL_LINES` table and logs
-`schema fetch failed -> static fallback`, so a note never fails a waterfall.
+A note that names only the first parameter tells the model how to make the one call that cannot
+answer the question: `head -40` on a 45k-line log was answered with `read` + `file_path`, and the
+call shape that reads lines 45200-45240 is `read { file_path, offset, limit }`. The defaults come
+from the harness itself - the `default` annotation when a tool declares one, else the "Defaults to
+X." sentence the harness puts on the parameter (its house convention across `packages/*/tool-*`).
+
+Any fetch failure degrades to the GENERATED `Variable/Catalog` table and logs
+`schema fetch failed -> static fallback`, so a note never fails a waterfall. That table is not
+hand-written: `Maintain/Generate/Catalog` projects it from the harness's own generated
+`docs/tool-catalog.md` in the `Module/deepseek-harness` submodule (`pnpm run catalog`, verified by
+`pnpm run catalog:check`), and the fallback runs through the SAME projection as the live fetch.
 
 `fetchLive: false` (the escape hatch) uses the static table unconditionally.
 
@@ -50,9 +61,13 @@ section, `notes.denied` the tier-3 deny reason) are volatile config cells, so a 
 replaces any of them retexts a tier without touching the package.
 
 The templates keep the placeholder grammar of `Function/Compose` (`${command}`, `${class}`,
-`${count}`, `${traceability}`, `${tool.name}`, `${tool.description}`, `${tool.param}`, `${table}`),
-and inserted user data is escaped before substitution, so a composed note never gains an unfilled
-placeholder.
+`${class.lead}`, `${count}`, `${traceability}`, `${tool.name}`, `${tool.description}`,
+`${tool.param}`, `${tool.params}`, `${tool.shape}`, `${table}`), and inserted user data is escaped
+before substitution, so a composed note never gains an unfilled placeholder.
+
+`toolDescriptions` is the coach's own interface to those descriptions: a per-tool override applied
+on top of BOTH the live registry and the generated table, per field, so a deployment can reword a
+tool's line, pin its parameter surface, or do both, without editing the package.
 
 The intended override appends the "Live-container grammar" block to `notes.persistent`, so the
 tier-2 section also teaches the live-containers machinery; the lesson is the SECTION, not the
@@ -102,6 +117,8 @@ Every knob is **volatile**, hot-edited without remounting, and a flip lands on t
 | `patternTable`      | array   | `DEFAULT_PATTERNS`                          | volatile - `{ pattern, class, tool, note? }` rows                                                |
 | `notes`             | object  | `first` / `persistent` / `denied` templates | volatile - the three model-facing note texts                                                     |
 | `fetchLive`         | boolean | `true`                                      | volatile - fetch tool data from the live registry                                                |
+| `toolDescriptions`  | object  | `{}`                                        | volatile - per-tool `{ description?, params? }` overrides over the live and generated data       |
+| `maxNoteParams`     | number  | `4`                                         | volatile - parameters a tier-1/3 note names (the rest are reported as `+N more`)                 |
 | `maxSectionTools`   | number  | `5`                                         | volatile - the tier-2 tool-table row cap                                                         |
 | `sectionTtl`        | number  | `20`                                        | volatile - judged calls between tier-2 section rebuilds                                          |
 
@@ -129,14 +146,18 @@ schema fetch failed -> static fallback
 
 - Build:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-tool-coach run prepublishOnly`
-- Smokes: `node Classic/packages/hook-dsh-tool-coach/Target/Test/<Folder>/Test.js` - the six folders
-  sum to the 132-check baseline exactly
-    - Wiring-And-Defaults - 39 checks
+- Smokes: `node Classic/packages/hook-dsh-tool-coach/Target/Test/<Folder>/Test.js` - the eight
+  folders sum to the 168-check baseline exactly
+    - Wiring-And-Defaults - 40 checks
     - Passthrough-And-Guards - 6 checks
     - Notes-And-Cooldown - 16 checks
     - Persistent-Section - 16 checks
     - Enforce-And-Exempts - 15 checks
     - Dynamic-And-Craft - 40 checks
+    - Deny-Tools - 10 checks
+    - Defaults-And-Overrides - 25 checks
+- Catalog: `pnpm run catalog` regenerates the two `Source/Variable/Catalog.ts` files from the
+  `Module/deepseek-harness` submodule; `pnpm run catalog:check` fails when either is stale.
 
 ## The plan
 

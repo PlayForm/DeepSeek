@@ -57,10 +57,10 @@ import Version from "./Variable/Version.js";
  *
  * The store rides the family's journal conventions: every state flip writes
  * a P5 journal record (best-effort through the factory) plus one byte-stable
- * ledger line. The plugin ships DISABLED - the IDLE-forever posture: it never
- * appears in the profile's bundles and enables only by an explicit ACTIVATE;
- * a cold mount logs `disabled (enabled=false)` and the tools and the service
- * no-op.
+ * ledger line. The plugin ships ENABLED - the live disabled posture: a
+ * profile turns it off with `enabled: false`; a cold disabled mount logs
+ * `disabled (enabled=false)` and the tools answer the documented disabled
+ * payloads while the service and the registrations stay mounted.
  *
  * Sits NEXT TO the BATCH-STATE and ROUTING-ENFORCER plugins in the
  * orchestration layer (Documentation/Plans/ORCHESTRATION-FAMILY.md: the state

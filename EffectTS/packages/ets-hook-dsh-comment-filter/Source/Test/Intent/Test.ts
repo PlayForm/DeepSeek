@@ -234,19 +234,23 @@ export const runTest = async (): Promise<number> => {
 			assert.ok(Out.kind === "accept" && !("content" in Out));
 			assert.ok(RunDisabled.Lines.length === LinesBefore);
 		});
-		// I11: ... and the ACTIVATION line still reached the ledger: the
-		// filter switch maps onto State.Active, NOT onto the factory's ledger
-		// gate (State.Enabled, from the shared `log` cell), so "did it
-		// activate" stays answerable from the ledger alone while the filter is
-		// off.
+		// I11: ... and the mount proof is the DISABLED line: the master switch
+		// (`enabled`) reaches the mount through `State.Active`, and the module's
+		// own proof composer writes `disabled (enabled=false)` INSTEAD of the
+		// activation summary - the same contract as the Classic twin.
 		{
-			const Sub = "intent: enabled off still records the activation line in the ledger";
+			const Sub = "intent: the disabled mount records the disabled line";
 			Check(Count, Sub, () => {
-				const Activated = RunDisabled.Lines.filter((Line: string) =>
-					Line.startsWith("hook-dsh-comment-filter: activated"),
+				const Disabled = RunDisabled.Lines.filter((Line: string) =>
+					Line.startsWith("hook-dsh-comment-filter: disabled (enabled=false)"),
 				);
-				assert.equal(Activated.length, 1);
-				assert.ok(Activated[0].includes("targets 2"));
+				assert.equal(Disabled.length, 1);
+				assert.equal(
+					RunDisabled.Lines.filter((Line: string) =>
+						Line.startsWith("hook-dsh-comment-filter: activated"),
+					).length,
+					0,
+				);
 			});
 		}
 	}

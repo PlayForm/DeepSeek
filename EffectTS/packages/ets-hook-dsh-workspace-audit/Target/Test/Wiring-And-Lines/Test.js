@@ -36,9 +36,9 @@ const runTest = async () => {
       assert.equal(Run.Returned, void 0);
       assert.ok(Run.Provided["workspaceAudit"] !== void 0);
     });
-    Check(Count, "W1: a disabled mount registers NOTHING on the root context", () => {
-      assert.deepEqual(Run.RootNames, []);
-      assert.deepEqual(Run.Effects, []);
+    Check(Count, "W1: a disabled mount registers EVERY surface (listener and storage effect)", () => {
+      assert.deepEqual(Run.RootNames, ["fs/observed"]);
+      assert.deepEqual(Run.Effects, ["audit-storage"]);
     });
     Check(Count, "W1: the cold mount logs the byte-exact disabled line", () => {
       assert.deepEqual(Run.Lines, ["audit: disabled (enabled=false)"]);

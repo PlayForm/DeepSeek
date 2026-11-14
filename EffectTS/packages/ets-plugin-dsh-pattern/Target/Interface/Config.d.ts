@@ -12,7 +12,9 @@ import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
  */
 export default interface Config {
     /**
-     * Master switch (default true - a registry is inert without callers).
+     * Master switch - the live disabled posture: off logs
+     * `disabled (enabled=false)` and leaves Match abstaining while the
+     * service stays resolvable (default true - the shipped posture is ON).
      */
     enabled: boolean;
     /**

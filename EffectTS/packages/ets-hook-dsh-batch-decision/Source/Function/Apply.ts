@@ -7,7 +7,7 @@ import Tool from "@Function/Tool.js";
 import type { BatchProposal } from "@Interface/Batch.js";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
+import { Proof } from "@playform/ets-base-dsh";
 import { Decide } from "@playform/ets-plugin-dsh-factory";
 import Version from "@Variable/Version.js";
 
@@ -121,18 +121,16 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone (the master switch and the policy knobs on the line).
-	if (!State_.On) {
-		Factory.Append(State_, "disabled (enabled=false)");
-	} else {
-		Factory.Append(
-			State_,
-			Activate([
-				["", `bundle ${Version}`],
-				["autoApprove", State_.AutoApprove],
-				["allowlist", String(State_.Allowlist.length)],
-			]),
-		);
-	}
+	// The disabled marker's byte-exact text belongs to the core's Proof
+	// composer (the parity rule: one composer owns the branch).
+	Factory.Append(
+		State_,
+		Proof(State_.On, [
+			["", `bundle ${Version}`],
+			["autoApprove", State_.AutoApprove],
+			["allowlist", String(State_.Allowlist.length)],
+		]),
+	);
 
 	// ------------------------------------------------------------------
 	// Listener L1: batch/proposed (emit mode, structural registration). The

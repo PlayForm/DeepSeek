@@ -17,8 +17,8 @@ import type { BlockSpecification } from "@Interface/Execution.js";
  * them in place on loader/volatile), so every knob - including the whole block table -
  * flips live without remounting. The factory's shared `log` cell (added by the
  * Compose(false, ...) wrapper) governs the DURABLE ledger file only; the plugin's own
- * `enabled` cell is the master switch (the IDLE-forever posture: false is the shipped
- * default).
+ * `enabled` cell is the master switch (the shipped posture is ON; a disabled mount logs
+ * `disabled (enabled=false)` and every listener passes through).
  */
 /**
  * The detach policy knobs (design section 2.3, volatile).

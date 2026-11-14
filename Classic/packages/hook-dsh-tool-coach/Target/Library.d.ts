@@ -35,9 +35,11 @@ import Version from "./Variable/Version.js";
  *                                `threshold` strikes within `window` judged
  *                                calls, cooled down by `cooldown` - the note
  *                                names the correct tool with its LIVE
- *                                registry description (ctx.tools.schemas(),
- *                                first sentence + key parameter) and the
- *                                fs/observed traceability mechanism;
+ *                                registry description and FULL parameter
+ *                                surface (ctx.tools.schemas(): first sentence
+ *                                plus every parameter's requiredness and
+ *                                declared default, and the call shape) and
+ *                                the fs/observed traceability mechanism;
  *   tier 2  system-prompt/assemble  a persistent "Tool discipline" section
  *                                (three fixed rules + a live-fetched tool
  *                                table capped at maxSectionTools rows) while

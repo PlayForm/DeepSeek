@@ -45,6 +45,12 @@ import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
  * docs/user/develop/basic/publish.md:103).
  */
 export default Compose(false, {
+	// The MASTER SWITCH (volatile: the running cells are refreshed in place,
+	// so a flip is read at the next CALL with no remount): false = the plugin
+	// appends `disabled (enabled=false)` to the ledger while every registered
+	// surface passes through silently. Distinct from the shared `log` cell,
+	// which governs only the durable ledger file.
+	enabled: Schema.boolean().default(true).volatile(),
 	// Ledger file — the hook-dsh-normalize-dash ledger, SEPARATE from the family's logs (one
 	// log per module) — volatile: hot-editable without remounting (overrides
 	// the minimal shared block's empty default).

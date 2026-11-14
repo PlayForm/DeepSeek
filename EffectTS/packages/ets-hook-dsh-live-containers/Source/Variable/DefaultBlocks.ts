@@ -9,8 +9,7 @@ import type { BlockSpecification } from "@Interface/Execution.js";
  *
  * A Variable: pure data, not code. The 14-entry catalog of Requirements/03 section 3,
  * shipped as the schema default of config `blocks` with the sensible enablements
- * (todo-list, command-runner and session-stats ON; the rest dormant) - and the PLUGIN
- * still disabled (the IDLE-forever posture, schema default of `enabled`).
+ * (todo-list, command-runner and session-stats ON; the rest dormant).
  *
  * The catalog entries carry their wave-2 kind names (03 section 3); in phase 1 they
  * validate against the kind registry (Interface/Execution.ts KINDS) and render as skipped

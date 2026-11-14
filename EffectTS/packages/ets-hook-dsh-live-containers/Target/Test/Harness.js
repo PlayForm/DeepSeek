@@ -500,7 +500,7 @@ if (InvokedDirectly) {
     assert.equal(1, 2);
   });
   rm();
-  const Run = Make(Validate({ logFile: Ledger }));
+  const Run = Make(Validate({ logFile: Ledger, enabled: false }));
   Check(Count, "selfcheck: the fake ctx registers the plugin's apply-time wiring", () => {
     assert.equal(Object.keys(Run.Listeners).length, 5);
     assert.equal(Run.State.Module, "hook-dsh-live-containers");

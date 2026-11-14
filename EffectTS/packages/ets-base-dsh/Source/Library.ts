@@ -50,6 +50,13 @@ export { default as Expand } from "./Function/Expand.js";
 export { default as Block } from "./Stream/Block.js";
 export { default as Chunk } from "./Stream/Chunk.js";
 export { default as StreamGate } from "./Stream/Gate.js";
+export { default as Coalesce } from "./Function/Coalesce.js";
+export { default as Proof } from "./Function/Proof.js";
+export { default as Ring } from "./Function/Ring.js";
+export { default as Capped } from "./Function/Capped.js";
+export { default as PerAgent } from "./Function/PerAgent.js";
+export { default as Resume } from "./Function/Resume.js";
+export { default as Counter } from "./Function/Counter.js";
 
 // The runtime wiring (moved from the factory's Source/Service and the
 // Function modules the services delegate to - the factory imports them from

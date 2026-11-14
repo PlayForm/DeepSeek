@@ -5,7 +5,7 @@ import ToolStatus from "@Function/ToolStatus.js";
 import Validate from "@Function/Validate.js";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
+import { Proof } from "@playform/ets-base-dsh";
 import Version from "@Variable/Version.js";
 
 /**
@@ -70,18 +70,14 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from
 	// the ledger alone (the master switch and the capacity model on the line).
-	if (!State.On) {
-		Factory.Append(State, "disabled (enabled=false)");
-	} else {
-		Factory.Append(
-			State,
-			Activate([
-				["", `bundle ${Version}`],
-				["capacity", `main=${State.Capacity.main} child=${State.Capacity.child}`],
-				["routedDispatch", String(State.RoutedDispatch)],
-			]),
-		);
-	}
+	Factory.Append(
+		State,
+		Proof(State.On !== false, [
+			["", `bundle ${Version}`],
+			["capacity", `main=${State.Capacity.main} child=${State.Capacity.child}`],
+			["routedDispatch", String(State.RoutedDispatch)],
+		]),
+	);
 
 	// The service: registered immediately on construction, removed with the
 	// owning fiber (the plugin's own). The State carries it for the tools.

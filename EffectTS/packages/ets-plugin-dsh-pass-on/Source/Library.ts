@@ -74,6 +74,14 @@ export default class PassOn extends Service {
 			Enabled: Config.enabled,
 			Proposals: new Map(),
 		};
+		// THE LIVE DISABLED POSTURE (the Config base): a disabled mount
+		// journals the byte-exact `disabled (enabled=false)` note and the
+		// service stays registered - `Prepare` reads `enabled` at CALL time
+		// and refuses; a flip needs a remount (the class form's documented
+		// posture). The mount-time effect of the flag is ONLY this line.
+		if (!Config.enabled) {
+			JournalFn(this.State, null, "disabled (enabled=false)", "disabled");
+		}
 	}
 
 	/**

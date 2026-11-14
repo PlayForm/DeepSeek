@@ -24,7 +24,9 @@ export default interface Config {
      */
     log: boolean;
     /**
-     * The master switch - the IDLE-forever posture: false by default.
+     * The master switch - the LIVE DISABLED posture: every surface registers
+     * on every mount and a disabled mount writes only the
+     * `disabled (enabled=false)` ledger line at mount.
      */
     enabled: boolean;
     /**

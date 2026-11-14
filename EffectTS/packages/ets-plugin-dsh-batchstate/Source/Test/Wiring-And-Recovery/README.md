@@ -8,8 +8,10 @@ validation, the state-file recovery, and the purity guarantee.
 - L1: the loader contract - the default object carries name `plugin-dsh-batchstate`, apply, Config,
   inject `["pluginFactory"]`, apply returns NOTHING, and the `__pluginDshBatchstateState` probe
   exists with the factory module name.
-- W1: the IDLE-forever cold mount - the byte-exact `disabled (enabled=false)` line, and the service
-  still registers and reads the empty state honestly.
+- W1: the disabled cold mount (`enabled: false`, explicit - the shipped default is the live
+  posture) - the byte-exact `disabled (enabled=false)` line followed by the recovery line, the
+  unconditional registration (the service, the store probe and both inbox listeners), the service
+  still reading the empty state honestly, and a disabled write no-op with zero ledger lines.
 - W2: the activation wiring - the byte-exact `activated (batch=default, stateFile=<path>)` line
   followed by the recovery line, and the nine-method service surface on the provided instance.
 - X1: the fail-loud validation - `maxRecent` 0, an empty `stateFile`, and an empty `batch` all throw
@@ -35,4 +37,4 @@ The shared Harness with the `Seed` helper (the JSON state file the recovery read
 
 ## Expected count
 
-13 PASS.
+15 PASS.

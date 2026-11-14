@@ -4,47 +4,60 @@ import * as OS from "node:os";
 import * as Path from "node:path";
 import Coach from "../../Target/Library.js";
 import Detect from "../../Target/Function/Detect.js";
+import { DefaultOf, ParamsOf, PrimaryOf } from "../../Target/Function/Fetch.js";
+import { CATALOG } from "../../Target/Variable/Catalog.js";
 import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "../../Target/Variable/Patterns.js";
 import {
+	CLASS_LEADS,
 	NOTE_DENIED,
+	NOTE_DENIED_TOOL,
 	NOTE_FIRST,
 	NOTE_PERSISTENT,
-	STATIC_TOOL_LINES,
 } from "../../Target/Variable/Notes.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
 /**
  * @module Harness
  *
- * The shared test harness for the TOOL COACH tests.
+ * The shared test harness for the TOOL COACH tests: the fake ctx (on capture, get serving the REAL
+ * @playform/ets-plugin-dsh-factory instance from its built Target, logger capture, a configurable
+ * tools.schemas seam + the root seam) plus the REAL tool-coach apply from its built Target - the
+ * seams from the source suite (Classic/smokes/tool-coach-smoke.mjs), written ONCE per package and
+ * imported by every test folder.
  *
  * @remarks
  *
- * The harness wires the fake ctx (on capture, get serving the REAL
- * @playform/ets-plugin-dsh-factory instance from its built Target, logger
- * capture, a configurable tools.schemas seam plus the root seam) plus the
- * REAL tool-coach apply from its built Target - the seams from the source
- * suite (`Classic/smokes/tool-coach-smoke.mjs`), written ONCE per package
- * and imported by every test folder. The suite-level fixtures (the tmp
- * ledger, the live registry schema fixture, the Post/Pre/Assemble waterfall
- * helpers, the pattern-row locators) live here too: each folder process gets
- * a fresh set (the module state is per-process), so every folder is
- * standalone-green and the aggregate replays the same seams per folder.
+ * The suite-level fixtures (the tmp ledger, the live registry schema fixture, the Post/Pre/Assemble
+ * waterfall helpers, the pattern-row locators) live here too: each folder process gets a fresh set
+ * (the module state is per-process), so every folder is standalone-green and the aggregate replays
+ * the same seams per folder.
  *
- * The standalone selfcheck `node Target/Test/Harness.js --selfcheck` runs the
- * counter through one deliberate pass plus one deliberate failure and exits 0
- * only when both are counted exactly, then proves the fake ctx actually wires
- * the coach (the vacuously-green backstop for every folder's fixture);
- * `prepublishOnly.sh` gates the build on it. Imported as a library, this
- * module only exports.
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the counter through one
+ * deliberate pass + one deliberate failure and exits 0 only when both are counted exactly, then
+ * proves the fake ctx actually wires the coach (the vacuously-green backstop for every folder's
+ * fixture); prepublishOnly.sh gates the build on it. Imported as a library, this module only
+ * exports.
  *
- * The fake clock: the coach measures time in JUDGED CALLS, not wall time -
- * the cooldown window, the clean window and sectionTtl are all judged-call
- * counters (strike 8 at the 6th call since the note, 12 clean calls, calls-9
- * >= ttl 2), so the TTL/cooldown paths are driven deterministically by the
- * call sequences in the folders; there are no timer stubs to fake.
+ * The fake clock: the coach measures time in JUDGED CALLS, not wall time - the cooldown window, the
+ * clean window and sectionTtl are all judged-call counters (strike 8 at the 6th call since the
+ * note, 12 clean calls, calls-9 >= ttl 2), so the TTL/cooldown paths are driven deterministically
+ * by the call sequences in the folders; there are no timer stubs to fake.
  */
-export { Coach, Detect, DEFAULT_EXEMPTS, DEFAULT_PATTERNS, NOTE_DENIED, NOTE_FIRST, NOTE_PERSISTENT, STATIC_TOOL_LINES };
+export {
+	CATALOG,
+	CLASS_LEADS,
+	Coach,
+	DefaultOf,
+	Detect,
+	DEFAULT_EXEMPTS,
+	DEFAULT_PATTERNS,
+	NOTE_DENIED,
+	NOTE_DENIED_TOOL,
+	NOTE_FIRST,
+	NOTE_PERSISTENT,
+	ParamsOf,
+	PrimaryOf,
+};
 
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks.
@@ -140,33 +153,71 @@ export const Furnace: any = new FactoryClass({
 /**
  * The LIVE registry fixture (the fake ctx.tools.schemas). The read
  * description carries a distinctive `(live fixture)` marker so the tests can
- * tell a LIVE fetch from the STATIC fallback table (D1 vs D2).
+ * tell a LIVE fetch from the GENERATED static fallback (D1 vs D2), and the
+ * read/edit schemas carry `required` plus the harness's own
+ * "Defaults to X." parameter sentences so the parameter projection is
+ * exercised exactly as the real registry exercises it.
  */
 export const LiveSchemas = () => [
 	{
 		name: "read",
 		description: "Read a UTF-8 text file (live fixture) and return line-numbered content.",
-		parameters: { properties: { file_path: {}, offset: {} } },
+		parameters: {
+			type: "object",
+			properties: {
+				file_path: { type: "string", description: "Path to read." },
+				offset: { type: "number", description: "1-based first line to return. Defaults to 1." },
+				limit: {
+					type: "number",
+					description: "Maximum number of lines to return. Defaults to 2000.",
+				},
+			},
+			required: ["file_path"],
+		},
 	},
 	{
 		name: "write",
 		description: "Create or fully replace a UTF-8 text file.",
-		parameters: { properties: { file_path: {} } },
+		parameters: { properties: { file_path: {} }, required: ["file_path"] },
 	},
 	{
 		name: "edit",
 		description: "Edit an existing UTF-8 text file by replacing literal text.",
-		parameters: { properties: { old_string: {}, new_string: {} } },
+		parameters: {
+			properties: {
+				file_path: { description: "Path to edit." },
+				old_string: { description: "Literal text to replace." },
+				new_string: { description: "Literal replacement text." },
+				replace_all: {
+					description: "Replace all matches. Defaults to false; when false, old_string must appear exactly once.",
+				},
+			},
+			required: ["file_path", "old_string", "new_string"],
+		},
 	},
 	{
 		name: "grep",
 		description: "Search file contents with a ripgrep regular expression.",
-		parameters: { properties: { pattern: {} } },
+		parameters: { properties: { pattern: {} }, required: ["pattern"] },
+	},
+	{
+		name: "aaa_fixture",
+		description: "Fixture tool that sorts first, so the top-up has a stable first row.",
+		parameters: { properties: { x: {} } },
 	},
 	{
 		name: "web_search",
 		description: "Search the web for current information.",
-		parameters: { properties: { queries: {} } },
+		parameters: { properties: { queries: {} }, required: ["queries"] },
+	},
+	{
+		name: "working_directory",
+		description: "Read the current working directory, or change it with cd.",
+		parameters: {
+			properties: {
+				cd: { description: "Existing directory to enter. Omit to read the current directory." },
+			},
+		},
 	},
 	{
 		name: "zzz_fixture",

@@ -7,6 +7,8 @@
 		"build": "turbo run prepublishOnly --framework-inference=false",
 		"build:classic": "turbo run prepublishOnly --framework-inference=false --filter \"./Classic/packages/*\"",
 		"build:effect-ts": "turbo run prepublishOnly --framework-inference=false --filter \"./EffectTS/packages/*\"",
+		"catalog": "node Maintain/Generate/Catalog/Index.mjs",
+		"catalog:check": "node Maintain/Generate/Catalog/Index.mjs --check",
 		"format": "bash Maintain/Format/Index.sh",
 		"format:check": "prettier --check --ignore-path .prettierignore . && node Maintain/Check/Newlines/Index.mjs",
 		"format:newlines": "bash Maintain/Format/Index.sh newlines",

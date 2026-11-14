@@ -25,13 +25,13 @@ import Schema from "@deepseek-ai/schemastery";
  * one log per module) is supplied through its own fields, which override the
  * minimal block's.
  *
- * VOLATILE CELLS: `log`, `logFile`, `thresholdBytes`, `previewMaxChars` and
- * `multipliers` are `.volatile()` - hot edits commit WITHOUT remounting the
- * plugin, matching Aphrodite's hot-reload thresholds. `thresholdBytes` is
- * the gate's only numeric knob that needs mid-session retuning;
- * `multipliers` is its per-type extension; `previewMaxChars` shapes the
- * model-visible line. The structural knobs (targets, exempt, the store, the
- * journal, auto-expand, the context-engine phase-4 flags) change the
+ * VOLATILE CELLS: `enabled`, `log`, `logFile`, `thresholdBytes`,
+ * `previewMaxChars` and `multipliers` are `.volatile()` - hot edits commit
+ * WITHOUT remounting the plugin, matching Aphrodite's hot-reload thresholds.
+ * `thresholdBytes` is the gate's only numeric knob that needs mid-session
+ * retuning; `multipliers` is its per-type extension; `previewMaxChars` shapes
+ * the model-visible line. The structural knobs (targets, exempt, the store,
+ * the journal, auto-expand, the context-engine phase-4 flags) change the
  * dispatch SEMANTICS, so they remount on edit (plain fields).
  * `contextEngine` and its three knobs are phase 4: the engine is implemented
  * and OFF by default - the field set is fixed so tuning it is config-only

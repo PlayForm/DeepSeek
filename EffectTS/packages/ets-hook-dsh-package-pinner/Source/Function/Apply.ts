@@ -1,7 +1,7 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
+import { Proof } from "@playform/ets-base-dsh";
 import { Effect, Scope } from "effect";
 
 import { Pin } from "./Direct.js";
@@ -18,11 +18,12 @@ import Observe from "./Observe.js";
  * Everything here is factory machinery (ctx.pluginFactory, injected - the
  * loader holds this bundle pending until the factory service exists):
  * - State - Furnace.State(ctx, config, { module: "hook-dsh-pinner-package",
- *   fields: { Section: "sections" }, policyFileName: "pin-policy.json",
- *   journalDomain: "hook_dsh_package_pinner" }): the shared shape (defensive
- *   cell unwrap of the factory's volatile shared fields,
- *   Tool/Policy/Ledger/Enabled/List mappings, Stash/Inflight/Seams/Queue/
- *   Journal, the P9 subprocess probe) + the pinner's Section.
+ *   fields: { On: "enabled", Section: "sections" }, policyFileName:
+ *   "pin-policy.json", journalDomain: "hook_dsh_package_pinner" }): the
+ *   shared shape (defensive cell unwrap of the factory's volatile shared
+ *   fields, Tool/Policy/Ledger/Enabled/List mappings, Stash/Inflight/Seams/
+ *   Queue/Journal, the P9 subprocess probe) + the master switch and the
+ *   pinner's Section.
  * - The activation proof - the MODULE'S ledger strings: the durable
  *   `activated (...)` Append ("did it activate" must be answerable from the
  *   ledger alone) and the P5 Journal record.
@@ -46,7 +47,7 @@ import Observe from "./Observe.js";
  * sync `Scope.make` run through `Effect.runSync` is fully synchronous, so no
  * async boundary is introduced). THE PINNER HAS NO UPDATE STAGE - it never
  * uses the core's typed-effect Update envelope (no Dispatch/Settle; its only
- * core imports are the plain composers Activate / Suppress / Refusal) and its
+ * core imports are the plain composers Proof / Suppress / Refusal) and its
  * pin chain runs as the FACTORY'S detached contained continuation (the
  * factory's own Effect runtime: the `dsh.chain-pass` span, the WriteService,
  * the `Effect.ensuring` P2 finalizer) - so, unlike the governor, no
@@ -66,7 +67,7 @@ export default (Context: Context, Options: Config): void => {
 
 	const State = Furnace.State<State>(Context, Options, {
 		module: "hook-dsh-pinner-package", // doubles as the factory-composed line prefix
-		fields: { Section: "sections" }, // the pinner's own field (config key)
+		fields: { On: "enabled", Section: "sections" }, // On: the master switch; the pinner's own field (config key)
 		policyFileName: "pin-policy.json", // the union-discovery sidecar name
 		journalDomain: "hook_dsh_package_pinner", // the pinner's own journal domain (unit-name rule: lowercase/digits/underscores)
 	});
@@ -80,19 +81,29 @@ export default (Context: Context, Options: Config): void => {
 	// The context attachment for test probes (never a return value).
 	(Context as unknown as Record<string, unknown>)["__hookDshPinnerPackageState"] = State;
 
+	// THE MASTER SWITCH (config `enabled`, volatile - the setup map's
+	// `On <- enabled`, so the State builder's P10 volatile-update listener
+	// refreshes it in place): the ONE mount-time effect of the flag is the
+	// ledger line - a disabled pinner appends the durable disabled line
+	// INSTEAD of the activation proof and still registers EVERYTHING below
+	// (no early return - the LIVE disabled posture).
 	// Durable activation proof (the module's own string) + the P5 journal
 	// record — both flow through the factory's Append/Journal. The line's
-	// string mechanics live in the core's Activate composer; the FIELD LIST
+	// string mechanics live in the core's Proof composer; the FIELD LIST
 	// is the module's own — the leading bare flavor word (empty key) and the
 	// bracketed lists.
-	const Proof = Activate([
+	const Line = Proof(State.On !== false, [
 		["", "pinner"],
 		["logFile", State.Ledger],
 		["sections", `[${State.Section.join(", ")}]`],
 		["exclude", `[${State.List.join(", ")}]`],
 	]);
-	Furnace.Append(State, Proof);
-	Furnace.Journal(State, "activated", "", Proof);
+	Furnace.Append(State, Line);
+	// The storage journal's `activated` record belongs to the LIVE mount only:
+	// the disabled mount's proof is the disabled line alone.
+	if (State.On !== false) {
+		Furnace.Journal(State, "activated", "", Line);
+	}
 
 	// The listener is owned by the current fiber: removed on unload — no
 	// manual removeListener bookkeeping, ever (the factory's Wire).

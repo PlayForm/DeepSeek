@@ -31,9 +31,10 @@ import { DEFAULT_POLICY } from "@Variable/Policy.js";
  * fields IN PLACE, so a policy edit lands on the next launch without a
  * remount (the plan's "the config hot-reload or the restart").
  *
- * `enabled` defaults to FALSE - the IDLE-forever posture: the plugin ships
- * disabled, never appears in the profile's bundles, and enables only by an
- * explicit ACTIVATE.
+ * `enabled` defaults to TRUE - the shipped posture is ON, and a profile turns
+ * it off with `enabled: false` (the LIVE disabled posture: a cold mount logs
+ * `disabled (enabled=false)` and every listener and the service stay
+ * registered, reading the flag at call time).
  *
  * This is one of the modules in the tree with a runtime import of
  * @deepseek-ai/schemastery (the schema must be a real schemastery instance -
@@ -50,8 +51,12 @@ const Role = () =>
 	});
 
 export default Compose(false, {
+	// The MASTER SWITCH (volatile: a flip is read at the next launch with no
+	// remount): false = the mount appends `disabled (enabled=false)` to the
+	// ledger while the listeners and the service stay registered and pass
+	// through silently.
+	enabled: Schema.boolean().default(true).volatile(),
 	logFile: Schema.string().default("~/.dsh/playform/ets-plugin-dsh-route.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
 	// The omission's default role: the CHEAP lane is the safe default - the
 	// plan's incident is the expensive parent route being inherited silently.
 	defaultRole: Schema.union(["explorer", "coder", "planner"]).default("explorer").volatile(),
