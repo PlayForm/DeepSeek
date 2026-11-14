@@ -1,0 +1,4 @@
+[submodule "Module/deepseek-harness"]
+path = Module/deepseek-harness
+url = https://github.com/DeepSeek-AI/deepseek-harness.git
+shallow = true
