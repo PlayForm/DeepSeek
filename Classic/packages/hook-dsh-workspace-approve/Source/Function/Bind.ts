@@ -42,7 +42,7 @@ export default (State: State, Candidate: Candidate): Binding | undefined => {
 	const Reject = (Reason: string): Binding => {
 		State.Factory.Append(State, `rejected ${Path} (${Reason})`);
 		const Rejected: Binding = {
-			id: `ap-${State.Sequence}`,
+			id: `ap-${State.Sequence.Value}`,
 			path: Path,
 			fingerprint: Fingerprint,
 			version: Version,
@@ -50,7 +50,7 @@ export default (State: State, Candidate: Candidate): Binding | undefined => {
 			summary: String(Candidate.summary ?? ""),
 			decision: "rejected",
 			committedBy: undefined,
-			sequence: State.Sequence,
+			sequence: State.Sequence.Value,
 		};
 		Record(State, Rejected);
 		return Rejected;
@@ -62,9 +62,9 @@ export default (State: State, Candidate: Candidate): Binding | undefined => {
 			return Reject("no constraints");
 		default:
 	}
-	State.Sequence += 1;
+	State.Sequence.Next();
 	const Binding: Binding = {
-		id: `ap-${State.Sequence}`,
+		id: `ap-${State.Sequence.Value}`,
 		path: Path,
 		fingerprint: Fingerprint,
 		version: Version,
@@ -72,7 +72,7 @@ export default (State: State, Candidate: Candidate): Binding | undefined => {
 		summary: String(Candidate.summary ?? ""),
 		decision: "pending",
 		committedBy: undefined,
-		sequence: State.Sequence,
+		sequence: State.Sequence.Value,
 	};
 	State.Factory.Append(State, `bound ${Binding.id} ${Path} fingerprint ${Fingerprint}`);
 	Record(State, Binding);

@@ -22,7 +22,7 @@ export default async (State: State, Request: Batch): Promise<Preview> => {
 	const Id =
 		typeof Request.id === "string" && Request.id.length > 0
 			? Request.id
-			: `preview-${State.Sequence + 1}`;
+			: `preview-${State.Sequence.Value + 1}`;
 	return {
 		id: Id,
 		ok: Checked.ok,

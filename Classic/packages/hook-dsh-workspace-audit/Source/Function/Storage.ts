@@ -123,7 +123,7 @@ export default async (State: State, Facility: unknown): Promise<void> => {
 			State.Ring = Loaded;
 		}
 		// Recovery: the sequence restarts at the maximum loaded sequence.
-		State.Sequence = Math.max(0, ...State.Ring.map((Entry) => Entry.sequence));
+		State.Sequence.Restore(Math.max(0, ...State.Ring.map((Entry) => Entry.sequence)));
 		State.Handle = Handle;
 	} catch (Cause) {
 		// LOUD (see header): one best-effort ledger line, never rethrown.

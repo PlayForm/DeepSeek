@@ -30,7 +30,7 @@ export default {
 	} {
 		return {
 			paths: State.Index.size,
-			revision: State.Revision,
+			revision: State.Revision.Value,
 			adapters: State.Adapters.size,
 		};
 	},

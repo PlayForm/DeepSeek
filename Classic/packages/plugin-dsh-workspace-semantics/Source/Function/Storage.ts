@@ -128,8 +128,8 @@ export default async (State: State, Facility: unknown): Promise<void> => {
 		// Recovery: the revision from the meta record (monotonic, never a wall clock). A
 		// record failing the symbol validation is skipped.
 		for (const [, Row] of Handle.table("meta").entries()) {
-			if (typeof Row === "number" && Row > State.Revision) {
-				State.Revision = Row;
+			if (typeof Row === "number") {
+				State.Revision.Restore(Row);
 			}
 		}
 		for (const Model of State.Index.values()) {

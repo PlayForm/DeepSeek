@@ -14,9 +14,10 @@ import { Check, Finish, Ledger, Make, MakeCounter, Rm, Validate } from "../Harne
  * comments leaves the read result untouched, a normal task strips it, the
  * stash is PER AGENT, a call with no agent identity falls back to the global
  * text, a step with no user message keeps the previous intent,
- * `intent: false` always strips, `enabled: false` never strips, and a filter
- * switched off still records its ACTIVATION line in the ledger (the switch
- * maps onto `State.Active`, never onto the factory's ledger gate).
+ * `intent: false` always strips, `enabled: false` never strips, and the
+ * disabled mount records the byte-exact `disabled (enabled=false)` line in the
+ * ledger (the switch maps onto `State.Active` and is gated through the core's
+ * Proof composer, never onto the factory's ledger gate).
  *
  * The file runs standalone (`node Target/Test/Intent/Test.js`) AND under the
  * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit smoke
@@ -232,19 +233,23 @@ export const runTest = async (): Promise<number> => {
 			assert.ok(Out.kind === "accept" && !("content" in Out));
 			assert.ok(RunDisabled.Lines.length === LinesBefore);
 		});
-		// I11: ... and the ACTIVATION line still reached the ledger: the
-		// filter switch maps onto State.Active, NOT onto the factory's ledger
-		// gate (State.Enabled, from the shared `log` cell), so "did it
-		// activate" stays answerable from the ledger alone while the filter is
-		// off.
+		// I11: ... and the DISABLED marker: the switch is gated through the
+		// core's Proof composer, so a disabled mount writes the byte-exact
+		// `disabled (enabled=false)` line (prefixed by the factory's Append
+		// layer) and NO activation line - the ledger alone answers "did it
+		// activate" with a no while every registration stays mounted.
 		{
-			const Sub = "intent: enabled off still records the activation line in the ledger";
+			const Sub = "intent: the disabled mount records the disabled line";
 			Check(Count, Sub, () => {
+				const Disabled = RunDisabled.Lines.filter((Line: string) =>
+					Line.startsWith("hook-dsh-comment-filter: disabled"),
+				);
+				assert.equal(Disabled.length, 1);
+				assert.equal(Disabled[0], "hook-dsh-comment-filter: disabled (enabled=false)");
 				const Activated = RunDisabled.Lines.filter((Line: string) =>
 					Line.startsWith("hook-dsh-comment-filter: activated"),
 				);
-				assert.equal(Activated.length, 1);
-				assert.ok(Activated[0].includes("targets 2"));
+				assert.equal(Activated.length, 0);
 			});
 		}
 	}

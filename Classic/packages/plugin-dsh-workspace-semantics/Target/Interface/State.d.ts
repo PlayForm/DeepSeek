@@ -70,9 +70,18 @@ interface Extra {
      */
     Index: Map<string, Model>;
     /**
-     * The service's own monotonic index revision (never a wall clock).
+     * The service's own monotonic index revision (never a wall clock) - the
+     * declared counter the factory births at the State build (`counter:
+     * true`), the service's own field aliasing the born counter: `Value` is
+     * the read-only current number, `Next` is the only way to advance, and
+     * `Restore` raises the value and never lowers it (the in-memory value is
+     * the floor).
      */
-    Revision: number;
+    Revision: {
+        readonly Value: number;
+        Next(): number;
+        Restore(Recovered: number): void;
+    };
     /**
      * The adapter registry, keyed by extension (with dot, lowercase) or by exact basename
      * (the file adapters).

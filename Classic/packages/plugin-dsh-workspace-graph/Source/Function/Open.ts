@@ -1,6 +1,5 @@
 import type State from "@Interface/State.js";
 import type { Domain } from "@Interface/State.js";
-import { Resume } from "@playform/lib-dsh-core";
 
 import Append from "./Append.js";
 import IsRecord from "./IsRecord.js";
@@ -74,7 +73,7 @@ export default async (StateRef: State): Promise<void> => {
 		}
 		const Meta = Store.meta(StateRef);
 		if (typeof Meta?.indexRevision === "number") {
-			StateRef.Revision = Resume(StateRef.Revision, Meta.indexRevision);
+			StateRef.Revision.Restore(Meta.indexRevision);
 		}
 		Append(StateRef, `domain ${StateRef.Config.domain} opened (${Count} records)`);
 	} catch (Cause) {

@@ -38,6 +38,15 @@
  *   (circuit breaker) - as FRESH instances per mount. When the option is
  *   absent or false, the three fields are not added and the shape stays as
  *   it is for every other module; the birth is never module-level.
+ * - `counter` - OPTIONAL. Set `true` when the module owns a monotonic
+ *   sequence or revision (an id stream it would otherwise increment by hand
+ *   and restore by hand through `Resume`): the State builder then births the
+ *   core's declared counter on the returned State - `Counter` (`Value` is
+ *   the read-only current number, `Next` is the only way to advance, and
+ *   `Restore` raises the value and never lowers it, the in-memory value
+ *   being the floor) - as a FRESH instance per mount at State-build time.
+ *   When the option is absent or false, the field is not added and the shape
+ *   stays as it is for every other module; the birth is never module-level.
  */
 export default interface Options {
     /**
@@ -60,4 +69,8 @@ export default interface Options {
      * Birth the per-directory update machinery on the State (Stamp/Set/Count).
      */
     updates?: boolean | undefined;
+    /**
+     * Birth the declared monotonic counter on the State (State.Counter).
+     */
+    counter?: boolean | undefined;
 }

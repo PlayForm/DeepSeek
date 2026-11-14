@@ -1,5 +1,6 @@
 import type Lease from "@Interface/Lease.js";
 import type State from "@Interface/State.js";
+import { ClosedWindow } from "@Variable/Config.js";
 
 import Policy from "./Policy.js";
 
@@ -43,6 +44,19 @@ export default (
 				State.Factory.Append(State, `expired ${Record.id}`);
 				break;
 		}
+	}
+	// The closed-lease window: the most recent closed leases stay addressable
+	// (the idempotent release and the statistic); beyond the cap the OLDEST
+	// closed entries are forgotten - a Map preserves insertion order, so the
+	// first key whose record is closed is the oldest.
+	const Closed = [...State.Leases.entries()].filter(([, Lease]) => Lease.closed);
+	let Excess = Closed.length - ClosedWindow;
+	for (const [Id] of Closed) {
+		if (Excess <= 0) {
+			break;
+		}
+		State.Leases.delete(Id);
+		Excess -= 1;
 	}
 	const Held = [...State.Leases.values()].filter(
 		(Record) => Record.holder === Holder && !Record.closed,

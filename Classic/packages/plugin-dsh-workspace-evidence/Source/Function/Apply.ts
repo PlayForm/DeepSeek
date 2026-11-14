@@ -75,6 +75,7 @@ export default (Context: Context, Options: Config): void => {
 	const Factory = Context.pluginFactory as unknown as FactoryHandle;
 	const State = Factory.State(Context, Options, {
 		module: "evidence",
+		counter: true,
 		fields: {
 			On: "enabled",
 			DomainName: "domain",
@@ -84,7 +85,11 @@ export default (Context: Context, Options: Config): void => {
 	}) as State;
 	State.Factory = Factory;
 	State.Store = new Map();
-	State.Sequence = 0;
+	// The declared counter (the `counter: true` setup option above births it
+	// at build time): the service's own sequence field aliases the born
+	// counter - `Next` is the only way to advance, `Restore` raises and never
+	// lowers.
+	State.Sequence = (State as unknown as { Counter: State["Sequence"] }).Counter;
 	State.Handle = undefined;
 	State.Seen = new Map();
 

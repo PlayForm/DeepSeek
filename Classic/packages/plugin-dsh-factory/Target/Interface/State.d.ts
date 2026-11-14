@@ -116,4 +116,18 @@ export default interface State {
     Stamp?: Map<string, number> | undefined;
     Set?: Set<string> | undefined;
     Count?: Map<string, number> | undefined;
+    /** THE DECLARED COUNTER - born by the State builder ONLY when the
+     * `counter` setup option is true, as a FRESH instance per mount (never
+     * module-level): the monotonic sequence or revision the module would
+     * otherwise increment by hand and restore by hand. `Value` is the
+     * read-only current number, `Next` is the only way to advance, and
+     * `Restore(recovered)` raises the value and never lowers it (the
+     * in-memory value is the floor - the core's `Resume` rule carried by the
+     * counter itself). Absent (and not even typed as present on other
+     * modules' shapes) when the option is not set. */
+    Counter?: {
+        readonly Value: number;
+        Next(): number;
+        Restore(Recovered: number): void;
+    } | undefined;
 }

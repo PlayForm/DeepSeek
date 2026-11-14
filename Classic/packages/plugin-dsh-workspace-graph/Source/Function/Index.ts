@@ -94,8 +94,8 @@ export default async (StateRef: State, Path: string): Promise<Outcome> => {
 		const Previous = StateRef.Records.get(Key);
 		StateRef.Records.set(Key, Record);
 		await Store.put(StateRef, Key, Record);
-		StateRef.Revision += 1;
-		await Store.putMeta(StateRef, StateRef.Revision);
+		StateRef.Revision.Next();
+		await Store.putMeta(StateRef, StateRef.Revision.Value);
 		StateRef.SkippedImports += Parsed.skipped.length;
 		Append(
 			StateRef,
@@ -108,7 +108,7 @@ export default async (StateRef: State, Path: string): Promise<Outcome> => {
 		if (Previous !== undefined) {
 			Emit(StateRef, Invalidated(Key, "replaced", Previous.version));
 		}
-		Emit(StateRef, Indexed(Key, Record.version, StateRef.Revision));
+		Emit(StateRef, Indexed(Key, Record.version, StateRef.Revision.Value));
 		return {
 			path: Key,
 			status: "indexed",

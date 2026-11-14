@@ -41,5 +41,5 @@ export const Statistics = (
 } => ({
 	bindings: State.Ring.length,
 	byId: State.ById.size,
-	sequence: State.Sequence,
+	sequence: State.Sequence.Value,
 });

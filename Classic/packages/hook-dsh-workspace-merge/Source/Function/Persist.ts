@@ -22,7 +22,7 @@ export default (State: State, RecordData: Record): void => {
 	void (async () => {
 		try {
 			await Handle.table("batches").put(RecordData.id, RecordData);
-			await Handle.table("meta").put("__meta", { sequence: State.Sequence });
+			await Handle.table("meta").put("__meta", { sequence: State.Sequence.Value });
 		} catch {
 			/* storage optional - never on any caller path */
 		}

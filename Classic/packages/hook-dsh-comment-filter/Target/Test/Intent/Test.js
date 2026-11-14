@@ -165,13 +165,17 @@ const runTest = async () => {
       assert.ok(RunDisabled.Lines.length === LinesBefore);
     });
     {
-      const Sub2 = "intent: enabled off still records the activation line in the ledger";
+      const Sub2 = "intent: the disabled mount records the disabled line";
       Check(Count, Sub2, () => {
+        const Disabled = RunDisabled.Lines.filter(
+          (Line) => Line.startsWith("hook-dsh-comment-filter: disabled")
+        );
+        assert.equal(Disabled.length, 1);
+        assert.equal(Disabled[0], "hook-dsh-comment-filter: disabled (enabled=false)");
         const Activated = RunDisabled.Lines.filter(
           (Line) => Line.startsWith("hook-dsh-comment-filter: activated")
         );
-        assert.equal(Activated.length, 1);
-        assert.ok(Activated[0].includes("targets 2"));
+        assert.equal(Activated.length, 0);
       });
     }
   }

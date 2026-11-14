@@ -89,7 +89,7 @@ export default (
 				return;
 			default:
 		}
-		State.Sequence += 1;
+		State.Sequence.Next();
 		State.Factory.Append(State, `stamped ${Path} version ${Version} (fs/observed)`);
 		// The record write happens AFTER the ledger line: the line is the
 		// proof, the stamp is the state (the ring cap runs inside the record
@@ -98,7 +98,7 @@ export default (
 			path: Path,
 			version: Version,
 			origin: "fs/observed",
-			sequence: State.Sequence,
+			sequence: State.Sequence.Value,
 		});
 	} catch (Cause) {
 		try {

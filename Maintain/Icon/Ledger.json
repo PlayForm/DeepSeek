@@ -2249,7 +2249,7 @@
 			"kind": "lib",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "c12f29bcc3277878a1cfba0bfa1862219aa035962a79803db47b98577560138e",
+			"seed": "0b2a53073f32c7dfab47946e47e3e36f4392d2f0d98ec1bf3faa424f1d743f0d",
 			"grammar": "crescent-ring",
 			"order": 4,
 			"arms": 4,
@@ -2258,8 +2258,8 @@
 			"rim": "woven",
 			"mode": "single",
 			"hash": {
-				"mono": "810eba8eba4e9424b77c60b22b5976f0a3ca5a61227695c5cfb03f4630015320",
-				"colour": "84926fd6222675e9731b47513fd0dd9e9a3d7b98cfdcb9508d41b5e541958dc8"
+				"mono": "888f4b65a02851ba82ce420aace23d7f02751e24d2f6aecfa8add3eaf9c937d2",
+				"colour": "aed78f28f44879ba986572a07f018f49b3f9a8d3f81f26053e0ac9513c6cdc2d"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/lib-dsh-core.svg",

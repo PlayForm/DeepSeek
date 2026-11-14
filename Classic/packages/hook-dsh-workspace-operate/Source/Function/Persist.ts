@@ -24,7 +24,7 @@ export default (State: State, Proposal: Proposal | undefined): void => {
 				await Handle.table("proposals").put(Proposal.id, Proposal);
 			}
 			await Handle.table("meta").put("__meta", {
-				sequence: State.Sequence,
+				sequence: State.Sequence.Value,
 				refused: State.Refused,
 			});
 		} catch {

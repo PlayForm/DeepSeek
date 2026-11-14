@@ -22,7 +22,7 @@ import type Query from "@Interface/Query.js";
 import type Snapshot from "@Interface/Snapshot.js";
 import type State from "@Interface/State.js";
 import type Statistics from "@Interface/Statistics.js";
-import { Proof } from "@playform/lib-dsh-core";
+import { Counter, Proof } from "@playform/lib-dsh-core";
 import type { Allowlist } from "@playform/plugin-dsh-factory";
 import Definition from "@Variable/Config.js";
 import Version from "@Variable/Version.js";
@@ -142,7 +142,10 @@ export default class WorkspaceGraph extends Service {
 			Allow,
 			On,
 			Records: new Map(),
-			Revision: 0,
+			// The declared counter: the core's monotonic revision born fresh per
+			// mount - `Next` is the only way to advance, `Restore` raises and
+			// never lowers (the in-memory value is the floor).
+			Revision: Counter(),
 			Domain: undefined,
 			Opened: undefined,
 			// The ledger seam: config `log` gates the durable file, config

@@ -22,6 +22,6 @@ export default (StateRef: State): Statistics => {
 		files: StateRef.Records.size,
 		nodes: Nodes,
 		edges: Edges,
-		indexRevision: String(StateRef.Revision),
+		indexRevision: String(StateRef.Revision.Value),
 	};
 };

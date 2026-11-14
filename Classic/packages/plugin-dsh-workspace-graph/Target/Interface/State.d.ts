@@ -67,9 +67,17 @@ export default interface State {
      */
     Records: Map<string, Record>;
     /**
-     * The index revision counter, bumped by every store write.
+     * The plugin's own monotonic revision (never a wall clock) - the declared
+     * counter the core births at the State build (`Function/Library` passes
+     * the core's `Counter()`): `Value` is the read-only current number, `Next`
+     * is the only way to advance, and `Restore` raises the value and never
+     * lowers it (the in-memory value is the floor).
      */
-    Revision: number;
+    Revision: {
+        readonly Value: number;
+        Next(): number;
+        Restore(Recovered: number): void;
+    };
     /**
      * The open storage-domain handle, when a facility was present.
      */

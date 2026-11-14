@@ -159,7 +159,7 @@ const runTest = async () => {
       const Line = Service.line({ operation: "op3", category: "commitment", path: "/d" });
       assert.equal(Line.id, "a4");
       assert.equal(Line.sequence, 4);
-      assert.equal(Second.State.Sequence, 4);
+      assert.equal(Second.State.Sequence.Value, 4);
     });
   }
   {

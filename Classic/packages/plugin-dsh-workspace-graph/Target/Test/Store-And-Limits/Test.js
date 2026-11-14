@@ -39,7 +39,7 @@ const runTest = async () => {
       assert.deepEqual(Snapshot.edges, Stored.edges);
       assert.equal(Snapshot.indexRevision, "1");
       assert.equal(Run.Graph.statistics().files, 1);
-      assert.equal(Run.State.Revision, 1);
+      assert.equal(Run.State.Revision.Value, 1);
     });
   }
   {
@@ -48,7 +48,7 @@ const runTest = async () => {
     await Run.Graph.indexFile(Path);
     Check(Count, "store: the revision increments with every successful index (A6)", () => {
       assert.equal(Run.Graph.statistics().indexRevision, "2");
-      assert.equal(Run.State.Revision, 2);
+      assert.equal(Run.State.Revision.Value, 2);
     });
   }
   {

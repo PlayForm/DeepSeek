@@ -90,7 +90,7 @@ export const runTest = async (): Promise<number> => {
 				undefined,
 			);
 			assert.equal(Run.Context.workspaceAudit.assessment("op1", true), undefined);
-			assert.equal(Run.State.Sequence, 0);
+			assert.equal(Run.State.Sequence.Value, 0);
 			assert.equal(Run.Lines.length, Before);
 		});
 	}
@@ -104,7 +104,7 @@ export const runTest = async (): Promise<number> => {
 		Check(Count, "W1: a volatile flip to enabled acts on the very next call, no remount", () => {
 			assert.equal(Run.State.On, true);
 			Fire(Run, "/repo/src/a.ts");
-			assert.equal(Run.State.Sequence, 1);
+			assert.equal(Run.State.Sequence.Value, 1);
 			assert.ok(Run.Lines.includes("audit: audit outcome-evidence /repo/src/a.ts (success) /repo/src/a.ts"));
 		});
 		Flip(Run.Raw.enabled, false);
@@ -113,7 +113,7 @@ export const runTest = async (): Promise<number> => {
 			const Before = Run.Lines.length;
 			Fire(Run, "/repo/src/b.ts");
 			assert.equal(Run.Lines.length, Before);
-			assert.equal(Run.State.Sequence, 1);
+			assert.equal(Run.State.Sequence.Value, 1);
 		});
 	}
 
@@ -189,7 +189,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		Check(Count, "W3: a third event advances the sequence to exactly 3", () => {
 			Fire(Run, "/repo/src/c.ts");
-			assert.equal(Run.State.Sequence, 3);
+			assert.equal(Run.State.Sequence.Value, 3);
 			assert.equal(Run.State.Ring[2].sequence, 3);
 		});
 		Check(Count, "W3: the parent pointer carries the actor's tag when there is one", () => {
@@ -256,19 +256,19 @@ export const runTest = async (): Promise<number> => {
 			assert.deepEqual(LinesWith(Run, "audit outcome-evidence /repo/src/e.ts"), [
 				"audit: audit outcome-evidence /repo/src/e.ts (success) /repo/src/e.ts",
 			]);
-			assert.equal(Run.State.Sequence, 1);
+			assert.equal(Run.State.Sequence.Value, 1);
 			assert.equal(Run.State.Ring.length, 1);
 		});
 		Check(Count, "W6: a different version is processed normally", () => {
 			Fire(Run, "/repo/src/e.ts", "absent");
-			assert.equal(Run.State.Sequence, 2);
+			assert.equal(Run.State.Sequence.Value, 2);
 			assert.equal(Run.State.Ring[1].outcome, "failure");
 		});
 		Check(Count, "W6: the same version outside the window is processed again", () => {
 			const Base = Date.now();
 			Run.State.Now = () => Base + 5000;
 			Fire(Run, "/repo/src/e.ts", "absent");
-			assert.equal(Run.State.Sequence, 3);
+			assert.equal(Run.State.Sequence.Value, 3);
 		});
 	}
 	return Finish(Count, "Wiring-And-Lines");

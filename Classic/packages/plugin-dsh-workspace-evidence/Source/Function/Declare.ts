@@ -53,20 +53,20 @@ export default (
 			break;
 		default:
 	}
-	State.Sequence += 1;
+	State.Sequence.Next();
 	const Validation: Validation = {
 		id: Id,
 		kind: Kind,
 		subject: Subject,
 		verdict: Verdict,
 		dependencies: [...Dependencies],
-		sequence: State.Sequence,
+		sequence: State.Sequence.Value,
 		status: "fresh",
 	};
 	State.Store.set(Id, Validation);
 	State.Factory.Append(
 		State,
-		`validated ${Id} (${Kind}, ${Subject}, ${Validation.dependencies.length} dependencies, ${Verdict}, sequence ${State.Sequence})`,
+		`validated ${Id} (${Kind}, ${Subject}, ${Validation.dependencies.length} dependencies, ${Verdict}, sequence ${State.Sequence.Value})`,
 	);
 	try {
 		void State.Handle?.table("validations")
@@ -75,7 +75,7 @@ export default (
 				/* persistence best-effort */
 			});
 		void State.Handle?.table("meta")
-			.put("__sequence", State.Sequence)
+			.put("__sequence", State.Sequence.Value)
 			.catch(() => {
 				/* persistence best-effort */
 			});

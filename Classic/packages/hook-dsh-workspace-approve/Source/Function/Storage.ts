@@ -1,6 +1,5 @@
 import type Binding from "@Interface/Binding.js";
 import type State from "@Interface/State.js";
-import { Resume } from "@playform/lib-dsh-core";
 
 /**
  * @module Storage
@@ -120,8 +119,7 @@ export default async (State: State, Facility: unknown): Promise<void> => {
 			}
 		}
 		// Recovery: the sequence restarts at the maximum loaded sequence.
-		State.Sequence = Resume(
-			State.Sequence,
+		State.Sequence.Restore(
 			Math.max(0, ...[...State.ById.values()].map((Entry) => Entry.sequence)),
 		);
 		State.Handle = Handle;

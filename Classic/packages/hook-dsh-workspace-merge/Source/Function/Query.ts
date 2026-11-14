@@ -39,6 +39,6 @@ export const Statistics = (State: State): Statistics => {
 		conflicts: Counts.conflicts,
 		rejected: Counts.rejected,
 		recovery: Counts.recovery,
-		sequence: State.Sequence,
+		sequence: State.Sequence.Value,
 	};
 };

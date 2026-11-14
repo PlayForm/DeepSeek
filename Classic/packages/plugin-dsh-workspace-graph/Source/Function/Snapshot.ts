@@ -34,5 +34,5 @@ export default (StateRef: State): Snapshot => {
 		Nodes.push(...Value.nodes);
 		Edges.push(...Value.edges);
 	}
-	return { indexRevision: String(StateRef.Revision), nodes: Nodes, edges: Edges };
+	return { indexRevision: String(StateRef.Revision.Value), nodes: Nodes, edges: Edges };
 };

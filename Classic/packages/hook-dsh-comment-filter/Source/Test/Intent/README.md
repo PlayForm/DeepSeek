@@ -33,8 +33,8 @@ own failure mode, because a step with no user message must NOT wipe the stash.
   mode)".
 - I10: the off switch. Check: "intent: enabled off never strips (and no ledger
   line)".
-- I11: the activation line survives the off switch. Check: "intent: enabled off
-  still records the activation line in the ledger".
+- I11: the disabled marker replaces the activation line. Check: "intent: the
+  disabled mount records the disabled line".
 
 ## Fixtures
 
@@ -59,9 +59,10 @@ leaks across a check, and the durable ledger is cleared at folder start.
 - A call with no agent identity falls back to the last text seen by ANY agent.
 - A step with no user message, which is a tool-result or assistant-only step, keeps the previous
   intent, because otherwise the gate would work only on step one.
-- `intent: false` strips unconditionally, and `enabled: false` never strips, yet its activation line
-  still reaches the ledger because `enabled` maps onto `State.Active` and never onto the ledger gate
-  of the factory.
+- `intent: false` strips unconditionally, and `enabled: false` never strips and writes no ledger
+  line during the call: its mount records the byte-exact `disabled (enabled=false)` line instead of
+  the activation line, because `enabled` maps onto `State.Active` and is gated through the core's
+  Proof composer, never onto the ledger gate of the factory.
 
 ## Expected count
 

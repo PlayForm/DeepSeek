@@ -49,6 +49,7 @@ export { default as Ring } from "./Function/Ring.js";
 export { default as Capped } from "./Function/Capped.js";
 export { default as PerAgent } from "./Function/PerAgent.js";
 export { default as Resume } from "./Function/Resume.js";
+export { default as Counter } from "./Function/Counter.js";
 export { default as SuggestRing } from "./Suggest/Ring.js";
 export { default as SuggestStore } from "./Suggest/Store.js";
 export { default as Replace } from "./Normalize/Replace.js";

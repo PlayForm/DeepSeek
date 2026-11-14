@@ -54,9 +54,17 @@ interface Extra {
      */
     Ring: Line[];
     /**
-     * The plugin's own monotonic sequence (never a wall clock).
+     * The plugin's own monotonic sequence (never a wall clock) - the declared
+     * counter the factory births at the State build (`counter: true`), the
+     * hook's own field aliasing the born counter: `Value` is the read-only
+     * current number, `Next` is the only way to advance, and `Restore` raises
+     * the value and never lowers it (the in-memory value is the floor).
      */
-    Sequence: number;
+    Sequence: {
+        readonly Value: number;
+        Next(): number;
+        Restore(Recovered: number): void;
+    };
     /**
      * The open storage domain handle; `undefined` while pending, after a
      * silent skip (absent facility), or after the effect's disposer.

@@ -97,6 +97,7 @@ export default (Context: Context, Options: Config): void => {
 	const Factory = Context.pluginFactory as unknown as FactoryHandle;
 	const State = Factory.State(Context, Options, {
 		module: "semantics",
+		counter: true,
 		fields: {
 			On: "enabled",
 			DomainName: "domain",
@@ -110,7 +111,11 @@ export default (Context: Context, Options: Config): void => {
 	State.Factory = Factory;
 	State.Fs = Context.get?.("fs");
 	State.Index = new Map();
-	State.Revision = 0;
+	// The declared counter (the `counter: true` setup option above births it
+	// at build time): the service's own revision field aliases the born
+	// counter - `Next` is the only way to advance, `Restore` raises and never
+	// lowers.
+	State.Revision = (State as unknown as { Counter: State["Revision"] }).Counter;
 	State.Adapters = new Map<string, Adapter>();
 	State.Deepenings = new Map();
 	State.Handle = undefined;

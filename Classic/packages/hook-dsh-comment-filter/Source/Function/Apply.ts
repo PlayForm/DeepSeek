@@ -1,7 +1,7 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate, PerAgent } from "@playform/lib-dsh-core";
+import { PerAgent, Proof } from "@playform/lib-dsh-core";
 
 import Intent from "./Intent.js";
 import Overpass from "./Overpass.js";
@@ -15,8 +15,9 @@ import Overpass from "./Overpass.js";
  *
  * It builds the State through `Factory.State` (the cell unwrap, the shared mappings
  * Ledger<-logFile / Enabled<-log and the module's own fields via the setup `fields` map -
- * factory SCHEME.md section 2.10), emits the durable activation proof (the module's own string,
- * via Factory.Append - the factory never owns ledger strings), registers the comment filter's
+ * factory SCHEME.md section 2.10), emits the durable mount proof (the module's own string,
+ * gated by the master switch through the core's Proof - the factory never owns ledger strings),
+ * registers the comment filter's
  * TWO listeners on the current fiber, and attaches the State for the smoke probes.
  *
  * THE TWO LISTENERS (both fiber-owned: removed on unload, no manual bookkeeping, ever):
@@ -97,7 +98,9 @@ export default (Context: Context, Options: Config): void => {
 	// ledger alone. Format (asserted by the smoke):
 	//   hook-dsh-comment-filter: activated (targets 2, intent on, notice on, logFile=...)
 	// The line's string mechanics (the `activated (` prefix, the `k=v` join,
-	// the `)` suffix) live in the core's Activate composer; the FIELD LIST is
+	// the `)` suffix) live in the core's Proof composer, which owns the master
+	// switch: a live mount writes the `activated (...)` summary, a disabled
+	// one the byte-exact `disabled (enabled=false)` marker; the FIELD LIST is
 	// the module's own. The three flag segments are passed with an EMPTY key -
 	// the composer's bare-segment form (the family's "anywhere mode"
 	// precedent) - so the line reads as a sentence (`targets 2, intent on,
@@ -107,7 +110,7 @@ export default (Context: Context, Options: Config): void => {
 	// then goes through the logger.
 	Factory.Append(
 		State,
-		Activate([
+		Proof(State.Active !== false, [
 			["", `targets ${State.Targets.length}`],
 			["", `intent ${State.IntentOn ? "on" : "off"}`],
 			["", `notice ${State.Notice ? "on" : "off"}`],

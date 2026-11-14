@@ -61,7 +61,7 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(await Run.Context.workspaceObserve.manual("/repo/src/a.ts"), undefined);
 			assert.equal(Run.Lines.length, Before);
 			assert.equal(Run.State.Latest.size, 0);
-			assert.equal(Run.State.Sequence, 0);
+			assert.equal(Run.State.Sequence.Value, 0);
 		});
 	}
 
@@ -88,7 +88,7 @@ export const runTest = async (): Promise<number> => {
 			const Before = Run.Lines.length;
 			Fire(Run, "/repo/src/b.ts", "2");
 			assert.equal(Run.Lines.length, Before);
-			assert.equal(Run.State.Sequence, 1);
+			assert.equal(Run.State.Sequence.Value, 1);
 		});
 	}
 
@@ -133,7 +133,7 @@ export const runTest = async (): Promise<number> => {
 		Check(Count, "W3: a third event advances the sequence to exactly 3", () => {
 			Fire(Run, "/repo/src/c.ts", "3");
 			assert.equal(Run.State.Latest.get("/repo/src/c.ts").sequence, 3);
-			assert.equal(Run.State.Sequence, 3);
+			assert.equal(Run.State.Sequence.Value, 3);
 		});
 		Check(Count, "W3: the stamped ledger line is byte-exact", () => {
 			assert.ok(
@@ -159,7 +159,7 @@ export const runTest = async (): Promise<number> => {
 				{ agent: { id: "agent-a" } },
 			);
 			assert.equal(Run.State.Latest.get("/repo/src/gone.ts").version, "absent");
-			assert.equal(Run.State.Sequence, 4);
+			assert.equal(Run.State.Sequence.Value, 4);
 		});
 	}
 

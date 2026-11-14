@@ -96,7 +96,7 @@ export default async (State: State, Facility: unknown): Promise<void> => {
 		for (const [, Row] of Handle.table("meta").entries()) {
 			const Meta = Row as { sequence?: unknown } | null;
 			if (Meta !== null && typeof Meta === "object" && typeof Meta.sequence === "number") {
-				State.Sequence = Math.max(State.Sequence, Meta.sequence);
+				State.Sequence.Restore(Meta.sequence);
 			}
 		}
 		State.Handle = Handle;

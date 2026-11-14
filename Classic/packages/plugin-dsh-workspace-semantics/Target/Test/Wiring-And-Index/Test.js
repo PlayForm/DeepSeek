@@ -63,16 +63,16 @@ const runTest = async () => {
     });
     Check(Count, "W1: the disabled listener does nothing (no line, no revision)", () => {
       Fire(Run, "/repo/src/a.ts", "1");
-      assert.equal(Run.State.Revision, 0);
+      assert.equal(Run.State.Revision.Value, 0);
       assert.deepEqual(LinesWith(Run, "indexed /repo/src/a.ts"), []);
     });
     Check(Count, "W1: a flip to enabled acts on the very next event", () => {
       Run.State.On = true;
       Fire(Run, "/repo/src/a.ts", "1");
-      assert.equal(Run.State.Revision, 1);
+      assert.equal(Run.State.Revision.Value, 1);
       Run.State.On = false;
       Fire(Run, "/repo/src/b.ts", "2");
-      assert.equal(Run.State.Revision, 1);
+      assert.equal(Run.State.Revision.Value, 1);
     });
   }
   {
@@ -98,14 +98,14 @@ const runTest = async () => {
     Fire(Run, "/repo/src/a.ts", "1");
     Fire(Run, "/repo/src/b.ts", "2");
     Check(Count, "W3: the revision advances monotonically - no wall clock", () => {
-      assert.equal(Run.State.Revision, 2);
+      assert.equal(Run.State.Revision.Value, 2);
       assert.deepEqual(LinesWith(Run, "indexed /repo/src/a.ts"), [
         "semantics: indexed /repo/src/a.ts version 1 (revision 1)"
       ]);
     });
     FireAbsent(Run, "/repo/src/gone.ts");
     Check(Count, "W3: an absent observation invalidates too, as version absent", () => {
-      assert.equal(Run.State.Revision, 3);
+      assert.equal(Run.State.Revision.Value, 3);
       assert.ok(
         Run.Lines.includes("semantics: indexed /repo/src/gone.ts version absent (revision 3)")
       );
@@ -161,21 +161,21 @@ const runTest = async () => {
     Fire(Run, "/repo/src/g.ts", "1");
     Fire(Run, "/repo/src/g.ts", "1");
     Check(Count, "W6: a repeat event with the same version is dropped silently", () => {
-      assert.equal(Run.State.Revision, 1);
+      assert.equal(Run.State.Revision.Value, 1);
       assert.deepEqual(LinesWith(Run, "indexed /repo/src/g.ts"), [
         "semantics: indexed /repo/src/g.ts version 1 (revision 1)"
       ]);
     });
     Check(Count, "W6: a different version is processed normally", () => {
       Fire(Run, "/repo/src/g.ts", "2");
-      assert.equal(Run.State.Revision, 2);
+      assert.equal(Run.State.Revision.Value, 2);
       assert.ok(Run.Lines.includes("semantics: indexed /repo/src/g.ts version 2 (revision 2)"));
     });
     Check(Count, "W6: the same version outside the window is processed again", () => {
       const Base = Date.now();
       Run.State.Now = () => Base + 5e3;
       Fire(Run, "/repo/src/g.ts", "2");
-      assert.equal(Run.State.Revision, 3);
+      assert.equal(Run.State.Revision.Value, 3);
     });
   }
   return Finish(Count, "Wiring-And-Index");

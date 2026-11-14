@@ -35,5 +35,5 @@ export const Statistics = (
 } => ({
 	operations: State.Chains.size,
 	lines: State.Ring.length,
-	sequence: State.Sequence,
+	sequence: State.Sequence.Value,
 });

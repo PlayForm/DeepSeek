@@ -32,7 +32,7 @@ const runTest = async () => {
     });
     Check(Count, "G1: the excluded event records nothing and moves no counter", () => {
       assert.equal(Run.State.Latest.size, 0);
-      assert.equal(Run.State.Sequence, 0);
+      assert.equal(Run.State.Sequence.Value, 0);
     });
     Check(Count, "G1: the segment form excludes too (plain name, no glob)", () => {
       Fire(Run, "/repo/node_modules/pkg/index.js", "1");
@@ -47,7 +47,7 @@ const runTest = async () => {
         "observe: ignored /repo/src/a.ts (own actor)"
       ]);
       assert.equal(Run.State.Latest.size, 0);
-      assert.equal(Run.State.Sequence, 0);
+      assert.equal(Run.State.Sequence.Value, 0);
     });
   }
   {
@@ -62,7 +62,7 @@ const runTest = async () => {
     Check(Count, "G3: a matching path under the same include records normally", () => {
       Fire(Run, "/repo/src/a.ts", "1");
       assert.equal(Run.State.Latest.get("/repo/src/a.ts").version, "1");
-      assert.equal(Run.State.Sequence, 1);
+      assert.equal(Run.State.Sequence.Value, 1);
     });
   }
   {
@@ -84,7 +84,7 @@ const runTest = async () => {
     });
     Check(Count, "G4: the latest map keeps every path and the counter keeps running", () => {
       assert.equal(Run.State.Latest.size, 5);
-      assert.equal(Run.State.Sequence, 5);
+      assert.equal(Run.State.Sequence.Value, 5);
     });
   }
   {
@@ -117,7 +117,7 @@ const runTest = async () => {
     });
     Check(Count, "G6: the listener keeps working after the failure", () => {
       Fire(Run, "/repo/src/a.ts", "1");
-      assert.equal(Run.State.Sequence, 1);
+      assert.equal(Run.State.Sequence.Value, 1);
     });
   }
   {
@@ -147,19 +147,19 @@ const runTest = async () => {
       assert.deepEqual(LinesWith(Run, "stamped /repo/src/g.ts"), [
         "observe: stamped /repo/src/g.ts version 1 (fs/observed)"
       ]);
-      assert.equal(Run.State.Sequence, 1);
+      assert.equal(Run.State.Sequence.Value, 1);
       assert.equal(Run.State.Latest.get("/repo/src/g.ts").sequence, 1);
     });
     Check(Count, "G8: a different version is processed normally", () => {
       Fire(Run, "/repo/src/g.ts", "2");
-      assert.equal(Run.State.Sequence, 2);
+      assert.equal(Run.State.Sequence.Value, 2);
       assert.ok(Run.Lines.includes("observe: stamped /repo/src/g.ts version 2 (fs/observed)"));
     });
     Check(Count, "G8: the same version outside the window is processed again", () => {
       const Base = Date.now();
       Run.State.Now = () => Base + 5e3;
       Fire(Run, "/repo/src/g.ts", "2");
-      assert.equal(Run.State.Sequence, 3);
+      assert.equal(Run.State.Sequence.Value, 3);
     });
   }
   return Finish(Count, "Guards-And-Ring");

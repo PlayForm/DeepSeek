@@ -75,6 +75,7 @@ export default (Context: Context, Options: Config): void => {
 	const Factory = Context.pluginFactory;
 	const State = Factory.State(Context, Options, {
 		module: "observe",
+		counter: true,
 		fields: {
 			On: "enabled",
 			DomainName: "domain",
@@ -86,7 +87,10 @@ export default (Context: Context, Options: Config): void => {
 	State.Factory = Factory;
 	State.Latest = new Map();
 	State.Ring = [];
-	State.Sequence = 0;
+	// The declared counter (the `counter: true` setup option above births it
+	// at build time): the hook's own sequence field aliases the born counter -
+	// `Next` is the only way to advance, `Restore` raises and never lowers.
+	State.Sequence = State.Counter as State["Sequence"];
 	State.Handle = undefined;
 	State.Seen = new Map();
 

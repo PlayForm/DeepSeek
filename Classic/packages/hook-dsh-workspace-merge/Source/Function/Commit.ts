@@ -65,11 +65,11 @@ export default async (State: State, Request: Batch): Promise<Commit> => {
 		}
 		default:
 	}
-	State.Sequence += 1;
+	State.Sequence.Next();
 	const Id =
 		typeof Request.id === "string" && Request.id.length > 0
 			? Request.id
-			: `batch-${State.Sequence}`;
+			: `batch-${State.Sequence.Value}`;
 	const Operations = Array.isArray(Request.operations) ? Request.operations : [];
 	const TotalBytes = Operations.reduce((Sum, Op) => Sum + (Op?.content?.length ?? 0), 0);
 
@@ -112,7 +112,7 @@ export default async (State: State, Request: Batch): Promise<Commit> => {
 			Persist(State, {
 				id: Id,
 				status: "rejected",
-				sequence: State.Sequence,
+				sequence: State.Sequence.Value,
 				replies: Replies,
 			});
 			return { id: Id, status: "rejected", replies: Replies, reason: Reason };
@@ -184,6 +184,6 @@ export default async (State: State, Request: Batch): Promise<Commit> => {
 		State,
 		`batch ${Id} complete (applied ${Applied}, conflict ${Conflicts}, denied ${Denied}, recovery ${Recovery}, unknown ${Unknown})`,
 	);
-	Persist(State, { id: Id, status: Status, sequence: State.Sequence, replies: Replies });
+	Persist(State, { id: Id, status: Status, sequence: State.Sequence.Value, replies: Replies });
 	return { id: Id, status: Status, replies: Replies };
 };

@@ -46,7 +46,7 @@ const Statistics = (
 	return {
 		validations: State.Store.size,
 		...Counts,
-		sequence: State.Sequence,
+		sequence: State.Sequence.Value,
 	};
 };
 

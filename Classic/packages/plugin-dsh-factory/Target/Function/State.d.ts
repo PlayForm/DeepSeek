@@ -32,6 +32,15 @@ export default _default;
  * absent or false the three fields are not added and the shape stays as it
  * is for every other module.
  *
+ * The optional `counter` setup option (the declared counter): a module that
+ * owns a monotonic sequence or revision sets it and receives the core's
+ * `lib-dsh-core/Function/Counter` BORN on its State at State-build time -
+ * `Value` (the read-only current number), `Next` (the only way to advance)
+ * and `Restore` (raise and never lower - the core's `Resume` rule carried by
+ * the counter itself) as a FRESH instance per mount, never module-level.
+ * When the option is absent or false the field is not added and the shape
+ * stays as it is for every other module.
+ *
  * Returns the SHARED shape intersected with the module's extra fields
  * (`State & Extra`) - the caller names its own extras type. Never returned
  * from `apply` itself: the loader treats apply return values specially, and

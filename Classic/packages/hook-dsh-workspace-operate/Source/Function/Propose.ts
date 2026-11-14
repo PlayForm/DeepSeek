@@ -65,9 +65,9 @@ export default async (State: State, Kind: Proposal["kind"], Input: unknown): Pro
 				};
 			}
 			const Proposal = Outcome.proposal as Proposal;
-			State.Sequence += 1;
-			Proposal.id = `${Proposal.kind}-${State.Sequence}`;
-			Proposal.sequence = State.Sequence;
+			State.Sequence.Next();
+			Proposal.id = `${Proposal.kind}-${State.Sequence.Value}`;
+			Proposal.sequence = State.Sequence.Value;
 			State.Proposals.set(Proposal.id, Proposal);
 			Persist(State, Proposal);
 			State.Factory.Append(

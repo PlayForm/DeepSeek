@@ -120,7 +120,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		Check(Count, "S3: the sequence continues at the recovered maximum, never a wall clock", () => {
 			Fire(Second, "/repo/src/c.ts", "3");
-			assert.equal(Second.State.Sequence, 3);
+			assert.equal(Second.State.Sequence.Value, 3);
 			assert.equal(Second.State.Latest.get("/repo/src/c.ts").sequence, 3);
 		});
 	}

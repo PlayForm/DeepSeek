@@ -3,6 +3,7 @@ import type SubprocessService from "@deepseek-ai/dsh-subprocess";
 import type Entry from "@Interface/Journal.js";
 import type Options from "@Interface/Options.js";
 import type State from "@Interface/State.js";
+import { Counter } from "@playform/lib-dsh-core";
 
 import Seam from "./Seam.js";
 import Unwrap from "./Unwrap.js";
@@ -36,6 +37,15 @@ import Unwrap from "./Unwrap.js";
  * State-build time, per mount, never module-level. When the option is
  * absent or false the three fields are not added and the shape stays as it
  * is for every other module.
+ *
+ * The optional `counter` setup option (the declared counter): a module that
+ * owns a monotonic sequence or revision sets it and receives the core's
+ * `lib-dsh-core/Function/Counter` BORN on its State at State-build time -
+ * `Value` (the read-only current number), `Next` (the only way to advance)
+ * and `Restore` (raise and never lower - the core's `Resume` rule carried by
+ * the counter itself) as a FRESH instance per mount, never module-level.
+ * When the option is absent or false the field is not added and the shape
+ * stays as it is for every other module.
  *
  * Returns the SHARED shape intersected with the module's extra fields
  * (`State & Extra`) - the caller names its own extras type. Never returned
@@ -125,6 +135,17 @@ export default <Extra extends object = Record<string, unknown>>(
 			Shared.Stamp = new Map();
 			Shared.Set = new Set();
 			Shared.Count = new Map();
+			break;
+	}
+
+	// The declared counter's birth (see header): the `counter` setup option
+	// births the monotonic sequence or revision on the State as a FRESH
+	// instance at State-build time (per mount, never module-level). When the
+	// option is absent or false the field is not added - the shape stays as
+	// it is for every other module.
+	switch (true) {
+		case Setup.counter === true:
+			Shared.Counter = Counter();
 			break;
 	}
 

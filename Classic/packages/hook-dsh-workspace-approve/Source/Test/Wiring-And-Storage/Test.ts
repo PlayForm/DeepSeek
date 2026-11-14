@@ -229,7 +229,7 @@ export const runTest = async (): Promise<number> => {
 			assert.ok(Run.State.Handle !== undefined);
 		});
 		await CheckAsync(Count, "W6: the sequence restarts at the maximum loaded sequence, never a wall clock", async () => {
-			assert.equal(Run.State.Sequence, 5);
+			assert.equal(Run.State.Sequence.Value, 5);
 			assert.equal(Store.spec.name, "workspace_approve");
 			assert.equal(Store.spec.version, 1);
 			assert.ok(Store.spec.tables.bindings !== undefined);

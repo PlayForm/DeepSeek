@@ -22,7 +22,10 @@ import ResolveFn from "./Resolve.js";
  *
  * READ-ONLY: nothing is written. If the proposal is empty or ambiguous
  * (unknown kind, no effective operations), the pass-on returns no batch - not
- * an empty one.
+ * an empty one. The proposal map is bounded: before an insert, entries whose
+ * expiresAt has passed (the same clock that stamped them) are swept, and the
+ * map is held under the 256-entry cap by evicting the oldest insertion first
+ * (a Map preserves insertion order, so the first key is the oldest).
  */
 export default (State: State, Intent: Intent): Proposal | null => {
 	const Config_ = State.Config;
@@ -86,6 +89,21 @@ export default (State: State, Intent: Intent): Proposal | null => {
 		expiresAt: Date.now() + Config_.expiresSeconds * 1000,
 		createdAt: Date.now(),
 	};
+	// The bounded ledger map: sweep what has expired on the same clock that
+	// stamped expiresAt, then evict the oldest insertions until below the cap.
+	const Now = Date.now();
+	for (const [Id, Stored] of State.Proposals) {
+		if (Stored.expiresAt <= Now) {
+			State.Proposals.delete(Id);
+		}
+	}
+	while (State.Proposals.size >= 256) {
+		const Oldest = State.Proposals.keys().next().value;
+		if (Oldest === undefined) {
+			break;
+		}
+		State.Proposals.delete(Oldest);
+	}
 	State.Proposals.set(Proposal_.id, Proposal_);
 	return Proposal_;
 };

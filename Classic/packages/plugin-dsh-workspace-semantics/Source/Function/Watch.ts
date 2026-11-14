@@ -82,11 +82,11 @@ export default (
 				return;
 			default:
 		}
-		State.Revision += 1;
+		State.Revision.Next();
 		State.Index.delete(Path);
 		try {
 			void State.Handle?.table("meta")
-				.put("__revision", State.Revision)
+				.put("__revision", State.Revision.Value)
 				.catch(() => {
 					/* persistence best-effort */
 				});
@@ -95,7 +95,7 @@ export default (
 		}
 		State.Factory.Append(
 			State,
-			`indexed ${Path} version ${Version} (revision ${State.Revision})`,
+			`indexed ${Path} version ${Version} (revision ${State.Revision.Value})`,
 		);
 	} catch (Cause) {
 		try {

@@ -127,7 +127,7 @@ export const runTest = async (): Promise<number> => {
 			);
 			assert.equal(Executed.status, "refused");
 			assert.equal(Executed.refusal.reason, "disabled");
-			assert.equal(Run.State.Sequence, 0);
+			assert.equal(Run.State.Sequence.Value, 0);
 			assert.equal(Run.State.Refused, 0);
 			assert.equal(Run.Lines.length, Before);
 		});

@@ -56,7 +56,7 @@ export const Statistics = (State: State): Statistics => {
 	return {
 		proposals: State.Proposals.size,
 		refused: State.Refused,
-		sequence: State.Sequence,
+		sequence: State.Sequence.Value,
 		byKind: ByKind,
 	};
 };

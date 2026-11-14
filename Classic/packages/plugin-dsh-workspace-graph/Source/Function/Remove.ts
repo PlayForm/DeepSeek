@@ -26,8 +26,8 @@ export default async (StateRef: State, Path: string): Promise<boolean> => {
 		if (!Removed) {
 			return false;
 		}
-		StateRef.Revision += 1;
-		await Store.putMeta(StateRef, StateRef.Revision);
+		StateRef.Revision.Next();
+		await Store.putMeta(StateRef, StateRef.Revision.Value);
 		Append(StateRef, `removed ${Key}`);
 		// The trace (D5): the record is gone - the consumers drop what they
 		// cached for the path. No ledger line is added.

@@ -121,7 +121,7 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Executed.action, "commit");
 			assert.equal(Executed.ok, false);
 			assert.equal(Executed.reason, "the merge is disabled (enabled=false)");
-			assert.equal(Run.State.Sequence, 0);
+			assert.equal(Run.State.Sequence.Value, 0);
 			assert.deepEqual(Run.Context.workspaceMerge.statistics(), {
 				batches: 0,
 				applied: 0,

@@ -31,18 +31,18 @@ export default async (State: State, Path: string): Promise<Stamp | undefined> =>
 	const Target = await State.Context.fs.resolve(Path);
 	const Info = (await State.Context.fs.stat(Target)) as { version: string } | undefined;
 	const Version = Info !== undefined ? String(Info.version) : "absent";
-	State.Sequence += 1;
+	State.Sequence.Next();
 	State.Factory.Append(State, `manual ${Path} version ${Version}`);
 	Record(State, {
 		path: Path,
 		version: Version,
 		origin: "manual",
-		sequence: State.Sequence,
+		sequence: State.Sequence.Value,
 	});
 	return {
 		path: Path,
 		version: Version,
 		origin: "manual",
-		sequence: State.Sequence,
+		sequence: State.Sequence.Value,
 	};
 };

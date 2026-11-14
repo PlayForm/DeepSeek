@@ -2,7 +2,7 @@ import type { Context } from "@deepseek-ai/cordis";
 import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/lib-dsh-core";
+import { Proof } from "@playform/lib-dsh-core";
 
 import Version from "../Variable/Version.js";
 import Compress, { type Verdict } from "./Compress.js";
@@ -102,6 +102,7 @@ export default (Context: Context, Options: Config): void => {
 	const State: State = Factory.State<State>(Context, Options, {
 		module: "ccr",
 		fields: {
+			On: "enabled",
 			Targets: "targets",
 			Exempt: "exempt",
 			Threshold: "thresholdBytes",
@@ -161,11 +162,13 @@ export default (Context: Context, Options: Config): void => {
 	// ledger alone. Format (asserted byte-identical by the smoke):
 	//   ccr: activated (bundle 0.2.1, targets 8, budget 268435456)
 	// The line's string mechanics (the `activated (` prefix, the `k=v` join,
-	// the `)` suffix) live in the core's Activate composer; the FIELD LIST is
-	// the module's own (the empty-key pair renders the bare leading segment).
+	// the `)` suffix, and the master switch's `disabled (enabled=false)`
+	// marker) live in the core's Proof composer (the join to the Activate
+	// pair grammar); the FIELD LIST is the module's own (the empty-key pair
+	// renders the bare leading segment).
 	Factory.Append(
 		State,
-		Activate([
+		Proof(State.On !== false, [
 			// Bare segments (empty key): the plan's exact activation format.
 			["", `bundle ${Version}`],
 			["", `targets ${State.Targets.length}`],

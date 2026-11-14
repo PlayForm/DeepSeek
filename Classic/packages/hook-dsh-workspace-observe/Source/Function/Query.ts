@@ -41,5 +41,5 @@ export const Statistics = (
 } => ({
 	paths: State.Latest.size,
 	stamps: State.Ring.length,
-	sequence: State.Sequence,
+	sequence: State.Sequence.Value,
 });

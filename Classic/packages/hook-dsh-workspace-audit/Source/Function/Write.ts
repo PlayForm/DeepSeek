@@ -41,16 +41,16 @@ export default (
 			return undefined;
 		default:
 	}
-	State.Sequence += 1;
+	State.Sequence.Next();
 	const Entry: Line = {
-		id: `a${State.Sequence}`,
+		id: `a${State.Sequence.Value}`,
 		operation: Input.operation,
 		parent: Input.parent,
 		category: Input.category,
 		path: Input.path,
 		outcome: Input.outcome,
 		assessment: Input.assessment ?? "",
-		sequence: State.Sequence,
+		sequence: State.Sequence.Value,
 		at: Date.now(),
 	};
 

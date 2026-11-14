@@ -121,11 +121,11 @@ export default async (State: State, Path: string): Promise<Model | undefined> =>
 					// A deepener never breaks the model: the lexical list stands.
 				}
 		}
-		State.Revision += 1;
+		State.Revision.Next();
 		const Model: Model = {
 			path: Path,
 			version: "manual",
-			indexRevision: State.Revision,
+			indexRevision: State.Revision.Value,
 			symbols: Scan.symbols,
 			references,
 			dependencies: Scan.dependencies,
@@ -135,7 +135,7 @@ export default async (State: State, Path: string): Promise<Model | undefined> =>
 		Cap(State);
 		try {
 			void State.Handle?.table("meta")
-				.put("__revision", State.Revision)
+				.put("__revision", State.Revision.Value)
 				.catch(() => {
 					/* persistence best-effort */
 				});

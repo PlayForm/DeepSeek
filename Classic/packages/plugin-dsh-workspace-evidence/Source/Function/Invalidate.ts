@@ -36,7 +36,7 @@ export default (State: State, Key: string): number => {
 		case Count > 0:
 			try {
 				void State.Handle?.table("meta")
-					.put("__sequence", State.Sequence)
+					.put("__sequence", State.Sequence.Value)
 					.catch(() => {
 						/* persistence best-effort */
 					});

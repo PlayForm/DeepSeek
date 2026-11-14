@@ -40,6 +40,10 @@ const DefaultMaxCapabilitiesPerHolder = 16;
 // The revocation grace (ms): how long a revoked capability still shields
 // its resource's promote protection (the policy's revocation timing).
 const DefaultRevocationGraceMs = 0;
+// The closed-lease window: how many closed leases stay addressable for the
+// idempotent release and the statistic - the map keeps the most recent
+// closed leases and forgets the oldest beyond this cap.
+export const ClosedWindow = 256;
 const DefaultDisposition = "keep";
 // The empty default: `never[]` is assignable to the schema's own element
 // type, which widens `disposition` to `string` and so is not the interface's
