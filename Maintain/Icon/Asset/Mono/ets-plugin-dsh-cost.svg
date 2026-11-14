@@ -1,88 +1,160 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="@playform/ets-plugin-dsh-cost - interlace-tile">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img"
+	aria-label="@playform/ets-plugin-dsh-cost - interlace-tile">
 	<title>@playform/ets-plugin-dsh-cost - interlace-tile</title>
 	<style>
 		@media (prefers-reduced-motion: no-preference) {
-			.ets-plugin-dsh-cost-scene * { transform-box: view-box; transform-origin: 50% 50%; }
-		.ets-plugin-dsh-cost-counter { animation: ets-plugin-dsh-cost-counter 21s linear -7s infinite; }
-		@keyframes ets-plugin-dsh-cost-counter { to { transform: rotate(-360deg); } }
-		.ets-plugin-dsh-cost-breathe { animation: ets-plugin-dsh-cost-breathe 7s ease-in-out -7s infinite; }
-		@keyframes ets-plugin-dsh-cost-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
-		.ets-plugin-dsh-cost-fire { animation: ets-plugin-dsh-cost-fire 3.0s ease-in-out infinite; }
-		@keyframes ets-plugin-dsh-cost-fire { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
-		.ets-plugin-dsh-cost-twinkle { animation: ets-plugin-dsh-cost-twinkle 9s ease-in-out -7s infinite; }
-		@keyframes ets-plugin-dsh-cost-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
-		.ets-plugin-dsh-cost-trace { animation: ets-plugin-dsh-cost-trace 4s ease-in-out -7s infinite; }
-		@keyframes ets-plugin-dsh-cost-trace { 0%, 100% { transform: translate(0, 0); opacity: 1; } 50% { transform: translate(1.4px, -1.4px); opacity: 0.35; } }
+			.ets-plugin-dsh-cost-scene * {
+				transform-box: view-box;
+				transform-origin: 50% 50%;
+			}
+
+			.ets-plugin-dsh-cost-counter {
+				animation: ets-plugin-dsh-cost-counter 21s linear -7s infinite;
+			}
+
+			@keyframes ets-plugin-dsh-cost-counter {
+				to {
+					transform: rotate(-360deg);
+				}
+			}
+
+			.ets-plugin-dsh-cost-breathe {
+				animation: ets-plugin-dsh-cost-breathe 7s ease-in-out -7s infinite;
+			}
+
+			@keyframes ets-plugin-dsh-cost-breathe {
+				50% {
+					transform: scale(1.06);
+					opacity: 0.85;
+				}
+			}
+
+			.ets-plugin-dsh-cost-fire {
+				animation: ets-plugin-dsh-cost-fire 3.0s ease-in-out infinite;
+			}
+
+			@keyframes ets-plugin-dsh-cost-fire {
+
+				0%,
+				100% {
+					opacity: 0.35;
+				}
+
+				50% {
+					opacity: 1;
+				}
+			}
+
+			.ets-plugin-dsh-cost-twinkle {
+				animation: ets-plugin-dsh-cost-twinkle 9s ease-in-out -7s infinite;
+			}
+
+			@keyframes ets-plugin-dsh-cost-twinkle {
+
+				0%,
+				100% {
+					transform: scale(0.94);
+					opacity: 0.4;
+				}
+
+				50% {
+					transform: scale(1.06);
+					opacity: 1;
+				}
+			}
+
+			.ets-plugin-dsh-cost-trace {
+				animation: ets-plugin-dsh-cost-trace 4s ease-in-out -7s infinite;
+			}
+
+			@keyframes ets-plugin-dsh-cost-trace {
+
+				0%,
+				100% {
+					transform: translate(0, 0);
+					opacity: 1;
+				}
+
+				50% {
+					transform: translate(1.4px, -1.4px);
+					opacity: 0.35;
+				}
+			}
 		}
 	</style>
 	<defs>
-		<path id="ets-plugin-dsh-cost-0" d="M94,50 L72,88 L28,88 L6,50 L28,12 L72,12 Z"/>
-		<path id="ets-plugin-dsh-cost-1" d="M41,82 L41,84 L39,85 L37,84 L37,82 L37,80 L39,80 L41,80 Z"/>
-		<path id="ets-plugin-dsh-cost-2" d="M22,64 L21,66 L19,67 L17,66 L17,64 L17,63 L19,62 L21,63 Z"/>
-		<path id="ets-plugin-dsh-cost-3" d="M64,50 L64,54 L62,57 L60,60 L57,62 L54,64 L50,64 L46,64 L43,62 L40,60 L38,57 L36,54 L36,50 L36,46 L38,43 L40,40 L43,38 L46,36 L50,36 L54,36 L57,38 L60,40 L62,43 L64,46 Z M62,50 L61,53 L60,56 L58,58 L56,60 L53,61 L50,62 L47,61 L44,60 L42,58 L40,56 L39,53 L38,50 L39,47 L40,44 L42,42 L44,40 L47,39 L50,38 L53,39 L56,40 L58,42 L60,44 L61,47 Z"/>
-		<path id="ets-plugin-dsh-cost-4" d="M67,50 L66,54 L65,59 L62,62 L59,65 L54,66 L50,67 L46,66 L42,65 L38,62 L35,59 L34,54 L33,50 L34,46 L35,42 L38,38 L41,35 L46,34 L50,33 L54,34 L59,35 L62,38 L65,41 L66,46 Z M65,50 L64,54 L63,57 L60,60 L57,63 L54,64 L50,65 L46,64 L43,63 L40,60 L37,57 L36,54 L35,50 L36,46 L37,43 L40,40 L43,37 L46,36 L50,35 L54,36 L57,37 L60,40 L63,43 L64,46 Z"/>
-		<path id="ets-plugin-dsh-cost-5" d="M97,48 L67,97 L3,82 L4,12 L73,3 Z M55,53 L90,73 L89,74 L55,53 Z M70,55 L70,56 L70,57 L68,58 L67,58 L66,58 L65,57 L64,56 L64,55 L64,54 L65,53 L66,52 L67,52 L68,52 L70,53 L70,54 Z M52,56 L63,94 L62,94 L52,56 Z M45,53 L9,71 L8,69 L45,53 Z M77,50 L77,51 L76,52 L75,53 L74,53 L73,53 L72,52 L71,51 L71,50 L71,49 L72,48 L73,47 L74,47 L75,47 L76,48 L77,49 Z M44,48 L6,38 L6,35 L44,48 Z M47,45 L30,9 L33,7 L48,44 Z M77,32 L77,33 L76,34 L75,35 L74,35 L73,35 L72,34 L72,33 L72,32 L72,31 L72,30 L73,30 L74,30 L75,30 L76,30 L77,31 Z M53,45 L72,9 L75,11 L53,45 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
-		<path id="ets-plugin-dsh-cost-6" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
-		<path id="ets-plugin-dsh-cost-7" d="M75,53 L74,54 L73,54 L73,53 L73,52 L74,52 Z"/>
-		<path id="ets-plugin-dsh-cost-8" d="M27,47 L27,48 L26,48 L25,47 L26,46 L27,46 Z"/>
-		<path id="ets-plugin-dsh-cost-9" d="M92,48 L86,50 L92,52 Z"/>
-		<path id="ets-plugin-dsh-cost-10" d="M70,50 L69,54 L68,59 L66,62 L62,66 L59,68 L54,69 L50,70 L46,69 L41,68 L38,66 L34,62 L32,59 L31,54 L30,50 L31,46 L32,41 L34,38 L38,34 L41,32 L46,31 L50,30 L54,31 L59,32 L62,34 L66,38 L68,41 L69,46 Z M69,50 L68,54 L67,58 L65,62 L62,65 L58,67 L54,68 L50,69 L46,68 L42,67 L38,65 L35,62 L33,58 L32,54 L31,50 L32,46 L33,42 L35,38 L38,35 L42,33 L46,32 L50,31 L54,32 L58,33 L62,35 L65,38 L67,42 L68,46 Z"/>
-		<path id="ets-plugin-dsh-cost-11" d="M74,57 L73,58 L73,58 L72,57 L73,56 L73,56 Z"/>
-		<path id="ets-plugin-dsh-cost-12" d="M51,74 L51,75 L50,75 L50,74 L50,73 L51,73 Z"/>
-		<path id="ets-plugin-dsh-cost-13" d="M28,58 L28,59 L27,59 L27,58 L27,57 L28,57 Z"/>
-		<path id="ets-plugin-dsh-cost-14" d="M36,31 L36,32 L35,32 L35,31 L35,30 L36,30 Z"/>
-		<path id="ets-plugin-dsh-cost-15" d="M65,30 L64,31 L63,31 L63,30 L63,30 L64,30 Z"/>
-		<path id="ets-plugin-dsh-cost-16" d="M34,97 L32,97 L31,97 Z"/>
-		<path id="ets-plugin-dsh-cost-17" d="M3,35 L3,33 L3,32 Z"/>
-		<path id="ets-plugin-dsh-cost-18" d="M97,34 L97,36 L97,39 Z"/>
-		<path id="ets-plugin-dsh-cost-19" d="M49,97 L47,97 L45,97 Z"/>
-		<path id="ets-plugin-dsh-cost-20" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
+		<path id="ets-plugin-dsh-cost-0" d="M94,50 L72,88 L28,88 L6,50 L28,12 L72,12 Z" />
+		<path id="ets-plugin-dsh-cost-1" d="M41,82 L41,84 L39,85 L37,84 L37,82 L37,80 L39,80 L41,80 Z" />
+		<path id="ets-plugin-dsh-cost-2" d="M22,64 L21,66 L19,67 L17,66 L17,64 L17,63 L19,62 L21,63 Z" />
+		<path id="ets-plugin-dsh-cost-3"
+			d="M64,50 L64,54 L62,57 L60,60 L57,62 L54,64 L50,64 L46,64 L43,62 L40,60 L38,57 L36,54 L36,50 L36,46 L38,43 L40,40 L43,38 L46,36 L50,36 L54,36 L57,38 L60,40 L62,43 L64,46 Z M62,50 L61,53 L60,56 L58,58 L56,60 L53,61 L50,62 L47,61 L44,60 L42,58 L40,56 L39,53 L38,50 L39,47 L40,44 L42,42 L44,40 L47,39 L50,38 L53,39 L56,40 L58,42 L60,44 L61,47 Z" />
+		<path id="ets-plugin-dsh-cost-4"
+			d="M67,50 L66,54 L65,59 L62,62 L59,65 L54,66 L50,67 L46,66 L42,65 L38,62 L35,59 L34,54 L33,50 L34,46 L35,42 L38,38 L41,35 L46,34 L50,33 L54,34 L59,35 L62,38 L65,41 L66,46 Z M65,50 L64,54 L63,57 L60,60 L57,63 L54,64 L50,65 L46,64 L43,63 L40,60 L37,57 L36,54 L35,50 L36,46 L37,43 L40,40 L43,37 L46,36 L50,35 L54,36 L57,37 L60,40 L63,43 L64,46 Z" />
+		<path id="ets-plugin-dsh-cost-5"
+			d="M97,48 L67,97 L3,82 L4,12 L73,3 Z M55,53 L90,73 L89,74 L55,53 Z M70,55 L70,56 L70,57 L68,58 L67,58 L66,58 L65,57 L64,56 L64,55 L64,54 L65,53 L66,52 L67,52 L68,52 L70,53 L70,54 Z M52,56 L63,94 L62,94 L52,56 Z M45,53 L9,71 L8,69 L45,53 Z M77,50 L77,51 L76,52 L75,53 L74,53 L73,53 L72,52 L71,51 L71,50 L71,49 L72,48 L73,47 L74,47 L75,47 L76,48 L77,49 Z M44,48 L6,38 L6,35 L44,48 Z M47,45 L30,9 L33,7 L48,44 Z M77,32 L77,33 L76,34 L75,35 L74,35 L73,35 L72,34 L72,33 L72,32 L72,31 L72,30 L73,30 L74,30 L75,30 L76,30 L77,31 Z M53,45 L72,9 L75,11 L53,45 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z" />
+		<path id="ets-plugin-dsh-cost-6"
+			d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z" />
+		<path id="ets-plugin-dsh-cost-7" d="M75,53 L74,54 L73,54 L73,53 L73,52 L74,52 Z" />
+		<path id="ets-plugin-dsh-cost-8" d="M27,47 L27,48 L26,48 L25,47 L26,46 L27,46 Z" />
+		<path id="ets-plugin-dsh-cost-9" d="M92,48 L86,50 L92,52 Z" />
+		<path id="ets-plugin-dsh-cost-10"
+			d="M70,50 L69,54 L68,59 L66,62 L62,66 L59,68 L54,69 L50,70 L46,69 L41,68 L38,66 L34,62 L32,59 L31,54 L30,50 L31,46 L32,41 L34,38 L38,34 L41,32 L46,31 L50,30 L54,31 L59,32 L62,34 L66,38 L68,41 L69,46 Z M69,50 L68,54 L67,58 L65,62 L62,65 L58,67 L54,68 L50,69 L46,68 L42,67 L38,65 L35,62 L33,58 L32,54 L31,50 L32,46 L33,42 L35,38 L38,35 L42,33 L46,32 L50,31 L54,32 L58,33 L62,35 L65,38 L67,42 L68,46 Z" />
+		<path id="ets-plugin-dsh-cost-11" d="M74,57 L73,58 L73,58 L72,57 L73,56 L73,56 Z" />
+		<path id="ets-plugin-dsh-cost-12" d="M51,74 L51,75 L50,75 L50,74 L50,73 L51,73 Z" />
+		<path id="ets-plugin-dsh-cost-13" d="M28,58 L28,59 L27,59 L27,58 L27,57 L28,57 Z" />
+		<path id="ets-plugin-dsh-cost-14" d="M36,31 L36,32 L35,32 L35,31 L35,30 L36,30 Z" />
+		<path id="ets-plugin-dsh-cost-15" d="M65,30 L64,31 L63,31 L63,30 L63,30 L64,30 Z" />
+		<path id="ets-plugin-dsh-cost-16" d="M34,97 L32,97 L31,97 Z" />
+		<path id="ets-plugin-dsh-cost-17" d="M3,35 L3,33 L3,32 Z" />
+		<path id="ets-plugin-dsh-cost-18" d="M97,34 L97,36 L97,39 Z" />
+		<path id="ets-plugin-dsh-cost-19" d="M49,97 L47,97 L45,97 Z" />
+		<path id="ets-plugin-dsh-cost-20" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z" />
 	</defs>
 	<g class="ets-plugin-dsh-cost-scene">
-	<g fill="currentColor" fill-opacity="0.3" fill-rule="evenodd">
-		<use class="ets-plugin-dsh-cost-breathe" href="#ets-plugin-dsh-cost-0"/>
-	</g>
-	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
-		<use class="ets-plugin-dsh-cost-fire" style="animation-delay:-7.00s" href="#ets-plugin-dsh-cost-1"/>
-		<use class="ets-plugin-dsh-cost-fire" style="animation-delay:-7.18s" href="#ets-plugin-dsh-cost-2"/>
-		<use class="ets-plugin-dsh-cost-breathe" href="#ets-plugin-dsh-cost-3"/>
-		<use class="ets-plugin-dsh-cost-breathe" href="#ets-plugin-dsh-cost-4"/>
-	</g>
-	<g fill="currentColor" fill-opacity="1" fill-rule="evenodd">
-		<use class="ets-plugin-dsh-cost-breathe" href="#ets-plugin-dsh-cost-5"/>
-	</g>
-	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
-		<use class="ets-plugin-dsh-cost-breathe" href="#ets-plugin-dsh-cost-6"/>
-		<use class="ets-plugin-dsh-cost-counter" href="#ets-plugin-dsh-cost-7"/>
-		<use class="ets-plugin-dsh-cost-counter" href="#ets-plugin-dsh-cost-8"/>
-	</g>
-	<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
-		<use class="ets-plugin-dsh-cost-fire" style="animation-delay:-7.36s" href="#ets-plugin-dsh-cost-9"/>
-	</g>
-	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
-		<use class="ets-plugin-dsh-cost-breathe" href="#ets-plugin-dsh-cost-10"/>
-		<use class="ets-plugin-dsh-cost-counter" href="#ets-plugin-dsh-cost-11"/>
-		<use class="ets-plugin-dsh-cost-counter" href="#ets-plugin-dsh-cost-12"/>
-		<use class="ets-plugin-dsh-cost-counter" href="#ets-plugin-dsh-cost-13"/>
-		<use class="ets-plugin-dsh-cost-counter" href="#ets-plugin-dsh-cost-14"/>
-		<use class="ets-plugin-dsh-cost-counter" href="#ets-plugin-dsh-cost-15"/>
-		<use class="ets-plugin-dsh-cost-twinkle" href="#ets-plugin-dsh-cost-16"/>
-	</g>
-	<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
-		<use class="ets-plugin-dsh-cost-twinkle" href="#ets-plugin-dsh-cost-17"/>
-	</g>
-	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
-		<use class="ets-plugin-dsh-cost-twinkle" href="#ets-plugin-dsh-cost-18"/>
-	</g>
-	<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
-		<use class="ets-plugin-dsh-cost-twinkle" href="#ets-plugin-dsh-cost-19"/>
-		<use class="ets-plugin-dsh-cost-breathe" href="#ets-plugin-dsh-cost-20"/>
-	</g>
-	<g class="ets-plugin-dsh-cost-trace" fill="currentColor" fill-opacity="0.18" fill-rule="evenodd" stroke="none">
-		<g transform="translate(1.2,-1.2)">
-			<use href="#ets-plugin-dsh-cost-5"/>
+		<g fill="currentColor" fill-opacity="0.3" fill-rule="evenodd">
+			<use class="ets-plugin-dsh-cost-breathe" href="#ets-plugin-dsh-cost-0" />
 		</g>
-	</g>
+		<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+			<use class="ets-plugin-dsh-cost-fire" style="animation-delay:-7.00s" href="#ets-plugin-dsh-cost-1" />
+			<use class="ets-plugin-dsh-cost-fire" style="animation-delay:-7.18s" href="#ets-plugin-dsh-cost-2" />
+			<use class="ets-plugin-dsh-cost-breathe" href="#ets-plugin-dsh-cost-3" />
+			<use class="ets-plugin-dsh-cost-breathe" href="#ets-plugin-dsh-cost-4" />
+		</g>
+		<g fill="currentColor" fill-opacity="1" fill-rule="evenodd">
+			<use class="ets-plugin-dsh-cost-breathe" href="#ets-plugin-dsh-cost-5" />
+		</g>
+		<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+			<use class="ets-plugin-dsh-cost-breathe" href="#ets-plugin-dsh-cost-6" />
+			<use class="ets-plugin-dsh-cost-counter" href="#ets-plugin-dsh-cost-7" />
+			<use class="ets-plugin-dsh-cost-counter" href="#ets-plugin-dsh-cost-8" />
+		</g>
+		<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
+			<use class="ets-plugin-dsh-cost-fire" style="animation-delay:-7.36s" href="#ets-plugin-dsh-cost-9" />
+		</g>
+		<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+			<use class="ets-plugin-dsh-cost-breathe" href="#ets-plugin-dsh-cost-10" />
+			<use class="ets-plugin-dsh-cost-counter" href="#ets-plugin-dsh-cost-11" />
+			<use class="ets-plugin-dsh-cost-counter" href="#ets-plugin-dsh-cost-12" />
+			<use class="ets-plugin-dsh-cost-counter" href="#ets-plugin-dsh-cost-13" />
+			<use class="ets-plugin-dsh-cost-counter" href="#ets-plugin-dsh-cost-14" />
+			<use class="ets-plugin-dsh-cost-counter" href="#ets-plugin-dsh-cost-15" />
+			<use class="ets-plugin-dsh-cost-twinkle" href="#ets-plugin-dsh-cost-16" />
+		</g>
+		<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
+			<use class="ets-plugin-dsh-cost-twinkle" href="#ets-plugin-dsh-cost-17" />
+		</g>
+		<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+			<use class="ets-plugin-dsh-cost-twinkle" href="#ets-plugin-dsh-cost-18" />
+		</g>
+		<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
+			<use class="ets-plugin-dsh-cost-twinkle" href="#ets-plugin-dsh-cost-19" />
+			<use class="ets-plugin-dsh-cost-breathe" href="#ets-plugin-dsh-cost-20" />
+		</g>
+		<g class="ets-plugin-dsh-cost-trace" fill="currentColor" fill-opacity="0.18" fill-rule="evenodd" stroke="none">
+			<g transform="translate(1.2,-1.2)">
+				<use href="#ets-plugin-dsh-cost-5" />
+			</g>
+		</g>
 	</g>
 </svg>

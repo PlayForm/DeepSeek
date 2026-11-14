@@ -1,35 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="@playform/lib-dsh-style - crescent-ring">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img"
+	aria-label="@playform/lib-dsh-style - crescent-ring">
 	<title>@playform/lib-dsh-style - crescent-ring</title>
 	<style>
 		@media (prefers-reduced-motion: no-preference) {
-			.lib-dsh-style-scene * { transform-box: view-box; transform-origin: 50% 50%; }
-		.lib-dsh-style-breathe { animation: lib-dsh-style-breathe 8s ease-in-out -7s infinite; }
-		@keyframes lib-dsh-style-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
-		.lib-dsh-style-twinkle { animation: lib-dsh-style-twinkle 11s ease-in-out -7s infinite; }
-		@keyframes lib-dsh-style-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
+			.lib-dsh-style-scene * {
+				transform-box: view-box;
+				transform-origin: 50% 50%;
+			}
+
+			.lib-dsh-style-breathe {
+				animation: lib-dsh-style-breathe 8s ease-in-out -7s infinite;
+			}
+
+			@keyframes lib-dsh-style-breathe {
+				50% {
+					transform: scale(1.06);
+					opacity: 0.85;
+				}
+			}
+
+			.lib-dsh-style-twinkle {
+				animation: lib-dsh-style-twinkle 11s ease-in-out -7s infinite;
+			}
+
+			@keyframes lib-dsh-style-twinkle {
+
+				0%,
+				100% {
+					transform: scale(0.94);
+					opacity: 0.4;
+				}
+
+				50% {
+					transform: scale(1.06);
+					opacity: 1;
+				}
+			}
 		}
 	</style>
 	<defs>
-		<path id="lib-dsh-style-0" d="M91,67 L88,73 L83,79 L79,83 L73,88 L67,91 L60,93 L53,94 L47,94 L40,93 L33,91 L27,88 L21,83 L17,79 L12,73 L9,67 L7,60 L6,53 L6,47 L7,40 L9,33 L12,27 L17,21 L21,17 L27,12 L33,9 L40,7 L47,6 L53,6 L60,7 L67,9 L73,12 L79,17 L83,21 L88,27 L91,33 L93,40 L94,47 L94,53 L93,60 Z"/>
-		<path id="lib-dsh-style-1" d="M76,65 L50,68 L25,66 L36,40 L50,20 L64,41 Z M55,53 L89,74 L89,75 L55,53 Z M70,57 L70,59 L69,60 L68,61 L66,61 L65,61 L64,60 L63,59 L63,57 L63,56 L64,55 L65,54 L66,54 L68,54 L69,55 L70,56 Z M50,56 L47,96 L46,96 L49,56 Z"/>
-		<path id="lib-dsh-style-2" d="M18,27 L16,23 L20,24 Z"/>
-		<path id="lib-dsh-style-3" d="M84,50 L86,51 L84,52 Z"/>
-		<path id="lib-dsh-style-4" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
+		<path id="lib-dsh-style-0"
+			d="M91,67 L88,73 L83,79 L79,83 L73,88 L67,91 L60,93 L53,94 L47,94 L40,93 L33,91 L27,88 L21,83 L17,79 L12,73 L9,67 L7,60 L6,53 L6,47 L7,40 L9,33 L12,27 L17,21 L21,17 L27,12 L33,9 L40,7 L47,6 L53,6 L60,7 L67,9 L73,12 L79,17 L83,21 L88,27 L91,33 L93,40 L94,47 L94,53 L93,60 Z" />
+		<path id="lib-dsh-style-1"
+			d="M76,65 L50,68 L25,66 L36,40 L50,20 L64,41 Z M55,53 L89,74 L89,75 L55,53 Z M70,57 L70,59 L69,60 L68,61 L66,61 L65,61 L64,60 L63,59 L63,57 L63,56 L64,55 L65,54 L66,54 L68,54 L69,55 L70,56 Z M50,56 L47,96 L46,96 L49,56 Z" />
+		<path id="lib-dsh-style-2" d="M18,27 L16,23 L20,24 Z" />
+		<path id="lib-dsh-style-3" d="M84,50 L86,51 L84,52 Z" />
+		<path id="lib-dsh-style-4" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z" />
 	</defs>
 	<g class="lib-dsh-style-scene">
-	<g fill="currentColor" fill-opacity="0.3" fill-rule="evenodd">
-		<use class="lib-dsh-style-breathe" href="#lib-dsh-style-0"/>
-	</g>
-	<g fill="currentColor" fill-opacity="1" fill-rule="evenodd">
-		<use href="#lib-dsh-style-1"/>
-	</g>
-	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
-		<use class="lib-dsh-style-twinkle" href="#lib-dsh-style-2"/>
-	</g>
-	<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
-		<use class="lib-dsh-style-twinkle" href="#lib-dsh-style-3"/>
-		<use class="lib-dsh-style-breathe" href="#lib-dsh-style-4"/>
-	</g>
+		<g fill="currentColor" fill-opacity="0.3" fill-rule="evenodd">
+			<use class="lib-dsh-style-breathe" href="#lib-dsh-style-0" />
+		</g>
+		<g fill="currentColor" fill-opacity="1" fill-rule="evenodd">
+			<use href="#lib-dsh-style-1" />
+		</g>
+		<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+			<use class="lib-dsh-style-twinkle" href="#lib-dsh-style-2" />
+		</g>
+		<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
+			<use class="lib-dsh-style-twinkle" href="#lib-dsh-style-3" />
+			<use class="lib-dsh-style-breathe" href="#lib-dsh-style-4" />
+		</g>
 	</g>
 </svg>
