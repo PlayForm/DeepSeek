@@ -477,11 +477,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794394724,
+					"publishTimestamp": 1794659485,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "30f52f998310c471025c508b12834abad77d935c",
+						"commit": "8178f06ecee31dd476a923fe431b2afc21e42e32",
 						"path": "EffectTS/packages/ets-hook-dsh-batch-decision"
 					},
 					"engines": {}
@@ -633,11 +633,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794334403,
+					"publishTimestamp": 1794659485,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "2376be68493fbbd67b69c6b0e4cb847e376c2864",
+						"commit": "8178f06ecee31dd476a923fe431b2afc21e42e32",
 						"path": "EffectTS/packages/ets-hook-dsh-comment-filter"
 					},
 					"engines": {}
@@ -890,11 +890,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794334403,
+					"publishTimestamp": 1794659485,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "2376be68493fbbd67b69c6b0e4cb847e376c2864",
+						"commit": "8178f06ecee31dd476a923fe431b2afc21e42e32",
 						"path": "EffectTS/packages/ets-hook-dsh-lesson-nudge"
 					},
 					"engines": {}
@@ -2912,11 +2912,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794334403,
+					"publishTimestamp": 1794659485,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "2376be68493fbbd67b69c6b0e4cb847e376c2864",
+						"commit": "8178f06ecee31dd476a923fe431b2afc21e42e32",
 						"path": "EffectTS/packages/ets-plugin-dsh-pass-on"
 					},
 					"engines": {}
@@ -2952,11 +2952,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794394724,
+					"publishTimestamp": 1794659485,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "30f52f998310c471025c508b12834abad77d935c",
+						"commit": "8178f06ecee31dd476a923fe431b2afc21e42e32",
 						"path": "EffectTS/packages/ets-plugin-dsh-pattern"
 					},
 					"engines": {}

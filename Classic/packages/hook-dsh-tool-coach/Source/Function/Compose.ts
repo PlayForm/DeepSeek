@@ -85,11 +85,11 @@ export const Fill = (Template: string, Values: Record<string, string | number>):
  * parameters names the first `maxNoteParams` and reports the remainder as a
  * count, so the model still knows the surface is wider than what it reads.
  */
-export const Params = (Params_: ToolParam[], Limit: number): string => {
-	if (Params_.length === 0) {
+export const Surface = (Params: ToolParam[], Limit: number): string => {
+	if (Params.length === 0) {
 		return "none declared";
 	}
-	const Shown = Params_.slice(0, Math.max(1, Limit));
+	const Shown = Params.slice(0, Math.max(1, Limit));
 	const Rendered = Shown.map((Param) => {
 		if (Param.required) {
 			return `${Param.name} (required)`;
@@ -98,8 +98,8 @@ export const Params = (Params_: ToolParam[], Limit: number): string => {
 			? `${Param.name} (optional)`
 			: `${Param.name} (default ${Param.default})`;
 	});
-	if (Params_.length > Shown.length) {
-		Rendered.push(`+${Params_.length - Shown.length} more`);
+	if (Params.length > Shown.length) {
+		Rendered.push(`+${Params.length - Shown.length} more`);
 	}
 	return Rendered.join(", ");
 };
@@ -108,14 +108,14 @@ export const Params = (Params_: ToolParam[], Limit: number): string => {
  * Render the call shape: `read { file_path, offset?, limit? }` (an optional key
  * carries `?`, the convention the model already reads in the tool schema).
  */
-export const Shape = (Name: string, Params_: ToolParam[]): string => {
+export const Shape = (Name: string, Params: ToolParam[]): string => {
 	if (!Name) {
 		return "the tool's own schema";
 	}
-	if (Params_.length === 0) {
+	if (Params.length === 0) {
 		return `${Name} { }`;
 	}
-	const Keys = Params_.map((Param) => (Param.required ? Param.name : `${Param.name}?`));
+	const Keys = Params.map((Param) => (Param.required ? Param.name : `${Param.name}?`));
 	return `${Name} { ${Keys.join(", ")} }`;
 };
 
@@ -139,7 +139,7 @@ const Values = (
 		"${tool.name}": Name,
 		"${tool.description}": Tool.description,
 		"${tool.param}": Tool.param,
-		"${tool.params}": Params(Tool.params, Config.maxNoteParams),
+		"${tool.params}": Surface(Tool.params, Config.maxNoteParams),
 		"${tool.shape}": Shape(Name, Tool.params),
 	};
 };

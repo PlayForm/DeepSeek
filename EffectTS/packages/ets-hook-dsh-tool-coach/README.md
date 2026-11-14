@@ -104,7 +104,7 @@ Every knob is **volatile**, hot-edited without remounting, and a flip lands on t
 | ------------------- | ------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | `enabled`           | boolean | `true`                                      | volatile - the coach switch (off logs `disabled (enabled=false)`; every listener passes through) |
 | `log`               | boolean | `true`                                      | volatile - the shared factory log switch                                                         |
-| `logFile`           | string  | `~/.dsh/playform/ets-hook-dsh-tool-coach.log`   | volatile - the ledger file                                                                       |
+| `logFile`           | string  | `~/.dsh/playform/<module>.log`              | volatile - the ledger file (one log per module)                                                  |
 | `judgeTools`        | array   | `["bash", "pwsh"]`                          | volatile - the terminal tools that are judged                                                    |
 | `threshold`         | number  | `3`                                         | volatile - tier-1 strikes within the window                                                      |
 | `window`            | number  | `8`                                         | volatile - the sliding judged-call window                                                        |
@@ -124,8 +124,8 @@ Every knob is **volatile**, hot-edited without remounting, and a flip lands on t
 
 ## The ledger
 
-One log per module: `~/.dsh/playform/ets-hook-dsh-tool-coach.log` (config `logFile`), where the durable
-file lines are the `[ISO] message` forms with the `hook-dsh-tool-coach: ` prefix.
+One log per module, at the configured `logFile` path (default under `~/.dsh/playform/`), where the
+durable file lines are the `[ISO] message` forms with the `hook-dsh-tool-coach: ` prefix.
 
 ```text
 activated (bundle 0.2.1, threshold=<t>/<w>, cooldown=<c>, escalate=<e>, clean=<cl>, enforce=<off|write|all>@<et>, judge=<list>, fetch=live|static)

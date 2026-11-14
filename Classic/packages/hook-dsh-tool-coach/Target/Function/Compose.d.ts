@@ -42,12 +42,12 @@ export declare const Fill: (Template: string, Values: Record<string, string | nu
  * parameters names the first `maxNoteParams` and reports the remainder as a
  * count, so the model still knows the surface is wider than what it reads.
  */
-export declare const Params: (Params_: ToolParam[], Limit: number) => string;
+export declare const Surface: (Params: ToolParam[], Limit: number) => string;
 /**
  * Render the call shape: `read { file_path, offset?, limit? }` (an optional key
  * carries `?`, the convention the model already reads in the tool schema).
  */
-export declare const Shape: (Name: string, Params_: ToolParam[]) => string;
+export declare const Shape: (Name: string, Params: ToolParam[]) => string;
 /**
  * The tier-1 note text (the fetched description line + the parameter surface).
  */
