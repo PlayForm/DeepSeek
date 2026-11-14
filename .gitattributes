@@ -11,3 +11,7 @@
 Maintain/Icon/Asset/**/*.svg -text
 Maintain/Icon/Ledger.json -text
 marketplace.json -text
+# The generated tool-catalog tables: `pnpm run catalog:check` compares their
+# bytes against Maintain/Generate/Catalog's output, so a CRLF checkout would
+# fail the check on every clone with core.autocrlf=true.
+**/Source/Variable/Catalog.ts -text
