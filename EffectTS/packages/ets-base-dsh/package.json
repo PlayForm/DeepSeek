@@ -28,7 +28,7 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"effect": "4.1.2"
+		"effect": "4.1.4"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.1.0",
