@@ -50,7 +50,7 @@
 		"prettier-plugin-toml": "4.1.0",
 		"sass-embedded": "1.108.2",
 		"tailwindcss": "4.3.3",
-		"turbo": "2.11.11"
+		"turbo": "2.11.13"
 	},
 	"packageManager": "pnpm@12.18.0",
 	"publishConfig": {
