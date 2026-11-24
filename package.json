@@ -32,7 +32,7 @@
 		"@prettier/plugin-php": "0.26.0",
 		"@prettier/plugin-ruby": "4.0.4",
 		"@trivago/prettier-plugin-sort-imports": "6.0.2",
-		"@vue/compiler-sfc": "3.5.45",
+		"@vue/compiler-sfc": "3.5.46",
 		"prettier": "3.10.1",
 		"prettier-plugin-astro": "1.1.2",
 		"prettier-plugin-autocorrect": "0.4.3",
